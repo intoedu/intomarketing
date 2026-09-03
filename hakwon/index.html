@@ -1,0 +1,2577 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ESC 학원지원센터 · 학원 경영 B2B 종합 지원</title>
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="favicon-16.png" sizes="16x16" type="image/png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#12294D">
+</head>
+<body>
+<style>
+  :root{
+    --paper:#FBFCFE; --surface:#FFFFFF; --surface-2:#F3F6FB;
+    --ink:#0E1B33; --muted:#56657F; --line:#E2E8F2;
+    --brand:#16305C; --accent:#2E5FE8; --accent-ink:#1E47C0;
+    --gold:#B67A22; --on-brand:#EAF0FB;
+    --band-bg:#12294D; --band-line:#2A436E; --band-text:#DCE6F8; --band-gold:#E7B24A;
+    --radius:14px; --maxw:1120px;
+    --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--paper:#0A101E;--surface:#101B30;--surface-2:#16233C;--ink:#E7EDF7;--muted:#9BAAC3;--line:#22314C;--brand:#7CA0EA;--accent:#6E93FF;--accent-ink:#8FAAFF;--gold:#E7B24A;--on-brand:#0E1B33;}
+  }
+  :root[data-theme="dark"]{--paper:#0A101E;--surface:#101B30;--surface-2:#16233C;--ink:#E7EDF7;--muted:#9BAAC3;--line:#22314C;--brand:#7CA0EA;--accent:#6E93FF;--accent-ink:#8FAAFF;--gold:#E7B24A;--on-brand:#0E1B33;}
+  :root[data-theme="light"]{--paper:#FBFCFE;--surface:#FFFFFF;--surface-2:#F3F6FB;--ink:#0E1B33;--muted:#56657F;--line:#E2E8F2;--brand:#16305C;--accent:#2E5FE8;--accent-ink:#1E47C0;--gold:#B67A22;--on-brand:#EAF0FB;}
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);line-height:1.7;-webkit-font-smoothing:antialiased;font-size:16px}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  h1,h2,h3,h4{margin:0;text-wrap:balance;letter-spacing:-.01em;line-height:1.25;word-break:keep-all}
+  p{margin:0}
+  .tnum{font-variant-numeric:tabular-nums}
+  section{scroll-margin-top:120px}
+
+  /* strip */
+  .strip{background:var(--band-bg);color:var(--band-text);font-size:.78rem;letter-spacing:.02em}
+  .strip .wrap{display:flex;gap:10px;align-items:center;justify-content:center;padding:8px 24px;text-align:center;flex-wrap:wrap}
+  .strip b{color:var(--band-gold);font-weight:700}
+
+  /* header */
+  header{position:sticky;top:0;z-index:80;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;gap:26px;height:64px}
+  .brand{display:flex;align-items:baseline;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:1.12rem;cursor:pointer;background:none;border:0;font-family:inherit}
+  .brand .mk{color:var(--brand)}
+  .brand small{font-weight:600;font-size:.72rem;color:var(--muted);letter-spacing:0}
+  .links{display:flex;gap:26px;margin-left:auto;align-items:center;height:100%}
+  .navlink{background:none;border:0;font-family:inherit;font-size:.94rem;font-weight:600;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:0}
+  .navlink:hover,.navlink.active{color:var(--ink)}
+  .navitem{position:relative;display:flex;align-items:center;height:100%}
+  .caret{width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:.2s;opacity:.7}
+  .navitem:hover .caret{transform:rotate(225deg) translateY(-2px)}
+  .drop{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(8px);background:var(--surface);border:1px solid var(--line);border-radius:13px;box-shadow:0 22px 46px -26px rgba(16,27,51,.55);padding:8px;min-width:230px;opacity:0;visibility:hidden;transition:.18s;z-index:90}
+  .navitem:hover .drop{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+  .drop a{display:block;padding:11px 13px;border-radius:9px;font-size:.92rem;font-weight:700;color:var(--ink);cursor:pointer}
+  .drop a small{display:block;color:var(--muted);font-weight:500;font-size:.76rem;margin-top:1px}
+  .drop a:hover{background:var(--surface-2);color:var(--accent)}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-family:inherit;font-weight:700;font-size:.92rem;padding:11px 20px;border-radius:10px;border:1px solid transparent;cursor:pointer;transition:transform .12s ease,background .2s}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{background:var(--accent-ink);transform:translateY(-1px)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+  .btn-light{background:#fff;color:var(--band-bg)}
+  .btn-light:hover{transform:translateY(-1px)}
+  .burger{display:none;margin-left:auto;background:none;border:1px solid var(--line);border-radius:9px;width:42px;height:38px;cursor:pointer;color:var(--ink);align-items:center;justify-content:center}
+  .burger svg{width:20px;height:20px}
+  .msheet{display:none;border-bottom:1px solid var(--line);background:var(--surface)}
+  .msheet.open{display:block}
+  .msheet a{display:block;padding:14px 24px;font-weight:700;border-top:1px solid var(--line);color:var(--ink);cursor:pointer}
+  .msheet a.sub{padding-left:40px;font-weight:600;color:var(--muted);font-size:.92rem}
+  @media(max-width:860px){.links,.headcta{display:none}.burger{display:inline-flex}}
+
+  /* views */
+  .view{display:none}
+  .view.active{display:block;animation:fade .4s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* hero */
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;opacity:.35;-webkit-mask-image:radial-gradient(120% 90% at 78% 8%,#000 0%,transparent 62%);mask-image:radial-gradient(120% 90% at 78% 8%,#000 0%,transparent 62%)}
+  .hero .wrap{position:relative;padding:84px 24px 74px;display:grid;grid-template-columns:1.15fr .85fr;gap:52px;align-items:center}
+  @media(max-width:880px){.hero .wrap{grid-template-columns:1fr;gap:36px;padding:52px 24px 48px}}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:.82rem;font-weight:700;color:var(--brand);letter-spacing:.02em;margin-bottom:22px}
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--gold)}
+  h1{font-size:clamp(2.15rem,4.6vw,3.35rem);font-weight:800}
+  .hero h1 .hl{color:var(--brand)}
+  .lead{margin-top:22px;font-size:1.05rem;color:var(--muted);max-width:46ch}
+  .hero-cta{margin-top:32px;display:flex;gap:12px;flex-wrap:wrap}
+  .microcopy{margin-top:16px;font-size:.84rem;color:var(--muted)}
+  .microcopy b{color:var(--gold)}
+  .side{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:8px;box-shadow:0 18px 44px -30px rgba(16,27,51,.5)}
+  .side-h{padding:15px 16px 12px;font-size:.82rem;font-weight:700;color:var(--muted);display:flex;justify-content:space-between;border-bottom:1px solid var(--line)}
+  .side-h span{color:var(--brand)}
+  .side ul{list-style:none;margin:0;padding:6px}
+  .side li{display:flex;gap:12px;align-items:center;padding:12px;border-radius:9px;cursor:pointer}
+  .side li:hover{background:var(--surface-2)}
+  .side li+li{border-top:1px solid var(--line)}
+  .side .k{width:30px;height:30px;flex:0 0 auto;border-radius:8px;background:var(--surface-2);color:var(--brand);display:grid;place-items:center}
+  .side li:hover .k{background:var(--accent);color:#fff}
+  .side .k svg{width:17px;height:17px}
+  .side .t{display:block;font-weight:700;font-size:.95rem}
+  .side .d{display:block;font-size:.79rem;color:var(--muted);margin-top:2px}
+  .side .p{margin-left:auto;font-size:.79rem;font-weight:700;color:var(--gold);white-space:nowrap}
+
+  /* generic section */
+  .sec{padding:74px 0}
+  .sec-head{max-width:640px;margin-bottom:42px}
+  .kicker{font-size:.8rem;font-weight:700;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px}
+  h2{font-size:clamp(1.5rem,3vw,2.15rem);font-weight:800}
+  .sec-head p{margin-top:14px;color:var(--muted);font-size:1.02rem}
+
+  /* support cards */
+  .tint{background:var(--surface-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .value{background:var(--surface-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .value .wrap{padding:76px 24px;text-align:center}
+  .value .kicker{color:var(--gold)}
+  .value p{font-size:clamp(1.2rem,2.5vw,1.65rem);font-weight:700;line-height:1.8;color:var(--ink);margin:16px auto 0;letter-spacing:-.01em;text-wrap:balance}
+  .value .vsig{font-size:1.02rem;font-weight:700;color:var(--gold);margin-top:20px;line-height:1.6}
+  .grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  @media(max-width:720px){.grid4{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:13px;transition:border-color .2s,transform .15s;cursor:pointer}
+  .card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .card .no{font-size:.78rem;font-weight:800;color:var(--muted);letter-spacing:.08em}
+  .card .ic{width:46px;height:46px;border-radius:11px;background:var(--surface-2);color:var(--brand);display:grid;place-items:center}
+  .card:hover .ic{background:var(--accent);color:#fff}
+  .card .ic svg{width:24px;height:24px}
+  .card h3{font-size:1.2rem;font-weight:800}
+  .card .desc{color:var(--muted);font-size:.95rem;flex:1}
+  .card .tags{display:flex;flex-wrap:wrap;gap:7px}
+  .tag{font-size:.75rem;font-weight:600;color:var(--brand);background:var(--surface-2);border:1px solid var(--line);padding:4px 9px;border-radius:999px}
+  .card .cardlink{font-size:.9rem;font-weight:800;color:var(--accent);border-top:1px solid var(--line);padding-top:14px;display:flex;justify-content:space-between;align-items:center}
+  .card:hover .cardlink{color:var(--accent-ink)}
+
+  /* process (home simple) */
+  .steps{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+  @media(max-width:860px){.steps{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:460px){.steps{grid-template-columns:1fr}}
+  .step{padding:22px 18px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .step .n{font-size:.76rem;font-weight:800;color:var(--accent);letter-spacing:.05em}
+  .step h3{font-size:1rem;font-weight:700;margin-top:10px}
+  .step p{font-size:.82rem;color:var(--muted);margin-top:6px}
+
+  /* band */
+  .band{background:var(--band-bg);color:var(--band-text);border-top:1px solid var(--band-line);border-bottom:1px solid var(--band-line)}
+  .band .wrap{padding:62px 24px}
+  .band .kicker{color:var(--band-gold)}
+  .band h2{color:#fff;max-width:620px}
+  .band .note{color:#A9BBDA;font-size:.9rem;margin-top:12px;max-width:560px}
+  .stats{margin-top:38px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  @media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{border-top:2px solid var(--band-gold);padding-top:16px}
+  .stat .big{font-size:clamp(1.8rem,3.6vw,2.5rem);font-weight:800;color:#fff;letter-spacing:-.02em}
+  .stat .lab{font-size:.85rem;color:#A9BBDA;margin-top:4px}
+  .stat .sub{font-size:.75rem;color:#7E93BC;margin-top:8px}
+
+  /* pricing */
+  /* 단계별 가격 — 표 대신 카드로. 눈이 「2단계」에 먼저 가도록 만들었습니다 */
+  .pcards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:stretch}
+  .pcard{position:relative;display:flex;flex-direction:column;background:var(--surface);
+       border:1px solid var(--line);border-radius:16px;padding:24px 20px 20px;
+       transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+  .pcard:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--accent) 45%,var(--line));
+       box-shadow:0 14px 34px -18px rgba(20,40,90,.45)}
+  .pcard.best{border:2px solid var(--gold);padding-top:30px;
+       box-shadow:0 16px 40px -20px color-mix(in srgb,var(--gold) 60%,transparent)}
+  .pbest{position:absolute;top:-1px;left:50%;transform:translate(-50%,-50%);white-space:nowrap;
+       font-size:.72rem;font-weight:800;letter-spacing:.02em;color:#fff;
+       background:linear-gradient(135deg,var(--gold),#8a5a17);padding:5px 14px;border-radius:999px;
+       box-shadow:0 4px 12px -4px color-mix(in srgb,var(--gold) 70%,transparent)}
+  .pstage{font-size:.78rem;font-weight:800;letter-spacing:.04em;color:var(--accent)}
+  .pcard.best .pstage{color:var(--gold)}
+  .psub{font-size:1.18rem;font-weight:800;color:var(--ink);margin-top:3px;line-height:1.3}
+  .ptip{font-size:.8rem;color:var(--muted);margin-top:7px;line-height:1.55;min-height:2.5em}
+  .pmoney{margin:16px 0 14px;padding:15px 0 14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .pbig{font-size:1.85rem;font-weight:850;color:var(--gold);line-height:1.15;letter-spacing:-.02em}
+  .pbig small{font-size:.86rem;font-weight:700;color:var(--muted);letter-spacing:0}
+  .pbig.quote{font-size:1.25rem;color:var(--accent)}
+  .psmall{font-size:.83rem;color:var(--muted);margin-top:7px}
+  .psmall b{color:var(--ink);font-weight:800}
+  .psmall b.isfree{color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,transparent);
+       padding:1px 8px;border-radius:999px}
+  .pinc{list-style:none;padding:0;margin:0 0 18px;flex:1}
+  .pinc li{position:relative;padding-left:19px;font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:6px}
+  .pinc li::before{content:'✓';position:absolute;left:0;top:0;color:var(--accent);font-weight:800;font-size:.82rem}
+  .pcard.best .pinc li::before{color:var(--gold)}
+  .pbtn{width:100%;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);
+       border-radius:10px;padding:11px 14px;font-size:.86rem;font-weight:800;cursor:pointer;
+       transition:background .15s,border-color .15s,color .15s}
+  .pbtn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+  .pcard.best .pbtn{background:linear-gradient(135deg,var(--gold),#8a5a17);border-color:transparent;color:#fff}
+  .pcard.best .pbtn:hover{filter:brightness(1.08)}
+  @media(max-width:1000px){
+    .pcards{grid-template-columns:repeat(2,1fr)}
+    .ptip{min-height:0}
+  }
+  @media(max-width:560px){
+    .pcards{grid-template-columns:1fr;gap:16px}
+    .pcard.best{padding-top:32px}
+  }
+  .pnote{margin-top:16px;font-size:.86rem;color:var(--muted)}
+  .pnote b{color:var(--ink);font-size:1.04rem}
+
+  /* form */
+  .form{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .form-step{padding:26px 28px;border-bottom:1px solid var(--line)}
+  .form-step:last-child{border-bottom:0}
+  .fs-lab{font-size:.82rem;font-weight:800;color:var(--accent);letter-spacing:.03em;display:flex;align-items:center;gap:9px;margin-bottom:16px}
+  .fs-lab .dot{width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:.72rem}
+  .picker{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:720px){.picker{grid-template-columns:repeat(2,1fr)}}
+  .pick{border:1.5px solid var(--line);background:var(--paper);border-radius:11px;padding:16px 14px;cursor:pointer;text-align:left;font-family:inherit;transition:.18s;display:flex;flex-direction:column;gap:8px;color:inherit}
+  .pick:hover{border-color:var(--accent)}
+  .pick.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--surface));box-shadow:inset 0 0 0 1px var(--accent)}
+  .pick .ic{width:34px;height:34px;border-radius:9px;background:var(--surface-2);color:var(--brand);display:grid;place-items:center}
+  .pick.on .ic{background:var(--accent);color:#fff}
+  .pick .ic svg{width:18px;height:18px}
+  .pick b{font-size:.97rem;font-weight:800}
+  .pick span{font-size:.77rem;color:var(--muted)}
+  .pick .ext{display:inline-flex;align-items:center;gap:4px;font-size:.7rem;font-weight:800;color:var(--gold);background:color-mix(in srgb,var(--gold) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--gold) 35%,var(--line));padding:3px 8px;border-radius:999px;width:max-content}
+  .pick.link:hover{border-color:var(--gold)}
+  .fields h4{margin:0 0 6px;font-size:.92rem;font-weight:800}
+  .fields .cap{font-size:.82rem;color:var(--muted);margin-bottom:14px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:.82rem;font-weight:600;color:var(--ink);background:var(--surface-2);border:1px solid var(--line);padding:7px 12px;border-radius:8px}
+  .chip.req::after{content:"*";color:var(--accent);margin-left:3px;font-weight:800}
+  .tzbox{margin-top:14px;background:color-mix(in srgb,var(--gold) 12%,var(--surface));border:1px solid color-mix(in srgb,var(--gold) 40%,var(--line));border-radius:10px;padding:14px 16px;font-size:.84rem}
+  .tzbox b{color:var(--gold)}
+  .tzbox ul{margin:8px 0 0;padding-left:18px;color:var(--muted)}
+  .ffhint{display:block;font-size:.82rem;color:var(--muted);margin:-4px 0 9px;line-height:1.5}
+  .guidebox{background:color-mix(in srgb,var(--accent) 7%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 28%,var(--line));border-radius:12px;padding:16px 18px;margin-bottom:22px}
+  .guidebox b{display:block;font-size:.92rem;margin-bottom:8px;color:var(--accent)}
+  .guidebox p{font-size:.86rem;color:var(--muted);line-height:1.65}
+  .guidebox p b{display:inline;color:var(--ink);font-size:inherit}
+  .guidebox.mini{background:var(--surface-2);border-color:var(--line)}
+  .guidebox.mini b{color:var(--ink)}
+  .gtbl{width:100%;margin-top:12px;border-collapse:collapse;font-size:.85rem}
+  .gtbl td{padding:6px 10px;border-bottom:1px solid color-mix(in srgb,var(--accent) 15%,var(--line))}
+  .gtbl tr:last-child td{border-bottom:0}
+  .gtbl td:first-child{width:64px;font-weight:800;color:var(--accent);white-space:nowrap}
+  .gtbl td:last-child{color:var(--muted)}
+  .fnote{font-size:.82rem;color:var(--muted);margin-top:8px}
+  .fnote.ok{color:var(--brand);font-weight:700}
+  .fnote.err{color:#c0392b;font-weight:700}
+  input[type=file].inp{padding:10px 12px;font-size:.86rem;cursor:pointer}
+  .ff{margin-bottom:20px}
+  .ff .fflabel{display:block;font-size:.88rem;font-weight:800;color:var(--ink);margin-bottom:10px}
+  .ff .fflabel.req::after{content:' *';color:var(--accent)}
+  /* 실제 사례 칸 — 검색 노출을 가르는 부분이라 눈에 띄게 둡니다 */
+  .storybox{background:color-mix(in srgb,var(--gold) 9%,var(--surface));
+       border:1.5px solid color-mix(in srgb,var(--gold) 42%,var(--line));
+       border-radius:12px;padding:17px 19px;margin-bottom:0}
+  .storybox b{display:block;font-size:.95rem;margin-bottom:9px;color:var(--gold)}
+  .storybox p{font-size:.87rem;color:var(--muted);line-height:1.7;margin-top:7px}
+  .storybox p b{display:inline;color:var(--ink);font-size:inherit}
+  .storybox .sbwarn{font-size:.8rem;padding-top:10px;margin-top:11px;
+       border-top:1px dashed color-mix(in srgb,var(--gold) 35%,var(--line))}
+  .ff.hi{background:color-mix(in srgb,var(--gold) 5%,var(--surface));
+       border:1.5px solid color-mix(in srgb,var(--gold) 42%,var(--line));border-top:0;
+       border-radius:0 0 12px 12px;padding:16px 19px 18px;margin-top:0}
+  .ff.hi .fflabel{color:var(--gold)}
+  .ff.hi textarea.inp{min-height:132px;border-color:color-mix(in srgb,var(--gold) 40%,var(--line));
+       background:var(--surface)}
+  .ff.hi textarea.inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 18%,transparent)}
+  .ffstar{display:inline-block;margin-left:7px;font-size:.7rem;font-weight:800;letter-spacing:.02em;
+       color:#fff;background:linear-gradient(135deg,var(--gold),#8a5a17);
+       padding:3px 9px;border-radius:999px;vertical-align:1px}
+  .ffopts{display:flex;flex-wrap:wrap;gap:8px}
+  .ffopt{position:relative;display:inline-flex;align-items:center;border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 15px;font-size:.86rem;font-weight:600;color:var(--ink);cursor:pointer;transition:border-color .15s,background .15s;user-select:none}
+  .ffopt:hover{border-color:var(--accent)}
+  .ffopt input{position:absolute;opacity:0;width:0;height:0}
+  .ffopt:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface));color:var(--accent-ink);box-shadow:inset 0 0 0 1px var(--accent)}
+  /* 편수 고르기 */
+  .qtyopts{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+  .qopt{flex-direction:column;align-items:stretch;justify-content:center;border-radius:12px;padding:13px 10px;text-align:center;line-height:1.35}
+  .qopt .qn{font-size:1.05rem;font-weight:800;letter-spacing:-.01em}
+  .qopt .qw{font-size:.76rem;font-weight:700;color:var(--muted);margin-top:1px}
+  .qopt .qp{font-size:.92rem;font-weight:800;color:var(--accent-ink);margin-top:6px}
+  .qopt:has(input:checked) .qw{color:var(--accent-ink)}
+  .qsum{margin-top:11px;font-size:.88rem;font-weight:700;background:color-mix(in srgb,var(--accent) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 25%,var(--line));border-radius:10px;padding:12px 15px}
+  .qsum .qsm{display:block;font-weight:600;color:var(--muted);font-size:.8rem;margin-top:4px}
+  @media(max-width:720px){.qtyopts{grid-template-columns:repeat(2,1fr)}}
+  /* 접어둔 선택 입력 칸 */
+  .ffold{border:1.5px dashed color-mix(in srgb,var(--accent) 35%,var(--line));border-radius:12px;
+         margin:2px 0 20px;background:color-mix(in srgb,var(--accent) 4%,var(--surface))}
+  .ffold>summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:800;font-size:.93rem;
+                 display:flex;align-items:center;justify-content:flex-start;gap:9px;flex-wrap:wrap}
+  .ffold>summary::-webkit-details-marker{display:none}
+  .ffold>summary::before{content:"＋";color:var(--accent);font-size:1.02rem;width:17px;text-align:center;flex:none}
+  .ffold[open]>summary::before{content:"－"}
+  .ffold>summary small{font-weight:600;color:var(--muted);font-size:.82rem}
+  .ffoldin{padding:6px 16px 2px;border-top:1px solid color-mix(in srgb,var(--accent) 18%,var(--line))}
+  .ffoldwhy{font-size:.84rem;color:var(--muted);line-height:1.6;margin:10px 0 16px}
+  .ffoldwhy b{color:var(--ink)}
+  /* 편수별 기간·가격 표 */
+  .qtbl{grid-column:1/-1;margin-top:16px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+  .qtbl table{width:100%;border-collapse:collapse;font-size:.88rem}
+  .qtbl th{background:var(--surface-2);font-size:.76rem;font-weight:800;color:var(--muted);padding:10px 13px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+  .qtbl th:nth-child(-n+2),.qtbl td:nth-child(-n+2){text-align:left}
+  .qtbl th:first-child,.qtbl td:first-child{width:16%}
+  .qtbl th:nth-child(2),.qtbl td:nth-child(2){width:26%}
+  .qtbl th.hl{color:var(--gold)}
+  .qtbl td{padding:11px 13px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+  .qtbl tr:last-child td{border-bottom:0}
+  .qtbl td.hl{font-weight:800;color:var(--gold);background:color-mix(in srgb,var(--gold) 7%,transparent)}
+  .qtbl td.wk{color:var(--muted);font-weight:700}
+  .qtbl td:first-child{font-weight:800}
+  @media(max-width:560px){.qtbl table{font-size:.8rem} .qtbl th,.qtbl td{padding:9px 8px}}
+  .common{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(max-width:720px){.common{grid-template-columns:repeat(2,1fr)}}
+  .inp{border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:11px 13px;font-size:.9rem;color:var(--ink);font-family:inherit;width:100%}
+  .inp::placeholder{color:var(--muted)}
+  .inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent)}
+  textarea.inp{resize:vertical;min-height:110px;line-height:1.6}
+  .consent{margin-top:14px;display:flex;gap:10px;align-items:flex-start;font-size:.84rem;color:var(--muted)}
+  .consent .box{width:18px;height:18px;border:1.5px solid var(--accent);border-radius:5px;flex:0 0 auto;margin-top:2px}
+  .consent a{color:var(--accent);font-weight:600;text-decoration:underline;cursor:pointer}
+  .form-actions{padding:22px 28px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .form-actions .hint{font-size:.82rem;color:var(--muted)}
+
+  /* faq */
+  details{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:12px;overflow:hidden}
+  details[open]{border-color:var(--accent)}
+  summary{cursor:pointer;list-style:none;padding:20px 22px;font-weight:700;font-size:1rem;display:flex;justify-content:space-between;align-items:center;gap:16px}
+  summary::-webkit-details-marker{display:none}
+  summary .plus{width:20px;height:20px;flex:0 0 auto;position:relative}
+  summary .plus::before,summary .plus::after{content:"";position:absolute;background:var(--accent);border-radius:2px}
+  summary .plus::before{top:9px;left:2px;right:2px;height:2px}
+  summary .plus::after{left:9px;top:2px;bottom:2px;width:2px;transition:transform .2s}
+  details[open] summary .plus::after{transform:scaleY(0)}
+  details .ans{padding:0 22px 20px;color:var(--muted);font-size:.94rem}
+
+  /* ===== area pages ===== */
+  .page-hero{border-bottom:1px solid var(--line);background:var(--surface-2)}
+  .page-hero .wrap{padding:44px 24px 40px}
+  .back{display:inline-flex;align-items:center;gap:6px;font-size:.85rem;font-weight:700;color:var(--muted);cursor:pointer;margin-bottom:18px}
+  .back:hover{color:var(--accent)}
+  .page-hero h1{font-size:clamp(1.8rem,3.6vw,2.6rem)}
+  .page-hero .lead{max-width:54ch}
+  .subpills{display:flex;gap:8px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px;width:max-content;max-width:100%;margin-bottom:36px}
+  .sp{border:0;background:none;font-family:inherit;font-weight:700;font-size:.93rem;color:var(--muted);padding:9px 18px;border-radius:999px;cursor:pointer;transition:.18s;white-space:nowrap}
+  .sp:hover{color:var(--ink)}
+  .sp.on{background:var(--band-bg);color:#fff}
+  .subpanel{display:none}
+  .subpanel.on{display:block;animation:fade .35s ease}
+  .panel-intro{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;flex-wrap:wrap;margin-bottom:26px}
+  .panel-intro h2{max-width:22ch}
+  .panel-intro p{color:var(--muted);margin-top:10px;max-width:52ch}
+
+  /* benefits (scroll reveal) */
+  .benefit{display:grid;grid-template-columns:88px 1fr;gap:24px;align-items:start;padding:30px 0;border-top:1px solid var(--line)}
+  .benefits{margin-top:6px}
+  .benefits .benefit:first-child{border-top:0}
+  .flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-top:24px}
+  .fstep{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .fstep .n{font-size:.72rem;font-weight:800;color:var(--accent);letter-spacing:.04em}
+  .fstep h4{font-size:.95rem;font-weight:700;margin-top:8px}
+  .fstep p{font-size:.8rem;color:var(--muted);margin-top:5px}
+  /* 앱 화면(폰 목업) — 실제 스크린샷을 넣으면 img가 자리를 채움 */
+  .phones{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:8px}
+  @media(max-width:900px){.phones{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.phones{grid-template-columns:1fr}}
+  .phone{margin:0}
+  /* 틀 비율을 앱 화면(1080x1956)에 맞춰 둡니다. 9/18 로 두면 좌우가 잘렸습니다 */
+  .phone .frame{position:relative;aspect-ratio:1080/1956;border:7px solid #16233c;border-radius:24px;background:#F4EFE3;overflow:hidden;box-shadow:0 12px 28px -14px rgba(10,20,40,.55)}
+  /* 스크린샷 파일이 있으면 그 위를 덮고, 없으면(onerror로 제거) 아래 안내 화면이 보임 */
+  .phone .frame img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:contain;object-position:top center;display:block}
+  .phone .ph{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:16px 12px;text-align:center}
+  .phone .ph .ico{font-size:1.7rem;line-height:1}
+  .phone .ph b{font-size:.9rem;font-weight:800;color:var(--brand)}
+  .phone .ph span{font-size:.72rem;color:var(--muted);line-height:1.5}
+  .phone figcaption{margin-top:11px;text-align:center}
+  .phone figcaption b{display:block;font-size:.9rem;font-weight:800}
+  .phone figcaption span{font-size:.78rem;color:var(--muted)}
+  .bprice{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px}
+  @media(max-width:720px){.bprice{grid-template-columns:1fr}}
+  .bcard{border:1.5px solid var(--line);border-radius:14px;padding:22px 24px;background:var(--surface)}
+  .bcard.on{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 8%,var(--surface));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold) 40%,transparent)}
+  .bcard .bl{font-size:.8rem;font-weight:800;color:var(--muted);letter-spacing:.02em;display:flex;align-items:center;gap:7px}
+  .bcard.on .bl{color:var(--gold)}
+  .bcard .bv{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;margin-top:8px;line-height:1.1}
+  .bcard .bv small{font-size:.92rem;font-weight:700;color:var(--muted);margin-left:3px}
+  .bcard .bd{font-size:.84rem;color:var(--muted);margin-top:8px}
+  .bcard .bnow{font-size:.72rem;font-weight:800;background:var(--gold);color:#fff;padding:2px 8px;border-radius:999px}
+  .cnote{margin-top:20px;font-size:.83rem;color:var(--muted);background:var(--surface-2);border:1px dashed var(--line);border-radius:10px;padding:13px 15px}
+  .cnote b{color:var(--ink)}
+  @media(max-width:640px){.benefit{grid-template-columns:56px 1fr;gap:16px}}
+  .benefit .bn{font-size:2.4rem;font-weight:800;color:var(--accent);opacity:.35;letter-spacing:-.02em;line-height:1}
+  .benefit h3{font-size:1.3rem;font-weight:800;margin-bottom:8px}
+  .benefit p{color:var(--muted);font-size:1rem;max-width:60ch}
+  .benefit .bt{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+
+  /* process parts (image-2 style) */
+  .part{display:grid;grid-template-columns:200px 1fr;gap:20px;margin-top:22px}
+  @media(max-width:760px){.part{grid-template-columns:1fr}}
+  .part-label{background:linear-gradient(155deg,var(--band-bg),#0d1f3b);color:#fff;border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:180px}
+  .part-label span{font-size:.8rem;letter-spacing:.12em;color:var(--band-gold);font-weight:700}
+  .part-label b{font-size:2.6rem;font-weight:800;line-height:1}
+  .part-label p{margin-top:8px;font-size:.95rem;color:#C4D2EC;font-weight:600}
+  .part-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+  .pstep{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
+  .pstep .sb{display:inline-block;font-size:.72rem;font-weight:800;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--surface));padding:4px 10px;border-radius:999px;letter-spacing:.04em}
+  .pstep h4{font-size:1.05rem;font-weight:800;margin:12px 0 6px}
+  .pstep p{font-size:.85rem;color:var(--muted)}
+
+  /* short sub content */
+  .simple{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:34px}
+  .simple h3{font-size:1.4rem;font-weight:800;margin-bottom:10px}
+  .simple .st{color:var(--muted);font-size:1.02rem;max-width:60ch}
+  .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+  .feat.f4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:980px){.feat,.feat.f4{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:720px){.feat,.feat.f4{grid-template-columns:1fr}}
+  .fcard{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .fcard b{font-weight:800;font-size:.98rem}
+  .fcard p{color:var(--muted);font-size:.86rem;margin-top:6px}
+  .area-cta{margin-top:30px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+
+  /* 디자인 제작 사례 — 표지 그대로 */
+  .dgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  @media(max-width:900px){.dgrid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:640px){.dgrid{grid-template-columns:repeat(2,1fr)}}
+  .dcard{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);
+       transition:transform .15s,border-color .2s,box-shadow .2s}
+  .dcard:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 16px 34px -20px rgba(20,40,90,.5)}
+  .dcard .dimg{aspect-ratio:3/4;background:var(--surface-2);display:flex;align-items:flex-start;
+       justify-content:center;overflow:hidden}
+  .dcard .dimg img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+  .dcard figcaption{padding:12px 14px;border-top:1px solid var(--line)}
+  .dcard figcaption b{display:block;font-size:.88rem;font-weight:800;line-height:1.4}
+  .dcard figcaption span{display:block;font-size:.78rem;color:var(--muted);margin-top:3px}
+
+  .dcard.more{cursor:zoom-in}
+  .dcard .dimg.fit{background:#fff;align-items:center;justify-content:center;padding:16px}
+  .dcard .dimg.fit img{width:100%;height:auto;object-fit:contain}
+  .dcard .dimg{position:relative}
+  .dmore{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);white-space:nowrap;
+       font-size:.72rem;font-weight:800;color:#fff;background:rgba(12,20,40,.72);
+       border:1px solid rgba(255,255,255,.4);padding:5px 12px;border-radius:999px;
+       opacity:0;transition:opacity .18s;backdrop-filter:blur(2px)}
+  .dcard:hover .dmore{opacity:1}
+  /* 작업물은 저장·드래그가 안 되게 (완전한 차단은 아니지만 손이 안 가게) */
+  #designFolio img,.dvimg img{user-select:none;-webkit-user-select:none;-webkit-user-drag:none;
+       -webkit-touch-callout:none;pointer-events:none}
+
+  /* 작업물 미리보기 창 */
+  .modal.dv{padding:16px;overflow:auto;align-items:flex-start}
+  .dvbox{width:auto;max-width:min(94vw,720px);margin:auto;display:flex;flex-direction:column;
+       background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .dvtop{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);flex:0 0 auto}
+  .dvtop b{font-size:.98rem;font-weight:800}
+  .dvnum{font-size:.8rem;color:var(--muted);font-weight:700;white-space:nowrap}
+  .dvx{margin-left:auto;background:none;border:0;font-size:1.5rem;line-height:1;color:var(--muted);cursor:pointer;padding:0 4px}
+  .dvx:hover{color:var(--ink)}
+  /* 그림은 원래 비율 그대로 — 늘어나지 않게 flex 대신 블록으로 두고 높이를 화면에 맞춥니다 */
+  .dvimg{background:var(--surface-2);padding:16px;text-align:center;overflow:auto;flex:0 1 auto}
+  .dvimg img{display:block;margin:0 auto;width:auto;height:auto;
+       max-width:100%;max-height:68vh;object-fit:contain;
+       border-radius:8px;box-shadow:0 10px 30px -14px rgba(0,0,0,.45)}
+  .dvbtm{display:flex;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--line);flex:0 0 auto}
+  /* ⚠️ 아래쪽에 .modal .btn{width:100%} 이 있고 우선순위가 같아 나중 것이 이깁니다.
+        그래서 여기서는 한 단계 더 좁혀 씁니다 (안 그러면 버튼이 창을 다 먹고
+        가운데 안내문이 한 글자씩 세로로 쏟아집니다) */
+  .modal.dv .dvbtm .btn{width:auto;flex:0 0 auto;padding:9px 16px;font-size:.85rem;justify-content:center}
+  .modal.dv .dvbtm .btn:disabled{opacity:.35;cursor:default}
+  .dvnote{flex:1 1 auto;min-width:0;text-align:center;font-size:.78rem;color:var(--muted);line-height:1.5}
+  @media(max-width:700px){ .dvnote{display:none} }
+  @media(max-width:560px){ .dvimg img{max-height:62vh} }
+
+  /* 화면 순서대로 보여주기 (인투 오피스) */
+  .shotflow{display:grid;gap:16px}
+  .sf{margin:0;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:0;
+       border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+  .sf .sfimg{background:var(--surface-2);border-right:1px solid var(--line);min-height:150px;
+       display:flex;align-items:flex-start;overflow:hidden}
+  .sf .sfimg.none{display:none}
+  .sf .sfimg.tall{justify-content:center;background:var(--surface-2);padding:14px}
+  .sf .sfimg.tall img{width:auto;max-width:100%;max-height:420px;border-radius:10px;
+       box-shadow:0 10px 26px -14px rgba(0,0,0,.4)}
+  .sf .sfimg img{width:100%;display:block}
+  .sf figcaption{padding:20px 22px;display:flex;flex-direction:column;justify-content:center}
+  .sf .sfn{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;
+       background:var(--brand);color:#fff;font-size:.78rem;font-weight:800;margin-bottom:9px}
+  .sf figcaption b{font-size:1.05rem;font-weight:800;display:block;margin-bottom:5px}
+  .sf figcaption p{font-size:.87rem;color:var(--muted);line-height:1.65}
+  .sf:nth-child(even){direction:rtl}
+  .sf:nth-child(even)>*{direction:ltr}
+  .sf:nth-child(even) .sfimg{border-right:0;border-left:1px solid var(--line)}
+  @media(max-width:760px){
+    .sf,.sf:nth-child(even){grid-template-columns:1fr;direction:ltr}
+    .sf .sfimg{border-right:0;border-bottom:1px solid var(--line);max-height:210px}
+    .sf:nth-child(even) .sfimg{border-left:0}
+  }
+
+  /* portfolio */
+  .folio{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:8px}
+  @media(max-width:820px){.folio{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.folio{grid-template-columns:1fr}}
+  .folio-card{display:block;margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface);text-decoration:none;color:inherit;transition:transform .15s,border-color .2s,box-shadow .2s}
+  .folio-card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 16px 34px -20px rgba(20,40,90,.5)}
+  .chrome .url{flex:1;margin-left:6px;font-style:normal;font-size:.66rem;color:var(--muted);
+       background:var(--surface);border-radius:999px;padding:2px 9px;overflow:hidden;
+       text-overflow:ellipsis;white-space:nowrap}
+  .shotbody{position:relative}
+  .shotbody img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+       object-position:top center;display:block}
+  /* 스크린샷이 들어오면 안내 글자는 감춥니다 (사진 위에 겹치면 안 읽힙니다) */
+  .shotbody:has(img) b,.shotbody:has(img)>span:not(.open){display:none}
+  .shotbody:has(img){padding:0;background:var(--surface-2)}
+  .shotbody .open{position:relative;margin-top:7px;font-size:.72rem;font-weight:800;color:#fff;
+       background:rgba(12,20,40,.72);border:1px solid rgba(255,255,255,.45);
+       padding:6px 13px;border-radius:999px;opacity:0;transition:opacity .18s;
+       backdrop-filter:blur(2px)}
+  .folio-card:hover .shotbody .open{opacity:1}
+  .folio-card figcaption .tags{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:4px}
+  .folio-card figcaption .tags em{font-style:normal;font-size:.7rem;font-weight:800;color:#fff;
+       background:var(--brand);padding:2px 8px;border-radius:999px}
+  .shot{aspect-ratio:16/10;display:flex;flex-direction:column}
+  .chrome{height:26px;background:var(--surface-2);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:5px;padding:0 11px;flex:0 0 auto}
+  .chrome i{width:8px;height:8px;border-radius:50%;background:var(--line);flex:0 0 auto}
+  .shotbody{flex:1;display:grid;place-items:center;gap:4px;background:linear-gradient(140deg,var(--brand),#0d1f3b);color:#fff;text-align:center;padding:14px}
+  .shotbody b{font-size:1.02rem;font-weight:800;letter-spacing:-.01em}
+  .shotbody span{font-size:.75rem;color:#B9C8E6}
+  .folio-card figcaption{padding:13px 15px;border-top:1px solid var(--line)}
+  .folio-card figcaption b{display:block;font-size:.94rem;font-weight:800}
+  .folio-card figcaption span{font-size:.8rem;color:var(--muted)}
+
+  /* auth */
+  .authArea{display:flex;align-items:center;gap:10px}
+  .authArea .lg{background:none;border:0;font-family:inherit;font-weight:600;font-size:.92rem;color:var(--muted);cursor:pointer;white-space:nowrap}
+  .authArea .lg:hover{color:var(--ink)}
+  .authArea .me{font-size:.85rem;font-weight:700;color:var(--brand);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  @media(max-width:860px){.authArea{display:none}}
+  .modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(8,14,28,.55);backdrop-filter:blur(3px)}
+  .modal.open{display:flex}
+  .modal-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:16px;width:100%;max-width:420px;box-shadow:0 30px 70px -30px rgba(0,0,0,.55);overflow:hidden}
+  .modal-x{position:absolute;top:14px;right:16px;background:none;border:0;font-size:1.5rem;color:var(--muted);cursor:pointer;line-height:1}
+  .modal-head{display:flex;border-bottom:1px solid var(--line)}
+  .modal-tab{flex:1;background:none;border:0;font-family:inherit;font-weight:800;font-size:1rem;padding:18px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
+  .modal-tab.on{color:var(--brand);border-bottom-color:var(--accent)}
+  .modal-body{padding:24px}
+  .modal-body .fld{margin-bottom:12px}
+  .modal-body label{display:block;font-size:.8rem;font-weight:700;color:var(--ink);margin-bottom:6px}
+  .modal-msg{font-size:.85rem;margin:2px 0 12px;min-height:1.1em}
+  .modal-msg.err{color:#c0392b}
+  .modal-msg.ok{color:#1e7e34}
+  .modal .btn{width:100%;justify-content:center}
+  .authArea .pbadge{background:linear-gradient(135deg,var(--gold),#8a5a17);color:#fff;font-size:.7rem;font-weight:800;padding:3px 9px;border-radius:999px;letter-spacing:.03em;white-space:nowrap}
+  .authArea .up{background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-weight:700;font-size:.8rem;padding:4px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+  .authArea .up:hover{background:var(--gold);color:#fff}
+  .pwrap{position:relative}
+  .pwrap .inp{padding-right:54px}
+  .pwtoggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:0;font-family:inherit;font-size:.78rem;font-weight:700;color:var(--accent);cursor:pointer;padding:4px}
+  .ptag-wrap{margin-bottom:16px}
+  .ptag{display:inline-block;font-size:.85rem;font-weight:600;color:var(--muted);background:var(--surface-2);border:1px solid var(--line);padding:8px 14px;border-radius:999px}
+  .ptag.on{color:#fff;background:linear-gradient(135deg,var(--gold),#8a5a17);border-color:transparent}
+  .ptag b{color:var(--gold)}
+  .ptag.on b{color:#fff}
+  /* board */
+  .board-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+  .board-head h2{font-size:1.5rem}
+  .board-list{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+  .board-empty{padding:44px;text-align:center;color:var(--muted)}
+  .brow{padding:18px 20px;border-bottom:1px solid var(--line);cursor:pointer;display:flex;gap:12px;align-items:baseline;justify-content:space-between;transition:background .15s}
+  .board-list .brow:last-child{border-bottom:0}
+  .brow:hover{background:var(--surface-2)}
+  .brow .bt{font-weight:700;font-size:1rem;min-width:0}
+  .brow .bmeta{font-size:.8rem;color:var(--muted);white-space:nowrap;display:flex;gap:8px;align-items:center}
+  .btag{font-size:.68rem;font-weight:800;padding:2px 8px;border-radius:999px}
+  .btag.ans{background:color-mix(in srgb,var(--accent) 14%,var(--surface));color:var(--accent)}
+  .brow.na{flex-direction:column;align-items:stretch;cursor:default}
+  .brow.na .nhead{display:flex;gap:12px;align-items:baseline;justify-content:space-between;cursor:pointer}
+  .nbody{color:var(--muted);font-size:.95rem;line-height:1.7;white-space:pre-wrap;margin-top:12px;display:none}
+  .brow.na.open .nbody{display:block}
+  .qbody{white-space:pre-wrap;line-height:1.7;color:var(--ink);font-size:.96rem}
+  .qanswer{margin-top:18px;padding:16px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line)}
+  .qanswer b{color:var(--accent);font-size:.85rem}
+  .qanswer p{margin-top:6px;white-space:pre-wrap;line-height:1.7;color:var(--ink)}
+  .modal-card.wide{max-width:560px}
+  /* 내 계정 — 신청 내역 */
+  .mehead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .mehead h3{font-size:1.2rem;font-weight:800}
+  .mehead span{display:block;font-size:.84rem;color:var(--muted);margin-top:3px;word-break:break-all}
+  .sec-line{margin:22px 0 12px;font-size:.76rem;font-weight:800;letter-spacing:.05em;color:var(--muted);
+       padding-bottom:8px;border-bottom:1px solid var(--line)}
+  .melist{display:grid;gap:10px;max-height:46vh;overflow-y:auto;margin:0 -4px;padding:0 4px}
+  .mecard{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface-2)}
+  .mecard .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px}
+  .mecard .area{font-size:.7rem;font-weight:800;color:#fff;background:var(--brand);
+       padding:3px 9px;border-radius:999px;white-space:nowrap}
+  .mecard .nm{font-weight:800;font-size:.95rem}
+  .mecard .st{font-size:.7rem;font-weight:800;padding:3px 9px;border-radius:999px;white-space:nowrap;
+       background:var(--surface);border:1px solid var(--line);color:var(--muted)}
+  .mecard .st.go{color:var(--accent-ink);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+  .mecard .st.done{color:var(--brand);border-color:color-mix(in srgb,var(--brand) 40%,var(--line))}
+  .mecard .sum{font-size:.83rem;color:var(--muted);line-height:1.6}
+  .mecard .meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:9px;font-size:.82rem}
+  .mecard .meta b{color:var(--gold);font-weight:800}
+  .mecard .meta i{font-style:normal;color:var(--muted)}
+  .mebar{height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:10px}
+  .mebar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--brand))}
+  .melink{display:inline-block;margin-top:11px;font-size:.83rem;font-weight:800;color:var(--accent-ink);
+       border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line));background:var(--surface);
+       padding:8px 13px;border-radius:9px;text-decoration:none}
+  .melink:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+  .meempty{font-size:.87rem;color:var(--muted);text-align:center;padding:26px 10px;line-height:1.7}
+  .merow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:20px;
+       padding-top:16px;border-top:1px solid var(--line)}
+  .merow .lg{background:none;border:0;font-family:inherit;font-weight:700;font-size:.9rem;
+       color:var(--muted);cursor:pointer;padding:8px 2px}
+  .merow .lg:hover{color:#c0392b}
+  .authArea .me{cursor:pointer;border:0;background:none;font-family:inherit}
+  .authArea .me:hover{text-decoration:underline}
+  @media(max-width:560px){ .melist{max-height:52vh} }
+  .modal-body h3{font-size:1.2rem;font-weight:800;margin-bottom:14px}
+  .chk{display:flex;gap:8px;align-items:center;font-size:.9rem;color:var(--ink);cursor:pointer}
+  .chk input{width:17px;height:17px;accent-color:var(--accent);flex:0 0 auto}
+  .adm-btns{display:inline-flex;gap:4px;margin-left:8px}
+  .adm-btn{background:none;border:0;font-family:inherit;font-size:.78rem;font-weight:700;color:var(--accent);cursor:pointer;padding:2px 4px;border-radius:6px}
+  .adm-btn.del{color:#c0392b}
+  .adm-btn:hover{background:var(--surface-2)}
+  .qcontact{font-size:.85rem;color:var(--muted);margin-top:8px}
+  .qcontact b{color:var(--ink)}
+
+  /* success case */
+  .case{background:linear-gradient(155deg,var(--band-bg),#0d1f3b);color:#fff;border-radius:var(--radius);padding:36px;margin-top:6px;border:1px solid var(--band-line)}
+  .case .ck{font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--band-gold)}
+  .case h3{font-size:clamp(1.35rem,2.6vw,1.8rem);font-weight:800;color:#fff;margin:12px 0 14px;max-width:24ch}
+  .case p{color:#C4D2EC;font-size:1rem;max-width:62ch}
+  .case .cstats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:28px}
+  @media(max-width:640px){.case .cstats{grid-template-columns:repeat(2,1fr)}}
+  .case .cstat{border-top:2px solid var(--band-gold);padding-top:14px}
+  .case .cstat .cb{font-size:clamp(1.5rem,3vw,2.1rem);font-weight:800;color:#fff;letter-spacing:-.02em}
+  .case .cstat .cl{font-size:.82rem;color:#9FB2D6;margin-top:3px}
+  .case .cnm{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid var(--band-line);padding:6px 13px;border-radius:999px;font-size:.84rem;font-weight:700;color:#fff;margin-bottom:4px}
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* 사업자 정보 — 작게, 그러나 읽을 수는 있게 */
+  .bizinfo{border-top:1px solid var(--band-line);margin-top:18px;padding-top:16px;
+    display:grid;gap:10px;font-size:.78rem;line-height:1.65;opacity:.78}
+  .bizrow b{display:block;font-weight:700;margin-bottom:2px}
+  .bizrow span{display:block}
+  @media(min-width:720px){.bizinfo{grid-template-columns:1fr 1fr;gap:10px 28px}}
+
+  /* footer */
+  footer{background:var(--band-bg);color:var(--band-text);border-top:1px solid var(--band-line)}
+  .foot-cta{text-align:center;padding:66px 24px 54px;border-bottom:1px solid var(--band-line)}
+  .foot-cta h2{color:#fff;margin-bottom:14px}
+  .foot-cta p{color:#A9BBDA;max-width:520px;margin:0 auto 26px}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px;padding:50px 24px}
+  @media(max-width:720px){.foot-grid{grid-template-columns:1fr;gap:26px}}
+  .foot-grid .brand{color:#fff;font-size:1.15rem;cursor:default}
+  .foot-grid .brand .mk{color:#fff}
+  .foot-grid .brand small{color:#8fa3c9}
+  .foot-col h4{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:#8fa3c9;margin:0 0 14px;font-weight:700}
+  .foot-col a,.foot-col p{display:block;color:var(--band-text);font-size:.9rem;margin-bottom:9px;cursor:pointer}
+  .foot-col a:hover{color:var(--band-gold)}
+  .about{color:#A9BBDA;font-size:.9rem;max-width:34ch;margin-top:12px}
+  .legal{border-top:1px solid var(--band-line);padding:20px 24px;font-size:.8rem;color:#8fa3c9;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .legal a{color:var(--band-gold);cursor:pointer}
+</style>
+
+
+<header>
+  <div class="wrap nav">
+    <button class="brand" onclick="go('home')"><span class="mk">ESC</span><small>학원지원센터</small></button>
+    <nav class="links">
+      <button class="navlink" onclick="go('home')">홈</button>
+      <div class="navitem">
+        <button class="navlink" id="nl-support">지원사업 <i class="caret"></i></button>
+        <div class="drop">
+          <a onclick="go('doc')">자료제작 지원<small>홈페이지 · 앱 · 프로그램 · 디자인</small></a>
+          <a onclick="go('hr')">인력 지원<small>필리핀 · 미국 원어민 매칭</small></a>
+          <a onclick="go('content')">컨텐츠 지원<small>유학자료 · SAT · IM VOCA · 오피스</small></a>
+          <a onclick="go('mkt')">마케팅·광고 지원<small>블로그 홍보 · 모객</small></a>
+        </div>
+      </div>
+      <button class="navlink" onclick="go('board')">공지·문의</button>
+      <button class="navlink" onclick="go('home','apply')">신청하기</button>
+      <button class="navlink" onclick="go('home','faq')">자주 묻는 질문</button>
+    </nav>
+    <span class="authArea" id="authArea"></span>
+    <a class="btn btn-primary headcta" onclick="go('home','apply')">신청하기</a>
+    <button class="burger" id="burger" aria-label="메뉴"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </div>
+  <div class="msheet" id="msheet">
+    <a onclick="go('home')">홈</a>
+    <a onclick="go('doc')">지원사업 · 자료제작</a>
+    <a class="sub" onclick="go('hr')">인력 지원</a>
+    <a class="sub" onclick="go('content')">컨텐츠 지원</a>
+    <a class="sub" onclick="go('mkt')">마케팅·광고 지원</a>
+    <a onclick="go('board')">공지·문의</a>
+    <a onclick="go('home','apply')">신청하기</a>
+    <a onclick="go('home','faq')">자주 묻는 질문</a>
+    <a id="mAuth" onclick="openAuth('login')">로그인 / 회원가입</a>
+  </div>
+</header>
+
+<main>
+<!-- ============ HOME ============ -->
+<div class="view active" id="v-home">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">학원 경영 B2B 종합 지원 플랫폼</span>
+        <h1>학원을 살리고,<br><span class="hl">교육을 세웁니다.</span></h1>
+        <p class="lead">홈페이지·디자인 같은 IT 자료 제작부터 마케팅·PR, 원어민 인력, 유학·온라인 콘텐츠까지. 학원 경영에 필요한 모든 인프라를 한 곳에서 일괄 공급하는 파트너 전용 지원 센터입니다.</p>
+        <div class="hero-cta">
+          <a href="#" class="btn btn-primary" onclick="go('home','apply');return false;">지원 신청하기 →</a>
+          <a href="#" class="btn btn-ghost" onclick="scrollId('support');return false;">지원사업 살펴보기</a>
+        </div>
+        <p class="microcopy">홈페이지 <b>제작비 0원</b> · 월 관리비만 · 파트너 학원 전용 정책</p>
+      </div>
+      <aside class="side" aria-label="지원 요약">
+        <div class="side-h">지원 영역 <span>4</span></div>
+        <ul>
+          <li onclick="go('doc')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span><span><span class="t">자료제작</span><span class="d">홈페이지·디자인 직접 제작</span></span><span class="p" id="sidePriceDoc">관리비 5만~</span></li>
+          <li onclick="go('hr')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.9-4.6 5.5-4.6S13.9 16 14.5 19M16 8.2a3 3 0 0 1 0 5.4M18 19c-.3-1.6-1-2.8-2-3.6"/></svg></span><span><span class="t">인력지원</span><span class="d">원어민 선생님 매칭</span></span><span class="p">구인 접수</span></li>
+          <li onclick="go('content')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21.5z"/></svg></span><span><span class="t">컨텐츠지원</span><span class="d">유학·SAT·VOCA·오피스</span></span><span class="p">콘텐츠 공급</span></li>
+          <li onclick="go('mkt')"><span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 15v-4h4l7-4v12l-7-4H4zM19 9a4 4 0 0 1 0 6"/></svg></span><span><span class="t">마케팅·광고</span><span class="d">블로그 홍보 · 모객</span></span><span class="p" id="sidePriceMkt">편당 6,000원</span></li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <section class="sec tint" id="support">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">What we support</div>
+        <h2>학원이 필요한 네 가지를 지원합니다</h2>
+        <p>가르치는 일만 학원이 맡고, 그 외의 운영 부담은 학원지원센터가 대신합니다. 카드를 누르면 각 지원사업 페이지로 이동합니다.</p>
+      </div>
+      <div class="grid4">
+        <article class="card reveal" onclick="go('doc')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></div>
+          <h3>자료제작 지원</h3>
+          <p class="desc">홈페이지·앱·프로그램·디자인까지 전 과정을 전담팀이 직접 제작합니다.</p>
+          <div class="tags"><span class="tag">홈페이지</span><span class="tag">앱</span><span class="tag">프로그램</span><span class="tag">디자인</span></div>
+          <div class="cardlink">자세히 보기 <span>→</span></div>
+        </article>
+        <article class="card reveal" onclick="go('hr')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.9-4.6 5.5-4.6S13.9 16 14.5 19M16 8.2a3 3 0 0 1 0 5.4M18 19c-.3-1.6-1-2.8-2-3.6"/></svg></div>
+          <h3>인력 지원</h3>
+          <p class="desc">검증된 필리핀·미국 원어민 선생님을 원하는 조건으로 매칭합니다.</p>
+          <div class="tags"><span class="tag">필리핀 원어민</span><span class="tag">미국 원어민</span><span class="tag">줌 수업</span></div>
+          <div class="cardlink">자세히 보기 <span>→</span></div>
+        </article>
+        <article class="card reveal" onclick="go('content')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21.5z"/></svg></div>
+          <h3>컨텐츠 지원</h3>
+          <p class="desc">유학자료·SAT·IM VOCA 등 학습 콘텐츠와 전자서명(인투 오피스)까지 공급합니다.</p>
+          <div class="tags"><span class="tag">유학자료</span><span class="tag">SAT</span><span class="tag">IM VOCA</span><span class="tag">인투 오피스</span></div>
+          <div class="cardlink">자세히 보기 <span>→</span></div>
+        </article>
+        <article class="card reveal" onclick="go('mkt')">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 15v-4h4l7-4v12l-7-4H4zM19 9a4 4 0 0 1 0 6"/></svg></div>
+          <h3>마케팅·광고 지원</h3>
+          <p class="desc">블로거들이 각자 블로그에 학원 홍보 글을 올립니다. 검색 유입·모객용.</p>
+          <div class="tags"><span class="tag">블로그 홍보</span><span class="tag">검색 노출</span><span class="tag">모객</span></div>
+          <div class="cardlink">자세히 보기 <span>→</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="value">
+    <div class="wrap reveal">
+      <div class="kicker">우리의 가치</div>
+      <p>학원을 살리는 일.<br>단순한 사업을 넘어,<br>올바른 교육을 세우기 위해<br>필요한 모든 것을 지원하는 일.</p>
+      <p class="vsig">그것이 ESC가 지키는 가치입니다.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">How it works</div>
+        <h2>신청하면 이렇게 진행됩니다</h2>
+        <p>어떤 지원이든 큰 흐름은 동일합니다. 신청서 하나로 시작해서, 마감 이후에도 계속 관리해 드립니다.</p>
+      </div>
+      <div class="steps reveal">
+        <div class="step"><div class="n">STEP 1</div><h3>의뢰</h3><p>신청폼 작성으로 접수</p></div>
+        <div class="step"><div class="n">STEP 2</div><h3>담당자 배정</h3><p>영역별 전담자 지정</p></div>
+        <div class="step"><div class="n">STEP 3</div><h3>견적 발송</h3><p>내용 확인 후 견적서</p></div>
+        <div class="step"><div class="n">STEP 4</div><h3>제작·수행</h3><p>작업 진행 및 컨펌</p></div>
+        <div class="step"><div class="n">STEP 5</div><h3>납부</h3><p>관리비·비용 납부</p></div>
+        <div class="step"><div class="n">STEP 6</div><h3>지속 관리</h3><p>오픈 이후 유지관리</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="kicker">Track record</div>
+      <h2>말보다, 우리가 직접 해 온 실적으로.</h2>
+      <p class="note">아래 블로그는 우리 팀이 직접 기획·운영해 온 것으로, 대량 콘텐츠 운영 노하우의 근거입니다.</p>
+      <div class="stats">
+        <div class="stat"><div class="big tnum">1,590<span style="font-size:1rem"> 편</span></div><div class="lab">직접 운영 블로그 글</div><div class="sub">대전 875 · 청주 141 · 광주 574</div></div>
+        <div class="stat"><div class="big tnum">4</div><div class="lab">지원 영역</div><div class="sub">자료·인력·컨텐츠·마케팅</div></div>
+        <div class="stat"><div class="big">0<span style="font-size:1rem"> 원</span></div><div class="lab">홈페이지 제작비</div><div class="sub">월 관리비만 · 파트너 전용</div></div>
+        <div class="stat"><div class="big">1:1</div><div class="lab">전담 담당자 배정</div><div class="sub">신청 후 영역별 매칭</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="price">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">Pricing</div>
+        <h2>홈페이지 단계별 가격</h2>
+        <p>필요한 기능에 따라 단계를 고르시면 됩니다. <b style="color:var(--gold)">프리미엄(파트너) 회원</b>은 회원가로 더 저렴하게 이용하실 수 있습니다.</p>
+      </div>
+      <div class="ptag-wrap reveal" id="priceTag"></div>
+      <div class="pcards reveal" id="priceRows"></div>
+      <p class="pnote">※ <b>유료 도메인은 학원 부담</b>입니다(연 1~2만원대). 사용 여부는 신청 시 선택하실 수 있으며, 도메인은 학원 소유가 됩니다.</p>
+    </div>
+  </section>
+
+  <section class="sec tint" id="apply">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">Apply</div>
+        <h2>지원 신청</h2>
+        <p>필요한 지원을 고르면 그에 맞는 항목만 나타납니다. <b style="color:var(--gold)">프리미엄 회원</b>은 로그인 후 신청하시면 회원가로 견적을 받으실 수 있습니다.</p>
+      </div>
+      <div class="form reveal" id="applyForm">
+        <div class="form-step">
+          <div class="fs-lab"><span class="dot">1</span>어떤 지원이 필요하세요?</div>
+          <div class="picker" id="picker">
+            <button class="pick link" data-k="doc" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span><b>자료제작</b><span>홈페이지·디자인</span><span class="ext">제작 신청서로 이동 ↗</span></button>
+            <button class="pick" data-k="hr" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.9-4.6 5.5-4.6S13.9 16 14.5 19M16 8.2a3 3 0 0 1 0 5.4M18 19c-.3-1.6-1-2.8-2-3.6"/></svg></span><b>인력지원</b><span>원어민 매칭</span></button>
+            <button class="pick" data-k="cnt" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21.5z"/></svg></span><b>컨텐츠지원</b><span>유학·VOCA·오피스</span></button>
+            <button class="pick" data-k="mkt" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 15v-4h4l7-4v12l-7-4H4zM19 9a4 4 0 0 1 0 6"/></svg></span><b>마케팅·광고</b><span>블로그 홍보</span></button>
+          </div>
+          <div class="cnote" id="pickHint" style="margin-top:18px">👆 위에서 <b>필요한 지원을 선택</b>하시면 신청 항목이 이어서 나타납니다. <b>자료제작</b>은 제작 전문 파트너 <b>@IM</b>의 제작 신청서로 연결됩니다.</div>
+        </div>
+        <div class="form-step" id="fstep2" style="display:none">
+          <div class="fs-lab"><span class="dot">2</span>세부 항목 <span style="color:var(--muted);font-weight:600;font-size:.8rem">(선택한 지원에 따라 달라집니다)</span></div>
+          <div class="fields" id="fields"></div>
+          <div class="ff" style="margin-top:24px"><span class="fflabel">전체적으로 원하시는 것 (자유롭게)</span><textarea class="inp" id="f_message" placeholder="큰 그림을 자유롭게 적어주세요. 예: 어떤 목적으로 · 어떤 느낌으로 · 특별히 신경 쓰고 싶은 점 등"></textarea></div>
+        </div>
+        <div class="form-step" id="fstep3" style="display:none">
+          <div class="fs-lab"><span class="dot">3</span>기본 정보</div>
+          <div class="common">
+            <input class="inp" id="f_academy" placeholder="학원명 *" autocomplete="organization">
+            <input class="inp" id="f_manager" placeholder="담당자명 *" autocomplete="name">
+            <input class="inp" id="f_phone" placeholder="연락처 *" inputmode="tel" autocomplete="tel">
+            <input class="inp" id="f_email" placeholder="이메일" inputmode="email" autocomplete="email">
+          </div>
+          <div class="ff" style="margin-top:16px"><span class="fflabel">기타 요청사항</span><textarea class="inp" id="f_extra" placeholder="작은 바람이라도 좋습니다." style="min-height:70px"></textarea></div>
+          <label class="consent"><input type="checkbox" id="f_consent" style="width:18px;height:18px;accent-color:var(--accent);margin-top:2px;flex:0 0 auto"><span>개인정보 수집·이용에 동의합니다. 수집한 정보는 상담·견적 목적 외에는 사용하지 않습니다. <a onclick="scrollId('contact')">개인정보처리방침 보기</a></span></label>
+        </div>
+        <div class="form-actions" id="fstepActions" style="display:none">
+          <button class="btn btn-primary" type="button" id="submitBtn" onclick="submitRequest()">신청서 제출</button>
+          <span class="hint" id="formHint">제출하면 담당자가 배정되어 1~2일 내 연락드립니다.</span>
+        </div>
+      </div>
+      <div class="form reveal in" id="formDone" style="display:none">
+        <div style="padding:52px 28px 44px;text-align:center">
+          <div style="font-size:2.6rem">✅</div>
+          <h3 style="font-size:1.4rem;font-weight:800;margin:14px 0 8px">신청이 접수되었습니다</h3>
+          <p style="color:var(--muted);max-width:44ch;margin:0 auto">담당자가 배정되어 1~2일 내에 연락드리겠습니다. 감사합니다.</p>
+          <p id="doneWhat" style="color:var(--muted);font-size:.86rem;margin-top:12px"></p>
+          <div style="margin-top:26px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-primary" type="button" onclick="applyAgain()">+ 추가 신청하기</button>
+            <a class="btn btn-ghost" onclick="go('board')">공지·문의 보기</a>
+          </div>
+          <p style="color:var(--muted);font-size:.82rem;margin-top:16px">필요한 지원이 여러 개라면 <b>영역별로 각각 신청</b>하실 수 있습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="faq">
+    <div class="wrap" style="max-width:820px">
+      <div class="sec-head reveal"><div class="kicker">FAQ</div><h2>자주 묻는 질문</h2></div>
+      <div class="reveal">
+        <details open><summary>제작비가 정말 없나요?<span class="plus"></span></summary><div class="ans"><b>프리미엄(파트너) 회원</b>은 1·2단계를 제작비 없이 월 관리비만 받습니다. 일반 회원은 제작비가 별도로 있으며, 3·4단계는 기능에 따라 견적으로 안내됩니다. 로그인하면 회원 종류에 맞는 가격이 자동으로 표시됩니다.</div></details>
+        <details><summary>유료 도메인 비용은 누가 내나요?<span class="plus"></span></summary><div class="ans">도메인은 학원 소유가 되기 때문에 학원에서 부담합니다(연 1~2만원대). 신청 시 사용 여부를 선택하실 수 있고, 무료 주소로도 시작할 수 있습니다.</div></details>
+        <details><summary>원어민 수업 시차는 어떻게 되나요?<span class="plus"></span></summary><div class="ans">필리핀은 한국보다 1시간, 미국은 14시간 느립니다. 원하는 시간은 한국시간 기준으로 적어주시면 되고, 미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다(현지 심야 시간대).</div></details>
+        <details><summary>온라인 카드 결제도 되나요?<span class="plus"></span></summary><div class="ans">현재는 계좌 안내로 진행하며, 카드 결제(PG) 연동 기능은 추후 단계에서 추가될 예정입니다.</div></details>
+        <details><summary>파트너 학원이 아니어도 신청할 수 있나요?<span class="plus"></span></summary><div class="ans">본 사이트는 파트너 학원 전용입니다. 신규로 함께하고 싶으신 경우 문의하기로 남겨주시면 별도로 안내해 드립니다.</div></details>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 자료제작 ============ -->
+<div class="view" id="v-doc">
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="back" onclick="go('home')">← 전체 지원사업</span>
+      <span class="eyebrow">지원사업 · 자료제작</span>
+      <h1>자료제작 지원</h1>
+      <p class="lead">홈페이지, 앱, 프로그램부터 포스터·브로셔·명함까지. 학원에 필요한 모든 자료를 외주가 아닌 전담팀이 직접 만듭니다.</p>
+      <p class="microcopy" style="margin-top:14px">📨 자료제작 신청은 제작 전담 파트너 <b>@IM</b>의 제작 신청서에서 접수됩니다. 아래 신청 버튼을 누르면 신청서로 이동합니다.</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="wrap">
+      <div class="subpills" data-area="doc">
+        <button class="sp on" data-t="home" type="button">홈페이지</button>
+        <button class="sp" data-t="app" type="button">앱</button>
+        <button class="sp" data-t="prog" type="button">프로그램</button>
+        <button class="sp" data-t="design" type="button">디자인</button>
+      </div>
+
+      <!-- 홈페이지 (상세) -->
+      <div class="subpanel on" id="doc-home">
+        <div class="panel-intro reveal">
+          <div><div class="kicker">홈페이지 제작</div><h2>학원 홈페이지, 왜 필요할까요?</h2><p>단순한 소개를 넘어, 홈페이지는 학원이 24시간 일하게 만드는 가장 확실한 도구입니다.</p></div>
+        </div>
+
+        <div class="benefits">
+        <div class="benefit reveal"><div class="bn">01</div><div><h3>24시간 열려 있는 상담 창구</h3><p>학원 문을 닫은 밤과 주말에도 홈페이지는 학원을 소개하고 상담·문의를 받습니다. 학부모가 궁금할 때 바로 확인할 수 있습니다.</p><div class="bt"><span class="tag">전화 상담 연결</span><span class="tag">카카오톡 바로가기</span></div></div></div>
+        <div class="benefit reveal"><div class="bn">02</div><div><h3>검색에서 발견되는 학원</h3><p>네이버·구글에서 학원 이름을 검색했을 때 공식 홈페이지가 첫인상을 만듭니다. 블로그·SNS와 연결되어 신뢰를 크게 높입니다.</p><div class="bt"><span class="tag">검색 노출</span><span class="tag">공식 채널</span></div></div></div>
+        <div class="benefit reveal"><div class="bn">03</div><div><h3>학부모가 원하는 정보를 한눈에</h3><p>시간표, 강좌, 오시는 길, 공지사항까지. 전화로 반복 안내하던 정보를 홈페이지가 대신 보여줘 응대 부담을 줄여줍니다.</p><div class="bt"><span class="tag">시간표 안내</span><span class="tag">공지·소식</span></div></div></div>
+        <div class="benefit reveal"><div class="bn">04</div><div><h3>온라인 수강신청으로 운영 효율화</h3><p>2·3단계에서는 수강신청을 온라인으로 받고 관리자 페이지에서 상태를 관리합니다. 종이·전화로 하던 접수 업무가 자동으로 정리됩니다.</p><div class="bt"><span class="tag">온라인 신청</span><span class="tag">신청 관리</span></div></div></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:56px"><div><div class="kicker">제작 과정</div><h2>의뢰부터 사후관리까지, 13단계</h2><p>각 단계가 무엇을 하는지 투명하게 공개합니다. 모든 과정은 전담 담당자와 함께 진행됩니다.</p></div></div>
+
+        <div class="part reveal">
+          <div class="part-label"><span>PART</span><b>01</b><p>준비</p></div>
+          <div class="part-steps">
+            <div class="pstep"><span class="sb">STEP 01</span><h4>의뢰</h4><p>신청폼으로 원하는 내용과 요구사항을 접수합니다.</p></div>
+            <div class="pstep"><span class="sb">STEP 02</span><h4>견적 산출</h4><p>페이지 수·기능·디자인 범위를 검토해 관리비 견적을 냅니다.</p></div>
+            <div class="pstep"><span class="sb">STEP 03</span><h4>담당자 배정</h4><p>프로젝트를 책임질 전담 담당자를 정합니다.</p></div>
+            <div class="pstep"><span class="sb">STEP 04</span><h4>계약</h4><p>작업 범위·일정·비용을 확정하고 계약합니다.</p></div>
+          </div>
+        </div>
+        <div class="part reveal">
+          <div class="part-label"><span>PART</span><b>02</b><p>제작</p></div>
+          <div class="part-steps">
+            <div class="pstep"><span class="sb">STEP 05</span><h4>기획</h4><p>사이트 구조와 메뉴, 담을 내용을 설계합니다.</p></div>
+            <div class="pstep"><span class="sb">STEP 06</span><h4>디자인</h4><p>색상·레이아웃으로 화면 시안을 만듭니다.</p></div>
+            <div class="pstep"><span class="sb">STEP 07</span><h4>제작</h4><p>시안을 실제 작동하는 웹페이지로 개발합니다.</p></div>
+            <div class="pstep"><span class="sb">STEP 08</span><h4>검수·보완</h4><p>오류를 점검하고 세부를 다듬습니다.</p></div>
+            <div class="pstep"><span class="sb">STEP 09</span><h4>반응형 적용</h4><p>PC·태블릿·모바일에 맞게 화면을 최적화합니다.</p></div>
+          </div>
+        </div>
+        <div class="part reveal">
+          <div class="part-label"><span>PART</span><b>03</b><p>완료·관리</p></div>
+          <div class="part-steps">
+            <div class="pstep"><span class="sb">STEP 10</span><h4>제작 후 확인</h4><p>완성본을 의뢰자에게 보여드리고 컨펌받습니다.</p></div>
+            <div class="pstep"><span class="sb">STEP 11</span><h4>홈페이지 오픈</h4><p>도메인을 연결해 실제로 공개합니다.</p></div>
+            <div class="pstep"><span class="sb">STEP 12</span><h4>프로젝트 종료</h4><p>최종 자료를 정리하고 마무리합니다.</p></div>
+            <div class="pstep"><span class="sb">STEP 13</span><h4>사후 관리</h4><p>오픈 후에도 수정·업데이트를 지원합니다.</p></div>
+          </div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:56px"><div><div class="kicker">제작 사례</div><h2>우리가 직접 만든 홈페이지</h2><p>말보다 결과물로 보여드립니다. <b>카드를 누르면 실제 사이트가 열립니다.</b> 학원뿐 아니라 제조·물류·플랫폼까지 만들고 있습니다.</p></div></div>
+        <div class="folio reveal" id="folioSites"></div>
+        <div class="cnote">🔎 <b>전부 지금 열리는 진짜 사이트입니다.</b> 눌러서 직접 확인해 보세요. 학원 홈페이지는 위 단계별 가격표 그대로, 제작비 없이 월 관리비만으로 만들어 드립니다.</div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('doc')">홈페이지 제작 신청하기 ↗</a><a class="btn btn-ghost" onclick="go('home','price')">관리비 안내 보기</a></div>
+      </div>
+
+      <!-- 앱 -->
+      <div class="subpanel" id="doc-app">
+        <div class="panel-intro reveal"><div><div class="kicker">앱 제작</div><h2>학원 전용 앱</h2><p>학부모·학생과의 소통과 관리를 앱 하나로 모읍니다. 학원 이름을 단 우리만의 앱을 만듭니다.</p></div></div>
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>소통을 앱 하나로</h3><p>공지·상담·알림을 앱으로 모아 전달합니다. 문자·전화로 흩어지던 소통이 한 곳에 정리되고 전달률이 올라갑니다.</p><div class="bt"><span class="tag">공지·알림</span><span class="tag">상담</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>출결·학습을 실시간으로</h3><p>등하원 체크와 학습 현황을 학부모가 바로 확인할 수 있어, 학원에 대한 신뢰가 높아집니다.</p><div class="bt"><span class="tag">등하원 체크</span><span class="tag">학습 현황</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>우리 학원만의 브랜드</h3><p>앱스토어에 학원 이름으로 올라가는 전용 앱은 그 자체로 전문성과 신뢰의 증거가 되어 재등록에 기여합니다.</p><div class="bt"><span class="tag">브랜드</span><span class="tag">재등록</span></div></div></div>
+        </div>
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">제작 과정</div><h2>요구 분석부터 출시·관리까지</h2></div></div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>의뢰</h4><p>필요한 기능을 접수합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>요구 분석</h4><p>앱에 담을 것을 정리합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>설계</h4><p>화면과 기능 구조를 설계합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>견적</h4><p>분석·설계를 바탕으로 비용을 산출합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 05</div><h4>개발</h4><p>실제 작동하는 앱으로 개발합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 06</div><h4>테스트</h4><p>오류를 점검하고 보완합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 07</div><h4>출시</h4><p>스토어에 등록·배포합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 08</div><h4>관리</h4><p>출시 후 업데이트를 지원합니다.</p></div>
+        </div>
+        <div class="cnote">🛠️ 앱은 <b>필요한 학원에 맞춰 제작</b>해 드립니다. 원하시는 기능을 신청 시 알려주세요.</div>
+
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('doc')">앱 제작 문의하기 ↗</a></div>
+      </div>
+
+      <!-- 프로그램 -->
+      <div class="subpanel" id="doc-prog">
+        <div class="panel-intro reveal"><div><div class="kicker">프로그램 제작</div><h2>학원 맞춤 프로그램</h2><p>기성 솔루션이 채우지 못하는 학원만의 필요를, 맞춤 프로그램으로 해결합니다.</p></div></div>
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>반복 업무 자동화</h3><p>출결·성적·정산처럼 매번 손으로 하던 일을 프로그램이 대신 처리해, 사람은 더 중요한 일에 집중할 수 있습니다.</p><div class="bt"><span class="tag">업무 자동화</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>흩어진 데이터를 하나로</h3><p>여러 파일과 장부에 흩어진 학생 정보를 한 곳에서 체계적으로 관리하고 바로 검색할 수 있습니다.</p><div class="bt"><span class="tag">데이터 관리</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>우리 방식에 딱 맞게</h3><p>남의 방식에 맞춰야 하는 기성 솔루션과 달리, 학원 운영 방식 그대로에 맞춰 설계합니다.</p><div class="bt"><span class="tag">맞춤 설계</span></div></div></div>
+        </div>
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">제작 과정</div><h2>요구 분석부터 적용·관리까지</h2></div></div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>의뢰</h4><p>필요와 문제를 접수합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>요구 분석</h4><p>무엇을 자동화할지 정리합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>설계</h4><p>프로그램 구조를 설계합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>견적</h4><p>분석·설계를 바탕으로 비용을 산출합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 05</div><h4>개발</h4><p>필요한 기능을 개발합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 06</div><h4>테스트</h4><p>실제 데이터로 점검합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 07</div><h4>적용</h4><p>학원에 도입하고 안내합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 08</div><h4>관리</h4><p>도입 후 개선을 지원합니다.</p></div>
+        </div>
+        <div class="tzbox"><b>📝 의뢰 전에 알려주세요</b><ul><li>어떤 업무를, 어떻게 도와드릴 프로그램인지 구체적으로 적어주세요.</li><li>학원의 업무 흐름과 불편한 점을 정확히 알아야 진짜 효율적인 자동화를 설계할 수 있습니다.</li><li>신청서에 자세히 적으실수록 정확한 설계와 견적이 가능합니다.</li></ul></div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('doc')">프로그램 문의하기 ↗</a></div>
+      </div>
+
+      <!-- 디자인 -->
+      <div class="subpanel" id="doc-design">
+        <div class="panel-intro reveal"><div><div class="kicker">디자인 제작</div><h2>포스터 · 브로셔 · 명함</h2><p>학원 홍보에 필요한 인쇄물을 디자인합니다. 디자인만 받으실 수도, 인쇄·배송까지 한 번에 맡기실 수도 있습니다.</p></div></div>
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>첫인상을 만드는 홍보물</h3><p>모집 포스터와 브로셔의 완성도가 곧 학원의 전문성입니다. 잘 만든 홍보물 한 장이 상담 문의로 이어집니다.</p><div class="bt"><span class="tag">모집 포스터</span><span class="tag">브로셔</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>온·오프라인 일관된 디자인</h3><p>인쇄물부터 SNS·홈페이지용 이미지까지 같은 톤으로 맞춰, 학원 브랜드가 어디서나 통일되게 보입니다.</p><div class="bt"><span class="tag">인쇄물</span><span class="tag">SNS 이미지</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>디자인만? 인쇄까지?</h3><p>필요에 따라 디자인 파일만 받으실 수도 있고, 인쇄와 배송까지 한 번에 맡기실 수도 있습니다.</p><div class="bt"><span class="tag">디자인만</span><span class="tag">인쇄·배송 포함</span></div></div></div>
+        </div>
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">제작 항목</div><h2>이런 것을 만듭니다</h2></div></div>
+        <div class="feat reveal">
+          <div class="fcard"><b>포스터</b><p>학생 모집·이벤트 홍보용. 매장 부착·온라인 게시 모두.</p></div>
+          <div class="fcard"><b>브로셔</b><p>학원 소개용 접이식·책자식. 상담 시 배부.</p></div>
+          <div class="fcard"><b>명함</b><p>원장·강사용 명함. 학원 브랜드에 맞춰.</p></div>
+        </div>
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">제작 과정</div><h2>의뢰부터 인쇄·배송까지</h2></div></div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>의뢰</h4><p>내용·컨셉·수량을 접수합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>담당자 배정</h4><p>전담 디자이너를 배정합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>견적</h4><p>디자인·인쇄 범위로 견적을 냅니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>제작</h4><p>시안을 디자인합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 05</div><h4>컨펌</h4><p>시안을 확인하고 수정합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 06</div><h4>납부</h4><p>제작비를 납부합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 07</div><h4>마감·전달</h4><p>파일 전달 또는 인쇄·배송.</p></div>
+        </div>
+        <div class="cnote">🖨️ 디자인만 제작하거나 인쇄·배송까지 선택할 수 있습니다. <b>비용은 항목·수량에 따라 견적으로 안내</b>합니다.</div>
+        <div class="panel-intro reveal" style="margin-top:56px"><div><div class="kicker">제작 사례</div><h2>우리가 만든 홍보물</h2><p>실제로 만들어 쓰고 있는 브로셔와 포스터입니다. <b>눌러보시면 앞부분 몇 장을 넘겨보실 수 있습니다.</b></p></div></div>
+        <div class="dgrid reveal" id="designFolio"></div>
+        <div class="cnote">🖨️ <b>학원 홍보물도 같은 수준으로 만들어 드립니다.</b> 모집 포스터·브로셔·명함·현수막·배너 — 필요한 것을 말씀해 주시면 견적으로 안내드립니다.</div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('doc')">디자인 문의하기 ↗</a></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 인력 ============ -->
+<div class="view" id="v-hr">
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="back" onclick="go('home')">← 전체 지원사업</span>
+      <span class="eyebrow">지원사업 · 인력</span>
+      <h1>인력 지원</h1>
+      <p class="lead">검증된 필리핀·미국 원어민 선생님을 학원과 연결합니다. 원하는 조건만 알려주시면 알맞은 선생님을 매칭해 드립니다.</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="wrap">
+      <div class="subpills" data-area="hr">
+        <button class="sp on" data-t="ph" type="button">필리핀 원어민</button>
+        <button class="sp" data-t="us" type="button">미국 원어민</button>
+        <button class="sp" data-t="flow" type="button">진행 절차</button>
+      </div>
+      <!-- 필리핀 원어민 -->
+      <div class="subpanel on" id="hr-ph">
+        <div class="panel-intro reveal">
+          <div><div class="kicker">필리핀 원어민</div><h2>부담 없는 비용으로, 자주 하는 화상 영어</h2><p>영어는 주 1회로 늘지 않습니다. 필리핀 원어민은 합리적인 비용이라 학원이 <b>꾸준한 수업</b>을 설계할 수 있습니다.</p></div>
+        </div>
+
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>자주 해도 부담이 적은 비용</h3><p>주 1회 수업으로는 실력이 쌓이기 어렵습니다. 필리핀 원어민 수업은 비용 부담이 적어 주 3~5회처럼 자주 하는 커리큘럼을 학원이 실제로 운영할 수 있습니다.</p><div class="bt"><span class="tag">주 3~5회 운영</span><span class="tag">지속 가능한 비용</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>말하는 시간을 채우는 회화 수업</h3><p>문법·독해 중심 수업에서 늘 부족한 것이 학생이 직접 말하는 시간입니다. 1:1 화상 수업은 한 시간 내내 학생이 말하게 만들어, 회화와 기초를 다지는 데 적합합니다.</p><div class="bt"><span class="tag">1:1 회화</span><span class="tag">기초 다지기</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>시차 1시간, 방과 후 시간을 그대로</h3><p>필리핀은 한국보다 1시간 느립니다. 학원이 실제로 쓰는 방과 후·저녁 시간대를 그대로 쓸 수 있어, 시간표를 억지로 바꿀 필요가 없습니다.</p><div class="bt"><span class="tag">방과 후 가능</span><span class="tag">저녁·주말 가능</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">04</div><div><h3>사람 구하는 일은 우리가</h3><p>학원이 직접 채용하고 검증하는 데 드는 시간을 우리가 대신 씁니다. 우리가 확인한 선생님만 연결하고, 수업이 맞지 않으면 교체까지 지원합니다.</p><div class="bt"><span class="tag">사전 검증</span><span class="tag">교체 지원</span></div></div></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">수업 운영</div><h2>이렇게 운영합니다</h2></div></div>
+        <div class="feat f4 reveal">
+          <div class="fcard"><b>1:1 수업</b><p>학생 한 명에 선생님 한 명. 말하기 시간이 가장 많습니다.</p></div>
+          <div class="fcard"><b>그룹 수업</b><p>소수 그룹으로도 운영 가능. 비용을 나눠 부담합니다.</p></div>
+          <div class="fcard"><b>줌(화상)</b><p>학원 교실·태블릿에서 바로 접속해 진행합니다.</p></div>
+          <div class="fcard"><b>교재·레벨 협의</b><p>학원이 쓰는 교재와 학생 레벨에 맞춰 조정합니다.</p></div>
+        </div>
+        <div class="tzbox"><b>⏰ 시차 안내</b><ul><li>필리핀은 한국보다 <b style="color:inherit">1시간</b> 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 적어주세요.</li></ul></div>
+        <div class="cnote">💰 <b>비용:</b> 수업 형태(1:1·그룹)와 주당 횟수에 따라 달라져 <b>신청 시 견적으로 안내</b>합니다.</div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('hr')">구인공고 등록하기 →</a><a class="btn btn-ghost" onclick="document.querySelector('#v-hr .sp[data-t=flow]').click()">진행 절차 보기</a></div>
+      </div>
+
+      <!-- 미국 원어민 -->
+      <div class="subpanel" id="hr-us">
+        <div class="panel-intro reveal">
+          <div><div class="kicker">미국 원어민</div><h2>원어민 수업이 있는 학원이라는 신뢰</h2><p>정통 발음과 표현이 필요한 수업, 그리고 유학·상위권 학생을 위한 프리미엄 수업에 적합합니다.</p></div>
+        </div>
+
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>정통 발음과 실제 쓰는 표현</h3><p>교재에는 없는 실제 표현과 억양을 그대로 배웁니다. 발음·스피킹 완성도가 중요한 학생에게는 차이가 분명하게 드러납니다.</p><div class="bt"><span class="tag">발음·억양</span><span class="tag">실사용 표현</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>유학·상위권 학생에게 맞는 수업</h3><p>해외 진학을 준비하거나 이미 상위권인 학생에게는 회화를 넘어선 수업이 필요합니다. 에세이·토론처럼 요구 수준이 높은 수업을 요청하실 수 있습니다.</p><div class="bt"><span class="tag">유학 준비</span><span class="tag">상위권 심화</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>모집과 상담에서 쓰이는 차별점</h3><p>"미국 원어민 수업을 운영하는 학원"은 그 자체로 홍보 문구가 됩니다. 상담에서 다른 학원과 확실히 구분되는 카드가 하나 늘어납니다.</p><div class="bt"><span class="tag">모집 차별점</span><span class="tag">브랜딩</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">04</div><div><h3>시차 14시간, 시간대만 맞추면 됩니다</h3><p>미국은 한국보다 14시간 느려 가능한 시간대가 정해져 있습니다. 아래 안내를 참고해 희망 시간을 적어주시면, 가능한 선생님으로 매칭합니다.</p><div class="bt"><span class="tag">오전 수업 권장</span><span class="tag">한국시간 기준</span></div></div></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">수업 가능 시간</div><h2>한국시간 기준으로 보세요</h2></div></div>
+        <div class="feat reveal">
+          <div class="fcard"><b>👍 권장</b><p>한국시간 <b>오전 7시~낮 12시</b> — 미국 현지 저녁 시간이라 가장 안정적입니다.</p></div>
+          <div class="fcard"><b>🤝 협의 가능</b><p>한국시간 <b>밤 9시 이후</b> — 선생님 지역·일정에 따라 가능한 경우가 있습니다.</p></div>
+          <div class="fcard"><b>🚫 어려움</b><p>한국시간 <b>오후 1시~오후 8시</b> — 미국 현지 심야로 수업이 불가합니다.</p></div>
+        </div>
+        <div class="tzbox"><b>⏰ 시차 안내</b><ul><li>미국은 한국보다 <b style="color:inherit">14시간</b> 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 적어주세요.</li><li>미국 선생님은 한국시간 <b style="color:inherit">오후 1시~오후 8시</b> 수업이 어렵습니다(현지 심야).</li><li>방과 후 시간대가 꼭 필요하다면 <b style="color:inherit">필리핀 원어민</b>을 함께 검토해 보세요.</li></ul></div>
+        <div class="cnote">💰 <b>비용:</b> 미국 원어민은 필리핀 원어민보다 비용이 높습니다. 수업 형태·횟수에 따라 <b>신청 시 견적으로 안내</b>합니다.</div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('hr')">구인공고 등록하기 →</a><a class="btn btn-ghost" onclick="document.querySelector('#v-hr .sp[data-t=ph]').click()">필리핀 원어민 비교</a></div>
+      </div>
+
+      <!-- 진행 절차 -->
+      <div class="subpanel" id="hr-flow">
+        <div class="panel-intro reveal">
+          <div><div class="kicker">진행 절차</div><h2>구인공고 하나로 시작합니다</h2><p>학원은 원하는 조건만 보내주시면 됩니다. 채용·검증·시간표 조정·사후 관리는 우리가 진행합니다.</p></div>
+        </div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>구인 접수</h4><p>신청서에 원하는 조건을 담아 접수합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>조건 정리</h4><p>담당자가 과목·시간대·인원을 함께 정리합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>선생님 매칭</h4><p>검증된 인력풀에서 조건에 맞는 후보를 찾습니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>확인·시범수업</h4><p>프로필을 보시고, 필요하면 시범수업으로 확인합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 05</div><h4>시간표·비용 확정</h4><p>수업 시간과 비용을 확정합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 06</div><h4>수업 시작</h4><p>줌 연결을 안내하고 수업을 시작합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 07</div><h4>지속 관리</h4><p>진행 상황을 확인하고, 필요하면 교체를 지원합니다.</p></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">이런 정보를 주세요</div><h2>조건이 구체적일수록 매칭이 빨라집니다</h2><p>신청서에 아래 항목이 들어갑니다. 미리 정리해 두시면 한 번에 진행됩니다.</p></div></div>
+        <div class="feat reveal">
+          <div class="fcard"><b>원하는 국적</b><p>필리핀 · 미국 · 무관.</p></div>
+          <div class="fcard"><b>과목·레벨</b><p>회화, 문법, 에세이 등과 학생 수준.</p></div>
+          <div class="fcard"><b>시간대·요일</b><p>한국시간 기준으로 적어주세요.</p></div>
+          <div class="fcard"><b>주당 횟수</b><p>주 1회부터 주 5회까지.</p></div>
+          <div class="fcard"><b>학생 연령·인원</b><p>1:1인지 그룹인지 판단합니다.</p></div>
+          <div class="fcard"><b>시작 희망일</b><p>언제부터 수업이 필요한지.</p></div>
+        </div>
+        <div class="tzbox"><b>⏰ 시차 안내</b><ul><li>필리핀은 한국보다 1시간, 미국은 14시간 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 적어주세요.</li><li>미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다.</li></ul></div>
+        <div class="cnote">🔁 <b>맞지 않으면 교체해 드립니다.</b> 수업이 학원·학생과 맞지 않을 경우 담당자에게 알려주시면 다른 선생님으로 다시 매칭합니다.</div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('hr')">구인공고 등록하기 →</a></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 컨텐츠 ============ -->
+<div class="view" id="v-content">
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="back" onclick="go('home')">← 전체 지원사업</span>
+      <span class="eyebrow">지원사업 · 컨텐츠</span>
+      <h1>컨텐츠 지원</h1>
+      <p class="lead">유학 자료, SAT, IM VOCA부터 전자서명 인투 오피스까지. 직접 가르치지 않아도 앱과 콘텐츠로 학생을 관리하고, 서류 업무까지 줄입니다.</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="wrap">
+      <div class="subpills" data-area="content">
+        <button class="sp on" data-t="study" type="button">유학자료</button>
+        <button class="sp" data-t="sat" type="button">SAT</button>
+        <button class="sp" data-t="voca" type="button">IM VOCA</button>
+        <button class="sp" data-t="office" type="button">인투 오피스</button>
+      </div>
+      <!-- 유학자료 -->
+      <div class="subpanel on" id="content-study">
+        <div class="panel-intro reveal">
+          <div><div class="kicker">유학자료</div><h2>유학 상담까지 되는 학원</h2><p>유학은 학원이 혼자 준비하기 어려운 영역입니다. 유학 업무를 실제로 하는 <b>인투유학</b>의 자료를 파트너 학원에 그대로 제공합니다.</p></div>
+        </div>
+
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>유학 문의에 그 자리에서 답하기</h3><p>"유학은 어떻게 준비하나요?"라는 질문에 "알아보고 연락드리겠습니다"라고 답하면 상담은 그대로 끝납니다. 자료가 있으면 상담 자리에서 바로 설명할 수 있습니다.</p><div class="bt"><span class="tag">상담 대응</span><span class="tag">이탈 방지</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>실무에서 쓰는 자료를 그대로</h3><p>학원 홍보용으로 만든 자료가 아니라, 유학 업무에서 실제로 쓰는 자료입니다. 내용의 정확도가 다릅니다.</p><div class="bt"><span class="tag">인투유학 제공</span><span class="tag">실무 자료</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>학부모에게 보여줄 수 있는 형태</h3><p>원장님이 읽고 이해하는 자료를 넘어, 학부모 상담에서 그대로 펼쳐 보여줄 수 있는 형태로 드립니다.</p><div class="bt"><span class="tag">상담 설명자료</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">04</div><div><h3>바뀌는 정보는 다시 전달합니다</h3><p>학교·전형·비용 정보는 해마다 달라집니다. 한 번 주고 끝내지 않고, 변경된 내용을 파트너 학원에 다시 전달합니다.</p><div class="bt"><span class="tag">업데이트 제공</span></div></div></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">제공 자료</div><h2>이런 자료를 받으실 수 있습니다</h2></div></div>
+        <div class="feat reveal">
+          <div class="fcard"><b>국가별 유학 가이드</b><p>준비 흐름과 일정을 국가별로 정리한 자료.</p></div>
+          <div class="fcard"><b>학교·전형 정보</b><p>학교 종류와 지원 조건 안내.</p></div>
+          <div class="fcard"><b>절차·서류 체크리스트</b><p>무엇을 언제까지 준비해야 하는지.</p></div>
+          <div class="fcard"><b>비용·장학 안내</b><p>학비·생활비 등 비용 구조 설명자료.</p></div>
+          <div class="fcard"><b>학부모 상담자료</b><p>상담 자리에서 바로 쓰는 설명자료.</p></div>
+          <div class="fcard"><b>유학 담당자 연결</b><p>학원이 답하기 어려운 건은 담당자로 연결.</p></div>
+        </div>
+        <div class="cnote">📝 <b>내용 확인 필요(시안):</b> 위 제공 자료 목록은 예시입니다. 실제로 파트너 학원에 드릴 자료 항목을 알려주시면 그대로 교체합니다.</div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">진행 절차</div><h2>요청부터 업데이트까지</h2></div></div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>요청</h4><p>필요한 자료와 대상 학생을 접수합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>목적 확인</h4><p>상담용인지 수업용인지 확인합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>자료 제공</h4><p>학원에 맞는 자료를 정리해 전달합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>활용 안내</h4><p>어떻게 쓰는지 담당자가 안내합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 05</div><h4>업데이트</h4><p>정보가 바뀌면 다시 전달합니다.</p></div>
+        </div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('cnt')">유학자료 요청하기 →</a></div>
+      </div>
+
+      <!-- SAT -->
+      <div class="subpanel" id="content-sat">
+        <div class="panel-intro reveal">
+          <div><div class="kicker">SAT · IMSAT</div><h2>SAT 강사 없이 SAT반을 엽니다</h2><p><b>AI가 문제를 만들고, 다른 AI가 그 답을 다시 검증합니다.</b> 시험지 만들기·응시·채점·오답 분석까지 한 곳에서 끝나서, 학원은 <b>관리</b>만 하시면 됩니다.</p></div>
+        </div>
+
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>가르칠 사람이 없어서 못 하던 수업</h3><p>SAT는 강사 구하기가 가장 어려운 과목입니다. 문제 출제와 채점·분석을 IMSAT가 대신하니, 학원은 진도와 출결만 관리해도 반이 굴러갑니다.</p><div class="bt"><span class="tag">강사 부담 없음</span><span class="tag">관리형 운영</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>정답이 틀린 문제를 학생에게 주지 않습니다</h3><p>AI가 만든 문제는 정답 오류가 늘 걱정입니다. IMSAT는 <b>제미나이가 출제하고 클로드가 정답을 숨긴 채 직접 다시 풉니다.</b> 답이 어긋나면 그 문항만 자동으로 다시 만들어 교체합니다.</p><div class="bt"><span class="tag">이중검증</span><span class="tag">자동 교체</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>상위권·유학 준비 학생을 붙잡는 카드</h3><p>SAT가 필요해지는 순간 학생은 다른 학원을 찾습니다. 우리 학원에서 이어서 준비할 수 있으면 이탈을 막을 수 있습니다.</p><div class="bt"><span class="tag">이탈 방지</span><span class="tag">상위권 유지</span></div></div></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">이중검증</div><h2>문제를 만드는 AI와, 검사하는 AI가 다릅니다</h2><p>출제한 AI가 스스로 채점하면 같은 실수를 못 잡습니다. 그래서 검증은 <b>다른 AI</b>가 합니다.</p></div></div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>제미나이가 출제</h4><p>실제 Digital SAT 형식에 맞춰 영역·유형·난이도별로 문항을 만듭니다.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>클로드가 검증</h4><p>정답을 가린 채 직접 풀어보고, 시험지의 정답과 맞는지 대조합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>어긋나면 자동 교체</h4><p>답이 다른 문항만 다시 출제해 바꾸고, 다시 검증합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>문제은행에 적립</h4><p>검증을 통과한 문항만 쌓입니다. <b>쓸수록 좋아집니다.</b></p></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">제공 범위</div><h2>무엇을 드리나요</h2></div></div>
+        <div class="feat f4 reveal">
+          <div class="fcard"><b>실전 문항 AI 출제</b><p>영역·유형·난이도를 고르면 바로 만들어집니다. 정답·해설·오답 풀이·도표까지 함께.</p></div>
+          <div class="fcard"><b>검증 문제은행</b><p>검증을 통과한 문항만 쌓아 다음 출제 때 다시 씁니다.</p></div>
+          <div class="fcard"><b>온라인 응시</b><p>실제 시험(Bluebook)과 같은 화면. 타이머, 이동·크기조절 계산기, 모듈 검토 화면까지.</p></div>
+          <div class="fcard"><b>적응형 2모듈</b><p>모듈1 성적에 따라 모듈2 난이도가 실제 시험처럼 갈립니다.</p></div>
+          <div class="fcard"><b>AI 오답 진단</b><p>틀렸다가 아니라 <b>왜 틀렸는지</b> — 오답을 고른 이유, 출제자의 함정, 오답 유형까지 교사용 리포트로.</p></div>
+          <div class="fcard"><b>약점 기반 맞춤 출제</b><p>그 학생이 자주 틀리는 유형만 모아 시험지를 만듭니다. 이미 낸 소재는 알아서 피합니다.</p></div>
+          <div class="fcard"><b>누적 성장 분석</b><p>볼수록 정교해지는 학생별 강점·약점·습관과 다음 학습 플랜.</p></div>
+          <div class="fcard"><b>학생 포털 · 시험 배부</b><p>학생이 직접 가입해 자기 점수와 해설을 봅니다. 배부하면 학생 화면에 응시 버튼이 바로 뜹니다.</p></div>
+        </div>
+        <div class="cnote">🖥️ <b>설치할 것이 없습니다.</b> 브라우저만 있으면 되고, 학생은 링크로 응시합니다. 제출하는 순간 채점과 진단이 선생님 화면으로 넘어옵니다.</div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">수업은 이렇게 돌아갑니다</div><h2>시험지 만들기부터 상담까지</h2></div></div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>시험지 만들기</h4><p>범위와 난이도를 고르면 검증까지 끝난 시험지가 나옵니다.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>학생에게 배부</h4><p>학생 로그인 화면에 응시 버튼이 뜹니다. 이름 고를 필요도 없습니다.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>응시</h4><p>실제 시험과 같은 화면에서 봅니다. 교실 밖에서도 됩니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>자동 채점·진단</h4><p>제출 즉시 점수와 오답 분석이 선생님 화면에 도착합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 05</div><h4>다음 시험에 반영</h4><p>약점만 모은 시험지를 다시 내주고, 누적 기록은 상담 자료가 됩니다.</p></div>
+        </div>
+        <div class="cnote">💰 <b>비용:</b> 학생 수와 기간에 따라 협의합니다. 신청 시 견적으로 안내드립니다.</div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('cnt')">SAT 콘텐츠 요청하기 →</a><a class="btn btn-ghost" href="https://koreayjk.github.io/imsat/landing.html" target="_blank" rel="noopener">IMSAT 자세히 보기 ↗</a></div>
+      </div>
+
+      <!-- IM VOCA -->
+      <div class="subpanel" id="content-voca">
+        <div class="panel-intro reveal">
+          <div><div class="kicker">IM VOCA</div><h2>단어는 앱이 시키고, 학원은 확인만</h2><p>단어장을 만들고, 시험을 내고, 채점하고, 다시 외우게 하는 일. 강사 시간을 가장 많이 쓰면서 가장 티가 안 나는 일을 앱이 대신합니다. <b>특허출원 기술</b>로 만든 학원용 단어 앱입니다.</p></div>
+        </div>
+
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>교재를 찍으면 단어장이 됩니다</h3><p>원서나 교재 페이지를 사진으로 찍으면 <b style="color:inherit">AI가 외울 단어를 뽑아 자동으로 등록</b>합니다. 학원이 쓰는 어떤 책이든 그대로 단어장이 되고, 직접 추가·수정도 됩니다.</p><div class="bt"><span class="tag">AI 자동 추출</span><span class="tag">원서·교재 그대로</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>외운 다음이 진짜입니다</h3><p>한 번 외우고 끝나면 대부분 잊습니다. 에빙하우스 망각곡선에 맞춰 <b style="color:inherit">1·2·3·6·15·30·60일 뒤 복습이 자동으로 뜹니다.</b> 학생은 뜨는 것만 하면 되고, 강사는 챙길 필요가 없습니다.</p><div class="bt"><span class="tag">자동 복습</span><span class="tag">망각곡선</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>출제와 채점에서 손을 뗍니다</h3><p>암기카드로 외우고, 다 외우면 바로 테스트로 넘어갑니다. 시험지를 만들고 채점하던 시간이 사라지고, 강사는 결과만 보고 학생을 챙깁니다.</p><div class="bt"><span class="tag">암기카드</span><span class="tag">자동 채점</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">04</div><div><h3>점수와 순위가 공부를 시킵니다</h3><p>단어를 외우면 점수가 쌓이고, 앱 전체 사용자와 순위가 매겨집니다. 개인전·단체전이 있어 <b style="color:inherit">학원끼리·반끼리 경쟁</b>이 되고, 시키지 않아도 학생이 먼저 켭니다.</p><div class="bt"><span class="tag">명예의 전당</span><span class="tag">개인전·단체전</span></div></div></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">앱 구성</div><h2>다섯 개 메뉴가 전부입니다</h2><p>학생이 헤매지 않도록 단순하게 만들었습니다.</p></div></div>
+        <div class="feat reveal">
+          <div class="fcard"><b>📚 책장</b><p>수능 기초·심화·숙어·토익 등 기본 단어장이 들어 있고, 원하는 책을 직접 추가할 수 있습니다. DAY별로 나뉘어 단어·뜻·예문을 봅니다.</p></div>
+          <div class="fcard"><b>🃏 암기</b><p>책 전체를 한 번에 외우거나, 페이지(DAY)별로 끊어서 외웁니다. 암기카드로 넘기며 외우고 퀴즈로 확인합니다.</p></div>
+          <div class="fcard"><b>📅 복습</b><p>DAY 하나를 끝내면 1·2·3·6·15·30·60일 복습이 자동 등록됩니다. 오늘 할 복습이 몇 개인지 바로 뜹니다.</p></div>
+          <div class="fcard"><b>🏆 명예의 전당</b><p>외운 만큼 점수가 쌓입니다. 멤버 순위·개인전·단체전으로 나뉘어 경쟁하게 만듭니다.</p></div>
+          <div class="fcard"><b>🔍 검색</b><p>저장한 모든 단어를 영어 또는 뜻으로 찾습니다. 수업 중 바로 꺼내 쓸 수 있습니다.</p></div>
+          <div class="fcard"><b>📌 학원 과제</b><p>학원이 지정한 책은 <b>과제</b>로 표시되어 학생 화면 맨 위에 뜹니다. 진도와 완료 여부를 학원이 확인합니다.</p></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">앱 화면</div><h2>학생이 보는 화면</h2></div></div>
+        <div class="phones reveal">
+          <figure class="phone"><div class="frame"><img src="img/imvoca-1.jpg" alt="IM VOCA 책장 화면" onerror="this.remove()"><div class="ph"><span class="ico">📚</span><b>책장</b><span>기본 단어장 +<br>내가 추가한 책</span></div></div><figcaption><b>책장</b><span>과제 · 내 책 한 곳에</span></figcaption></figure>
+          <figure class="phone"><div class="frame"><img src="img/imvoca-2.jpg" alt="IM VOCA 단어 목록 화면" onerror="this.remove()"><div class="ph"><span class="ico">📸</span><b>AI 단어 추출</b><span>찍으면 AI가<br>단어 자동 등록</span></div></div><figcaption><b>뽑힌 단어</b><span>뜻 · 예문 · 발음까지</span></figcaption></figure>
+          <figure class="phone"><div class="frame"><img src="img/imvoca-3.jpg" alt="IM VOCA 암기카드 화면" onerror="this.remove()"><div class="ph"><span class="ico">🃏</span><b>암기카드</b><span>발음 듣기 ·<br>탭해서 뜻 보기</span></div></div><figcaption><b>암기카드</b><span>모름 · 외움으로 넘기기</span></figcaption></figure>
+          <figure class="phone"><div class="frame"><img src="img/imvoca-4.jpg" alt="IM VOCA 복습 현황 화면" onerror="this.remove()"><div class="ph"><span class="ico">📅</span><b>복습 현황</b><span>1·2·3·6·15·30·60일<br>자동 복습</span></div></div><figcaption><b>망각곡선 복습</b><span>오늘 할 복습만</span></figcaption></figure>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">핵심 기능</div><h2>사진 한 장이면 단어장이 만들어집니다</h2><p>교재든 원서든 <b>페이지를 찍기만 하면</b> AI가 외울 단어를 골라 뜻·예문·발음까지 붙여 저장합니다. <b>특허출원 기술(제10-2026-0127089호)</b>입니다.</p></div></div>
+        <div class="shotflow reveal">
+          <figure class="sf"><div class="sfimg tall"><img src="img/voca/ai1.jpg" alt="페이지 촬영 화면" onerror="this.closest('.sfimg').classList.add('none')"></div>
+            <figcaption><span class="sfn">1</span><b>페이지를 찍습니다</b><p>책을 고르고 페이지 번호만 넣은 뒤 촬영합니다. 갖고 있는 사진을 골라도 됩니다.</p></figcaption></figure>
+          <figure class="sf"><div class="sfimg tall"><img src="img/voca/ai2.jpg" alt="단어 선택 화면" onerror="this.closest('.sfimg').classList.add('none')"></div>
+            <figcaption><span class="sfn">2</span><b>AI가 골라 줍니다</b><p>난이도(CEFR)별로 색이 나뉘어 나옵니다. 아는 단어는 빼고 <b>외울 것만 골라 저장</b>합니다.</p></figcaption></figure>
+          <figure class="sf"><div class="sfimg tall"><img src="img/voca/ai3.jpg" alt="저장된 단어 목록" onerror="this.closest('.sfimg').classList.add('none')"></div>
+            <figcaption><span class="sfn">3</span><b>단어장이 완성됩니다</b><p>기본 뜻에 <b>이 문장에서의 뜻</b>과 예문, 발음 듣기까지 함께 저장됩니다. 바로 암기카드·테스트로 넘어갑니다.</p></figcaption></figure>
+          <figure class="sf"><div class="sfimg tall"><img src="img/voca/ai4.jpg" alt="책 상세 · 페이지별 단어" onerror="this.closest('.sfimg').classList.add('none')"></div>
+            <figcaption><span class="sfn">4</span><b>페이지별로 쌓입니다</b><p>찍은 페이지마다 단어가 모이고, <b>복습 전 · 복습 중 · 복습 완료</b>가 한눈에 보입니다.</p></figcaption></figure>
+        </div>
+
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">진행 절차</div><h2>요청 → 협의 → 사용</h2></div></div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>제공 요청</h4><p>신청서로 필요를 접수합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>대상·인원 확인</h4><p>학년·레벨·학생 수를 확인합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>비용 협의</h4><p>학생 수에 맞춰 비용을 협의합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>계정 제공</h4><p>학원·학생 사용을 열어드립니다.</p></div>
+          <div class="fstep"><div class="n">STEP 05</div><h4>운영 지원</h4><p>사용 중 문의를 담당자가 지원합니다.</p></div>
+        </div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('cnt')">IM VOCA 요청하기 →</a></div>
+      </div>
+
+      <!-- 인투 오피스 -->
+      <div class="subpanel" id="content-office">
+        <div class="panel-intro reveal">
+          <div><div class="kicker">인투 오피스</div><h2>서류를 종이로 주고받지 않습니다</h2><p><b>법적 효력이 있는 전자서명</b> 프로그램입니다. 등록 계약서·동의서·근로계약서를 링크로 보내고 받으면, 원장님이 학원에 없어도 서류가 끝납니다.</p></div>
+        </div>
+
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>만나지 않아도 계약이 끝납니다</h3><p>등록하려는 학부모에게 링크만 보내면 휴대폰에서 바로 서명합니다. 서류 받으러 오라고 하거나, 원장님이 기다릴 필요가 없습니다.</p><div class="bt"><span class="tag">비대면 서명</span><span class="tag">모바일</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>법적 효력이 있는 전자서명</h3><p>단순한 사진·스캔 서명이 아니라 <b style="color:inherit">법적 효력이 인정되는 전자서명</b>입니다. 분쟁이 생겼을 때 근거로 쓸 수 있습니다.</p><div class="bt"><span class="tag">법적 효력</span><span class="tag">서명 기록</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>몇 건을 쓰든 요금은 같습니다</h3><p>건당 과금이 아니라 <b style="color:inherit">월 구독 하나로 횟수 제한 없이</b> 씁니다. 신학기처럼 계약이 몰리는 달에도 비용이 늘지 않습니다.</p><div class="bt"><span class="tag">무제한</span><span class="tag">월 구독</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">04</div><div><h3>서류가 흩어지지 않습니다</h3><p>서명이 끝난 문서가 한 곳에 쌓입니다. 캐비닛을 뒤지거나 카톡을 거슬러 올라가지 않고 바로 찾습니다.</p><div class="bt"><span class="tag">문서 보관</span><span class="tag">바로 조회</span></div></div></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">이런 서류에 씁니다</div><h2>학원에서 매번 종이로 하던 것들</h2></div></div>
+        <div class="feat reveal">
+          <div class="fcard"><b>수강 등록 계약서</b><p>등록 조건·수강료·환불 규정 서명.</p></div>
+          <div class="fcard"><b>학부모 동의서</b><p>개인정보·사진 촬영·셔틀 이용 동의.</p></div>
+          <div class="fcard"><b>강사 근로계약서</b><p>채용 시 계약서를 원격으로 체결.</p></div>
+          <div class="fcard"><b>캠프·특강 신청서</b><p>참가 신청과 보호자 동의를 한 번에.</p></div>
+          <div class="fcard"><b>교재·물품 신청</b><p>구매 신청과 수령 확인 서명.</p></div>
+          <div class="fcard"><b>학원 내부 결재</b><p>지출·휴가 등 내부 문서 승인.</p></div>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">실제 화면</div><h2>보내는 데 5분이면 됩니다</h2><p>계약서 하나 보내는 전 과정입니다. 배우실 것이 거의 없습니다.</p></div></div>
+        <div class="shotflow reveal">
+          <figure class="sf"><div class="sfimg"><img src="img/office/step1.jpg" alt="문서 업로드 화면" onerror="this.closest('.sfimg').classList.add('none')"></div>
+            <figcaption><span class="sfn">1</span><b>문서 업로드</b><p>쓰시던 계약서·동의서를 그대로 올립니다. PDF도 이미지도 됩니다.</p></figcaption></figure>
+          <figure class="sf"><div class="sfimg"><img src="img/office/step2.jpg" alt="서명자 정보 입력 화면" onerror="this.closest('.sfimg').classList.add('none')"></div>
+            <figcaption><span class="sfn">2</span><b>서명자 정보</b><p>서명할 사람의 이름과 연락처를 넣습니다. 여러 명도 됩니다.</p></figcaption></figure>
+          <figure class="sf"><div class="sfimg"><img src="img/office/step3.jpg" alt="서명란 배치 화면" onerror="this.closest('.sfimg').classList.add('none')"></div>
+            <figcaption><span class="sfn">3</span><b>서명란 배치</b><p>문서 위에서 서명·날짜 칸을 끌어다 놓습니다. 사람별로 색이 다릅니다.</p></figcaption></figure>
+          <figure class="sf"><div class="sfimg"><img src="img/office/step4.jpg" alt="서명 요청 보내기 화면" onerror="this.closest('.sfimg').classList.add('none')"></div>
+            <figcaption><span class="sfn">4</span><b>서명 요청 보내기</b><p>보내면 상대방에게 링크가 갑니다. 앱을 깔 필요가 없습니다.</p></figcaption></figure>
+          <figure class="sf"><div class="sfimg"><img src="img/office/step5.jpg" alt="문서 관리 화면" onerror="this.closest('.sfimg').classList.add('none')"></div>
+            <figcaption><span class="sfn">5</span><b>문서 관리</b><p>누가 서명했고 누가 안 했는지 한눈에. 끝난 문서는 여기 보관됩니다.</p></figcaption></figure>
+        </div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">비용</div><h2>월 구독 하나로 무제한</h2><p>건당 추가 요금이 없습니다. 회원 종류에 따라 구독료가 다릅니다.</p></div></div>
+        <div class="bprice reveal" id="officePrice"></div>
+
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">진행 절차</div><h2>신청부터 사용까지</h2></div></div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>신청</h4><p>신청서에 인투 오피스를 선택합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>계정 개설</h4><p>학원 계정을 만들어 드립니다.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>양식 등록</h4><p>쓰시던 계약서·동의서를 그대로 올립니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>발송·서명</h4><p>링크로 보내면 학부모가 서명합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 05</div><h4>보관·관리</h4><p>완료된 문서를 한 곳에서 관리합니다.</p></div>
+        </div>
+        <div class="cnote">📝 <b>양식이 없어도 됩니다.</b> 쓰시던 종이 서류를 주시면 전자서명 양식으로 만들어 드립니다.</div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('cnt')">인투 오피스 신청하기 →</a></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============ 마케팅 ============ -->
+<div class="view" id="v-mkt">
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="back" onclick="go('home')">← 전체 지원사업</span>
+      <span class="eyebrow">지원사업 · 마케팅·광고</span>
+      <h1>마케팅·광고 지원</h1>
+      <p class="lead">학원을 소개하는 홍보 글을 블로거들이 각자의 블로그에 올립니다. 여러 곳에서 동시에 검색에 노출되고, 제3자의 소개라 학부모의 신뢰도 함께 올라갑니다.</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="wrap">
+      <div class="subpills" data-area="mkt">
+        <button class="sp on" data-t="blog" type="button">블로그 홍보</button>
+        <button class="sp" data-t="case" type="button">성공 사례</button>
+        <button class="sp" data-t="flow" type="button">진행 절차</button>
+      </div>
+      <!-- 블로그 홍보 -->
+      <div class="subpanel on" id="mkt-blog">
+        <div class="panel-intro reveal"><div><div class="kicker">블로그 홍보</div><h2>검색에서 모객으로</h2><p><b>100여 명의 블로거가 각자의 블로그에</b> 학원을 소개하는 글을 올립니다. 지역·과목 키워드로 검색했을 때 <b>학원이 여러 번 노출되게</b> 만드는 것이 목적입니다. 원하시는 편수만큼 주문하시면 됩니다.</p></div></div>
+        <div class="cnote" style="margin-bottom:8px">✍️ <b>이렇게 진행됩니다:</b> 학원이 자료를 주시면 → 블로거를 배정해 → 블로거가 <b>자기 블로그에</b> 학원 홍보 글을 발행 → 발행된 글 주소를 학원에 전달드립니다. <b>학원 블로그 계정을 만들거나 넘겨주실 필요가 없습니다.</b></div>
+        <div class="benefits">
+          <div class="benefit reveal"><div class="bn">01</div><div><h3>검색에서 학원을 찾게</h3><p>"지역 + 과목"으로 검색하는 학부모에게 학원이 노출됩니다. 여러 블로거의 글이 각각 검색 결과에 잡히기 때문에, 노출되는 지점이 하나가 아니라 여러 개가 됩니다.</p><div class="bt"><span class="tag">지역 검색</span><span class="tag">다중 노출</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">02</div><div><h3>광고보다 오래 남는 자산</h3><p>광고는 끄면 사라지지만, 잘 쓴 블로그 글은 계속 검색에 남아 시간이 지나도 꾸준히 유입을 만듭니다.</p><div class="bt"><span class="tag">누적 효과</span><span class="tag">장기 자산</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">03</div><div><h3>제3자가 소개해 주는 신뢰</h3><p>학원이 직접 하는 자랑보다, 다른 사람이 소개하는 글이 학부모에게 더 자연스럽게 닿습니다. 광고처럼 보이지 않으면서 학원을 알릴 수 있습니다.</p><div class="bt"><span class="tag">제3자 소개</span><span class="tag">자연스러운 홍보</span></div></div></div>
+          <div class="benefit reveal"><div class="bn">04</div><div><h3>원장님 손이 가지 않습니다</h3><p>학원 블로그를 새로 만들거나 관리할 필요가 없습니다. 계정도, 글쓰기도, 발행도 우리 쪽에서 진행하고 학원은 자료만 주시면 됩니다.</p><div class="bt"><span class="tag">계정 불필요</span><span class="tag">자료만 제공</span></div></div></div>
+        </div>
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">이런 정보를 주세요</div><h2>검색어를 만드는 재료입니다</h2><p>글마다 <b>서로 다른 검색어</b>를 하나씩 배정합니다. 아래 네 가지를 쉼표로 나눠 적어주시면 "성수동 초등 영어 내신", "성수역 예비중 영어 레벨테스트" 처럼 학부모가 실제로 검색하는 말에 맞춘 글이 만들어집니다.</p></div></div>
+        <div class="feat reveal">
+          <div class="fcard"><b>지역</b><p>성수동, 성수역, 뚝섬, 서울숲 — 동네·지하철역·큰 건물까지.</p></div>
+          <div class="fcard"><b>과목</b><p>영어, 영어회화, 영어독해 — 나눠 적을수록 좋습니다.</p></div>
+          <div class="fcard"><b>학년·대상</b><p>초등, 예비중, 중등, 고등.</p></div>
+          <div class="fcard"><b>검색 상황</b><p>내신, 학원 추천, 레벨테스트, 방학특강.</p></div>
+          <div class="fcard"><b>사진 30장 이상</b><p>글마다 다른 사진을 써야 검색에 잘 걸립니다. 학생 얼굴이 없는 사진이면 무엇이든.</p></div>
+          <div class="fcard"><b>학원 기본 정보</b><p>정식 명칭·주소·전화·수업 시간. 모든 글에 그대로 들어갑니다.</p></div>
+        </div>
+        <div class="cnote">📣 관련 법(공정거래위원회 추천·보증 심사지침)에 따라 <b>모든 글 하단에는 광고임을 알리는 문구가 표기</b>됩니다.</div>
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">비용</div><h2>편수를 고르면 기간과 비용이 정해집니다</h2><p>원하시는 편수만큼 주문하시면 됩니다. 약정 기간이나 기본료는 없습니다.</p></div></div>
+        <div class="bprice reveal" id="blogPrice"></div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('mkt')">블로그 홍보 신청하기 →</a><a class="btn btn-ghost" onclick="document.querySelector('#v-mkt .sp[data-t=flow]').click()">진행 절차 보기</a></div>
+      </div>
+
+      <!-- 성공 사례 -->
+      <div class="subpanel" id="mkt-case">
+        <div class="panel-intro reveal"><div><div class="kicker">성공 사례</div><h2>직접 운영해 성과를 만든 블로그</h2><p>말로만 하는 마케팅이 아닙니다. 우리 팀이 직접 블로그를 굴려 검색 노출을 만들어 봤고, 그때 쌓은 노하우로 학원 홍보 글을 씁니다.</p></div></div>
+        <div class="case reveal">
+          <span class="cnm">🏫 인투어학원 · 대전 · 청주 · 광주</span>
+          <h3>파워블로거 없이, 알고리즘으로 만든 검색 노출</h3>
+          <p>인투어학원 블로그를 우리 팀이 직접 기획·운영하며 1,590편을 발행했습니다. 유명 블로거에 의존하는 대신, 검색 알고리즘에 맞춘 <b style="color:#fff">꾸준한 발행</b>으로 노출을 쌓았습니다. <b style="color:#fff">이때 쌓은 노하우로, 지금은 여러 블로거가 파트너 학원의 홍보 글을 씁니다.</b></p>
+          <div class="cstats">
+            <div class="cstat"><div class="cb tnum">875<span style="font-size:.9rem"> 편</span></div><div class="cl">대전</div></div>
+            <div class="cstat"><div class="cb tnum">141<span style="font-size:.9rem"> 편</span></div><div class="cl">청주</div></div>
+            <div class="cstat"><div class="cb tnum">574<span style="font-size:.9rem"> 편</span></div><div class="cl">광주</div></div>
+            <div class="cstat"><div class="cb tnum">1,590<span style="font-size:.9rem"> 편</span></div><div class="cl">누적 발행</div></div>
+          </div>
+        </div>
+        <div class="cnote">ℹ️ 위 지점들은 우리 팀이 <b>직접 운영</b>한 블로그로, 대량 발행·검색 노출 노하우의 근거입니다.</div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('mkt')">우리 학원도 신청하기 →</a><a class="btn btn-ghost" onclick="document.querySelector('#v-mkt .sp[data-t=flow]').click()">진행 절차 보기</a></div>
+      </div>
+
+      <!-- 진행 절차 -->
+      <div class="subpanel" id="mkt-flow">
+        <div class="panel-intro reveal"><div><div class="kicker">진행 절차</div><h2>정보를 받아 글로, 그리고 관리까지</h2><p>신청서 안에 필요한 정보를 담아 주시면 그 뒤는 우리가 진행합니다.</p></div></div>
+        <div class="flow reveal">
+          <div class="fstep"><div class="n">STEP 01</div><h4>의뢰</h4><p>신청서에 학원 정보를 담아 접수.</p></div>
+          <div class="fstep"><div class="n">STEP 02</div><h4>정보 취합</h4><p>소개·강점·시그니처 정리.</p></div>
+          <div class="fstep"><div class="n">STEP 03</div><h4>블로거 배정</h4><p>글을 쓸 블로거를 배정합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 04</div><h4>작성</h4><p>알고리즘에 맞춰 홍보 글 작성.</p></div>
+          <div class="fstep"><div class="n">STEP 05</div><h4>발행</h4><p>블로거 블로그에 발행 후 글 주소 전달.</p></div>
+          <div class="fstep"><div class="n">STEP 06</div><h4>관리</h4><p>발행 이후 성과를 관리.</p></div>
+        </div>
+        <div class="cnote">💡 <b>노하우:</b> 무작정 유명 블로그가 아니라, 검색 <b>알고리즘에 맞는 꾸준한 발행</b>이 노출을 만듭니다. (실제 사례는 <b>성공 사례</b> 탭에서 확인하세요.)</div>
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">비용</div><h2>편수를 고르면 기간과 비용이 정해집니다</h2><p>주문하신 편수만큼 결제합니다. 회원 종류에 따라 편당 비용이 다릅니다.</p></div></div>
+        <div class="bprice reveal" id="blogPrice2"></div>
+        <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('mkt')">블로그 홍보 신청하기 →</a></div>
+      </div>
+    </div>
+  </section>
+</div>
+<!-- ============ 게시판 ============ -->
+<div class="view" id="v-board">
+  <section class="page-hero">
+    <div class="wrap">
+      <span class="back" onclick="go('home')">← 홈으로</span>
+      <span class="eyebrow">공지 · 문의</span>
+      <h1>게시판</h1>
+      <p class="lead">ESC의 공지사항과 파트너 학원의 문의를 확인하실 수 있습니다.</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="wrap">
+      <div class="subpills" data-area="board">
+        <button class="sp on" data-t="notice" type="button">공지사항</button>
+        <button class="sp" data-t="qna" type="button">문의</button>
+      </div>
+      <div class="subpanel on" id="board-notice">
+        <div class="board-head"><h2>공지사항</h2><button class="btn btn-primary" id="noticeNewBtn" style="display:none" type="button" onclick="openNoticeForm()">+ 새 공지 작성</button></div>
+        <div id="noticeList" class="board-list"><div class="board-empty">불러오는 중…</div></div>
+      </div>
+      <div class="subpanel" id="board-qna">
+        <div class="board-head"><h2>문의</h2><button class="btn btn-primary" type="button" onclick="openQForm()">+ 문의하기</button></div>
+        <div id="qnaList" class="board-list"><div class="board-empty">불러오는 중…</div></div>
+        <div class="sec-head" style="max-width:none;margin:52px 0 20px"><div class="kicker">FAQ</div><h2 style="font-size:1.4rem">자주 묻는 질문</h2></div>
+        <details open><summary>제작비가 정말 없나요?<span class="plus"></span></summary><div class="ans"><b>프리미엄(파트너) 회원</b>은 1·2단계를 제작비 없이 월 관리비만 받습니다. 일반 회원은 제작비가 별도로 있으며, 3·4단계는 기능에 따라 견적으로 안내됩니다. 로그인하면 회원 종류에 맞는 가격이 자동으로 표시됩니다.</div></details>
+        <details><summary>유료 도메인 비용은 누가 내나요?<span class="plus"></span></summary><div class="ans">도메인은 학원 소유가 되기 때문에 학원에서 부담합니다(연 1~2만원대). 신청 시 사용 여부를 선택하실 수 있고, 무료 주소로도 시작할 수 있습니다.</div></details>
+        <details><summary>원어민 수업 시차는 어떻게 되나요?<span class="plus"></span></summary><div class="ans">필리핀은 한국보다 1시간, 미국은 14시간 느립니다. 원하는 시간은 한국시간 기준으로 적어주시면 되고, 미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다(현지 심야 시간대).</div></details>
+        <details><summary>온라인 카드 결제도 되나요?<span class="plus"></span></summary><div class="ans">현재는 계좌 안내로 진행하며, 카드 결제(PG) 연동 기능은 추후 단계에서 추가될 예정입니다.</div></details>
+        <details><summary>파트너 학원이 아니어도 신청할 수 있나요?<span class="plus"></span></summary><div class="ans">본 사이트는 파트너 학원 전용입니다. 신규로 함께하고 싶으신 경우 문의하기로 남겨주시면 별도로 안내해 드립니다.</div></details>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+
+<footer id="contact">
+  <div class="foot-cta">
+    <div class="wrap" style="max-width:640px">
+      <h2>지원이 필요하신가요?</h2>
+      <p>신청서 하나면 담당자가 배정되어 견적부터 관리까지 함께합니다. 궁금한 점은 편하게 문의해 주세요.</p>
+      <a class="btn btn-light" onclick="go('home','apply')">지원 신청하기 →</a>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand"><span class="mk">ESC</span> <small>Education Supporting Center</small></div>
+        <p class="about">ESC(학원지원센터)는 학원 경영에 필요한 모든 인프라를 일괄 공급하는 파트너 전용 B2B 지원 플랫폼입니다. 인투유학이 운영합니다.</p>
+      </div>
+      <div class="foot-col">
+        <h4>지원사업</h4>
+        <a onclick="go('doc')">자료제작 지원</a>
+        <a onclick="go('hr')">인력 지원</a>
+        <a onclick="go('content')">컨텐츠 지원</a>
+        <a onclick="go('mkt')">마케팅·광고 지원</a>
+      </div>
+      <div class="foot-col">
+        <h4>문의</h4>
+        <p>전화 010-7318-1790</p>
+        <p>이메일 benjamin.leeeunchong08@gmail.com</p>
+        <a onclick="go('home','faq')">자주 묻는 질문</a>
+      </div>
+    </div>
+    <!-- 전자상거래법상 사업자 정보 표시 의무.
+         ESC 안에서 파는 주체가 둘입니다 — 블로그·리뷰 홍보는 인투마케팅,
+         나머지 지원사업은 인투유학. 나중에 다른 지원사업도 사업자를 내면 여기에 한 줄 더 넣으세요. -->
+    <div class="bizinfo">
+      <div class="bizrow">
+        <b>마케팅·광고 지원 (블로그·리뷰 홍보)</b>
+        <span>인투마케팅 · 대표 양회광 · 사업자등록번호 306-24-53380</span>
+        <span>대전광역시 유성구 은구비남로33번길 13-8, 3397호 (지족동, 양지빌딩)</span>
+      </div>
+      <div class="bizrow">
+        <b>자료제작 · 인력 · 컨텐츠 지원</b>
+        <span>인투유학</span>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© 2026 ESC · Education Supporting Center. All rights reserved.</span>
+      <span><a>개인정보처리방침</a> · 파트너 학원 전용 · <a href="admin.html">ESC 직원 로그인</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- 로그인 / 회원가입 모달 -->
+<div class="modal" id="authModal" onclick="if(event.target===this)closeAuth()">
+  <div class="modal-card">
+    <button class="modal-x" onclick="closeAuth()" aria-label="닫기">×</button>
+    <div class="modal-head">
+      <button class="modal-tab on" id="tabLogin" type="button" onclick="switchAuthTab('login')">로그인</button>
+      <button class="modal-tab" id="tabSignup" type="button" onclick="switchAuthTab('signup')">회원가입</button>
+    </div>
+    <div class="modal-body">
+      <div id="paneLogin">
+        <div class="fld"><label>이메일</label><input class="inp" id="li_email" type="email" inputmode="email" autocomplete="email" placeholder="이메일"></div>
+        <div class="fld"><label>비밀번호</label><div class="pwrap"><input class="inp" id="li_pw" type="password" autocomplete="current-password" placeholder="비밀번호"><button class="pwtoggle" type="button" onclick="togglePw('li_pw',this)">표시</button></div></div>
+        <div class="modal-msg" id="li_msg"></div>
+        <button class="btn btn-primary" type="button" onclick="doLogin()">로그인</button>
+      </div>
+      <div id="paneSignup" style="display:none">
+        <div class="fld"><label>학원명 *</label><input class="inp" id="su_academy" autocomplete="organization" placeholder="학원명"></div>
+        <div class="fld"><label>담당자명</label><input class="inp" id="su_manager" autocomplete="name" placeholder="담당자명"></div>
+        <div class="fld"><label>연락처</label><input class="inp" id="su_phone" inputmode="tel" autocomplete="tel" placeholder="연락처"></div>
+        <div class="fld"><label>이메일 *</label><input class="inp" id="su_email" type="email" inputmode="email" autocomplete="email" placeholder="이메일"></div>
+        <div class="fld"><label>비밀번호 *</label><div class="pwrap"><input class="inp" id="su_pw" type="password" autocomplete="new-password" placeholder="비밀번호 (6자 이상)"><button class="pwtoggle" type="button" onclick="togglePw('su_pw',this)">표시</button></div></div>
+        <div class="fld"><label>비밀번호 확인 *</label><div class="pwrap"><input class="inp" id="su_pw2" type="password" autocomplete="new-password" placeholder="비밀번호 다시 입력"><button class="pwtoggle" type="button" onclick="togglePw('su_pw2',this)">표시</button></div></div>
+        <div class="modal-msg" id="su_msg"></div>
+        <button class="btn btn-primary" type="button" onclick="doSignup()">회원가입</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 공지 작성 모달 (관리자) -->
+<div class="modal" id="noticeModal" onclick="if(event.target===this)closeModal('noticeModal')">
+  <div class="modal-card wide">
+    <button class="modal-x" onclick="closeModal('noticeModal')" aria-label="닫기">×</button>
+    <div class="modal-body">
+      <h3 id="ntModalTitle">새 공지 작성</h3>
+      <div class="fld"><label>제목</label><input class="inp" id="nt_title" placeholder="공지 제목"></div>
+      <div class="fld"><label>내용</label><textarea class="inp" id="nt_body" style="min-height:170px" placeholder="공지 내용"></textarea></div>
+      <div class="modal-msg" id="nt_msg"></div>
+      <button class="btn btn-primary" type="button" onclick="submitNotice()">공지 등록</button>
+    </div>
+  </div>
+</div>
+
+<!-- 문의 작성 모달 -->
+<div class="modal" id="qformModal" onclick="if(event.target===this)closeModal('qformModal')">
+  <div class="modal-card wide">
+    <button class="modal-x" onclick="closeModal('qformModal')" aria-label="닫기">×</button>
+    <div class="modal-body">
+      <h3>문의하기</h3>
+      <div class="fld"><label>제목 *</label><input class="inp" id="q_title" placeholder="문의 제목"></div>
+      <div class="fld"><label>내용 *</label><textarea class="inp" id="q_body" style="min-height:140px" placeholder="문의 내용"></textarea></div>
+      <div class="common" style="grid-template-columns:1fr 1fr"><input class="inp" id="q_name" placeholder="이름 / 학원명"><input class="inp" id="q_contact" placeholder="연락처 또는 이메일"></div>
+      <label class="chk" style="margin-top:14px"><input type="checkbox" id="q_secret" onchange="document.getElementById('q_pwrap').style.display=this.checked?'block':'none'"> 비밀글로 작성 (작성자와 ESC만 볼 수 있어요)</label>
+      <div class="fld" id="q_pwrap" style="display:none;margin-top:12px"><label>비밀글 비밀번호</label><input class="inp" id="q_pw" type="password" placeholder="이 글을 열 때 쓸 비밀번호"></div>
+      <div class="modal-msg" id="q_msg"></div>
+      <button class="btn btn-primary" type="button" onclick="submitQuestion()">문의 등록</button>
+    </div>
+  </div>
+</div>
+
+<!-- 문의 상세 모달 -->
+<div class="modal" id="qdetailModal" onclick="if(event.target===this)closeModal('qdetailModal')">
+  <div class="modal-card wide">
+    <button class="modal-x" onclick="closeModal('qdetailModal')" aria-label="닫기">×</button>
+    <div class="modal-body" id="qdetailBody"></div>
+  </div>
+</div>
+
+<!-- 프리미엄 전환 모달 -->
+<!-- 작업물 미리보기 -->
+<div class="modal dv" id="dvModal" onclick="if(event.target===this)closeDesign()">
+  <div class="dvbox" oncontextmenu="return false">
+    <div class="dvtop">
+      <b id="dvTitle"></b>
+      <span class="dvnum" id="dvNum"></span>
+      <button class="dvx" onclick="closeDesign()" aria-label="닫기">×</button>
+    </div>
+    <div class="dvimg" id="dvImg"></div>
+    <div class="dvbtm">
+      <button class="btn btn-ghost" id="dvPrev" onclick="dvGo(-1)">← 이전</button>
+      <span class="dvnote">앞부분만 보여드립니다. 전체는 상담 때 안내드립니다.</span>
+      <button class="btn btn-ghost" id="dvNext" onclick="dvGo(1)">다음 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- 내 계정 — 신청 내역 · 진행현황 · 로그아웃 -->
+<div class="modal" id="meModal" onclick="if(event.target===this)closeMe()">
+  <div class="modal-card wide">
+    <button class="modal-x" onclick="closeMe()" aria-label="닫기">×</button>
+    <div class="modal-body" style="padding:26px 26px 22px">
+      <div class="mehead">
+        <div>
+          <h3 id="meName">내 계정</h3>
+          <span id="meMail"></span>
+        </div>
+        <div id="meTier"></div>
+      </div>
+      <div class="sec-line">내 신청 내역</div>
+      <div id="meList"><div class="meempty">불러오는 중입니다…</div></div>
+      <div class="merow">
+        <button class="lg" type="button" onclick="doLogout();closeMe()">로그아웃</button>
+        <button class="btn btn-primary" type="button" style="width:auto;padding:10px 18px"
+                onclick="closeMe();applyAgain(true)">새 신청하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="premiumModal" onclick="if(event.target===this)closePremium()">
+  <div class="modal-card" style="max-width:390px">
+    <button class="modal-x" onclick="closePremium()" aria-label="닫기">×</button>
+    <div class="modal-body" style="padding:28px">
+      <h3 style="font-size:1.25rem;font-weight:800;margin-bottom:6px">프리미엄 회원 전환</h3>
+      <p style="color:var(--muted);font-size:.9rem;margin-bottom:16px;line-height:1.6">ESC와 연결된 파트너 학원에 발급된 코드를 입력하면 <b style="color:var(--gold)">프리미엄 회원가</b>로 이용하실 수 있습니다.</p>
+      <input class="inp" id="pm_code" placeholder="프리미엄 코드 (예: ESC-XXXXX)" autocomplete="off">
+      <div class="modal-msg" id="pm_msg"></div>
+      <button class="btn btn-primary" type="button" onclick="doRedeem()">전환하기</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  var VIEWS=['home','doc','hr','content','mkt','board'];
+  function scrollId(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});closeMenu();}
+  function revealIn(container){
+    (container||document).querySelectorAll('.reveal').forEach(function(el){
+      var r=el.getBoundingClientRect();
+      if(r.top < (window.innerHeight||800)*0.92){el.classList.add('in');}
+    });
+  }
+  function go(view,anchor){
+    if(VIEWS.indexOf(view)<0)view='home';
+    VIEWS.forEach(function(v){var el=document.getElementById('v-'+v);if(el)el.classList.toggle('active',v===view);});
+    document.getElementById('nl-support').classList.toggle('active',view!=='home');
+    if(view==='board'&&typeof loadBoard==='function'){loadBoard();}
+    closeMenu();
+    if(anchor){
+      window.scrollTo(0,0);
+      setTimeout(function(){var el=document.getElementById(anchor);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},40);
+    }else{window.scrollTo({top:0,behavior:'auto'});}
+    setTimeout(function(){revealIn(document.getElementById('v-'+view));},60);
+    if(history&&history.replaceState){history.replaceState(null,'','#'+view);}
+  }
+  /* 자료제작 신청은 제작 파트너 @IM 신청서로 접수.
+     ⭐ 어디서 넘어온 건지 알 수 있게 ?from=esc 를 붙여 보냅니다.
+     @IM 신청서(request.html)는 2026-08-24 현재 쿼리 파라미터를 읽지 않으므로
+     지금은 아무 일도 안 일어납니다(무해). @IM 담당자가 이 값을 받아 저장하도록
+     고쳐 주시면 그때부터 「ESC에서 넘어온 건」으로 구분됩니다. */
+  var AIM_REQUEST_URL='https://koreayjk.github.io/aim/request.html';
+  function goAim(){location.href=AIM_REQUEST_URL+'?from=esc';}
+  function applyWith(k){
+    if(k==='doc'){goAim();return;}
+    go('home','apply');setTimeout(function(){applyAgain(true);selectPick(k,true);},80);
+  }
+
+  /* form picker */
+  var FORM_SCHEMA={
+    hr:[
+      {t:'check',k:'원하는 국적',req:1,opts:['필리핀','미국','무관']},
+      {t:'check',k:'수업 형태',opts:['줌(화상)','대면']},
+      {t:'text',k:'과목·레벨',req:1,ph:'예: 초등 회화 기초 / 중등 문법 / 고등 에세이·토론'},
+      {t:'text',k:'원하는 시간대·요일 (한국시간 기준)',req:1,ph:'예: 평일 오후 4~6시 (월·수·금) / 토요일 오전'},
+      {t:'text',k:'주당 수업 횟수'},
+      {t:'text',k:'학생 연령·인원',ph:'예: 초3~초5 8명 (1:1 희망) / 중2 4명 그룹'},
+      {t:'text',k:'예상 비용'},
+      {t:'text',k:'시작 희망일'},
+      {t:'note',note:'tz'}
+    ],
+    cnt:[
+      {t:'check',k:'유형',req:1,opts:['유학자료','SAT','IM VOCA','인투 오피스(전자서명)','기타']},
+      {t:'text',k:'대상 학생 (학년·레벨)',req:1},
+      {t:'text',k:'학생 수'},
+      {t:'text',k:'사용 목적'},
+      {t:'text',k:'시작 희망일'}
+    ],
+    mkt:[
+      {t:'qty',k:'원하시는 편수',req:1,hint:'편수를 고르시면 작성 기간과 금액이 함께 정해집니다. 많을수록 검색에 걸리는 폭이 넓어집니다.'},
+      {t:'note',note:'blogkeyword'},
+      {t:'text',k:'지역',req:1,ph:'예: 성수동, 성수역, 뚝섬, 서울숲',hint:'학부모가 검색할 만한 동네 이름을 다 적어 주세요. 학원 주변 지하철역·큰 건물도 좋습니다.'},
+      {t:'text',k:'과목',req:1,ph:'예: 영어, 영어회화, 영어독해',hint:'가르치시는 과목만 나눠 적어 주세요. (학원 이름·상황은 아래 칸에 있습니다)'},
+      {t:'check',k:'학년·대상',req:1,opts:['초등','예비중','중등','예비고','고등','재수·N수','성인'],
+        hint:'받으시는 학생을 모두 골라 주세요.'},
+      {t:'check',k:'어떤 상황에서 검색되고 싶으신가요 (홍보 목적)',req:1,
+        opts:['내신','학원 추천','레벨테스트','방학특강','선행','기초 다지기','소수정예','관리형','원어민','1:1 맞춤','입시 상담','수행평가'],
+        hint:'학부모가 과목 뒤에 함께 치는 말입니다. 여러 개 고르실수록 서로 다른 글이 많이 나옵니다.'},
+      {t:'note',note:'blogpurpose'},
+      {t:'note',note:'blogfixed'},
+      {t:'text',k:'학원 정식 명칭',req:1,ph:'예: 성수영어학원'},
+      {t:'text',k:'주소',req:1,ph:'예: 서울 성동구 성수이로 00, 3층'},
+      {t:'text',k:'전화번호',req:1,ph:'예: 02-000-0000'},
+      {t:'text',k:'수업 시간',ph:'예: 평일 15:00~22:00 / 토 10:00~14:00'},
+      {t:'text',k:'홈페이지·블로그 주소',ph:'https://…  (없으면 비워두셔도 됩니다)'},
+      {t:'note',note:'blogphoto'},
+      {t:'files',k:'학원 사진'},
+      {t:'text',k:'사진 링크 (드라이브·MYBOX)',ph:'업로드가 어려우시면 링크를 적어 주세요'},
+      {t:'textarea',k:'꼭 알리고 싶은 점',ph:'다른 학원과 다른 점, 자랑하고 싶은 것을 적어 주세요. 글에 녹여 넣습니다.'},
+      {t:'note',note:'blogstory'},
+      {t:'textarea',k:'실제 에피소드 · 구체적 사례',hi:1,req:1,
+        ph:'예) 중2 남학생이 3월에 영어 42점으로 왔는데, 단어 시험을 매일 다시 보게 했더니 1학기 기말에 88점이 됐습니다.\n'
+          +'예) 학부모님이 "숙제를 봐줄 사람이 없다"고 하셔서, 수업 끝나고 30분 자습을 붙여 드렸습니다. 지금은 그 반 전체가 그렇게 합니다.\n'
+          +'예) 겨울방학에 예비중 8명이 왔는데 그중 6명이 지금도 다니고 있습니다.',
+        hint:'이름은 빼고 「중2 남학생」처럼만 적어 주세요. 숫자가 들어가면 더 좋습니다.'},
+      {t:'textarea',k:'쓰지 말아야 할 것',ph:'언급을 피하고 싶은 내용이 있으면 적어 주세요 (예: 수강료, 특정 경쟁 학원)'},
+      {t:'note',note:'blogcall'},
+      /* ── 여기부터 접어둔 선택 칸 ── */
+      {t:'foldstart',k:'글이 훨씬 좋아집니다 — 5분만 더 쓰시면',sub:'안 쓰셔도 신청은 됩니다'},
+      {t:'note',note:'blogwhy'},
+      {t:'text',k:'학부모가 자주 묻는 질문 ①',ph:'예: 우리 아이 레벨이 어느 정도인가요?'},
+      {t:'text',k:'학부모가 자주 묻는 질문 ②',ph:'예: 숙제는 얼마나 나가나요?'},
+      {t:'text',k:'학부모가 자주 묻는 질문 ③',ph:'예: 중간에 반을 바꿀 수 있나요?'},
+      {t:'text',k:'우리 학원을 한 문장으로',ph:'예: 성수동에서 12년째, 중등 내신만 파는 소수정예 영어학원'},
+      {t:'check',k:'다른 학원과 다른 점',opts:['소수정예','원어민 수업','자체 교재','관리형(숙제·출결 관리)','1:1 맞춤','성적 향상 보장','상담이 잦음','오래된 학원','학원 차량 운행']},
+      {t:'check',k:'주로 오는 학생',opts:['내신 대비','선행','기초 다지기','특목고·자사고','유학 준비','편입·재수','경시·올림피아드']},
+      {t:'textarea',k:'수업 한 타임이 어떻게 진행되나요',ph:'예: 단어 시험 10분 → 본문 강의 40분 → 문제 풀이 30분 → 오답 확인 10분'},
+      {t:'text',k:'쓰는 교재·커리큘럼 이름',ph:'예: 자체 제작 IM VOCA, 능률 중2 영어, 리딩튜터'},
+      {t:'text',k:'최근 성과 (숫자로)',ph:'예: 3개월 만에 내신 20점 상승 / 작년 특목고 7명 합격'},
+      {t:'text',k:'원장님 경력 한 줄',ph:'예: 대치동 10년 강의 후 성수동 개원, 영어교육 석사'},
+      {t:'text',k:'시설 중 자랑하고 싶은 것',ph:'예: 층 전체를 쓰는 자습실, 학생별 개인 사물함'},
+      {t:'text',k:'상담 오면 꼭 보여주시는 것',ph:'예: 학생별 오답 노트, 월간 학습 리포트'},
+      {t:'foldend'},
+      {t:'note',note:'blogad'}
+    ]
+  };
+  /* ── 블로그 편수 요금제 — 신청폼과 지원사업 가격표가 같이 씁니다 ── */
+  var QTY_PLANS=[{qty:10,weeks:1},{qty:20,weeks:1},{qty:30,weeks:2},{qty:50,weeks:2},{qty:100,weeks:4}];
+  var BLOG_UNIT={general:6000,premium:3000};
+  var CUR_PREMIUM=false;
+  function blogUnit(premium){return premium?BLOG_UNIT.premium:BLOG_UNIT.general;}
+  function wonf(n){return (Number(n)||0).toLocaleString('ko-KR');}
+  function qtyPlan(q){for(var i=0;i<QTY_PLANS.length;i++){if(QTY_PLANS[i].qty===q)return QTY_PLANS[i];}return null;}
+  function planDue(weeks){
+    var d=new Date();d.setDate(d.getDate()+weeks*7);
+    return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+  }
+  function qtyCards(premium,k){
+    var u=blogUnit(premium),s='';
+    QTY_PLANS.forEach(function(p){
+      s+='<label class="ffopt qopt" data-k="'+esc(k)+'" data-v="'+p.qty+'편">'
+        +'<input type="radio" name="ff_qty">'
+        +'<span class="qn">'+p.qty+'편</span>'
+        +'<span class="qw">'+p.weeks+'주 안에</span>'
+        +'<span class="qp">'+wonf(p.qty*u)+'원</span></label>';
+    });
+    return s;
+  }
+  /* 고른 편수에 맞춰 마감일·금액을 보여줍니다 */
+  function qtySummary(){
+    var box=document.getElementById('qtySum');if(!box)return;
+    var sel=document.querySelector('#qtyOpts .qopt:has(input:checked)');
+    if(!sel){box.innerHTML='';return;}
+    var q=parseInt(sel.getAttribute('data-v'),10),pl=qtyPlan(q);
+    if(!pl){box.innerHTML='';return;}
+    var u=blogUnit(CUR_PREMIUM);
+    box.innerHTML='<div class="qsum">'+q+'편 · '+pl.weeks+'주 안에 모두 올라갑니다 (약 '+planDue(pl.weeks)+'까지) · '
+      +'예상 금액 <b>'+wonf(q*u)+'원</b>'
+      +'<span class="qsm">'+(CUR_PREMIUM?'프리미엄(파트너) 회원가':'일반 회원가')+' 편당 '+wonf(u)+'원 · '
+      +(CUR_PREMIUM?'':'프리미엄(파트너) 회원은 편당 '+wonf(BLOG_UNIT.premium)+'원입니다. ')
+      +'입금이 확인된 날부터 기간을 셉니다.</span></div>';
+  }
+  /* 로그인 상태가 바뀌면 고른 것은 그대로 두고 가격만 다시 그립니다 */
+  function refreshQtyCards(){
+    var box=document.getElementById('qtyOpts');if(!box)return;
+    var sel=document.querySelector('#qtyOpts .qopt:has(input:checked)');
+    var keep=sel?sel.getAttribute('data-v'):null;
+    box.innerHTML=qtyCards(CUR_PREMIUM,'원하시는 편수');
+    if(keep){
+      var again=box.querySelector('.qopt[data-v="'+keep+'"] input');
+      if(again)again.checked=true;
+    }
+    qtySummary();
+  }
+  document.addEventListener('change',function(e){
+    if(e.target&&e.target.closest&&e.target.closest('#qtyOpts'))qtySummary();
+  });
+
+  function renderFields(k){
+    var schema=FORM_SCHEMA[k]||[],h='';
+    for(var i=0;i<schema.length;i++){var f=schema[i];
+      if(f.t==='note'){
+        if(f.note==='tz')h+='<div class="tzbox"><b>⏰ 시차 안내</b><ul><li>필리핀은 한국보다 1시간, 미국은 14시간 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 적어주세요.</li><li>미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다.</li></ul></div>';
+        else if(f.note==='blogkeyword')h+='<div class="guidebox"><b>📌 이렇게 적어주시면 좋습니다</b>'
+          +'<p>저희는 블로거 100여 명이 각자의 블로그에 학원을 소개하는 글을 올립니다. 글마다 서로 다른 검색어를 하나씩 배정하기 때문에, 아래 네 가지를 <b>쉼표로 나눠</b> 적어주시면 <b>"성수동 초등 영어 내신"</b>, <b>"성수역 예비중 영어 레벨테스트"</b> 처럼 학부모가 실제로 검색하는 말에 맞춘 글이 만들어집니다.</p>'
+          +'<table class="gtbl"><tr><td>지역</td><td>성수동, 성수역, 뚝섬, 서울숲</td></tr><tr><td>과목</td><td>영어, 영어회화, 영어독해</td></tr><tr><td>대상</td><td>초등, 예비중, 중등, 고등</td></tr><tr><td>상황</td><td>내신, 학원 추천, 레벨테스트, 방학특강</td></tr></table>'
+          +'<p style="margin-top:10px">많이 적어주실수록 서로 다른 글이 많이 나오고, 검색에 걸리는 폭이 넓어집니다.</p></div>';
+        else if(f.note==='blogpurpose')h+='<div class="cnote" style="margin:-8px 0 4px">💡 <b>「영어학원」·「수학학원」 같은 말은 고르지 않으셔도 됩니다.</b> 과목은 위 칸에서 이미 받았고, 여기에 또 넣으면 <b>「영어 내신 수학학원」</b> 처럼 말이 안 되는 검색어가 만들어집니다.</div>';
+        else if(f.note==='blogfixed')h+='<div class="guidebox mini"><b>📋 모든 글에 똑같이 들어갈 정보</b><p>이 내용은 모든 글에 그대로 들어갑니다. 정확하게 적어 주세요.</p></div>';
+        else if(f.note==='blogphoto')h+='<div class="guidebox mini"><b>📷 사진</b><p>사진이 많을수록 좋습니다. 글마다 다른 사진을 써야 검색에 잘 걸리기 때문입니다. <b>30장 이상을 권합니다.</b> 간판·건물 바깥, 강의실, 교재, 시간표, 안내문, 수업 자료 등 <b>학생 얼굴이 나오지 않는 사진</b>이면 무엇이든 좋습니다.</p><p style="margin-top:8px"><b>지금 다 모으기 어려우시면 비워두셔도 됩니다.</b> 접수 후 <b>사진을 언제든 올리실 수 있는 주소</b>를 따로 안내해 드립니다. 드라이브·MYBOX 링크로 주셔도 됩니다.</p></div>';
+        else if(f.note==='blogstory')h+='<div class="storybox"><b>여기가 가장 중요합니다 — 검색 노출이 여기서 갈립니다</b>'
+          +'<p>요즘 네이버는 <b>어디에나 들어맞는 소개글을 좋게 보지 않습니다.</b> '
+          +'학원 이름·과목·주소만 있는 글은 다른 학원 글과 비슷하다고 판단해 <b>검색에서 밀어냅니다.</b></p>'
+          +'<p>반대로 <b>그 학원에서 실제로 있었던 일</b>이 담긴 글은 다른 어디에도 없는 내용이라 '
+          +'<b>검색 상위에 올라가고 오래 남습니다.</b> 읽는 학부모도 그 대목에서 전화를 겁니다.</p>'
+          +'<p style="margin-top:10px"><b>한 줄이라도 좋습니다.</b> 성적이 오른 학생, 학부모가 했던 말, '
+          +'수업 중 있었던 일, 상담 때 자주 나오는 이야기 — 무엇이든 <b>실제로 있었던 일</b>이면 됩니다.</p>'
+          +'<p class="sbwarn">※ 학생 이름·사진은 넣지 마세요. <b>「중2 남학생」「고1 학부모님」</b> 처럼만 적어 주시면 됩니다.<br>'
+          +'※ 저희는 <b>지어내지 않습니다.</b> 여기 적어주신 것만 글에 씁니다.</p></div>';
+        else if(f.note==='blogad')h+='<div class="cnote" style="margin-top:4px">📣 관련 법(공정거래위원회 추천·보증 심사지침)에 따라 <b>모든 글 하단에는 광고임을 알리는 문구가 표기</b>됩니다.</div>';
+        else if(f.note==='blogcall')h+='<div class="guidebox mini"><b>☎️ 접수 후 10분 통화</b><p>신청서를 받으면 담당자가 <b>10분 정도 전화로 몇 가지 더 여쭙습니다.</b> 글로 쓰시는 것보다 말씀으로 듣는 편이 훨씬 좋은 글감이 됩니다. 아래 칸은 <b>미리 알려주실 수 있는 만큼만</b> 적어 주세요.</p></div>';
+        else if(f.note==='blogwhy')h+='<div class="ffoldwhy">학원 이름·주소·과목만으로는 <b>어느 학원에나 들어맞는 뻔한 글</b>이 됩니다. 그런 글은 검색에서도 밀립니다.<br>아래는 <b>원장님만 아시는 것</b>들입니다. 한 줄씩만 적어주셔도 글이 완전히 달라집니다. <b>비워두셔도 신청은 정상 접수됩니다.</b></div>';
+        continue;
+      }
+      if(f.t==='foldstart'){
+        h+='<details class="ffold"><summary>'+esc(f.k)
+          +(f.sub?' <small>'+esc(f.sub)+'</small>':'')+'</summary><div class="ffoldin">';
+        continue;
+      }
+      if(f.t==='foldend'){h+='</div></details>';continue;}
+      h+='<div class="ff'+(f.hi?' hi':'')+'"><span class="fflabel'+(f.req?' req':'')+'">'+esc(f.k)
+        +(f.hi?' <span class="ffstar">노출에 가장 큰 영향</span>':'')+'</span>';
+      if(f.hint)h+='<span class="ffhint">'+esc(f.hint)+'</span>';
+      if(f.t==='check'||f.t==='radio'){
+        h+='<div class="ffopts">';
+        for(var j=0;j<f.opts.length;j++){
+          var inp=f.t==='radio'?'<input type="radio" name="ff_'+i+'">':'<input type="checkbox">';
+          h+='<label class="ffopt" data-k="'+esc(f.k)+'">'+inp+esc(f.opts[j])+'</label>';
+        }
+        h+='</div>';
+      }else if(f.t==='textarea'){
+        h+='<textarea class="inp ffinput" data-k="'+esc(f.k)+'" style="min-height:'+(f.hi?150:90)+'px"'+(f.ph?' placeholder="'+esc(f.ph)+'"':'')+'></textarea>';
+      }else if(f.t==='files'){
+        h+='<input type="file" class="inp ffinput ffiles" data-k="'+esc(f.k)+'" accept="image/*" multiple onchange="onPhotoPick(this)">'
+          +'<div class="fnote" id="photoInfo">아직 선택한 사진이 없습니다.</div>';
+      }else if(f.t==='qty'){
+        h+='<div class="qtyopts" id="qtyOpts">'+qtyCards(CUR_PREMIUM,f.k)+'</div><div id="qtySum"></div>';
+      }else if(f.t==='number'){
+        h+='<input class="inp ffinput" type="number" min="1" inputmode="numeric" data-k="'+esc(f.k)+'"'+(f.ph?' placeholder="'+esc(f.ph)+'"':'')+'>';
+      }else if(f.t==='date'){
+        h+='<input class="inp ffinput" type="date" data-k="'+esc(f.k)+'">';
+      }else{
+        h+='<input class="inp ffinput" data-k="'+esc(f.k)+'"'+(f.ph?' placeholder="'+esc(f.ph)+'"':'')+'>';
+      }
+      h+='</div>';
+    }
+    document.getElementById('fields').innerHTML=h;
+  }
+  /* 별표(필수) 칸이 비었는지 봅니다.
+     지금까지는 별만 그려놓고 실제로 막지는 않아, 빈 신청서가 들어와 전화로 다시 묻곤 했습니다. */
+  function firstMissing(k){
+    var schema=FORM_SCHEMA[k]||[];
+    for(var i=0;i<schema.length;i++){
+      var f=schema[i];
+      if(!f.req||f.t==='note'||f.t==='foldstart'||f.t==='foldend'||f.t==='files')continue;
+      if(f.t==='qty')continue;               /* 편수는 아래에서 따로 봅니다 */
+      if(f.t==='check'||f.t==='radio'){
+        var any=false;
+        document.querySelectorAll('#fields .ffopt[data-k="'+f.k+'"]').forEach(function(lab){
+          if(lab.querySelector('input').checked)any=true;
+        });
+        if(!any)return f;
+      }else{
+        var el=document.querySelector('#fields .ffinput[data-k="'+f.k+'"]');
+        if(!el||!el.value.trim())return f;
+      }
+    }
+    return null;
+  }
+  function focusField(f){
+    var el=document.querySelector('#fields .ffinput[data-k="'+f.k+'"]')
+        || document.querySelector('#fields .ffopt[data-k="'+f.k+'"]');
+    if(!el)return;
+    var box=el.closest('.ff')||el;
+    var fold=box.closest('details.ffold');
+    if(fold)fold.open=true;                  /* 접힌 칸이면 펴 줍니다 */
+    box.scrollIntoView({behavior:'smooth',block:'center'});
+    if(el.focus)setTimeout(function(){try{el.focus();}catch(e){}},350);
+  }
+
+  function collectDetails(k){
+    var schema=FORM_SCHEMA[k]||[],d={};
+    schema.forEach(function(f){
+      if(f.t==='note'||f.t==='foldstart'||f.t==='foldend')return;
+      if(f.t==='files')return; /* 사진은 업로드 후 별도로 넣음 */
+      if(f.t==='check'||f.t==='radio'||f.t==='qty'){
+        var vals=[];
+        document.querySelectorAll('#fields .ffopt[data-k="'+f.k+'"]').forEach(function(lab){
+          if(lab.querySelector('input').checked)vals.push(lab.getAttribute('data-v')||lab.textContent.trim());
+        });
+        if(vals.length)d[f.k]=(f.t==='check'?vals:vals[0]);
+      }else{
+        var el=document.querySelector('#fields .ffinput[data-k="'+f.k+'"]');
+        if(el&&el.value.trim())d[f.k]=el.value.trim();
+      }
+    });
+    /* 편수를 고르면 작성 기간·마감일·예상 금액이 함께 넘어갑니다 */
+    if(d['원하시는 편수']){
+      var q=parseInt(d['원하시는 편수'],10),pl=qtyPlan(q);
+      if(pl){
+        var u=blogUnit(CUR_PREMIUM);
+        d['작성 기간']=pl.weeks+'주 안에';
+        d['작성 마감일']=planDue(pl.weeks);
+        d['예상 금액']=wonf(q*u)+'원 ('+(CUR_PREMIUM?'프리미엄':'일반')+' 회원가 편당 '+wonf(u)+'원)';
+      }
+    }
+    return d;
+  }
+  function stepsShow(on){
+    document.getElementById('pickHint').style.display=on?'none':'';
+    ['fstep2','fstep3','fstepActions'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display=on?'':'none';});
+  }
+  function collapsePicks(){
+    document.querySelectorAll('#picker .pick').forEach(function(x){x.classList.remove('on');});
+    document.getElementById('fields').innerHTML='';
+    stepsShow(false);
+  }
+  function selectPick(k,force){
+    if(k==='doc'){goAim();return;}
+    var btn=document.querySelector('#picker .pick[data-k="'+k+'"]');
+    if(!force&&btn&&btn.classList.contains('on')){collapsePicks();return;} /* 같은 항목 다시 누르면 접기 */
+    document.querySelectorAll('#picker .pick').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-k')===k);});
+    renderFields(k);
+    stepsShow(true);
+  }
+  document.querySelectorAll('#picker .pick').forEach(function(b){b.addEventListener('click',function(){selectPick(b.getAttribute('data-k'));});});
+
+  /* sub pills */
+  document.querySelectorAll('.subpills').forEach(function(row){
+    var area=row.getAttribute('data-area');
+    row.querySelectorAll('.sp').forEach(function(b){
+      b.addEventListener('click',function(){
+        row.querySelectorAll('.sp').forEach(function(x){x.classList.remove('on');});
+        b.classList.add('on');
+        var t=b.getAttribute('data-t');
+        document.querySelectorAll('#v-'+(area==='content'?'content':area)+' .subpanel').forEach(function(p){p.classList.remove('on');});
+        var panel=document.getElementById(area+'-'+t);
+        if(panel){panel.classList.add('on');revealIn(panel);}
+        window.scrollTo({top:document.querySelector('#v-'+area+' .subpills').offsetTop-90,behavior:'smooth'});
+      });
+    });
+  });
+
+  /* mobile menu */
+  function closeMenu(){document.getElementById('msheet').classList.remove('open');}
+  document.getElementById('burger').addEventListener('click',function(){document.getElementById('msheet').classList.toggle('open');});
+
+  /* reveal on scroll */
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+
+  /* initial route */
+  var h=(location.hash||'').replace('#','');
+  if(VIEWS.indexOf(h)>=0){go(h);}else{revealIn(document.getElementById('v-home'));}
+
+  /* ===== Supabase: 의뢰서(신청) 저장 ===== */
+  var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
+  var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
+  var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
+  var AREA_KO={doc:"자료제작",hr:"인력",cnt:"컨텐츠",mkt:"마케팅"};
+  /* ===== 신청서 사진 업로드 ===== */
+  var PHOTO_MAX=10*1024*1024; /* 파일당 10MB (버킷 설정과 동일) */
+  function onPhotoPick(input){
+    var info=document.getElementById('photoInfo');if(!info)return;
+    var files=input.files?Array.prototype.slice.call(input.files):[];
+    if(!files.length){info.textContent='아직 선택한 사진이 없습니다.';info.className='fnote';return;}
+    var mb=files.reduce(function(a,f){return a+f.size;},0)/1048576;
+    info.className='fnote ok';
+    info.textContent='✓ '+files.length+'장 선택됨 ('+mb.toFixed(1)+'MB)'
+      +(mb>8?' · 보내실 때 자동으로 줄여서 올립니다':'')
+      +(files.length<30?' · 30장 이상을 권합니다':'');
+  }
+  /* 요즘 폰 사진은 한 장에 4000×3000 · 5MB씩 합니다.
+     블로그 글에는 그만한 크기가 필요 없어서, 보내기 전에 브라우저에서 줄입니다.
+     — 원장님 데이터도 아끼고, 나중에 블로거가 받을 때도 빨라집니다. */
+  var PHOTO_LONG_SIDE=1600, PHOTO_QUALITY=0.82;
+  async function shrinkPhoto(file){
+    if(!/^image\//.test(file.type)||/gif|svg/.test(file.type))return file;
+    var bmp;
+    try{
+      bmp=await createImageBitmap(file,{imageOrientation:'from-image'});
+    }catch(e){
+      try{ bmp=await createImageBitmap(file); }catch(e2){ return file; }   /* 못 줄이면 원본 그대로 */
+    }
+    var w=bmp.width,h=bmp.height,long=Math.max(w,h);
+    if(long<=PHOTO_LONG_SIDE&&file.size<=700*1024){bmp.close&&bmp.close();return file;}
+    var s=Math.min(1,PHOTO_LONG_SIDE/long);
+    var cw=Math.round(w*s),ch=Math.round(h*s);
+    var cv=document.createElement('canvas');cv.width=cw;cv.height=ch;
+    var cx=cv.getContext('2d');
+    cx.fillStyle='#fff';cx.fillRect(0,0,cw,ch);       /* 투명 PNG가 검게 나오지 않도록 */
+    cx.drawImage(bmp,0,0,cw,ch);
+    bmp.close&&bmp.close();
+    var blob=await new Promise(function(res){cv.toBlob(res,'image/jpeg',PHOTO_QUALITY);});
+    if(!blob||blob.size>=file.size)return file;        /* 오히려 커지면 원본 */
+    return new File([blob],file.name.replace(/\.[^.]+$/,'')+'.jpg',{type:'image/jpeg'});
+  }
+
+  async function uploadPhotos(onProgress){
+    var input=document.querySelector('#fields .ffiles');
+    if(!input||!input.files||!input.files.length)return null;
+    var files=Array.prototype.slice.call(input.files);
+    var folder=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():(''+Date.now()+Math.random().toString(16).slice(2));
+    var paths=[];
+    for(var i=0;i<files.length;i++){
+      var f=await shrinkPhoto(files[i]);
+      if(f.size>PHOTO_MAX)throw new Error('「'+files[i].name+'」은 줄여도 10MB가 넘습니다. 이 사진만 빼고 다시 시도해 주세요.');
+      /* 안 줄여지고 원본 그대로 갈 수도 있어서 실제 형식에 맞춰 확장자를 붙입니다 */
+      var ext=(f.type==='image/jpeg')?'jpg':((f.type.split('/')[1]||'jpg').replace(/[^a-z0-9]/g,'')||'jpg');
+      var path=folder+'/'+String(i+1).padStart(3,'0')+'.'+ext;
+      var r=await sb.storage.from('request-photos').upload(path,f,{contentType:f.type||'image/jpeg',upsert:false});
+      if(r.error)throw new Error('사진 업로드 실패('+files[i].name+'): '+r.error.message);
+      paths.push(r.data.path);
+      if(onProgress)onProgress(i+1,files.length);
+    }
+    return {folder:folder,paths:paths};
+  }
+  async function submitRequest(){
+    var hint=document.getElementById('formHint');
+    var setErr=function(m){hint.textContent=m;hint.style.color="#c0392b";};
+    var pick=document.querySelector('#picker .pick.on');
+    if(!pick)return setErr('먼저 필요한 지원을 선택해 주세요.');
+    var area=pick.getAttribute('data-k');
+    if(area==='doc')return goAim();
+    if(area==='mkt'&&!document.querySelector('#qtyOpts .qopt:has(input:checked)'))
+      return setErr('원하시는 편수를 골라 주세요.');
+    var miss=firstMissing(area);
+    if(miss){focusField(miss);return setErr('「'+miss.k+'」 칸을 채워 주세요.');}
+    var academy=document.getElementById('f_academy').value.trim();
+    var manager=document.getElementById('f_manager').value.trim();
+    var phone=document.getElementById('f_phone').value.trim();
+    var email=document.getElementById('f_email').value.trim();
+    var message=document.getElementById('f_message').value.trim();
+    var consent=document.getElementById('f_consent').checked;
+    if(!academy)return setErr('학원명을 입력해 주세요.');
+    if(!phone&&!email)return setErr('연락처 또는 이메일 중 하나는 입력해 주세요.');
+    if(!consent)return setErr('개인정보 수집·이용에 동의해 주세요.');
+    if(!sb)return setErr('연결 오류입니다. 새로고침 후 다시 시도해 주세요.');
+    var btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='제출 중...';
+    var details=collectDetails(area);
+    var extra=document.getElementById('f_extra').value.trim();
+    if(extra)details['기타 요청사항']=extra;
+    /* 사진이 있으면 먼저 업로드 */
+    try{
+      var up=await uploadPhotos(function(done,total){btn.textContent='사진 올리는 중 '+done+'/'+total;});
+      if(up){details['학원 사진']=up.paths.length+'장';details['_photos']=up.paths;}
+    }catch(e){
+      btn.disabled=false;btn.textContent='신청서 제출';
+      return setErr(e.message||'사진 업로드에 실패했습니다. 사진을 빼고 제출하시거나 링크로 남겨주세요.');
+    }
+    btn.textContent='제출 중...';
+    var res=await sb.from('requests').insert({area:AREA_KO[area]||area,academy_name:academy,manager_name:manager,phone:phone,email:email,message:message,details:details,consent:consent});
+    if(res.error){btn.disabled=false;btn.textContent='신청서 제출';setErr('제출 실패: '+res.error.message);return;}
+    document.getElementById('doneWhat').textContent='접수 내용 · '+(AREA_KO[area]||area)+' 지원 · '+academy;
+    document.getElementById('applyForm').style.display='none';
+    document.getElementById('formDone').style.display='';
+    document.getElementById('apply').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  /* 완료 화면 → 다시 신청 가능하게 초기화 */
+  function applyAgain(silent){
+    ['f_academy','f_manager','f_phone','f_email','f_message','f_extra'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+    var cs=document.getElementById('f_consent');if(cs)cs.checked=false;
+    var btn=document.getElementById('submitBtn');if(btn){btn.disabled=false;btn.textContent='신청서 제출';}
+    var hint=document.getElementById('formHint');if(hint){hint.textContent='제출하면 담당자가 배정되어 1~2일 내 연락드립니다.';hint.style.color='';}
+    collapsePicks();
+    document.getElementById('formDone').style.display='none';
+    document.getElementById('applyForm').style.display='';
+    if(!silent)document.getElementById('apply').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  /* ===== 로그인 / 회원가입 ===== */
+  function openAuth(tab){switchAuthTab(tab||'login');document.getElementById('authModal').classList.add('open');closeMenu();}
+  function closeAuth(){document.getElementById('authModal').classList.remove('open');}
+  function switchAuthTab(t){
+    var l=(t!=='signup');
+    document.getElementById('tabLogin').classList.toggle('on',l);
+    document.getElementById('tabSignup').classList.toggle('on',!l);
+    document.getElementById('paneLogin').style.display=l?'':'none';
+    document.getElementById('paneSignup').style.display=l?'none':'';
+  }
+  async function doLogin(){
+    var m=document.getElementById('li_msg');m.className='modal-msg';m.textContent='';
+    var email=document.getElementById('li_email').value.trim(),pw=document.getElementById('li_pw').value;
+    if(!email||!pw){m.className='modal-msg err';m.textContent='이메일과 비밀번호를 입력해 주세요.';return;}
+    if(!sb){m.className='modal-msg err';m.textContent='연결 오류입니다.';return;}
+    m.textContent='로그인 중...';
+    var res=await sb.auth.signInWithPassword({email:email,password:pw});
+    if(res.error){m.className='modal-msg err';m.textContent='로그인 실패: 이메일 또는 비밀번호를 확인해 주세요.';return;}
+    closeAuth();updateAuthUI();
+  }
+  function togglePw(id,btn){var el=document.getElementById(id);if(!el)return;if(el.type==='password'){el.type='text';btn.textContent='숨김';}else{el.type='password';btn.textContent='표시';}}
+  async function doSignup(){
+    var m=document.getElementById('su_msg');m.className='modal-msg';m.textContent='';
+    var academy=document.getElementById('su_academy').value.trim(),manager=document.getElementById('su_manager').value.trim(),phone=document.getElementById('su_phone').value.trim(),email=document.getElementById('su_email').value.trim(),pw=document.getElementById('su_pw').value,pw2=document.getElementById('su_pw2').value;
+    if(!academy||!email||!pw){m.className='modal-msg err';m.textContent='학원명·이메일·비밀번호는 필수입니다.';return;}
+    if(pw.length<6){m.className='modal-msg err';m.textContent='비밀번호는 6자 이상이어야 합니다.';return;}
+    if(pw!==pw2){m.className='modal-msg err';m.textContent='비밀번호가 일치하지 않습니다.';return;}
+    if(!sb){m.className='modal-msg err';m.textContent='연결 오류입니다.';return;}
+    m.textContent='가입 중...';
+    var res=await sb.auth.signUp({email:email,password:pw,options:{data:{academy_name:academy,manager_name:manager,phone:phone}}});
+    if(res.error){m.className='modal-msg err';m.textContent='가입 실패: '+res.error.message;return;}
+    try{await sb.auth.signOut();}catch(e){}
+    document.getElementById('su_pw').value='';document.getElementById('su_pw2').value='';
+    document.getElementById('li_email').value=email;
+    switchAuthTab('login');
+    var lm=document.getElementById('li_msg');lm.className='modal-msg ok';lm.textContent='회원가입이 완료되었습니다! 비밀번호를 입력해 로그인해 주세요.';
+    updateAuthUI();
+  }
+  async function doLogout(){if(sb){await sb.auth.signOut();}updateAuthUI();}
+  /* 관리자 전용: 내 계정 프리미엄 켜기/끄기 (표시 확인용) */
+  async function togglePremiumSelf(){
+    if(!sb||!window.__uid||!window.__isOwner)return;
+    var next=!window.__isPremium;
+    var r=await sb.from('profiles').update({is_premium:next,premium_since:next?new Date().toISOString():null}).eq('id',window.__uid).select('is_premium');
+    if(r.error){alert('변경 실패: '+r.error.message);return;}
+    if(!r.data||!r.data.length){alert('권한이 없어 변경되지 않았습니다.');return;}
+    await updateAuthUI();
+    if(document.getElementById('meModal').classList.contains('open'))openMe();
+  }
+  async function updateAuthUI(){
+    var area=document.getElementById('authArea');if(!area||!sb)return;
+    var res=await sb.auth.getUser();
+    var user=(res&&res.data)?res.data.user:null;
+    var ma=document.getElementById('mAuth');
+    if(user){
+      var meta=user.user_metadata||{};
+      var name=meta.academy_name||user.email;
+      window.__uid=user.id;window.__academy=name;
+      var premium=false;
+      try{var p=await sb.from('profiles').select('is_premium').eq('id',user.id).single();if(p.data){premium=!!p.data.is_premium;}}catch(e){}
+      /* 게시판 관리 권한은 서버 판단을 그대로 따름
+         (회원 is_admin 또는 직원 권한 '홈페이지 게시판 관리') */
+      var isAdmin=false,isOwner=false;
+      try{var ia=await sb.rpc('is_admin');if(!ia.error)isAdmin=!!ia.data;}catch(e){}
+      try{var io=await sb.rpc('is_owner');if(!io.error)isOwner=!!io.data;}catch(e){}
+      window.__isAdmin=isAdmin;window.__isOwner=isOwner;
+      window.__isPremium=premium;
+      renderPricing(premium);
+      if(typeof loadBoard==='function'&&document.getElementById('v-board')&&document.getElementById('v-board').classList.contains('active')){loadBoard();}
+      var tail=premium?'<span class="pbadge">프리미엄</span>':'<button class="up" type="button" onclick="openPremium()">프리미엄 전환</button>';
+      /* 관리자 계정 전용: 프리미엄 화면을 껐다 켜며 확인 */
+      if(window.__isOwner){tail+='<button class="lg" type="button" title="최고관리자 전용 · 프리미엄 표시 확인용" onclick="togglePremiumSelf()">프리미엄 '+(premium?'OFF':'ON')+'</button>';}
+      area.innerHTML='<button class="me" type="button" title="내 계정 · 신청 내역 보기" onclick="openMe()">'
+        +esc(name)+' 님 ▾</button>'+tail;
+      if(ma){ma.textContent='내 계정 · 신청 내역';ma.setAttribute('onclick','openMe()');}
+    }else{
+      window.__uid=null;window.__isPremium=false;window.__isAdmin=false;window.__isOwner=false;window.__academy=null;
+      renderPricing(false);
+      if(typeof loadBoard==='function'&&document.getElementById('v-board')&&document.getElementById('v-board').classList.contains('active')){loadBoard();}
+      area.innerHTML='<button class="lg" type="button" onclick="openAuth(\'login\')">로그인</button>';
+      if(ma){ma.textContent='로그인 / 회원가입';ma.setAttribute('onclick',"openAuth('login')");}
+    }
+  }
+  /* ===== 내 계정 — 신청 내역 · 진행현황 ===== */
+  function closeMe(){document.getElementById('meModal').classList.remove('open');}
+  async function openMe(){
+    if(!window.__uid){openAuth('login');return;}
+    document.getElementById('meModal').classList.add('open');
+    closeMenu();
+    document.getElementById('meName').textContent=(window.__academy||'내 계정')+' 님';
+    var mail='';try{var u=await sb.auth.getUser();mail=(u.data&&u.data.user)?u.data.user.email:'';}catch(e){}
+    document.getElementById('meMail').textContent=mail;
+    /* 프리미엄 표시 · 최고관리자는 여기서 켜고 끕니다 */
+    var t=window.__isPremium
+      ? '<span class="pbadge">프리미엄 회원</span>'
+      : '<button class="up" type="button" onclick="closeMe();openPremium()">프리미엄 전환</button>';
+    if(window.__isOwner)
+      t+='<button class="up" type="button" style="margin-left:6px" onclick="togglePremiumSelf()">프리미엄 '
+        +(window.__isPremium?'OFF':'ON')+'</button>';
+    document.getElementById('meTier').innerHTML=t;
+    loadMyRequests();
+  }
+  /* 목록이 너무 길면 앞의 몇 개만 보여줍니다 (지역·과목을 다 적으신 분이 많습니다) */
+  function shortList(s,keep){
+    var a=String(s||'').split(/,\s*/);
+    return a.length<=keep?s:a.slice(0,keep).join(', ')+' 외 '+(a.length-keep)+'개';
+  }
+  async function loadMyRequests(){
+    var box=document.getElementById('meList');
+    box.innerHTML='<div class="meempty">불러오는 중입니다…</div>';
+    var r=await sb.rpc('my_requests');
+    if(r.error){box.innerHTML='<div class="meempty">내역을 불러오지 못했습니다.<br>'+esc(r.error.message)+'</div>';return;}
+    var rows=r.data||[];
+    if(!rows.length){
+      box.innerHTML='<div class="meempty"><b>아직 신청하신 내역이 없습니다.</b><br>'
+        +'아래 [새 신청하기]로 신청하시면 여기에서 진행 상황을 보실 수 있습니다.<br>'
+        +'<span style="font-size:.8rem">로그인하지 않고 넣으신 신청서는 여기에 안 나옵니다.</span></div>';
+      return;
+    }
+    var h='<div class="melist">';
+    rows.forEach(function(x){
+      var done=(x.status||'').indexOf('완료')>=0, going=(x.status||'').indexOf('진행')>=0;
+      h+='<div class="mecard"><div class="top">'
+        +'<span class="area">'+esc(x.area||'')+'</span>'
+        +'<span class="nm">'+esc(x.academy_name||'')+'</span>'
+        +'<span class="st'+(done?' done':going?' go':'')+'">'+esc(x.status||'접수')+'</span>'
+        +'<span style="margin-left:auto;font-size:.78rem;color:var(--muted)">'+fdateK(x.created_at)+' 신청</span>'
+        +'</div>';
+      if(x.summary)h+='<div class="sum">'+esc(shortList(x.summary,4))+'</div>';
+      var meta=[];
+      if(x.price)meta.push('<b>'+esc(x.price)+'</b>');
+      if(x.deadline)meta.push('<i>마감 '+esc(x.deadline)+'</i>');
+      if(meta.length)h+='<div class="meta">'+meta.join('')+'</div>';
+      if(x.share_key){
+        var pct=x.qty?Math.round((x.done||0)/x.qty*100):0;
+        h+='<div class="mebar"><i style="width:'+pct+'%"></i></div>'
+          +'<div class="meta"><i>올라간 글 '+(x.done||0)+' / '+(x.qty||0)+'편</i></div>'
+          +'<a class="melink" href="'+BLOG_STATUS_URL+'?k='+encodeURIComponent(x.share_key)+'" '
+          +'target="_blank" rel="noopener">진행현황 자세히 보기 ↗</a>';
+      }
+      h+='</div>';
+    });
+    box.innerHTML=h+'</div>';
+  }
+  function fdateK(s){
+    if(!s)return '';
+    var d=new Date(s);
+    return d.getFullYear()+'.'+('0'+(d.getMonth()+1)).slice(-2)+'.'+('0'+d.getDate()).slice(-2);
+  }
+  var BLOG_STATUS_URL='https://center.intomarketing.co.kr/status.html';
+
+  /* 디자인 제작 사례
+     p: 안에서 넘겨볼 수 있는 쪽수 (파일은 <s>-1.jpg … <s>-N.jpg)
+     p 가 없으면 한 장짜리 (<s>.jpg), fit:'contain' 은 로고처럼 잘리면 안 되는 것 */
+  var DESIGN_WORKS=[
+    {s:'into',     n:'인투유학 브로셔',            d:'유학원 종합 소개 · 5개국', p:3},
+    {s:'poster',   n:'미국 스쿨링 캠프 포스터',    d:'모집 포스터 · 일정 안내'},
+    {s:'blinn',    n:'블린컬리지 브로셔',          d:'미국 대학 과정 안내', p:3},
+    {s:'schooling',n:'미국 스쿨링 단기 캠프 브로셔',d:'단기 캠프 프로그램 안내', p:3},
+    {s:'career',   n:'미국 진로 설계 캠프 브로셔', d:'진로 설계 캠프 안내', p:3},
+    {s:'sports',   n:'스포츠 & 투어 캠프 브로셔',  d:'스포츠·투어 캠프 안내', p:3},
+    {s:'logo',     n:'인투렌탈 로고',              d:'로고 · 파비콘 제작', fit:'contain'}
+  ];
+  function dsrc(w,n){ return 'img/design/'+w.s+(w.p?('-'+n):'')+'.jpg'; }
+  function renderDesign(){
+    var box=document.getElementById('designFolio');if(!box)return;
+    box.innerHTML=DESIGN_WORKS.map(function(w,idx){
+      return '<figure class="dcard'+(w.p?' more':'')+'" data-design="'+idx+'"'
+        +(w.p?' title="눌러서 '+w.p+'장 보기"':'')+'>'
+        +'<div class="dimg'+(w.fit==='contain'?' fit':'')+'">'
+        +'<img src="'+esc(dsrc(w,1))+'" alt="'+esc(w.n)+'" draggable="false" onerror="this.remove()">'
+        +(w.p?'<span class="dmore">'+w.p+'장 보기</span>':'')
+        +'</div><figcaption><b>'+esc(w.n)+'</b><span>'+esc(w.d)+'</span></figcaption></figure>';
+    }).join('');
+  }
+  /* 작업물 미리보기 — 두세 장만 넘겨봅니다 */
+  var DV_I=0, DV_P=1;
+  function openDesign(idx){
+    var w=DESIGN_WORKS[idx]; if(!w||!w.p)return;
+    DV_I=idx; DV_P=1;
+    document.getElementById('dvModal').classList.add('open');
+    drawDesign();
+  }
+  function closeDesign(){document.getElementById('dvModal').classList.remove('open');}
+  function dvGo(step){
+    var w=DESIGN_WORKS[DV_I];
+    DV_P=Math.min(w.p,Math.max(1,DV_P+step));
+    drawDesign();
+  }
+  function drawDesign(){
+    var w=DESIGN_WORKS[DV_I];
+    document.getElementById('dvTitle').textContent=w.n;
+    document.getElementById('dvNum').textContent=DV_P+' / '+w.p+'장';
+    document.getElementById('dvImg').innerHTML=
+      '<img src="'+esc(dsrc(w,DV_P))+'" alt="'+esc(w.n)+' '+DV_P+'쪽" draggable="false">';
+    document.getElementById('dvPrev').disabled=(DV_P<=1);
+    document.getElementById('dvNext').disabled=(DV_P>=w.p);
+  }
+  document.addEventListener('click',function(e){
+    var c=e.target.closest('[data-design]');
+    if(c)openDesign(Number(c.getAttribute('data-design')));
+  });
+  document.addEventListener('keydown',function(e){
+    if(!document.getElementById('dvModal').classList.contains('open'))return;
+    if(e.key==='Escape')closeDesign();
+    if(e.key==='ArrowLeft')dvGo(-1);
+    if(e.key==='ArrowRight')dvGo(1);
+  });
+
+  /* ===== 제작 사례 =====
+     새로 만든 사이트는 이 목록에 한 줄만 추가하면 화면에 바로 나옵니다.
+     u=주소 n=이름 d=한 줄 설명 t=유형 f=분야 y=연도 */
+  var FOLIO_SITES=[
+    {u:'https://intoedu.github.io/Mirae-N-Math-Xi-Home-Page/',n:'미래엔수학 자이학원',
+     d:'부산 수영구 광안동 · 수학 전문 학원',t:'학원 사이트',f:'학원 · 수학',y:'2026',s:'mirae'},
+    {u:'https://koreayjk.github.io/renewgen/',n:'리뉴젠 아카데미',
+     d:'중고등 온라인 보습학원',t:'기업 사이트',f:'교육 · 아카데미',y:'2026',s:'renewgen'},
+    {u:'https://koreayjk.github.io/ontact/',n:'온택잉글리쉬 ONTACT',
+     d:'집에서 만나는 1:1 원어민 화상영어',t:'플랫폼',f:'화상영어 · 교육',y:'2026',s:'ontact'},
+    {u:'https://koreayjk.github.io/pickleon/',n:'피클온 PICKLEON',
+     d:'피클볼 코트예약 · 소셜매치 플랫폼',t:'플랫폼',f:'스포츠 · 예약',y:'2026',s:'pickleon'},
+    {u:'https://unoglobal.co.kr',n:'유노글로벌 UNO Global',
+     d:'국제물류주선 전문기업',t:'기업 사이트',f:'물류 · B2B',y:'2026',s:'unoglobal'},
+    {u:'https://juel2414.github.io/-wooridongne-coffee/',n:'우리동네 커피',
+     d:'인천 미추홀구 · 스페셜티 카페',t:'기업 사이트',f:'카페 · F&B',y:'2026',s:'coffee'},
+    {u:'https://koreayjk.github.io/matjibtour/',n:'맛집여행',
+     d:'대전 · 충남대 정문 앞 집밥 한식당',t:'기업 사이트',f:'음식점 · F&B',y:'2026',s:'matjibtour'},
+    {u:'https://koreayjk.github.io/nst/',n:'노바스타테크 NST',
+     d:'SPC·LVT 표면필름 제조',t:'기업 사이트',f:'제조 · B2B',y:'2025',s:'nst'}
+  ];
+  function renderFolio(){
+    var box=document.getElementById('folioSites');if(!box)return;
+    box.innerHTML=FOLIO_SITES.map(function(s){
+      var host=s.u.replace(/^https?:\/\//,'').replace(/\/$/,'');
+      return '<a class="folio-card" href="'+esc(s.u)+'" target="_blank" rel="noopener">'
+        +'<div class="shot"><span class="chrome"><i></i><i></i><i></i>'
+        +'<em class="url">'+esc(host)+'</em></span>'
+        +'<div class="shotbody">'
+        +(s.s?'<img src="img/folio/'+esc(s.s)+'.jpg" alt="'+esc(s.n)+' 홈페이지 화면" '
+             +'onerror="this.remove()">':'')
+        +'<b>'+esc(s.n)+'</b><span>'+esc(s.d)+'</span>'
+        +'<span class="open">사이트 열기 ↗</span></div></div>'
+        +'<figcaption><b>'+esc(s.n)+'</b>'
+        +'<span class="tags"><em>'+esc(s.t)+'</em>'+esc(s.f)+' · '+esc(s.y)+'</span>'
+        +'</figcaption></a>';
+    }).join('');
+  }
+
+  function openPremium(){var c=document.getElementById('pm_code');c.value='';var m=document.getElementById('pm_msg');m.textContent='';m.className='modal-msg';document.getElementById('premiumModal').classList.add('open');closeMenu();}
+  function closePremium(){document.getElementById('premiumModal').classList.remove('open');}
+  async function doRedeem(){
+    var m=document.getElementById('pm_msg');m.className='modal-msg';m.textContent='';
+    var code=document.getElementById('pm_code').value.trim();
+    if(!code){m.className='modal-msg err';m.textContent='코드를 입력해 주세요.';return;}
+    if(!sb){m.className='modal-msg err';m.textContent='연결 오류입니다.';return;}
+    m.textContent='확인 중...';
+    var res=await sb.rpc('redeem_member_code',{p_code:code});
+    if(res.error){m.className='modal-msg err';m.textContent='오류: '+res.error.message;return;}
+    if(res.data&&res.data.ok){m.className='modal-msg ok';m.textContent='🎉 프리미엄 회원으로 전환되었습니다!';updateAuthUI();setTimeout(closePremium,1400);}
+    else{m.className='modal-msg err';m.textContent=(res.data&&res.data.error)||'전환에 실패했습니다.';}
+  }
+  /* ===== 회원별 홈페이지 가격표 ===== */
+  var PRICE_STAGES=[
+    {s:'1단계',sub:'단순 홍보형',tip:'홈페이지가 아직 없으시다면 여기서 시작하세요',
+     inc:'학원 소개, 원장 인사말, 시설·시간표 안내, 오시는 길(지도), 전화·카톡 상담 연결'},
+    {s:'2단계',sub:'소통형',best:1,tip:'학부모와 주고받을 것이 있다면 이 단계입니다',
+     inc:'1단계에 있는 것 전부, 회원가입·로그인, 공지·Q&amp;A 게시판, 갤러리, 자료실'},
+    {s:'3단계',sub:'신청·결제형',tip:'수강신청·결제까지 홈페이지에서 받으실 때',
+     inc:'2단계에 있는 것 전부, 강좌 목록, 온라인 수강신청, 신청 관리, 카드 결제 연동'},
+    {s:'4단계',sub:'맞춤 제작형',merged:true,tip:'원하시는 것을 말씀해 주시면 맞춰 만듭니다',
+     inc:'정해진 틀 없이 학원 요구에 맞춰 기능·디자인을 자유롭게 설계하는 완전 맞춤형'}
+  ];
+  var PRICE_TABLE={
+    general:[['4.5만원','5만원'],['7만원','5~7만원'],['견적 후 안내','9~12만원'],['견적 후 안내']],
+    premium:[['무료','3만원'],['무료','4~6만원'],['견적 후 안내','7~10만원'],['견적 후 안내']]
+  };
+  function renderPricing(premium){
+    var rowsEl=document.getElementById('priceRows');if(!rowsEl)return;
+    var arr=premium?PRICE_TABLE.premium:PRICE_TABLE.general,h='';
+    for(var i=0;i<PRICE_STAGES.length;i++){
+      var st=PRICE_STAGES[i],p=arr[i];
+      var free=p[0],fee=st.merged?'':p[1];
+      var isFree=/무료/.test(free);
+      h+='<div class="pcard'+(st.best?' best':'')+(st.merged?' wide':'')+'">'
+        +(st.best?'<div class="pbest">가장 많이 고르십니다</div>':'')
+        +'<div class="pstage">'+st.s+'</div>'
+        +'<div class="psub">'+st.sub+'</div>'
+        +'<div class="ptip">'+st.tip+'</div>'
+        +'<div class="pmoney">';
+      if(st.merged){
+        h+='<div class="pbig quote">'+free+'</div>'
+          +'<div class="psmall">기능이 정해지면 그때 금액을 알려드립니다</div>';
+      }else{
+        h+='<div class="pbig tnum">'+fee+'<small> / 월</small></div>'
+          +'<div class="psmall">제작비 <b'+(isFree?' class="isfree"':'')+'>'+free+'</b></div>';
+      }
+      h+='</div><ul class="pinc">';
+      st.inc.split(/,\s*/).forEach(function(x){ h+='<li>'+x+'</li>'; });
+      h+='</ul><button class="pbtn" onclick="applyWith(\'doc\')">이 단계로 상담받기</button></div>';
+    }
+    rowsEl.innerHTML=h;
+    var tag=document.getElementById('priceTag');
+    if(tag){tag.innerHTML=premium?'<span class="ptag on">✓ 프리미엄 회원가로 표시 중</span>':'<span class="ptag">일반 가격입니다 · <b>프리미엄(파트너) 회원</b>은 회원가로 더 저렴합니다</span>';}
+    var sd=document.getElementById('sidePriceDoc');if(sd)sd.textContent=premium?'관리비 3만~':'관리비 5만~';
+    var sm=document.getElementById('sidePriceMkt');if(sm)sm.textContent=premium?'편당 3,000원':'편당 6,000원';
+    CUR_PREMIUM=!!premium;
+    renderBlogPrice(premium);
+    renderOfficePrice(premium);
+    refreshQtyCards();
+  }
+  /* 인투 오피스 회원별 구독료 */
+  var OFFICE_PRICE={general:'6,900',premium:'4,900'};
+  function renderOfficePrice(premium){
+    var el=document.getElementById('officePrice');if(!el)return;
+    var h='<div class="bcard'+(premium?'':' on')+'">'
+      +'<div class="bl">일반 회원'+(premium?'':' <span class="bnow">지금 적용</span>')+'</div>'
+      +'<div class="bv">'+OFFICE_PRICE.general+'원<small>/ 월</small></div>'
+      +'<div class="bd">횟수 제한 없이 무제한 사용.</div></div>'
+      +'<div class="bcard'+(premium?' on':'')+'">'
+      +'<div class="bl">프리미엄(파트너) 회원'+(premium?' <span class="bnow">지금 적용</span>':'')+'</div>'
+      +'<div class="bv">'+OFFICE_PRICE.premium+'원<small>/ 월</small></div>'
+      +'<div class="bd">파트너 코드로 전환하신 회원 가격.</div></div>'
+      +'<div class="cnote" style="grid-column:1/-1">'
+      +(premium
+        ? '✓ <b>프리미엄 회원가</b>로 표시 중입니다. 월 '+OFFICE_PRICE.premium+'원으로 서명 <b>횟수 제한 없이</b> 사용하실 수 있습니다.'
+        : '💡 <b>로그인하면</b> 회원 종류에 맞는 가격이 표시됩니다. 프리미엄(파트너) 회원은 <b>월 '+OFFICE_PRICE.premium+'원</b>입니다.')
+      +' 건당 추가 요금은 없습니다.</div>';
+    el.innerHTML=h;
+  }
+  /* 블로그 홍보 회원별 가격 */
+  var BLOG_PRICE={general:'6,000',premium:'3,000'};
+  function renderBlogPrice(premium){
+    var h='<div class="bcard'+(premium?'':' on')+'">'
+      +'<div class="bl">일반 회원'+(premium?'':' <span class="bnow">지금 적용</span>')+'</div>'
+      +'<div class="bv">'+BLOG_PRICE.general+'원<small>/ 글 1편</small></div>'
+      +'<div class="bd">회원가입만 하신 경우 적용되는 가격입니다.</div></div>'
+      +'<div class="bcard'+(premium?' on':'')+'">'
+      +'<div class="bl">프리미엄(파트너) 회원'+(premium?' <span class="bnow">지금 적용</span>':'')+'</div>'
+      +'<div class="bv">'+BLOG_PRICE.premium+'원<small>/ 글 1편</small></div>'
+      +'<div class="bd">파트너 코드로 전환하신 회원에게 적용됩니다.</div></div>';
+    /* 편수별 작성 기간·금액 */
+    var tbl='<div class="qtbl"><table><thead><tr>'
+      +'<th>편수</th><th>작성 기간</th>'
+      +'<th'+(premium?'':' class="hl"')+'>일반 회원</th>'
+      +'<th'+(premium?' class="hl"':'')+'>프리미엄 회원</th>'
+      +'</tr></thead><tbody>'
+      +QTY_PLANS.map(function(p){
+        return '<tr><td>'+p.qty+'편</td><td class="wk">'+p.weeks+'주 안에</td>'
+          +'<td'+(premium?'':' class="hl"')+'>'+wonf(p.qty*BLOG_UNIT.general)+'원</td>'
+          +'<td'+(premium?' class="hl"':'')+'>'+wonf(p.qty*BLOG_UNIT.premium)+'원</td></tr>';
+      }).join('')
+      +'</tbody></table></div>';
+    var note='<div class="cnote" style="grid-column:1/-1">'
+      +(premium
+        ? '✓ <b>프리미엄 회원가</b>로 표시 중입니다. 주문하신 편수 × 편당 '+BLOG_PRICE.premium+'원으로 정산합니다.'
+        : '💡 <b>로그인하면</b> 회원 종류에 맞는 가격이 표시됩니다. 프리미엄(파트너) 회원은 <b>편당 '+BLOG_PRICE.premium+'원</b>으로 절반 저렴합니다.')
+      +' <b>작성 기간은 입금이 확인된 날부터</b> 셉니다. 약정 기간이나 기본료는 없습니다.</div>';
+    ['blogPrice','blogPrice2'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=h+tbl+note;});
+  }
+  renderPricing(false);
+  renderFolio();
+  renderDesign();
+
+  /* ===== 게시판 (공지 · 문의) ===== */
+  function closeModal(id){var el=document.getElementById(id);if(el)el.classList.remove('open');}
+  function esc(s){return (s==null?'':(''+s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function fmtDate(s){try{var d=new Date(s);return (''+d.getFullYear()).slice(2)+'.'+('0'+(d.getMonth()+1)).slice(-2)+'.'+('0'+d.getDate()).slice(-2);}catch(e){return '';}}
+  function loadBoard(){loadNotices();loadQuestions();}
+  async function loadNotices(){
+    var el=document.getElementById('noticeList');if(!el||!sb)return;
+    var nb=document.getElementById('noticeNewBtn');if(nb)nb.style.display=window.__isAdmin?'':'none';
+    var res=await sb.from('notices').select('*').order('created_at',{ascending:false});
+    if(res.error){el.innerHTML='<div class="board-empty">불러오지 못했습니다.</div>';return;}
+    var rows=res.data||[];window.__notices=rows;
+    if(!rows.length){el.innerHTML='<div class="board-empty">아직 공지가 없습니다.</div>';return;}
+    var h='';
+    for(var i=0;i<rows.length;i++){var n=rows[i];
+      var adm='';
+      if(window.__isAdmin){
+        adm='<span class="adm-btns"><button class="adm-btn" onclick="event.stopPropagation();editNotice(\''+n.id+'\')">수정</button>'
+          +(window.__isOwner?'<button class="adm-btn del" onclick="event.stopPropagation();deleteNotice(\''+n.id+'\')">삭제</button>':'')
+          +'</span>';
+      }
+      h+='<div class="brow na"><div class="nhead" onclick="this.parentNode.classList.toggle(\'open\')"><span class="bt">'+esc(n.title)+'</span><span class="bmeta">'+(n.author_name?esc(n.author_name)+' · ':'')+fmtDate(n.created_at)+adm+'</span></div><div class="nbody">'+esc(n.body)+'</div></div>';
+    }
+    el.innerHTML=h;
+  }
+  async function loadQuestions(){
+    var el=document.getElementById('qnaList');if(!el||!sb)return;
+    var res=await sb.rpc('list_questions');
+    if(res.error){el.innerHTML='<div class="board-empty">불러오지 못했습니다.</div>';return;}
+    var rows=res.data||[];
+    if(!rows.length){el.innerHTML='<div class="board-empty">아직 문의가 없습니다. 첫 문의를 남겨보세요.</div>';return;}
+    var h='';
+    for(var i=0;i<rows.length;i++){var q=rows[i];
+      var mine=q.qowned?'<span class="btag" style="background:color-mix(in srgb,var(--accent) 14%,var(--surface-2));color:var(--accent)">내 글</span>':'';
+      var adm=window.__isOwner?'<span class="adm-btns"><button class="adm-btn del" onclick="event.stopPropagation();deleteQuestion(\''+q.qid+'\')">삭제</button></span>':'';
+      h+='<div class="brow" onclick="openQDetail(\''+q.qid+'\','+(q.qsecret?'true':'false')+','+(q.qowned?'true':'false')+')"><span class="bt">'+(q.qsecret?'🔒 ':'')+esc(q.qtitle)+'</span><span class="bmeta">'+mine+(q.qanswered?'<span class="btag ans">답변완료</span>':'')+(q.qname?esc(q.qname)+' · ':'')+fmtDate(q.qcreated)+adm+'</span></div>';
+    }
+    el.innerHTML=h;
+  }
+  function openNoticeForm(){window.__noticeEditId=null;document.getElementById('ntModalTitle').textContent='새 공지 작성';document.getElementById('nt_title').value='';document.getElementById('nt_body').value='';var m=document.getElementById('nt_msg');m.textContent='';m.className='modal-msg';document.getElementById('noticeModal').classList.add('open');}
+  function editNotice(id){
+    var n=(window.__notices||[]).filter(function(x){return x.id===id;})[0];if(!n)return;
+    window.__noticeEditId=id;
+    document.getElementById('ntModalTitle').textContent='공지 수정';
+    document.getElementById('nt_title').value=n.title;
+    document.getElementById('nt_body').value=n.body;
+    var m=document.getElementById('nt_msg');m.textContent='';m.className='modal-msg';
+    document.getElementById('noticeModal').classList.add('open');
+  }
+  async function submitNotice(){
+    var m=document.getElementById('nt_msg');m.className='modal-msg';
+    var t=document.getElementById('nt_title').value.trim(),b=document.getElementById('nt_body').value.trim();
+    if(!t||!b){m.className='modal-msg err';m.textContent='제목과 내용을 입력해 주세요.';return;}
+    var res;
+    if(window.__noticeEditId){res=await sb.from('notices').update({title:t,body:b}).eq('id',window.__noticeEditId);}
+    else{res=await sb.from('notices').insert({title:t,body:b,author_name:'ESC 운영팀'});}
+    if(res.error){m.className='modal-msg err';m.textContent='저장 실패: '+res.error.message;return;}
+    window.__noticeEditId=null;closeModal('noticeModal');loadNotices();
+  }
+  async function deleteNotice(id){
+    if(!window.__isOwner){alert('삭제는 최고관리자만 할 수 있습니다.');return;}
+    if(!confirm('이 공지를 삭제할까요?'))return;
+    var res=await sb.from('notices').delete().eq('id',id).select('id');
+    if(res.error){alert('삭제 실패: '+res.error.message);return;}
+    if(!res.data||!res.data.length){alert('삭제 권한이 없습니다. (최고관리자만 가능)');return;}
+    loadNotices();
+  }
+  function openQForm(){['q_title','q_body','q_name','q_contact','q_pw'].forEach(function(id){document.getElementById(id).value='';});document.getElementById('q_secret').checked=false;document.getElementById('q_pwrap').style.display='none';var m=document.getElementById('q_msg');m.textContent='';m.className='modal-msg';document.getElementById('qformModal').classList.add('open');}
+  async function submitQuestion(){
+    var m=document.getElementById('q_msg');m.className='modal-msg';
+    var t=document.getElementById('q_title').value.trim(),b=document.getElementById('q_body').value.trim(),name=document.getElementById('q_name').value.trim(),contact=document.getElementById('q_contact').value.trim(),secret=document.getElementById('q_secret').checked,pw=document.getElementById('q_pw').value;
+    if(!t||!b){m.className='modal-msg err';m.textContent='제목과 내용을 입력해 주세요.';return;}
+    if(secret&&!pw){m.className='modal-msg err';m.textContent='비밀글 비밀번호를 입력해 주세요.';return;}
+    var res=await sb.rpc('post_question',{p_title:t,p_body:b,p_name:name,p_contact:contact,p_is_secret:secret,p_pw:pw});
+    if(res.error){m.className='modal-msg err';m.textContent='등록 실패: '+res.error.message;return;}
+    closeModal('qformModal');loadQuestions();
+  }
+  var CURQID=null,CURQPW=null;
+  function openQDetail(id,isSecret,isOwned){
+    var box=document.getElementById('qdetailBody');
+    document.getElementById('qdetailModal').classList.add('open');
+    window.__qEditing=false;CURQID=id;CURQPW=null;
+    if(isSecret&&!window.__isAdmin&&!isOwned){
+      box.innerHTML='<h3>🔒 비밀글</h3><p style="color:var(--muted);font-size:.9rem;margin-bottom:12px">비밀번호를 입력하면 내용을 볼 수 있습니다.</p><input class="inp" id="qd_pw" type="password" placeholder="비밀번호"><div class="modal-msg" id="qd_msg"></div><button class="btn btn-primary" type="button" onclick="unlockQ(\''+id+'\')">확인</button>';
+    }else{renderQDetail(id,null);}
+  }
+  function unlockQ(id){renderQDetail(id,document.getElementById('qd_pw').value);}
+  async function renderQDetail(id,pw){
+    var box=document.getElementById('qdetailBody');
+    CURQID=id;CURQPW=pw||null;
+    var res=await sb.rpc('get_question',{p_id:id,p_pw:pw});
+    var q=(res.data&&res.data.length)?res.data[0]:null;
+    if(!q){var mm=document.getElementById('qd_msg');if(mm){mm.className='modal-msg err';mm.textContent='비밀번호가 올바르지 않습니다.';}else{box.innerHTML='<div class="board-empty">내용을 불러올 수 없습니다.</div>';}return;}
+    var h='';
+    if(window.__qEditing){
+      h+='<h3 style="margin-bottom:14px">내 글 수정</h3>'
+        +'<div class="fld"><label>제목</label><input class="inp" id="qd_et" value="'+esc(q.qtitle)+'"></div>'
+        +'<div class="fld"><label>내용</label><textarea class="inp" id="qd_eb" style="min-height:120px">'+esc(q.qbody)+'</textarea></div>'
+        +'<div class="modal-msg" id="qd_emsg"></div>'
+        +'<div class="area-cta" style="margin-top:12px"><button class="btn btn-primary" type="button" onclick="saveQuestionEdit()">저장</button><button class="btn btn-ghost" type="button" onclick="window.__qEditing=false;renderQDetail(CURQID,CURQPW)">취소</button></div>';
+      box.innerHTML=h;return;
+    }
+    h+='<h3>'+(q.qsecret?'🔒 ':'')+esc(q.qtitle)+'</h3><div class="bmeta" style="margin-bottom:14px;color:var(--muted);font-size:.82rem">'+(q.qname?esc(q.qname)+' · ':'')+fmtDate(q.qcreated)+'</div><div class="qbody">'+esc(q.qbody)+'</div>';
+    if(window.__isAdmin&&q.qcontact){h+='<div class="qcontact">📞 연락처: <b>'+esc(q.qcontact)+'</b></div>';}
+    if(q.qanswer){h+='<div class="qanswer"><b>ESC 답변</b><p>'+esc(q.qanswer)+'</p></div>';}
+    if(q.qowned){
+      h+='<div class="area-cta" style="margin-top:16px">'
+        +'<button class="btn btn-ghost" type="button" onclick="window.__qEditing=true;renderQDetail(CURQID,CURQPW)">✏️ 내 글 수정</button>'
+        +'<button class="btn btn-ghost" type="button" style="border-color:#e0b4b4;color:#c0392b" onclick="deleteQuestion(\''+id+'\')">🗑 내 글 삭제</button>'
+        +'</div>';
+    }else if(window.__isOwner){
+      h+='<div class="area-cta" style="margin-top:16px"><button class="btn btn-ghost" type="button" style="border-color:#e0b4b4;color:#c0392b" onclick="deleteQuestion(\''+id+'\')">🗑 삭제 (최고관리자)</button></div>';
+    }
+    if(window.__isAdmin){h+='<div class="fld" style="margin-top:18px"><label>답변 '+(q.qanswer?'수정':'작성')+'</label><textarea class="inp" id="qd_answer" style="min-height:100px">'+esc(q.qanswer||'')+'</textarea></div><div class="modal-msg" id="qd_amsg"></div><div class="area-cta" style="margin-top:14px"><button class="btn btn-primary" type="button" onclick="submitAnswer(\''+id+'\')">답변 저장</button></div>';}
+    box.innerHTML=h;
+  }
+  async function saveQuestionEdit(){
+    var m=document.getElementById('qd_emsg');m.className='modal-msg';
+    var t=document.getElementById('qd_et').value.trim(),b=document.getElementById('qd_eb').value.trim();
+    if(!t||!b){m.className='modal-msg err';m.textContent='제목과 내용을 입력해 주세요.';return;}
+    var res=await sb.rpc('update_question',{p_id:CURQID,p_title:t,p_body:b,p_pw:CURQPW});
+    if(res.error||res.data!==true){m.className='modal-msg err';m.textContent='수정 권한이 없거나 저장에 실패했습니다.';return;}
+    window.__qEditing=false;
+    await renderQDetail(CURQID,CURQPW);
+    loadQuestions();
+  }
+  async function deleteQuestion(id){
+    if(!confirm('이 문의를 삭제할까요? 되돌릴 수 없습니다.'))return;
+    var res=await sb.rpc('delete_question',{p_id:id,p_pw:CURQPW});
+    if(res.error||res.data!==true){alert('삭제할 수 없습니다. 본인 글이거나 최고관리자만 삭제할 수 있습니다.');return;}
+    closeModal('qdetailModal');loadQuestions();
+  }
+  async function submitAnswer(id){
+    var m=document.getElementById('qd_amsg');m.className='modal-msg';
+    var a=document.getElementById('qd_answer').value.trim();
+    var res=await sb.rpc('answer_question',{p_id:id,p_answer:a});
+    if(res.error||res.data!==true){m.className='modal-msg err';m.textContent='저장 실패했습니다.';return;}
+    closeModal('qdetailModal');loadQuestions();
+  }
+
+  if(sb){sb.auth.onAuthStateChange(function(){updateAuthUI();});updateAuthUI();}
+</script>
+</body>
+</html>
