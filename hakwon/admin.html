@@ -298,6 +298,7 @@
     <div class="side-sep"></div>
     <button class="navb hide" data-nav="staff" id="navStaff" type="button">관리자 목록 <span class="cnt" id="c-staff">0</span></button>
     <button class="navb hide" data-nav="set" id="navSet" type="button">견적서 설정</button>
+    <button class="navb" data-nav="links" type="button">🔗 주소 모음</button>
     <div class="side-foot">
       <div class="whoami"><b id="meName">-</b><span id="meRole">-</span></div>
       <button class="navb" type="button" onclick="loadAll(true)">↻ 새로고침</button>
@@ -355,6 +356,20 @@
       </div>
       <div class="card" id="staffWrap"></div>
       <div class="empty hide" id="staffEmpty"></div>
+    </section>
+
+    <!-- 주소 모음 —
+         이것저것 흩어져 있어 찾기 어렵다고 하셔서 한곳에 모았습니다.
+         ⚠️ 학원별 진행현황 주소는 여기 없습니다 — 학원마다 달라서 블로그 센터에 있습니다. -->
+    <section id="viewLinks" class="hide">
+      <div class="head">
+        <div><h1>주소 모음</h1><p>자주 쓰는 주소를 한곳에 모았습니다. [복사]를 눌러 그대로 보내시면 됩니다.</p></div>
+      </div>
+      <div id="linkWrap"></div>
+      <div class="qbox" style="display:block;line-height:1.75;margin-top:16px">
+        <b>학원별 진행현황 주소</b>는 여기 없습니다 — <b>블로그 센터의 「🔗 주소 모음」</b>에 있습니다.
+        학원마다 주소가 달라서 거기서 학원 이름으로 찾으셔야 합니다.
+      </div>
     </section>
 
     <!-- 견적서 설정 -->
@@ -654,14 +669,73 @@
       var k=b.getAttribute('data-nav');
       document.querySelectorAll('.navb[data-nav]').forEach(function(x){x.classList.remove('on');});
       b.classList.add('on');
-      ['viewList','viewStaff','viewSet'].forEach(function(v){$(v).classList.add('hide');});
+      ['viewList','viewStaff','viewSet','viewLinks'].forEach(function(v){$(v).classList.add('hide');});
       if(k==='staff'){$('viewStaff').classList.remove('hide');renderStaff();return;}
       if(k==='set'){$('viewSet').classList.remove('hide');fillSettings();return;}
+      if(k==='links'){$('viewLinks').classList.remove('hide');renderLinks();return;}
       $('viewList').classList.remove('hide');
       CUR=k;$('listTitle').textContent=AREAS[k]+' 의뢰';
       renderList();
     });
   });
+
+  /* ---------- 🔗 주소 모음 ----------
+     흩어져 있던 주소를 한곳에. 값을 여기 직접 적습니다 —
+     이 페이지는 바깥 파일을 안 쓰는 구조입니다.
+     ⚠️ 회사 주소가 바뀌면 블로그 센터(js/admin.js 의 LINKS)도 같이 고쳐야 합니다. */
+  var LINK_GROUPS=[
+    {g:'학원에게 보내는 것',l:[
+      {t:'ESC 학원지원센터',u:'https://intomarketing.co.kr/hakwon/',
+       d:'학원이 의뢰를 넣는 곳입니다. 블로그 홍보 신청도 여기서 받습니다.'},
+      {t:'인투마케팅 (회사 대표)',u:'https://intomarketing.co.kr/',
+       d:'회사 대표 페이지입니다. 학원지원센터는 이 밑에 있습니다.'}
+    ]},
+    {g:'블로거에게 보내는 것',l:[
+      {t:'블로거 모집 · 신청서',u:'https://center.intomarketing.co.kr/#signup',
+       d:'로그인 없이 바로 신청서가 열립니다. 새로 모집할 분에게 보내세요.'},
+      {t:'블로그 센터',u:'https://center.intomarketing.co.kr/',
+       d:'승인된 블로거가 교육받고 글 쓰는 곳입니다.'}
+    ]},
+    {g:'우리끼리 쓰는 것',l:[
+      {t:'ESC 관리자 (여기)',u:'https://intomarketing.co.kr/hakwon/admin.html',
+       d:'인력·컨텐츠·마케팅 의뢰를 관리하고 직원 권한을 주는 곳입니다.'},
+      {t:'블로그 센터 관리자',u:'https://center.intomarketing.co.kr/',
+       d:'같은 주소로 들어가되, 직원 권한이 있으면 관리자 화면이 열립니다. 학원별 진행현황 주소도 여기 있습니다.'}
+    ]},
+    {g:'법적 고지 — 누구에게나',l:[
+      {t:'개인정보처리방침',u:'https://intomarketing.co.kr/privacy/',
+       d:'블로거·학원이 물어보면 이 주소를 보내시면 됩니다. 개인정보보호법상 공개 의무입니다.'},
+      {t:'이용약관',u:'https://intomarketing.co.kr/terms/',
+       d:'광고 표기·게시물 12개월 유지·원고료 지급 방식이 여기에 적혀 있습니다.'}
+    ]}
+  ];
+
+  window.copyLink=async function(u){
+    try{await navigator.clipboard.writeText(u);toast('주소를 복사했습니다');}
+    catch(e){toast('복사에 실패했습니다. 아래 주소를 직접 긁어 주세요');}
+  };
+
+  window.renderLinks=function(){
+    $('linkWrap').innerHTML=LINK_GROUPS.map(function(G){
+      return '<div style="margin-bottom:22px">'
+        +'<div class="muted" style="font-size:.82rem;font-weight:700;margin-bottom:8px">'+esc(G.g)+'</div>'
+        +G.l.map(function(l){
+          return '<div class="card" style="padding:16px 18px;margin-bottom:10px">'
+            +'<div style="display:flex;gap:12px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap">'
+            +'<div style="min-width:220px;flex:1">'
+            +'<b style="font-size:.95rem">'+esc(l.t)+'</b>'
+            +'<div class="muted" style="font-size:.82rem;margin-top:3px;line-height:1.6">'+esc(l.d)+'</div>'
+            +'</div>'
+            +'<div style="display:flex;gap:6px;flex-wrap:wrap">'
+            +'<button class="btn btn-primary" type="button" onclick="copyLink(\''+esc(l.u)+'\')">📋 복사</button>'
+            +'<a class="btn btn-ghost" href="'+esc(l.u)+'" target="_blank" rel="noopener">열어보기 ↗</a>'
+            +'</div></div>'
+            +'<div class="muted" style="font-size:.78rem;margin-top:10px;word-break:break-all">'+esc(l.u)+'</div>'
+            +'</div>';
+        }).join('')
+        +'</div>';
+    }).join('');
+  };
 
   window.renderList=function(){
     var rows=DATA[CUR]||[];
