@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>모아 보기 · 인투마케팅 관리자</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="../hakwon/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../hakwon/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#12294D">
+<style>
+/* ──────────────────────────────────────────────────────────────
+   모아 보기  ( intomarketing.co.kr/admin/ )
+
+   🔴 여기서는 아무것도 «고치지» 않습니다. 보기만 합니다.
+      고치는 일은 각 플랫폼의 어드민에서 합니다.
+        /marketing/admin/     인투마케팅 메인 홈페이지에서 온 신청
+        /hakwon/admin.html    학원지원센터 홈페이지에서 온 신청
+        /church/admin.html    우리교회지원센터 홈페이지에서 온 신청
+      저장 단추를 여기에 만들면, 두 곳에서 같은 줄을 고치게 되어
+      나중에 어느 쪽이 맞는지 알 수 없게 됩니다.
+
+   🔴 교회는 자기 DB(tbxosynzszcgtieonsui)를 씁니다.
+      우리 DB 만 읽는 이 화면에는 교회 의뢰가 «뜨지 않습니다».
+      그래서 교회 칸은 건수 대신 「어드민 열기」만 보여줍니다.
+      숫자가 0 으로 보이면 오해하므로, 아예 숫자를 만들지 않습니다.
+   ────────────────────────────────────────────────────────────── */
+:root{
+  --paper:#F4F7FB; --surface:#FFFFFF; --surface-2:#EFF3F9;
+  --ink:#0E1B33; --muted:#5B6A82; --line:#DFE6F1;
+  --accent:#2E5FE8; --accent-ink:#1E47C0; --band:#12294D;
+  --ok:#12805C; --warn:#B67A22; --bad:#C2413B;
+  --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--paper:#0A101E;--surface:#101B30;--surface-2:#16233C;--ink:#E7EDF7;--muted:#9BAAC3;
+        --line:#22314C;--accent:#6E93FF;--accent-ink:#8FAAFF;--ok:#4FBF95;--warn:#E7B24A;--bad:#F08A85;}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.7;
+     -webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button,input{font-family:inherit;font-size:inherit;color:inherit}
+h1,h2,h3{margin:0;letter-spacing:-.015em;line-height:1.3;word-break:keep-all}
+p{margin:0;word-break:keep-all}
+.hide{display:none !important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* 로그인 */
+#gate{min-height:100dvh;display:grid;place-items:center;padding:24px;
+      background:radial-gradient(120% 90% at 20% -10%,#1E4374 0%,#12294D 60%)}
+.gbox{background:var(--surface);border-radius:16px;padding:34px 30px;width:100%;max-width:400px;
+      box-shadow:0 30px 70px -30px rgba(0,0,0,.6)}
+.gbox h1{font-size:20px;margin-bottom:5px}
+.gbox .gsub{color:var(--muted);font-size:13.5px;margin-bottom:22px}
+.fld{margin-bottom:13px}
+.fld label{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:5px}
+.inp{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:9px;background:var(--surface-2)}
+.inp:focus{outline:none;border-color:var(--accent);background:var(--surface)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 18px;border-radius:9px;
+     font-weight:700;font-size:14.5px;border:1px solid transparent;cursor:pointer;transition:.14s;white-space:nowrap}
+.btn-p{background:var(--accent);color:#fff}
+.btn-p:hover{background:#3D6BF0}
+.btn-g{background:var(--surface);border-color:var(--line)}
+.btn-g:hover{background:var(--surface-2)}
+.btn-s{padding:7px 12px;font-size:13px;border-radius:8px}
+.wfull{width:100%}
+.msg{font-size:13px;margin-top:11px;color:var(--muted);min-height:19px}
+.msg.err{color:var(--bad)}
+
+/* 뼈대 */
+.top{background:var(--surface);border-bottom:1px solid var(--line);padding:13px 22px;
+     display:flex;align-items:center;gap:14px;flex-wrap:wrap;position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:9px}
+.brand .mk{width:30px;height:30px;border-radius:8px;background:var(--band);display:grid;place-items:center;
+           font-weight:800;font-size:11px;color:#fff}
+.brand b{font-size:15px;display:block;line-height:1.25}
+.brand span{font-size:11.5px;color:var(--muted)}
+.me{margin-left:auto;display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted)}
+.me b{color:var(--ink)}
+.wrap{max-width:1060px;margin:0 auto;padding:24px 22px 70px}
+@media(max-width:640px){.wrap{padding:18px 14px 50px}.top{padding:11px 14px}}
+
+.hd{margin-bottom:18px}
+.hd h2{font-size:23px}
+.hd p{color:var(--muted);font-size:14px;margin-top:5px}
+
+.readonly{background:var(--surface-2);border:1px solid var(--line);border-left:3px solid var(--accent);
+          border-radius:10px;padding:13px 16px;font-size:13.5px;color:var(--muted);margin-bottom:20px;line-height:1.75}
+.readonly b{color:var(--ink)}
+
+.tabs{display:flex;gap:4px;background:var(--surface-2);padding:4px;border-radius:999px;width:max-content;
+      max-width:100%;flex-wrap:wrap;margin-bottom:20px}
+.tab{border:0;background:none;padding:9px 18px;border-radius:999px;font-weight:700;font-size:14px;
+     color:var(--muted);cursor:pointer;white-space:nowrap}
+.tab.on{background:var(--band);color:#fff}
+
+/* 플랫폼 카드 */
+.plats{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.plat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;
+      flex-direction:column}
+.plat h3{font-size:17px}
+.plat .path{font-size:12px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;margin-top:3px}
+.plat .tot{margin:14px 0 4px;font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.plat .tot em{font-style:normal;font-size:14px;font-weight:600;color:var(--muted);margin-left:5px}
+.kinds{display:flex;flex-direction:column;gap:1px;margin:12px 0 16px;border-top:1px solid var(--line)}
+.kindrow{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);
+         font-size:13.5px;background:none;border-left:0;border-right:0;border-top:0;width:100%;cursor:pointer;
+         text-align:left;font-family:inherit}
+.kindrow:hover{color:var(--accent-ink)}
+.kindrow .n{margin-left:auto;font-weight:800}
+.plat .acts{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap}
+.plat.nodata{border-style:dashed}
+.plat .why{background:var(--surface-2);border-radius:9px;padding:11px 13px;font-size:12.5px;color:var(--muted);
+           line-height:1.7;margin:12px 0 16px}
+
+/* 항목별 */
+.kindgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px}
+.kcard{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:16px 18px;cursor:pointer;
+       text-align:left;font-family:inherit;transition:.14s}
+.kcard:hover,.kcard.on{border-color:var(--accent)}
+.kcard.on{box-shadow:0 0 0 3px rgba(46,95,232,.13)}
+.kcard .v{font-size:27px;font-weight:800;letter-spacing:-.03em;line-height:1.1}
+.kcard .k{font-size:13.5px;color:var(--muted);margin-top:2px;font-weight:600}
+
+.tblwrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:13px}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle}
+th{background:var(--surface-2);font-size:12px;color:var(--muted);font-weight:700;white-space:nowrap}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--surface-2)}
+tbody tr:last-child td{border-bottom:0}
+td.num{color:var(--muted);width:44px}
+td.go{text-align:right;white-space:nowrap;color:var(--accent-ink);font-weight:700;font-size:12.5px}
+.empty{padding:44px 20px;text-align:center;color:var(--muted);font-size:14px}
+.empty b{display:block;color:var(--ink);font-size:15.5px;margin-bottom:5px}
+
+.badge{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:700;
+       background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.badge.p-esc{background:#E4EDFC;color:#1E47C0}
+.badge.p-church{background:#E7F3EC;color:#12805C}
+.badge.p-mkt{background:#FBEFE0;color:#96631C}
+.st{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:800;white-space:nowrap;
+    background:var(--surface-2);color:var(--muted)}
+@media (prefers-color-scheme:dark){.badge.p-esc,.badge.p-church,.badge.p-mkt{filter:brightness(.82)}}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="gbox">
+    <h1>인투마케팅 관리자</h1>
+    <p class="gsub">모아 보기입니다. ESC 직원 계정으로 들어오시면 됩니다.</p>
+    <div class="fld"><label for="li_email">이메일</label>
+      <input class="inp" id="li_email" type="email" autocomplete="username"></div>
+    <div class="fld"><label for="li_pw">비밀번호</label>
+      <input class="inp" id="li_pw" type="password" autocomplete="current-password"></div>
+    <button class="btn btn-p wfull" type="button" onclick="doLogin()">로그인</button>
+    <p class="msg" id="gMsg"></p>
+    <p class="msg" id="gWait" style="display:none">
+      계정은 있는데 아직 <b>승인 전</b>입니다. 최고관리자가 승인하면 들어오실 수 있습니다.</p>
+  </div>
+</div>
+
+<div id="app" class="hide">
+  <div class="top">
+    <div class="brand"><span class="mk">IM</span>
+      <span><b>모아 보기</b><span>intomarketing.co.kr/admin</span></span></div>
+    <div class="me"><span id="meName"></span><b id="meRole"></b>
+      <button class="btn btn-g btn-s" type="button" onclick="reload()">↻ 새로고침</button>
+      <button class="btn btn-g btn-s" type="button" onclick="doLogout()">로그아웃</button></div>
+  </div>
+
+  <div class="wrap">
+    <div class="hd">
+      <h2>모아 보기</h2>
+      <p>모든 홈페이지에서 들어온 의뢰를 한자리에서 봅니다.</p>
+    </div>
+
+    <div class="readonly">
+      <b>여기서는 고칠 수 없습니다.</b> 담당자 배정·진행·견적서는 각 홈페이지의 어드민에서 합니다.
+      줄을 누르면 그 의뢰가 있는 어드민으로 바로 넘어갑니다.
+    </div>
+
+    <div class="tabs">
+      <button class="tab on" data-by="platform" type="button">플랫폼별</button>
+      <button class="tab" data-by="kind" type="button">지원항목별</button>
+    </div>
+
+    <section id="s-platform"><div class="plats" id="plats"></div></section>
+
+    <section id="s-kind" class="hide">
+      <div class="kindgrid" id="kinds"></div>
+      <div id="kindList"></div>
+    </section>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+"use strict";
+var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
+var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
+var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+
+var ME=null, PLATS=[], REQS=[], STAFF=[], BY='platform', KIND=null;
+
+function plat(id){for(var i=0;i<PLATS.length;i++)if(PLATS[i].id===id)return PLATS[i];
+  return {id:id,name:id,short:id,admin:'',home:'',data_here:true};}
+function fdate(d){return d?String(d).slice(0,10):'';}
+function who(id){var s=STAFF.filter(function(x){return x.id===id;})[0];return s?s.name:'미지정';}
+
+/* ── 로그인 ── */
+function gmsg(t,c){var m=$('gMsg');m.textContent=t;m.className='msg'+(c?' '+c:'');}
+window.doLogin=async function(){
+  var e=$('li_email').value.trim(), p=$('li_pw').value;
+  if(!e||!p)return gmsg('이메일과 비밀번호를 넣어 주세요.','err');
+  if(!sb)return gmsg('연결이 안 됩니다. 새로고침해 주세요.','err');
+  gmsg('들어가는 중...');
+  var r=await sb.auth.signInWithPassword({email:e,password:p});
+  if(r.error)return gmsg('로그인 실패: '+r.error.message,'err');
+  boot();
+};
+window.doLogout=async function(){if(sb)await sb.auth.signOut();location.reload();};
+
+async function boot(){
+  if(!sb)return gmsg('연결이 안 됩니다.','err');
+  var s=await sb.auth.getSession();
+  if(!s.data.session)return;
+  var me=await sb.from('staff').select('*').eq('id',s.data.session.user.id).maybeSingle();
+  if(me.error)return gmsg('확인 실패: '+me.error.message,'err');
+  if(!me.data||me.data.status!=='approved'){$('gWait').style.display='';gmsg('');return;}
+  ME=me.data;
+  $('gate').classList.add('hide'); $('app').classList.remove('hide');
+  $('meName').textContent=ME.name||ME.email;
+  $('meRole').textContent=({owner:'최고관리자',admin:'관리자',staff:'직원'})[ME.role]||'직원';
+  await reload();
+}
+
+window.reload=async function(){
+  var a=await sb.from('settings').select('value').eq('key','platforms').maybeSingle();
+  PLATS=((a.data&&a.data.value)||{}).list||[];
+  var b=await sb.from('requests').select('*').order('created_at',{ascending:false});
+  REQS=b.data||[];
+  var c=await sb.from('staff').select('id,name').eq('status','approved');
+  STAFF=c.data||[];
+  paint();
+};
+
+/* ── 보기 전환 ── */
+document.querySelectorAll('.tab').forEach(function(t){
+  t.addEventListener('click',function(){
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x===t);});
+    BY=t.dataset.by; KIND=null;
+    $('s-platform').classList.toggle('hide',BY!=='platform');
+    $('s-kind').classList.toggle('hide',BY!=='kind');
+    paint();
+  });
+});
+
+function allKinds(){
+  var seen={}, out=[];
+  REQS.forEach(function(r){var k=r.kind||'기타'; if(!seen[k]){seen[k]=1;out.push(k);}});
+  return out.sort();
+}
+
+function paint(){
+  if(!ME)return;
+  if(BY==='platform')paintPlatforms(); else paintKinds();
+}
+
+/* ── 플랫폼별 ── */
+function paintPlatforms(){
+  $('plats').innerHTML=PLATS.map(function(p){
+    /* 🔴 교회처럼 우리 DB 를 안 쓰는 곳은 숫자를 만들지 않습니다.
+          0 으로 보이면 「의뢰가 없다」로 잘못 읽힙니다. */
+    if(p.data_here===false){
+      return '<div class="plat nodata"><h3>'+esc(p.name)+'</h3>'
+        +'<p class="path">'+esc(p.home)+'</p>'
+        +'<div class="why">'+esc(p.note||'')+'</div>'
+        +'<div class="acts">'
+        +'<a class="btn btn-p btn-s" href="'+esc(p.admin)+'" target="_blank" rel="noopener">어드민 열기 ↗</a>'
+        +'<a class="btn btn-g btn-s" href="'+esc(p.home)+'" target="_blank" rel="noopener">홈페이지 ↗</a>'
+        +'</div></div>';
+    }
+    var mine=REQS.filter(function(r){return r.center===p.id;});
+    var byKind={};
+    mine.forEach(function(r){var k=r.kind||'기타'; byKind[k]=(byKind[k]||0)+1;});
+    var ks=Object.keys(byKind).sort();
+    return '<div class="plat"><h3>'+esc(p.name)+'</h3>'
+      +'<p class="path">'+esc(p.home)+'</p>'
+      +'<div class="tot tnum">'+mine.length+'<em>건</em></div>'
+      +(ks.length
+        ? '<div class="kinds">'+ks.map(function(k){
+            return '<button class="kindrow" type="button" data-k="'+esc(k)+'">'
+              +esc(k)+'<span class="n tnum">'+byKind[k]+'</span></button>';}).join('')+'</div>'
+        : '<div class="why">아직 들어온 의뢰가 없습니다.</div>')
+      +'<div class="acts">'
+      +'<a class="btn btn-p btn-s" href="'+esc(p.admin)+'" target="_blank" rel="noopener">어드민 열기 ↗</a>'
+      +'<a class="btn btn-g btn-s" href="'+esc(p.home)+'" target="_blank" rel="noopener">홈페이지 ↗</a>'
+      +'</div></div>';
+  }).join('');
+  $('plats').querySelectorAll('.kindrow').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x.dataset.by==='kind');});
+      BY='kind'; KIND=b.dataset.k;
+      $('s-platform').classList.add('hide'); $('s-kind').classList.remove('hide');
+      paintKinds();
+    });
+  });
+}
+
+/* ── 지원항목별 ── */
+function paintKinds(){
+  var ks=allKinds();
+  if(KIND&&ks.indexOf(KIND)<0)KIND=null;
+  if(!KIND&&ks.length)KIND=ks[0];
+
+  $('kinds').innerHTML=ks.length?ks.map(function(k){
+    var n=REQS.filter(function(r){return (r.kind||'기타')===k;}).length;
+    return '<button class="kcard'+(k===KIND?' on':'')+'" type="button" data-k="'+esc(k)+'">'
+      +'<div class="v tnum">'+n+'</div><div class="k">'+esc(k)+'</div></button>';
+  }).join(''):'';
+  $('kinds').querySelectorAll('.kcard').forEach(function(b){
+    b.addEventListener('click',function(){KIND=b.dataset.k;paintKinds();});
+  });
+
+  if(!ks.length){
+    $('kindList').innerHTML='<div class="tblwrap"><div class="empty">'
+      +'<b>아직 들어온 의뢰가 없습니다</b>신청이 들어오면 여기에 쌓입니다.</div></div>';
+    return;
+  }
+  var list=REQS.filter(function(r){return (r.kind||'기타')===KIND;});
+  var h='<div class="tblwrap"><table><thead><tr>'
+    +'<th class="num">#</th><th>어디서 온 의뢰인가</th><th>제목</th>'
+    +'<th>담당자</th><th>상태</th><th>마감</th><th></th></tr></thead><tbody>';
+  list.forEach(function(r,i){
+    var p=plat(r.center);
+    var due=(r.due_stages||{}).done||'';
+    h+='<tr data-admin="'+esc(p.admin)+'" data-id="'+esc(r.id)+'">'
+      +'<td class="num">'+(i+1)+'</td>'
+      +'<td><span class="badge p-'+esc(r.center)+'">'+esc(p.name)+'</span></td>'
+      +'<td><b>'+esc(r.academy_name||'(이름 없음)')+'</b></td>'
+      +'<td>'+esc(who(r.assignee_id))+'</td>'
+      +'<td><span class="st">'+esc(r.stage||r.status||'-')+'</span></td>'
+      +'<td class="tnum">'+esc(fdate(due)||'-')+'</td>'
+      +'<td class="go">고치러 가기 ↗</td></tr>';
+  });
+  $('kindList').innerHTML=h+'</tbody></table></div>';
+  $('kindList').querySelectorAll('tbody tr').forEach(function(tr){
+    tr.addEventListener('click',function(){
+      /* 🔴 여기서 고치지 않습니다 — 그 의뢰가 있는 어드민으로 보냅니다.
+            #req= 는 받는 쪽이 아직 안 읽어도 해가 없습니다. */
+      var u=tr.dataset.admin; if(!u)return;
+      window.open(u+'#req='+encodeURIComponent(tr.dataset.id),'_blank','noopener');
+    });
+  });
+}
+
+boot();
+})();
+</script>
+</body>
+</html>
