@@ -1,0 +1,1675 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>인투마케팅 의뢰 관리</title>
+<style>
+  :root{
+    --paper:#F5F7FC; --surface:#FFFFFF; --surface-2:#F3F6FB;
+    --ink:#0E1B33; --muted:#56657F; --line:#E2E8F2;
+    --brand:#16305C; --accent:#2E5FE8; --accent-ink:#1E47C0;
+    --gold:#B67A22; --band-bg:#12294D; --band-line:#2A436E; --band-text:#DCE6F8;
+    --ok:#1E8E5A; --warn:#B67A22; --bad:#C0392B;
+    --radius:14px;
+    --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{margin:0;letter-spacing:-.01em;line-height:1.3;word-break:keep-all}
+  p{margin:0}
+  input,select,textarea,button{font-family:inherit;font-size:inherit;color:inherit}
+  .tnum{font-variant-numeric:tabular-nums}
+  .hide{display:none!important}
+
+  /* ---------- 로그인 게이트 ---------- */
+  .gate{min-height:100vh;display:grid;place-items:center;padding:28px}
+  .gate-card{width:100%;max-width:440px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:34px;box-shadow:0 14px 40px rgba(16,32,64,.08)}
+  .gate-logo{display:flex;align-items:baseline;gap:9px;font-weight:800;font-size:1.2rem;letter-spacing:-.02em}
+  .gate-logo b{color:var(--brand)}
+  .gate-logo span{font-size:.82rem;color:var(--muted);font-weight:700}
+  .gate h2{font-size:1.35rem;font-weight:800;margin:22px 0 6px}
+  .gate .sub{color:var(--muted);font-size:.9rem}
+  .tabs{display:flex;gap:6px;background:var(--surface-2);border-radius:999px;padding:5px;margin:22px 0 18px}
+  .tab{flex:1;border:0;background:none;font-weight:700;font-size:.9rem;color:var(--muted);padding:9px;border-radius:999px;cursor:pointer}
+  .tab.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .fld{margin-bottom:12px}
+  .fld label{display:block;font-size:.82rem;font-weight:700;color:var(--muted);margin-bottom:6px}
+  .inp{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:11px 13px;outline:none;transition:.15s}
+  .inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 14%,transparent)}
+  textarea.inp{min-height:84px;resize:vertical;line-height:1.6}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:.9rem;padding:11px 18px;border-radius:10px;border:1.5px solid transparent;cursor:pointer;transition:.15s}
+  .btn-primary{background:var(--accent);color:#fff}
+  .btn-primary:hover{background:var(--accent-ink)}
+  .btn-ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+  .btn-danger{background:transparent;border-color:color-mix(in srgb,var(--bad) 40%,var(--line));color:var(--bad)}
+  .btn-danger:hover{background:color-mix(in srgb,var(--bad) 8%,transparent)}
+  .btn-block{width:100%}
+  .btn[disabled]{opacity:.55;cursor:not-allowed}
+  .msg{font-size:.85rem;margin-top:12px;min-height:20px}
+  .msg.err{color:var(--bad)}
+  .msg.ok{color:var(--ok)}
+  .gate-note{margin-top:18px;font-size:.8rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+
+  /* ---------- 앱 레이아웃 ---------- */
+  .app{display:grid;grid-template-columns:236px 1fr;min-height:100vh}
+  .side{background:var(--surface);border-right:1px solid var(--line);padding:20px 16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
+  .side .logo{display:flex;align-items:center;gap:10px;padding:6px 8px 18px}
+  .side .logo .mark{width:38px;height:38px;border-radius:10px;background:var(--band-bg);color:#fff;display:grid;place-items:center;font-weight:800;font-size:.86rem;letter-spacing:.02em}
+  .side .logo b{font-size:.95rem;font-weight:800;display:block}
+  .side .logo span{font-size:.76rem;color:var(--muted)}
+  .navb{display:flex;align-items:center;gap:9px;border:0;background:none;text-align:left;font-weight:700;font-size:.92rem;color:var(--muted);padding:10px 12px;border-radius:10px;cursor:pointer;width:100%}
+  .navb:hover{background:var(--surface-2);color:var(--ink)}
+  .navb.on{background:var(--band-bg);color:#fff}
+  .navb .cnt{margin-left:auto;font-size:.75rem;font-weight:800;background:var(--surface-2);color:var(--muted);padding:1px 8px;border-radius:999px}
+  .navb.on .cnt{background:rgba(255,255,255,.16);color:#fff}
+  .navb .cnt.alert{background:var(--bad);color:#fff}
+  .side-sep{height:1px;background:var(--line);margin:12px 4px}
+  .side-foot{margin-top:auto;border-top:1px solid var(--line);padding-top:14px}
+  .whoami{padding:8px 10px;border-radius:10px;background:var(--surface-2);margin-bottom:10px}
+  .whoami b{display:block;font-size:.88rem}
+  .whoami span{font-size:.76rem;color:var(--muted)}
+  .main{padding:26px 30px 60px;min-width:0}
+  .head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+  .head h1{font-size:1.5rem;font-weight:800}
+  .head p{color:var(--muted);font-size:.88rem;margin-top:4px}
+  .head .sp{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:20px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .stat b{display:block;font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+  .stat span{font-size:.8rem;color:var(--muted);font-weight:600}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .toolbar .inp{max-width:280px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  table{width:100%;border-collapse:collapse}
+  th{font-size:.76rem;font-weight:700;color:var(--muted);text-align:left;padding:13px 14px;background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:13px 14px;border-bottom:1px solid var(--line);font-size:.89rem;vertical-align:middle}
+  tr:last-child td{border-bottom:0}
+  tbody tr{cursor:pointer}
+  tbody tr:hover{background:color-mix(in srgb,var(--accent) 4%,var(--surface))}
+  .num{color:var(--muted);font-size:.82rem;width:42px}
+  td .nm{font-weight:800;white-space:nowrap}
+  td .sub{display:block;font-size:.76rem;color:var(--muted);font-weight:600}
+  .muted{color:var(--muted)}
+  .badge{display:inline-block;font-size:.74rem;font-weight:800;padding:3px 10px;border-radius:999px;white-space:nowrap}
+  .b-접수{background:#EDF1FB;color:#2E5FE8}
+  .b-진행중{background:#FFF3E0;color:#B67A22}
+  .b-보류{background:#F1F3F7;color:#56657F}
+  .b-완료{background:#E7F6EE;color:#1E8E5A}
+  .b-prem{background:color-mix(in srgb,var(--gold) 16%,#fff);color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 35%,var(--line))}
+  .b-owner{background:#12294D;color:#fff}
+  .b-admin{background:#EDF1FB;color:#2E5FE8}
+  .b-staff{background:#F1F3F7;color:#56657F}
+  .prog{display:flex;align-items:center;gap:8px;min-width:110px}
+  .bar{flex:1;height:6px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--accent);border-radius:999px}
+  .empty{padding:56px 20px;text-align:center;color:var(--muted)}
+  .empty b{display:block;font-size:1.05rem;color:var(--ink);margin-bottom:6px}
+
+  /* ---------- 상세 모달 ---------- */
+  .modal{position:fixed;inset:0;background:rgba(10,20,40,.5);display:none;align-items:flex-start;justify-content:center;padding:34px 18px;z-index:60;overflow:auto}
+  .modal.open{display:flex}
+  .sheet{width:100%;max-width:720px;background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:0 24px 60px rgba(10,20,40,.3)}
+  .sheet-h{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:12px}
+  .sheet-h h3{font-size:1.2rem;font-weight:800}
+  .sheet-h .meta{font-size:.8rem;color:var(--muted);margin-top:3px}
+  .x{margin-left:auto;border:0;background:none;font-size:1.3rem;color:var(--muted);cursor:pointer;line-height:1;padding:2px 6px}
+  .sheet-b{padding:22px 24px}
+  .sec-t{font-size:.78rem;font-weight:800;color:var(--accent);letter-spacing:.04em;margin:22px 0 10px}
+  .sec-t:first-child{margin-top:0}
+  .pills{display:flex;gap:7px;flex-wrap:wrap}
+  .pill{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 15px;font-size:.85rem;font-weight:700;color:var(--muted);cursor:pointer}
+  .pill.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface));color:var(--accent)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .todo{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:7px;background:var(--surface)}
+  .todo input[type=checkbox]{width:17px;height:17px;accent-color:var(--accent);flex:0 0 auto;cursor:pointer}
+  .todo .t{flex:1;font-size:.9rem}
+  .todo.done .t{text-decoration:line-through;color:var(--muted)}
+  .todo .due{border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:.78rem;color:var(--muted);background:var(--surface-2)}
+  .todo .del{border:0;background:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0 4px}
+  .todo .del:hover{color:var(--bad)}
+  .addrow{display:flex;gap:8px}
+  .addrow .btn{flex:0 0 auto;white-space:nowrap}
+  .info{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .irow{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:11px 14px;border-bottom:1px solid var(--line);font-size:.88rem}
+  .irow:last-child{border-bottom:0}
+  .irow .k{color:var(--muted);font-weight:700;font-size:.82rem}
+  .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+  .pgrid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block;background:var(--surface-2)}
+  .pgrid a:hover img{border-color:var(--accent)}
+  .sheet-f{padding:16px 24px;border-top:1px solid var(--line);display:flex;gap:9px;align-items:center;background:var(--surface-2)}
+  .saved{font-size:.82rem;color:var(--ok);font-weight:700;opacity:0;transition:.2s}
+  .saved.on{opacity:1}
+
+  /* ---------- 견적서 ---------- */
+  .qbox{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface-2);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .qbox b{font-size:.9rem}
+  .qbox .qno{font-weight:800;color:var(--brand)}
+  .sheet.wide{max-width:880px}
+  .qtable{width:100%;border-collapse:collapse;margin-top:6px}
+  .qtable th{background:var(--band-bg);color:#fff;font-size:.76rem;padding:10px;border:0;white-space:nowrap}
+  .qtable td{padding:6px;border-bottom:1px solid var(--line);vertical-align:middle}
+  .qtable .qi{width:100%;border:1px solid transparent;background:transparent;border-radius:8px;padding:7px 8px}
+  .qtable .qi:hover{border-color:var(--line)}
+  .qtable .qi:focus{border-color:var(--accent);background:var(--surface);outline:none}
+  .qtable input[type=number]{text-align:right}
+  .qtable .qdel{border:0;background:none;color:var(--muted);cursor:pointer;padding:0 6px}
+  .qtable .qdel:hover{color:var(--bad)}
+  .qsum{margin-top:16px;margin-left:auto;max-width:380px}
+  .qsum .r{display:flex;justify-content:space-between;gap:16px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+  .qsum .r.total{border-bottom:0;border-top:2px solid var(--ink);margin-top:6px;padding-top:12px;font-size:1.05rem;font-weight:800}
+  .qsum .r .dis{color:var(--bad)}
+  .qsum .r span:last-child{font-weight:700;font-variant-numeric:tabular-nums}
+
+  /* A4 견적서 */
+  .paper{background:#fff;color:#111;max-width:820px;margin:0 auto;padding:46px 52px;border-radius:6px}
+  .paper *{color:inherit}
+  .p-h{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+  .p-h h1{font-size:2rem;font-weight:800;letter-spacing:.22em}
+  .p-h .qsub{font-size:.72rem;letter-spacing:.3em;color:#888;margin-top:2px}
+  .p-from{text-align:right;font-size:.82rem;line-height:1.7;color:#333}
+  .p-from b{font-size:.95rem}
+  .p-line{height:3px;background:#12294D;margin:18px 0 22px}
+  .p-cols{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-bottom:26px}
+  .p-cols h4{font-size:.82rem;font-weight:800;letter-spacing:.06em;color:#12294D;border-bottom:1px solid #ccd4e2;padding-bottom:7px;margin-bottom:10px}
+  .p-cols .pr{display:grid;grid-template-columns:80px 1fr;gap:10px;font-size:.86rem;padding:4px 0}
+  .p-cols .pr span:first-child{color:#777}
+  table.p-t{width:100%;border-collapse:collapse;font-size:.88rem}
+  table.p-t th{background:#12294D;color:#fff;padding:11px 12px;font-weight:700;font-size:.82rem;text-align:left}
+  table.p-t th.r,table.p-t td.r{text-align:right}
+  table.p-t td{padding:11px 12px;border-bottom:1px solid #e3e8f0}
+  table.p-t td.num{color:#999;width:34px}
+  .p-sum{margin-left:auto;width:340px;margin-top:18px}
+  .p-sum .r{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #e3e8f0;font-size:.9rem}
+  .p-sum .r.tot{border-bottom:0;border-top:2px solid #12294D;font-weight:800;font-size:1.05rem;padding-top:12px;margin-top:4px}
+  .p-sum .dis{color:#c0392b}
+  .p-note{font-size:.78rem;color:#777;text-align:right;margin-top:8px}
+  .p-sec{margin-top:30px}
+  .p-sec h4{font-size:.82rem;font-weight:800;letter-spacing:.06em;color:#12294D;margin-bottom:9px}
+  .p-sec .box{border:1px solid #dce3ee;border-radius:8px;padding:14px 16px;font-size:.85rem;white-space:pre-wrap;line-height:1.75;color:#333}
+  .p-f{margin-top:34px;padding-top:16px;border-top:1px solid #e3e8f0;text-align:center;font-size:.78rem;color:#888;line-height:1.7}
+  @media print{
+    body{background:#fff}
+    .app,.modal:not(#paperModal),.toast{display:none!important}
+    #paperModal{position:static;display:block!important;background:#fff;padding:0;overflow:visible}
+    #paperModal .sheet{max-width:none;box-shadow:none;border-radius:0}
+    #paperModal .sheet-h,#paperModal .sheet-f{display:none!important}
+    #paperModal .sheet-b{padding:0}
+    .paper{max-width:none;padding:0}
+  }
+
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:var(--band-bg);color:#fff;padding:11px 20px;border-radius:999px;font-size:.86rem;font-weight:700;opacity:0;pointer-events:none;transition:.22s;z-index:90}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media(max-width:860px){
+    .app{grid-template-columns:1fr}
+    .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;border-right:0;border-bottom:1px solid var(--line);gap:6px}
+    .side .logo{padding:0 10px 0 0}
+    .navb{width:auto}
+    .side-sep{display:none}
+    .side-foot{margin:0 0 0 auto;border:0;padding:0;display:flex;gap:6px;align-items:center}
+    .whoami{margin:0}
+    .main{padding:18px 16px 50px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .grid2{grid-template-columns:1fr}
+    .irow{grid-template-columns:1fr;gap:2px}
+  }
+</style>
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="favicon-16.png" sizes="16x16" type="image/png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#12294D">
+</head>
+<body>
+
+<!-- ================= 로그인 / 승인 대기 게이트 ================= -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="gate-logo"><b>ESC</b><span>학원지원센터 · 관리자</span></div>
+
+    <!-- 로그인/가입 -->
+    <div id="gAuth">
+      <h2>직원 로그인</h2>
+      <p class="sub">ESC 내부 직원용 페이지입니다. 처음이시면 계정을 만든 뒤 승인을 요청해 주세요.</p>
+      <div class="tabs">
+        <button class="tab on" id="tabLogin" type="button" onclick="switchTab('login')">로그인</button>
+        <button class="tab" id="tabJoin" type="button" onclick="switchTab('join')">계정 만들기</button>
+      </div>
+      <div id="paneLogin">
+        <div class="fld"><label>이메일</label><input class="inp" id="li_email" type="email" autocomplete="username"></div>
+        <div class="fld"><label>비밀번호</label><input class="inp" id="li_pw" type="password" autocomplete="current-password"></div>
+        <button class="btn btn-primary btn-block" type="button" onclick="doLogin()">로그인</button>
+      </div>
+      <div id="paneJoin" style="display:none">
+        <div class="fld"><label>이메일</label><input class="inp" id="su_email" type="email" autocomplete="username"></div>
+        <div class="fld"><label>비밀번호 (6자 이상)</label><input class="inp" id="su_pw" type="password" autocomplete="new-password"></div>
+        <div class="fld"><label>이름</label><input class="inp" id="su_name" placeholder="실명으로 적어주세요"></div>
+        <div class="fld"><label>연락처</label><input class="inp" id="su_phone" inputmode="tel" placeholder="010-0000-0000"></div>
+        <button class="btn btn-primary btn-block" type="button" onclick="doSignup()">계정 만들고 승인 요청</button>
+      </div>
+      <div class="msg" id="gMsg"></div>
+      <div class="gate-note">계정을 만들면 최고관리자에게 승인 요청이 전달됩니다. 승인 후부터 의뢰 목록을 볼 수 있습니다.</div>
+    </div>
+
+    <!-- 직원 신청(이미 로그인은 되어 있으나 staff 없음) -->
+    <div id="gApply" style="display:none">
+      <h2>직원 승인 요청</h2>
+      <p class="sub">로그인은 되었지만 아직 직원으로 등록되지 않았습니다. 아래 정보를 남기면 최고관리자에게 승인 요청이 전달됩니다.</p>
+      <div class="fld" style="margin-top:20px"><label>이름</label><input class="inp" id="ap_name" placeholder="실명으로 적어주세요"></div>
+      <div class="fld"><label>연락처</label><input class="inp" id="ap_phone" inputmode="tel" placeholder="010-0000-0000"></div>
+      <button class="btn btn-primary btn-block" type="button" onclick="requestStaff()">승인 요청 보내기</button>
+      <div class="msg" id="apMsg"></div>
+      <div class="gate-note"><span id="apWho"></span> <a href="#" onclick="doLogout();return false;" style="color:var(--accent);font-weight:700">다른 계정으로 로그인</a></div>
+    </div>
+
+    <!-- 승인 대기 -->
+    <div id="gWait" style="display:none">
+      <h2>승인 대기 중입니다</h2>
+      <p class="sub" style="margin-top:8px">최고관리자가 승인하면 바로 이용하실 수 있습니다. 승인 후 이 페이지를 새로고침해 주세요.</p>
+      <div class="info" style="margin:20px 0">
+        <div class="irow"><span class="k">이름</span><span id="w_name"></span></div>
+        <div class="irow"><span class="k">이메일</span><span id="w_email"></span></div>
+        <div class="irow"><span class="k">요청일</span><span id="w_at"></span></div>
+      </div>
+      <button class="btn btn-ghost btn-block" type="button" onclick="location.reload()">새로고침</button>
+      <div class="gate-note"><a href="#" onclick="doLogout();return false;" style="color:var(--accent);font-weight:700">로그아웃</a></div>
+    </div>
+
+    <!-- 거절됨 -->
+    <div id="gDenied" style="display:none">
+      <h2>이용이 제한된 계정입니다</h2>
+      <p class="sub" style="margin-top:8px">이 계정은 현재 접근 권한이 없습니다. 최고관리자에게 문의해 주세요.</p>
+      <div style="margin-top:20px"><button class="btn btn-ghost btn-block" type="button" onclick="doLogout()">로그아웃</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 관리자 앱 ================= -->
+<div class="app hide" id="app">
+  <aside class="side">
+    <div class="logo"><div class="mark">IM</div><div><b>의뢰 관리</b><span>인투마케팅</span></div></div>
+    <button class="navb on" data-nav="web" type="button">홈페이지 제작 <span class="cnt" id="c-web">0</span></button>
+    <button class="navb" data-nav="sns" type="button">SNS 채널 제작 <span class="cnt" id="c-sns">0</span></button>
+    <button class="navb" data-nav="design" type="button">그래픽 디자인 <span class="cnt" id="c-design">0</span></button>
+    <button class="navb" data-nav="video" type="button">영상 제작 <span class="cnt" id="c-video">0</span></button>
+    <button class="navb" data-nav="blog" type="button">블로그 · 리뷰 <span class="cnt" id="c-blog">0</span></button>
+    <button class="navb" data-nav="etc" type="button">기타 <span class="cnt" id="c-etc">0</span></button>
+    <button class="navb hide" id="navBlog" type="button" onclick="window.open(BLOG_URL,'_blank')">📝 블로그 센터 ↗</button>
+    <div class="side-sep"></div>
+    <button class="navb hide" data-nav="staff" id="navStaff" type="button">관리자 목록 <span class="cnt" id="c-staff">0</span></button>
+    <button class="navb hide" data-nav="site" id="navSite" type="button">홈페이지 정보 · 푸터</button>
+    <button class="navb hide" data-nav="set" id="navSet" type="button">견적서 설정</button>
+    <button class="navb" data-nav="links" type="button">🔗 주소 모음</button>
+    <div class="side-foot">
+      <div class="whoami"><b id="meName">-</b><span id="meRole">-</span></div>
+      <button class="navb" type="button" onclick="loadAll(true)">↻ 새로고침</button>
+      <button class="navb" type="button" onclick="doLogout()">로그아웃</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- 의뢰 리스트 -->
+    <section id="viewList">
+      <div class="head">
+        <div><h1 id="listTitle">홈페이지 제작 의뢰</h1><p id="listSub">인투마케팅 홈페이지에서 들어온 신청입니다. 담당자·진행·견적서를 여기서 관리합니다.</p></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><b class="tnum" id="s-all">0</b><span>전체</span></div>
+        <div class="stat"><b class="tnum" id="s-new">0</b><span>접수</span></div>
+        <div class="stat"><b class="tnum" id="s-ing">0</b><span>진행중</span></div>
+        <div class="stat"><b class="tnum" id="s-done">0</b><span>완료</span></div>
+      </div>
+      <div class="toolbar">
+        <input class="inp" id="q" placeholder="상호명·담당자·메모 검색" oninput="renderList()">
+        <select class="inp" id="fStatus" style="max-width:150px" onchange="renderList()">
+          <option value="">상태 전체</option>
+          <option>접수</option><option>진행중</option><option>보류</option><option>완료</option>
+        </select>
+        <select class="inp" id="fMine" style="max-width:150px" onchange="renderList()">
+          <option value="">담당자 전체</option>
+          <option value="__me">내 담당</option>
+          <option value="__none">미배정</option>
+        </select>
+      </div>
+      <div class="card"><table>
+        <thead><tr>
+          <th class="num">#</th><th>상호명</th><th>작업 종류</th><th>담당자</th><th>작업 메모</th><th>작업 진행</th><th>상태</th><th>접수일</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table><div class="empty hide" id="listEmpty"><b>아직 신청이 없습니다</b>홈페이지에서 신청이 들어오면 여기에 표시됩니다.</div></div>
+    </section>
+
+    <!-- 홈페이지 정보 · 푸터 -->
+    <section id="viewSite" class="hide">
+      <div class="head"><div><h1>홈페이지 정보 · 푸터</h1>
+        <p>인투마케팅 홈페이지(intomarketing.co.kr) 아래에 찍히는 값입니다.</p></div></div>
+      <div id="siteBody"></div>
+    </section>
+
+    <!-- 관리자 목록 -->
+    <section id="viewStaff" class="hide">
+      <div class="head">
+        <div><h1>관리자 목록</h1><p>승인 요청을 수락하고 직분·권한을 관리합니다.</p></div>
+      </div>
+      <div class="toolbar">
+        <button class="pill on" id="stTabWait" type="button" onclick="staffTab('wait')">승인 대기 <span id="waitCnt">(0)</span></button>
+        <button class="pill" id="stTabOk" type="button" onclick="staffTab('ok')">승인된 직원</button>
+      </div>
+      <div class="qbox" style="margin-bottom:14px;display:block;line-height:1.75">
+        <b>블로그 센터에 들어오게 하려면</b> — 승인한 뒤 그 직원 줄에서 체크하세요.<br>
+        · <b>「블로그 센터 운영 (전체)」</b> — 최고관리자와 <b>똑같은 블로그 화면</b>이 열립니다 (1 블로거 관리 ~ 8 정산)<br>
+        · <b>「블로그 원고 검수만」</b> — 원고 검수·진행 현황 세 개만 보입니다<br>
+        · 직분을 <b>「최고관리자」</b>로 바꾸면 <b>체크 없이도 전부</b> 열립니다 (의뢰 삭제·직원 승인까지)<br>
+        <span class="muted" style="font-size:.82rem">글을 쓰는 블로거 신청은 여기가 아니라 블로그 센터의 「1 블로거 관리」에 들어옵니다.</span>
+      </div>
+      <div class="card" id="staffWrap"></div>
+      <div class="empty hide" id="staffEmpty"></div>
+    </section>
+
+    <!-- 1대1 상담 —
+         홈페이지 「문의」는 남들도 보는 게시판이고, 이건 손님과 담당자만 보는 방입니다.
+         손님마다 방 하나이고 주고받은 것이 계속 쌓입니다. -->
+
+    <!-- 주소 모음 —
+         이것저것 흩어져 있어 찾기 어렵다고 하셔서 한곳에 모았습니다.
+         ⚠️ 학원별 진행현황 주소는 여기 없습니다 — 학원마다 달라서 블로그 센터에 있습니다. -->
+    <section id="viewLinks" class="hide">
+      <div class="head">
+        <div><h1>주소 모음</h1><p>자주 쓰는 주소를 한곳에 모았습니다. [복사]를 눌러 그대로 보내시면 됩니다.</p></div>
+      </div>
+      <div id="linkWrap"></div>
+      <div class="qbox" style="display:block;line-height:1.75;margin-top:16px">
+        <b>학원별 진행현황 주소</b>는 여기 없습니다 — <b>블로그 센터의 「🔗 주소 모음」</b>에 있습니다.
+        학원마다 주소가 달라서 거기서 학원 이름으로 찾으셔야 합니다.
+      </div>
+    </section>
+
+    <!-- 견적서 설정 -->
+    <section id="viewSet" class="hide">
+      <div class="head"><div><h1>견적서 설정</h1><p>견적서에 찍히는 우리 쪽 정보입니다. 여기서 고치면 이후 발행하는 모든 견적서에 반영됩니다.</p></div></div>
+      <div class="card" style="padding:24px;max-width:760px">
+        <div class="fld"><label>어느 사업자를 고칠까요</label>
+          <select class="inp" id="st_pick" onchange="pickProfile(this.value)"></select>
+          <div class="muted" style="font-size:.82rem;margin-top:6px">
+            블로그·리뷰 홍보는 <b>인투마케팅</b>, 나머지 지원사업은 <b>인투유학</b>이 팝니다.
+            다른 지원사업도 사업자를 내시면 아래 [+ 사업자 추가]로 늘리시면 됩니다.</div></div>
+        <div class="grid2">
+          <div class="fld"><label>이 사업자를 부를 이름 <span class="muted">(우리끼리 구분용)</span></label>
+            <input class="inp" id="st_name" placeholder="예: 인투마케팅 (블로그·리뷰 홍보)"></div>
+          <div class="fld"><label>상호(견적서 표기)</label><input class="inp" id="st_company" placeholder="인투마케팅"></div>
+        </div>
+        <div class="grid2">
+          <div class="fld"><label>사업자/운영 주체</label><input class="inp" id="st_legal" placeholder="인투마케팅"></div>
+          <div class="fld"><label>대표자</label><input class="inp" id="st_owner" placeholder="예: 양회광"></div>
+        </div>
+        <div class="fld"><label>사업자등록번호</label>
+          <input class="inp" id="st_bizno" placeholder="000-00-00000">
+          <div class="muted" style="font-size:.8rem;margin-top:5px">
+            견적서와 홈페이지 하단에 찍힙니다. 전자상거래법상 표시 의무입니다.</div></div>
+        <div class="fld"><label>주소</label><input class="inp" id="st_addr" placeholder="예: 대전광역시 ○○구 ○○로 00, 3층"></div>
+        <div class="grid2">
+          <div class="fld"><label>연락처</label><input class="inp" id="st_phone" placeholder="010-0000-0000"></div>
+          <div class="fld"><label>이메일</label><input class="inp" id="st_email" placeholder="name@example.com"></div>
+        </div>
+        <div class="fld"><label>입금 계좌</label><input class="inp" id="st_bank" placeholder="예: 국민은행 000000-00-000000 (예금주: 인투마케팅)">
+          <div class="muted" style="font-size:.8rem;margin-top:5px">
+            사업자마다 <b>그 사업자 명의 계좌</b>를 쓰셔야 나중에 정리가 쉽습니다.</div></div>
+        <div class="fld"><label>결제 조건 안내문</label><textarea class="inp" id="st_paynote" placeholder="아래 계좌로 입금해 주시면 확인 후 진행됩니다."></textarea></div>
+        <div class="grid2">
+          <div class="fld"><label>기본 유효기간 (일)</label><input class="inp" id="st_valid" type="number" min="1" value="30"></div>
+          <div class="fld"><label>하단 문구</label><input class="inp" id="st_foot" placeholder="본 견적서는 발행일로부터 30일간 유효합니다."></div>
+        </div>
+        <div style="display:flex;gap:9px;align-items:center;margin-top:8px;flex-wrap:wrap">
+          <button class="btn btn-primary" type="button" onclick="saveSettings()">저장</button>
+          <button class="btn btn-ghost" type="button" onclick="addProfile()">+ 사업자 추가</button>
+          <span class="muted" style="font-size:.82rem">최고관리자·직원 승인 권한이 있는 사람만 수정할 수 있습니다.</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- 의뢰 상세 -->
+<div class="modal" id="detail"><div class="sheet">
+  <div class="sheet-h">
+    <div><h3 id="d_title">-</h3><div class="meta" id="d_meta">-</div></div>
+    <button class="x" type="button" onclick="closeDetail()">✕</button>
+  </div>
+  <div class="sheet-b">
+    <div class="sec-t">상태</div>
+    <div class="pills" id="d_status"></div>
+
+    <div class="sec-t">작업 종류 · 담당자</div>
+    <div class="grid2">
+      <div><input class="inp" id="d_work" list="workOpts" placeholder="예: 새로 제작 / 숏폼 / 배너" onchange="saveField('work_type',this.value)"><datalist id="workOpts"></datalist></div>
+      <div><select class="inp" id="d_assignee" onchange="saveField('assignee_id',this.value||null)"></select></div>
+    </div>
+
+    <div class="sec-t">작업 메모</div>
+    <textarea class="inp" id="d_memo" placeholder="진행하면서 남길 메모를 적어주세요." onchange="saveField('memo',this.value)"></textarea>
+
+    <div class="sec-t">제작 진행</div>
+    <div class="pills" id="d_stage"></div>
+    <div class="grid2">
+      <div class="fld"><label>디자인 마감</label><input class="inp" type="date" id="d_due_design" onchange="saveDue('design',this.value)"></div>
+      <div class="fld"><label>개발 마감</label><input class="inp" type="date" id="d_due_dev" onchange="saveDue('dev',this.value)"></div>
+      <div class="fld"><label>검수 마감</label><input class="inp" type="date" id="d_due_check" onchange="saveDue('check',this.value)"></div>
+      <div class="fld"><label>최종 마감</label><input class="inp" type="date" id="d_due_done" onchange="saveDue('done',this.value)"></div>
+    </div>
+    <div class="grid2">
+      <div class="fld"><label>금액 (원)</label>
+        <input class="inp tnum" type="number" id="d_amount" placeholder="예: 45000"
+               onchange="saveField('amount',this.value===''?null:Number(this.value))"></div>
+      <div class="fld"><label>입금일 <span class="muted" style="font-weight:500">— 넣으면 입금 완료로 봅니다</span></label>
+        <input class="inp" type="date" id="d_paid_at" onchange="savePaid(this.value)"></div>
+    </div>
+    <div class="fld"><label>만든 사이트 주소</label>
+      <input class="inp" id="d_site" placeholder="https://" onchange="saveField('site_url',this.value||null)"></div>
+
+    <div class="sec-t">할 일 <span class="muted" id="d_progtxt" style="font-weight:600"></span></div>
+    <div id="d_todos"></div>
+    <div class="addrow">
+      <input class="inp" id="d_newtodo" placeholder="할 일 입력 후 Enter" onkeydown="if(event.key==='Enter')addTodo()">
+      <button class="btn btn-ghost" type="button" onclick="addTodo()">추가</button>
+    </div>
+
+    <div class="sec-t">견적서</div>
+    <div class="qbox" id="d_quote"></div>
+
+    <div class="sec-t hide" id="d_blogT">블로그 홍보</div>
+    <div class="qbox hide" id="d_blog"></div>
+
+    <div class="sec-t">의뢰처 정보</div>
+    <div class="info" id="d_info"></div>
+    <div id="d_photos" class="hide"></div>
+  </div>
+  <div class="sheet-f">
+    <button class="btn btn-ghost" type="button" onclick="closeDetail()">닫기</button>
+    <button class="btn btn-danger hide" id="d_del" type="button" onclick="deleteRequest()">🗑 의뢰 삭제</button>
+    <span class="muted hide" id="d_delnote" style="font-size:.78rem">최고관리자만 삭제할 수 있습니다</span>
+    <span class="saved" id="d_saved" style="margin-left:auto">저장됨 ✓</span>
+  </div>
+</div></div>
+
+<!-- 견적서 편집 -->
+<div class="modal" id="quoteModal"><div class="sheet wide">
+  <div class="sheet-h">
+    <div><h3>견적서 작성</h3><div class="meta" id="q_meta">-</div></div>
+    <button class="x" type="button" onclick="closeModal('quoteModal')">✕</button>
+  </div>
+  <div class="sheet-b">
+    <div class="sec-t">받는 곳</div>
+    <div class="grid2">
+      <div class="fld"><label>단체/회사</label><input class="inp" id="q_to_company"></div>
+      <div class="fld"><label>담당자</label><input class="inp" id="q_to_manager"></div>
+      <div class="fld"><label>연락처</label><input class="inp" id="q_to_phone"></div>
+      <div class="fld"><label>이메일</label><input class="inp" id="q_to_email"></div>
+    </div>
+    <div class="grid2">
+      <div class="fld"><label>프로젝트명</label><input class="inp" id="q_project" placeholder="예: 인력지원 · 필리핀 원어민 매칭"></div>
+      <div class="fld"><label>유효기간 (일)</label><input class="inp" id="q_valid" type="number" min="1" value="30"></div>
+    </div>
+    <!-- 사업자가 둘 이상이라 어느 이름으로 나가는지 고릅니다 -->
+    <div class="fld"><label>어느 이름으로 발행할까요</label>
+      <select class="inp" id="q_from" onchange="useProfile(this.value)"></select>
+      <div class="muted" style="font-size:.8rem;margin-top:5px" id="q_from_hint"></div></div>
+
+    <div class="sec-t">견적 항목</div>
+    <table class="qtable"><thead><tr>
+      <th style="width:34px">#</th><th>항목</th>
+      <th style="width:112px" class="r">개당가격</th><th style="width:78px" class="r">수량</th>
+      <th style="width:104px">결제주기</th>
+      <th style="width:120px" class="r">기존 비용</th><th style="width:126px" class="r">할인가(청구)</th><th style="width:34px"></th>
+    </tr></thead><tbody id="q_rows"></tbody></table>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost" type="button" onclick="addQuoteRow()">+ 항목 추가</button>
+      <button class="btn btn-ghost" type="button" onclick="presetQuote()">기본 항목 넣기</button>
+    </div>
+    <div class="qsum" id="q_sum"></div>
+
+    <div class="sec-t">비고</div>
+    <textarea class="inp" id="q_note" placeholder="작업 범위, 수정 횟수, 기타 안내사항 등을 적어 주세요."></textarea>
+  </div>
+  <div class="sheet-f">
+    <button class="btn btn-primary" type="button" onclick="saveQuote(true)">저장하고 미리보기</button>
+    <button class="btn btn-ghost" type="button" onclick="saveQuote(false)">저장만</button>
+    <button class="btn btn-ghost" type="button" onclick="closeModal('quoteModal')">닫기</button>
+  </div>
+</div></div>
+
+<!-- 견적서 미리보기(인쇄용) -->
+<div class="modal" id="paperModal"><div class="sheet wide">
+  <div class="sheet-h">
+    <div><h3>견적서 미리보기</h3><div class="meta">① <b>PDF로 저장</b> → ② 메일 작성 창에서 저장한 <b>PDF를 첨부</b> → ③ 전송. 브라우저에서는 파일을 자동으로 첨부할 수 없어 두 단계로 나뉩니다.</div></div>
+    <button class="x" type="button" onclick="closePaper()">✕</button>
+  </div>
+  <div class="sheet-b" style="background:#eef1f7"><div id="paper"></div></div>
+  <div class="sheet-f" style="flex-wrap:wrap">
+    <button class="btn btn-primary" type="button" onclick="window.print()">① 🖨 PDF로 저장</button>
+    <button class="btn btn-ghost" type="button" onclick="mailQuoteGmail()">② 📧 Gmail로 작성</button>
+    <button class="btn btn-ghost" type="button" onclick="mailQuote()">② ✉️ 메일 앱으로 작성</button>
+    <button class="btn btn-ghost" type="button" onclick="copyQuoteText()">📋 상세 내용 복사</button>
+    <button class="btn btn-ghost" type="button" onclick="closePaper()">닫기</button>
+  </div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
+  var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
+  var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
+
+  /* 인투마케팅의 지원 항목. requests.kind 를 이 여섯으로 «묶어서» 보여줍니다.
+     🔴 모르는 종류는 반드시 '기타' 로 떨어지게 두세요 —
+        어느 묶음에도 안 들어가면 의뢰가 화면에서 «사라집니다». */
+  var AREAS={web:'홈페이지 제작',sns:'SNS 채널 제작',design:'그래픽 디자인',
+             video:'영상 제작',blog:'블로그 · 리뷰',etc:'기타'};
+  var KINDS_OF={web:['홈페이지','앱','프로그램'],sns:['SNS'],design:['디자인'],
+                video:['영상'],blog:['블로그·리뷰'],etc:[]};
+  function groupOf(r){
+    var k=(r&&r.kind)||'';
+    for(var g in KINDS_OF){if(KINDS_OF[g].indexOf(k)>=0)return g;}
+    return 'etc';
+  }
+  var WORK_OPTS={
+    web:['기존 그대로','참고 제작','새로 제작'],
+    sns:['채널 개설','지도 등록','채널 운영'],
+    design:['배너','브로슈어','포스터','명함','기타'],
+    video:['숏폼','롱폼','기타'],
+    blog:['블로그 홍보','네이버 리뷰'],
+    etc:['기타']
+  };
+  var STATUSES=['접수','진행중','보류','완료'];
+  var ROLE_KO={owner:'최고관리자',admin:'관리자',staff:'직원'};
+  var PERM_KO={site_board:'홈페이지 게시판 관리',manage_staff:'직원 승인·권한 관리',
+               blog_admin:'블로그 센터 운영 (전체)',blog_review:'블로그 원고 검수만'};
+
+  var QALL={};
+
+  var ME=null, STAFF=[], COMMS=[], DATA={}, CUR='web', CURROW=null, STTAB='wait', SET={}, QD=null;
+  window.BLOG_URL="https://center.intomarketing.co.kr/";  /* 인라인 onclick에서 쓰므로 전역 */
+
+  function $(id){return document.getElementById(id);}
+  function esc(s){return (s==null?'':(''+s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function fdate(s){if(!s)return '-';var d=new Date(s);return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
+  function fdatetime(s){if(!s)return '-';var d=new Date(s);return fdate(s)+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);}
+  function normStatus(s){if(!s)return '접수';if(s==='신청접수'||s==='접수·견적')return '접수';return STATUSES.indexOf(s)>=0?s:'접수';}
+  function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on');},1800);}
+  window.closeModal=function(id){var el=$(id);if(el)el.classList.remove('open');};
+  function can(k){return !!ME&&(ME.role==='owner'||(ME.perms&&ME.perms[k]===true));}
+
+  /* ---------- 게이트 ---------- */
+  function showPane(id){
+    ['gAuth','gApply','gWait','gDenied'].forEach(function(x){$(x).style.display=(x===id?'':'none');});
+    $('gate').classList.remove('hide');$('app').classList.add('hide');
+  }
+  window.switchTab=function(t){
+    var l=(t==='login');
+    $('tabLogin').classList.toggle('on',l);$('tabJoin').classList.toggle('on',!l);
+    $('paneLogin').style.display=l?'':'none';$('paneJoin').style.display=l?'none':'';
+    $('gMsg').textContent='';
+  };
+  function gmsg(t,cls){var m=$('gMsg');m.textContent=t;m.className='msg'+(cls?' '+cls:'');}
+
+  window.doLogin=async function(){
+    var email=$('li_email').value.trim(),pw=$('li_pw').value;
+    if(!email||!pw)return gmsg('이메일과 비밀번호를 입력해 주세요.','err');
+    if(!sb)return gmsg('연결 오류입니다. 새로고침해 주세요.','err');
+    gmsg('로그인 중...');
+    var r=await sb.auth.signInWithPassword({email:email,password:pw});
+    if(r.error)return gmsg('로그인 실패: '+r.error.message,'err');
+    boot();
+  };
+  window.doSignup=async function(){
+    var email=$('su_email').value.trim(),pw=$('su_pw').value,name=$('su_name').value.trim(),phone=$('su_phone').value.trim();
+    if(!email||!pw)return gmsg('이메일과 비밀번호를 입력해 주세요.','err');
+    if(pw.length<6)return gmsg('비밀번호는 6자 이상으로 해주세요.','err');
+    if(!name)return gmsg('이름을 입력해 주세요.','err');
+    if(!sb)return gmsg('연결 오류입니다.','err');
+    gmsg('계정 만드는 중...');
+    var r=await sb.auth.signUp({email:email,password:pw});
+    if(r.error)return gmsg('가입 실패: '+r.error.message+' (이미 계정이 있다면 로그인 후 승인 요청을 보내주세요)','err');
+    var s=await sb.auth.getSession();
+    if(!s.data.session){return gmsg('계정이 생성되었습니다. 로그인 탭에서 로그인해 주세요.','ok');}
+    var ins=await insertStaff(name,phone);
+    if(ins)return gmsg(ins,'err');
+    boot();
+  };
+  async function insertStaff(name,phone){
+    var u=(await sb.auth.getUser()).data.user;
+    if(!u)return '로그인 정보를 찾을 수 없습니다.';
+    var r=await sb.from('staff').insert({id:u.id,email:u.email,name:name,phone:phone,role:'staff',status:'pending'});
+    return r.error?('승인 요청 실패: '+r.error.message):null;
+  }
+  window.requestStaff=function(){
+    var name=$('ap_name').value.trim(),phone=$('ap_phone').value.trim();
+    var m=$('apMsg');m.className='msg';
+    if(!name){m.className='msg err';m.textContent='이름을 입력해 주세요.';return;}
+    m.textContent='요청 보내는 중...';
+    insertStaff(name,phone).then(function(err){
+      if(err){m.className='msg err';m.textContent=err;return;}
+      boot();
+    });
+  };
+  window.doLogout=async function(){if(sb)await sb.auth.signOut();location.reload();};
+
+  /* ---------- 부팅 ---------- */
+  async function boot(){
+    if(!sb){showPane('gAuth');gmsg('Supabase 연결에 실패했습니다.','err');return;}
+    var ses=(await sb.auth.getSession()).data.session;
+    if(!ses){showPane('gAuth');return;}
+    var r=await sb.from('staff').select('*').eq('id',ses.user.id).maybeSingle();
+    if(r.error){showPane('gAuth');gmsg('조회 오류: '+r.error.message,'err');return;}
+    var me=r.data;
+    if(!me){$('apWho').textContent=ses.user.email+' 로 로그인됨 ·';showPane('gApply');return;}
+    if(me.status==='pending'){
+      $('w_name').textContent=me.name||'-';$('w_email').textContent=me.email||ses.user.email;$('w_at').textContent=fdatetime(me.created_at);
+      showPane('gWait');return;
+    }
+    if(me.status!=='approved'){showPane('gDenied');return;}
+    ME=me;
+    $('gate').classList.add('hide');$('app').classList.remove('hide');
+    $('meName').textContent=(me.name||me.email||'-');
+    $('meRole').textContent=ROLE_KO[me.role]||'직원';
+    if(me.role==='owner'||can('manage_staff')){$('navStaff').classList.remove('hide');$('navSet').classList.remove('hide');$('navSite').classList.remove('hide');}
+    if(can('blog_admin')||can('blog_review'))$('navBlog').classList.remove('hide');
+    await loadSettings();
+    loadAll();
+  }
+
+  /* ---------- 데이터 ---------- */
+  window.loadAll=async function(manual){
+    /* 🔴 이 어드민은 인투마케팅 홈페이지에서 온 것«만» 봅니다.
+          거르지 않으면 학원·교회 의뢰까지 여기서 고쳐져 버립니다. */
+    var rs=await sb.from('requests').select('*').eq('center','mkt').order('created_at',{ascending:false});
+    if(rs.error){toast('불러오기 실패: '+rs.error.message);return;}
+    DATA={}; Object.keys(AREAS).forEach(function(a){DATA[a]=[];});
+    (rs.data||[]).forEach(function(x){DATA[groupOf(x)].push(x);});
+    var st=await sb.from('staff').select('*').order('created_at',{ascending:true});
+    STAFF=st.error?[]:(st.data||[]);
+    /* 소속 고르는 칸에 쓸 공동체 목록 (블로그 센터와 같은 표를 봅니다) */
+    var cm=await sb.from('communities').select('id,name').order('name');
+    COMMS=cm.error?[]:(cm.data||[]);
+    Object.keys(AREAS).forEach(function(a){$('c-'+a).textContent=DATA[a].length;});
+    var pend=STAFF.filter(function(s){return s.status==='pending';}).length;
+    var c=$('c-staff');c.textContent=pend;c.classList.toggle('alert',pend>0);
+    $('waitCnt').textContent='('+pend+')';
+    renderAssigneeOpts();
+    renderList();
+    if($('viewStaff').classList.contains('hide')===false)renderStaff();
+    if(manual)toast('새로고침 완료');
+    openFromHash();
+  };
+  function staffName(id){var s=STAFF.filter(function(x){return x.id===id;})[0];return s?(s.name||s.email):null;}
+  function renderAssigneeOpts(){
+    var sel=$('d_assignee'),h='<option value="">담당자 미배정</option>';
+    STAFF.filter(function(s){return s.status==='approved';}).forEach(function(s){
+      h+='<option value="'+esc(s.id)+'">'+esc(s.name||s.email)+'</option>';
+    });
+    sel.innerHTML=h;
+  }
+
+  /* ---------- 리스트 ---------- */
+  document.querySelectorAll('.navb[data-nav]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var k=b.getAttribute('data-nav');
+      document.querySelectorAll('.navb[data-nav]').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      ['viewList','viewStaff','viewSet','viewLinks','viewSite'].forEach(function(v){$(v).classList.add('hide');});
+      if(k==='staff'){$('viewStaff').classList.remove('hide');renderStaff();return;}
+      if(k==='site'){$('viewSite').classList.remove('hide');fillSite();return;}
+      if(k==='set'){$('viewSet').classList.remove('hide');fillSettings();return;}
+      if(k==='links'){$('viewLinks').classList.remove('hide');renderLinks();return;}
+      $('viewList').classList.remove('hide');
+      CUR=k;$('listTitle').textContent=AREAS[k]+' 의뢰';
+      renderList();
+    });
+  });
+
+  /* ---------- 🔗 주소 모음 ----------
+     흩어져 있던 주소를 한곳에. 값을 여기 직접 적습니다 —
+     이 페이지는 바깥 파일을 안 쓰는 구조입니다.
+     ⚠️ 회사 주소가 바뀌면 블로그 센터(js/admin.js 의 LINKS)도 같이 고쳐야 합니다. */
+  var LINK_GROUPS=[
+    {g:'고객에게 보내는 것',l:[
+      {t:'인투마케팅 홈페이지',u:'https://intomarketing.co.kr/',
+       d:'블로그·리뷰, 홈페이지, SNS, 디자인, 영상 다섯 갈래를 소개하는 곳입니다.'},
+      {t:'홈페이지 제작 신청서',u:'https://intomarketing.co.kr/apply/',
+       d:'홈페이지·앱 제작을 신청받는 곳입니다. 여기로 들어온 것이 이 어드민에 쌓입니다.'}
+    ]},
+    {g:'다른 홈페이지 (서로 링크하지 않습니다)',l:[
+      {t:'학원지원센터',u:'https://intomarketing.co.kr/hakwon/',
+       d:'학원 대상입니다. 손님 화면끼리는 서로 연결하지 않습니다.'},
+      {t:'우리교회지원센터',u:'https://intomarketing.co.kr/church/',
+       d:'교회 대상입니다. 자기 DB 를 따로 씁니다.'}
+    ]},
+    {g:'우리끼리 쓰는 것',l:[
+      {t:'모아 보기 (전체 현황)',u:'https://intomarketing.co.kr/admin/',
+       d:'모든 홈페이지에서 온 의뢰를 한자리에서 «봅니다». 고치는 건 각 어드민에서 합니다.'},
+      {t:'인투마케팅 어드민 (여기)',u:'https://intomarketing.co.kr/marketing/admin/',
+       d:'인투마케팅 홈페이지에서 온 신청을 관리하고 견적서를 냅니다.'},
+      {t:'학원지원센터 어드민',u:'https://intomarketing.co.kr/hakwon/admin.html',
+       d:'인력·컨텐츠·마케팅 의뢰와 직원 권한을 관리합니다.'},
+      {t:'우리교회지원센터 어드민',u:'https://intomarketing.co.kr/church/admin.html',
+       d:'교회 쪽은 계정이 «따로»입니다. 여기 계정으로는 안 들어갑니다.'},
+      {t:'블로그 센터',u:'https://center.intomarketing.co.kr/',
+       d:'블로그·리뷰 의뢰를 실제로 굴리는 곳입니다. 학원별 진행현황 주소도 여기 있습니다.'}
+    ]},
+    {g:'법적 고지 — 누구에게나',l:[
+      {t:'개인정보처리방침',u:'https://intomarketing.co.kr/privacy/',
+       d:'블로거·고객이 물어보면 이 주소를 보내시면 됩니다. 개인정보보호법상 공개 의무입니다.'},
+      {t:'이용약관',u:'https://intomarketing.co.kr/terms/',
+       d:'광고 표기·게시물 12개월 유지·원고료 지급 방식이 여기에 적혀 있습니다.'}
+    ]}
+  ];
+
+  window.copyLink=async function(u){
+    try{await navigator.clipboard.writeText(u);toast('주소를 복사했습니다');}
+    catch(e){toast('복사에 실패했습니다. 아래 주소를 직접 긁어 주세요');}
+  };
+
+  window.renderLinks=function(){
+    $('linkWrap').innerHTML=LINK_GROUPS.map(function(G){
+      return '<div style="margin-bottom:22px">'
+        +'<div class="muted" style="font-size:.82rem;font-weight:700;margin-bottom:8px">'+esc(G.g)+'</div>'
+        +G.l.map(function(l){
+          return '<div class="card" style="padding:16px 18px;margin-bottom:10px">'
+            +'<div style="display:flex;gap:12px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap">'
+            +'<div style="min-width:220px;flex:1">'
+            +'<b style="font-size:.95rem">'+esc(l.t)+'</b>'
+            +'<div class="muted" style="font-size:.82rem;margin-top:3px;line-height:1.6">'+esc(l.d)+'</div>'
+            +'</div>'
+            +'<div style="display:flex;gap:6px;flex-wrap:wrap">'
+            +'<button class="btn btn-primary" type="button" onclick="copyLink(\''+esc(l.u)+'\')">📋 복사</button>'
+            +'<a class="btn btn-ghost" href="'+esc(l.u)+'" target="_blank" rel="noopener">열어보기 ↗</a>'
+            +'</div></div>'
+            +'<div class="muted" style="font-size:.78rem;margin-top:10px;word-break:break-all">'+esc(l.u)+'</div>'
+            +'</div>';
+        }).join('')
+        +'</div>';
+    }).join('');
+  };
+
+  window.renderList=function(){
+    var rows=DATA[CUR]||[];
+    var q=($('q').value||'').trim().toLowerCase();
+    var fs=$('fStatus').value, fm=$('fMine').value;
+    var view=rows.filter(function(r){
+      if(fs&&normStatus(r.status)!==fs)return false;
+      if(fm==='__me'&&r.assignee_id!==ME.id)return false;
+      if(fm==='__none'&&r.assignee_id)return false;
+      if(q){
+        var hay=[r.academy_name,r.manager_name,r.work_type,r.memo,staffName(r.assignee_id)].join(' ').toLowerCase();
+        if(hay.indexOf(q)<0)return false;
+      }
+      return true;
+    });
+    $('s-all').textContent=rows.length;
+    $('s-new').textContent=rows.filter(function(r){return normStatus(r.status)==='접수';}).length;
+    $('s-ing').textContent=rows.filter(function(r){return normStatus(r.status)==='진행중';}).length;
+    $('s-done').textContent=rows.filter(function(r){return normStatus(r.status)==='완료';}).length;
+
+    var h='';
+    view.forEach(function(r,i){
+      var todos=Array.isArray(r.todos)?r.todos:[];
+      var done=todos.filter(function(t){return t.done;}).length;
+      var pct=todos.length?Math.round(done/todos.length*100):0;
+      var st=normStatus(r.status);
+      h+='<tr onclick="openDetail(\''+r.id+'\')">'
+       +'<td class="num tnum">'+(i+1)+'</td>'
+       +'<td><span class="nm">'+esc(r.academy_name||'-')+'</span>'+(r.is_premium?' <span class="badge b-prem">프리미엄</span>':'')+'<span class="sub">'+esc(r.manager_name||'')+(r.phone?' · '+esc(r.phone):'')+'</span></td>'
+       +'<td>'+(r.work_type?esc(r.work_type):'<span class="muted">-</span>')+'</td>'
+       +'<td>'+(r.assignee_id?esc(staffName(r.assignee_id)||'-'):'<span class="muted">미배정</span>')+'</td>'
+       +'<td class="muted" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(r.memo?esc(r.memo):'-')+'</td>'
+       +'<td>'+(todos.length?'<div class="prog"><div class="bar"><i style="width:'+pct+'%"></i></div><span class="muted tnum" style="font-size:.78rem">'+done+'/'+todos.length+'</span></div>':'<span class="muted">-</span>')+'</td>'
+       +'<td><span class="badge b-'+st+'">'+st+'</span>'+(r.quote_no?'<span class="sub" style="font-size:.7rem">📄 '+esc(r.quote_no)+'</span>':'')+'</td>'
+       +'<td class="muted tnum" style="font-size:.82rem">'+fdate(r.created_at)+'</td>'
+       +'</tr>';
+    });
+    $('rows').innerHTML=h;
+    $('listEmpty').classList.toggle('hide',view.length>0);
+    if(!view.length&&rows.length)$('listEmpty').innerHTML='<b>조건에 맞는 의뢰가 없습니다</b>검색어나 필터를 바꿔보세요.';
+    else $('listEmpty').innerHTML='<b>아직 신청이 없습니다</b>홈페이지에서 신청이 들어오면 여기에 표시됩니다.';
+  };
+
+  /* ---------- 상세 ---------- */
+  window.openDetail=function(id){
+    /* 🔴 모아 보기(/admin)에서 넘어올 때는 지금 보고 있는 묶음이 아닐 수 있습니다.
+          DATA[CUR] 만 뒤지면 「눌렀는데 아무 일도 안 일어나는」 일이 생깁니다. */
+    var r=null;
+    Object.keys(DATA).forEach(function(g){
+      (DATA[g]||[]).forEach(function(x){if(x.id===id)r=x;});
+    });
+    if(!r)return;
+    CURROW=r;
+    $('d_title').textContent=r.academy_name||'-';
+    $('d_meta').textContent=AREAS[groupOf(r)]+' · 접수 '+fdatetime(r.created_at)+(r.is_premium?' · 프리미엄 회원':'');
+    var sh='';STATUSES.forEach(function(s){sh+='<button class="pill'+(normStatus(r.status)===s?' on':'')+'" type="button" onclick="setStatus(\''+s+'\')">'+s+'</button>';});
+    $('d_status').innerHTML=sh;
+    $('workOpts').innerHTML=(WORK_OPTS[groupOf(r)]||[]).map(function(o){return '<option value="'+esc(o)+'">';}).join('');
+    $('d_work').value=r.work_type||'';
+    $('d_assignee').value=r.assignee_id||'';
+    $('d_memo').value=r.memo||'';
+    renderStagePills(r.stage||'');
+    var du=r.due_stages||{};
+    $('d_due_design').value=du.design||''; $('d_due_dev').value=du.dev||'';
+    $('d_due_check').value=du.check||'';   $('d_due_done').value=du.done||'';
+    $('d_amount').value=(r.amount==null?'':r.amount);
+    $('d_paid_at').value=r.paid_at||'';
+    $('d_site').value=r.site_url||'';
+    renderTodos();
+    renderQuoteBox();
+    renderBlogBox();
+    renderInfo(r);
+    var isOwner=(ME.role==='owner');
+    $('d_del').classList.toggle('hide',!isOwner);
+    $('d_delnote').classList.toggle('hide',isOwner);
+    $('detail').classList.add('open');
+  };
+  window.closeDetail=function(){$('detail').classList.remove('open');CURROW=null;};
+  $('detail').addEventListener('click',function(e){if(e.target===this)closeDetail();});
+
+  function renderInfo(r){
+    var h='';
+    var add=function(k,v){if(v===undefined||v===null||v==='')return;h+='<div class="irow"><span class="k">'+esc(k)+'</span><span>'+esc(v)+'</span></div>';};
+    add('학원명',r.academy_name);add('담당자',r.manager_name);add('연락처',r.phone);add('이메일',r.email);
+    add('회원',r.user_id?(r.is_premium?'프리미엄 회원':'일반 회원(로그인)'):'비회원');
+    if(r.message)add('전체적으로 원하시는 것',r.message);
+    var d=r.details||{};
+    Object.keys(d).forEach(function(k){
+      if(k.charAt(0)==='_')return; /* _photos 등 내부 값은 아래에서 따로 처리 */
+      var v=d[k];add(k,Array.isArray(v)?v.join(', '):v);
+    });
+    $('d_info').innerHTML=h||'<div class="irow"><span class="k">-</span><span class="muted">추가 정보 없음</span></div>';
+    renderPhotos(d._photos);
+  }
+  /* 신청서에 올린 사진 (비공개 버킷 → 서명 URL로 열람) */
+  async function renderPhotos(paths){
+    var box=$('d_photos');
+    if(!paths||!paths.length){box.classList.add('hide');box.innerHTML='';return;}
+    box.classList.remove('hide');
+    box.innerHTML='<div class="sec-t">신청서 사진 ('+paths.length+'장)</div><div class="muted" style="font-size:.84rem">불러오는 중…</div>';
+    var r=await sb.storage.from('request-photos').createSignedUrls(paths,60*60);
+    if(r.error){box.innerHTML='<div class="sec-t">신청서 사진</div><div class="muted" style="font-size:.84rem">사진을 불러오지 못했습니다: '+esc(r.error.message)+'</div>';return;}
+    var urls=(r.data||[]).filter(function(x){return x.signedUrl;});
+    var h='<div class="sec-t">신청서 사진 ('+urls.length+'장) <span class="muted" style="font-weight:600">· 클릭하면 원본이 열립니다</span></div><div class="pgrid">';
+    urls.forEach(function(x,i){
+      h+='<a href="'+esc(x.signedUrl)+'" target="_blank" rel="noopener"><img src="'+esc(x.signedUrl)+'" loading="lazy" alt="사진 '+(i+1)+'"></a>';
+    });
+    h+='</div>';
+    box.innerHTML=h;
+  }
+
+  function renderTodos(){
+    var r=CURROW;var todos=Array.isArray(r.todos)?r.todos:[];
+    var h='';
+    todos.forEach(function(t,i){
+      h+='<div class="todo'+(t.done?' done':'')+'">'
+       +'<input type="checkbox" '+(t.done?'checked':'')+' onchange="toggleTodo('+i+',this.checked)">'
+       +'<span class="t">'+esc(t.t)+'</span>'
+       +'<input class="due" type="date" value="'+esc(t.due||'')+'" onchange="setTodoDue('+i+',this.value)">'
+       +'<button class="del" type="button" onclick="delTodo('+i+')">✕</button>'
+       +'</div>';
+    });
+    $('d_todos').innerHTML=h;
+    var done=todos.filter(function(t){return t.done;}).length;
+    $('d_progtxt').textContent=todos.length?('('+done+'/'+todos.length+' · '+Math.round(done/todos.length*100)+'%)'):'';
+  }
+  window.addTodo=function(){
+    var el=$('d_newtodo'),v=el.value.trim();if(!v)return;
+    var todos=Array.isArray(CURROW.todos)?CURROW.todos.slice():[];
+    todos.push({t:v,done:false,due:''});el.value='';
+    saveField('todos',todos);
+  };
+  window.toggleTodo=function(i,v){var t=CURROW.todos.slice();t[i]=Object.assign({},t[i],{done:v});saveField('todos',t);};
+  window.setTodoDue=function(i,v){var t=CURROW.todos.slice();t[i]=Object.assign({},t[i],{due:v});saveField('todos',t);};
+  window.delTodo=function(i){var t=CURROW.todos.slice();t.splice(i,1);saveField('todos',t);};
+  window.setStatus=function(s){saveField('status',s);};
+
+  /* 단계별 마감일은 due_stages(jsonb) 한 칸에 모여 있습니다 */
+  window.saveDue=function(k,v){
+    if(!CURROW)return;
+    var d={},cur=CURROW.due_stages||{};
+    for(var x in cur)d[x]=cur[x];
+    if(v)d[k]=v; else delete d[k];
+    saveField('due_stages',d);
+  };
+  /* 입금은 «두 칸이 함께» 움직여야 합니다.
+     따로 저장하면 「입금 완료인데 입금일이 없는」 줄이 생깁니다. */
+  window.savePaid=function(v){ savePatch({paid:!!v,paid_at:v||null},'paid_at'); };
+  var STAGES=['접수·견적','디자인','개발','검수','완료'];
+  window.setStage=function(v){ saveField('stage',v); renderStagePills(v); };
+  function renderStagePills(cur){
+    $('d_stage').innerHTML=STAGES.map(function(s){
+      return '<button class="pill'+(cur===s?' on':'')+'" type="button" onclick="setStage(\''+s+'\')">'+s+'</button>';
+    }).join('');
+  }
+
+  window.saveField=async function(field,value){
+    var patch={};patch[field]=value;
+    return savePatch(patch,field);
+  };
+  window.savePatch=async function(patch,field){
+    if(!CURROW)return;
+    var r=await sb.from('requests').update(patch).eq('id',CURROW.id).select().maybeSingle();
+    if(r.error){toast('저장 실패: '+r.error.message);return;}
+    CURROW=r.data;
+    var arr=DATA[groupOf(CURROW)]||[];
+    for(var i=0;i<arr.length;i++){if(arr[i].id===CURROW.id){arr[i]=CURROW;break;}}
+    if(field==='todos')renderTodos();
+    if(field==='status'){
+      var sh='';STATUSES.forEach(function(s){sh+='<button class="pill'+(normStatus(CURROW.status)===s?' on':'')+'" type="button" onclick="setStatus(\''+s+'\')">'+s+'</button>';});
+      $('d_status').innerHTML=sh;
+    }
+    renderList();
+    var sv=$('d_saved');sv.classList.add('on');setTimeout(function(){sv.classList.remove('on');},1200);
+  };
+  window.deleteRequest=async function(){
+    if(!CURROW)return;
+    if(ME.role!=='owner'){toast('의뢰 삭제는 최고관리자만 할 수 있습니다');return;}
+    /* 블로그 센터에 주문이 걸려 있으면 같이 지웁니다 (안 지우면 주인 없는 주문이 남습니다) */
+    var bs=await sb.rpc('request_blog_status',{p_request:CURROW.id});
+    var bo=(bs.data&&bs.data.order_id)?bs.data:null;
+
+    var q='아래 의뢰를 완전히 삭제할까요? 되돌릴 수 없습니다.\n\n'
+      +'· 학원: '+(CURROW.academy_name||'-')+'\n'
+      +'· 영역: '+(AREAS[groupOf(CURROW)]||'')+'\n'
+      +'· 접수: '+fdatetime(CURROW.created_at)
+      +(bo?'\n\n⚠️ 블로그 센터의 주문도 함께 지워집니다.\n'
+          +'   · '+bo.total_qty+'편 주문 · 만든 글 '+bo.made+'편'
+          +(bo.done?' (발행 완료 '+bo.done+'편)':'')
+          +'\n   글과 진행 기록이 모두 사라집니다.':'');
+    if(!confirm(q))return;
+
+    if(bo){
+      var rb=await sb.rpc('order_delete',{p_order:bo.order_id});
+      if(rb.error){toast('블로그 주문 삭제 실패: '+rb.error.message);return;}
+      toast('블로그 주문과 글 '+((rb.data&&rb.data.posts)||0)+'편을 지웠습니다');
+    }
+    var r=await sb.from('requests').delete().eq('id',CURROW.id).select('id');
+    if(r.error){toast('삭제 실패: '+r.error.message);return;}
+    if(!r.data||!r.data.length){toast('삭제 권한이 없습니다 (최고관리자만 가능)');return;}
+    closeDetail();toast('삭제했습니다');loadAll();
+  };
+
+  /* ---------- 견적서 ---------- */
+  var CYCLES=['1회','매월','매년'];
+  function won(n){n=Number(n)||0;return '₩'+n.toLocaleString('ko-KR');}
+  function defaultQuote(r){
+    return {
+      to:{company:r.academy_name||'',manager:r.manager_name||'',phone:r.phone||'',email:r.email||''},
+      project:(AREAS[groupOf(r)]||'')+(r.work_type?(' · '+r.work_type):''),
+      items:[],note:'',valid_days:Number(SET.valid_days)||30
+    };
+  }
+  function renderQuoteBox(){
+    var r=CURROW,el=$('d_quote');
+    if(r.quote_no){
+      el.innerHTML='<span class="qno">'+esc(r.quote_no)+'</span>'
+        +'<b class="muted" style="font-weight:600;font-size:.84rem">발행 '+fdate(r.quote_issued_at)+' · 청구 '+won(quoteTotals(r.quote).firstPay)+'</b>'
+        +'<span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">'
+        +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="openQuote()">✏️ 편집</button>'
+        +'<button class="btn btn-primary" style="padding:7px 13px" type="button" onclick="previewQuote()">📄 미리보기 · PDF</button>'
+        +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="previewQuote()">✉️ 메일 보내기</button></span>';
+    }else{
+      el.innerHTML='<b>아직 견적서를 만들지 않았습니다.</b>'
+        +'<span style="margin-left:auto"><button class="btn btn-primary" style="padding:7px 14px" type="button" onclick="openQuote()">📋 견적서 만들기</button></span>';
+    }
+  }
+  /* ---------- 블로그 홍보 (블로그 센터 연결) ---------- */
+  async function renderBlogBox(){
+    var r=CURROW;
+    var show=!!r&&groupOf(r)==='blog'&&can('blog_admin');
+    $('d_blogT').classList.toggle('hide',!show);
+    $('d_blog').classList.toggle('hide',!show);
+    if(!show)return;
+    $('d_blog').innerHTML='<span class="muted">불러오는 중…</span>';
+
+    var res=await sb.rpc('request_blog_status',{p_request:r.id});
+    if(!CURROW||CURROW.id!==r.id)return;              /* 그 사이 다른 의뢰를 열었으면 무시 */
+    if(res.error){$('d_blog').innerHTML='<span class="muted">블로그 센터 조회 실패: '+esc(res.error.message)+'</span>';return;}
+    var s=(res.data&&res.data.order_id)?res.data:null;
+
+    if(!s){
+      var price=r.is_premium?3000:6000;
+      /* 신청서에서 고른 편수·마감일을 그대로 채워 둡니다 */
+      var det=r.details||{};
+      var qty=parseInt(det['원하시는 편수']||'',10);
+      var 기간=det['작성 기간']||'';
+      /* 학원에는 "입금 확인일부터 ○주"로 안내했으므로 오늘 기준으로 계산해 둡니다 */
+      var wk=parseInt(기간,10);
+      var due='';
+      if(wk>0){var dd=new Date();dd.setDate(dd.getDate()+wk*7);
+        due=dd.getFullYear()+'-'+('0'+(dd.getMonth()+1)).slice(-2)+'-'+('0'+dd.getDate()).slice(-2);}
+      else if((det['작성 마감일']||'').match(/^\d{4}-\d{2}-\d{2}$/))due=det['작성 마감일'];
+      $('d_blog').innerHTML='<div style="width:100%">'
+        +'<b>아직 블로그 주문이 없습니다.</b>'
+        +'<div class="muted" style="font-size:.82rem;margin:6px 0 10px">'
+        +(qty?'신청서에서 고르신 <b>'+qty+'편'+(기간?' · '+esc(기간):'')+'</b>으로 채워 두었습니다. '
+             +'마감일은 <b>오늘부터</b> 계산해 두었으니, 입금이 늦어지면 그때 맞춰 고쳐 주세요.'
+           :'편수와 마감일만 넣으면 신청서에 적은 지역·과목·대상·목적·사진이 그대로 블로그 센터로 넘어갑니다.')
+        +'</div>'
+        +'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
+        +'<input class="inp" id="bo_qty" type="number" min="1" placeholder="편수 (예: 100)" style="width:140px"'
+        +(qty?' value="'+qty+'"':'')+'>'
+        +'<input class="inp" id="bo_price" type="number" value="'+price+'" style="width:120px" title="편당 받는 돈">'
+        +'<input class="inp" id="bo_deadline" type="date" style="width:165px" title="마감일"'
+        +(due?' value="'+esc(due)+'"':'')+'>'
+        +'<button class="btn btn-primary" style="padding:7px 14px" type="button" onclick="makeBlogOrder()">🖊 블로그 주문 만들기</button>'
+        +'</div></div>';
+      return;
+    }
+    var surl=s.share_key?BLOG_URL+'status.html?k='+s.share_key:'';
+    $('d_blog').innerHTML='<b>'+s.total_qty+'편 주문 · '+s.done+'편 발행 완료</b>'
+      +'<span class="muted" style="font-weight:600;font-size:.84rem">만든 글 '+s.made+'편'
+      +(s.waiting?' · 검수 대기 '+s.waiting:'')
+      +(s.paid_at?'':' · 입금 대기')
+      +(s.deadline?' · 마감 '+s.deadline:'')+'</span>'
+      +'<span style="margin-left:auto"><button class="btn btn-ghost" style="padding:7px 13px" type="button" '
+      +'onclick="window.open(BLOG_URL+\'#order='+s.order_id+'\',\'_blank\')">블로그 센터에서 열기 ↗</button></span>'
+      +(surl?'<div style="width:100%;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)">'
+        +'<div class="muted" style="font-size:.82rem;margin-bottom:6px">학원에 보낼 진행현황 주소 — '
+        +'로그인 없이 열리고, 이 학원 것만 보입니다 (블로거 이름·단가는 안 보입니다)</div>'
+        +'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
+        +'<input class="inp" readonly style="flex:1;min-width:230px;font-size:.8rem" value="'+esc(surl)+'" onclick="this.select()">'
+        +'<button class="btn btn-primary" style="padding:7px 13px" type="button" '
+        +'onclick="copyStatusUrl(this,\''+esc(surl)+'\')">📋 복사</button>'
+        +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" '
+        +'onclick="window.open(\''+esc(surl)+'\',\'_blank\')">열어보기 ↗</button>'
+        +'</div></div>':'');
+  }
+
+  /* 인라인 onclick 에서 부르므로 전역이어야 합니다 */
+  window.copyStatusUrl=async function(btn,url){
+    try{await navigator.clipboard.writeText(url);toast('주소를 복사했습니다. 학원에 보내주세요');}
+    catch(e){window.prompt('아래 주소를 복사해 학원에 보내주세요',url);}
+  };
+
+  window.makeBlogOrder=async function(){
+    var qty=Number($('bo_qty').value);
+    if(!qty||qty<1){toast('편수를 넣어 주세요');return;}
+    var btn=document.querySelector('#d_blog .btn-primary');if(btn){btn.disabled=true;btn.textContent='만드는 중…';}
+    var res=await sb.rpc('order_create',{
+      p_academy:CURROW.academy_name,
+      p_qty:qty,
+      p_sale:Number($('bo_price').value)||null,
+      p_deadline:$('bo_deadline').value||null,
+      p_region:null,
+      p_request:CURROW.id
+    });
+    if(res.error){toast('실패: '+res.error.message);if(btn){btn.disabled=false;btn.textContent='🖊 블로그 주문 만들기';}return;}
+    toast('블로그 주문을 만들었습니다');
+    if(!CURROW.work_type){$('d_work').value='블로그 홍보';saveField('work_type','블로그 홍보');}
+    window.open(BLOG_URL+'#order='+res.data.id,'_blank');
+    renderBlogBox();
+  };
+
+  window.openQuote=function(){
+    var r=CURROW;QD=r.quote?JSON.parse(JSON.stringify(r.quote)):defaultQuote(r);
+    if(!QD.items||!QD.items.length)QD.items=[NEWITEM()];
+    $('q_meta').textContent=(r.academy_name||'')+' · '+(r.quote_no?('견적번호 '+r.quote_no):'새 견적서');
+    $('q_to_company').value=QD.to.company||'';$('q_to_manager').value=QD.to.manager||'';
+    $('q_to_phone').value=QD.to.phone||'';$('q_to_email').value=QD.to.email||'';
+    $('q_project').value=QD.project||'';$('q_valid').value=QD.valid_days||30;$('q_note').value=QD.note||'';
+
+    /* 어느 이름으로 낼지 — 이미 발행한 견적서는 그때 쓴 주체를 그대로 되살립니다
+       (나중에 다시 열었을 때 다른 사업자 이름으로 바뀌면 안 됩니다) */
+    var sel=$('q_from');
+    sel.innerHTML=QPROF.map(function(pf){
+      return '<option value="'+esc(pf.id)+'">'+esc(pf.name||pf.company)+'</option>';
+    }).join('');
+    var want=QD.from||guessProfile(r);
+    useProfile(profOf(want).id);
+    sel.value=profOf(want).id;
+    qFromHint();
+    renderQuoteRows();
+    $('quoteModal').classList.add('open');
+  };
+  /* 마케팅 의뢰면 인투마케팅이 기본입니다 (블로그·리뷰를 파는 주체) */
+  function guessProfile(r){
+    /* 이 어드민에서 나가는 견적서는 «언제나 인투마케팅» 이름입니다.
+       (학원 어드민은 인투유학으로 나갑니다 — 사업자가 다릅니다) */
+    for(var i=0;i<QPROF.length;i++){if(QPROF[i].id==='mkt')return 'mkt';}
+    return QPROF[0]?QPROF[0].id:'';
+  }
+  window.qFromHint=function(){
+    var el=$('q_from_hint'); if(!el)return;
+    el.innerHTML=SET.biz_no
+      ? esc(SET.company)+(SET.owner?' · 대표 '+esc(SET.owner):'')+' · 사업자등록번호 '+esc(SET.biz_no)
+      : '<b style="color:#C0392B">이 이름에는 사업자등록번호가 아직 없습니다.</b> 「견적서 설정」에서 넣어 주세요.';
+  };
+
+  /* ⚠️ 견적 항목의 칸은 여기 한 곳에서 정합니다. 늘릴 때 여기부터 고치세요.
+     옛 견적서에는 unit·qty 가 없습니다 — 없으면 빈칸으로 두고 할인가만 씁니다. */
+  function NEWITEM(){return {name:'',unit:'',qty:'',cycle:'1회',before:'',price:''};}
+
+  function renderQuoteRows(){
+    var h='';
+    QD.items.forEach(function(it,i){
+      h+='<tr><td class="num muted tnum">'+(i+1)+'</td>'
+       +'<td><input class="qi" value="'+esc(it.name)+'" placeholder="예: 블로그 작성 / 원어민 수업료" oninput="qEdit('+i+',\'name\',this.value)"></td>'
+       +'<td><input class="qi r" type="number" min="0" step="1000" value="'+esc(it.unit||'')+'" placeholder="0" oninput="qEdit('+i+',\'unit\',this.value)"></td>'
+       +'<td><input class="qi r" type="number" min="0" step="1" value="'+esc(it.qty||'')+'" placeholder="1" oninput="qEdit('+i+',\'qty\',this.value)"></td>'
+       +'<td><select class="qi" onchange="qEdit('+i+',\'cycle\',this.value)">'
+       +CYCLES.map(function(c){return '<option'+(it.cycle===c?' selected':'')+'>'+c+'</option>';}).join('')
+       +'</select></td>'
+       +'<td><input class="qi r" type="number" min="0" step="1000" value="'+esc(it.before)+'" placeholder="0" oninput="qEdit('+i+',\'before\',this.value)"></td>'
+       +'<td><input class="qi r" type="number" min="0" step="1000" value="'+esc(it.price)+'" placeholder="0" oninput="qEdit('+i+',\'price\',this.value)"></td>'
+       +'<td><button class="qdel" type="button" onclick="qDel('+i+')">✕</button></td></tr>';
+    });
+    $('q_rows').innerHTML=h;
+    renderQuoteSum();
+  }
+  /* 개당가격이나 수량을 고치면 **할인가(청구)를 자동으로 곱해 넣습니다.**
+     할인가를 직접 치면 그 값이 그대로 남습니다 — 곱한 값과 다르게 주고 싶을 때가 있습니다. */
+  window.qEdit=function(i,k,v){
+    var it=QD.items[i]; it[k]=v;
+    if(k==='unit'||k==='qty'){
+      var u=Number(it.unit)||0, q=Number(it.qty)||0;
+      if(u&&q){ it.price=String(u*q); renderQuoteRows(); return; }
+    }
+    renderQuoteSum();
+  };
+  window.qDel=function(i){QD.items.splice(i,1);if(!QD.items.length)QD.items=[NEWITEM()];renderQuoteRows();};
+  window.addQuoteRow=function(){QD.items.push(NEWITEM());renderQuoteRows();};
+  window.presetQuote=function(){
+    var r=CURROW,pre=[];
+    var g=groupOf(r);
+    if(g==='blog')pre=[{name:'블로그 작성',unit:'6000',qty:'10',cycle:'1회',before:'',price:'60000'}];
+    else if(g==='web')pre=[{name:'홈페이지 제작',unit:'',qty:'1',cycle:'1회',before:'',price:''},
+                           {name:'홈페이지 관리',unit:'',qty:'',cycle:'매월',before:'',price:''}];
+    else if(g==='video')pre=[{name:'영상 제작',unit:'',qty:'1',cycle:'1회',before:'',price:''}];
+    else if(g==='design')pre=[{name:'디자인 제작',unit:'',qty:'1',cycle:'1회',before:'',price:''}];
+    else pre=[{name:'콘텐츠 제공료',unit:'',qty:'',cycle:'매월',before:'',price:''},{name:'초기 세팅 비용',unit:'',qty:'',cycle:'1회',before:'',price:''}];
+    QD.items=QD.items.filter(function(x){return x.name||x.price;}).concat(pre);
+    renderQuoteRows();
+  };
+  function quoteTotals(q){
+    var t={once:0,month:0,year:0,before:0,price:0};
+    (q&&q.items?q.items:[]).forEach(function(it){
+      var b=Number(it.before)||0,p=Number(it.price)||0;
+      if(!it.name&&!b&&!p)return;
+      t.before+=b;t.price+=p;
+      if(it.cycle==='매월')t.month+=p;else if(it.cycle==='매년')t.year+=p;else t.once+=p;
+    });
+    t.discount=Math.max(0,t.before-t.price);
+    t.firstPay=t.once+t.month+t.year;
+    return t;
+  }
+  function renderQuoteSum(){
+    var t=quoteTotals(QD),h='';
+    h+='<div class="r"><span>기존 비용 합계</span><span>'+won(t.before)+'</span></div>';
+    h+='<div class="r"><span>할인 금액</span><span class="dis">- '+won(t.discount)+'</span></div>';
+    if(t.once)h+='<div class="r"><span>1회성 비용</span><span>'+won(t.once)+'</span></div>';
+    if(t.month)h+='<div class="r"><span>매월 청구</span><span>'+won(t.month)+' / 월</span></div>';
+    if(t.year)h+='<div class="r"><span>매년 청구</span><span>'+won(t.year)+' / 년</span></div>';
+    h+='<div class="r total"><span>최초 청구액</span><span>'+won(t.firstPay)+'</span></div>';
+    $('q_sum').innerHTML=h;
+  }
+  window.saveQuote=async function(preview){
+    QD.to={company:$('q_to_company').value.trim(),manager:$('q_to_manager').value.trim(),phone:$('q_to_phone').value.trim(),email:$('q_to_email').value.trim()};
+    QD.project=$('q_project').value.trim();
+    QD.valid_days=Number($('q_valid').value)||30;
+    QD.note=$('q_note').value;
+    QD.from=$('q_from')?$('q_from').value:QPROF_ID;   /* 어느 사업자 이름으로 냈는지 남깁니다 */
+    QD.items=QD.items.filter(function(it){return it.name||Number(it.before)||Number(it.price);});
+    if(!QD.items.length){toast('견적 항목을 한 줄 이상 입력해 주세요');return;}
+    var patch={quote:QD};
+    if(!CURROW.quote_no){
+      var no=await sb.rpc('next_quote_no');
+      if(no.error){toast('견적번호 생성 실패: '+no.error.message);return;}
+      patch.quote_no=no.data;patch.quote_issued_at=new Date().toISOString();
+    }
+    var r=await sb.from('requests').update(patch).eq('id',CURROW.id).select().maybeSingle();
+    if(r.error){toast('저장 실패: '+r.error.message);return;}
+    if(!r.data){toast('권한이 없어 저장되지 않았습니다');return;}
+    CURROW=r.data;
+    var arr=DATA[groupOf(CURROW)]||[];
+    for(var i=0;i<arr.length;i++){if(arr[i].id===CURROW.id){arr[i]=CURROW;break;}}
+    renderQuoteBox();renderList();
+    closeModal('quoteModal');
+    toast('견적서를 저장했습니다 · '+CURROW.quote_no);
+    if(preview)previewQuote();
+  };
+  function paperHTML(){
+    var r=CURROW,q=r.quote||{},t=quoteTotals(q);
+    var issued=r.quote_issued_at?new Date(r.quote_issued_at):new Date();
+    var rows='';
+    var n=Math.max(5,(q.items||[]).length);
+    for(var i=0;i<n;i++){
+      var it=(q.items||[])[i];
+      var u=it&&Number(it.unit)?Number(it.unit):0, qn=it&&Number(it.qty)?Number(it.qty):0;
+      rows+='<tr><td class="num">'+(i+1)+'</td>'
+        +'<td>'+(it?esc(it.name):'')+'</td>'
+        +'<td class="r">'+(u?u.toLocaleString('ko-KR'):'')+'</td>'
+        +'<td class="r">'+(qn?qn.toLocaleString('ko-KR'):'')+'</td>'
+        +'<td>'+(it?esc(it.cycle||'1회'):'')+'</td>'
+        +'<td class="r">'+(it&&Number(it.before)?Number(it.before).toLocaleString('ko-KR'):'')+'</td>'
+        +'<td class="r"><b>'+(it&&Number(it.price)?Number(it.price).toLocaleString('ko-KR'):'')+'</b></td></tr>';
+    }
+    var cyc='';
+    if(t.once)cyc+='<div class="r"><span>1회성 비용</span><span>'+won(t.once)+'</span></div>';
+    if(t.month)cyc+='<div class="r"><span>매월 청구</span><span>'+won(t.month)+' / 월</span></div>';
+    if(t.year)cyc+='<div class="r"><span>매년 청구</span><span>'+won(t.year)+' / 년</span></div>';
+    return '<div class="paper" id="paperBody">'
+     +'<div class="p-h"><div><h1>견 적 서</h1><div class="qsub">QUOTATION</div></div>'
+     +'<div class="p-from"><b>'+esc(SET.company||'ESC 학원지원센터')+'</b><br>'
+       +(SET.legal&&SET.legal!==SET.company?esc(SET.legal)+'<br>':'')
+       +(SET.owner?'대표 '+esc(SET.owner)+'<br>':'')
+       +(SET.biz_no?'사업자등록번호 '+esc(SET.biz_no)+'<br>':'')
+       +(SET.addr?esc(SET.addr)+'<br>':'')
+       +(SET.phone?esc(SET.phone)+'<br>':'')
+       +(SET.email?esc(SET.email):'')+'</div></div>'
+     +'<div class="p-line"></div>'
+     +'<div class="p-cols">'
+       +'<div><h4>받는 곳 / TO</h4>'
+         +'<div class="pr"><span>단체/학원</span><span>'+esc((q.to&&q.to.company)||r.academy_name||'')+'</span></div>'
+         +'<div class="pr"><span>담당자</span><span>'+esc((q.to&&q.to.manager)||'')+'</span></div>'
+         +'<div class="pr"><span>연락처</span><span>'+esc((q.to&&q.to.phone)||'')+'</span></div>'
+         +'<div class="pr"><span>이메일</span><span>'+esc((q.to&&q.to.email)||'')+'</span></div></div>'
+       +'<div><h4>견적 정보 / INFO</h4>'
+         +'<div class="pr"><span>견적번호</span><span>'+esc(r.quote_no||'-')+'</span></div>'
+         +'<div class="pr"><span>작성일</span><span>'+issued.getFullYear()+'. '+('0'+(issued.getMonth()+1)).slice(-2)+'. '+('0'+issued.getDate()).slice(-2)+'.</span></div>'
+         +'<div class="pr"><span>유효기간</span><span>발행일로부터 '+(q.valid_days||30)+'일</span></div>'
+         +'<div class="pr"><span>프로젝트</span><span>'+esc(q.project||'')+'</span></div></div>'
+     +'</div>'
+     +'<table class="p-t"><thead><tr><th></th><th>항목</th><th class="r">개당가격</th><th class="r">수량</th>'
+     +'<th>결제주기</th><th class="r">기존 비용</th><th class="r">할인가</th></tr></thead><tbody>'+rows+'</tbody></table>'
+     +'<div class="p-sum">'
+       +'<div class="r"><span>기존 비용 합계</span><span>'+won(t.before)+'</span></div>'
+       +'<div class="r"><span>할인 금액</span><span class="dis">- '+won(t.discount)+'</span></div>'
+       +cyc
+       +'<div class="r tot"><span>최종 청구액</span><span>'+won(t.firstPay)+'</span></div>'
+     +'</div>'
+     +'<div class="p-note">'+(t.month||t.year?'※ 매월·매년 항목은 주기마다 청구됩니다. 최종 청구액은 최초 결제 기준입니다.':'※ 표시된 금액은 부가세 포함 금액입니다.')+'</div>'
+     +'<div class="p-sec"><h4>결제 조건 / PAYMENT</h4><div class="box">'
+       +esc(SET.pay_note||'')+(SET.bank?('\n[ 입금 계좌 ] '+SET.bank):'')+'</div></div>'
+     +(q.note?'<div class="p-sec"><h4>비고 / NOTES</h4><div class="box">'+esc(q.note)+'</div></div>':'')
+     +'<div class="p-f">'+esc(SET.foot_note||'')+'<br>'+esc(SET.company||'')
+       +(SET.owner?' · 대표 '+esc(SET.owner):'')
+       +(SET.biz_no?' · '+esc(SET.biz_no):'')
+       +(SET.email?' · '+esc(SET.email):'')+'</div>'
+     +'</div>';
+  }
+  var PAPER_TITLE_PREV=null;
+  window.previewQuote=function(){
+    if(!CURROW||!CURROW.quote){toast('먼저 견적서를 작성해 주세요');return;}
+    /* ⚠️ 미리보기·메일은 목록에서 바로 열 수도 있습니다. 그때 SET 이 다른 사업자로
+       남아 있으면 **엉뚱한 이름의 견적서**가 나갑니다. 저장된 주체로 먼저 맞춥니다. */
+    useProfile(profOf(CURROW.quote.from||guessProfile(CURROW)).id);
+    $('paper').innerHTML=paperHTML();
+    /* "PDF로 저장" 시 브라우저가 문서 제목을 파일명으로 제안하므로, 나중에 메일에 첨부할 파일을 알아보기 쉽게 임시로 바꿔둠 */
+    PAPER_TITLE_PREV=document.title;
+    document.title=('견적서_'+(CURROW.academy_name||'')+'_'+(CURROW.quote_no||'')).replace(/\s+/g,'');
+    $('paperModal').classList.add('open');
+  };
+  window.closePaper=function(){
+    $('paperModal').classList.remove('open');
+    if(PAPER_TITLE_PREV!=null){document.title=PAPER_TITLE_PREV;PAPER_TITLE_PREV=null;}
+  };
+  function quoteText(){
+    var r=CURROW,q=r.quote||{},t=quoteTotals(q);
+    var lines=[];
+    lines.push((q.to&&q.to.manager?q.to.manager+' 님, ':'')+'안녕하세요. '+(SET.company||'ESC 학원지원센터')+'입니다.');
+    lines.push('요청하신 '+(q.project||'지원')+' 건의 견적서를 보내드립니다.');
+    lines.push('');
+    lines.push('[ 견적 요약 ]');
+    lines.push('· 견적번호: '+(r.quote_no||''));
+    (q.items||[]).forEach(function(it){
+      /* 개당가격·수량이 있으면 「6,000원 × 10 = 60,000원」 처럼 풀어 씁니다 —
+         받는 분이 무엇을 몇 개 사는지 바로 압니다 */
+      var u=Number(it.unit)||0, qn=Number(it.qty)||0;
+      lines.push('· '+it.name+' ('+(it.cycle||'1회')+') : '
+        +(u&&qn?(won(u)+' × '+qn+' = '):'')+won(it.price)
+        +(Number(it.before)>Number(it.price)?(' (기존 '+won(it.before)+')'):''));
+    });
+    if(t.once)lines.push('· 1회성 비용 합계: '+won(t.once));
+    if(t.month)lines.push('· 매월 청구: '+won(t.month)+' / 월');
+    if(t.year)lines.push('· 매년 청구: '+won(t.year)+' / 년');
+    lines.push('· 최초 청구액: '+won(t.firstPay));
+    lines.push('');
+    if(SET.pay_note)lines.push(SET.pay_note);
+    if(SET.bank)lines.push('[ 입금 계좌 ] '+SET.bank);
+    if(q.note){lines.push('');lines.push('[ 비고 ]');lines.push(q.note);}
+    lines.push('');
+    lines.push('본 견적은 발행일로부터 '+(q.valid_days||30)+'일간 유효합니다. 궁금한 점은 편하게 회신 주세요.');
+    lines.push((SET.company||'')+(SET.phone?' · '+SET.phone:'')+(SET.email?' · '+SET.email:''));
+    return lines.join('\n');
+  }
+  /* 메일 본문은 짧게: 항목을 전부 넣으면 URL이 길어져 일부 안드로이드 기기에서
+     메일 작성창이 열리지 않거나 내용이 비는 문제가 있었음(모바일 인텐트 길이 제한).
+     자세한 내역은 PDF 첨부와 "상세 내용 복사"로 대신함. */
+  function quoteTextShort(){
+    var r=CURROW,q=r.quote||{},t=quoteTotals(q);
+    var lines=[];
+    lines.push((q.to&&q.to.manager?q.to.manager+' 님, ':'')+'안녕하세요. '+(SET.company||'ESC 학원지원센터')+'입니다.');
+    lines.push('요청하신 '+(q.project||'지원')+' 건의 견적서를 첨부 파일(PDF)로 보내드립니다.');
+    lines.push('');
+    lines.push('· 견적번호: '+(r.quote_no||''));
+    var due='최초 청구액: '+won(t.firstPay);
+    if(t.month)due+=' (매월 '+won(t.month)+' 포함)';
+    if(t.year)due+=' (매년 '+won(t.year)+' 포함)';
+    lines.push('· '+due);
+    lines.push('· 유효기간: 발행일로부터 '+(q.valid_days||30)+'일');
+    lines.push('');
+    lines.push('자세한 항목은 첨부된 PDF를 확인해 주세요. 궁금한 점은 편하게 회신 주세요.');
+    lines.push((SET.company||'')+(SET.phone?' · '+SET.phone:'')+(SET.email?' · '+SET.email:''));
+    return lines.join('\n');
+  }
+  function quoteMailParts(){
+    if(!CURROW||!CURROW.quote){toast('먼저 견적서를 작성해 주세요');return null;}
+    var q=CURROW.quote,to=(q.to&&q.to.email)||CURROW.email||'';
+    if(!to){toast('고객 이메일이 없습니다. 견적서 편집에서 이메일을 입력해 주세요');return null;}
+    return {to:to, subject:'['+(SET.company||'ESC')+'] '+(CURROW.academy_name||'')+' 견적서 안내 ('+(CURROW.quote_no||'')+')', body:quoteTextShort()};
+  }
+  window.mailQuoteGmail=function(){
+    var p=quoteMailParts();if(!p)return;
+    var url='https://mail.google.com/mail/?view=cm&fs=1&to='+encodeURIComponent(p.to)+'&su='+encodeURIComponent(p.subject)+'&body='+encodeURIComponent(p.body);
+    window.open(url,'_blank');
+    toast('Gmail 작성 창을 엽니다 · 저장한 PDF를 첨부해 주세요');
+  };
+  window.mailQuote=function(){
+    var p=quoteMailParts();if(!p)return;
+    location.href='mailto:'+encodeURIComponent(p.to)+'?subject='+encodeURIComponent(p.subject)+'&body='+encodeURIComponent(p.body);
+    toast('메일 앱이 열립니다 · PDF를 저장해 첨부해 주세요');
+  };
+  window.copyQuoteText=function(){
+    navigator.clipboard.writeText(quoteText()).then(function(){toast('견적 내용을 복사했습니다');},function(){toast('복사에 실패했습니다');});
+  };
+
+  /* ---------- 견적서 설정 ---------- */
+  /* ⭐ 사업자가 둘 이상입니다 (블로그·리뷰는 「인투마케팅」, 나머지는 「인투유학」).
+     앞으로 다른 지원사업도 따로 사업자를 낼 수 있어서 **프로필 목록**으로 둡니다.
+     ⚠️ SET 은 예전처럼 「지금 쓰는 한 벌」입니다 — 아래 견적서 그리는 코드들이
+     전부 SET.company 식으로 읽고 있어서, 그 부분은 손대지 않으려고 이렇게 했습니다. */
+  var QPROF=[], QPROF_ID='';
+  function profOf(id){
+    for(var i=0;i<QPROF.length;i++){if(QPROF[i].id===id)return QPROF[i];}
+    return QPROF[0]||{};
+  }
+  window.useProfile=function(id){
+    QPROF_ID=id; SET=profOf(id);
+    if($('q_from'))$('q_from').value=QPROF_ID;
+    if(window.qFromHint)qFromHint();
+  };
+  var SITE={};
+  async function loadSettings(){
+    /* 홈페이지 푸터·가격은 settings['site.mkt'] 에 있습니다 (공개 홈페이지가 읽어 갑니다) */
+    var sr=await sb.from('settings').select('value').eq('key','site.mkt').maybeSingle();
+    SITE=(sr.data&&sr.data.value)?sr.data.value:{};
+    var r=await sb.from('settings').select('value').eq('key','quote').maybeSingle();
+    var v=(r.data&&r.data.value)?r.data.value:{};
+    QALL=v;
+    QPROF=(v.profiles&&v.profiles.length)?v.profiles:[{
+      id:'esc',name:'ESC 학원지원센터',company:v.company||'ESC 학원지원센터',legal:v.legal||'',
+      owner:'',biz_no:'',addr:v.addr||'',phone:v.phone||'',email:v.email||'',bank:v.bank||'',
+      pay_note:v.pay_note||'',foot_note:v.foot_note||'',valid_days:v.valid_days||30}];
+    useProfile(QPROF[0].id);
+  }
+  var ST_EDIT='';                      /* 지금 고치고 있는 사업자 */
+  window.fillSettings=function(){
+    var sel=$('st_pick');
+    sel.innerHTML=QPROF.map(function(pf){
+      return '<option value="'+esc(pf.id)+'">'+esc(pf.name||pf.company||pf.id)+'</option>';
+    }).join('');
+    if(!ST_EDIT||!QPROF.some(function(pf){return pf.id===ST_EDIT;}))ST_EDIT=QPROF[0]?QPROF[0].id:'';
+    sel.value=ST_EDIT;
+    pickProfile(ST_EDIT);
+  };
+  window.pickProfile=function(id){
+    ST_EDIT=id;
+    var pf=profOf(id)||{};
+    $('st_name').value=pf.name||'';$('st_company').value=pf.company||'';$('st_legal').value=pf.legal||'';
+    $('st_owner').value=pf.owner||'';$('st_bizno').value=pf.biz_no||'';$('st_addr').value=pf.addr||'';
+    $('st_phone').value=pf.phone||'';$('st_email').value=pf.email||'';$('st_bank').value=pf.bank||'';
+    $('st_paynote').value=pf.pay_note||'';$('st_valid').value=pf.valid_days||30;$('st_foot').value=pf.foot_note||'';
+  };
+  window.addProfile=function(){
+    var nm=prompt('새 사업자를 뭐라고 부를까요?\n(예: 인투컨텐츠 · 컨텐츠 지원)');
+    if(!nm)return;
+    var id='biz'+Date.now().toString(36);
+    QPROF.push({id:id,name:nm,company:nm,legal:'',owner:'',biz_no:'',addr:'',phone:'',email:'',
+                bank:'',pay_note:'',foot_note:'',valid_days:30});
+    ST_EDIT=id; fillSettings();
+    toast('추가했습니다. 내용을 채우고 [저장]을 눌러 주세요');
+  };
+  window.saveSettings=async function(){
+    var pf=profOf(ST_EDIT);
+    if(!pf){toast('고칠 사업자를 골라 주세요');return;}
+    pf.name=$('st_name').value.trim()||pf.id;
+    pf.company=$('st_company').value.trim();pf.legal=$('st_legal').value.trim();
+    pf.owner=$('st_owner').value.trim();pf.biz_no=$('st_bizno').value.trim();
+    pf.addr=$('st_addr').value.trim();pf.phone=$('st_phone').value.trim();
+    pf.email=$('st_email').value.trim();pf.bank=$('st_bank').value.trim();
+    pf.pay_note=$('st_paynote').value;pf.valid_days=Number($('st_valid').value)||30;
+    pf.foot_note=$('st_foot').value.trim();
+
+    /* ⚠️ 옛 평평한 칸(company·legal…)도 첫 사업자 값으로 같이 맞춰 둡니다 —
+       예전 코드나 다른 화면이 그걸 읽고 있을 수 있어서입니다. */
+    var v=Object.assign({},QALL,QPROF[0]||{},{profiles:QPROF});
+    delete v.id; delete v.name;
+    var r=await sb.from('settings').update({value:v,updated_at:new Date().toISOString(),updated_by:ME.id}).eq('key','quote').select('key');
+    if(r.error){toast('저장 실패: '+r.error.message);return;}
+    if(!r.data||!r.data.length){toast('권한이 없어 저장되지 않았습니다');return;}
+    QALL=v; useProfile(QPROF_ID||(QPROF[0]&&QPROF[0].id));
+    fillSettings();
+    toast(pf.name+' 정보를 저장했습니다');
+  };
+
+  /* ---------- 관리자 목록 ---------- */
+  window.staffTab=function(t){
+    STTAB=t;
+    $('stTabWait').classList.toggle('on',t==='wait');
+    $('stTabOk').classList.toggle('on',t==='ok');
+    renderStaff();
+  };
+  function renderStaff(){
+    var list=STAFF.filter(function(s){return STTAB==='wait'?s.status==='pending':s.status==='approved';});
+    if(!list.length){
+      $('staffWrap').innerHTML='<div class="empty"><b>'+(STTAB==='wait'?'대기 중인 요청이 없습니다':'승인된 직원이 없습니다')+'</b>'+(STTAB==='wait'?'새 직원이 계정을 만들면 여기에 표시됩니다.':'')+'</div>';
+      return;
+    }
+    var h='<table><thead><tr><th class="num">#</th><th>이름</th><th>소속</th><th>이메일</th><th>연락처</th><th>'+(STTAB==='wait'?'요청일':'직분 · 권한')+'</th><th style="text-align:right">관리</th></tr></thead><tbody>';
+    list.forEach(function(s,i){
+      h+='<tr style="cursor:default"><td class="num tnum">'+(i+1)+'</td>'
+        +'<td><span class="nm">'+esc(s.name||'-')+'</span></td>'
+        +'<td>'+homeCell(s)+'</td>'
+        +'<td class="muted">'+esc(s.email||'-')+'</td>'
+        +'<td class="muted">'+esc(s.phone||'-')+'</td>';
+      if(STTAB==='wait'){
+        h+='<td class="muted tnum" style="font-size:.82rem">'+fdatetime(s.created_at)+'</td>'
+          +'<td style="text-align:right;white-space:nowrap">'
+          +'<button class="btn btn-primary" style="padding:7px 14px" type="button" onclick="approve(\''+s.id+'\')">승인</button> '
+          +'<button class="btn btn-danger" style="padding:7px 14px" type="button" onclick="reject(\''+s.id+'\')">거절</button></td>';
+      }else{
+        /* 본인 행은 항상 잠금(스스로 권한을 잃는 사고 방지).
+           최고관리자는 다른 최고관리자까지 내릴 수 있고, 그 외 관리자는 최고관리자 행을 못 건드림. */
+        var isMe=(s.id===ME.id);
+        var canEdit=isMe?false:(ME.role==='owner'?true:s.role!=='owner');
+        h+='<td><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'
+          +'<span class="badge b-'+s.role+'">'+ROLE_KO[s.role]+'</span>'
+          +(canEdit?'<select class="inp" style="width:auto;padding:5px 9px;font-size:.82rem" onchange="setRole(\''+s.id+'\',this.value)">'
+              +'<option value="staff"'+(s.role==='staff'?' selected':'')+'>직원</option>'
+              +'<option value="admin"'+(s.role==='admin'?' selected':'')+'>관리자</option>'
+              +(ME.role==='owner'?'<option value="owner"'+(s.role==='owner'?' selected':'')+'>최고관리자</option>':'')+'</select>':'')
+          +'</div><div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:7px">'
+          +Object.keys(PERM_KO).map(function(k){
+             var on=(s.role==='owner')||(s.perms&&s.perms[k]===true);
+             return '<label style="font-size:.8rem;color:var(--muted);font-weight:600;display:inline-flex;gap:5px;align-items:center">'
+               +'<input type="checkbox" '+(on?'checked ':'')+((s.role==='owner'||!canEdit)?'disabled ':'')+'style="accent-color:var(--accent)" onchange="setPerm(\''+s.id+'\',\''+k+'\',this.checked)">'+PERM_KO[k]+'</label>';
+           }).join('')
+          +'</div></td>'
+          +'<td style="text-align:right;white-space:nowrap">'
+          +(isMe?'<span class="muted" style="font-size:.8rem">본인 계정</span>'
+                :(canEdit?'<button class="btn btn-danger" style="padding:7px 14px" type="button" onclick="reject(\''+s.id+'\')">권한 해제</button>'
+                        :'<span class="muted" style="font-size:.8rem">최고관리자</span>'))
+          +'</td>';
+      }
+      h+='</tr>';
+    });
+    h+='</tbody></table>';
+    $('staffWrap').innerHTML=h;
+  }
+  /* 소속 — ESC 본부(빈 값) 또는 공동체 하나.
+     ⚠️ 블로그 센터의 「담당 공동체」(여러 개, 검수 화면 표시용)와는 다른 칸입니다.
+     여기는 「이 사람이 어디 사람인가」 하나만 정합니다. */
+  function commName(id){var c=COMMS.filter(function(x){return x.id===id;})[0];return c?c.name:null;}
+  function homeCell(s){
+    var now=commName(s.community_id);
+    var canEdit=(ME.role==='owner'||(ME.perms&&ME.perms.manage_staff===true))
+                && (ME.role==='owner'||s.role!=='owner');
+    if(!canEdit) return '<span class="muted" style="font-size:.82rem">'+esc(now||'ESC')+'</span>';
+    return '<select class="inp" style="width:auto;padding:5px 9px;font-size:.82rem" '
+      +'onchange="setHome(\''+s.id+'\',this.value)">'
+      +'<option value=""'+(s.community_id?'':' selected')+'>ESC</option>'
+      +COMMS.map(function(c){
+        return '<option value="'+c.id+'"'+(s.community_id===c.id?' selected':'')+'>'+esc(c.name)+'</option>';
+      }).join('')+'</select>';
+  }
+  window.setHome=function(id,cid){
+    updStaff(id,{community_id:cid||null},'소속을 바꿨습니다');
+  };
+
+  async function updStaff(id,patch,msg){
+    var r=await sb.from('staff').update(patch).eq('id',id).select('id');
+    if(r.error){toast('실패: '+r.error.message);return;}
+    if(!r.data||!r.data.length){toast('권한이 없어 변경되지 않았습니다');await loadAll();renderStaff();return;}
+    toast(msg||'저장했습니다');
+    await loadAll();renderStaff();
+  }
+  window.approve=function(id){updStaff(id,{status:'approved',approved_at:new Date().toISOString(),approved_by:ME.id},'승인했습니다');};
+  window.reject=function(id){if(!confirm('이 계정의 접근 권한을 해제할까요?'))return;updStaff(id,{status:'rejected'},'해제했습니다');};
+  window.setRole=function(id,role){updStaff(id,{role:role},'직분을 변경했습니다');};
+  window.setPerm=function(id,k,v){
+    var s=STAFF.filter(function(x){return x.id===id;})[0];if(!s)return;
+    var p=Object.assign({},s.perms||{});p[k]=v;
+    updStaff(id,{perms:p},'권한을 변경했습니다');
+  };
+
+  boot();
+
+  /* ── 모아 보기(/admin)에서 「고치러 가기」로 넘어온 경우 ── */
+  function openFromHash(){
+    var m=(location.hash||'').match(/^#req=(.+)$/);
+    if(!m)return;
+    var id=decodeURIComponent(m[1]);
+    history.replaceState(null,'',location.pathname);   /* 새로고침 때 또 열리지 않게 */
+    var g=null;
+    Object.keys(DATA).forEach(function(k){(DATA[k]||[]).forEach(function(x){if(x.id===id)g=k;});});
+    if(!g){toast('그 의뢰는 인투마케팅 것이 아닙니다');return;}
+    if(g!==CUR){var b=document.querySelector('.navb[data-nav="'+g+'"]');if(b)b.click();}
+    openDetail(id);
+  }
+
+  /* ── 홈페이지 정보 · 푸터 ──
+     🔴 여기서 저장하면 공개 홈페이지에 그대로 나갑니다.
+        사업자 정보를 지우면 전자상거래법 표시 의무를 어기게 되고,
+        카카오 비즈니스 심사도 그 이유로 반려된 적이 있습니다. */
+  window.fillSite=function(){
+    var ft=SITE.footer||{}, pr=SITE.price||{}, ents=ft.entities||[];
+    var stages=(pr.web||{}).stages||[];
+    var h='<div class="card" style="padding:24px;max-width:820px;margin-bottom:14px">'
+      +'<div class="grid2">'
+      +fld('전화','<input class="inp" id="sf_phone" value="'+esc(ft.phone||'')+'">')
+      +fld('전화 2 <span class="muted">(없으면 비움)</span>','<input class="inp" id="sf_phone2" value="'+esc(ft.phone2||'')+'">')
+      +'</div><div class="grid2">'
+      +fld('이메일','<input class="inp" id="sf_email" value="'+esc(ft.email||'')+'">')
+      +fld('카카오톡 채널명','<input class="inp" id="sf_kakao" value="'+esc(ft.kakao||'')+'">')
+      +'</div>'
+      +'<div class="muted" style="font-size:.82rem;margin:-4px 0 14px">'
+      +'🔴 채널명 <b>「ESC 학원지원」</b>은 카카오 비즈니스 심사 통과 근거입니다. 심사가 끝나기 전에는 바꾸지 마세요.</div>'
+      +'<div class="sec-t">사업자 정보</div>'
+      +'<div id="sf_ents">'+ents.map(entRow).join('')+'</div>'
+      +'<button class="btn btn-ghost" type="button" onclick="addEnt()">+ 사업자 한 줄 더</button>'
+      +'</div>';
+    h+='<div class="card" style="padding:24px;max-width:820px;margin-bottom:14px">'
+      +'<div class="sec-t">홈페이지 단계별 가격</div>'
+      +'<div id="sf_stages">'+stages.map(stgRow).join('')+'</div>'
+      +'<button class="btn btn-ghost" type="button" onclick="addStg()">+ 단계 추가</button>'
+      +'<div style="margin-top:14px">'+fld('아래 붙일 안내','<input class="inp" id="sf_note" value="'+esc((pr.web||{}).note||'')+'">')+'</div>'
+      +'<div class="grid2">'
+      +fld('네이버 리뷰','<input class="inp" id="sf_review" value="'+esc((pr.review||{}).note||'')+'">')
+      +fld('SNS 채널 제작','<input class="inp" id="sf_sns" value="'+esc((pr.sns||{}).note||'')+'">')
+      +'</div><div class="grid2">'
+      +fld('그래픽 디자인','<input class="inp" id="sf_design" value="'+esc((pr.design||{}).note||'')+'">')
+      +fld('영상 제작','<input class="inp" id="sf_video" value="'+esc((pr.video||{}).note||'')+'">')
+      +'</div></div>';
+    h+='<button class="btn btn-primary" type="button" onclick="saveSite()">저장</button>';
+    $('siteBody').innerHTML=h;
+  };
+  function fld(l,inner){return '<div class="fld"><label>'+l+'</label>'+inner+'</div>';}
+  function entRow(e){
+    e=e||{};
+    return '<div class="card" style="padding:14px;margin-bottom:10px" data-ent>'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">'
+      +'<b style="font-size:.9rem">사업자</b>'
+      +'<button class="btn btn-ghost" style="margin-left:auto;padding:5px 10px;font-size:.78rem" type="button" '
+      +'onclick="this.closest(\'[data-ent]\').remove()">지우기</button></div>'
+      +fld('앞에 붙는 설명 <span class="muted">(없으면 비움)</span>','<input class="inp" data-e="label" value="'+esc(e.label||'')+'">')
+      +'<div class="grid2">'
+      +fld('상호','<input class="inp" data-e="company" value="'+esc(e.company||'')+'">')
+      +fld('대표자','<input class="inp" data-e="owner" value="'+esc(e.owner||'')+'">')
+      +'</div><div class="grid2">'
+      +fld('사업자등록번호','<input class="inp" data-e="biz_no" value="'+esc(e.biz_no||'')+'">')
+      +fld('통신판매업 신고번호','<input class="inp" data-e="mailorder" value="'+esc(e.mailorder||'')+'">')
+      +'</div>'
+      +fld('주소','<input class="inp" data-e="addr" value="'+esc(e.addr||'')+'">')
+      +'</div>';
+  }
+  function stgRow(x){
+    x=x||{};
+    return '<div class="card" style="padding:14px;margin-bottom:10px" data-stg>'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">'
+      +'<b style="font-size:.9rem">단계</b>'
+      +'<button class="btn btn-ghost" style="margin-left:auto;padding:5px 10px;font-size:.78rem" type="button" '
+      +'onclick="this.closest(\'[data-stg]\').remove()">지우기</button></div>'
+      +'<div class="grid2">'
+      +fld('단계','<input class="inp" data-s="stage" value="'+esc(x.stage||'')+'">')
+      +fld('이름','<input class="inp" data-s="name" value="'+esc(x.name||'')+'">')
+      +'</div><div class="grid2">'
+      +fld('제작비','<input class="inp" data-s="make" value="'+esc(x.make||'')+'">')
+      +fld('관리비','<input class="inp" data-s="keep" value="'+esc(x.keep||'')+'">')
+      +'</div>'
+      +fld('포함되는 것','<input class="inp" data-s="inc" value="'+esc(x.inc||'')+'">')
+      +fld('가장 많이 고름','<select class="inp" data-s="best"><option value="">아니오</option>'
+          +'<option value="1"'+(x.best?' selected':'')+'>예</option></select>')
+      +'</div>';
+  }
+  window.addEnt=function(){$('sf_ents').insertAdjacentHTML('beforeend',entRow({}));};
+  window.addStg=function(){$('sf_stages').insertAdjacentHTML('beforeend',stgRow({}));};
+  window.saveSite=async function(){
+    var ents=[];
+    $('sf_ents').querySelectorAll('[data-ent]').forEach(function(el){
+      var o={};el.querySelectorAll('[data-e]').forEach(function(i){o[i.dataset.e]=i.value.trim();});
+      if(o.company)ents.push(o);
+    });
+    var stages=[];
+    $('sf_stages').querySelectorAll('[data-stg]').forEach(function(el){
+      var o={};el.querySelectorAll('[data-s]').forEach(function(i){o[i.dataset.s]=i.value.trim();});
+      o.best=!!o.best;
+      if(o.stage||o.name)stages.push(o);
+    });
+    var val={
+      footer:{phone:$('sf_phone').value.trim(),phone2:$('sf_phone2').value.trim(),
+              email:$('sf_email').value.trim(),kakao:$('sf_kakao').value.trim(),entities:ents},
+      price:{web:{note:$('sf_note').value.trim(),stages:stages},
+             review:{note:$('sf_review').value.trim()},
+             sns:{note:$('sf_sns').value.trim()},
+             design:{note:$('sf_design').value.trim()},
+             video:{note:$('sf_video').value.trim()}}
+    };
+    var r=await sb.from('settings').update({value:val}).eq('key','site.mkt').select().maybeSingle();
+    if(r.error){toast('저장 실패: '+r.error.message);return;}
+    SITE=val; toast('홈페이지 정보를 저장했습니다');
+  };
+
+})();
+</script>
+</body>
+</html>
