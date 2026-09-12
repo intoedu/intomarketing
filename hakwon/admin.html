@@ -298,6 +298,7 @@
     <div class="side-sep"></div>
     <button class="navb hide" data-nav="staff" id="navStaff" type="button">관리자 목록 <span class="cnt" id="c-staff">0</span></button>
     <button class="navb hide" data-nav="set" id="navSet" type="button">견적서 설정</button>
+    <button class="navb" data-nav="consult" type="button">💬 1대1 상담 <span class="cnt" id="c-consult">0</span></button>
     <button class="navb" data-nav="links" type="button">🔗 주소 모음</button>
     <div class="side-foot">
       <div class="whoami"><b id="meName">-</b><span id="meRole">-</span></div>
@@ -356,6 +357,17 @@
       </div>
       <div class="card" id="staffWrap"></div>
       <div class="empty hide" id="staffEmpty"></div>
+    </section>
+
+    <!-- 1대1 상담 —
+         홈페이지 「문의」는 남들도 보는 게시판이고, 이건 손님과 담당자만 보는 방입니다.
+         손님마다 방 하나이고 주고받은 것이 계속 쌓입니다. -->
+    <section id="viewConsult" class="hide">
+      <div class="head">
+        <div><h1>1대1 상담</h1><p>홈페이지에서 온 상담입니다. <b>답을 기다리는 것이 위</b>에 옵니다.</p></div>
+      </div>
+      <div id="csList"></div>
+      <div id="csDetail" class="hide" style="margin-top:16px"></div>
     </section>
 
     <!-- 주소 모음 —
@@ -671,15 +683,94 @@
       var k=b.getAttribute('data-nav');
       document.querySelectorAll('.navb[data-nav]').forEach(function(x){x.classList.remove('on');});
       b.classList.add('on');
-      ['viewList','viewStaff','viewSet','viewLinks'].forEach(function(v){$(v).classList.add('hide');});
+      ['viewList','viewStaff','viewSet','viewLinks','viewConsult'].forEach(function(v){$(v).classList.add('hide');});
       if(k==='staff'){$('viewStaff').classList.remove('hide');renderStaff();return;}
       if(k==='set'){$('viewSet').classList.remove('hide');fillSettings();return;}
       if(k==='links'){$('viewLinks').classList.remove('hide');renderLinks();return;}
+      if(k==='consult'){$('viewConsult').classList.remove('hide');loadConsults();return;}
       $('viewList').classList.remove('hide');
       CUR=k;$('listTitle').textContent=AREAS[k]+' 의뢰';
       renderList();
     });
   });
+
+  /* ---------- 💬 1대1 상담 ---------- */
+  var CS=[];
+  function csTime(iso){
+    var d=new Date(iso);
+    return (d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+  }
+  window.loadConsults=async function(){
+    var r=await sb.rpc('consult_list');
+    if(r.error){$('csList').innerHTML='<div class="empty"><b>불러오지 못했습니다</b>'+esc(r.error.message)+'</div>';return;}
+    CS=r.data||[];
+    var wait=CS.filter(function(c){return c.waiting;}).length;
+    var b=$('c-consult'); if(b){b.textContent=wait;b.style.display=wait?'':'none';}
+    if(!CS.length){$('csList').innerHTML='<div class="empty"><b>아직 상담이 없습니다</b>홈페이지에서 상담을 시작하면 여기에 뜹니다.</div>';return;}
+    $('csList').innerHTML=CS.map(function(c){
+      return '<div class="card" style="padding:14px 18px;margin-bottom:10px;cursor:pointer" onclick="openConsult(\''+c.id+'\')">'
+        +'<div style="display:flex;gap:10px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap">'
+        +'<div style="min-width:200px;flex:1">'
+        +'<b>'+esc(c.academy_name||c.email||'(이름 없음)')+'</b>'
+        +(c.waiting?' <span class="pill on" style="font-size:.72rem;padding:2px 8px">답변 기다림</span>':'')
+        +(c.status==='done'?' <span class="muted" style="font-size:.75rem">· 마무리됨</span>':'')
+        +'<div class="muted" style="font-size:.82rem;margin-top:3px">'
+        +(c.manager_name?esc(c.manager_name)+' · ':'')+(c.phone?esc(c.phone)+' · ':'')+esc(c.email||'')+'</div>'
+        +'<div class="muted" style="font-size:.84rem;margin-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'
+        +(c.last_sender==='staff'?'↩ ':'')+esc((c.last_body||'').slice(0,70))+'</div></div>'
+        +'<div class="muted" style="font-size:.78rem;white-space:nowrap">'+csTime(c.last_msg_at)+' · '+c.count+'개</div>'
+        +'</div></div>';
+    }).join('');
+  };
+  window.openConsult=async function(id){
+    var r=await sb.rpc('consult_read',{p_consult:id});
+    if(r.error){toast('불러오지 못했습니다: '+r.error.message);return;}
+    var d=r.data||{}, ms=d.messages||[];
+    var log=ms.map(function(m){
+      var mine=(m.sender==='staff');
+      return '<div style="display:flex;justify-content:'+(mine?'flex-end':'flex-start')+'">'
+        +'<div style="max-width:76%;padding:10px 13px;border-radius:13px;font-size:.88rem;line-height:1.65;'
+        +'white-space:pre-wrap;word-break:break-word;'
+        +(mine?'background:var(--brand,#2E5FE8);color:#fff;border-bottom-right-radius:4px'
+              :'background:var(--bg-2,#F3F6FB);border:1px solid var(--line,#E2E8F2);border-bottom-left-radius:4px')+'">'
+        +(mine?'':'<span style="font-size:.7rem;font-weight:700;opacity:.7;display:block;margin-bottom:3px">손님</span>')
+        +esc(m.body)
+        +'<span style="font-size:.7rem;opacity:.7;display:block;margin-top:4px">'+csTime(m.at)+'</span>'
+        +'</div></div>';
+    }).join('');
+    $('csDetail').classList.remove('hide');
+    $('csDetail').innerHTML='<div class="card" style="padding:20px 22px">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">'
+      +'<div><b style="font-size:1rem">'+esc(d.academy_name||d.email||'(이름 없음)')+'</b>'
+      +'<div class="muted" style="font-size:.83rem;margin-top:2px">'
+      +(d.manager_name?esc(d.manager_name)+' · ':'')+(d.phone?esc(d.phone)+' · ':'')+esc(d.email||'')+'</div></div>'
+      +'<div style="display:flex;gap:6px">'
+      +'<button class="btn btn-ghost" type="button" onclick="csStatus(\''+d.id+'\',\''+(d.status==='done'?'open':'done')+'\')">'
+      +(d.status==='done'?'다시 열기':'상담 마무리')+'</button>'
+      +'<button class="btn btn-ghost" type="button" onclick="$(\'csDetail\').classList.add(\'hide\')">닫기</button>'
+      +'</div></div>'
+      +'<div style="display:flex;flex-direction:column;gap:10px;margin:16px 0;max-height:360px;overflow-y:auto">'+log+'</div>'
+      +'<div style="display:flex;gap:8px;align-items:flex-end">'
+      +'<textarea class="inp" id="cs_reply" style="flex:1;min-height:70px" placeholder="답변을 적어 주세요"></textarea>'
+      +'<button class="btn btn-primary" type="button" onclick="csReply(\''+d.id+'\',this)">답장</button></div>'
+      +'</div>';
+    $('csDetail').scrollIntoView({block:'nearest',behavior:'smooth'});
+  };
+  window.csReply=async function(id,btn){
+    var t=$('cs_reply'), body=(t&&t.value||'').trim();
+    if(!body){toast('답변을 적어 주세요');return;}
+    btn.disabled=true;
+    var r=await sb.rpc('consult_reply',{p_consult:id,p_body:body});
+    btn.disabled=false;
+    if(r.error){toast('보내지 못했습니다: '+r.error.message);return;}
+    toast('답장을 보냈습니다');
+    await loadConsults(); await openConsult(id);
+  };
+  window.csStatus=async function(id,st){
+    var r=await sb.rpc('consult_status',{p_consult:id,p_status:st});
+    if(r.error){toast('실패: '+r.error.message);return;}
+    await loadConsults(); await openConsult(id);
+  };
 
   /* ---------- 🔗 주소 모음 ----------
      흩어져 있던 주소를 한곳에. 값을 여기 직접 적습니다 —
