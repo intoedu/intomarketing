@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>자료제작 지원 신청 · ESC 학원지원센터</title>
+<meta name="description" content="ESC 학원지원센터 자료제작 지원 신청서. 홈페이지·앱·프로그램·디자인. 적어 주시면 담당자가 배정되어 1~2일 안에 연락드립니다.">
+<link rel="canonical" href="https://intomarketing.co.kr/hakwon/apply/">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#12294D">
+<style>
+/* ──────────────────────────────────────────────────────────────
+   홈페이지 제작 신청서  ( intomarketing.co.kr/apply/ )
+   · 넣는 곳 = requests 표. center='mkt', kind='홈페이지'
+   · 🔴 금액·입금·담당자·단계는 여기서 못 넣습니다(보안 규칙이 막습니다).
+        관리자가 통합 관리자에서 채웁니다.
+   ────────────────────────────────────────────────────────────── */
+:root{
+  --paper:#F4F7FB; --surface:#FFFFFF; --surface-2:#EFF3F9;
+  --ink:#0E1B33; --muted:#56657F; --line:#DFE6F1;
+  --accent:#2E5FE8; --accent-ink:#1E47C0; --band:#12294D;
+  --ok:#12805C; --bad:#C2413B;
+  --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--paper:#0A101E;--surface:#101B30;--surface-2:#16233C;--ink:#E7EDF7;--muted:#9BAAC3;
+        --line:#22314C;--accent:#6E93FF;--accent-ink:#8FAAFF;--ok:#4FBF95;--bad:#F08A85;}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.75;
+     -webkit-font-smoothing:antialiased}
+a{color:inherit}
+h1,h2,h3{margin:0;letter-spacing:-.02em;line-height:1.3;word-break:keep-all}
+p{margin:0;word-break:keep-all}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:5px}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+
+header{background:radial-gradient(120% 100% at 15% -20%,#1E4374 0%,#12294D 62%);color:#fff;padding:44px 0 40px}
+header .back{display:inline-flex;align-items:center;gap:6px;color:#A9C4EA;font-size:13.5px;
+             font-weight:600;text-decoration:none;margin-bottom:18px}
+header .back:hover{color:#fff}
+header h1{font-size:clamp(24px,4vw,32px)}
+header p{color:#B7CBEA;margin-top:12px;font-size:15.5px;max-width:46ch}
+
+main{padding:26px 0 70px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:24px 22px;margin-bottom:14px}
+.eyebrow{font-size:11.5px;font-weight:800;letter-spacing:.18em;color:var(--accent-ink);text-transform:uppercase}
+.card h2{font-size:18px;margin:5px 0 18px}
+.card h2 .req{color:var(--bad);font-size:14px}
+.hint{color:var(--muted);font-size:13.5px;font-weight:400}
+
+.fld{margin-bottom:15px}
+.fld:last-child{margin-bottom:0}
+.fld label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px}
+.fld label .hint{font-weight:500}
+.inp{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.inp:focus{outline:none;border-color:var(--accent);background:var(--surface)}
+textarea.inp{min-height:92px;resize:vertical}
+
+/* 고르는 칸 */
+.picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media(max-width:640px){.picks{grid-template-columns:1fr}}
+.pick{border:1px solid var(--line);border-radius:12px;padding:16px 15px;background:var(--surface-2);cursor:pointer;
+      transition:.14s;display:block;position:relative}
+.pick:hover{border-color:var(--accent)}
+.pick.on{border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px rgba(46,95,232,.13)}
+.pick .n{font-size:12px;font-weight:800;color:var(--accent-ink);font-style:italic}
+.pick b{display:block;font-size:15px;margin:4px 0 5px}
+.pick span{font-size:13px;color:var(--muted);line-height:1.6}
+.pick input{position:absolute;opacity:0;pointer-events:none}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:8px 15px;background:var(--surface-2);
+      cursor:pointer;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:7px;transition:.14s}
+.chip:hover{border-color:var(--accent)}
+.chip.on{border-color:var(--accent);background:var(--surface);color:var(--accent-ink)}
+.chip input{width:16px;height:16px;accent-color:var(--accent);margin:0}
+
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--muted);line-height:1.7}
+.consent input{width:18px;height:18px;accent-color:var(--accent);margin-top:3px;flex:0 0 auto}
+.consent a{color:var(--accent-ink);font-weight:700}
+
+.submit{text-align:center;padding-top:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 34px;border-radius:11px;
+     font-weight:800;font-size:16px;border:0;cursor:pointer;background:var(--band);color:#fff;transition:.14s}
+.btn:hover{background:#1B3A69}
+.btn[disabled]{opacity:.55;cursor:default}
+.err{color:var(--bad);font-size:14px;margin-top:12px;min-height:20px;font-weight:600}
+
+.done{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:44px 26px;text-align:center}
+.done .ic{font-size:40px}
+.done h2{font-size:21px;margin:12px 0 8px}
+.done p{color:var(--muted);font-size:15px}
+.done .box{background:var(--surface-2);border-radius:11px;padding:14px 16px;margin-top:20px;
+           font-size:14px;text-align:left;color:var(--muted);line-height:1.8}
+.done .box b{color:var(--ink)}
+
+footer{border-top:1px solid var(--line);padding:22px 0 46px;color:var(--muted);font-size:12.5px;line-height:1.9}
+footer a{color:var(--ink);font-weight:700;text-decoration:none}
+footer a:hover{text-decoration:underline}
+footer span{margin:0 8px;color:var(--line)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="back" href="../">← 학원지원센터</a>
+    <h1>자료제작 지원 신청</h1>
+    <p>아래를 적어 주시면 담당자가 배정되어 <b>1~2일 안에</b> 연락드립니다.
+       모르는 칸은 비워 두셔도 됩니다 — 상담하면서 같이 정합니다.</p>
+  </div>
+</header>
+
+<main class="wrap">
+<form id="form" novalidate>
+
+  <!-- 00 무엇을 -->
+  <section class="card">
+    <p class="eyebrow">What</p>
+    <h2>무엇을 만들어 드릴까요? <span class="req">*</span></h2>
+    <div class="chips" data-one="kind">
+      <label class="chip"><input type="radio" name="kind" value="홈페이지">홈페이지</label>
+      <label class="chip"><input type="radio" name="kind" value="앱">앱</label>
+      <label class="chip"><input type="radio" name="kind" value="프로그램">프로그램</label>
+      <label class="chip"><input type="radio" name="kind" value="디자인">디자인 (배너·브로슈어 등)</label>
+    </div>
+  </section>
+
+  <!-- 01 시작하기 -->
+  <section class="card">
+    <p class="eyebrow">Start</p>
+    <h2>어떻게 만들어 드릴까요? <span class="req">*</span></h2>
+    <div class="picks" id="method">
+      <label class="pick"><input type="radio" name="method" value="기존 그대로">
+        <span class="n">01</span><b>기존 홈페이지 그대로</b>
+        <span>이미 있는 홈페이지의 내용을 그대로 옮기고 싶어요. 주소만 알려주세요.</span></label>
+      <label class="pick"><input type="radio" name="method" value="참고 제작">
+        <span class="n">02</span><b>이런 느낌으로</b>
+        <span>참고하고 싶은 홈페이지가 있어요. 비슷한 느낌으로 새로 만들래요.</span></label>
+      <label class="pick"><input type="radio" name="method" value="새로 제작">
+        <span class="n">03</span><b>새로 제작</b>
+        <span>처음부터 새로 만들고 싶어요.</span></label>
+    </div>
+    <div class="fld" style="margin-top:15px">
+      <label for="f_ref">참고하거나 옮길 홈페이지 주소 <span class="hint">(있으면)</span></label>
+      <input class="inp" id="f_ref" placeholder="https://">
+    </div>
+  </section>
+
+  <!-- 02 기본 정보 -->
+  <section class="card">
+    <p class="eyebrow">Basic</p>
+    <h2>기본 정보</h2>
+    <div class="fld"><label for="f_name">학원명 <span class="req">*</span></label>
+      <input class="inp" id="f_name"></div>
+    <div class="fld"><label for="f_boss">원장님 성함</label><input class="inp" id="f_boss"></div>
+    <div class="fld"><label for="f_phone">연락처 (전화) <span class="req">*</span></label>
+      <input class="inp" id="f_phone" type="tel" inputmode="tel" placeholder="010-0000-0000"></div>
+    <div class="fld"><label for="f_email">이메일</label><input class="inp" id="f_email" type="email"></div>
+    <div class="fld"><label for="f_biz">분야 / 업종</label>
+      <input class="inp" id="f_biz" placeholder="예: 영어학원, 수학학원, 보습학원, 예체능"></div>
+  </section>
+
+  <!-- 03 목적 -->
+  <section class="card">
+    <p class="eyebrow">Purpose</p>
+    <h2>홈페이지의 목적</h2>
+    <div class="fld"><label>왜 만들고 싶으신가요? <span class="hint">(여러 개 고르셔도 됩니다)</span></label>
+      <div class="chips" data-multi="why">
+        <label class="chip"><input type="checkbox" value="소개 / 신뢰">소개 / 신뢰</label>
+        <label class="chip"><input type="checkbox" value="홍보 / 모객">홍보 / 모객</label>
+        <label class="chip"><input type="checkbox" value="공지·소식 전달">공지·소식 전달</label>
+        <label class="chip"><input type="checkbox" value="문의·신청 받기">문의·신청 받기</label>
+        <label class="chip"><input type="checkbox" value="온라인 수강신청">온라인 수강신청</label>
+        <label class="chip"><input type="checkbox" value="수강생 모집">수강생 모집</label>
+      </div></div>
+    <div class="fld"><label for="f_who">방문하는 사람들은 누구일까요?
+      <span class="hint">(예: 학부모, 재원생, 신규 상담 문의자)</span></label>
+      <input class="inp" id="f_who"></div>
+    <div class="fld"><label for="f_do">방문자가 무엇을 하길 바라시나요?
+      <span class="hint">(예: 전화 걸기, 방문, 신청서 작성, 위치 확인)</span></label>
+      <input class="inp" id="f_do"></div>
+  </section>
+
+  <!-- 04 메뉴 -->
+  <section class="card">
+    <p class="eyebrow">Pages</p>
+    <h2>페이지(메뉴) 구성</h2>
+    <div class="fld"><label>필요한 메뉴를 골라 주세요</label>
+      <div class="chips" data-multi="pages">
+        <label class="chip"><input type="checkbox" value="메인(홈)">메인(홈)</label>
+        <label class="chip"><input type="checkbox" value="소개·인사말">소개·인사말</label>
+        <label class="chip"><input type="checkbox" value="강좌·시간표 안내">강좌·시간표 안내</label>
+        <label class="chip"><input type="checkbox" value="공지·소식">공지·소식</label>
+        <label class="chip"><input type="checkbox" value="갤러리(사진)">갤러리(사진)</label>
+        <label class="chip"><input type="checkbox" value="오시는 길">오시는 길</label>
+        <label class="chip"><input type="checkbox" value="문의하기">문의하기</label>
+        <label class="chip"><input type="checkbox" value="신청·예약">신청·예약</label>
+        <label class="chip"><input type="checkbox" value="수강 결제">수강 결제</label>
+        <label class="chip"><input type="checkbox" value="자주 묻는 질문">자주 묻는 질문</label>
+      </div></div>
+  </section>
+
+  <!-- 05 자료 -->
+  <section class="card">
+    <p class="eyebrow">Content</p>
+    <h2>준비해 주실 자료</h2>
+    <div class="fld"><label>가지고 계신 자료 <span class="hint">(있다면 이메일로 함께 보내 주세요)</span></label>
+      <div class="chips" data-multi="have">
+        <label class="chip"><input type="checkbox" value="로고">로고</label>
+        <label class="chip"><input type="checkbox" value="소개글 / 인사말">소개글 / 인사말</label>
+        <label class="chip"><input type="checkbox" value="사진">사진</label>
+        <label class="chip"><input type="checkbox" value="영상">영상</label>
+        <label class="chip"><input type="checkbox" value="기존 인쇄물·홍보물">기존 인쇄물·홍보물</label>
+      </div></div>
+    <div class="fld"><label for="f_intro">우리를 한두 문장으로 소개한다면?
+      <span class="hint">(소개글이 없다면)</span></label>
+      <textarea class="inp" id="f_intro"></textarea></div>
+    <div class="fld"><label for="f_addr">주소 · 운영시간 · 대표 연락처</label>
+      <textarea class="inp" id="f_addr"></textarea></div>
+  </section>
+
+  <!-- 06 디자인 -->
+  <section class="card">
+    <p class="eyebrow">Look &amp; Feel</p>
+    <h2>디자인 · 분위기</h2>
+    <div class="fld"><label>원하는 느낌 <span class="hint">(여러 개 고르셔도 됩니다)</span></label>
+      <div class="chips" data-multi="mood">
+        <label class="chip"><input type="checkbox" value="깔끔·심플">깔끔·심플</label>
+        <label class="chip"><input type="checkbox" value="따뜻·친근">따뜻·친근</label>
+        <label class="chip"><input type="checkbox" value="전문·신뢰">전문·신뢰</label>
+        <label class="chip"><input type="checkbox" value="고급·세련">고급·세련</label>
+        <label class="chip"><input type="checkbox" value="활기·밝음">활기·밝음</label>
+      </div></div>
+    <div class="fld"><label for="f_color">좋아하는 색 / 피하고 싶은 색</label>
+      <input class="inp" id="f_color"></div>
+    <div class="fld"><label for="f_like">참고하고 싶은 디자인 / 사이트 <span class="hint">(마음에 드는 곳 1~2개)</span></label>
+      <textarea class="inp" id="f_like"></textarea></div>
+  </section>
+
+  <!-- 07 기능 -->
+  <section class="card">
+    <p class="eyebrow">Features</p>
+    <h2>필요한 기능</h2>
+    <div class="chips" data-multi="feat">
+      <label class="chip"><input type="checkbox" value="문의 양식">문의 양식</label>
+      <label class="chip"><input type="checkbox" value="지도(위치)">지도(위치)</label>
+      <label class="chip"><input type="checkbox" value="SNS 연결">SNS 연결</label>
+      <label class="chip"><input type="checkbox" value="온라인 신청·예약">온라인 신청·예약</label>
+      <label class="chip"><input type="checkbox" value="게시판">게시판</label>
+      <label class="chip"><input type="checkbox" value="결제">결제</label>
+      <label class="chip"><input type="checkbox" value="유튜브·영상">유튜브·영상</label>
+      <label class="chip"><input type="checkbox" value="다국어(한/영)">다국어(한/영)</label>
+      <label class="chip"><input type="checkbox" value="사진 갤러리">사진 갤러리</label>
+      <label class="chip"><input type="checkbox" value="방문자 통계">방문자 통계</label>
+    </div>
+  </section>
+
+  <!-- 08 도메인 -->
+  <section class="card">
+    <p class="eyebrow">Domain</p>
+    <h2>도메인 · 운영</h2>
+    <div class="fld"><label>도메인(홈페이지 주소)을 가지고 계신가요?</label>
+      <div class="chips" data-one="domain">
+        <label class="chip"><input type="radio" name="domain" value="이미 있음">이미 있음</label>
+        <label class="chip"><input type="radio" name="domain" value="새로 필요함">새로 필요함</label>
+        <label class="chip"><input type="radio" name="domain" value="잘 모르겠음">잘 모르겠음</label>
+      </div></div>
+    <div class="fld"><label for="f_domain">원하는 주소가 있다면 <span class="hint">(예: www.example.com)</span></label>
+      <input class="inp" id="f_domain"></div>
+    <div class="fld"><label>완성 후 직접 수정하길 원하시나요?</label>
+      <div class="chips" data-one="edit">
+        <label class="chip"><input type="radio" name="edit" value="직접 수정">직접 수정</label>
+        <label class="chip"><input type="radio" name="edit" value="맡기고 싶음">맡기고 싶음</label>
+        <label class="chip"><input type="radio" name="edit" value="상의해서 결정">상의해서 결정</label>
+      </div></div>
+  </section>
+
+  <!-- 09 일정 -->
+  <section class="card">
+    <p class="eyebrow">Timeline</p>
+    <h2>일정 · 예산</h2>
+    <div class="fld"><label for="f_when">희망 완료 시기</label>
+      <input class="inp" id="f_when" placeholder="예: 한 달 안에, 급하지 않음"></div>
+    <div class="fld"><label for="f_budget">생각하시는 예산</label>
+      <input class="inp" id="f_budget"></div>
+  </section>
+
+  <!-- 10 기타 -->
+  <section class="card">
+    <p class="eyebrow">Anything else</p>
+    <h2>기타 요청사항</h2>
+    <textarea class="inp" id="f_etc" placeholder="작은 바람이라도 좋습니다."></textarea>
+  </section>
+
+  <section class="card">
+    <label class="consent"><input type="checkbox" id="f_consent">
+      <span>개인정보 수집·이용에 동의합니다. 적어 주신 정보는 <b>상담과 견적</b> 외에는 쓰지 않습니다.
+        <a href="../../privacy/" target="_blank" rel="noopener">개인정보처리방침 보기</a></span></label>
+  </section>
+
+  <div class="submit">
+    <button class="btn" id="btn" type="submit">신청서 제출 ↗</button>
+    <p class="err" id="err"></p>
+  </div>
+</form>
+
+<div class="done" id="done" style="display:none">
+  <div class="ic">✅</div>
+  <h2>신청이 접수되었습니다</h2>
+  <p>담당자가 배정되어 <b>1~2일 안에</b> 연락드리겠습니다. 감사합니다.</p>
+  <div class="box">
+    <b>급하시면 바로 연락 주세요</b><br>
+    전화 <a href="tel:01073181790">010-7318-1790</a><br>
+    이메일 <a href="mailto:info@intomarketing.co.kr">info@intomarketing.co.kr</a><br>
+    자료(로고·사진·소개글)는 위 이메일로 보내주시면 됩니다.
+  </div>
+  <p style="margin-top:20px"><a href="../">← 학원지원센터로 돌아가기</a></p>
+</div>
+</main>
+
+<footer class="wrap">
+  <b>자료제작 · 인력 · 컨텐츠 지원</b> — 인투유학<br>
+  <b>마케팅·광고 지원 (블로그·리뷰 홍보)</b> — 인투마케팅 · 대표 양회광 · 사업자등록번호 306-24-53380<br>
+  대전광역시 유성구 은구비남로33번길 13-8, 3397호 (지족동, 양지빌딩)<br>
+  <div style="margin-top:10px">
+    <a href="../../privacy/">개인정보처리방침</a><span>|</span><a href="../../terms/">이용약관</a><span>|</span><a href="../">학원지원센터</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+"use strict";
+var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
+var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
+var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
+function $(id){return document.getElementById(id);}
+
+/* 고른 칸에 표시 */
+document.querySelectorAll('.pick input').forEach(function(i){
+  i.addEventListener('change',function(){
+    document.querySelectorAll('.pick').forEach(function(p){
+      p.classList.toggle('on', p.querySelector('input').checked);
+    });
+  });
+});
+document.querySelectorAll('.chip input').forEach(function(i){
+  i.addEventListener('change',function(){
+    if(i.type==='radio'){
+      var box=i.closest('.chips');
+      box.querySelectorAll('.chip').forEach(function(c){
+        c.classList.toggle('on',c.querySelector('input').checked);});
+    }else{
+      i.closest('.chip').classList.toggle('on',i.checked);
+    }
+  });
+});
+
+function multi(name){
+  var out=[];
+  document.querySelectorAll('[data-multi="'+name+'"] input:checked').forEach(function(i){out.push(i.value);});
+  return out;
+}
+function one(name){
+  var el=document.querySelector('input[name="'+name+'"]:checked');
+  return el?el.value:'';
+}
+function val(id){var el=$(id);return el?el.value.trim():'';}
+
+$('form').addEventListener('submit',async function(e){
+  e.preventDefault();
+  var err=$('err'); err.textContent='';
+  var btn=$('btn');
+
+  var kind=one('kind');
+  var method=one('method');
+  var name=val('f_name'), phone=val('f_phone');
+  if(!kind){err.textContent='맨 위에서 「무엇을 만들어 드릴까요?」를 골라 주세요.';window.scrollTo({top:0,behavior:'smooth'});return;}
+  if(!method){err.textContent='「어떻게 만들어 드릴까요?」를 골라 주세요.';window.scrollTo({top:0,behavior:'smooth'});return;}
+  if(!name){err.textContent='학원명을 적어 주세요.';$('f_name').focus();return;}
+  if(!phone){err.textContent='연락처를 적어 주세요.';$('f_phone').focus();return;}
+  if(!$('f_consent').checked){err.textContent='개인정보 수집·이용에 동의해 주셔야 접수됩니다.';return;}
+  if(!sb){err.textContent='연결이 안 됩니다. 잠시 뒤 다시 시도해 주세요.';return;}
+
+  btn.disabled=true; btn.textContent='보내는 중...';
+
+  /* 🔴 금액·입금·담당자·단계는 넣지 않습니다 — 보안 규칙이 막고 있고, 관리자가 채웁니다. */
+  var details={
+    '참고/옮길 주소': val('f_ref'),
+    '분야/업종': val('f_biz'),
+    '만드는 목적': multi('why').join(', '),
+    '방문하는 사람': val('f_who'),
+    '방문자가 하길 바라는 것': val('f_do'),
+    '필요한 메뉴': multi('pages').join(', '),
+    '가지고 있는 자료': multi('have').join(', '),
+    '한두 문장 소개': val('f_intro'),
+    '주소·운영시간·연락처': val('f_addr'),
+    '원하는 느낌': multi('mood').join(', '),
+    '색': val('f_color'),
+    '참고 사이트': val('f_like'),
+    '필요한 기능': multi('feat').join(', '),
+    '도메인': one('domain'),
+    '원하는 주소': val('f_domain'),
+    '완성 후 수정': one('edit'),
+    '희망 완료 시기': val('f_when'),
+    '생각하는 예산': val('f_budget')
+  };
+  Object.keys(details).forEach(function(k){if(!details[k])delete details[k];});
+
+  var res=await sb.from('requests').insert({
+    /* 🔴 center='esc' 라야 학원 어드민의 「자료제작 지원」에 뜹니다.
+          'mkt' 로 넣으면 인투마케팅 어드민으로 가버립니다. */
+    area:'제작', center:'esc', kind:kind, method:method,
+    academy_name:name, manager_name:val('f_boss'), phone:phone, email:val('f_email'),
+    message:val('f_etc'), details:details, consent:true
+  });
+
+  if(res.error){
+    btn.disabled=false; btn.textContent='신청서 제출 ↗';
+    err.textContent='제출에 실패했습니다: '+res.error.message
+      +' — 010-7318-1790 으로 연락 주시면 바로 도와드리겠습니다.';
+    return;
+  }
+  $('form').style.display='none';
+  $('done').style.display='';
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+})();
+</script>
+</body>
+</html>

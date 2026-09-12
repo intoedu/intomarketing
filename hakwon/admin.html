@@ -291,12 +291,14 @@
 <div class="app hide" id="app">
   <aside class="side">
     <div class="logo"><div class="mark">ESC</div><div><b>의뢰 관리</b><span>학원지원센터</span></div></div>
+    <button class="navb" data-nav="제작" type="button">자료제작 지원 <span class="cnt" id="c-제작">0</span></button>
     <button class="navb on" data-nav="인력" type="button">인력지원 <span class="cnt" id="c-인력">0</span></button>
     <button class="navb" data-nav="컨텐츠" type="button">컨텐츠지원 <span class="cnt" id="c-컨텐츠">0</span></button>
     <button class="navb" data-nav="마케팅" type="button">마케팅지원 <span class="cnt" id="c-마케팅">0</span></button>
     <button class="navb hide" id="navBlog" type="button" onclick="window.open(BLOG_URL,'_blank')">📝 블로그 센터 ↗</button>
     <div class="side-sep"></div>
     <button class="navb hide" data-nav="staff" id="navStaff" type="button">관리자 목록 <span class="cnt" id="c-staff">0</span></button>
+    <button class="navb hide" data-nav="site" id="navSite" type="button">홈페이지 정보 · 푸터</button>
     <button class="navb hide" data-nav="set" id="navSet" type="button">견적서 설정</button>
     <button class="navb" data-nav="consult" type="button">💬 1대1 상담 <span class="cnt" id="c-consult">0</span></button>
     <button class="navb" data-nav="links" type="button">🔗 주소 모음</button>
@@ -337,6 +339,13 @@
         </tr></thead>
         <tbody id="rows"></tbody>
       </table><div class="empty hide" id="listEmpty"><b>아직 신청이 없습니다</b>홈페이지에서 신청이 들어오면 여기에 표시됩니다.</div></div>
+    </section>
+
+    <!-- 홈페이지 정보 · 푸터 -->
+    <section id="viewSite" class="hide">
+      <div class="head"><div><h1>홈페이지 정보 · 푸터</h1>
+        <p>학원지원센터 홈페이지(intomarketing.co.kr/hakwon/) 아래에 찍히는 값입니다.</p></div></div>
+      <div id="siteBody"></div>
     </section>
 
     <!-- 관리자 목록 -->
@@ -448,7 +457,25 @@
     <div class="sec-t">작업 메모</div>
     <textarea class="inp" id="d_memo" placeholder="진행하면서 남길 메모를 적어주세요." onchange="saveField('memo',this.value)"></textarea>
 
-    <div class="sec-t">작업 진행 <span class="muted" id="d_progtxt" style="font-weight:600"></span></div>
+    <div class="sec-t">제작 진행 <span class="muted" style="font-weight:500">— 자료제작 의뢰에 씁니다</span></div>
+    <div class="pills" id="d_stage"></div>
+    <div class="grid2">
+      <div class="fld"><label>디자인 마감</label><input class="inp" type="date" id="d_due_design" onchange="saveDue('design',this.value)"></div>
+      <div class="fld"><label>개발 마감</label><input class="inp" type="date" id="d_due_dev" onchange="saveDue('dev',this.value)"></div>
+      <div class="fld"><label>검수 마감</label><input class="inp" type="date" id="d_due_check" onchange="saveDue('check',this.value)"></div>
+      <div class="fld"><label>최종 마감</label><input class="inp" type="date" id="d_due_done" onchange="saveDue('done',this.value)"></div>
+    </div>
+    <div class="grid2">
+      <div class="fld"><label>금액 (원)</label>
+        <input class="inp tnum" type="number" id="d_amount" placeholder="예: 45000"
+               onchange="saveField('amount',this.value===''?null:Number(this.value))"></div>
+      <div class="fld"><label>입금일 <span class="muted" style="font-weight:500">— 넣으면 입금 완료로 봅니다</span></label>
+        <input class="inp" type="date" id="d_paid_at" onchange="savePaid(this.value)"></div>
+    </div>
+    <div class="fld"><label>만든 사이트 주소</label>
+      <input class="inp" id="d_site" placeholder="https://" onchange="saveField('site_url',this.value||null)"></div>
+
+    <div class="sec-t">할 일 <span class="muted" id="d_progtxt" style="font-weight:600"></span></div>
     <div id="d_todos"></div>
     <div class="addrow">
       <input class="inp" id="d_newtodo" placeholder="할 일 입력 후 Enter" onkeydown="if(event.key==='Enter')addTodo()">
@@ -544,11 +571,12 @@
   var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
   var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
 
-  var AREAS={'인력':'인력지원','컨텐츠':'컨텐츠지원','마케팅':'마케팅지원'};
+  var AREAS={'제작':'자료제작 지원','인력':'인력지원','컨텐츠':'컨텐츠지원','마케팅':'마케팅지원'};
   var WORK_OPTS={
     '인력':['필리핀 원어민','미국 원어민','필리핀+미국','기타'],
     '컨텐츠':['유학자료','SAT','IM VOCA','인투 오피스(전자서명)','기타'],
-    '마케팅':['블로그 홍보','기타']
+    '마케팅':['블로그 홍보','기타'],
+    '제작':['홈페이지','앱','프로그램','디자인','기타']
   };
   var STATUSES=['접수','진행중','보류','완료'];
   var ROLE_KO={owner:'최고관리자',admin:'관리자',staff:'직원'};
@@ -557,7 +585,7 @@
 
   var QALL={};
 
-  var ME=null, STAFF=[], COMMS=[], DATA={'인력':[],'컨텐츠':[],'마케팅':[]}, CUR='인력', CURROW=null, STTAB='wait', SET={}, QD=null;
+  var ME=null, STAFF=[], COMMS=[], DATA={'제작':[],'인력':[],'컨텐츠':[],'마케팅':[]}, CUR='인력', CURROW=null, STTAB='wait', SET={}, QD=null;
   window.BLOG_URL="https://center.intomarketing.co.kr/";  /* 인라인 onclick에서 쓰므로 전역 */
 
   function $(id){return document.getElementById(id);}
@@ -642,7 +670,7 @@
     $('gate').classList.add('hide');$('app').classList.remove('hide');
     $('meName').textContent=(me.name||me.email||'-');
     $('meRole').textContent=ROLE_KO[me.role]||'직원';
-    if(me.role==='owner'||can('manage_staff')){$('navStaff').classList.remove('hide');$('navSet').classList.remove('hide');}
+    if(me.role==='owner'||can('manage_staff')){$('navStaff').classList.remove('hide');$('navSet').classList.remove('hide');$('navSite').classList.remove('hide');}
     if(can('blog_admin')||can('blog_review'))$('navBlog').classList.remove('hide');
     await loadSettings();
     loadAll();
@@ -650,9 +678,12 @@
 
   /* ---------- 데이터 ---------- */
   window.loadAll=async function(manual){
-    var rs=await sb.from('requests').select('*').order('created_at',{ascending:false});
+    /* 🔴 이 어드민은 학원지원센터 홈페이지에서 온 것«만» 봅니다.
+          안 거르면 인투마케팅·교회 의뢰까지 여기서 고쳐집니다.
+          (지금까지는 area 가 셋 중 하나인 것만 담아 우연히 안 샜을 뿐입니다) */
+    var rs=await sb.from('requests').select('*').eq('center','esc').order('created_at',{ascending:false});
     if(rs.error){toast('불러오기 실패: '+rs.error.message);return;}
-    DATA={'인력':[],'컨텐츠':[],'마케팅':[]};
+    DATA={'제작':[],'인력':[],'컨텐츠':[],'마케팅':[]};
     (rs.data||[]).forEach(function(x){if(DATA[x.area])DATA[x.area].push(x);});
     var st=await sb.from('staff').select('*').order('created_at',{ascending:true});
     STAFF=st.error?[]:(st.data||[]);
@@ -667,6 +698,7 @@
     renderList();
     if($('viewStaff').classList.contains('hide')===false)renderStaff();
     if(manual)toast('새로고침 완료');
+    openFromHash();
   };
   function staffName(id){var s=STAFF.filter(function(x){return x.id===id;})[0];return s?(s.name||s.email):null;}
   function renderAssigneeOpts(){
@@ -683,8 +715,9 @@
       var k=b.getAttribute('data-nav');
       document.querySelectorAll('.navb[data-nav]').forEach(function(x){x.classList.remove('on');});
       b.classList.add('on');
-      ['viewList','viewStaff','viewSet','viewLinks','viewConsult'].forEach(function(v){$(v).classList.add('hide');});
+      ['viewList','viewStaff','viewSet','viewLinks','viewConsult','viewSite'].forEach(function(v){$(v).classList.add('hide');});
       if(k==='staff'){$('viewStaff').classList.remove('hide');renderStaff();return;}
+      if(k==='site'){$('viewSite').classList.remove('hide');fillSite();return;}
       if(k==='set'){$('viewSet').classList.remove('hide');fillSettings();return;}
       if(k==='links'){$('viewLinks').classList.remove('hide');renderLinks();return;}
       if(k==='consult'){$('viewConsult').classList.remove('hide');loadConsults();return;}
@@ -874,7 +907,12 @@
 
   /* ---------- 상세 ---------- */
   window.openDetail=function(id){
-    var r=(DATA[CUR]||[]).filter(function(x){return x.id===id;})[0];
+    /* 🔴 모아 보기(/admin)에서 넘어올 때는 지금 보고 있는 묶음이 아닐 수 있습니다.
+          DATA[CUR] 만 뒤지면 「눌렀는데 아무 일도 안 일어나는」 일이 생깁니다. */
+    var r=null;
+    Object.keys(DATA).forEach(function(g){
+      (DATA[g]||[]).forEach(function(x){if(x.id===id)r=x;});
+    });
     if(!r)return;
     CURROW=r;
     $('d_title').textContent=r.academy_name||'-';
@@ -885,6 +923,13 @@
     $('d_work').value=r.work_type||'';
     $('d_assignee').value=r.assignee_id||'';
     $('d_memo').value=r.memo||'';
+    renderStagePills(r.stage||'');
+    var du=r.due_stages||{};
+    $('d_due_design').value=du.design||''; $('d_due_dev').value=du.dev||'';
+    $('d_due_check').value=du.check||'';   $('d_due_done').value=du.done||'';
+    $('d_amount').value=(r.amount==null?'':r.amount);
+    $('d_paid_at').value=r.paid_at||'';
+    $('d_site').value=r.site_url||'';
     renderTodos();
     renderQuoteBox();
     renderBlogBox();
@@ -954,9 +999,31 @@
   window.delTodo=function(i){var t=CURROW.todos.slice();t.splice(i,1);saveField('todos',t);};
   window.setStatus=function(s){saveField('status',s);};
 
-  window.saveField=async function(field,value){
+  /* 단계별 마감일은 due_stages(jsonb) 한 칸에 모여 있습니다 */
+  window.saveDue=function(k,v){
     if(!CURROW)return;
+    var d={},cur=CURROW.due_stages||{};
+    for(var x in cur)d[x]=cur[x];
+    if(v)d[k]=v; else delete d[k];
+    saveField('due_stages',d);
+  };
+  /* 입금은 «두 칸이 함께» 움직여야 합니다.
+     따로 저장하면 「입금 완료인데 입금일이 없는」 줄이 생깁니다. */
+  window.savePaid=function(v){ savePatch({paid:!!v,paid_at:v||null},'paid_at'); };
+  var STAGES=['접수·견적','디자인','개발','검수','완료'];
+  window.setStage=function(v){ saveField('stage',v); renderStagePills(v); };
+  function renderStagePills(cur){
+    $('d_stage').innerHTML=STAGES.map(function(s){
+      return '<button class="pill'+(cur===s?' on':'')+'" type="button" onclick="setStage(\''+s+'\')">'+s+'</button>';
+    }).join('');
+  }
+
+  window.saveField=async function(field,value){
     var patch={};patch[field]=value;
+    return savePatch(patch,field);
+  };
+  window.savePatch=async function(patch,field){
+    if(!CURROW)return;
     var r=await sb.from('requests').update(patch).eq('id',CURROW.id).select().maybeSingle();
     if(r.error){toast('저장 실패: '+r.error.message);return;}
     CURROW=r.data;
@@ -1394,7 +1461,11 @@
     if($('q_from'))$('q_from').value=QPROF_ID;
     if(window.qFromHint)qFromHint();
   };
+  var SITE={};
   async function loadSettings(){
+    /* 홈페이지 푸터·가격은 settings['site.esc'] 에 있습니다 (공개 홈페이지가 읽어 갑니다) */
+    var sr=await sb.from('settings').select('value').eq('key','site.esc').maybeSingle();
+    SITE=(sr.data&&sr.data.value)?sr.data.value:{};
     var r=await sb.from('settings').select('value').eq('key','quote').maybeSingle();
     var v=(r.data&&r.data.value)?r.data.value:{};
     QALL=v;
@@ -1545,6 +1616,113 @@
   };
 
   boot();
+
+  /* ── 모아 보기(/admin)에서 「고치러 가기」로 넘어온 경우 ── */
+  function openFromHash(){
+    var m=(location.hash||'').match(/^#req=(.+)$/);
+    if(!m)return;
+    var id=decodeURIComponent(m[1]);
+    history.replaceState(null,'',location.pathname);   /* 새로고침 때 또 열리지 않게 */
+    var g=null;
+    Object.keys(DATA).forEach(function(k){(DATA[k]||[]).forEach(function(x){if(x.id===id)g=k;});});
+    if(!g){toast('그 의뢰는 학원지원센터 것이 아닙니다');return;}
+    if(g!==CUR){var b=document.querySelector('.navb[data-nav="'+g+'"]');if(b)b.click();}
+    openDetail(id);
+  }
+
+  /* ── 홈페이지 정보 · 푸터 ──
+     🔴 저장하면 공개 홈페이지에 그대로 나갑니다.
+        사업자 정보를 지우면 전자상거래법 표시 의무를 어기게 되고,
+        카카오 비즈니스 심사도 그 이유로 반려된 적이 있습니다.
+     🔴 학원지원센터는 파는 «주체가 둘»입니다 —
+        블로그·리뷰 홍보는 인투마케팅, 나머지 지원사업은 인투유학. */
+  window.fillSite=function(){
+    var ft=SITE.footer||{}, pr=SITE.price||{}, ents=ft.entities||[];
+    var stages=(pr.web||{}).stages||[];
+    var h='<div class="card" style="padding:24px;max-width:860px;margin-bottom:14px">'
+      +'<div class="grid2">'
+      +sfld('전화','<input class="inp" id="sf_phone" value="'+esc(ft.phone||'')+'">')
+      +sfld('이메일','<input class="inp" id="sf_email" value="'+esc(ft.email||'')+'">')
+      +'</div>'
+      +sfld('카카오톡 채널명','<input class="inp" id="sf_kakao" value="'+esc(ft.kakao||'')+'">')
+      +'<div class="muted" style="font-size:.82rem;margin:-4px 0 14px">'
+      +'🔴 채널명 <b>「ESC 학원지원」</b>은 카카오 비즈니스 심사 통과 근거입니다. 심사가 끝나기 전에는 바꾸지 마세요.</div>'
+      +'<div class="sec-t">사업자 정보 <span class="muted" style="font-weight:500">— 파는 주체가 둘입니다</span></div>'
+      +'<div id="sf_ents">'+ents.map(sent).join('')+'</div>'
+      +'<button class="btn btn-ghost" type="button" onclick="addEnt()">+ 사업자 한 줄 더</button>'
+      +'</div>';
+    h+='<div class="card" style="padding:24px;max-width:860px;margin-bottom:14px">'
+      +'<div class="sec-t">홈페이지 단계별 가격</div>'
+      +'<div class="muted" style="font-size:.82rem;margin-bottom:12px">'
+      +'파트너 학원은 값이 다릅니다. 빈칸으로 두면 그 줄은 홈페이지에 안 나옵니다.</div>'
+      +'<div id="sf_stages">'+stages.map(sstg).join('')+'</div>'
+      +'<button class="btn btn-ghost" type="button" onclick="addStg()">+ 단계 추가</button>'
+      +'<div style="margin-top:14px">'+sfld('아래 붙일 안내','<input class="inp" id="sf_note" value="'+esc((pr.web||{}).note||'')+'">')+'</div>'
+      +'</div>';
+    h+='<button class="btn btn-primary" type="button" onclick="saveSite()">저장</button>';
+    $('siteBody').innerHTML=h;
+  };
+  function sfld(l,inner){return '<div class="fld"><label>'+l+'</label>'+inner+'</div>';}
+  function sent(e){
+    e=e||{};
+    return '<div class="card" style="padding:14px;margin-bottom:10px" data-ent>'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><b style="font-size:.9rem">사업자</b>'
+      +'<button class="btn btn-ghost" style="margin-left:auto;padding:5px 10px;font-size:.78rem" type="button" '
+      +'onclick="this.closest(\'[data-ent]\').remove()">지우기</button></div>'
+      +sfld('앞에 붙는 설명 <span class="muted">(예: 마케팅·광고 지원)</span>','<input class="inp" data-e="label" value="'+esc(e.label||'')+'">')
+      +'<div class="grid2">'
+      +sfld('상호','<input class="inp" data-e="company" value="'+esc(e.company||'')+'">')
+      +sfld('대표자','<input class="inp" data-e="owner" value="'+esc(e.owner||'')+'">')
+      +'</div><div class="grid2">'
+      +sfld('사업자등록번호','<input class="inp" data-e="biz_no" value="'+esc(e.biz_no||'')+'">')
+      +sfld('통신판매업 신고번호','<input class="inp" data-e="mailorder" value="'+esc(e.mailorder||'')+'">')
+      +'</div>'
+      +sfld('주소','<input class="inp" data-e="addr" value="'+esc(e.addr||'')+'">')
+      +'</div>';
+  }
+  function sstg(x){
+    x=x||{};
+    return '<div class="card" style="padding:14px;margin-bottom:10px" data-stg>'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><b style="font-size:.9rem">단계</b>'
+      +'<button class="btn btn-ghost" style="margin-left:auto;padding:5px 10px;font-size:.78rem" type="button" '
+      +'onclick="this.closest(\'[data-stg]\').remove()">지우기</button></div>'
+      +'<div class="grid2">'
+      +sfld('단계','<input class="inp" data-s="stage" value="'+esc(x.stage||'')+'">')
+      +sfld('이름','<input class="inp" data-s="name" value="'+esc(x.name||'')+'">')
+      +'</div><div class="grid2">'
+      +sfld('제작비 <span class="muted">(일반)</span>','<input class="inp" data-s="make" value="'+esc(x.make||'')+'">')
+      +sfld('관리비 <span class="muted">(일반)</span>','<input class="inp" data-s="keep" value="'+esc(x.keep||'')+'">')
+      +'</div><div class="grid2">'
+      +sfld('제작비 <span class="muted">(파트너)</span>','<input class="inp" data-s="make_p" value="'+esc(x.make_p||'')+'">')
+      +sfld('관리비 <span class="muted">(파트너)</span>','<input class="inp" data-s="keep_p" value="'+esc(x.keep_p||'')+'">')
+      +'</div>'
+      +sfld('포함되는 것','<input class="inp" data-s="inc" value="'+esc(x.inc||'')+'">')
+      +sfld('가장 많이 고름','<select class="inp" data-s="best"><option value="">아니오</option>'
+          +'<option value="1"'+(x.best?' selected':'')+'>예</option></select>')
+      +'</div>';
+  }
+  window.addEnt=function(){$('sf_ents').insertAdjacentHTML('beforeend',sent({}));};
+  window.addStg=function(){$('sf_stages').insertAdjacentHTML('beforeend',sstg({}));};
+  window.saveSite=async function(){
+    var ents=[];
+    $('sf_ents').querySelectorAll('[data-ent]').forEach(function(el){
+      var o={};el.querySelectorAll('[data-e]').forEach(function(i){o[i.dataset.e]=i.value.trim();});
+      if(o.company)ents.push(o);
+    });
+    var stages=[];
+    $('sf_stages').querySelectorAll('[data-stg]').forEach(function(el){
+      var o={};el.querySelectorAll('[data-s]').forEach(function(i){o[i.dataset.s]=i.value.trim();});
+      o.best=!!o.best;
+      if(o.stage||o.name)stages.push(o);
+    });
+    var val={footer:{phone:$('sf_phone').value.trim(),email:$('sf_email').value.trim(),
+                     kakao:$('sf_kakao').value.trim(),entities:ents},
+             price:{web:{note:$('sf_note').value.trim(),stages:stages}}};
+    var r=await sb.from('settings').update({value:val}).eq('key','site.esc').select().maybeSingle();
+    if(r.error){toast('저장 실패: '+r.error.message);return;}
+    SITE=val; toast('홈페이지 정보를 저장했습니다');
+  };
+
 })();
 </script>
 </body>
