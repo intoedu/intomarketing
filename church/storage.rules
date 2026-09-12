@@ -1,0 +1,87 @@
+rules_version = '2';
+
+/* CAPS_STORAGE_VERSION: 2026-08-14-b
+ * =========================================================
+ * 우리교회지원센터 — Firebase Storage 보안 규칙
+ *
+ * Firebase 콘솔 → Storage → [Rules] 탭에
+ * 이 파일 내용을 그대로 붙여넣고 [게시] 를 누르세요.
+ *
+ * 여기에 올라가는 파일은 두 가지이고, 공개 범위가 정반대입니다.
+ *
+ *   listing-photos/  매물 사진   — 누구나 봅니다 (게시판에 보여 주는 것이 목적)
+ *   listing-proofs/  권리 증빙   — 올린 본인과 승인된 직원만
+ *   request-files/   신청서 첨부 — 올린 본인과 승인된 직원만
+ *
+ * 계약서 · 등기부등본에는 이름 · 주소 · 금액 같은 민감한 정보가 들어 있어
+ * 게시판에는 절대 노출되지 않습니다. 두 경로를 반드시 구분해 주세요.
+ * ========================================================= */
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    /* Firestore 의 users 문서를 보고 승인된 직원인지 확인합니다. */
+    function isStaff() {
+      return signedIn()
+        && firestore.exists(/databases/(default)/documents/users/$(request.auth.uid))
+        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.approved == true
+        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role
+             in ['owner', 'admin', 'staff'];
+    }
+
+    /* 매물 권리 증빙 — listing-proofs/{올린 사람 uid}/{파일명} */
+    match /listing-proofs/{userId}/{fileName} {
+      allow read: if signedIn() && (request.auth.uid == userId || isStaff());
+
+      // 본인만 올릴 수 있고, 이미지 또는 PDF 10MB 까지입니다.
+      allow write: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*|application/pdf');
+
+      // 확인이 끝나면 지웁니다 (본인 또는 직원).
+      allow delete: if signedIn() && (request.auth.uid == userId || isStaff());
+    }
+
+    /* 신청서 첨부 — request-files/{올린 사람 uid}/{파일명}
+
+       홈페이지 의뢰서처럼 신청할 때 함께 받는 파일입니다.
+       로고 · 사진 · 사업자등록증이 한 자리에 오고, 사업자등록증에는
+       상호 · 대표자 · 주소 · 등록번호가 그대로 들어 있습니다.
+       그래서 종류를 가리지 않고 모두 비공개로 둡니다. */
+    match /request-files/{userId}/{fileName} {
+      allow read: if signedIn() && (request.auth.uid == userId || isStaff());
+
+      allow write: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.size < 10 * 1024 * 1024;
+
+      allow delete: if signedIn() && (request.auth.uid == userId || isStaff());
+    }
+
+    /* 매물 사진 — listing-photos/{올린 사람 uid}/{파일명}
+       게시판에서 누구나 보는 사진이므로 읽기는 열어 둡니다.
+       올리기·지우기는 본인(과 직원)만 할 수 있습니다. */
+    match /listing-photos/{userId}/{fileName} {
+      allow read: if true;
+
+      // 본인만 올릴 수 있고, 이미지 5MB 까지입니다.
+      // (브라우저가 올리기 전에 긴 변 1600px JPEG 로 줄이므로 보통 1MB 미만입니다.)
+      allow write: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+
+      allow delete: if signedIn() && (request.auth.uid == userId || isStaff());
+    }
+
+    /* 그 외 경로는 모두 차단 */
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

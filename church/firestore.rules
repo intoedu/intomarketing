@@ -1,0 +1,358 @@
+rules_version = '2';
+
+/* CAPS_RULES_VERSION: 2026-08-28-a  ← 관리자 화면 [보안 규칙] 에 표시되는 판 번호 */
+
+/* =========================================================
+   우리교회지원센터 — Firestore 보안 규칙
+
+   Firebase 콘솔 → Firestore Database → [규칙] 탭에
+   이 파일 내용을 그대로 붙여넣고 [게시] 를 누르세요.
+
+   기본 원칙
+   · 홈페이지 내용(지원 항목, 센터 설정)은 로그인 없이 누구나 읽습니다.
+   · 신청서는 로그인한 사용자가 자기 것만 만들고 읽습니다.
+   · 고객·구독·청구 정보는 승인된 직원만 읽습니다.
+   · 직분(role)과 승인(approved)은 권한자만 바꿀 수 있습니다.
+     (사용자가 스스로 관리자로 승격하는 것을 막습니다.)
+   · 담당자로 배정된 직원은 자기 작업의 진행 정보만 수정할 수 있습니다.
+   · 고객 교회의 정보(교회명 · 담당자 · 연락처 등)는 그 교회 계정이
+     수정을 승인한 동안에만 직원이 고칠 수 있습니다. (내부 메모는 예외)
+   · 매물 게시판은 게시(published)된 글만 공개됩니다. 서류 확인만 끝난
+     '입금 대기' 글은 아직 공개되지 않습니다. 등록자가 내용을 고치면
+     다시 승인 대기로 돌아가고, 요금·상태는 등록자가 건드릴 수 없습니다.
+
+   ⚠ 목록 조회(query)에 대하여
+   Firestore 는 목록 조회 시 "조회 범위가 규칙을 반드시 만족하는지"를 검사합니다.
+   따라서 고객 계정은 requests 를 조회할 때 반드시
+     where('userId', '==', 본인 uid)
+   조건을 붙여야 합니다. 앱의 db.js 가 이를 처리합니다.
+   ========================================================= */
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /* ---------- 도우미 ---------- */
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function meExists() {
+      return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function me() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isOwner() {
+      return meExists() && me().role == 'owner' && me().approved == true;
+    }
+
+    // 승인된 직원 (최고관리자 · 관리자 · 직원)
+    function isStaff() {
+      return meExists() && me().approved == true && me().role in ['owner', 'admin', 'staff'];
+    }
+
+    // 특정 권한 보유 여부 (최고관리자는 항상 통과)
+    function can(perm) {
+      return isOwner() || (isStaff() && me().perms[perm] == true);
+    }
+
+    // 교회가 알려준 정보 — 고치려면 그 교회의 승인이 필요합니다.
+    function churchInfoFields() {
+      return ['name', 'denomination', 'location', 'size',
+              'contactName', 'contactRole', 'phone', 'email'];
+    }
+
+    function touchesChurchInfo() {
+      return request.resource.data.diff(resource.data).affectedKeys()
+        .hasAny(churchInfoFields());
+    }
+
+    // 해당 고객이 수정을 승인해 두었는지.
+    //   · 기한(expiresAt)은 문자열로 저장되어 규칙에서 비교할 수 없으므로
+    //     앱이 확인하고, 지나면 status 를 'expired' 로 바꿔 이 검사에서 걸립니다.
+    //   · 수정을 마치면 status 가 'used' 가 되어 다시 잠깁니다.
+    function editApproved(customerId) {
+      return exists(/databases/$(database)/documents/editConsents/$(customerId))
+        && get(/databases/$(database)/documents/editConsents/$(customerId)).data.status == 'approved';
+    }
+
+    /* ---------- users : 계정 ---------- */
+    match /users/{userId} {
+      // 본인 문서는 항상, 그 외에는 승인된 직원이 읽습니다.
+      // (담당자 이름 표시와 업무량 집계에 필요합니다.)
+      allow read: if signedIn() && (request.auth.uid == userId || isStaff());
+
+      // 가입 시 본인 문서를 만듭니다. 스스로 관리자가 될 수는 없습니다.
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.role in ['client', 'staff']
+        && (request.resource.data.role == 'client'
+              ? request.resource.data.approved == true
+              : request.resource.data.approved == false)
+        && request.resource.data.perms.size() == 0;
+
+      // 본인은 이름·연락처 등만 수정할 수 있습니다 (role·approved·perms 는 잠금).
+      allow update: if signedIn() && request.auth.uid == userId
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.approved == resource.data.approved
+        && request.resource.data.perms == resource.data.perms;
+
+      // 직분 · 승인 · 권한 변경은 직원 관리 권한자만.
+      allow update: if can('members');
+
+      // 계정 정보 삭제 (로그인 계정 자체는 콘솔에서 지워야 합니다)
+      allow delete: if can('members');
+    }
+
+    /* ---------- requests : 지원 신청 ---------- */
+    match /requests/{docId} {
+      // 신청자 본인, 또는 승인된 직원 전체 (전체 작업 화면).
+      allow read: if signedIn()
+        && (resource.data.userId == request.auth.uid || isStaff());
+
+      // 로그인한 사용자가 자기 이름으로 신청서를 만듭니다.
+      // 담당자·상태는 서버에서 정한 초기값만 허용합니다.
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'received'
+        && request.resource.data.assignee == ''
+        && request.resource.data.memo == '';
+
+      // 신청·의뢰 관리 권한자는 모든 항목을 수정할 수 있습니다.
+      allow update: if can('requests');
+
+      // 담당자로 배정된 직원은 자기 작업의 진행 정보만 수정할 수 있습니다.
+      // (디데이 설정, 상태 변경, 메모, 할 일 — 담당자 재배정은 불가)
+      allow update: if isStaff()
+        && resource.data.assignee == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['dueDate', 'status', 'memo', 'tasks']);
+
+      allow delete: if can('requests');
+    }
+
+    /* ---------- editConsents : 고객 정보 수정 동의 ----------
+       문서 아이디가 곧 고객(customers) 아이디입니다.
+       고객마다 "가장 최근 요청" 한 건을 담습니다. */
+    match /editConsents/{customerId} {
+      // 승인 권한이 있는 교회 계정 본인과 승인된 직원이 읽습니다.
+      allow read: if isStaff()
+        || (signedIn() && resource.data.userId == request.auth.uid);
+
+      // 요청 보내기 · 취소 · 사용 완료 표시는 고객 관리 권한자만.
+      // 직원이 스스로 'approved' 로 만들 수는 없습니다 — 그래야 승인이 의미가 있습니다.
+      allow create: if can('customers') && request.resource.data.status == 'pending';
+      allow update: if can('customers')
+        && request.resource.data.status in ['pending', 'canceled', 'used', 'expired'];
+      allow delete: if can('customers');
+
+      // 교회 계정 본인은 승인 · 거절만 할 수 있습니다.
+      // (어떤 항목을 고치겠다는 내용 자체는 바꿀 수 없습니다.)
+      allow update: if signedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.status in ['approved', 'rejected']
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['status', 'respondedAt', 'expiresAt', 'rejectNote']);
+    }
+
+    /* ---------- customers : 고객 교회 ---------- */
+    match /customers/{docId} {
+      // 고객 정보는 승인된 직원만 봅니다.
+      // (신청자는 고객 목록을 조회하지 않습니다 — 연결은 관리자 화면에서 처리)
+      allow read: if isStaff();
+      allow create, delete: if can('customers');
+
+      // 교회가 알려준 정보(아래 항목)를 고치려면 그 교회의 승인이 필요합니다.
+      // 내부 메모처럼 센터에서 관리하는 값은 언제든 수정할 수 있습니다.
+      allow update: if can('customers')
+        && (!touchesChurchInfo() || editApproved(docId));
+    }
+
+    /* ---------- listings : 부동산 매물 게시판 ----------
+       공개는 게시(published)된 글만. 나머지는 등록자 본인과 직원만 봅니다.
+       ('입금 대기'는 서류 확인만 끝난 상태로, 아직 공개되지 않습니다.)
+
+       사진은 게시판에 보여 주는 것이 목적이라 Storage 에서 공개로 두었고,
+       권리 증빙 파일은 같은 Storage 의 다른 경로에서 본인과 직원만
+       열 수 있게 막았습니다 (storage.rules 참고). */
+    match /listings/{docId} {
+      allow read: if resource.data.status == 'published'
+        || (signedIn() && resource.data.userId == request.auth.uid)
+        || isStaff();
+
+      // 등록은 언제나 '승인 대기'로 시작하고, 요금은 미납 상태로 만들어집니다.
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.fee.paid == false
+        && request.resource.data.reviewedBy == ''
+        && request.resource.data.publishedAt == '';
+
+      // 등록자는 내용만 고칩니다. 고치면 다시 승인 대기로 돌아갑니다.
+      // 상태를 스스로 published 로 올리거나 요금을 납부 처리할 수는 없습니다.
+      allow update: if signedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.status == 'pending'
+        && request.resource.data.fee == resource.data.fee
+        && request.resource.data.publishedAt == resource.data.publishedAt;
+
+      // 직원: 서류 확인(계좌 안내) · 게시 · 반려 · 내리기 · 입금 확인
+      allow update: if can('customers');
+
+      allow delete: if (signedIn() && resource.data.userId == request.auth.uid)
+        || can('customers');
+    }
+
+    /* ---------- marketItems : 중고 장터 ----------
+       부동산 매물과 같은 흐름이되 등록비가 없어 fee 조건이 빠집니다.
+       '거래 완료(done)'로 내리는 것은 판 사람이 가장 먼저 아는 일이라
+       등록자에게 허용합니다. */
+    match /marketItems/{docId} {
+      allow read: if resource.data.status == 'published'
+        || (signedIn() && resource.data.userId == request.auth.uid)
+        || isStaff();
+
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.reviewedBy == ''
+        && request.resource.data.publishedAt == '';
+
+      allow update: if signedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.status in ['pending', 'done']
+        && request.resource.data.publishedAt == resource.data.publishedAt;
+
+      allow update: if can('customers');
+
+      allow delete: if (signedIn() && resource.data.userId == request.auth.uid)
+        || can('customers');
+    }
+
+    /* ---------- installRequests : 설치 대행 문의 ----------
+       게시판에 공개되지 않습니다 — 본인과 직원만 봅니다. */
+    match /installRequests/{docId} {
+      allow read: if (signedIn() && resource.data.userId == request.auth.uid) || isStaff();
+
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'received'
+        && request.resource.data.quoteAmount == 0;
+
+      // 견적은 직원만 적습니다.
+      allow update: if signedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.quoteAmount == resource.data.quoteAmount
+        && request.resource.data.status in ['received', 'canceled'];
+
+      allow update: if can('requests');
+      allow delete: if can('requests');
+    }
+
+    /* ---------- guestHouses : 교회 게스트하우스 ---------- */
+    match /guestHouses/{docId} {
+      allow read: if resource.data.status == 'published'
+        || (signedIn() && resource.data.userId == request.auth.uid)
+        || isStaff();
+
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.reviewedBy == ''
+        && request.resource.data.publishedAt == '';
+
+      allow update: if signedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.status in ['pending', 'done']
+        && request.resource.data.publishedAt == resource.data.publishedAt;
+
+      allow update: if can('customers');
+
+      allow delete: if (signedIn() && resource.data.userId == request.auth.uid)
+        || can('customers');
+    }
+
+    /* ---------- events : 집회 티켓팅 ----------
+       마감(closed)된 집회도 읽힙니다 — "마감되었습니다"를 읽어야 하니까요.
+       taken(신청 합계)은 주최자가 건드릴 수 없습니다. */
+    match /events/{docId} {
+      allow read: if resource.data.status in ['published', 'closed', 'done']
+        || (signedIn() && resource.data.userId == request.auth.uid)
+        || isStaff();
+
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.taken == 0
+        && request.resource.data.reviewedBy == ''
+        && request.resource.data.publishedAt == '';
+
+      allow update: if signedIn()
+        && resource.data.userId == request.auth.uid
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.status in ['pending', 'done', 'closed', 'published']
+        && request.resource.data.taken == resource.data.taken
+        && request.resource.data.publishedAt == resource.data.publishedAt;
+
+      allow update: if can('customers');
+
+      allow delete: if (signedIn() && resource.data.userId == request.auth.uid
+          && resource.data.taken == 0)
+        || can('customers');
+    }
+
+    /* ---------- ticketOrders : 집회 신청 내역 ----------
+       신청자 본인 · 집회를 연 주최자 · 직원만 봅니다.
+       (Firebase 쪽은 정원을 서버에서 잠글 방법이 없어 데모 용도입니다 —
+        실제 운영은 Supabase 의 reserve_tickets() 를 씁니다.) */
+    match /ticketOrders/{docId} {
+      allow read: if (signedIn() && resource.data.userId == request.auth.uid) || isStaff();
+
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'confirmed'
+        && request.resource.data.qty > 0;
+
+      allow update: if (signedIn() && resource.data.userId == request.auth.uid
+          && request.resource.data.status == 'canceled')
+        || can('customers');
+
+      allow delete: if can('customers');
+    }
+
+    /* ---------- subscriptions : 구독 ---------- */
+    match /subscriptions/{docId} {
+      allow read: if can('customers') || can('settlement');
+      allow write: if can('customers');
+    }
+
+    /* ---------- invoices : 청구 · 정산 ---------- */
+    match /invoices/{docId} {
+      allow read, write: if can('settlement');
+    }
+
+    /* ---------- serviceContent : 지원 항목 공개 내용 ---------- */
+    match /serviceContent/{docId} {
+      // 홈페이지가 로그인 없이 읽습니다.
+      allow read: if true;
+      allow write: if can('services');
+    }
+
+    /* ---------- settings : 센터 설정 ---------- */
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if can('settings');
+    }
+
+    /* 위에서 다루지 않은 경로는 모두 차단 */
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

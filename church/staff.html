@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>직원 로그인 | 우리교회지원센터</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="우리교회지원센터 직원 전용 로그인 및 계정 신청">
+  <meta name="theme-color" content="#1F7A44">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%231F7A44'/%3E%3Cpath d='M20 9.5v21M13 16.5h14' stroke='%23F2C82F' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=6faf68c7">
+  <link rel="stylesheet" href="assets/css/auth.css?v=981bfea1">
+</head>
+<body class="staff">
+
+<div class="sp">
+  <!-- 왼쪽: 브랜드 안내 -->
+  <aside class="sp-aside">
+    <a class="sp-brand" href="index.html">
+      <img class="logo-img is-row" src="assets/img/logo-row-light.png" width="1780" height="307" alt="우리교회지원센터" decoding="async">
+      <span class="sp-brand-text">
+        <strong>우리교회지원센터</strong>
+        <small>Wori Church Support Center</small>
+      </span>
+    </a>
+
+    <div class="sp-copy">
+      <span class="sp-badge">센터 직원 전용</span>
+      <h1>업무 시스템에<br>로그인해 주세요</h1>
+      <p>
+        교회 신청 접수부터 고객·구독 관리, 정산, 홈페이지 항목 수정까지
+        센터 업무를 처리하는 화면입니다.
+      </p>
+      <ul class="sp-list">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4.5 12.5 5 5 10-11"/></svg>
+          <span>배정된 신청 건과 진행 상황 관리</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4.5 12.5 5 5 10-11"/></svg>
+          <span>고객 교회별 구독 현황과 정산 처리</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4.5 12.5 5 5 10-11"/></svg>
+          <span>권한은 최고관리자가 항목별로 부여합니다</span>
+        </li>
+      </ul>
+    </div>
+
+    <p class="sp-foot">
+      교회 관계자시라면 <a href="index.html">홈페이지</a>에서 지원 신청을 이용해 주세요.
+    </p>
+  </aside>
+
+  <!-- 오른쪽: 로그인 / 신청 -->
+  <main class="sp-main">
+    <div class="sp-card">
+      <!-- 로그인 · 계정 신청 -->
+      <div id="spGate">
+        <div class="sp-tabs">
+          <button type="button" class="sp-tab is-on" data-tab="login">로그인</button>
+          <button type="button" class="sp-tab" data-tab="signup">직원 계정 신청</button>
+        </div>
+
+        <div class="sp-card-body">
+          <!-- 로그인 -->
+          <form class="sp-form" id="spLoginForm" data-pane="login" novalidate>
+            <h2 style="margin-bottom:18px">직원 로그인</h2>
+            <div class="field">
+              <label for="spEmail">이메일</label>
+              <input type="email" id="spEmail" autocomplete="email" required placeholder="name@caps.or.kr">
+            </div>
+            <div class="field">
+              <label for="spPw">비밀번호</label>
+              <div class="pw-row">
+                <input type="password" id="spPw" autocomplete="current-password" required>
+                <button type="button" class="pw-toggle" data-pw="spPw">표시</button>
+              </div>
+            </div>
+            <p class="auth-err" id="spLoginErr" hidden></p>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">로그인</button>
+            <p class="auth-or"><span>또는</span></p>
+            <button type="button" class="btn btn-outline btn-block auth-google" id="spGoogle"><svg class="g-mark" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62Z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.34A8.99 8.99 0 0 0 9 18Z"/><path fill="#FBBC05" d="M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.94H.96a9 9 0 0 0 0 8.12l3.01-2.34Z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.9 11.43 0 9 0A8.99 8.99 0 0 0 .96 4.94l3.01 2.34C4.68 5.16 6.66 3.58 9 3.58Z"/></svg>Google 계정으로 로그인</button>
+            <div class="sp-switch">
+              <button type="button" id="spReset">비밀번호를 잊으셨나요?</button>
+            </div>
+          </form>
+
+          <!-- 계정 신청 -->
+          <form class="sp-form" id="spSignupForm" data-pane="signup" hidden novalidate>
+            <h2 style="margin-bottom:10px">직원 계정 신청</h2>
+            <p class="sp-lead" style="margin-bottom:20px">
+              신청 후 <strong>최고관리자 승인</strong>을 받으면 업무 시스템을 이용할 수 있습니다.
+            </p>
+
+            <!-- 구글 신청을 가장 위에 둡니다 — 가장 빠른 방법이기 때문입니다. -->
+            <button type="button" class="btn btn-outline btn-block btn-lg auth-google is-first" id="spGoogleSignup"><svg class="g-mark" viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62Z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.34A8.99 8.99 0 0 0 9 18Z"/><path fill="#FBBC05" d="M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.94H.96a9 9 0 0 0 0 8.12l3.01-2.34Z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.9 11.43 0 9 0A8.99 8.99 0 0 0 .96 4.94l3.01 2.34C4.68 5.16 6.66 3.58 9 3.58Z"/></svg>Google 계정으로 신청하기</button>
+            <p class="auth-google-note">
+              비밀번호를 따로 만들지 않아도 됩니다.
+              교회명 · 직분 · 연락처는 다음 화면에서 입력합니다.
+            </p>
+            <p class="auth-err" id="spSignupGoogleErr" hidden></p>
+            <p class="auth-or"><span>또는 이메일로 신청</span></p>
+
+            <div class="field">
+              <label for="spName">성함 <em class="req">필수</em></label>
+              <input type="text" id="spName" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="spBirth">생년월일 <span class="opt">선택</span></label>
+              <input type="date" id="spBirth" autocomplete="bday">
+            </div>
+            <div class="field">
+              <label for="spChurch">교회명 <em class="req">필수</em></label>
+              <input type="text" id="spChurch" autocomplete="organization" required>
+            </div>
+            <div class="field">
+              <label for="spRole">직분 <em class="req">필수</em></label>
+              <!-- 옵션은 db.js 의 공용 목록으로 채웁니다 -->
+              <select id="spRole" required></select>
+            </div>
+            <div class="field" id="spRoleOtherBox" hidden>
+              <label for="spRoleOther">직분 직접 입력 <em class="req">필수</em></label>
+              <input type="text" id="spRoleOther">
+            </div>
+            <div class="field">
+              <label for="spPhone">연락처 <em class="req">필수</em></label>
+              <input type="tel" id="spPhone" autocomplete="tel" required placeholder="01000000000">
+              <p class="field-hint">숫자 11자리까지 입력됩니다. 하이픈은 자동으로 들어갑니다.</p>
+            </div>
+            <div class="field">
+              <label for="spSuEmail">이메일 <em class="req">필수</em></label>
+              <input type="email" id="spSuEmail" autocomplete="email" required placeholder="name@caps.or.kr">
+            </div>
+            <div class="field">
+              <label for="spSuPw">비밀번호 <em class="req">필수</em></label>
+              <div class="pw-row">
+                <input type="password" id="spSuPw" autocomplete="new-password" required minlength="6" placeholder="6자 이상">
+                <button type="button" class="pw-toggle" data-pw="spSuPw">표시</button>
+              </div>
+            </div>
+            <div class="field">
+              <label for="spSuPw2">비밀번호 확인 <em class="req">필수</em></label>
+              <div class="pw-row">
+                <input type="password" id="spSuPw2" autocomplete="new-password" required minlength="6">
+                <button type="button" class="pw-toggle" data-pw="spSuPw2">표시</button>
+              </div>
+              <p class="field-hint" id="spPwMatch"></p>
+            </div>
+            <label class="check-line">
+              <input type="checkbox" id="spAgree" required>
+              <span>개인정보 수집 · 이용에 동의합니다. <em class="req">필수</em></span>
+            </label>
+            <p class="auth-err" id="spSignupErr" hidden></p>
+            <button type="submit" class="btn btn-primary btn-block btn-lg">계정 신청하기</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- 상태 안내 (승인 대기 / 고객 계정 / 연결 실패) -->
+      <div class="sp-card-body" id="spState" hidden></div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/js/supabase-config.js?v=9b329d2d"></script>
+<script src="assets/js/firebase-config.js?v=cc88c05f"></script>
+<script src="assets/js/data.js?v=e9ec199c"></script>
+<script src="assets/js/db.js?v=065b25e8"></script>
+<script src="assets/js/profile.js?v=042b697c"></script>
+<script src="assets/js/account.js?v=2e49bb79"></script>
+<script src="assets/js/staff.js?v=aad0fb5d"></script>
+</body>
+</html>

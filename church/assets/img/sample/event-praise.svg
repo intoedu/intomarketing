@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="돌이키라">
+  <rect width="900" height="1200" fill="#12301F"/>
+  <circle cx="740" cy="205" r="260" fill="#1B4D2E"/>
+  <circle cx="740" cy="205" r="150" fill="none" stroke="#F2C82F" stroke-width="6" opacity=".7"/>
+  <g transform="translate(150 900)" fill="none" stroke="#1B4D2E" stroke-width="10" opacity=".85"
+     stroke-linecap="round"><path d="M0 0h600M0 60h600M0 120h480"/></g>
+  <text x="90" y="150" font-family="'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif" font-size="30" font-weight="700"
+        letter-spacing="6" fill="#F2C82F">찬양집회</text>
+  <text font-family="'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif" font-size="76" font-weight="800" fill="#FFFFFF"
+        letter-spacing="-2"><tspan x="90" y="470">돌이키라</tspan></text>
+  <rect x="90" y="522" width="96" height="8" fill="#F2C82F"/>
+  <text x="90" y="608" font-family="'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif" font-size="34"
+        fill="#D3EBDB">서문교회 청년부 · 마커스워십</text>
+  <text x="90" y="1090" font-family="'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif" font-size="32" font-weight="700" fill="#FFFFFF">서문교회 본당</text>
+  <text x="90" y="1140" font-family="'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif" font-size="28" fill="#9DBCA8">사흘 저녁 · 서울 마포</text>
+</svg>

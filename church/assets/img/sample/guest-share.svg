@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="사택 방 하나">
+  <rect width="1200" height="900" fill="#F2F9F4"/>
+  <circle cx="1040" cy="140" r="210" fill="#D3EBDB" opacity=".55"/>
+  <circle cx="150" cy="820" r="160" fill="#D3EBDB" opacity=".4"/>
+  <g transform="translate(600 400)" fill="none" stroke="#1B4D2E" stroke-width="9"
+     stroke-linecap="round" stroke-linejoin="round"><rect x="-250" y="-180" width="500" height="360" rx="16"/>
+    <path d="M0-180v360" stroke-dasharray="22 20"/>
+    <rect x="-200" y="40" width="150" height="100" rx="10" fill="#D3EBDB"/>
+    <rect x="50" y="40" width="150" height="100" rx="10"/></g>
+  <rect x="0" y="762" width="1200" height="138" fill="#12301F"/>
+  <text x="64" y="848" font-family="'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif" font-size="52" font-weight="700" fill="#FFFFFF">사택 방 하나</text>
+</svg>

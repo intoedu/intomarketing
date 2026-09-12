@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="성찬기 세트">
+  <rect width="1200" height="900" fill="#F2F9F4"/>
+  <circle cx="1040" cy="140" r="210" fill="#D3EBDB" opacity=".55"/>
+  <circle cx="150" cy="820" r="160" fill="#D3EBDB" opacity=".4"/>
+  <g transform="translate(600 400)" fill="none" stroke="#1B4D2E" stroke-width="9"
+     stroke-linecap="round" stroke-linejoin="round"><path d="M-70-160h140l-22 130a48 48 0 0 1-96 0z"/>
+    <path d="M0-30v130M-70 100h140"/>
+    <path d="M-230 190h460" opacity=".5"/>
+    <circle cx="-160" cy="60" r="46"/><circle cx="160" cy="60" r="46"/></g>
+  <rect x="0" y="762" width="1200" height="138" fill="#12301F"/>
+  <text x="64" y="848" font-family="'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif" font-size="52" font-weight="700" fill="#FFFFFF">성찬기 세트</text>
+</svg>

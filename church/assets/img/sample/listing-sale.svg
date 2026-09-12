@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="단독 건물 · 사택 포함">
+  <rect width="1200" height="900" fill="#F2F9F4"/>
+  <circle cx="1040" cy="140" r="210" fill="#D3EBDB" opacity=".55"/>
+  <circle cx="150" cy="820" r="160" fill="#D3EBDB" opacity=".4"/>
+  <g transform="translate(600 400)" fill="none" stroke="#1B4D2E" stroke-width="9"
+     stroke-linecap="round" stroke-linejoin="round"><path d="M-230 250v-330l230-160 230 160v330z"/>
+    <path d="M0-260v-70M-34-294h68"/>
+    <rect x="-140" y="-40" width="90" height="90"/>
+    <rect x="50" y="-40" width="90" height="90"/>
+    <rect x="-55" y="110" width="110" height="140"/></g>
+  <rect x="0" y="762" width="1200" height="138" fill="#12301F"/>
+  <text x="64" y="848" font-family="'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif" font-size="52" font-weight="700" fill="#FFFFFF">단독 건물 · 사택 포함</text>
+</svg>

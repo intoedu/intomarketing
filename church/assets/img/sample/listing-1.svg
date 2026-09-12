@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="3층 본당 — 남향, 한강 조망">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F2F9F4"/><stop offset="1" stop-color="#E7EFE9"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky)"/>
+  <rect x="0" y="0" width="1200" height="470" fill="#DCEBF6"/>
+  <path d="M0 300h1200v60H0z" fill="#B9D6E8"/>
+  <path d="M0 355h1200v46H0z" fill="#9CC4DD"/>
+  <path d="M60 300c120-40 260-58 420-52 150 6 300 26 460 52z" fill="#CBDDD0"/>
+  <g fill="#8FB0A0" opacity=".55">
+    <rect x="120" y="252" width="34" height="50"/><rect x="168" y="236" width="26" height="66"/>
+    <rect x="210" y="262" width="40" height="40"/><rect x="900" y="244" width="30" height="58"/>
+    <rect x="944" y="266" width="38" height="36"/><rect x="996" y="232" width="24" height="70"/>
+  </g>
+  <rect x="0" y="401" width="1200" height="315" fill="#E9E3D8"/>
+  <g stroke="#fff" stroke-width="18" fill="none">
+    <path d="M300 0v401M600 0v401M900 0v401"/>
+    <path d="M0 130h1200"/>
+  </g>
+  <rect x="0" y="392" width="1200" height="22" fill="#fff"/>
+  <g fill="#C8BEAE">
+    <rect x="0" y="620" width="1200" height="8"/>
+  </g>
+  <g fill="#7A5C3A">
+    <rect x="430" y="470" width="340" height="18" rx="4"/>
+    <rect x="470" y="488" width="14" height="52"/><rect x="716" y="488" width="14" height="52"/>
+    <rect x="560" y="420" width="80" height="52" rx="6" fill="#8B6B45"/>
+  </g>
+  <g fill="#5C6E62" opacity=".9">
+    <rect x="160" y="560" width="66" height="14" rx="5"/>
+    <rect x="250" y="560" width="66" height="14" rx="5"/>
+    <rect x="340" y="560" width="66" height="14" rx="5"/>
+    <rect x="430" y="560" width="66" height="14" rx="5"/>
+    <rect x="520" y="560" width="66" height="14" rx="5"/>
+    <rect x="610" y="560" width="66" height="14" rx="5"/>
+    <rect x="700" y="560" width="66" height="14" rx="5"/>
+    <rect x="790" y="560" width="66" height="14" rx="5"/>
+    <rect x="880" y="560" width="66" height="14" rx="5"/>
+    <rect x="970" y="560" width="66" height="14" rx="5"/>
+    <rect x="160" y="598" width="66" height="14" rx="5"/>
+    <rect x="250" y="598" width="66" height="14" rx="5"/>
+    <rect x="340" y="598" width="66" height="14" rx="5"/>
+    <rect x="430" y="598" width="66" height="14" rx="5"/>
+    <rect x="520" y="598" width="66" height="14" rx="5"/>
+    <rect x="610" y="598" width="66" height="14" rx="5"/>
+    <rect x="700" y="598" width="66" height="14" rx="5"/>
+    <rect x="790" y="598" width="66" height="14" rx="5"/>
+    <rect x="880" y="598" width="66" height="14" rx="5"/>
+    <rect x="970" y="598" width="66" height="14" rx="5"/>
+    <rect x="160" y="636" width="66" height="14" rx="5"/>
+    <rect x="250" y="636" width="66" height="14" rx="5"/>
+    <rect x="340" y="636" width="66" height="14" rx="5"/>
+    <rect x="430" y="636" width="66" height="14" rx="5"/>
+    <rect x="520" y="636" width="66" height="14" rx="5"/>
+    <rect x="610" y="636" width="66" height="14" rx="5"/>
+    <rect x="700" y="636" width="66" height="14" rx="5"/>
+    <rect x="790" y="636" width="66" height="14" rx="5"/>
+    <rect x="880" y="636" width="66" height="14" rx="5"/>
+    <rect x="970" y="636" width="66" height="14" rx="5"/>
+    <rect x="160" y="674" width="66" height="14" rx="5"/>
+    <rect x="250" y="674" width="66" height="14" rx="5"/>
+    <rect x="340" y="674" width="66" height="14" rx="5"/>
+    <rect x="430" y="674" width="66" height="14" rx="5"/>
+    <rect x="520" y="674" width="66" height="14" rx="5"/>
+    <rect x="610" y="674" width="66" height="14" rx="5"/>
+    <rect x="700" y="674" width="66" height="14" rx="5"/>
+    <rect x="790" y="674" width="66" height="14" rx="5"/>
+    <rect x="880" y="674" width="66" height="14" rx="5"/>
+    <rect x="970" y="674" width="66" height="14" rx="5"/>
+  </g>
+  <g fill="#12301F" opacity=".28">
+    <rect x="330" y="404" width="10" height="120"/><rect x="860" y="404" width="10" height="120"/>
+    <path d="M318 404h34v14h-34zM848 404h34v14h-34z"/>
+  </g>
+
+  <g font-family="Pretendard, -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif">
+    <rect x="0" y="716" width="1200" height="84" fill="#12301F" opacity=".92"/>
+    <text x="600" y="758" text-anchor="middle" fill="#F2C82F" font-size="27" font-weight="700">3층 본당 — 남향, 한강 조망</text>
+    <text x="600" y="787" text-anchor="middle" fill="#ffffff" opacity=".72" font-size="19">예시 이미지 — 실제 매물 사진이 아닙니다</text>
+  </g>
+</svg>

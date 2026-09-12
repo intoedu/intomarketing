@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="소그룹실 · 유아실">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F6F4EE"/><stop offset="1" stop-color="#EFEBE1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky)"/>
+  <rect x="0" y="0" width="1200" height="716" fill="#F4F1E9"/>
+  <rect x="0" y="0" width="1200" height="150" fill="#EDE8DC"/>
+  <rect x="0" y="560" width="1200" height="156" fill="#DED5C4"/>
+  <g fill="#fff" stroke="#CFC6B4" stroke-width="3">
+    <rect x="90" y="120" width="250" height="170" rx="6"/>
+    <rect x="470" y="120" width="250" height="170" rx="6"/>
+    <rect x="850" y="120" width="250" height="170" rx="6"/>
+  </g>
+  <g fill="#DCEBF6"><rect x="104" y="134" width="222" height="142"/><rect x="484" y="134" width="222" height="142"/><rect x="864" y="134" width="222" height="142"/></g>
+  <g fill="#9AAE9F"><rect x="104" y="220" width="222" height="56"/><rect x="484" y="220" width="222" height="56"/><rect x="864" y="220" width="222" height="56"/></g>
+  <g fill="#8B6B45">
+    <rect x="150" y="420" width="300" height="16" rx="5"/><rect x="170" y="436" width="12" height="80"/><rect x="418" y="436" width="12" height="80"/>
+    <rect x="740" y="420" width="300" height="16" rx="5"/><rect x="760" y="436" width="12" height="80"/><rect x="1008" y="436" width="12" height="80"/>
+  </g>
+  <g fill="#5C6E62">
+    <rect x="170" y="470" width="52" height="12" rx="4"/><rect x="240" y="470" width="52" height="12" rx="4"/>
+    <rect x="310" y="470" width="52" height="12" rx="4"/><rect x="380" y="470" width="52" height="12" rx="4"/>
+    <rect x="760" y="470" width="52" height="12" rx="4"/><rect x="830" y="470" width="52" height="12" rx="4"/>
+    <rect x="900" y="470" width="52" height="12" rx="4"/><rect x="970" y="470" width="52" height="12" rx="4"/>
+  </g>
+  <rect x="530" y="330" width="140" height="230" fill="#1B4D2E" opacity=".16" rx="4"/>
+  <rect x="540" y="342" width="120" height="90" fill="#12301F" opacity=".5" rx="3"/>
+
+  <g font-family="Pretendard, -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif">
+    <rect x="0" y="716" width="1200" height="84" fill="#12301F" opacity=".92"/>
+    <text x="600" y="758" text-anchor="middle" fill="#F2C82F" font-size="27" font-weight="700">소그룹실 · 유아실</text>
+    <text x="600" y="787" text-anchor="middle" fill="#ffffff" opacity=".72" font-size="19">예시 이미지 — 실제 매물 사진이 아닙니다</text>
+  </g>
+</svg>

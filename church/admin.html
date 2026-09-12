@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>관리자 | 우리교회지원센터</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="우리교회지원센터 관리자 화면">
+  <meta name="theme-color" content="#1F7A44">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%231F7A44'/%3E%3Cpath d='M20 9.5v21M13 16.5h14' stroke='%23F2C82F' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=6faf68c7">
+  <link rel="stylesheet" href="assets/css/auth.css?v=981bfea1">
+  <link rel="stylesheet" href="assets/css/admin.css?v=8d499e62">
+</head>
+<body class="admin">
+
+  <!-- 게이트(로그인/승인 대기)에서 재사용하는 로고 -->
+  <template id="gateLogo">
+    <img class="logo-img is-row" src="assets/img/logo-row-light.png" width="1780" height="307" alt="우리교회지원센터" decoding="async">
+  </template>
+
+  <!-- 로그인 / 권한 안내 -->
+  <div class="gate" id="admGate" hidden></div>
+
+  <!-- 관리자 화면 -->
+  <div id="admShell" hidden>
+    <div class="adm-mobile-bar">
+      <button type="button" class="adm-burger" id="admBurger" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+      <strong id="admMobileTitle">관리자</strong>
+    </div>
+
+    <div class="adm">
+      <aside class="adm-side" id="admSide">
+        <a class="adm-brand" href="index.html">
+          <img class="logo-img is-row" src="assets/img/logo-row-light.png" width="1780" height="307" alt="우리교회지원센터" decoding="async">
+          <span class="adm-brand-text">
+            <strong>관리자</strong>
+            <small>우리교회지원센터</small>
+          </span>
+        </a>
+
+        <nav id="admNav" aria-label="관리자 메뉴"></nav>
+
+        <div class="adm-side-foot">
+          <div class="adm-me" id="admMe"></div>
+          <div class="adm-mode" id="admMode" hidden>
+            데모 모드 — 이 브라우저에만 저장됩니다.
+            실제 운영은 <code>supabase-config.js</code> 설정 후 시작됩니다.
+          </div>
+          <button type="button" class="adm-link" id="admAccount">
+            <svg class="adm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="8" r="3.4"/><path d="M5 20v-1a4.5 4.5 0 0 1 4.5-4.5h5A4.5 4.5 0 0 1 19 19v1"/>
+            </svg>
+            <span class="adm-link-text">내 정보 수정</span>
+          </button>
+          <button type="button" class="adm-link" id="admSignOut">
+            <svg class="adm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+            </svg>
+            <span class="adm-link-text">로그아웃</span>
+          </button>
+          <a class="adm-link" href="index.html">
+            <svg class="adm-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m3 10.5 9-7.5 9 7.5V20a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 20v-9.5Z"/>
+            </svg>
+            <span class="adm-link-text">홈페이지 보기</span>
+          </a>
+        </div>
+      </aside>
+
+      <main class="adm-main">
+        <div class="adm-head">
+          <div class="adm-head-row">
+            <div>
+              <h1 id="admTitle">관리자</h1>
+              <p id="admDesc"></p>
+            </div>
+            <div id="admActions"></div>
+          </div>
+        </div>
+        <div id="admBody"></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- 상세 서랍 -->
+  <div class="drawer" id="drawer" hidden>
+    <div class="drawer-backdrop"></div>
+    <div class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+      <div class="drawer-head">
+        <h2 id="drawerTitle"></h2>
+        <p id="drawerSub"></p>
+        <button type="button" class="drawer-close" id="drawerClose" aria-label="닫기">×</button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+    </div>
+  </div>
+
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <script src="assets/js/supabase-config.js?v=9b329d2d"></script>
+  <script src="assets/js/firebase-config.js?v=cc88c05f"></script>
+  <script src="assets/js/data.js?v=e9ec199c"></script>
+  <script src="assets/js/rules-text.js?v=05dee3aa"></script>
+  <script src="assets/js/db.js?v=065b25e8"></script>
+  <script src="assets/js/profile.js?v=042b697c"></script>
+  <script src="assets/js/account.js?v=2e49bb79"></script>
+  <script src="assets/js/admin/app.js?v=63fb8f69"></script>
+  <script src="assets/js/admin/dashboard.js?v=804a07ae"></script>
+  <script src="assets/js/admin/tasks.js?v=0219b5e9"></script>
+  <script src="assets/js/admin/requests.js?v=6b53a0f2"></script>
+  <script src="assets/js/admin/customers.js?v=cb0cc058"></script>
+  <script src="assets/js/admin/consents.js?v=c96dad30"></script>
+  <script src="assets/js/admin/listings.js?v=4d9498e8"></script>
+  <script src="assets/js/admin/boards.js?v=b47b5725"></script>
+  <script src="assets/js/admin/subscriptions.js?v=fa0c97f0"></script>
+  <script src="assets/js/admin/settlement.js?v=9adef2bf"></script>
+  <script src="assets/js/admin/services.js?v=27139a96"></script>
+  <script src="assets/js/admin/members.js?v=f0265431"></script>
+  <script src="assets/js/admin/settings.js?v=53b6d6fa"></script>
+  <script src="assets/js/admin/rules.js?v=76f531b7"></script>
+  <script>
+    // gateLogo 는 <template> 이므로 innerHTML 접근을 위해 content 를 펼쳐 둡니다.
+    (function () {
+      var tpl = document.getElementById('gateLogo');
+      var holder = document.createElement('div');
+      holder.id = 'gateLogo';
+      holder.hidden = true;
+      holder.appendChild(tpl.content.cloneNode(true));
+      tpl.replaceWith(holder);
+      window.CAPSAdmin.boot();
+    })();
+  </script>
+</body>
+</html>
