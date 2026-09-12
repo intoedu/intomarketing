@@ -486,8 +486,10 @@
 
     <div class="sec-t">견적 항목</div>
     <table class="qtable"><thead><tr>
-      <th style="width:34px">#</th><th>항목</th><th style="width:110px">결제주기</th>
-      <th style="width:130px" class="r">기존 비용</th><th style="width:130px" class="r">할인가(청구)</th><th style="width:34px"></th>
+      <th style="width:34px">#</th><th>항목</th>
+      <th style="width:112px" class="r">개당가격</th><th style="width:78px" class="r">수량</th>
+      <th style="width:104px">결제주기</th>
+      <th style="width:120px" class="r">기존 비용</th><th style="width:126px" class="r">할인가(청구)</th><th style="width:34px"></th>
     </tr></thead><tbody id="q_rows"></tbody></table>
     <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn btn-ghost" type="button" onclick="addQuoteRow()">+ 항목 추가</button>
@@ -1019,7 +1021,7 @@
 
   window.openQuote=function(){
     var r=CURROW;QD=r.quote?JSON.parse(JSON.stringify(r.quote)):defaultQuote(r);
-    if(!QD.items||!QD.items.length)QD.items=[{name:'',cycle:'1회',before:'',price:''}];
+    if(!QD.items||!QD.items.length)QD.items=[NEWITEM()];
     $('q_meta').textContent=(r.academy_name||'')+' · '+(r.quote_no?('견적번호 '+r.quote_no):'새 견적서');
     $('q_to_company').value=QD.to.company||'';$('q_to_manager').value=QD.to.manager||'';
     $('q_to_phone').value=QD.to.phone||'';$('q_to_email').value=QD.to.email||'';
@@ -1052,29 +1054,44 @@
       : '<b style="color:#C0392B">이 이름에는 사업자등록번호가 아직 없습니다.</b> 「견적서 설정」에서 넣어 주세요.';
   };
 
+  /* ⚠️ 견적 항목의 칸은 여기 한 곳에서 정합니다. 늘릴 때 여기부터 고치세요.
+     옛 견적서에는 unit·qty 가 없습니다 — 없으면 빈칸으로 두고 할인가만 씁니다. */
+  function NEWITEM(){return {name:'',unit:'',qty:'',cycle:'1회',before:'',price:''};}
+
   function renderQuoteRows(){
     var h='';
     QD.items.forEach(function(it,i){
       h+='<tr><td class="num muted tnum">'+(i+1)+'</td>'
-       +'<td><input class="qi" value="'+esc(it.name)+'" placeholder="예: 홈페이지 제작비 / 원어민 수업료" oninput="qEdit('+i+',\'name\',this.value)"></td>'
+       +'<td><input class="qi" value="'+esc(it.name)+'" placeholder="예: 블로그 작성 / 원어민 수업료" oninput="qEdit('+i+',\'name\',this.value)"></td>'
+       +'<td><input class="qi r" type="number" min="0" step="1000" value="'+esc(it.unit||'')+'" placeholder="0" oninput="qEdit('+i+',\'unit\',this.value)"></td>'
+       +'<td><input class="qi r" type="number" min="0" step="1" value="'+esc(it.qty||'')+'" placeholder="1" oninput="qEdit('+i+',\'qty\',this.value)"></td>'
        +'<td><select class="qi" onchange="qEdit('+i+',\'cycle\',this.value)">'
        +CYCLES.map(function(c){return '<option'+(it.cycle===c?' selected':'')+'>'+c+'</option>';}).join('')
        +'</select></td>'
-       +'<td><input class="qi" type="number" min="0" step="1000" value="'+esc(it.before)+'" placeholder="0" oninput="qEdit('+i+',\'before\',this.value)"></td>'
-       +'<td><input class="qi" type="number" min="0" step="1000" value="'+esc(it.price)+'" placeholder="0" oninput="qEdit('+i+',\'price\',this.value)"></td>'
+       +'<td><input class="qi r" type="number" min="0" step="1000" value="'+esc(it.before)+'" placeholder="0" oninput="qEdit('+i+',\'before\',this.value)"></td>'
+       +'<td><input class="qi r" type="number" min="0" step="1000" value="'+esc(it.price)+'" placeholder="0" oninput="qEdit('+i+',\'price\',this.value)"></td>'
        +'<td><button class="qdel" type="button" onclick="qDel('+i+')">✕</button></td></tr>';
     });
     $('q_rows').innerHTML=h;
     renderQuoteSum();
   }
-  window.qEdit=function(i,k,v){QD.items[i][k]=v;if(k!=='name')renderQuoteSum();else renderQuoteSum();};
-  window.qDel=function(i){QD.items.splice(i,1);if(!QD.items.length)QD.items=[{name:'',cycle:'1회',before:'',price:''}];renderQuoteRows();};
-  window.addQuoteRow=function(){QD.items.push({name:'',cycle:'1회',before:'',price:''});renderQuoteRows();};
+  /* 개당가격이나 수량을 고치면 **할인가(청구)를 자동으로 곱해 넣습니다.**
+     할인가를 직접 치면 그 값이 그대로 남습니다 — 곱한 값과 다르게 주고 싶을 때가 있습니다. */
+  window.qEdit=function(i,k,v){
+    var it=QD.items[i]; it[k]=v;
+    if(k==='unit'||k==='qty'){
+      var u=Number(it.unit)||0, q=Number(it.qty)||0;
+      if(u&&q){ it.price=String(u*q); renderQuoteRows(); return; }
+    }
+    renderQuoteSum();
+  };
+  window.qDel=function(i){QD.items.splice(i,1);if(!QD.items.length)QD.items=[NEWITEM()];renderQuoteRows();};
+  window.addQuoteRow=function(){QD.items.push(NEWITEM());renderQuoteRows();};
   window.presetQuote=function(){
     var r=CURROW,pre=[];
-    if(r.area==='마케팅')pre=[{name:'블로그 홍보 (글 1편 기준)',cycle:'매월',before:'',price:''}];
-    else if(r.area==='인력')pre=[{name:'원어민 수업료 (주 O회)',cycle:'매월',before:'',price:''},{name:'매칭·세팅 비용',cycle:'1회',before:'',price:''}];
-    else pre=[{name:'콘텐츠 제공료',cycle:'매월',before:'',price:''},{name:'초기 세팅 비용',cycle:'1회',before:'',price:''}];
+    if(r.area==='마케팅')pre=[{name:'블로그 작성',unit:'6000',qty:'10',cycle:'1회',before:'',price:'60000'}];
+    else if(r.area==='인력')pre=[{name:'원어민 수업료',unit:'',qty:'',cycle:'매월',before:'',price:''},{name:'매칭·세팅 비용',unit:'',qty:'',cycle:'1회',before:'',price:''}];
+    else pre=[{name:'콘텐츠 제공료',unit:'',qty:'',cycle:'매월',before:'',price:''},{name:'초기 세팅 비용',unit:'',qty:'',cycle:'1회',before:'',price:''}];
     QD.items=QD.items.filter(function(x){return x.name||x.price;}).concat(pre);
     renderQuoteRows();
   };
@@ -1132,8 +1149,11 @@
     var n=Math.max(5,(q.items||[]).length);
     for(var i=0;i<n;i++){
       var it=(q.items||[])[i];
+      var u=it&&Number(it.unit)?Number(it.unit):0, qn=it&&Number(it.qty)?Number(it.qty):0;
       rows+='<tr><td class="num">'+(i+1)+'</td>'
         +'<td>'+(it?esc(it.name):'')+'</td>'
+        +'<td class="r">'+(u?u.toLocaleString('ko-KR'):'')+'</td>'
+        +'<td class="r">'+(qn?qn.toLocaleString('ko-KR'):'')+'</td>'
         +'<td>'+(it?esc(it.cycle||'1회'):'')+'</td>'
         +'<td class="r">'+(it&&Number(it.before)?Number(it.before).toLocaleString('ko-KR'):'')+'</td>'
         +'<td class="r"><b>'+(it&&Number(it.price)?Number(it.price).toLocaleString('ko-KR'):'')+'</b></td></tr>';
@@ -1164,7 +1184,8 @@
          +'<div class="pr"><span>유효기간</span><span>발행일로부터 '+(q.valid_days||30)+'일</span></div>'
          +'<div class="pr"><span>프로젝트</span><span>'+esc(q.project||'')+'</span></div></div>'
      +'</div>'
-     +'<table class="p-t"><thead><tr><th></th><th>항목</th><th>결제주기</th><th class="r">기존 비용</th><th class="r">할인가</th></tr></thead><tbody>'+rows+'</tbody></table>'
+     +'<table class="p-t"><thead><tr><th></th><th>항목</th><th class="r">개당가격</th><th class="r">수량</th>'
+     +'<th>결제주기</th><th class="r">기존 비용</th><th class="r">할인가</th></tr></thead><tbody>'+rows+'</tbody></table>'
      +'<div class="p-sum">'
        +'<div class="r"><span>기존 비용 합계</span><span>'+won(t.before)+'</span></div>'
        +'<div class="r"><span>할인 금액</span><span class="dis">- '+won(t.discount)+'</span></div>'
@@ -1206,7 +1227,12 @@
     lines.push('[ 견적 요약 ]');
     lines.push('· 견적번호: '+(r.quote_no||''));
     (q.items||[]).forEach(function(it){
-      lines.push('· '+it.name+' ('+(it.cycle||'1회')+') : '+won(it.price)+(Number(it.before)>Number(it.price)?(' (기존 '+won(it.before)+')'):''));
+      /* 개당가격·수량이 있으면 「6,000원 × 10 = 60,000원」 처럼 풀어 씁니다 —
+         받는 분이 무엇을 몇 개 사는지 바로 압니다 */
+      var u=Number(it.unit)||0, qn=Number(it.qty)||0;
+      lines.push('· '+it.name+' ('+(it.cycle||'1회')+') : '
+        +(u&&qn?(won(u)+' × '+qn+' = '):'')+won(it.price)
+        +(Number(it.before)>Number(it.price)?(' (기존 '+won(it.before)+')'):''));
     });
     if(t.once)lines.push('· 1회성 비용 합계: '+won(t.once));
     if(t.month)lines.push('· 매월 청구: '+won(t.month)+' / 월');
