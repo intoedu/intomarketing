@@ -177,6 +177,29 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 .subpanel.on{display:block}
 
 /* ── 가격 카드 ── */
+/* 홈 아래 분류 트리 — 왼쪽에서 고르면 오른쪽 목록이 바뀝니다 */
+.bw{display:grid;grid-template-columns:216px minmax(0,1fr);gap:30px;margin-top:28px;align-items:start}
+@media(max-width:820px){.bw{grid-template-columns:1fr;gap:18px}}
+.btree{position:sticky;top:78px}
+@media(max-width:820px){.btree{position:static;display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}}
+.btree .all{display:block;width:100%;text-align:left;border:0;background:none;font:inherit;cursor:pointer;
+  font-size:16px;font-weight:800;color:var(--accent-ink,#1E47C0);padding:0 0 12px}
+.bgrp{border-top:1px solid var(--line);padding:14px 0 4px}
+@media(max-width:820px){.bgrp{border-top:0;padding:0;flex:0 0 auto}}
+.bgrp>b{display:block;font-size:14.5px;font-weight:800;margin-bottom:8px;cursor:pointer}
+.bgrp>b:hover{color:var(--accent-ink,#1E47C0)}
+.bleaf{display:block;width:100%;text-align:left;border:0;background:none;font:inherit;cursor:pointer;
+  font-size:13.5px;color:var(--muted);padding:5px 0}
+.bleaf:hover{color:var(--ink)}
+.bleaf.on{color:var(--accent-ink,#1E47C0);font-weight:800}
+.bcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(212px,1fr));gap:14px}
+.bcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;
+  cursor:pointer;transition:.14s;text-align:left;font:inherit}
+.bcard:hover{border-color:var(--accent);transform:translateY(-2px)}
+.bcard .tag{font-size:11.5px;font-weight:800;color:var(--muted)}
+.bcard b{display:block;font-size:15.5px;margin:6px 0 5px}
+.bcard p{font-size:13px;color:var(--muted);line-height:1.65;margin:0}
+.bcard .more{display:block;margin-top:12px;font-size:12.5px;font-weight:800;color:var(--accent-ink,#1E47C0)}
 .pgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:30px}
 @media(max-width:900px){.pgrid{grid-template-columns:1fr}}
 .pcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
@@ -194,6 +217,17 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 .pnum .v{font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .pinc{margin-top:14px;font-size:13.5px;color:var(--muted);line-height:1.8}
 .pinc b{color:var(--ink);font-weight:700}
+/* 약정 표 — 가로로 길어서 좁은 화면에선 옆으로 밀립니다 */
+.ptw{margin-top:22px;overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.ptab{width:100%;border-collapse:collapse;min-width:520px}
+.ptab th,.ptab td{padding:13px 16px;text-align:right;border-bottom:1px solid var(--line);
+  font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ptab th{background:var(--surface-2);font-size:12.5px;color:var(--muted);font-weight:700}
+.ptab th:first-child,.ptab td:first-child{text-align:left;white-space:normal}
+.ptab tbody tr:last-child td{border-bottom:0}
+.ptab td b{font-weight:800}
+.ptab td .sm{display:block;font-size:12.5px;color:var(--muted);font-weight:500;margin-top:2px}
+.ptab .lo{color:var(--accent-ink,#1E47C0);font-weight:800}
 .pnote{margin-top:18px;font-size:13.5px;color:var(--muted);background:var(--surface-2);
        border-radius:10px;padding:13px 15px;line-height:1.8}
 
@@ -330,7 +364,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
           <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18M7 6.5h.01M9.7 6.5h.01"/></svg></span>
           <b>홈페이지 제작</b>
           <span>홈페이지 · 앱</span>
-          <span class="price">4.5만원부터</span>
+          <span class="price">월 45,000원부터</span>
         </div>
         <div class="item" onclick="go('sns')" role="link" tabindex="0" onkeydown="if(event.key==='Enter')go('sns')">
           <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="17.5" cy="6" r="2.6"/><circle cx="6.5" cy="12" r="2.6"/><circle cx="17.5" cy="18" r="2.6"/><path d="M9 10.7 15 7.4M9 13.3l6 3.3"/></svg></span>
@@ -350,6 +384,19 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
           <span>숏폼 · 롱폼</span>
           <span class="price">상담 후 안내</span>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 분류해서 보기 — 왼쪽에서 고르면 오른쪽이 바뀝니다 -->
+  <section class="sec alt" id="browse">
+    <div class="wrap">
+      <p class="kicker">Browse</p>
+      <h2 class="h2">분류해서 보기</h2>
+      <p class="lead">왼쪽에서 필요한 것을 고르시면 오른쪽에 자세한 안내가 나옵니다.</p>
+      <div class="bw">
+        <nav class="btree" id="btree"></nav>
+        <div class="bcards" id="bcards"></div>
       </div>
     </div>
   </section>
@@ -485,7 +532,8 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
         </div>
       </div>
 
-      <div class="acts"><a class="btn btn-primary" onclick="go('home','contact')">상담 문의하기 →</a>
+      <div class="acts"><a class="btn btn-primary" href="apply/blog/">블로그 신청서 쓰기 →</a>
+        <a class="btn btn-ghost" onclick="go('home','contact')">전화 · 메일로 문의</a>
         <a class="btn btn-ghost" onclick="go('home','items')">다른 항목 보기</a></div>
     </div>
   </div>
@@ -525,17 +573,18 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
       <div style="margin-top:56px">
         <p class="kicker">Pricing</p>
         <h2 class="h2">단계별 가격</h2>
-        <p class="lead">필요한 기능에 따라 단계를 고르시면 됩니다. 아래는 <b>일반 가격</b>입니다.</p>
+        <p class="lead"><b>제작비는 따로 받지 않습니다.</b> 약정 기간에 나눠 넣어 <b>월 요금으로만</b> 받습니다.
+           약정이 길수록 월 요금이 내려갑니다.</p>
 
         <div class="pgrid">
           <div class="pcard">
             <div class="pstage">1단계</div>
             <div class="psub">단순 홍보형</div>
             <div class="pnum">
-              <div><span class="k">제작</span><span class="v">4.5만원</span></div>
-              <div><span class="k">관리</span><span class="v">월 5만원</span></div>
+              <div><span class="k">월</span><span class="v">45,000원부터</span></div>
+              <div><span class="k">페이지</span><span class="v">3장 이하</span></div>
             </div>
-            <p class="pinc">회사 소개, 인사말, 서비스·시설 안내, 오시는 길(지도), 전화·카톡 상담 연결</p>
+            <p class="pinc">소개, 대표 인사말, 시설·서비스 안내, 오시는 길(지도), 전화·카톡 상담 버튼</p>
           </div>
 
           <div class="pcard best">
@@ -543,30 +592,44 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
             <div class="pstage">2단계</div>
             <div class="psub">소통형</div>
             <div class="pnum">
-              <div><span class="k">제작</span><span class="v">7만원</span></div>
-              <div><span class="k">관리</span><span class="v">월 5~7만원</span></div>
+              <div><span class="k">월</span><span class="v">72,000원부터</span></div>
+              <div><span class="k">페이지</span><span class="v">5장 이하</span></div>
             </div>
-            <p class="pinc"><b>1단계에 있는 것 전부</b>, 회원가입·로그인, 공지·Q&amp;A 게시판, 갤러리, 자료실</p>
+            <p class="pinc"><b>1단계에 있는 것 전부</b>, 회원가입·로그인, 공지, Q&amp;A(비밀글), 자유게시판, 갤러리</p>
           </div>
 
           <div class="pcard">
             <div class="pstage">3단계</div>
-            <div class="psub">신청 · 결제형</div>
-            <div class="pnum">
-              <div><span class="k">제작</span><span class="v">견적 후 안내</span></div>
-              <div><span class="k">관리</span><span class="v">월 9~12만원</span></div>
-            </div>
-            <p class="pinc"><b>2단계에 있는 것 전부</b>, 상품·강좌 목록, 온라인 신청·예약, 신청 관리, 카드 결제 연동</p>
-          </div>
-
-          <div class="pcard wide">
-            <div class="pstage">4단계</div>
             <div class="psub">맞춤 제작형</div>
-            <div class="pnum"><div><span class="k">제작 · 관리</span><span class="v">견적 후 안내</span></div></div>
-            <p class="pinc">정해진 틀 없이 요구에 맞춰 기능과 디자인을 자유롭게 설계하는 완전 맞춤형입니다.
-               앱 · 프로그램도 이 단계에서 상담합니다.</p>
+            <div class="pnum">
+              <div><span class="k">월</span><span class="v">견적 후 안내</span></div>
+              <div><span class="k">페이지</span><span class="v">10장 이상</span></div>
+            </div>
+            <p class="pinc">정해진 틀 없이 요구에 맞춰 기능과 디자인을 설계합니다. 상담 후 견적을 드립니다.</p>
           </div>
         </div>
+
+        <div class="ptw">
+          <table class="ptab">
+            <thead><tr><th>단계</th><th>3개월</th><th>6개월</th><th>12개월</th><th>24개월</th></tr></thead>
+            <tbody>
+              <tr><td><b>1단계</b> 단순 홍보형<span class="sm">3페이지 이하</span></td>
+                  <td>65,000</td><td>55,000</td><td>48,000</td><td class="lo">45,000</td></tr>
+              <tr><td><b>2단계</b> 소통형<span class="sm">5페이지 이하</span></td>
+                  <td>103,000</td><td>88,000</td><td>76,000</td><td class="lo">72,000</td></tr>
+              <tr><td><b>3단계</b> 맞춤 제작형<span class="sm">10페이지 이상</span></td>
+                  <td colspan="4" style="text-align:center;color:var(--muted)">견적 후 안내</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="pnote" style="margin-top:12px">
+          모든 금액은 <b style="color:var(--ink)">부가세 포함 · 한 달 요금</b>이며, 오픈일부터 매달 자동결제로 받습니다.
+          최소 약정은 <b style="color:var(--ink)">3개월</b>입니다.
+        </p>
+        <p class="pnote" style="margin-top:8px">
+          <b style="color:var(--ink)">페이지 세는 법</b> — 메뉴를 눌렀을 때 나오는 내용 화면 1개가 1페이지입니다(메인 포함).
+          게시판·로그인·회원가입·신청 화면과 개인정보처리방침·이용약관은 세지 않습니다.
+        </p>
 
         <div class="pnote">
           ※ <b style="color:var(--ink)">유료 도메인은 고객 부담</b>입니다(연 1~2만원대).
@@ -631,7 +694,8 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
         플랫폼 수와 운영 여부에 따라 달라집니다. 필요한 채널만 고르셔도 됩니다.
       </div>
 
-      <div class="acts"><a class="btn btn-primary" onclick="go('home','contact')">상담 문의하기 →</a>
+      <div class="acts"><a class="btn btn-primary" href="apply/sns/">SNS 신청서 쓰기 →</a>
+        <a class="btn btn-ghost" onclick="go('home','contact')">전화 · 메일로 문의</a>
         <a class="btn btn-ghost" onclick="go('home','items')">다른 항목 보기</a></div>
     </div>
   </div>
@@ -651,53 +715,70 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
   <div class="sec" style="padding-top:0">
     <div class="wrap">
       <div class="subpills" data-area="design">
-        <button class="sp on" data-t="web" type="button">웹 배너 · 팝업</button>
-        <button class="sp" data-t="bro" type="button">브로슈어</button>
-        <button class="sp" data-t="pos" type="button">포스터</button>
+        <button class="sp on" data-t="logo" type="button">로고 · 명함</button>
+        <button class="sp" data-t="print" type="button">인쇄 · 홍보물</button>
+        <button class="sp" data-t="card" type="button">SNS · 카드뉴스</button>
       </div>
 
-      <div class="subpanel on" id="design-web">
+      <!-- 1. 로고 · 명함 -->
+      <div class="subpanel on" id="design-logo">
         <div class="grid2">
-          <div class="card"><h3>웹 배너 · 팝업</h3>
-            <p>홈페이지 · SNS · 광고에 쓰는 이미지입니다. 쓰는 자리마다 규격이 다르므로
-               필요한 크기를 한 번에 맞춰 드립니다.</p>
-            <div class="tags"><span class="tag">메인 배너</span><span class="tag">팝업</span><span class="tag">SNS 게시물</span></div></div>
-          <div class="card"><h3>홈페이지와 같이 하면</h3>
-            <p>홈페이지 제작과 함께 진행하면 배너 규격을 따로 물어볼 일이 없고,
-               올리는 것까지 저희가 합니다.</p></div>
+          <div class="card"><h3>로고</h3>
+            <p>간판·명함·홈페이지·서류에 두루 쓰이는 얼굴입니다. 큰 간판부터 작은 도장 크기까지
+               뭉개지지 않게 만들고, 가로형·세로형·흑백까지 함께 드립니다.</p>
+            <div class="tags"><span class="tag">시안 제안</span><span class="tag">가로·세로형</span><span class="tag">원본 파일</span></div></div>
+          <div class="card"><h3>명함</h3>
+            <p>로고가 이미 있으시면 그 로고에 맞춰, 없으시면 로고부터 함께 만듭니다.
+               인쇄 규격과 여백은 저희가 맞춥니다.</p>
+            <div class="tags"><span class="tag">앞·뒷면</span><span class="tag">인쇄 대행</span></div></div>
         </div>
       </div>
 
-      <div class="subpanel" id="design-bro">
+      <!-- 2. 인쇄 · 홍보물 -->
+      <div class="subpanel" id="design-print">
         <div class="grid2">
-          <div class="card"><h3>브로슈어</h3>
-            <p>접지 방식(2단 · 3단)과 면 수부터 함께 정합니다. 글이 없으셔도 됩니다 —
+          <div class="card"><h3>브로셔 · 리플렛 · 팜플렛</h3>
+            <p>접는 방식(2단·3단)과 면 수부터 함께 정합니다. 글이 없으셔도 됩니다 —
                말씀해 주시면 원고부터 씁니다.</p>
-            <div class="tags"><span class="tag">3단 접지</span><span class="tag">원고 작성</span><span class="tag">인쇄 대행</span></div></div>
-          <div class="card"><h3>인쇄까지</h3>
-            <p>도련 · 접지선 같은 인쇄 규격은 저희가 맞춥니다.
+            <div class="tags"><span class="tag">3단 접지</span><span class="tag">원고 작성</span></div></div>
+          <div class="card"><h3>전단지 · 포스터</h3>
+            <p>붙이는 자리와 보는 거리에 따라 글자 크기가 달라집니다.
+               어디에 쓰실지 알려주시면 거기에 맞춰 잡습니다.</p>
+            <div class="tags"><span class="tag">행사 · 모집</span><span class="tag">매장 게시</span></div></div>
+          <div class="card"><h3>책 (표지 · 속지)</h3>
+            <p>표지만도, 속지 편집까지도 됩니다. 쪽수·판형·제본 방식을 정하고
+               인쇄소에 바로 넘길 수 있는 파일로 드립니다.</p>
+            <div class="tags"><span class="tag">표지</span><span class="tag">속지 편집</span></div></div>
+          <div class="card"><h3>인쇄까지 맡기셔도 됩니다</h3>
+            <p>도련·접지선 같은 인쇄 규격은 저희가 맞춥니다.
                수량을 정해 주시면 인쇄와 배송까지 대행합니다.</p></div>
         </div>
       </div>
 
-      <div class="subpanel" id="design-pos">
+      <!-- 3. SNS · 카드뉴스 -->
+      <div class="subpanel" id="design-card">
         <div class="grid2">
-          <div class="card"><h3>포스터</h3>
-            <p>붙이는 자리와 보는 거리에 따라 글자 크기가 달라집니다.
-               어디에 붙이실지 알려주시면 거기에 맞춰 잡습니다.</p>
-            <div class="tags"><span class="tag">행사 · 모집</span><span class="tag">매장 게시</span><span class="tag">현수막</span></div></div>
-          <div class="card"><h3>시안 수정</h3>
-            <p>시안을 보시고 고칠 곳을 말씀해 주시면 반영합니다.
-               수정 범위는 상담 때 미리 정해 드립니다.</p></div>
+          <div class="card"><h3>웹 배너 · 썸네일</h3>
+            <p>홈페이지·SNS·광고에 쓰는 이미지입니다. 쓰는 자리마다 규격이 달라서
+               필요한 크기를 한 번에 맞춰 드립니다.</p>
+            <div class="tags"><span class="tag">메인 배너</span><span class="tag">팝업</span><span class="tag">유튜브 썸네일</span></div></div>
+          <div class="card"><h3>카드뉴스</h3>
+            <p>여러 장을 넘겨 보는 형식입니다. 무엇을 몇 장에 나눠 담을지부터 함께 정하고,
+               글이 없으셔도 원고부터 씁니다.</p>
+            <div class="tags"><span class="tag">장수 구성</span><span class="tag">원고 작성</span></div></div>
+          <div class="card"><h3>채널 운영과 같이 하면</h3>
+            <p>SNS 채널 제작·운영과 함께 하시면 올릴 것을 매달 만들어 올리는 것까지
+               한 곳에서 됩니다.</p></div>
         </div>
       </div>
 
       <div class="pnote" style="margin-top:26px">
         <b style="color:var(--ink)">비용 — 상담 후 안내</b><br>
-        종류 · 면 수 · 인쇄 수량에 따라 달라집니다.
+        종류 · 면 수 · 시안 개수 · 인쇄 수량에 따라 달라집니다.
       </div>
 
-      <div class="acts"><a class="btn btn-primary" onclick="go('home','contact')">상담 문의하기 →</a>
+      <div class="acts"><a class="btn btn-primary" href="apply/design/">디자인 의뢰서 쓰기 →</a>
+        <a class="btn btn-ghost" onclick="go('home','contact')">전화 · 메일로 문의</a>
         <a class="btn btn-ghost" onclick="go('home','items')">다른 항목 보기</a></div>
     </div>
   </div>
@@ -752,7 +833,8 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
         길이 · 촬영 포함 여부 · 편수에 따라 달라집니다.
       </div>
 
-      <div class="acts"><a class="btn btn-primary" onclick="go('home','contact')">상담 문의하기 →</a>
+      <div class="acts"><a class="btn btn-primary" href="apply/video/">영상 신청서 쓰기 →</a>
+        <a class="btn btn-ghost" onclick="go('home','contact')">전화 · 메일로 문의</a>
         <a class="btn btn-ghost" onclick="go('home','items')">다른 항목 보기</a></div>
     </div>
   </div>
@@ -784,6 +866,76 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
 <script>
 (function(){
   var VIEWS=['home','blog','web','sns','design','video'];
+
+  /* 분류 트리 — 항목과 하위 갈래를 한 곳에서 정의합니다.
+     🔴 t 값은 각 화면의 subpills(data-t)과 같아야 눌렀을 때 그 갈래가 열립니다. */
+  var CATS=[
+    {v:'blog',  n:'블로그 · 리뷰', subs:[
+      {t:'post',   n:'블로그 홍보',   d:'실제로 방문한 블로거가 직접 쓰고 올립니다.'},
+      {t:'review', n:'네이버 리뷰',   d:'지도·플레이스에 방문자 리뷰를 쌓습니다.'}]},
+    {v:'web',   n:'홈페이지 제작', subs:[
+      {t:'',       n:'홈페이지 제작', d:'1~3단계 중에 고르시면 됩니다. 제작비 없이 월 요금으로만 받습니다.'}]},
+    {v:'sns',   n:'SNS 채널 제작', subs:[
+      {t:'open',   n:'채널 개설',     d:'계정 개설·지도 등록·초기 세팅까지 잡아 드립니다.'},
+      {t:'run',    n:'개설 + 운영',   d:'매달 올릴 것을 만들어 올리고 리포트까지 드립니다.'}]},
+    {v:'design',n:'그래픽 디자인', subs:[
+      {t:'logo',   n:'로고 · 명함',       d:'로고, 명함'},
+      {t:'print',  n:'인쇄 · 홍보물',     d:'브로셔, 전단지, 포스터·리플렛, 책(표지·속지)'},
+      {t:'card',   n:'SNS · 카드뉴스',    d:'웹배너, 썸네일, 카드뉴스'}]},
+    {v:'video', n:'영상 제작', subs:[
+      {t:'short',  n:'숏폼',  d:'세로 짧은 영상. 릴스·쇼츠·틱톡.'},
+      {t:'long',   n:'롱폼',  d:'홍보 스케치, 인터뷰, 정보전달 영상.'}]}
+  ];
+  var bPick=null;   /* null 이면 전체 */
+
+  window.goSub=function(view,t){
+    go(view);
+    if(!t)return;
+    setTimeout(function(){
+      var bar=document.querySelector('.subpills[data-area="'+view+'"]');
+      if(!bar)return;
+      var b=bar.querySelector('.sp[data-t="'+t+'"]');
+      if(b)b.click();
+    },60);
+  };
+
+  function paintBrowse(){
+    var tree=document.getElementById('btree'), box=document.getElementById('bcards');
+    if(!tree||!box)return;
+    var h='<button class="all" type="button" data-all>전체</button>';
+    CATS.forEach(function(c){
+      h+='<div class="bgrp"><b data-go="'+c.v+'">'+c.n+'</b>';
+      c.subs.forEach(function(sb){
+        var key=c.v+'/'+sb.t;
+        h+='<button class="bleaf'+(bPick===key?' on':'')+'" type="button" data-key="'+key+'">'+sb.n+'</button>';
+      });
+      h+='</div>';
+    });
+    tree.innerHTML=h;
+
+    var list=[];
+    CATS.forEach(function(c){ c.subs.forEach(function(sb){
+      var key=c.v+'/'+sb.t;
+      if(bPick===null||bPick===key)list.push({c:c,sb:sb,key:key});
+    });});
+    box.innerHTML=list.map(function(x){
+      return '<button class="bcard" type="button" data-key="'+x.key+'">'
+        +'<span class="tag">'+x.c.n+'</span><b>'+x.sb.n+'</b><p>'+x.sb.d+'</p>'
+        +'<span class="more">보러 가기 →</span></button>';
+    }).join('');
+
+    tree.querySelector('[data-all]').onclick=function(){bPick=null;paintBrowse();};
+    tree.querySelectorAll('[data-go]').forEach(function(b){
+      b.onclick=function(){go(b.dataset.go);};
+    });
+    tree.querySelectorAll('.bleaf').forEach(function(b){
+      b.onclick=function(){bPick=(bPick===b.dataset.key?null:b.dataset.key);paintBrowse();};
+    });
+    box.querySelectorAll('.bcard').forEach(function(b){
+      b.onclick=function(){var p=b.dataset.key.split('/');goSub(p[0],p[1]);};
+    });
+  }
+  paintBrowse();
 
   window.go=function(view,anchor){
     if(VIEWS.indexOf(view)<0)view='home';

@@ -1,0 +1,111 @@
+/* ──────────────────────────────────────────────────────────
+   신청서 공통 모양 — apply/design · video · blog · sns 가 같이 씁니다.
+   🔴 여기를 고치면 신청서 네 장이 한꺼번에 바뀝니다.
+   ────────────────────────────────────────────────────────── */
+:root{
+  --paper:#F4F7FB; --surface:#FFFFFF; --surface-2:#EFF3F9;
+  --ink:#0E1B33; --muted:#56657F; --line:#DFE6F1;
+  --accent:#2E5FE8; --accent-ink:#1E47C0; --band:#12294D;
+  --ok:#12805C; --bad:#C2413B;
+  --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--paper:#0A101E;--surface:#101B30;--surface-2:#16233C;--ink:#E7EDF7;--muted:#9BAAC3;
+        --line:#22314C;--accent:#6E93FF;--accent-ink:#8FAAFF;--ok:#4FBF95;--bad:#F08A85;}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.75;
+     -webkit-font-smoothing:antialiased}
+a{color:inherit}
+h1,h2,h3{margin:0;letter-spacing:-.02em;line-height:1.3;word-break:keep-all}
+p{margin:0;word-break:keep-all}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:5px}
+.wrap{max-width:780px;margin:0 auto;padding:0 20px}
+
+header{background:radial-gradient(120% 100% at 15% -20%,#1E4374 0%,#12294D 62%);color:#fff;padding:44px 0 40px}
+header .back{display:inline-flex;align-items:center;gap:6px;color:#A9C4EA;font-size:13.5px;
+             font-weight:600;text-decoration:none;margin-bottom:18px}
+header .back:hover{color:#fff}
+header h1{font-size:clamp(24px,4vw,32px)}
+header p{color:#B7CBEA;margin-top:12px;font-size:15.5px;max-width:48ch}
+
+main{padding:26px 0 70px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:24px 22px;margin-bottom:14px}
+.eyebrow{font-size:11.5px;font-weight:800;letter-spacing:.18em;color:var(--accent-ink);text-transform:uppercase}
+.card h2{font-size:18px;margin:5px 0 18px}
+.card h2 .req{color:var(--bad);font-size:14px}
+.hint{color:var(--muted);font-size:13.5px;font-weight:400}
+.sub{color:var(--muted);font-size:13.5px;margin:-10px 0 16px;line-height:1.7}
+
+.fld{margin-bottom:15px}
+.fld:last-child{margin-bottom:0}
+.fld label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px}
+.fld label .hint{font-weight:500}
+.inp{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.inp:focus{outline:none;border-color:var(--accent);background:var(--surface)}
+textarea.inp{min-height:92px;resize:vertical}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media(max-width:620px){.g2{grid-template-columns:1fr}}
+
+/* 큰 고르는 칸 */
+.picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media(max-width:640px){.picks{grid-template-columns:1fr}}
+.pick{border:1px solid var(--line);border-radius:12px;padding:16px 15px;background:var(--surface-2);cursor:pointer;
+      transition:.14s;display:block;position:relative}
+.pick:hover{border-color:var(--accent)}
+.pick.on{border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px rgba(46,95,232,.13)}
+.pick .n{font-size:12px;font-weight:800;color:var(--accent-ink);font-style:italic}
+.pick b{display:block;font-size:15px;margin:4px 0 5px}
+.pick span{font-size:13px;color:var(--muted);line-height:1.6}
+.pick input{position:absolute;opacity:0;pointer-events:none}
+
+/* 작은 고르는 칸 */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:8px 15px;background:var(--surface-2);
+      cursor:pointer;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:7px;transition:.14s}
+.chip:hover{border-color:var(--accent)}
+.chip.on{border-color:var(--accent);background:var(--surface);color:var(--accent-ink)}
+.chip input{width:16px;height:16px;accent-color:var(--accent);margin:0}
+
+/* 수량 고르는 칸 (옵션 추가) */
+.opts{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.opt{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.opt:last-child{border-bottom:0}
+.opt .t{flex:1;min-width:190px}
+.opt .t b{display:block;font-size:14.5px}
+.opt .t span{font-size:13px;color:var(--muted);line-height:1.6}
+.qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface-2)}
+.qty button{border:0;background:none;width:34px;height:36px;font-size:17px;cursor:pointer;color:var(--muted)}
+.qty button:hover{color:var(--accent-ink)}
+.qty input{width:44px;height:36px;border:0;background:none;text-align:center;font-weight:800;
+           font-variant-numeric:tabular-nums}
+.qty input::-webkit-outer-spin-button,.qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--muted);line-height:1.7}
+.consent input{width:18px;height:18px;accent-color:var(--accent);margin-top:3px;flex:0 0 auto}
+.consent a{color:var(--accent-ink);font-weight:700}
+
+.note{background:var(--surface-2);border-radius:11px;padding:14px 16px;font-size:13.5px;color:var(--muted);
+      line-height:1.8}
+.note b{color:var(--ink)}
+
+.submit{text-align:center;padding-top:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 34px;border-radius:11px;
+     font-weight:800;font-size:16px;border:0;cursor:pointer;background:var(--band);color:#fff;transition:.14s}
+.btn:hover{background:#1B3A69}
+.btn[disabled]{opacity:.55;cursor:default}
+.err{color:var(--bad);font-size:14px;margin-top:12px;min-height:20px;font-weight:600}
+
+.done{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:44px 26px;text-align:center}
+.done .ic{font-size:40px}
+.done h2{font-size:21px;margin:12px 0 8px}
+.done p{color:var(--muted);font-size:15px}
+.done .box{background:var(--surface-2);border-radius:11px;padding:14px 16px;margin-top:20px;
+           font-size:14px;text-align:left;color:var(--muted);line-height:1.8}
+.done .box b{color:var(--ink)}
+
+footer{border-top:1px solid var(--line);padding:22px 0 46px;color:var(--muted);font-size:12.5px;line-height:1.9}
+footer a{color:var(--ink);font-weight:700;text-decoration:none}
+footer a:hover{text-decoration:underline}
+footer span.sep{margin:0 8px;color:var(--line)}

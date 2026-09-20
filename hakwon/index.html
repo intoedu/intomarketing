@@ -181,6 +181,9 @@
   .pbig small{font-size:.86rem;font-weight:700;color:var(--muted);letter-spacing:0}
   .pbig.quote{font-size:1.25rem;color:var(--accent)}
   .psmall{font-size:.83rem;color:var(--muted);margin-top:7px}
+  .pterms{font-size:.78rem;color:var(--muted);margin-top:8px;line-height:1.7;
+          border-top:1px dashed var(--line);padding-top:8px}
+  .pterms b{color:var(--ink);font-weight:800;font-variant-numeric:tabular-nums}
   .psmall b{color:var(--ink);font-weight:800}
   .psmall b.isfree{color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,transparent);
        padding:1px 8px;border-radius:999px}
@@ -735,7 +738,7 @@
           <a href="#" class="btn btn-primary" onclick="go('home','apply');return false;">지원 신청하기 →</a>
           <a href="#" class="btn btn-ghost" onclick="scrollId('support');return false;">지원사업 살펴보기</a>
         </div>
-        <p class="microcopy">홈페이지 <b>제작비 0원</b> · 월 관리비만 · 파트너 학원 전용 정책</p>
+        <p class="microcopy">홈페이지 <b>제작비 0원</b> · 월 요금만 · 파트너 학원은 가장 낮은 요금</p>
       </div>
       <aside class="side" aria-label="지원 요약">
         <div class="side-h">지원 영역 <span>4</span></div>
@@ -823,7 +826,7 @@
       <div class="stats">
         <div class="stat"><div class="big tnum">1,590<span style="font-size:1rem"> 편</span></div><div class="lab">직접 운영 블로그 글</div><div class="sub">대전 875 · 청주 141 · 광주 574</div></div>
         <div class="stat"><div class="big tnum">4</div><div class="lab">지원 영역</div><div class="sub">자료·인력·컨텐츠·마케팅</div></div>
-        <div class="stat"><div class="big">0<span style="font-size:1rem"> 원</span></div><div class="lab">홈페이지 제작비</div><div class="sub">월 관리비만 · 파트너 전용</div></div>
+        <div class="stat"><div class="big">0<span style="font-size:1rem"> 원</span></div><div class="lab">홈페이지 제작비</div><div class="sub">월 요금만 · 최소 약정 3개월</div></div>
         <div class="stat"><div class="big">1:1</div><div class="lab">전담 담당자 배정</div><div class="sub">신청 후 영역별 매칭</div></div>
       </div>
     </div>
@@ -901,7 +904,7 @@
     <div class="wrap" style="max-width:820px">
       <div class="sec-head reveal"><div class="kicker">FAQ</div><h2>자주 묻는 질문</h2></div>
       <div class="reveal">
-        <details open><summary>제작비가 정말 없나요?<span class="plus"></span></summary><div class="ans"><b>프리미엄(파트너) 회원</b>은 1·2단계를 제작비 없이 월 관리비만 받습니다. 일반 회원은 제작비가 별도로 있으며, 3·4단계는 기능에 따라 견적으로 안내됩니다. 로그인하면 회원 종류에 맞는 가격이 자동으로 표시됩니다.</div></details>
+        <details open><summary>제작비가 정말 없나요?<span class="plus"></span></summary><div class="ans">네. <b>제작비는 따로 받지 않습니다.</b> 제작비를 약정 기간에 나눠 넣어 <b>월 요금으로만</b> 받습니다. 최소 약정은 3개월이고, 약정이 길수록 월 요금이 내려갑니다. <b>프리미엄(파트너) 학원</b>은 약정 기간과 상관없이 가장 낮은 요금(24개월 값)으로 드립니다.</div></details>
         <details><summary>유료 도메인 비용은 누가 내나요?<span class="plus"></span></summary><div class="ans">도메인은 학원 소유가 되기 때문에 학원에서 부담합니다(연 1~2만원대). 신청 시 사용 여부를 선택하실 수 있고, 무료 주소로도 시작할 수 있습니다.</div></details>
         <details><summary>원어민 수업 시차는 어떻게 되나요?<span class="plus"></span></summary><div class="ans">필리핀은 한국보다 1시간, 미국은 14시간 느립니다. 원하는 시간은 한국시간 기준으로 적어주시면 되고, 미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다(현지 심야 시간대).</div></details>
         <details><summary>온라인 카드 결제도 되나요?<span class="plus"></span></summary><div class="ans">현재는 계좌 안내로 진행하며, 카드 결제(PG) 연동 기능은 추후 단계에서 추가될 예정입니다.</div></details>
@@ -1049,7 +1052,7 @@
           <div class="fstep"><div class="n">STEP 03</div><h4>견적</h4><p>디자인·인쇄 범위로 견적을 냅니다.</p></div>
           <div class="fstep"><div class="n">STEP 04</div><h4>제작</h4><p>시안을 디자인합니다.</p></div>
           <div class="fstep"><div class="n">STEP 05</div><h4>컨펌</h4><p>시안을 확인하고 수정합니다.</p></div>
-          <div class="fstep"><div class="n">STEP 06</div><h4>납부</h4><p>제작비를 납부합니다.</p></div>
+          <div class="fstep"><div class="n">STEP 06</div><h4>납부</h4><p>오픈일부터 매달 월 요금을 냅니다.</p></div>
           <div class="fstep"><div class="n">STEP 07</div><h4>마감·전달</h4><p>파일 전달 또는 인쇄·배송.</p></div>
         </div>
         <div class="cnote">🖨️ 디자인만 제작하거나 인쇄·배송까지 선택할 수 있습니다. <b>비용은 항목·수량에 따라 견적으로 안내</b>합니다.</div>
@@ -1476,7 +1479,7 @@
           가격·견적처럼 주고받아야 하는 이야기는 <b>1대1 상담</b>이 편합니다 — 나와 담당자만 봅니다.</p>
         <div id="qnaList" class="board-list"><div class="board-empty">불러오는 중…</div></div>
         <div class="sec-head" style="max-width:none;margin:52px 0 20px"><div class="kicker">FAQ</div><h2 style="font-size:1.4rem">자주 묻는 질문</h2></div>
-        <details open><summary>제작비가 정말 없나요?<span class="plus"></span></summary><div class="ans"><b>프리미엄(파트너) 회원</b>은 1·2단계를 제작비 없이 월 관리비만 받습니다. 일반 회원은 제작비가 별도로 있으며, 3·4단계는 기능에 따라 견적으로 안내됩니다. 로그인하면 회원 종류에 맞는 가격이 자동으로 표시됩니다.</div></details>
+        <details open><summary>제작비가 정말 없나요?<span class="plus"></span></summary><div class="ans">네. <b>제작비는 따로 받지 않습니다.</b> 제작비를 약정 기간에 나눠 넣어 <b>월 요금으로만</b> 받습니다. 최소 약정은 3개월이고, 약정이 길수록 월 요금이 내려갑니다. <b>프리미엄(파트너) 학원</b>은 약정 기간과 상관없이 가장 낮은 요금(24개월 값)으로 드립니다.</div></details>
         <details><summary>유료 도메인 비용은 누가 내나요?<span class="plus"></span></summary><div class="ans">도메인은 학원 소유가 되기 때문에 학원에서 부담합니다(연 1~2만원대). 신청 시 사용 여부를 선택하실 수 있고, 무료 주소로도 시작할 수 있습니다.</div></details>
         <details><summary>원어민 수업 시차는 어떻게 되나요?<span class="plus"></span></summary><div class="ans">필리핀은 한국보다 1시간, 미국은 14시간 느립니다. 원하는 시간은 한국시간 기준으로 적어주시면 되고, 미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다(현지 심야 시간대).</div></details>
         <details><summary>온라인 카드 결제도 되나요?<span class="plus"></span></summary><div class="ans">현재는 계좌 안내로 진행하며, 카드 결제(PG) 연동 기능은 추후 단계에서 추가될 예정입니다.</div></details>
@@ -2453,39 +2456,45 @@
     else{m.className='modal-msg err';m.textContent=(res.data&&res.data.error)||'전환에 실패했습니다.';}
   }
   /* ===== 회원별 홈페이지 가격표 ===== */
+  /* 🔴 2026-09-20 매뉴얼대로 바꿈 — 4단계 → 3단계, 제작비 없음, 약정 월 요금.
+        파트너(프리미엄) 혜택 = 약정 기간과 상관없이 «24개월 값»을 적용합니다.
+        예전에는 「제작비 0원」이 파트너 혜택이었는데, 이제 제작비는 누구나 없습니다. */
   var PRICE_STAGES=[
-    {s:'1단계',sub:'단순 홍보형',tip:'홈페이지가 아직 없으시다면 여기서 시작하세요',
-     inc:'학원 소개, 원장 인사말, 시설·시간표 안내, 오시는 길(지도), 전화·카톡 상담 연결'},
-    {s:'2단계',sub:'소통형',best:1,tip:'학부모와 주고받을 것이 있다면 이 단계입니다',
-     inc:'1단계에 있는 것 전부, 회원가입·로그인, 공지·Q&amp;A 게시판, 갤러리, 자료실'},
-    {s:'3단계',sub:'신청·결제형',tip:'수강신청·결제까지 홈페이지에서 받으실 때',
-     inc:'2단계에 있는 것 전부, 강좌 목록, 온라인 수강신청, 신청 관리, 카드 결제 연동'},
-    {s:'4단계',sub:'맞춤 제작형',merged:true,tip:'원하시는 것을 말씀해 주시면 맞춰 만듭니다',
+    {s:'1단계',sub:'단순 홍보형',pages:'3페이지 이하',tip:'홈페이지가 아직 없으시다면 여기서 시작하세요',
+     inc:'학원 소개, 원장 인사말, 시설·시간표 안내, 오시는 길(지도), 전화·카톡 상담 버튼'},
+    {s:'2단계',sub:'소통형',best:1,pages:'5페이지 이하',tip:'학부모와 주고받을 것이 있다면 이 단계입니다',
+     inc:'1단계에 있는 것 전부, 회원가입·로그인, 공지, Q&amp;A(비밀글), 자유게시판, 갤러리'},
+    {s:'3단계',sub:'맞춤 제작형',merged:true,pages:'10페이지 이상',tip:'원하시는 것을 말씀해 주시면 맞춰 만듭니다',
      inc:'정해진 틀 없이 학원 요구에 맞춰 기능·디자인을 자유롭게 설계하는 완전 맞춤형'}
   ];
+  /* [3개월, 6개월, 12개월, 24개월] · 부가세 포함 · 월 요금 */
   var PRICE_TABLE={
-    general:[['4.5만원','5만원'],['7만원','5~7만원'],['견적 후 안내','9~12만원'],['견적 후 안내']],
-    premium:[['무료','3만원'],['무료','4~6만원'],['견적 후 안내','7~10만원'],['견적 후 안내']]
+    general:[['65,000','55,000','48,000','45,000'],['103,000','88,000','76,000','72,000'],null],
+    premium:[['45,000','45,000','45,000','45,000'],['72,000','72,000','72,000','72,000'],null]
   };
+  var TERMS=['3개월','6개월','12개월','24개월'];
   function renderPricing(premium){
     var rowsEl=document.getElementById('priceRows');if(!rowsEl)return;
     var arr=premium?PRICE_TABLE.premium:PRICE_TABLE.general,h='';
     for(var i=0;i<PRICE_STAGES.length;i++){
       var st=PRICE_STAGES[i],p=arr[i];
-      var free=p[0],fee=st.merged?'':p[1];
-      var isFree=/무료/.test(free);
       h+='<div class="pcard'+(st.best?' best':'')+(st.merged?' wide':'')+'">'
         +(st.best?'<div class="pbest">가장 많이 고르십니다</div>':'')
         +'<div class="pstage">'+st.s+'</div>'
         +'<div class="psub">'+st.sub+'</div>'
         +'<div class="ptip">'+st.tip+'</div>'
         +'<div class="pmoney">';
-      if(st.merged){
-        h+='<div class="pbig quote">'+free+'</div>'
-          +'<div class="psmall">기능이 정해지면 그때 금액을 알려드립니다</div>';
+      if(st.merged||!p){
+        h+='<div class="pbig quote">견적 후 안내</div>'
+          +'<div class="psmall">'+st.pages+' · 기능이 정해지면 그때 금액을 알려드립니다</div>';
       }else{
-        h+='<div class="pbig tnum">'+fee+'<small> / 월</small></div>'
-          +'<div class="psmall">제작비 <b'+(isFree?' class="isfree"':'')+'>'+free+'</b></div>';
+        /* 파트너는 네 기간 값이 같아 「기간과 상관없이」로 보여 줍니다 */
+        var same=(p[0]===p[3]);
+        h+='<div class="pbig tnum">'+p[3]+'<small> 원 / 월</small></div>'
+          +'<div class="psmall">'+st.pages+' · <b class="isfree">제작비 없음</b></div>'
+          +'<div class="pterms">'+(same
+             ? '약정 기간과 상관없이 <b>월 '+p[0]+'원</b>'
+             : TERMS.map(function(t,k){return t+' <b>'+p[k]+'</b>';}).join(' · '))+'</div>';
       }
       h+='</div><ul class="pinc">';
       st.inc.split(/,\s*/).forEach(function(x){ h+='<li>'+x+'</li>'; });
@@ -2493,8 +2502,8 @@
     }
     rowsEl.innerHTML=h;
     var tag=document.getElementById('priceTag');
-    if(tag){tag.innerHTML=premium?'<span class="ptag on">✓ 프리미엄 회원가로 표시 중</span>':'<span class="ptag">일반 가격입니다 · <b>프리미엄(파트너) 회원</b>은 회원가로 더 저렴합니다</span>';}
-    var sd=document.getElementById('sidePriceDoc');if(sd)sd.textContent=premium?'관리비 3만~':'관리비 5만~';
+    if(tag){tag.innerHTML=premium?'<span class="ptag on">✓ 파트너 학원가로 표시 중 — 약정 기간과 상관없이 가장 낮은 요금</span>':'<span class="ptag">일반 가격입니다 · <b>프리미엄(파트너) 학원</b>은 약정 기간과 상관없이 가장 낮은 요금으로 드립니다</span>';}
+    var sd=document.getElementById('sidePriceDoc');if(sd)sd.textContent=premium?'월 45,000원~':'월 65,000원~';
     var sm=document.getElementById('sidePriceMkt');if(sm)sm.textContent=premium?'편당 3,000원':'편당 6,000원';
     CUR_PREMIUM=!!premium;
     renderBlogPrice(premium);

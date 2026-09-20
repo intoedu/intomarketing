@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>블로그 · 리뷰 신청서 · 인투마케팅</title>
+<meta name="description" content="인투마케팅 블로그·리뷰 홍보 신청서. 한 달에 10~100편.">
+<link rel="canonical" href="https://intomarketing.co.kr/apply/blog/">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../hakwon/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../../hakwon/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#12294D">
+<link rel="stylesheet" href="../form.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="back" href="../../#blog">← 블로그 · 리뷰</a>
+    <h1>블로그 · 리뷰 신청서</h1>
+    <p>실제로 방문한 블로거가 직접 쓰고 올립니다.
+       적어 주시면 담당자가 배정되어 <b>1~2일 안에</b> 연락드립니다.</p>
+  </div>
+</header>
+
+<main class="wrap">
+<form id="form" data-kind="블로그·리뷰" data-area="마케팅" novalidate>
+
+  <!-- 01 -->
+  <section class="card">
+    <p class="eyebrow">Type</p>
+    <h2>무엇을 도와드릴까요? <span class="req">*</span></h2>
+    <div class="picks" data-one data-q="갈래" data-req="갈래">
+      <label class="pick"><input type="radio" name="tp" value="블로그 홍보">
+        <span class="n">01</span><b>블로그 홍보</b><span>블로거가 방문해 글을 쓰고 자기 블로그에 올립니다.</span></label>
+      <label class="pick"><input type="radio" name="tp" value="네이버 리뷰">
+        <span class="n">02</span><b>네이버 리뷰</b><span>지도·플레이스에 방문자 리뷰를 쌓습니다.</span></label>
+      <label class="pick"><input type="radio" name="tp" value="둘 다">
+        <span class="n">03</span><b>둘 다</b><span>블로그와 리뷰를 같이 진행합니다.</span></label>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="card">
+    <p class="eyebrow">Business</p>
+    <h2>어떤 곳인가요? <span class="req">*</span></h2>
+    <p class="sub">업종을 고르시면 아래 보기가 그 업종에 맞게 바뀝니다.</p>
+    <div class="chips" data-one data-q="업종" data-req="업종" id="bizBox">
+      <label class="chip"><input type="radio" name="biz" value="학원">학원</label>
+      <label class="chip"><input type="radio" name="biz" value="음식점">음식점</label>
+      <label class="chip"><input type="radio" name="biz" value="병원·의원">병원 · 의원</label>
+      <label class="chip"><input type="radio" name="biz" value="미용실·네일">미용실 · 네일</label>
+      <label class="chip"><input type="radio" name="biz" value="헬스·필라테스">헬스 · 필라테스</label>
+      <label class="chip"><input type="radio" name="biz" value="카페">카페</label>
+      <label class="chip"><input type="radio" name="biz" value="기타">기타</label>
+    </div>
+
+    <div class="fld" style="margin-top:18px">
+      <label>주로 오는 고객 <span class="hint">(여러 개 고르셔도 됩니다)</span></label>
+      <div class="chips" data-multi data-q="주로 오는 고객" id="whoBox"></div>
+    </div>
+
+    <div class="fld">
+      <label>무엇을 알리고 싶으신가요? <span class="hint">(검색했을 때 걸리고 싶은 것)</span></label>
+      <div class="chips" data-multi data-q="홍보 목적" id="goalBox"></div>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section class="card">
+    <p class="eyebrow">Basic</p>
+    <h2>기본 정보</h2>
+    <div class="g2">
+      <div class="fld"><label for="f_name">상호 (정식 명칭) <span class="req">*</span></label>
+        <input class="inp" id="f_name" data-col="academy_name" data-req="상호" placeholder="예: 우리동네커피 도안점"></div>
+      <div class="fld"><label for="f_boss">대표자 · 담당자 성함</label>
+        <input class="inp" id="f_boss" data-col="manager_name" placeholder="예: 김사장"></div>
+    </div>
+    <div class="g2">
+      <div class="fld"><label for="f_phone">연락처 <span class="req">*</span></label>
+        <input class="inp" id="f_phone" type="tel" inputmode="tel" data-col="phone" data-req="연락처" placeholder="010-0000-0000"></div>
+      <div class="fld"><label for="f_email">이메일</label>
+        <input class="inp" id="f_email" type="email" data-col="email"></div>
+    </div>
+    <div class="fld"><label>알리고 싶은 지역 <span class="req">*</span>
+      <span class="hint">(검색어에 들어갑니다. 예: 「대전 도안동」)</span></label>
+      <input class="inp" data-q="알리고 싶은 지역" data-req="알리고 싶은 지역" placeholder="예: 대전 유성구 도안동"></div>
+    <div class="fld"><label>취급 항목 · 서비스</label>
+      <input class="inp" data-q="취급 항목·서비스" placeholder="예: 핸드드립, 디저트, 단체 예약"></div>
+    <div class="fld"><label>주소 · 영업 시간 · 대표 전화</label>
+      <textarea class="inp" data-q="주소·영업시간·전화" placeholder="모든 글에 똑같이 들어갑니다."></textarea></div>
+  </section>
+
+  <!-- 04 -->
+  <section class="card">
+    <p class="eyebrow">Volume</p>
+    <h2>편수 <span class="req">*</span></h2>
+    <p class="sub">한 달에 몇 편을 올릴지 정합니다. <b>10편부터 100편까지</b> 고르실 수 있고,
+       <b>기간은 한 달</b>입니다. 시작일은 자료를 다 받아 확인한 날부터 셉니다.</p>
+    <div class="fld">
+      <label>원하시는 편수</label>
+      <div class="qty" style="width:max-content">
+        <button data-d="-">−</button>
+        <input type="number" id="cnt" value="10" min="10" max="100" step="5" data-q="편수" style="width:60px">
+        <button data-d="+">+</button>
+      </div>
+    </div>
+    <div class="fld"><label>언제부터 시작하고 싶으신가요?</label>
+      <input class="inp" data-q="희망 시작 시기" placeholder="예: 다음 주부터 / 이번 달 안에"></div>
+  </section>
+
+  <!-- 05 -->
+  <section class="card">
+    <p class="eyebrow">Story</p>
+    <h2>글에 담을 이야기</h2>
+    <p class="sub">글이 비슷해지지 않게 하려고 여쭙습니다. 모르시면 비워 두셔도 됩니다.</p>
+    <div class="fld"><label>우리를 한 문장으로 하면?</label>
+      <input class="inp" data-q="한 문장 소개" placeholder="예: 원두를 매일 아침 직접 볶는 동네 카페"></div>
+    <div class="fld"><label>다른 곳과 다른 점</label>
+      <textarea class="inp" data-q="다른 곳과 다른 점" placeholder="예: 사장이 직접 로스팅합니다 / 주차가 10대까지 됩니다"></textarea></div>
+    <div class="fld"><label>문의 오면 꼭 보여주시는 것</label>
+      <input class="inp" data-q="꼭 보여주는 것" placeholder="예: 로스팅 기계, 원두 보관실"></div>
+    <div class="fld"><label>글에 쓰지 말아야 할 내용</label>
+      <textarea class="inp" data-q="쓰지 말아야 할 내용" placeholder="예: 가격은 적지 말아 주세요 / 사장 얼굴은 빼주세요"></textarea></div>
+    <div class="fld"><label>그 밖에 하고 싶은 말</label>
+      <textarea class="inp" data-col="message"></textarea></div>
+  </section>
+
+  <section class="card">
+    <p class="note">사진은 접수 뒤 진행 현황 페이지에서 올리실 수 있습니다.
+      글마다 다른 사진을 써야 해서 <b>30장 이상</b>이면 좋습니다.
+      모든 글에는 법에 따라 <b>광고 표기</b>가 들어갑니다.</p>
+  </section>
+
+  <section class="card">
+    <label class="consent"><input type="checkbox" id="f_consent">
+      <span>개인정보 수집·이용에 동의합니다. 적어 주신 정보는 <b>상담과 견적</b> 외에는 쓰지 않습니다.
+        <a href="../../privacy/" target="_blank" rel="noopener">개인정보처리방침 보기</a></span></label>
+  </section>
+
+  <div class="submit">
+    <button class="btn" id="btn" type="submit" data-label="신청서 제출 ↗">신청서 제출 ↗</button>
+    <p class="err" id="err"></p>
+  </div>
+</form>
+
+<div class="done" id="done" style="display:none">
+  <div class="ic">✅</div>
+  <h2>신청이 접수되었습니다</h2>
+  <p>담당자가 배정되어 <b>1~2일 안에</b> 연락드리겠습니다. 감사합니다.</p>
+  <div class="box">
+    <b>다음 순서</b><br>
+    담당자가 사진과 전달사항을 받을 <b>진행 현황 주소</b>를 보내드립니다.<br>
+    급하시면 전화 <a href="tel:01073181790">010-7318-1790</a>
+  </div>
+  <p style="margin-top:20px"><a href="../../#blog">← 블로그 · 리뷰로 돌아가기</a></p>
+</div>
+</main>
+
+<footer class="wrap">
+  인투마케팅 · 대표 양회광 · 사업자등록번호 306-24-53380<br>
+  대전광역시 유성구 은구비남로33번길 13-8, 3397호
+  <div style="margin-top:10px">
+    <a href="../../privacy/">개인정보처리방침</a><span class="sep">|</span><a href="../../terms/">이용약관</a><span class="sep">|</span><a href="../../">인투마케팅</a>
+  </div>
+</footer>
+
+<script>
+/* 업종을 고르면 「주로 오는 고객」과 「홍보 목적」 보기가 바뀝니다.
+   🔴 근거 = 학원지원센터/신청서/블로그마케팅-신청서-내용정리.md 부록 B.
+      「학년·대상」과 「홍보 목적」은 학원 전용이라 업종마다 새로 짜야 한다고 적혀 있습니다. */
+(function(){
+  var BIZ={
+    '학원':      {who:['초등','예비중','중등','예비고','고등','재수·N수','성인'],
+                  goal:['내신','학원 추천','레벨테스트','방학특강','선행','기초 다지기','소수정예','관리형','원어민','1:1 맞춤','입시 상담','수행평가']},
+    '음식점':    {who:['가족','직장인','데이트','단체','혼밥'],
+                  goal:['맛집','배달','회식','주차','예약','룸','브런치','야식']},
+    '병원·의원': {who:['소아','성인','노인','임산부'],
+                  goal:['야간진료','주말진료','비급여','건강검진','예약','주차']},
+    '미용실·네일':{who:['남성','여성','학생'],
+                  goal:['펌','염색','클리닉','예약','남성컷','가격']},
+    '헬스·필라테스':{who:['초보','직장인','시니어','산전산후'],
+                  goal:['PT','그룹수업','1:1','체험','등록비','샤워시설']},
+    '카페':      {who:['혼자','스터디','모임','반려동물'],
+                  goal:['콘센트','주차','디저트','24시','테라스']},
+    '기타':      {who:['신규 고객','단골','가족','직장인','학생'],
+                  goal:['위치','주차','예약','가격','영업시간','신규 오픈']}
+  };
+  function draw(box,list,name){
+    box.innerHTML=list.map(function(v){
+      return '<label class="chip"><input type="checkbox" value="'+v+'">'+v+'</label>';
+    }).join('');
+  }
+  function pickBiz(v){
+    var b=BIZ[v]||BIZ['기타'];
+    draw(document.getElementById('whoBox'),b.who);
+    draw(document.getElementById('goalBox'),b.goal);
+  }
+  document.getElementById('bizBox').addEventListener('change',function(e){
+    if(e.target&&e.target.name==='biz')pickBiz(e.target.value);
+  });
+  pickBiz('기타');   /* 처음엔 공통 보기 */
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../form.js"></script>
+</body>
+</html>
