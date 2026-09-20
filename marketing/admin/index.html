@@ -189,6 +189,14 @@
   .p-sec{margin-top:30px}
   .p-sec h4{font-size:.82rem;font-weight:800;letter-spacing:.06em;color:#12294D;margin-bottom:9px}
   .p-sec .box{border:1px solid #dce3ee;border-radius:8px;padding:14px 16px;font-size:.85rem;white-space:pre-wrap;line-height:1.75;color:#333}
+  /* 서명란 — 견적서를 계약서처럼 쓸 때 */
+  .p-sign{margin-top:30px;border:1px solid #dce3ee;border-radius:8px;padding:18px 16px;background:#fbfcfe}
+  .p-sign .sg-t{font-size:.86rem;font-weight:700;color:#12294D;margin-bottom:16px}
+  .p-sign .sg-row{display:flex;gap:28px;flex-wrap:wrap}
+  .p-sign .sg{flex:1;min-width:190px;display:flex;align-items:flex-end;gap:10px}
+  .p-sign .sg span{font-size:.8rem;color:#666;white-space:nowrap}
+  .p-sign .sg i{flex:1;border-bottom:1px solid #b9c4d6;height:26px;display:block}
+  .p-sign .sg-n{margin-top:12px;font-size:.76rem;color:#888}
   .p-f{margin-top:34px;padding-top:16px;border-top:1px solid #e3e8f0;text-align:center;font-size:.78rem;color:#888;line-height:1.7}
   @media print{
     body{background:#fff}
@@ -532,6 +540,25 @@
 
     <div class="sec-t">비고</div>
     <textarea class="inp" id="q_note" placeholder="작업 범위, 수정 횟수, 기타 안내사항 등을 적어 주세요."></textarea>
+
+    <!-- 계약 조항 — 견적서 하나로 계약서 노릇까지 하게 하는 부분입니다 -->
+    <div class="sec-t" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      계약 조항
+      <span class="muted" style="font-weight:500;font-size:.8rem">견적서 아래에 그대로 인쇄됩니다. 비우면 그 칸은 안 나옵니다.</span>
+      <button class="btn btn-ghost" style="margin-left:auto;padding:6px 12px;font-size:.8rem" type="button"
+              onclick="fillTerms()">기본 문구 다시 넣기</button>
+    </div>
+    <div class="muted" id="q_terms_hint" style="font-size:.8rem;margin:-6px 0 10px"></div>
+    <div class="fld"><label>작업 순서</label>
+      <textarea class="inp" id="q_flow" rows="6" placeholder="어떤 순서로 진행되는지 적습니다."></textarea></div>
+    <div class="grid2">
+      <div class="fld"><label>포함되는 것</label>
+        <textarea class="inp" id="q_inc" rows="5"></textarea></div>
+      <div class="fld"><label>포함되지 않는 것</label>
+        <textarea class="inp" id="q_exc" rows="5"></textarea></div>
+    </div>
+    <div class="fld"><label>환불 규정 <span class="muted" style="font-weight:500">— 결제 전에 보여드려야 효력이 있습니다</span></label>
+      <textarea class="inp" id="q_ref" rows="7"></textarea></div>
   </div>
   <div class="sheet-f">
     <button class="btn btn-primary" type="button" onclick="saveQuote(true)">저장하고 미리보기</button>
@@ -1001,11 +1028,91 @@
   /* ---------- 견적서 ---------- */
   var CYCLES=['1회','매월','매년'];
   function won(n){n=Number(n)||0;return '₩'+n.toLocaleString('ko-KR');}
+  /* ── 견적서에 들어갈 «계약 조항» 기본 문구 ─────────────────────────
+     견적서 하나로 계약서 노릇까지 하게 하려고 넣습니다.
+     🔴 근거 = 인투마케팅 메뉴얼. 지어낸 문장이 아닙니다.
+        영상 = 영상/0·1·3 매뉴얼 · SNS = SNS/매뉴얼0·1·2·3 · 블로그 = 블로그 담당자 매뉴얼
+     🔴 디자인은 매뉴얼이 아직 없어 «비워 둡니다». 담당자가 직접 적어야 합니다.
+        빈 채로 두면 견적서에 그 칸이 아예 안 나옵니다. */
+  var TERMS={
+    video:{
+      flow:'1. 신청 접수 후 1영업일 안에 연락드려 작업 범위를 확인합니다.\n'
+          +'2. 정보가 모이면 1영업일 안에 견적서를 보내드립니다.\n'
+          +'3. 입금이 확인되면 담당자를 배정하고 제작에 필요한 자료를 요청합니다.\n'
+          +'4. 자료가 모두 오면 담당자가 「의뢰 시작」을 날짜와 함께 알려드립니다. (이 날이 기한·환불의 기준일)\n'
+          +'5. 기획서는 3영업일(콘티 5영업일), 구성안은 2영업일 안에 공유하고 컨펌을 받습니다.\n'
+          +'6. 촬영일은 2영업일 전에 안내하고, 촬영 원본은 촬영일로부터 2영업일 안에 전달합니다.\n'
+          +'7. 편집 중 중간보고로 방향을 한 번 확인합니다. (중간보고 의견은 수정 횟수에 들어가지 않습니다)\n'
+          +'8. 최종본 전달 후 3영업일간 수정 요청이 없으면 최종 확정되고, 확정 후 1영업일 안에 납품합니다.',
+      include:'· 견적 내역에 적힌 작업\n· 수정은 결과물 종류별 1회 (기획서 1회, 완성 영상 1회)\n· 편집 중 중간보고 1회\n· 모든 기한은 영업일(월~금, 공휴일 제외, 20:00 마감) 기준이며 실제 날짜로 안내드립니다.',
+      exclude:'· 모델·출연자·장소 섭외 및 대여 비용\n· 견적서에 적히지 않은 유료 폰트·음원\n· 촬영 원본 파일 및 편집 프로젝트 파일 (따로 납품하기로 한 경우는 제외)\n· 확정한 구성안 밖의 추가 촬영·추가 소스 반영\n· 고객 피드백·자료를 기다리는 기간은 작업 기한에서 제외됩니다.',
+      refund:'· 의뢰 시작 전 (담당자 배정·자료 대기 포함) : 전액 환불\n'
+            +'· 의뢰 시작 후 고객 사유 : 이미 시작한 작업(기획·촬영·편집) 금액만 공제하고 환불\n'
+            +'· 편집만 의뢰하신 경우 : 의뢰 시작과 동시에 편집이 시작되어 환불이 불가합니다.\n'
+            +'· 촬영 : 촬영일 2영업일 전부터 인력·장비를 확보하므로 시작한 것으로 봅니다.\n'
+            +'· 당사 사유로 진행이 불가한 경우 : 전액 환불 (이미 받으신 결과물을 계속 사용하시면 그 금액만 공제)\n'
+            +'· 당사 지연이 약속한 최종본 전달일로부터 10영업일을 넘기면 고객이 해지할 수 있습니다.\n'
+            +'· 환불은 금액 산정 내역을 안내하고 계좌 확인 후 5영업일 이내 입금합니다.'},
+    sns:{
+      flow:'1. 신청 접수 후 1영업일 안에 연락드려 채널과 작업 범위를 확인합니다.\n'
+          +'2. 정보가 모이면 1영업일 안에 견적서를 보내드립니다.\n'
+          +'3. 입금이 확인되면 담당자를 배정하고 세팅정보 요청서를 보내드립니다.\n'
+          +'4. 자료와 기존 계정 관리자 권한을 받고, 새로 여는 채널은 인증 일정을 정합니다.\n'
+          +'5. 담당자가 「의뢰 시작」을 날짜와 함께 알려드립니다. (이 날이 기한·환불의 기준일)\n'
+          +'6. 기존 계정은 진단표를 작성하고, 계정이 없는 채널은 고객 명의로 개설합니다.\n'
+          +'7. 채널 세팅안을 공유하고 컨펌을 받은 뒤 반영합니다.\n'
+          +'8. 오픈 보고 후 3영업일간 수정 요청이 없으면 최종 확정됩니다.\n'
+          +'[정기 콘텐츠] 계획표 공유(시작 5영업일 전) → 컨펌(3영업일 전) → 제작 → 업로드 2영업일 전 사전 공유 → 업로드·응대 → 월간 리포트',
+      include:'· 견적 내역에 적힌 채널의 세팅\n· 세팅안 수정 1회, 업로드 전 게시물 건별 1회\n· 계정은 고객님 명의로 개설하며, 계약 종료 시 정보·권한을 그대로 인계해 드립니다.',
+      exclude:'· 네이버 톡톡·카카오톡 채널의 상담 응대 (연결·기본 세팅과 응대 교육까지만 제공, 응대는 고객이 직접)\n· 광고비·플랫폼 유료 기능 이용료\n· 스레드는 계정 개설과 활용 가이드만 제공하며 세팅·운영은 하지 않습니다.\n· 지도 등록 승인, 구글 인증, 샤오홍슈 기업 인증 등 플랫폼 심사 기간은 작업 기한에서 제외됩니다.\n· 업로드 후 수정은 당사 실수인 경우에만 무료입니다.',
+      refund:'[1회 상품 · 세팅]\n'
+            +'· 의뢰 시작 전 : 전액 환불\n'
+            +'· 의뢰 시작 후 : 이미 진행한 작업(진단·개설·세팅) 금액만 공제하고 환불\n'
+            +'· 세팅안 확정 이후 : 환불 불가\n'
+            +'[정기 콘텐츠]\n'
+            +'· 다음 달부터 해지 : 결제일 7영업일 전까지 서면 통보 시 다음 달분을 청구하지 않습니다.\n'
+            +'· 당월 중도 해지 : 월 콘텐츠 계획표 컨펌 전이면 전액, 컨펌 후에는 진행분을 공제하고 환불\n'
+            +'· 당사 사유로 진행이 불가한 경우 : 전액 또는 미이행분 환불\n'
+            +'· 환불은 계좌 확인 후 5영업일 이내 입금합니다.'},
+    blog:{
+      flow:'1. 신청 접수 후 담당자가 배정되어 연락드립니다.\n'
+          +'2. 사진과 소개 자료를 받습니다. (글마다 다른 사진이 필요해 30장 이상 권장)\n'
+          +'3. 자료를 확인한 날 담당자가 「의뢰 시작」을 알려드리며, 그날부터 30일이 마감입니다.\n'
+          +'   🔴 입금일이 아니라 자료를 확인한 날부터 셉니다.\n'
+          +'4. 글마다 검색어를 나눠 배정하고, 블로거가 쓴 원고를 발행 전에 검수합니다.\n'
+          +'5. 진행 상황과 검색 순위는 진행 현황 페이지에서 확인하실 수 있습니다.\n'
+          +'6. 주문하신 편수가 모두 올라가면 안내드립니다. 자동으로 다음 달이 시작되지 않습니다.',
+      include:'· 주문 편수만큼의 원고 작성·검수·발행\n· 발행된 글은 최소 12개월 유지하며, 그 사이 삭제되면 다시 게시합니다.\n· 모든 글에는 법에 따른 광고 표기가 들어갑니다.',
+      exclude:'· 이미 발행된 글의 검색어 변경 (새 주문이 필요합니다)\n· 검색 순위·조회수 보장',
+      refund:'· 아직 원고를 제출하지 않은 글 : 환불 가능\n'
+            +'· 원고가 제출된 글부터 : 작업이 완료된 것으로 보아 환불 불가\n'
+            +'· 마감일까지 주문 편수를 채우지 못한 경우 : 올리지 못한 편수만큼 환불하고, 남은 글도 그대로 발행해 드립니다.\n'
+            +'· 검색어 변경 : 아직 발행되지 않은 글 1편당 3,000원. 금액을 먼저 안내하고 확인을 받은 뒤 변경합니다.'},
+    web:{
+      flow:'1. 신청 접수 후 담당자가 배정되어 단계와 범위를 확인합니다.\n'
+          +'2. 견적서를 보내드리고, 동의하시면 별도의 제작·관리 계약서(전자서명)를 보내드립니다.\n'
+          +'3. 입금이 확인되면 자료(로고·사진·원고·사업자 정보)를 요청합니다.\n'
+          +'4. 자료를 모두 받은 날부터 1주 안에 디자인 초안, 2주 안에 완성본을 드립니다.\n'
+          +'5. 오픈 전 점검 후 오픈하고, 네이버·구글 검색 등록을 진행합니다.',
+      include:'· 견적한 단계의 페이지 수 (메인 포함, 게시판·로그인 화면은 세지 않음)\n· 모바일 화면 대응, 네이버·구글 검색 등록\n· 시안 1개, 제작 중 수정 5회\n· 오픈 후 작은 수정 월 1회, 백업, 장애 대응',
+      exclude:'· 원고 작성·사진 촬영 (고객이 제공)\n· 유료 도메인 비용 (연 1~2만원대, 고객 부담·고객 명의)\n· 결제 회사 가입비·연관리비·수수료\n· 페이지 추가·메뉴 구조 변경·새 기능 (견적 후 진행)',
+      refund:'· 최소 이용 기간은 3개월입니다.\n'
+            +'· 약정 기간 중 해지하시면 남은 기간의 월 요금이 청구됩니다.\n'
+            +'· 자세한 환불 기준은 별도로 보내드리는 제작·관리 계약서 제9조를 따릅니다.'},
+    design:{flow:'',include:'',exclude:'',refund:''},
+    etc:{flow:'',include:'',exclude:'',refund:''}
+  };
+  function defaultTerms(r){
+    var t=TERMS[groupOf(r)]||TERMS.etc;
+    return {flow:t.flow||'',include:t.include||'',exclude:t.exclude||'',refund:t.refund||''};
+  }
+
   function defaultQuote(r){
     return {
       to:{company:r.academy_name||'',manager:r.manager_name||'',phone:r.phone||'',email:r.email||''},
       project:(AREAS[groupOf(r)]||'')+(r.work_type?(' · '+r.work_type):''),
-      items:[],note:'',valid_days:Number(SET.valid_days)||30
+      items:[],note:'',valid_days:Number(SET.valid_days)||30,
+      terms:defaultTerms(r)
     };
   }
   function renderQuoteBox(){
@@ -1117,6 +1224,13 @@
     $('q_to_company').value=QD.to.company||'';$('q_to_manager').value=QD.to.manager||'';
     $('q_to_phone').value=QD.to.phone||'';$('q_to_email').value=QD.to.email||'';
     $('q_project').value=QD.project||'';$('q_valid').value=QD.valid_days||30;$('q_note').value=QD.note||'';
+    var tm=QD.terms||defaultTerms(r);
+    $('q_flow').value=tm.flow||''; $('q_inc').value=tm.include||'';
+    $('q_exc').value=tm.exclude||''; $('q_ref').value=tm.refund||'';
+    var g=groupOf(r), hasDefault=!!(TERMS[g]&&TERMS[g].refund);
+    $('q_terms_hint').innerHTML = hasDefault
+      ? '「'+esc(AREAS[g]||'')+'」 기본 문구가 들어가 있습니다. 이 건에 맞게 고쳐서 쓰세요.'
+      : '<b style="color:#C0392B">'+esc(AREAS[g]||'')+'은 아직 매뉴얼이 없어 기본 문구가 없습니다.</b> 직접 적어 주세요. 비워 두면 그 칸은 인쇄되지 않습니다.';
 
     /* 어느 이름으로 낼지 — 이미 발행한 견적서는 그때 쓴 주체를 그대로 되살립니다
        (나중에 다시 열었을 때 다른 사업자 이름으로 바뀌면 안 됩니다) */
@@ -1212,11 +1326,23 @@
     h+='<div class="r total"><span>최초 청구액</span><span>'+won(t.firstPay)+'</span></div>';
     $('q_sum').innerHTML=h;
   }
+  window.fillTerms=function(){
+    if(!CURROW)return;
+    var t=defaultTerms(CURROW);
+    if(!t.refund&&!t.flow){toast('이 항목은 기본 문구가 없습니다 — 직접 적어 주세요');return;}
+    if(($('q_flow').value||$('q_ref').value) && !confirm('지금 적혀 있는 조항을 기본 문구로 덮어씁니다. 계속할까요?'))return;
+    $('q_flow').value=t.flow; $('q_inc').value=t.include;
+    $('q_exc').value=t.exclude; $('q_ref').value=t.refund;
+    toast('기본 문구를 넣었습니다');
+  };
+
   window.saveQuote=async function(preview){
     QD.to={company:$('q_to_company').value.trim(),manager:$('q_to_manager').value.trim(),phone:$('q_to_phone').value.trim(),email:$('q_to_email').value.trim()};
     QD.project=$('q_project').value.trim();
     QD.valid_days=Number($('q_valid').value)||30;
     QD.note=$('q_note').value;
+    QD.terms={flow:$('q_flow').value,include:$('q_inc').value,
+              exclude:$('q_exc').value,refund:$('q_ref').value};
     QD.from=$('q_from')?$('q_from').value:QPROF_ID;   /* 어느 사업자 이름으로 냈는지 남깁니다 */
     QD.items=QD.items.filter(function(it){return it.name||Number(it.before)||Number(it.price);});
     if(!QD.items.length){toast('견적 항목을 한 줄 이상 입력해 주세요');return;}
@@ -1237,6 +1363,17 @@
     toast('견적서를 저장했습니다 · '+CURROW.quote_no);
     if(preview)previewQuote();
   };
+  /* 줄바꿈을 살려서 인쇄합니다. 비어 있으면 칸 자체를 만들지 않습니다. */
+  function termSec(title,txt){
+    txt=(txt||'').trim(); if(!txt)return '';
+    return '<div class="p-sec"><h4>'+title+'</h4><div class="box">'
+      +esc(txt).replace(/\n/g,'<br>')+'</div></div>';
+  }
+  function hasTerms(q){
+    var t=q.terms||{};
+    return !!((t.flow||'').trim()||(t.include||'').trim()||(t.exclude||'').trim()||(t.refund||'').trim());
+  }
+
   function paperHTML(){
     var r=CURROW,q=r.quote||{},t=quoteTotals(q);
     var issued=r.quote_issued_at?new Date(r.quote_issued_at):new Date();
@@ -1291,6 +1428,19 @@
      +'<div class="p-sec"><h4>결제 조건 / PAYMENT</h4><div class="box">'
        +esc(SET.pay_note||'')+(SET.bank?('\n[ 입금 계좌 ] '+SET.bank):'')+'</div></div>'
      +(q.note?'<div class="p-sec"><h4>비고 / NOTES</h4><div class="box">'+esc(q.note)+'</div></div>':'')
+     /* ── 계약 조항 — 비어 있는 칸은 아예 안 나옵니다 ── */
+     +termSec('작업 순서 / PROCESS',(q.terms||{}).flow)
+     +termSec('포함되는 것 / INCLUDED',(q.terms||{}).include)
+     +termSec('포함되지 않는 것 / NOT INCLUDED',(q.terms||{}).exclude)
+     +termSec('환불 규정 / REFUND',(q.terms||{}).refund)
+     +(hasTerms(q)?('<div class="p-sign">'
+         +'<div class="sg-t">위 견적 내용과 조항에 동의하며 작업을 의뢰합니다.</div>'
+         +'<div class="sg-row">'
+           +'<div class="sg"><span>의뢰인</span><i></i></div>'
+           +'<div class="sg"><span>날짜</span><i></i></div>'
+         +'</div>'
+         +'<div class="sg-n">서명 또는 회신(메일·메신저)으로 동의하시면 같은 효력을 가집니다.</div>'
+       +'</div>'):'')
      +'<div class="p-f">'+esc(SET.foot_note||'')+'<br>'+esc(SET.company||'')
        +(SET.owner?' · 대표 '+esc(SET.owner):'')
        +(SET.biz_no?' · '+esc(SET.biz_no):'')
