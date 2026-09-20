@@ -1191,10 +1191,11 @@
     var s=(res.data&&res.data.order_id)?res.data:null;
 
     if(!s){
-      var price=r.is_premium?3000:6000;
+      var price=BLOG_SALE?(r.is_premium?BLOG_SALE.premium:BLOG_SALE.normal):'';
       /* 신청서에서 고른 편수·마감일을 그대로 채워 둡니다 */
       var det=r.details||{};
-      var qty=parseInt(det['원하시는 편수']||'',10);
+      /* 옛 신청서는 「원하시는 편수」, 새 신청서(apply/blog)는 「편수」 로 넘어옵니다 */
+      var qty=parseInt(det['원하시는 편수']||det['편수']||'',10);
       var 기간=det['작성 기간']||'';
       /* 학원에는 "입금 확인일부터 ○주"로 안내했으므로 오늘 기준으로 계산해 둡니다 */
       var wk=parseInt(기간,10);
@@ -1212,7 +1213,9 @@
         +'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
         +'<input class="inp" id="bo_qty" type="number" min="1" placeholder="편수 (예: 100)" style="width:140px"'
         +(qty?' value="'+qty+'"':'')+'>'
-        +'<input class="inp" id="bo_price" type="number" value="'+price+'" style="width:120px" title="편당 받는 돈">'
+        +'<input class="inp" id="bo_price" type="number" value="'+price+'" style="width:120px" title="편당 받는 돈"'
+        +(BLOG_SALE?'':' placeholder="편당 금액"')+'>'
+        +(BLOG_SALE?'':'<span style="color:#C0392B;font-size:.8rem;font-weight:700">판매가를 불러오지 못했습니다 — 직접 넣어 주세요</span>')
         +'<input class="inp" id="bo_deadline" type="date" style="width:165px" title="마감일"'
         +(due?' value="'+esc(due)+'"':'')+'>'
         +'<button class="btn btn-primary" style="padding:7px 14px" type="button" onclick="makeBlogOrder()">🖊 블로그 주문 만들기</button>'
@@ -1341,7 +1344,8 @@
   window.addQuoteRow=function(){QD.items.push(NEWITEM());renderQuoteRows();};
   window.presetQuote=function(){
     var r=CURROW,pre=[];
-    if(r.area==='마케팅')pre=[{name:'블로그 작성',unit:'6000',qty:'10',cycle:'1회',before:'',price:'60000'}];
+    if(r.area==='마케팅')pre=[{name:'블로그 작성',unit:BLOG_SALE?String(BLOG_SALE.normal):'',qty:'10',cycle:'1회',before:'',
+                              price:BLOG_SALE?String(BLOG_SALE.normal*10):''}];
     else if(r.area==='인력')pre=[{name:'원어민 수업료',unit:'',qty:'',cycle:'매월',before:'',price:''},{name:'매칭·세팅 비용',unit:'',qty:'',cycle:'1회',before:'',price:''}];
     else pre=[{name:'콘텐츠 제공료',unit:'',qty:'',cycle:'매월',before:'',price:''},{name:'초기 세팅 비용',unit:'',qty:'',cycle:'1회',before:'',price:''}];
     QD.items=QD.items.filter(function(x){return x.name||x.price;}).concat(pre);
@@ -1592,7 +1596,16 @@
     if(window.qFromHint)qFromHint();
   };
   var SITE={};
+  /* 🔴 블로그 판매가는 settings.blog.sale «하나»가 진짜입니다.
+        여기에 숫자를 박아 두면 값이 바뀔 때 주문이 옛 금액으로 만들어집니다.
+        (2026-09-20 6,000 → 10,000 으로 올랐을 때 실제로 그럴 뻔했습니다) */
+  /* 🔴 못 읽었으면 «비워 둡니다». 숫자를 미리 넣어 두면, 값이 바뀐 뒤 읽기가 실패했을 때
+        옛 금액으로 주문이 조용히 만들어집니다. 빈칸이면 사람이 알아챕니다. */
+  var BLOG_SALE=null;
   async function loadSettings(){
+    var br=await sb.from('settings').select('value').eq('key','blog').maybeSingle();
+    var bs=(br.data&&br.data.value&&br.data.value.sale)||null;
+    BLOG_SALE=(bs&&Number(bs.normal)>0)?{normal:Number(bs.normal),premium:Number(bs.premium)||0}:null;
     /* 홈페이지 푸터·가격은 settings['site.esc'] 에 있습니다 (공개 홈페이지가 읽어 갑니다) */
     var sr=await sb.from('settings').select('value').eq('key','site.esc').maybeSingle();
     SITE=(sr.data&&sr.data.value)?sr.data.value:{};
