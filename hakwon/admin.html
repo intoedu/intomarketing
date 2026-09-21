@@ -340,6 +340,7 @@
           <option value="__me">내 담당</option>
           <option value="__none">미배정</option>
         </select>
+        <button class="btn btn-primary" type="button" style="margin-left:auto" onclick="openNew()">+ 직접 주문 만들기</button>
       </div>
       <div class="card"><table>
         <thead><tr>
@@ -508,6 +509,56 @@
   </div>
 </div></div>
 
+<!-- 직접 주문 만들기 — 전화·방문·소개처럼 홈페이지를 거치지 않고 들어온 건을
+     여기서 손으로 넣습니다. 넣고 나면 홈페이지 신청과 똑같이 다뤄집니다. -->
+<div class="modal" id="newModal"><div class="sheet">
+  <div class="sheet-h">
+    <div><h3>직접 주문 만들기</h3><div class="meta">전화·방문·소개로 들어온 건을 손으로 넣습니다. 만든 뒤 바로 견적서를 쓸 수 있습니다.</div></div>
+    <button class="x" type="button" onclick="closeModal('newModal')">✕</button>
+  </div>
+  <div class="sheet-b">
+    <div class="sec-t">무슨 일인가요</div>
+    <div class="grid2">
+      <div class="fld"><label>지원 항목 <span style="color:#C0392B">*</span></label>
+        <select class="inp" id="n_group" onchange="newGroupChanged()"></select></div>
+      <div class="fld"><label>작업 종류</label>
+        <input class="inp" id="n_work" list="newWorkOpts" placeholder="예: 필리핀 원어민 / 블로그 홍보">
+        <datalist id="newWorkOpts"></datalist></div>
+    </div>
+
+    <div class="sec-t">고객 정보</div>
+    <div class="grid2">
+      <div class="fld"><label>상호명(학원) <span style="color:#C0392B">*</span></label>
+        <input class="inp" id="n_company" placeholder="예: 혼공기적학원"></div>
+      <div class="fld"><label>담당자</label><input class="inp" id="n_manager" placeholder="예: 홍길동 원장"></div>
+      <div class="fld"><label>연락처</label><input class="inp" id="n_phone" placeholder="010-0000-0000"></div>
+      <div class="fld"><label>이메일 <span class="muted" style="font-weight:500">— 견적서를 메일로 보낼 때 씁니다</span></label>
+        <input class="inp" id="n_email" placeholder="name@example.com"></div>
+    </div>
+    <div class="grid2">
+      <div class="fld"><label>사업자등록번호 <span class="muted" style="font-weight:500">— 견적서에 찍힙니다</span></label>
+        <input class="inp" id="n_bizno" placeholder="000-00-00000"></div>
+      <div class="fld"><label>접수 경로</label>
+        <select class="inp" id="n_route">
+          <option>전화</option><option>방문</option><option>카카오톡</option>
+          <option>메일</option><option>소개</option><option>기타</option>
+        </select></div>
+    </div>
+    <div class="fld"><label>주소</label><input class="inp" id="n_addr" placeholder="예: 대전광역시 유성구 ○○로 00"></div>
+
+    <div class="sec-t">요청 내용</div>
+    <textarea class="inp" id="n_msg" placeholder="통화·상담에서 들은 내용을 적어 두세요."></textarea>
+    <div class="muted" style="font-size:.82rem;margin-top:8px">
+      넣으면 <b>「접수」 상태</b>로 목록에 올라갑니다. 금액·마감·담당자는 만든 뒤 상세에서 정하시면 됩니다.
+    </div>
+  </div>
+  <div class="sheet-f">
+    <button class="btn btn-primary" type="button" onclick="saveNew(true)">만들고 견적서 쓰기</button>
+    <button class="btn btn-ghost" type="button" onclick="saveNew(false)">만들기만</button>
+    <button class="btn btn-ghost" type="button" onclick="closeModal('newModal')">닫기</button>
+  </div>
+</div></div>
+
 <!-- 견적서 편집 -->
 <div class="modal" id="quoteModal"><div class="sheet wide">
   <div class="sheet-h">
@@ -523,8 +574,18 @@
       <div class="fld"><label>이메일</label><input class="inp" id="q_to_email"></div>
     </div>
     <div class="grid2">
+      <div class="fld"><label>사업자등록번호</label><input class="inp" id="q_to_bizno" placeholder="000-00-00000"></div>
+      <div class="fld"><label>주소</label><input class="inp" id="q_to_addr"></div>
+    </div>
+    <div class="grid2">
       <div class="fld"><label>프로젝트명</label><input class="inp" id="q_project" placeholder="예: 인력지원 · 필리핀 원어민 매칭"></div>
       <div class="fld"><label>유효기간 (일)</label><input class="inp" id="q_valid" type="number" min="1" value="30"></div>
+    </div>
+    <div class="grid2">
+      <div class="fld"><label>납품 기한 <span class="muted" style="font-weight:500">— 언제까지 드리는지</span></label>
+        <input class="inp" id="q_delivery" placeholder="예: 계약금 입금 후 3주 이내 / 2026-10-15"></div>
+      <div class="fld"><label>담당자 <span class="muted" style="font-weight:500">— 견적서에 찍히는 우리 쪽 담당</span></label>
+        <input class="inp" id="q_owner_staff" placeholder="예: 이은총"></div>
     </div>
     <!-- 사업자가 둘 이상이라 어느 이름으로 나가는지 고릅니다 -->
     <div class="fld"><label>어느 이름으로 발행할까요</label>
@@ -562,6 +623,18 @@
     </div>
     <div class="fld"><label>환불 규정 <span class="muted" style="font-weight:500">— 결제 전에 보여드려야 효력이 있습니다</span></label>
       <textarea class="inp" id="q_ref" rows="7"></textarea></div>
+
+    <!-- 결제 조건 — 견적서마다 다를 수 있어 여기서 고칩니다.
+         비워 두면 「견적서 설정」에 적어 둔 기본 문구가 그대로 나갑니다. -->
+    <div class="sec-t" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      결제 조건
+      <span class="muted" style="font-weight:500;font-size:.8rem">비우면 「견적서 설정」의 기본 문구가 나갑니다.</span>
+      <button class="btn btn-ghost" style="margin-left:auto;padding:6px 12px;font-size:.8rem" type="button"
+              onclick="fillPay()">기본 문구 넣기</button>
+    </div>
+    <div class="fld"><label>결제 방법 · 시기</label>
+      <textarea class="inp" id="q_pay" rows="4" placeholder="예: 계약금 50% 선입금, 잔금은 납품 후 7일 이내"></textarea></div>
+    <div class="fld"><label>입금 계좌</label><input class="inp" id="q_bank" placeholder="예: 국민 000000-00-000000 인투유학"></div>
 
     <div class="sec-t">비고</div>
     <textarea class="inp" id="q_note" placeholder="작업 범위, 수정 횟수, 기타 안내사항 등을 적어 주세요."></textarea>
@@ -1155,10 +1228,14 @@
   }
 
   function defaultQuote(r){
+    var d=r.details||{};
     return {
-      to:{company:r.academy_name||'',manager:r.manager_name||'',phone:r.phone||'',email:r.email||''},
+      to:{company:r.academy_name||'',manager:r.manager_name||'',phone:r.phone||'',email:r.email||'',
+          biz_no:d['사업자등록번호']||'',addr:d['주소']||''},
       project:(AREAS[r.area]||r.area)+(r.work_type?(' · '+r.work_type):''),
+      delivery:'', owner_staff:(ME&&(ME.name||ME.email))||'',
       items:[],note:'',valid_days:Number(SET.valid_days)||30,
+      pay:'', bank:'',                       /* 비우면 「견적서 설정」 기본값이 인쇄됩니다 */
       terms:defaultTerms(r)
     };
   }
@@ -1267,13 +1344,76 @@
     renderBlogBox();
   };
 
+  /* ---------- 직접 주문 만들기 ----------
+     🔴 넣기(insert) 규칙이 손님 신청서와 같습니다 —
+        status 는 '신청접수', 담당자·금액·메모·견적서는 «비어 있어야» 넣어집니다.
+        (DB 규칙 anyone_can_insert_request)
+     🔴 이 어드민은 area 로 묶습니다 (인투마케팅 어드민은 kind 로 묶습니다). */
+  window.openNew=function(){
+    var sel=$('n_group');
+    sel.innerHTML=Object.keys(AREAS).map(function(a){
+      return '<option value="'+esc(a)+'"'+(a===CUR?' selected':'')+'>'+esc(AREAS[a])+'</option>';
+    }).join('');
+    ['n_company','n_manager','n_phone','n_email','n_bizno','n_addr','n_work','n_msg'].forEach(function(id){$(id).value='';});
+    $('n_route').value='전화';
+    newGroupChanged();
+    $('newModal').classList.add('open');
+    setTimeout(function(){$('n_company').focus();},80);
+  };
+  window.newGroupChanged=function(){
+    var a=$('n_group').value;
+    $('newWorkOpts').innerHTML=(WORK_OPTS[a]||[]).map(function(o){return '<option value="'+esc(o)+'">';}).join('');
+  };
+  window.saveNew=async function(goQuote){
+    var area=$('n_group').value;
+    var company=$('n_company').value.trim();
+    if(!company){toast('상호명을 넣어 주세요');return;}
+    var btns=document.querySelectorAll('#newModal .sheet-f .btn');
+    btns.forEach(function(b){b.disabled=true;});
+    var work=$('n_work').value.trim();
+    var det={};
+    det['등록 경로']='관리자 직접 입력';
+    det['접수 경로']=$('n_route').value||'';
+    if($('n_bizno').value.trim())det['사업자등록번호']=$('n_bizno').value.trim();
+    if($('n_addr').value.trim())det['주소']=$('n_addr').value.trim();
+    var row={
+      area:area, center:'esc',
+      /* 자료제작 지원은 kind 로 종류를 나눕니다 (견적서 조항이 kind 를 봅니다) */
+      kind:(area==='제작'?(work||'기타'):(area==='마케팅'?'블로그·리뷰':null)),
+      academy_name:company,
+      manager_name:$('n_manager').value.trim()||null,
+      phone:$('n_phone').value.trim()||null,
+      email:$('n_email').value.trim()||null,
+      work_type:work||null,
+      message:$('n_msg').value.trim()||null,
+      details:det, consent:true
+    };
+    var ins=await sb.from('requests').insert(row).select().maybeSingle();
+    btns.forEach(function(b){b.disabled=false;});
+    if(ins.error){toast('만들기 실패: '+ins.error.message);return;}
+    if(!ins.data){toast('만들었지만 화면에 못 불러왔습니다. 새로고침해 주세요');return;}
+    closeModal('newModal');
+    toast('주문을 만들었습니다 · '+company);
+    var nav=document.querySelector('.navb[data-nav="'+ins.data.area+'"]');
+    if(nav)nav.click();
+    await loadAll();
+    openDetail(ins.data.id);
+    if(goQuote)openQuote();
+  };
+
   window.openQuote=function(){
     var r=CURROW;QD=r.quote?JSON.parse(JSON.stringify(r.quote)):defaultQuote(r);
     if(!QD.items||!QD.items.length)QD.items=[NEWITEM()];
     $('q_meta').textContent=(r.academy_name||'')+' · '+(r.quote_no?('견적번호 '+r.quote_no):'새 견적서');
     $('q_to_company').value=QD.to.company||'';$('q_to_manager').value=QD.to.manager||'';
     $('q_to_phone').value=QD.to.phone||'';$('q_to_email').value=QD.to.email||'';
+    $('q_to_bizno').value=QD.to.biz_no||'';$('q_to_addr').value=QD.to.addr||'';
     $('q_project').value=QD.project||'';$('q_valid').value=QD.valid_days||30;$('q_note').value=QD.note||'';
+    $('q_delivery').value=QD.delivery||'';
+    $('q_owner_staff').value=QD.owner_staff||((ME&&(ME.name||ME.email))||'');
+    $('q_pay').value=QD.pay||'';$('q_bank').value=QD.bank||'';
+    $('q_pay').placeholder=SET.pay_note?('비우면 이렇게 나갑니다 — '+SET.pay_note):'예: 계약금 50% 선입금, 잔금은 납품 후 7일 이내';
+    $('q_bank').placeholder=SET.bank?('비우면 이렇게 나갑니다 — '+SET.bank):'예: 국민 000000-00-000000 인투유학';
     var tm=QD.terms||defaultTerms(r);
     $('q_flow').value=tm.flow||''; $('q_inc').value=tm.include||'';
     $('q_exc').value=tm.exclude||''; $('q_ref').value=tm.refund||'';
@@ -1373,6 +1513,12 @@
     h+='<div class="r total"><span>최초 청구액</span><span>'+won(t.firstPay)+'</span></div>';
     $('q_sum').innerHTML=h;
   }
+  window.fillPay=function(){
+    $('q_pay').value=SET.pay_note||'';
+    $('q_bank').value=SET.bank||'';
+    if(!SET.pay_note&&!SET.bank)toast('「견적서 설정」에 기본 결제 조건이 아직 없습니다');
+    else toast('기본 문구를 넣었습니다');
+  };
   window.fillTerms=function(){
     if(!CURROW)return;
     var t=defaultTerms(CURROW);
@@ -1384,9 +1530,14 @@
   };
 
   window.saveQuote=async function(preview){
-    QD.to={company:$('q_to_company').value.trim(),manager:$('q_to_manager').value.trim(),phone:$('q_to_phone').value.trim(),email:$('q_to_email').value.trim()};
+    QD.to={company:$('q_to_company').value.trim(),manager:$('q_to_manager').value.trim(),phone:$('q_to_phone').value.trim(),email:$('q_to_email').value.trim(),
+           biz_no:$('q_to_bizno').value.trim(),addr:$('q_to_addr').value.trim()};
     QD.project=$('q_project').value.trim();
     QD.valid_days=Number($('q_valid').value)||30;
+    QD.delivery=$('q_delivery').value.trim();
+    QD.owner_staff=$('q_owner_staff').value.trim();
+    QD.pay=$('q_pay').value;
+    QD.bank=$('q_bank').value.trim();
     QD.note=$('q_note').value;
     QD.terms={flow:$('q_flow').value,include:$('q_inc').value,
               exclude:$('q_exc').value,refund:$('q_ref').value};
@@ -1419,6 +1570,16 @@
   function hasTerms(q){
     var t=q.terms||{};
     return !!((t.flow||'').trim()||(t.include||'').trim()||(t.exclude||'').trim()||(t.refund||'').trim());
+  }
+
+  /* 결제 조건 — 이 견적서에 적은 것이 먼저, 없으면 「견적서 설정」의 기본 문구.
+     둘 다 비어 있으면 칸 자체를 안 만듭니다 (빈 네모가 인쇄되면 이상합니다). */
+  function payHTML(q){
+    var pay=((q&&q.pay)||'').trim()||(SET.pay_note||'').trim();
+    var bank=((q&&q.bank)||'').trim()||(SET.bank||'').trim();
+    if(!pay&&!bank)return '';
+    return '<div class="p-sec"><h4>결제 조건 / PAYMENT</h4><div class="box">'
+      +esc(pay)+(bank?((pay?'\n':'')+'[ 입금 계좌 ] '+esc(bank)):'')+'</div></div>';
   }
 
   function paperHTML(){
@@ -1456,12 +1617,16 @@
          +'<div class="pr"><span>단체/학원</span><span>'+esc((q.to&&q.to.company)||r.academy_name||'')+'</span></div>'
          +'<div class="pr"><span>담당자</span><span>'+esc((q.to&&q.to.manager)||'')+'</span></div>'
          +'<div class="pr"><span>연락처</span><span>'+esc((q.to&&q.to.phone)||'')+'</span></div>'
-         +'<div class="pr"><span>이메일</span><span>'+esc((q.to&&q.to.email)||'')+'</span></div></div>'
+         +'<div class="pr"><span>이메일</span><span>'+esc((q.to&&q.to.email)||'')+'</span></div>'
+         +((q.to&&q.to.biz_no)?'<div class="pr"><span>사업자등록번호</span><span>'+esc(q.to.biz_no)+'</span></div>':'')
+         +((q.to&&q.to.addr)?'<div class="pr"><span>주소</span><span>'+esc(q.to.addr)+'</span></div>':'')+'</div>'
        +'<div><h4>견적 정보 / INFO</h4>'
          +'<div class="pr"><span>견적번호</span><span>'+esc(r.quote_no||'-')+'</span></div>'
          +'<div class="pr"><span>작성일</span><span>'+issued.getFullYear()+'. '+('0'+(issued.getMonth()+1)).slice(-2)+'. '+('0'+issued.getDate()).slice(-2)+'.</span></div>'
          +'<div class="pr"><span>유효기간</span><span>발행일로부터 '+(q.valid_days||30)+'일</span></div>'
-         +'<div class="pr"><span>프로젝트</span><span>'+esc(q.project||'')+'</span></div></div>'
+         +'<div class="pr"><span>프로젝트</span><span>'+esc(q.project||'')+'</span></div>'
+         +(q.delivery?'<div class="pr"><span>납품 기한</span><span>'+esc(q.delivery)+'</span></div>':'')
+         +(q.owner_staff?'<div class="pr"><span>담당자</span><span>'+esc(q.owner_staff)+'</span></div>':'')+'</div>'
      +'</div>'
      +'<table class="p-t"><thead><tr><th></th><th>항목</th><th class="r">개당가격</th><th class="r">수량</th>'
      +'<th>결제주기</th><th class="r">기존 비용</th><th class="r">할인가</th></tr></thead><tbody>'+rows+'</tbody></table>'
@@ -1472,8 +1637,7 @@
        +'<div class="r tot"><span>최종 청구액</span><span>'+won(t.firstPay)+'</span></div>'
      +'</div>'
      +'<div class="p-note">'+(t.month||t.year?'※ 매월·매년 항목은 주기마다 청구됩니다. 최종 청구액은 최초 결제 기준입니다.':'※ 표시된 금액은 부가세 포함 금액입니다.')+'</div>'
-     +'<div class="p-sec"><h4>결제 조건 / PAYMENT</h4><div class="box">'
-       +esc(SET.pay_note||'')+(SET.bank?('\n[ 입금 계좌 ] '+SET.bank):'')+'</div></div>'
+     +payHTML(q)
      +(q.note?'<div class="p-sec"><h4>비고 / NOTES</h4><div class="box">'+esc(q.note)+'</div></div>':'')
      /* ── 계약 조항 — 비어 있는 칸은 아예 안 나옵니다 ── */
      +termSec('작업 순서 / PROCESS',(q.terms||{}).flow)
