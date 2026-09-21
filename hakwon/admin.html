@@ -174,7 +174,8 @@
   .p-line{height:3px;background:#12294D;margin:18px 0 22px}
   .p-cols{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-bottom:26px}
   .p-cols h4{font-size:.82rem;font-weight:800;letter-spacing:.06em;color:#12294D;border-bottom:1px solid #ccd4e2;padding-bottom:7px;margin-bottom:10px}
-  .p-cols .pr{display:grid;grid-template-columns:80px 1fr;gap:10px;font-size:.86rem;padding:4px 0}
+  .p-cols .pr{display:grid;grid-template-columns:96px 1fr;gap:10px;font-size:.86rem;padding:4px 0}
+  .p-cols .pr span:first-child{white-space:nowrap}
   .p-cols .pr span:first-child{color:#777}
   table.p-t{width:100%;border-collapse:collapse;font-size:.88rem}
   table.p-t th{background:#12294D;color:#fff;padding:11px 12px;font-weight:700;font-size:.82rem;text-align:left}
@@ -197,6 +198,9 @@
   .p-sign .sg span{font-size:.8rem;color:#666;white-space:nowrap}
   .p-sign .sg i{flex:1;border-bottom:1px solid #b9c4d6;height:26px;display:block}
   .p-sign .sg-n{margin-top:12px;font-size:.76rem;color:#888}
+  /* PDF 저장용 사본에만 붙는 모양 — 쪽 수를 줄이려고 칸 사이를 조금 좁힙니다 */
+  .paper.pdf .p-sec,.paper.pdf .p-sign{margin-top:20px}
+  .paper.pdf .p-f{margin-top:22px}
   .p-f{margin-top:34px;padding-top:16px;border-top:1px solid #e3e8f0;text-align:center;font-size:.78rem;color:#888;line-height:1.7}
   @media print{
     body{background:#fff}
@@ -649,15 +653,16 @@
 <!-- 견적서 미리보기(인쇄용) -->
 <div class="modal" id="paperModal"><div class="sheet wide">
   <div class="sheet-h">
-    <div><h3>견적서 미리보기</h3><div class="meta">① <b>PDF로 저장</b> → ② 메일 작성 창에서 저장한 <b>PDF를 첨부</b> → ③ 전송. 브라우저에서는 파일을 자동으로 첨부할 수 없어 두 단계로 나뉩니다.</div></div>
+    <div><h3>견적서 미리보기</h3><div class="meta">① <b>PDF로 저장</b>(다운로드 폴더에 바로 저장됩니다) → ② 메일 작성 창에서 저장한 <b>PDF를 첨부</b> → ③ 전송. 브라우저에서는 파일을 자동으로 첨부할 수 없어 두 단계로 나뉩니다.</div></div>
     <button class="x" type="button" onclick="closePaper()">✕</button>
   </div>
   <div class="sheet-b" style="background:#eef1f7"><div id="paper"></div></div>
   <div class="sheet-f" style="flex-wrap:wrap">
-    <button class="btn btn-primary" type="button" onclick="window.print()">① 🖨 PDF로 저장</button>
+    <button class="btn btn-primary" type="button" onclick="savePdf(this)">① 💾 PDF로 저장</button>
     <button class="btn btn-ghost" type="button" onclick="mailQuoteGmail()">② 📧 Gmail로 작성</button>
     <button class="btn btn-ghost" type="button" onclick="mailQuote()">② ✉️ 메일 앱으로 작성</button>
     <button class="btn btn-ghost" type="button" onclick="copyQuoteText()">📋 상세 내용 복사</button>
+    <button class="btn btn-ghost" type="button" onclick="window.print()">🖨 인쇄</button>
     <button class="btn btn-ghost" type="button" onclick="closePaper()">닫기</button>
   </div>
 </div></div>
@@ -1743,6 +1748,67 @@
        +(SET.email?' · '+esc(SET.email):'')+'</div>'
      +'</div>';
   }
+  /* ---------- PDF 바로 저장 ----------
+     예전엔 「PDF로 저장」이 인쇄 창(window.print)을 열었습니다.
+     이제는 견적서를 그림으로 찍어 A4 PDF 로 만들고 «다운로드 폴더에 바로» 저장합니다.
+     도구(html2pdf)는 버튼을 누를 때만 불러옵니다 — 어드민 첫 화면이 무거워지지 않게.
+     🔴 도구를 못 불러오면(인터넷·CDN 문제) 인쇄 창으로 돌아갑니다. 조용히 실패하지 않게. */
+  var H2P_URL='https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js';
+  function loadH2P(){
+    return new Promise(function(ok,no){
+      if(window.html2pdf)return ok();
+      var sc=document.createElement('script');
+      sc.src=H2P_URL; sc.onload=function(){ok();}; sc.onerror=function(){no(new Error('load'));};
+      document.head.appendChild(sc);
+    });
+  }
+  function pdfName(){
+    return ('견적서_'+(CURROW.academy_name||'')+'_'+(CURROW.quote_no||''))
+      .replace(/\s+/g,'').replace(/[\\/:*?"<>|]/g,'')+'.pdf';
+  }
+  window.savePdf=async function(btn){
+    if(!CURROW||!CURROW.quote){toast('먼저 견적서를 작성해 주세요');return;}
+    var src=$('paperBody'); if(!src){toast('견적서 미리보기를 먼저 열어 주세요');return;}
+    var label=btn?btn.textContent:'';
+    if(btn){btn.disabled=true;btn.textContent='PDF 만드는 중…';}
+    try{ await loadH2P(); }
+    catch(e){
+      if(btn){btn.disabled=false;btn.textContent=label;}
+      toast('PDF 도구를 못 불러왔습니다 — 인쇄 창에서 「PDF로 저장」을 골라 주세요');
+      window.print(); return;
+    }
+    /* 화면 크기에 따라 견적서 폭이 달라지지 않게, A4 폭(794px)으로 고정한 사본을 화면 밖에 만들어 찍습니다 */
+    var box=document.createElement('div');
+    box.style.cssText='position:fixed;left:-10000px;top:0;width:794px;background:#fff;z-index:-1';
+    var paper=src.cloneNode(true); paper.removeAttribute('id'); paper.classList.add('pdf');
+    /* 화면에선 표를 5줄로 채워 보여 주지만, PDF 에선 빈 줄을 뺍니다 — 간단한 견적서가 1쪽에 들어가게 */
+    paper.querySelectorAll('table.p-t tbody tr').forEach(function(tr){
+      var rest=[].slice.call(tr.children,1);        /* 첫 칸(번호) 말고 전부 비었을 때만 */
+      if(rest.length&&rest.every(function(td){return !td.textContent.trim();}))tr.remove();
+    });
+    /* 🔴 아래 여백은 0 — 몇 px 만 넘쳐도 html2pdf 가 «빈 쪽»을 하나 더 붙입니다 (위·아래 8mm 는 margin 이 맡음) */
+    paper.style.cssText='max-width:none;width:794px;margin:0;padding:32px 46px 0;border-radius:0;box-shadow:none';
+    box.appendChild(paper); document.body.appendChild(box);
+    var name=pdfName();
+    try{
+      await html2pdf().set({
+        margin:[8,0,8,0],                               /* 위·아래 8mm — 여러 쪽일 때 글이 종이 끝에 붙지 않게 */
+        filename:name,
+        image:{type:'jpeg',quality:0.97},
+        html2canvas:{scale:2,backgroundColor:'#ffffff',useCORS:true},
+        jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+        /* 표 한 줄·조항 한 칸·서명란이 쪽 경계에서 반으로 잘리지 않게 */
+        pagebreak:{mode:['css','legacy'],avoid:['tr','.p-h','.p-cols','.p-sum','.p-sec','.p-sign','.p-f']}
+      }).from(paper).save();
+      toast('PDF를 저장했습니다 · '+name);
+    }catch(e){
+      toast('PDF 저장 실패: '+(e&&e.message||e)+' — 🖨 인쇄로 저장해 주세요');
+    }finally{
+      box.remove();
+      if(btn){btn.disabled=false;btn.textContent=label;}
+    }
+  };
+
   var PAPER_TITLE_PREV=null;
   window.previewQuote=function(){
     if(!CURROW||!CURROW.quote){toast('먼저 견적서를 작성해 주세요');return;}
