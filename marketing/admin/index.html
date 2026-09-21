@@ -1415,27 +1415,41 @@
   function qNumBox(i,k,v,ph){
     return '<input class="qi r" type="text" inputmode="numeric" autocomplete="off" data-qi="'+i+'" data-qk="'+k+'"'
       +' value="'+esc(comma(v))+'" placeholder="'+ph+'" oninput="qNum(this)"'
-      +' onfocus="qFocus(this)" onkeydown="qKey(event,this)">';
+      +' onfocus="qFocus(this)" onblur="qBlur(this)" onkeydown="qKey(event,this)">';
   }
+  /* 🔴 치는 동안에는 칸 글자를 «절대 고치지 않습니다».
+        (9/21 에 한 글자마다 쉼표를 다시 찍게 했더니 `30,000` 에서 3 을 지우면
+         `0,000` → 숫자 0 이 되어 000 이 통째로 사라졌습니다.)
+        숫자만 뽑아 계산에 쓰고, 쉼표는 칸을 벗어날 때(qBlur) 찍습니다. */
   window.qNum=function(el){
-    var i=Number(el.dataset.qi),k=el.dataset.qk;
-    /* 커서 앞의 숫자 개수를 세어 두었다가, 쉼표를 다시 찍은 뒤 같은 자리로 돌려놓습니다 */
-    var pos=el.selectionStart||0, before=digits(el.value.slice(0,pos)).length;
-    var d=digits(el.value), shown=comma(d);
-    el.value=shown;
-    var p=0,seen=0;
-    while(p<shown.length&&seen<before){if(/\d/.test(shown[p]))seen++;p++;}
-    try{el.setSelectionRange(p,p);}catch(e){}
-    var it=QD.items[i]; it[k]=d;
-    /* 개당가격 × 수량 → «기존 비용» 에 넣습니다 (할인가는 Tab 으로 따로 넘깁니다 — 아래 qKey) */
+    var i=Number(el.dataset.qi),k=el.dataset.qk,it=QD.items[i];
+    var prevB=digits(it.before);
+    it[k]=digits(el.value);
+    /* ① 개당가격 × 수량 → «기존 비용».
+          기존 비용을 사람이 «직접 다른 값으로» 적었으면 건드리지 않습니다.
+          「지난번에 우리가 곱해 넣은 값」을 it._auto 에 기억해 두고 그것과 비교합니다
+          — 지우는 도중 잠깐 0 이 되어도(30,000 → 0,000 → 20,000) 흐름이 끊기지 않게. */
     if(k==='unit'||k==='qty'){
-      var u=Number(it.unit)||0,q=Number(it.qty)||0;
-      if(u&&q){
-        it.before=String(u*q);
+      var u=Number(it.unit)||0,q=Number(it.qty)||0,b=Number(it.before)||0;
+      if(u&&q&&(!b||String(b)===String(it._auto||''))){
+        it.before=String(u*q); it._auto=it.before;
         var bf=qBox(i,'before'); if(bf)bf.value=comma(it.before);
       }
     }
+    if(k==='before')it._auto=null;              /* 직접 고쳤으니 이제부터는 사람 값 */
+    /* ② 할인가가 기존 비용과 «같았으면»(= 할인 없음) 기존 비용을 따라갑니다.
+          다르게 적어 둔 할인가는 그대로 둡니다. */
+    var nowB=digits(it.before);
+    if(nowB!==prevB&&digits(it.price)&&digits(it.price)===prevB){
+      it.price=nowB;
+      var pr=qBox(i,'price'); if(pr&&pr!==document.activeElement)pr.value=comma(it.price);
+    }
     renderQuoteSum();
+  };
+  window.qBlur=function(el){
+    var i=Number(el.dataset.qi),k=el.dataset.qk,it=QD.items[i];
+    if(!it)return;
+    el.value=comma(it[k]);
   };
   function qBox(i,k){return document.querySelector('#q_rows input[data-qi="'+i+'"][data-qk="'+k+'"]');}
   /* 기존 비용 칸에 들어올 때의 값을 기억해 둡니다 —
@@ -1443,6 +1457,10 @@
      할인가를 따로 깎아 둔 줄은 Tab 을 눌러도 안 건드립니다. */
   window.qFocus=function(el){
     var i=Number(el.dataset.qi),it=QD.items[i]||{};
+    if(it._auto==null){
+      var uq=(Number(it.unit)||0)*(Number(it.qty)||0);
+      if(uq&&Number(it.before)===uq)it._auto=String(uq);
+    }
     el.dataset.bv=digits(it.before);
   };
   /* Tab (Shift 없이) :
@@ -1557,7 +1575,16 @@
     QD.terms={flow:$('q_flow').value,include:$('q_inc').value,
               exclude:$('q_exc').value,refund:$('q_ref').value};
     QD.from=$('q_from')?$('q_from').value:QPROF_ID;   /* 어느 사업자 이름으로 냈는지 남깁니다 */
+    /* 기존 비용·할인가 중 «한쪽만» 적었으면 같은 금액으로 채웁니다 (할인 없음으로 봄).
+       둘 다 비었고 개당가격 × 수량이 있으면 그 값으로 둘 다 채웁니다. */
+    QD.items.forEach(function(it){
+      var b=Number(it.before)||0,p=Number(it.price)||0,uq=(Number(it.unit)||0)*(Number(it.qty)||0);
+      if(!b&&!p&&uq){it.before=String(uq);it.price=String(uq);}
+      else if(b&&!p)it.price=String(b);
+      else if(p&&!b)it.before=String(p);
+    });
     QD.items=QD.items.filter(function(it){return it.name||Number(it.before)||Number(it.price);});
+    QD.items.forEach(function(it){delete it._auto;});   /* 화면용 표시라 저장하지 않습니다 */
     if(!QD.items.length){toast('견적 항목을 한 줄 이상 입력해 주세요');return;}
     var patch={quote:QD};
     if(!CURROW.quote_no){
