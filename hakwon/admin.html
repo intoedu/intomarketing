@@ -169,7 +169,15 @@
   .p-h{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
   .p-h h1{font-size:2rem;font-weight:800;letter-spacing:.22em}
   .p-h .qsub{font-size:.72rem;letter-spacing:.3em;color:#888;margin-top:2px}
-  .p-from{text-align:right;font-size:.82rem;line-height:1.7;color:#333}
+  .p-from{text-align:right;font-size:.82rem;line-height:1.7;color:#333;position:relative}
+  /* 직인 — 우리 회사 정보 «오른쪽 옆»에 찍습니다. 글자를 덮으면 상호·대표가 안 읽힙니다.
+     (흰 배경은 올릴 때 투명하게 바꿔 둠) */
+  .p-from.has-stamp{display:flex;align-items:flex-start;gap:0}
+  .p-stamp{flex:none;width:72px;height:72px;object-fit:contain;margin:-6px -8px 0 -4px;opacity:.93;pointer-events:none}
+  .stamp-box{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .stamp-prev{width:96px;height:96px;border:1px dashed var(--line);border-radius:10px;display:grid;place-items:center;
+    background:repeating-conic-gradient(#f1f4f9 0% 25%,#fff 0% 50%) 50%/14px 14px;color:var(--muted);font-size:.74rem;text-align:center}
+  .stamp-prev img{max-width:88px;max-height:88px}
   .p-from b{font-size:.95rem}
   .p-line{height:3px;background:#12294D;margin:18px 0 22px}
   .p-cols{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-bottom:26px}
@@ -441,6 +449,18 @@
           <div class="fld"><label>기본 유효기간 (일)</label><input class="inp" id="st_valid" type="number" min="1" value="30"></div>
           <div class="fld"><label>하단 문구</label><input class="inp" id="st_foot" placeholder="본 견적서는 발행일로부터 30일간 유효합니다."></div>
         </div>
+        <div class="fld"><label>직인 이미지 <span class="muted" style="font-weight:500">— 견적서의 우리 회사 이름 위에 찍힙니다</span></label>
+          <div class="stamp-box">
+            <div class="stamp-prev" id="st_stamp_prev">직인<br>없음</div>
+            <div>
+              <input type="file" id="st_stamp_file" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="pickStamp(this)">
+              <button class="btn btn-ghost" type="button" onclick="$id('st_stamp_file').click()">이미지 올리기</button>
+              <button class="btn btn-ghost" type="button" id="st_stamp_del" onclick="clearStamp()">지우기</button>
+              <div class="muted" style="font-size:.8rem;margin-top:7px;line-height:1.6">
+                PNG·JPG. <b>흰 배경은 자동으로 투명하게</b> 바꿉니다 — 종이에 찍어 스캔·촬영한 것도 됩니다.<br>
+                올린 뒤 <b>아래 [저장]</b>을 눌러야 반영됩니다. 이 이미지는 로그인한 직원만 볼 수 있습니다.</div>
+            </div>
+          </div></div>
         <div style="display:flex;gap:9px;align-items:center;margin-top:8px;flex-wrap:wrap">
           <button class="btn btn-primary" type="button" onclick="saveSettings()">저장</button>
           <button class="btn btn-ghost" type="button" onclick="addProfile()">+ 사업자 추가</button>
@@ -1694,13 +1714,15 @@
     if(t.year)cyc+='<div class="r"><span>매년 청구</span><span>'+won(t.year)+' / 년</span></div>';
     return '<div class="paper" id="paperBody">'
      +'<div class="p-h"><div><h1>견 적 서</h1><div class="qsub">QUOTATION</div></div>'
-     +'<div class="p-from"><b>'+esc(SET.company||'ESC 학원지원센터')+'</b><br>'
+     +'<div class="p-from'+(SET.stamp?' has-stamp':'')+'"><div>'
+       +'<b>'+esc(SET.company||'ESC 학원지원센터')+'</b><br>'
        +(SET.legal&&SET.legal!==SET.company?esc(SET.legal)+'<br>':'')
        +(SET.owner?'대표 '+esc(SET.owner)+'<br>':'')
        +(SET.biz_no?'사업자등록번호 '+esc(SET.biz_no)+'<br>':'')
        +(SET.addr?esc(SET.addr)+'<br>':'')
        +(SET.phone?esc(SET.phone)+'<br>':'')
-       +(SET.email?esc(SET.email):'')+'</div></div>'
+       +(SET.email?esc(SET.email):'')+'</div>'
+       +(SET.stamp?'<img class="p-stamp" alt="" src="'+SET.stamp+'">':'')+'</div></div>'
      +'<div class="p-line"></div>'
      +'<div class="p-cols">'
        +'<div><h4>받는 곳 / TO</h4>'
@@ -1950,6 +1972,7 @@
     $('st_owner').value=pf.owner||'';$('st_bizno').value=pf.biz_no||'';$('st_addr').value=pf.addr||'';
     $('st_phone').value=pf.phone||'';$('st_email').value=pf.email||'';$('st_bank').value=pf.bank||'';
     $('st_paynote').value=pf.pay_note||'';$('st_valid').value=pf.valid_days||30;$('st_foot').value=pf.foot_note||'';
+    ST_STAMP=pf.stamp||''; showStamp();
   };
   window.addProfile=function(){
     var nm=prompt('새 사업자를 뭐라고 부를까요?\n(예: 인투컨텐츠 · 컨텐츠 지원)');
@@ -1960,6 +1983,54 @@
     ST_EDIT=id; fillSettings();
     toast('추가했습니다. 내용을 채우고 [저장]을 눌러 주세요');
   };
+  /* ---------- 직인 ----------
+     사업자마다 settings['quote'].profiles[].stamp 에 «그림 글자(data URL)» 로 둡니다.
+     🔴 settings 는 로그인한 직원만 읽을 수 있습니다 — 직인을 공개 폴더(저장소)에 올리지 마세요.
+        이 저장소는 공개라 누구나 내려받아 도용할 수 있습니다. */
+  var ST_STAMP='';
+  window.$id=function(id){return document.getElementById(id);};
+  function showStamp(){
+    var box=$('st_stamp_prev'); if(!box)return;
+    box.innerHTML=ST_STAMP?'<img alt="직인" src="'+ST_STAMP+'">':'직인<br>없음';
+    $('st_stamp_del').disabled=!ST_STAMP;
+  }
+  window.clearStamp=function(){
+    if(!ST_STAMP)return;
+    if(!confirm('직인 이미지를 지울까요? (아래 [저장]을 눌러야 실제로 지워집니다)'))return;
+    ST_STAMP=''; showStamp(); toast('지웠습니다 — [저장]을 눌러 주세요');
+  };
+  /* 400px 안으로 줄이고, 흰색에 가까운 칸은 투명하게 만듭니다.
+     경계가 딱딱하지 않게 235~250 사이는 조금씩 비치게 합니다. */
+  window.pickStamp=function(inp){
+    var f=inp.files&&inp.files[0]; inp.value='';
+    if(!f)return;
+    if(!/^image\//.test(f.type)){toast('이미지 파일만 올릴 수 있습니다');return;}
+    if(f.size>8*1024*1024){toast('8MB 보다 작은 파일로 올려 주세요');return;}
+    var rd=new FileReader();
+    rd.onload=function(){
+      var im=new Image();
+      im.onload=function(){
+        var k=Math.min(1,400/Math.max(im.width,im.height));
+        var w=Math.max(1,Math.round(im.width*k)),h=Math.max(1,Math.round(im.height*k));
+        var cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+        var cx=cv.getContext('2d'); cx.drawImage(im,0,0,w,h);
+        var d=cx.getImageData(0,0,w,h),a=d.data;
+        for(var i=0;i<a.length;i+=4){
+          var m=Math.min(a[i],a[i+1],a[i+2]);
+          if(m>=250)a[i+3]=0;
+          else if(m>235)a[i+3]=Math.round(a[i+3]*(250-m)/15);
+        }
+        cx.putImageData(d,0,0);
+        ST_STAMP=cv.toDataURL('image/png');
+        showStamp();
+        toast('직인을 올렸습니다 — [저장]을 눌러야 반영됩니다');
+      };
+      im.onerror=function(){toast('이미지를 읽지 못했습니다');};
+      im.src=rd.result;
+    };
+    rd.readAsDataURL(f);
+  };
+
   window.saveSettings=async function(){
     var pf=profOf(ST_EDIT);
     if(!pf){toast('고칠 사업자를 골라 주세요');return;}
@@ -1970,11 +2041,12 @@
     pf.email=$('st_email').value.trim();pf.bank=$('st_bank').value.trim();
     pf.pay_note=$('st_paynote').value;pf.valid_days=Number($('st_valid').value)||30;
     pf.foot_note=$('st_foot').value.trim();
+    if(ST_STAMP)pf.stamp=ST_STAMP; else delete pf.stamp;
 
     /* ⚠️ 옛 평평한 칸(company·legal…)도 첫 사업자 값으로 같이 맞춰 둡니다 —
        예전 코드나 다른 화면이 그걸 읽고 있을 수 있어서입니다. */
     var v=Object.assign({},QALL,QPROF[0]||{},{profiles:QPROF});
-    delete v.id; delete v.name;
+    delete v.id; delete v.name; delete v.stamp;
     var r=await sb.from('settings').update({value:v,updated_at:new Date().toISOString(),updated_by:ME.id}).eq('key','quote').select('key');
     if(r.error){toast('저장 실패: '+r.error.message);return;}
     if(!r.data||!r.data.length){toast('권한이 없어 저장되지 않았습니다');return;}
