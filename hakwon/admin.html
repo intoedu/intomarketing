@@ -1453,18 +1453,49 @@
      옛 견적서에는 unit·qty 가 없습니다 — 없으면 빈칸으로 두고 할인가만 씁니다. */
   function NEWITEM(){return {name:'',unit:'',qty:'',cycle:'1회',before:'',price:''};}
 
+  /* 🔴 금액 칸 — 예전엔 type=number 였고, 한 글자 칠 때마다 표 전체를 다시 그려서
+        «커서가 빠져나가» 한 자리씩 다시 눌러야 했습니다. 쉼표도 못 받았습니다.
+        이제는 글자 칸에 숫자만 남기고 쉼표를 자동으로 찍고, 표는 다시 그리지 않습니다.
+        저장되는 값은 예전과 같이 «쉼표 없는 숫자 글자»입니다 (옛 견적서와 호환). */
+  function digits(v){return String(v==null?'':v).replace(/[^0-9]/g,'').replace(/^0+(?=\d)/,'');}
+  function comma(v){var d=digits(v);return d?Number(d).toLocaleString('ko-KR'):'';}
+  function qNumBox(i,k,v,ph){
+    return '<input class="qi r" type="text" inputmode="numeric" autocomplete="off" data-qi="'+i+'" data-qk="'+k+'"'
+      +' value="'+esc(comma(v))+'" placeholder="'+ph+'" oninput="qNum(this)">';
+  }
+  window.qNum=function(el){
+    var i=Number(el.dataset.qi),k=el.dataset.qk;
+    /* 커서 앞의 숫자 개수를 세어 두었다가, 쉼표를 다시 찍은 뒤 같은 자리로 돌려놓습니다 */
+    var pos=el.selectionStart||0, before=digits(el.value.slice(0,pos)).length;
+    var d=digits(el.value), shown=comma(d);
+    el.value=shown;
+    var p=0,seen=0;
+    while(p<shown.length&&seen<before){if(/\d/.test(shown[p]))seen++;p++;}
+    try{el.setSelectionRange(p,p);}catch(e){}
+    var it=QD.items[i]; it[k]=d;
+    if(k==='unit'||k==='qty'){
+      var u=Number(it.unit)||0,q=Number(it.qty)||0;
+      if(u&&q){
+        it.price=String(u*q);
+        var pr=document.querySelector('#q_rows input[data-qi="'+i+'"][data-qk="price"]');
+        if(pr)pr.value=comma(it.price);
+      }
+    }
+    renderQuoteSum();
+  };
+
   function renderQuoteRows(){
     var h='';
     QD.items.forEach(function(it,i){
       h+='<tr><td class="num muted tnum">'+(i+1)+'</td>'
        +'<td><input class="qi" value="'+esc(it.name)+'" placeholder="예: 블로그 작성 / 원어민 수업료" oninput="qEdit('+i+',\'name\',this.value)"></td>'
-       +'<td><input class="qi r" type="number" min="0" step="1000" value="'+esc(it.unit||'')+'" placeholder="0" oninput="qEdit('+i+',\'unit\',this.value)"></td>'
-       +'<td><input class="qi r" type="number" min="0" step="1" value="'+esc(it.qty||'')+'" placeholder="1" oninput="qEdit('+i+',\'qty\',this.value)"></td>'
+       +'<td>'+qNumBox(i,'unit',it.unit,'0')+'</td>'
+       +'<td>'+qNumBox(i,'qty',it.qty,'1')+'</td>'
        +'<td><select class="qi" onchange="qEdit('+i+',\'cycle\',this.value)">'
        +CYCLES.map(function(c){return '<option'+(it.cycle===c?' selected':'')+'>'+c+'</option>';}).join('')
        +'</select></td>'
-       +'<td><input class="qi r" type="number" min="0" step="1000" value="'+esc(it.before)+'" placeholder="0" oninput="qEdit('+i+',\'before\',this.value)"></td>'
-       +'<td><input class="qi r" type="number" min="0" step="1000" value="'+esc(it.price)+'" placeholder="0" oninput="qEdit('+i+',\'price\',this.value)"></td>'
+       +'<td>'+qNumBox(i,'before',it.before,'0')+'</td>'
+       +'<td>'+qNumBox(i,'price',it.price,'0')+'</td>'
        +'<td><button class="qdel" type="button" onclick="qDel('+i+')">✕</button></td></tr>';
     });
     $('q_rows').innerHTML=h;
