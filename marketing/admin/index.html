@@ -1414,7 +1414,8 @@
   function comma(v){var d=digits(v);return d?Number(d).toLocaleString('ko-KR'):'';}
   function qNumBox(i,k,v,ph){
     return '<input class="qi r" type="text" inputmode="numeric" autocomplete="off" data-qi="'+i+'" data-qk="'+k+'"'
-      +' value="'+esc(comma(v))+'" placeholder="'+ph+'" oninput="qNum(this)">';
+      +' value="'+esc(comma(v))+'" placeholder="'+ph+'" oninput="qNum(this)"'
+      +' onfocus="qFocus(this)" onkeydown="qKey(event,this)">';
   }
   window.qNum=function(el){
     var i=Number(el.dataset.qi),k=el.dataset.qk;
@@ -1426,15 +1427,41 @@
     while(p<shown.length&&seen<before){if(/\d/.test(shown[p]))seen++;p++;}
     try{el.setSelectionRange(p,p);}catch(e){}
     var it=QD.items[i]; it[k]=d;
+    /* 개당가격 × 수량 → «기존 비용» 에 넣습니다 (할인가는 Tab 으로 따로 넘깁니다 — 아래 qKey) */
     if(k==='unit'||k==='qty'){
       var u=Number(it.unit)||0,q=Number(it.qty)||0;
       if(u&&q){
-        it.price=String(u*q);
-        var pr=document.querySelector('#q_rows input[data-qi="'+i+'"][data-qk="price"]');
-        if(pr)pr.value=comma(it.price);
+        it.before=String(u*q);
+        var bf=qBox(i,'before'); if(bf)bf.value=comma(it.before);
       }
     }
     renderQuoteSum();
+  };
+  function qBox(i,k){return document.querySelector('#q_rows input[data-qi="'+i+'"][data-qk="'+k+'"]');}
+  /* 기존 비용 칸에 들어올 때의 값을 기억해 둡니다 —
+     할인가가 «그때의 기존 비용과 같거나 비어 있으면» Tab 으로 덮어써도 되는 것으로 봅니다.
+     할인가를 따로 깎아 둔 줄은 Tab 을 눌러도 안 건드립니다. */
+  window.qFocus=function(el){
+    var i=Number(el.dataset.qi),it=QD.items[i]||{};
+    el.dataset.bv=digits(it.before);
+  };
+  /* Tab (Shift 없이) :
+       수량 → 결제주기를 건너뛰고 «기존 비용» 으로
+       기존 비용 → 같은 금액을 «할인가(청구)» 에 넣고 그리로 */
+  window.qKey=function(e,el){
+    if(e.key!=='Tab'||e.shiftKey||e.isComposing)return;
+    var i=Number(el.dataset.qi),k=el.dataset.qk,it=QD.items[i];
+    if(k==='qty'){
+      var bf=qBox(i,'before'); if(!bf)return;
+      e.preventDefault(); bf.focus(); bf.select();
+      return;
+    }
+    if(k==='before'){
+      var pr=qBox(i,'price'); if(!pr)return;
+      var cur=digits(it.price);
+      if(!cur||cur===(el.dataset.bv||'')){ it.price=digits(it.before); pr.value=comma(it.price); renderQuoteSum(); }
+      e.preventDefault(); pr.focus(); pr.select();
+    }
   };
 
   function renderQuoteRows(){
@@ -1454,13 +1481,13 @@
     $('q_rows').innerHTML=h;
     renderQuoteSum();
   }
-  /* 개당가격이나 수량을 고치면 **할인가(청구)를 자동으로 곱해 넣습니다.**
-     할인가를 직접 치면 그 값이 그대로 남습니다 — 곱한 값과 다르게 주고 싶을 때가 있습니다. */
+  /* 개당가격이나 수량을 고치면 **기존 비용**에 곱해 넣습니다 (2026-09-21 변경 — 예전엔 할인가).
+     할인가(청구)는 기존 비용 칸에서 Tab 을 눌러 넘깁니다 → qKey. */
   window.qEdit=function(i,k,v){
     var it=QD.items[i]; it[k]=v;
     if(k==='unit'||k==='qty'){
       var u=Number(it.unit)||0, q=Number(it.qty)||0;
-      if(u&&q){ it.price=String(u*q); renderQuoteRows(); return; }
+      if(u&&q){ it.before=String(u*q); renderQuoteRows(); return; }
     }
     renderQuoteSum();
   };
