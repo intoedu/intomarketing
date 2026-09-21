@@ -144,6 +144,15 @@ td.go{text-align:right;white-space:nowrap;color:var(--accent-ink);font-weight:70
 .st{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:800;white-space:nowrap;
     background:var(--surface-2);color:var(--muted)}
 @media (prefers-color-scheme:dark){.badge.p-esc,.badge.p-church,.badge.p-mkt{filter:brightness(.82)}}
+/* 로그인 / 계정 만들기 탭 — 보기 전환 탭(.tab)과 이름을 다르게 둬야 서로 안 엉킵니다 */
+.gtabs{display:flex;gap:4px;background:var(--surface-2);padding:4px;border-radius:999px;margin:18px 0 16px}
+.gtab{flex:1;border:0;background:none;padding:9px 12px;border-radius:999px;font-weight:700;font-size:14px;color:var(--muted);cursor:pointer}
+.gtab.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.gnote{margin-top:16px;padding-top:13px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);line-height:1.65}
+.gnote a{color:var(--accent);font-weight:700}
+.msg.ok{color:var(--ok)}
+.irow{display:flex;gap:12px;padding:6px 0;font-size:14px}
+.irow .k{width:64px;color:var(--muted);flex:none}
 </style>
 </head>
 <body>
@@ -151,15 +160,67 @@ td.go{text-align:right;white-space:nowrap;color:var(--accent-ink);font-weight:70
 <div id="gate">
   <div class="gbox">
     <h1>인투마케팅 관리자</h1>
-    <p class="gsub">모아 보기입니다. ESC 직원 계정으로 들어오시면 됩니다.</p>
-    <div class="fld"><label for="li_email">이메일</label>
-      <input class="inp" id="li_email" type="email" autocomplete="username"></div>
-    <div class="fld"><label for="li_pw">비밀번호</label>
-      <input class="inp" id="li_pw" type="password" autocomplete="current-password"></div>
-    <button class="btn btn-p wfull" type="button" onclick="doLogin()">로그인</button>
-    <p class="msg" id="gMsg"></p>
-    <p class="msg" id="gWait" style="display:none">
-      계정은 있는데 아직 <b>승인 전</b>입니다. 최고관리자가 승인하면 들어오실 수 있습니다.</p>
+
+    <!-- 로그인 / 계정 만들기 -->
+    <div id="gAuth">
+      <p class="gsub">직원 전용입니다. 계정이 없으시면 [계정 만들기]로 신청해 주세요.</p>
+      <div class="gtabs">
+        <button class="gtab on" id="tabLogin" type="button" onclick="switchTab('login')">로그인</button>
+        <button class="gtab" id="tabJoin" type="button" onclick="switchTab('join')">계정 만들기</button>
+      </div>
+      <div id="paneLogin">
+        <div class="fld"><label for="li_email">이메일</label>
+          <input class="inp" id="li_email" type="email" autocomplete="username"></div>
+        <div class="fld"><label for="li_pw">비밀번호</label>
+          <input class="inp" id="li_pw" type="password" autocomplete="current-password"
+                 onkeydown="if(event.key==='Enter')doLogin()"></div>
+        <button class="btn btn-p wfull" type="button" onclick="doLogin()">로그인</button>
+      </div>
+      <div id="paneJoin" style="display:none">
+        <div class="fld"><label for="su_email">이메일</label>
+          <input class="inp" id="su_email" type="email" autocomplete="username"></div>
+        <div class="fld"><label for="su_pw">비밀번호 (6자 이상)</label>
+          <input class="inp" id="su_pw" type="password" autocomplete="new-password"></div>
+        <div class="fld"><label for="su_name">이름</label>
+          <input class="inp" id="su_name" placeholder="실명으로 적어 주세요"></div>
+        <div class="fld"><label for="su_phone">연락처</label>
+          <input class="inp" id="su_phone" inputmode="tel" placeholder="010-0000-0000"></div>
+        <button class="btn btn-p wfull" type="button" onclick="doSignup()">계정 만들고 승인 요청</button>
+      </div>
+      <p class="msg" id="gMsg"></p>
+      <div class="gnote">계정을 만들면 최고관리자에게 승인 요청이 갑니다. 승인된 뒤부터 들어오실 수 있습니다.<br>
+        다른 관리자 화면과 <b>같은 계정</b>을 씁니다 — 한 번 만들면 됩니다.</div>
+    </div>
+
+    <!-- 로그인은 됐는데 직원 등록이 없을 때 -->
+    <div id="gApply" style="display:none">
+      <p class="gsub">로그인은 되었지만 아직 직원으로 등록되지 않았습니다. 아래를 남기시면 승인 요청이 갑니다.</p>
+      <div class="fld" style="margin-top:18px"><label for="ap_name">이름</label>
+        <input class="inp" id="ap_name" placeholder="실명으로 적어 주세요"></div>
+      <div class="fld"><label for="ap_phone">연락처</label>
+        <input class="inp" id="ap_phone" inputmode="tel" placeholder="010-0000-0000"></div>
+      <button class="btn btn-p wfull" type="button" onclick="requestStaff()">승인 요청 보내기</button>
+      <p class="msg" id="apMsg"></p>
+      <div class="gnote"><span id="apWho"></span> <a href="#" onclick="doLogout();return false;">다른 계정으로 로그인</a></div>
+    </div>
+
+    <!-- 승인 대기 -->
+    <div id="gWait" style="display:none">
+      <p class="gsub"><b>승인 대기 중입니다.</b> 최고관리자가 승인하면 들어오실 수 있습니다. 승인 뒤 새로고침해 주세요.</p>
+      <div style="margin:16px 0">
+        <div class="irow"><span class="k">이름</span><span id="w_name"></span></div>
+        <div class="irow"><span class="k">이메일</span><span id="w_email"></span></div>
+        <div class="irow"><span class="k">요청일</span><span id="w_at"></span></div>
+      </div>
+      <button class="btn btn-g wfull" type="button" onclick="location.reload()">새로고침</button>
+      <div class="gnote"><a href="#" onclick="doLogout();return false;">로그아웃</a></div>
+    </div>
+
+    <!-- 승인 거절·정지 -->
+    <div id="gDenied" style="display:none">
+      <p class="gsub"><b>이용이 제한된 계정입니다.</b> 최고관리자에게 문의해 주세요.</p>
+      <button class="btn btn-g wfull" type="button" style="margin-top:14px" onclick="doLogout()">로그아웃</button>
+    </div>
   </div>
 </div>
 
@@ -215,8 +276,52 @@ function plat(id){for(var i=0;i<PLATS.length;i++)if(PLATS[i].id===id)return PLAT
 function fdate(d){return d?String(d).slice(0,10):'';}
 function who(id){var s=STAFF.filter(function(x){return x.id===id;})[0];return s?s.name:'미지정';}
 
-/* ── 로그인 ── */
+/* ── 로그인 · 계정 만들기 ──
+   직원 표(staff)는 학원·인투마케팅 어드민과 «같은 표»입니다.
+   여기서 만든 계정도 그쪽 「관리자 목록 → 승인 대기」에 뜨고, 승인은 거기서 합니다
+   (모아 보기는 고치는 기능이 없는 화면이라 승인 버튼을 두지 않습니다). */
 function gmsg(t,c){var m=$('gMsg');m.textContent=t;m.className='msg'+(c?' '+c:'');}
+function showPane(id){
+  ['gAuth','gApply','gWait','gDenied'].forEach(function(x){$(x).style.display=(x===id?'':'none');});
+}
+function fdt(s){if(!s)return '-';var d=new Date(s);
+  return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)
+    +' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);}
+window.switchTab=function(t){
+  var l=(t==='login');
+  $('tabLogin').classList.toggle('on',l); $('tabJoin').classList.toggle('on',!l);
+  $('paneLogin').style.display=l?'':'none'; $('paneJoin').style.display=l?'none':'';
+  gmsg('');
+};
+async function insertStaff(name,phone){
+  var u=(await sb.auth.getUser()).data.user;
+  if(!u)return '로그인 정보를 찾을 수 없습니다.';
+  var r=await sb.from('staff').insert({id:u.id,email:u.email,name:name,phone:phone,role:'staff',status:'pending'});
+  return r.error?('승인 요청 실패: '+r.error.message):null;
+}
+window.doSignup=async function(){
+  var email=$('su_email').value.trim(),pw=$('su_pw').value,name=$('su_name').value.trim(),phone=$('su_phone').value.trim();
+  if(!email||!pw)return gmsg('이메일과 비밀번호를 넣어 주세요.','err');
+  if(pw.length<6)return gmsg('비밀번호는 6자 이상으로 해 주세요.','err');
+  if(!name)return gmsg('이름을 넣어 주세요.','err');
+  if(!sb)return gmsg('연결이 안 됩니다. 새로고침해 주세요.','err');
+  gmsg('계정 만드는 중...');
+  var r=await sb.auth.signUp({email:email,password:pw});
+  if(r.error)return gmsg('가입 실패: '+r.error.message+' (이미 계정이 있으면 [로그인] 탭으로 들어오세요)','err');
+  var s=await sb.auth.getSession();
+  if(!s.data.session)return gmsg('계정이 만들어졌습니다. [로그인] 탭에서 로그인해 주세요.','ok');
+  var err=await insertStaff(name,phone);
+  if(err)return gmsg(err,'err');
+  boot();
+};
+window.requestStaff=async function(){
+  var name=$('ap_name').value.trim(),phone=$('ap_phone').value.trim(),m=$('apMsg');
+  if(!name){m.className='msg err';m.textContent='이름을 넣어 주세요.';return;}
+  m.className='msg';m.textContent='요청 보내는 중...';
+  var err=await insertStaff(name,phone);
+  if(err){m.className='msg err';m.textContent=err;return;}
+  boot();
+};
 window.doLogin=async function(){
   var e=$('li_email').value.trim(), p=$('li_pw').value;
   if(!e||!p)return gmsg('이메일과 비밀번호를 넣어 주세요.','err');
@@ -231,10 +336,17 @@ window.doLogout=async function(){if(sb)await sb.auth.signOut();location.reload()
 async function boot(){
   if(!sb)return gmsg('연결이 안 됩니다.','err');
   var s=await sb.auth.getSession();
-  if(!s.data.session)return;
+  if(!s.data.session){showPane('gAuth');return;}
   var me=await sb.from('staff').select('*').eq('id',s.data.session.user.id).maybeSingle();
-  if(me.error)return gmsg('확인 실패: '+me.error.message,'err');
-  if(!me.data||me.data.status!=='approved'){$('gWait').style.display='';gmsg('');return;}
+  if(me.error){showPane('gAuth');return gmsg('확인 실패: '+me.error.message,'err');}
+  if(!me.data){$('apWho').textContent=s.data.session.user.email+' 로 로그인됨 ·';showPane('gApply');return;}
+  if(me.data.status==='pending'){
+    $('w_name').textContent=me.data.name||'-';
+    $('w_email').textContent=me.data.email||s.data.session.user.email;
+    $('w_at').textContent=fdt(me.data.created_at);
+    showPane('gWait');return;
+  }
+  if(me.data.status!=='approved'){showPane('gDenied');return;}
   ME=me.data;
   $('gate').classList.add('hide'); $('app').classList.remove('hide');
   $('meName').textContent=ME.name||ME.email;
