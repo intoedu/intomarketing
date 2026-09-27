@@ -572,6 +572,10 @@
   .ptag b{color:var(--gold)}
   .ptag.on b{color:#fff}
   /* board */
+  /* 신청 내역 카드 안 «진행 단계» 표시 */
+  .mesteps{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0 2px}
+  .mestep{font-size:.74rem;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+  .mestep.on{background:var(--brand);color:#fff;font-weight:700}
   .board-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:22px;flex-wrap:wrap}
   .board-head h2{font-size:1.5rem}
   .board-list{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
@@ -707,6 +711,8 @@
       <button class="navlink" onclick="go('board')">공지·문의</button>
       <button class="navlink" onclick="go('home','apply')">신청하기</button>
       <button class="navlink" onclick="go('home','faq')">자주 묻는 질문</button>
+      <!-- 로그인 안 한 상태로 눌러도 됩니다 — openMe() 가 로그인 창을 먼저 엽니다 -->
+      <button class="navlink" onclick="openMe()">마이페이지</button>
     </nav>
     <span class="authArea" id="authArea"></span>
     <a class="btn btn-primary headcta" onclick="go('home','apply')">신청하기</a>
@@ -2307,6 +2313,13 @@
     var r=await sb.rpc('my_requests');
     if(r.error){box.innerHTML='<div class="meempty">내역을 불러오지 못했습니다.<br>'+esc(r.error.message)+'</div>';return;}
     var rows=r.data||[];
+    /* 진행 단계·견적번호·매월 요금·소개 실장은 «따로» 가져와 id 로 맞춰 붙입니다
+       (기존 my_requests 함수를 건드리지 않으려고 my_request_extra 를 새로 만들었습니다) */
+    var EX={};
+    try{
+      var ex=await sb.rpc('my_request_extra');
+      (ex.data||[]).forEach(function(x){EX[x.id]=x;});
+    }catch(e){}
     if(!rows.length){
       box.innerHTML='<div class="meempty"><b>아직 신청하신 내역이 없습니다.</b><br>'
         +'아래 [새 신청하기]로 신청하시면 여기에서 진행 상황을 보실 수 있습니다.<br>'
@@ -2323,10 +2336,21 @@
         +'<span style="margin-left:auto;font-size:.78rem;color:var(--muted)">'+fdateK(x.created_at)+' 신청</span>'
         +'</div>';
       if(x.summary)h+='<div class="sum">'+esc(shortList(x.summary,4))+'</div>';
+      var e=EX[x.id]||{};
+      if(e.stage){
+        h+='<div class="mesteps">'+['접수·견적','디자인','개발','검수','완료'].map(function(st){
+          return '<span class="mestep'+(st===e.stage?' on':'')+'">'+st+'</span>';}).join('')+'</div>';
+      }
       var meta=[];
       if(x.price)meta.push('<b>'+esc(x.price)+'</b>');
+      if(e.amount)meta.push('<b>'+Number(e.amount).toLocaleString('ko-KR')+'원</b>');
+      if(Number(e.monthly)>0)meta.push('<b>매월 '+Number(e.monthly).toLocaleString('ko-KR')+'원</b>');
+      if(e.paid_at)meta.push('<i>입금 '+String(e.paid_at).slice(0,10)+'</i>');
       if(x.deadline)meta.push('<i>마감 '+esc(x.deadline)+'</i>');
+      if(e.quote_no)meta.push('<i>견적번호 '+esc(e.quote_no)+'</i>');
+      if(e.partner_name)meta.push('<i>소개 '+esc(e.partner_name)+' 실장님</i>');
       if(meta.length)h+='<div class="meta">'+meta.join('')+'</div>';
+      if(e.site_url)h+='<a class="melink" href="'+esc(e.site_url)+'" target="_blank" rel="noopener">만든 사이트 열기 ↗</a>';
       if(x.share_key){
         var pct=x.qty?Math.round((x.done||0)/x.qty*100):0;
         h+='<div class="mebar"><i style="width:'+pct+'%"></i></div>'
