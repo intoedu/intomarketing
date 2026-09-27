@@ -1,0 +1,71 @@
+/* 고객 마이페이지 공통 모양 (2026-09-27)
+   색은 페이지에서 --brand / --accent 만 바꿔 쓰면 됩니다. */
+:root{
+  --paper:#F4F7FB; --surface:#fff; --surface-2:#EFF3F9;
+  --ink:#0E1B33; --muted:#5B6A82; --line:#DFE6F1;
+  --accent:#2E5FE8; --accent-ink:#1E47C0; --brand:#12294D;
+  --ok:#12805C; --warn:#B67A22; --bad:#C2413B;
+  --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);line-height:1.7;font-size:15px}
+h1,h2,h3{margin:0;letter-spacing:-.01em;word-break:keep-all}
+.hide{display:none!important}
+.tnum{font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+
+/* 로그인 */
+.gate{min-height:100vh;display:grid;place-items:center;padding:24px}
+.gbox{width:100%;max-width:430px;background:var(--surface);border:1px solid var(--line);
+      border-radius:16px;padding:30px;box-shadow:0 12px 36px rgba(16,32,64,.08)}
+.gbox h1{font-size:1.25rem;margin-bottom:6px}
+.gsub{color:var(--muted);font-size:.9rem;margin:0 0 18px}
+.gtabs{display:flex;gap:4px;background:var(--surface-2);padding:4px;border-radius:999px;margin:0 0 16px}
+.gtab{flex:1;border:0;background:none;padding:9px 12px;border-radius:999px;font-weight:700;font-size:.9rem;color:var(--muted);cursor:pointer;font-family:inherit}
+.gtab.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.fld{margin-bottom:12px}
+.fld label{display:block;font-size:.82rem;font-weight:700;color:var(--muted);margin-bottom:6px}
+.inp{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:11px 13px;outline:none;font:inherit}
+.inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(46,95,232,.14)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:.9rem;
+     padding:11px 18px;border-radius:10px;border:1.5px solid transparent;cursor:pointer;font-family:inherit;text-decoration:none}
+.btn-p{background:var(--accent);color:#fff}
+.btn-p:hover{background:var(--accent-ink)}
+.btn-g{background:var(--surface);border-color:var(--line);color:var(--ink)}
+.btn-g:hover{border-color:var(--accent);color:var(--accent)}
+.btn-s{padding:7px 13px;font-size:.82rem;border-radius:8px}
+.wfull{width:100%}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.msg{font-size:.86rem;margin-top:11px;min-height:20px;color:var(--muted)}
+.msg.err{color:var(--bad)} .msg.ok{color:var(--ok)}
+.gnote{margin-top:16px;padding-top:13px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted);line-height:1.7}
+
+/* 본문 */
+.top{background:var(--brand);color:#fff;padding:15px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.top b{font-size:1rem} .top span{color:#C6D5EE;font-size:.84rem}
+.wrap{max-width:900px;margin:0 auto;padding:22px 18px 60px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px}
+.card h2{font-size:1rem;margin-bottom:4px}
+.card .sub{color:var(--muted);font-size:.85rem;margin:0 0 14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.stat b{display:block;font-size:1.45rem;font-weight:800}
+.stat span{color:var(--muted);font-size:.82rem}
+
+/* 주문 카드 */
+.ord{border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px;background:var(--surface)}
+.ord .h{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:10px}
+.ord .h b{font-size:1rem}
+.rowline{display:flex;gap:10px;padding:6px 0;font-size:.9rem;border-bottom:1px dashed var(--line)}
+.rowline:last-child{border-bottom:0}
+.rowline .k{width:110px;flex:none;color:var(--muted);font-size:.84rem}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.76rem;font-weight:800;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.pill.ok{background:#E3F3EC;color:var(--ok)}
+.pill.ing{background:#E4EDFC;color:var(--accent-ink)}
+.pill.wait{background:#FBF0DF;color:var(--warn)}
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.step{font-size:.76rem;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.step.on{background:var(--brand);color:#fff;font-weight:700}
+.note{background:var(--surface-2);border-radius:10px;padding:14px 16px;font-size:.86rem;line-height:1.75}
+.empty{text-align:center;color:var(--muted);padding:26px 10px;font-size:.9rem}
+@media(max-width:620px){ .rowline .k{width:88px} }
