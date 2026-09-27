@@ -416,7 +416,9 @@
       <div class="qbox" style="display:block;line-height:1.75;margin-bottom:14px">
         <b>쓰는 법</b> — [+ 영업실장 추가]로 만들고, 그 줄의 <b>[링크]</b>를 눌러 복사해서 실장님께 보내세요.<br>
         명함·리플렛 QR에 그 링크를 넣으면 <b>고객이 아무것도 적지 않아도</b> 누구를 통해 왔는지 남습니다.<br>
-        <span class="muted" style="font-size:.82rem">링크 없이 들어온 의뢰는 의뢰 상세의 「영업실장」에서 직접 고르시면 됩니다.</span>
+        <span class="muted" style="font-size:.82rem">링크 없이 들어온 의뢰는 의뢰 상세의 「영업실장」에서 직접 고르시면 됩니다.</span><br>
+        <b>실장 현황 페이지</b> — <a href="https://intomarketing.co.kr/partner/" target="_blank" style="color:var(--accent);font-weight:700">intomarketing.co.kr/partner/</a>
+        · <b>이메일을 넣어 두셔야</b> 실장님이 그 이메일로 가입해 자기 현황을 볼 수 있습니다.
       </div>
       <div style="margin-bottom:12px"><button class="btn btn-primary" type="button" onclick="newPartner()">+ 영업실장 추가</button></div>
       <div class="card" id="partnerWrap"></div>
@@ -1467,12 +1469,15 @@
     var cnt={};
     Object.keys(DATA).forEach(function(g){(DATA[g]||[]).forEach(function(r){
       if(r.partner_id)cnt[r.partner_id]=(cnt[r.partner_id]||0)+1;});});
-    var h='<table><thead><tr><th>이름</th><th>코드</th><th>연락처</th><th class="num">들어온 의뢰</th><th>상태</th><th></th></tr></thead><tbody>';
+    var h='<table><thead><tr><th>이름</th><th>코드</th><th>연락처 · 이메일</th><th class="num">들어온 의뢰</th><th>현황 페이지</th><th>상태</th><th></th></tr></thead><tbody>';
     PARTNERS.forEach(function(p){
       h+='<tr><td><b>'+esc(p.name)+'</b>'+(p.memo?'<div class="muted" style="font-size:.8rem">'+esc(p.memo)+'</div>':'')+'</td>'
        +'<td><code style="background:var(--surface-2);padding:2px 7px;border-radius:5px">'+esc(p.code)+'</code></td>'
-       +'<td class="muted">'+esc(p.phone||'-')+'</td>'
+       +'<td class="muted" style="font-size:.82rem">'+esc(p.phone||'-')
+         +(p.email?'<br>'+esc(p.email):'<br><span style="color:#C0392B">이메일 없음</span>')+'</td>'
        +'<td class="num tnum">'+(cnt[p.id]||0)+'</td>'
+       +'<td style="font-size:.82rem">'+(p.user_id?'<span style="color:var(--ok);font-weight:700">연결됨</span>'
+            :(p.email?'<span class="muted">가입 대기</span>':'<span class="muted">이메일 먼저</span>'))+'</td>'
        +'<td>'+(p.status==='active'?'<span style="color:var(--ok);font-weight:700">활동</span>'
                                    :'<span class="muted">중지</span>')+'</td>'
        +'<td style="text-align:right;white-space:nowrap">'
@@ -1491,7 +1496,10 @@
     if(!code||!code.trim())return;
     code=code.trim();
     if(!/^[A-Za-z0-9_-]{2,20}$/.test(code)){toast('코드는 영문·숫자 2~20자로 적어 주세요');return;}
-    var r=await sb.from('partners').insert({name:name.trim(),code:code}).select().maybeSingle();
+    /* 🔴 이메일이 있어야 실장님이 현황 페이지에 로그인할 수 있습니다.
+          (그 이메일로 가입한 사람만 이 실장과 연결됩니다 — partner_claim) */
+    var mail=prompt('이메일을 적어 주세요 — 실장님이 현황 페이지에 로그인할 때 쓰는 주소입니다.\n계약서에 적힌 이메일로 넣어 주세요. (나중에 넣으셔도 됩니다)');
+    var r=await sb.from('partners').insert({name:name.trim(),code:code,email:(mail||'').trim()||null}).select().maybeSingle();
     if(r.error){toast(/duplicate|unique/i.test(r.error.message)?'이미 쓰고 있는 코드입니다':('실패: '+r.error.message));return;}
     await loadPartners(); renderPartners();
     toast(name.trim()+' 님을 넣었습니다');
@@ -1501,10 +1509,12 @@
     var p=pOf(id); if(!p)return;
     var name=prompt('성함',p.name); if(name===null)return;
     var phone=prompt('연락처',p.phone||''); if(phone===null)return;
+    var mail=prompt('이메일 (현황 페이지 로그인에 쓰는 주소)',p.email||''); if(mail===null)return;
     var memo=prompt('메모 (어느 플랫폼 담당인지 등)',p.memo||''); if(memo===null)return;
     var st=confirm('지금 «활동 중»으로 둘까요?\n[확인] 활동 중 · [취소] 중지\n\n중지하면 전용 링크로 들어와도 연결되지 않습니다.');
     var r=await sb.from('partners').update({name:name.trim()||p.name,phone:phone.trim()||null,
-              memo:memo.trim()||null,status:st?'active':'paused',updated_at:new Date().toISOString()})
+              email:mail.trim()||null,memo:memo.trim()||null,
+              status:st?'active':'paused',updated_at:new Date().toISOString()})
             .eq('id',id).select().maybeSingle();
     if(r.error){toast('실패: '+r.error.message);return;}
     if(!r.data){toast('권한이 없어 바뀌지 않았습니다');return;}

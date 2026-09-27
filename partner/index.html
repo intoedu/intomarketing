@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>영업실장 현황 · 인투마케팅</title>
+<!--
+  영업실장 전용 개인 현황 페이지 (2026-09-27)
+  🔴 계약서가 요구하는 페이지입니다 —
+     제6조 「을 전용 개인 현황 페이지를 통한 커미션 기준 및 정산 현황 상시 공개」
+     제7조 「게시된 내용을 본 계약의 일부로 본다 · 계정을 제공한다」
+     그래서 링크 공유 방식이 아니라 «로그인»이어야 하고, 커미션 기준 칸을 비워 두면 안 됩니다.
+
+  🔴 표를 직접 읽지 않고 함수(partner_me / partner_orders / partner_rules)로만 봅니다.
+     고객 연락처·메모·견적서는 실장에게 나가지 않습니다.
+-->
+<style>
+  :root{
+    --paper:#F4F7FB; --surface:#fff; --surface-2:#EFF3F9;
+    --ink:#0E1B33; --muted:#5B6A82; --line:#DFE6F1;
+    --accent:#2E5FE8; --accent-ink:#1E47C0; --band:#12294D;
+    --ok:#12805C; --warn:#B67A22; --bad:#C2413B;
+    --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);line-height:1.7;font-size:15px}
+  h1,h2,h3{margin:0;letter-spacing:-.01em;word-break:keep-all}
+  .hide{display:none!important}
+  .tnum{font-variant-numeric:tabular-nums}
+  a{color:var(--accent)}
+
+  /* 로그인 */
+  .gate{min-height:100vh;display:grid;place-items:center;padding:24px}
+  .gbox{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--line);
+        border-radius:16px;padding:30px;box-shadow:0 12px 36px rgba(16,32,64,.08)}
+  .gbox h1{font-size:1.25rem;margin-bottom:6px}
+  .gsub{color:var(--muted);font-size:.9rem;margin:0 0 18px}
+  .gtabs{display:flex;gap:4px;background:var(--surface-2);padding:4px;border-radius:999px;margin:0 0 16px}
+  .gtab{flex:1;border:0;background:none;padding:9px 12px;border-radius:999px;font-weight:700;font-size:.9rem;color:var(--muted);cursor:pointer}
+  .gtab.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .fld{margin-bottom:12px}
+  .fld label{display:block;font-size:.82rem;font-weight:700;color:var(--muted);margin-bottom:6px}
+  .inp{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:11px 13px;outline:none;font:inherit}
+  .inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(46,95,232,.14)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:.9rem;
+       padding:11px 18px;border-radius:10px;border:1.5px solid transparent;cursor:pointer;font-family:inherit}
+  .btn-p{background:var(--accent);color:#fff}
+  .btn-p:hover{background:var(--accent-ink)}
+  .btn-g{background:var(--surface);border-color:var(--line);color:var(--ink)}
+  .btn-g:hover{border-color:var(--accent);color:var(--accent)}
+  .btn-s{padding:7px 13px;font-size:.82rem;border-radius:8px}
+  .wfull{width:100%}
+  .btn[disabled]{opacity:.55;cursor:not-allowed}
+  .msg{font-size:.86rem;margin-top:11px;min-height:20px;color:var(--muted)}
+  .msg.err{color:var(--bad)} .msg.ok{color:var(--ok)}
+  .gnote{margin-top:16px;padding-top:13px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted);line-height:1.7}
+
+  /* 본문 */
+  .top{background:var(--band);color:#fff;padding:16px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .top b{font-size:1rem} .top span{color:#C6D5EE;font-size:.84rem}
+  .wrap{max-width:960px;margin:0 auto;padding:22px 18px 60px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px}
+  .card h2{font-size:1rem;margin-bottom:4px}
+  .card .sub{color:var(--muted);font-size:.85rem;margin:0 0 14px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .stat b{display:block;font-size:1.5rem;font-weight:800}
+  .stat span{color:var(--muted);font-size:.82rem}
+  table{width:100%;border-collapse:collapse;font-size:.9rem}
+  th{text-align:left;color:var(--muted);font-size:.78rem;font-weight:800;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  td.r,th.r{text-align:right}
+  .pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.76rem;font-weight:800;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+  .pill.ok{background:#E3F3EC;color:var(--ok)}
+  .pill.ing{background:#E4EDFC;color:var(--accent-ink)}
+  .lk{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:9px}
+  .lk .name{width:150px;font-size:.84rem;font-weight:700;color:var(--muted)}
+  .lk input{flex:1;min-width:220px;font-size:.8rem;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--surface-2);font-family:inherit}
+  .note{background:var(--surface-2);border-radius:10px;padding:14px 16px;font-size:.86rem;white-space:pre-wrap;line-height:1.75}
+  .empty{text-align:center;color:var(--muted);padding:30px 10px;font-size:.9rem}
+  @media(max-width:620px){
+    .lk .name{width:100%}
+    td,th{padding:9px 6px;font-size:.84rem}
+  }
+</style>
+</head>
+<body>
+
+<!-- ───────── 로그인 ───────── -->
+<div class="gate" id="gate">
+  <div class="gbox">
+    <h1>영업실장 현황</h1>
+
+    <div id="gAuth">
+      <p class="gsub">인투마케팅 영업실장 전용 페이지입니다.</p>
+      <div class="gtabs">
+        <button class="gtab on" id="tabLogin" type="button" onclick="switchTab('login')">로그인</button>
+        <button class="gtab" id="tabJoin" type="button" onclick="switchTab('join')">계정 만들기</button>
+      </div>
+      <div id="paneLogin">
+        <div class="fld"><label for="li_email">이메일</label>
+          <input class="inp" id="li_email" type="email" autocomplete="username"></div>
+        <div class="fld"><label for="li_pw">비밀번호</label>
+          <input class="inp" id="li_pw" type="password" autocomplete="current-password"
+                 onkeydown="if(event.key==='Enter')doLogin()"></div>
+        <button class="btn btn-p wfull" type="button" onclick="doLogin()">로그인</button>
+      </div>
+      <div id="paneJoin" style="display:none">
+        <div class="fld"><label for="su_email">이메일</label>
+          <input class="inp" id="su_email" type="email" autocomplete="username"></div>
+        <div class="fld"><label for="su_pw">비밀번호 (6자 이상)</label>
+          <input class="inp" id="su_pw" type="password" autocomplete="new-password"></div>
+        <button class="btn btn-p wfull" type="button" onclick="doSignup()">계정 만들기</button>
+        <div class="gnote" style="margin-top:14px;padding-top:0;border:0">
+          🔴 <b>계약서에 적어 주신 이메일</b>로 만들어 주세요. 그 이메일이어야 현황이 연결됩니다.</div>
+      </div>
+      <p class="msg" id="gMsg"></p>
+      <div class="gnote">계정이 안 만들어지거나 현황이 안 보이면 <b>010-7318-1790</b> 으로 연락 주세요.</div>
+    </div>
+
+    <div id="gNoMatch" style="display:none">
+      <p class="gsub"><b>아직 명단에 연결되지 않았습니다.</b></p>
+      <div class="note" style="margin:14px 0">로그인하신 이메일이 영업실장 명단에 없습니다.<br>
+        계약서에 적으신 이메일로 로그인하셨는지 확인해 주세요.<br><br>
+        <b>010-7318-1790</b> 으로 연락 주시면 바로 등록해 드리겠습니다.</div>
+      <button class="btn btn-g wfull" type="button" onclick="location.reload()">다시 확인</button>
+      <div class="gnote"><a href="#" onclick="doLogout();return false;">다른 계정으로 로그인</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── 현황 ───────── -->
+<div id="app" class="hide">
+  <div class="top">
+    <b id="p_name">-</b><span id="p_code">-</span>
+    <span style="margin-left:auto"><button class="btn btn-g btn-s" type="button" onclick="doLogout()">로그아웃</button></span>
+  </div>
+
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><b class="tnum" id="s-all">0</b><span>소개한 의뢰 전체</span></div>
+      <div class="stat"><b class="tnum" id="s-paid">0</b><span>입금 완료</span></div>
+      <div class="stat"><b class="tnum" id="s-month">0</b><span>이번 달 입금</span></div>
+      <div class="stat"><b class="tnum" id="s-amt">0원</b><span>이번 달 입금액</span></div>
+    </div>
+
+    <div class="card">
+      <h2>내가 소개한 의뢰</h2>
+      <p class="sub">전용 링크로 들어오셨거나, 저희가 확인해 연결한 건입니다.</p>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr>
+            <th>업체명</th><th>플랫폼</th><th>종류</th><th>상태</th>
+            <th class="r">금액</th><th>입금일</th><th>접수일</th>
+          </tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="empty hide" id="noRows">아직 연결된 의뢰가 없습니다.<br>아래 전용 링크로 고객을 안내해 주세요.</div>
+      <p class="sub" style="margin:14px 0 0">표시된 금액은 <b>고객이 결제한 금액(부가세 포함)</b>입니다.
+        커미션은 계약서 제7조에 따라 <b>부가세를 뺀 금액(공급가액)</b>을 기준으로 계산됩니다.</p>
+    </div>
+
+    <div class="card">
+      <h2>커미션 기준</h2>
+      <p class="sub">계약서 제7조에 따라 이곳에 게시된 내용이 계약의 일부가 됩니다.</p>
+      <div class="note" id="p_rules">불러오는 중…</div>
+      <p class="sub" style="margin:12px 0 0" id="p_pay"></p>
+    </div>
+
+    <div class="card">
+      <h2>내 전용 링크</h2>
+      <p class="sub">이 링크로 들어온 고객은 <b>자동으로</b> 실장님 소개 건으로 기록됩니다.
+        명함·카톡·SNS에 쓰시면 됩니다.</p>
+      <div id="links"></div>
+    </div>
+
+    <div class="card">
+      <h2>문의</h2>
+      <p class="sub">현황이 실제와 다르거나 빠진 건이 있으면 바로 알려 주세요.
+        계약서 제9조에 따라 <b>확인일로부터 7일 이내</b>에 이의를 제기하실 수 있습니다.</p>
+      <div style="display:flex;gap:9px;flex-wrap:wrap">
+        <a class="btn btn-p" href="tel:01073181790">📞 전화하기</a>
+        <a class="btn btn-g" href="sms:01073181790">💬 문자 보내기</a>
+        <a class="btn btn-g" id="mailBtn" href="#">✉️ 메일 보내기</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+"use strict";
+var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
+var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
+var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
+
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function won(n){return (Number(n)||0).toLocaleString('ko-KR')+'원';}
+function fdate(s){return s?String(s).slice(0,10):'-';}
+function gmsg(t,c){var m=$('gMsg');m.textContent=t;m.className='msg'+(c?' '+c:'');}
+
+var ME=null;
+
+/* ---------- 로그인 ---------- */
+window.switchTab=function(t){
+  var l=(t==='login');
+  $('tabLogin').classList.toggle('on',l); $('tabJoin').classList.toggle('on',!l);
+  $('paneLogin').style.display=l?'':'none'; $('paneJoin').style.display=l?'none':'';
+  gmsg('');
+};
+window.doLogin=async function(){
+  var e=$('li_email').value.trim(), p=$('li_pw').value;
+  if(!e||!p)return gmsg('이메일과 비밀번호를 넣어 주세요.','err');
+  if(!sb)return gmsg('연결이 안 됩니다. 새로고침해 주세요.','err');
+  gmsg('들어가는 중…');
+  var r=await sb.auth.signInWithPassword({email:e,password:p});
+  if(r.error)return gmsg('로그인 실패: '+r.error.message,'err');
+  boot();
+};
+window.doSignup=async function(){
+  var e=$('su_email').value.trim(), p=$('su_pw').value;
+  if(!e||!p)return gmsg('이메일과 비밀번호를 넣어 주세요.','err');
+  if(p.length<6)return gmsg('비밀번호는 6자 이상으로 해 주세요.','err');
+  if(!sb)return gmsg('연결이 안 됩니다. 새로고침해 주세요.','err');
+  gmsg('계정 만드는 중…');
+  var r=await sb.auth.signUp({email:e,password:p});
+  if(r.error)return gmsg('가입 실패: '+r.error.message+' (이미 계정이 있으면 [로그인] 탭으로 들어오세요)','err');
+  var s=await sb.auth.getSession();
+  if(!s.data.session)return gmsg('계정이 만들어졌습니다. [로그인] 탭에서 로그인해 주세요.','ok');
+  boot();
+};
+window.doLogout=async function(){ if(sb)await sb.auth.signOut(); location.reload(); };
+
+/* ---------- 들어오기 ---------- */
+async function boot(){
+  if(!sb)return gmsg('연결이 안 됩니다.','err');
+  var s=await sb.auth.getSession();
+  if(!s.data.session){ show('gAuth'); return; }
+
+  /* 이름표 붙이기 — 명단의 «이메일»과 같아야 연결됩니다 (partner_claim) */
+  var c=await sb.rpc('partner_claim');
+  if(c.error){ show('gAuth'); return gmsg('확인 실패: '+c.error.message,'err'); }
+  if(!c.data||!c.data.ok){ show('gNoMatch'); return; }
+
+  var me=await sb.rpc('partner_me');
+  if(me.error||!me.data){ show('gNoMatch'); return; }
+  ME=me.data;
+
+  $('gate').classList.add('hide'); $('app').classList.remove('hide');
+  $('p_name').textContent=ME.name+' 실장님';
+  $('p_code').textContent='코드 '+ME.code+(ME.status==='active'?'':' · 활동 중지');
+  $('mailBtn').href='mailto:info@intomarketing.co.kr?subject='
+    +encodeURIComponent('['+ME.name+' 실장] 현황 문의');
+  renderLinks();
+  await Promise.all([loadRules(), loadOrders()]);
+}
+function show(id){
+  ['gAuth','gNoMatch'].forEach(function(x){ $(x).style.display=(x===id?'':'none'); });
+  $('gate').classList.remove('hide'); $('app').classList.add('hide');
+}
+
+/* ---------- 커미션 기준 (계약의 일부) ---------- */
+async function loadRules(){
+  var r=await sb.rpc('partner_rules');
+  var v=(r&&!r.error&&r.data)?r.data:{};
+  $('p_rules').textContent=v.rules||'아직 게시된 기준이 없습니다. 담당자에게 문의해 주세요.';
+  $('p_pay').textContent=v.pay_note||'';
+}
+
+/* ---------- 내가 소개한 의뢰 ---------- */
+var PLAT={mkt:'인투마케팅',esc:'학원지원센터',church:'교회지원센터'};
+function statusPill(s){
+  var t=(s==='신청접수')?'접수':(s||'접수');
+  var cls=(t==='완료')?'ok':((t==='진행중')?'ing':'');
+  return '<span class="pill '+cls+'">'+esc(t)+'</span>';
+}
+async function loadOrders(){
+  var r=await sb.rpc('partner_orders');
+  var rows=(r&&!r.error&&r.data)?r.data:[];
+  var now=new Date(), ym=now.getFullYear()+'-'+('0'+(now.getMonth()+1)).slice(-2);
+  var paid=0, mcnt=0, mamt=0, h='';
+  rows.forEach(function(x){
+    if(x.paid_at){ paid++; if(String(x.paid_at).slice(0,7)===ym){ mcnt++; mamt+=Number(x.amount)||0; } }
+    h+='<tr><td><b>'+esc(x.customer||'-')+'</b>'
+      +(x.how==='link'?'<div class="sub" style="font-size:.76rem;color:var(--muted)">전용 링크</div>':'')
+      +'</td>'
+      +'<td>'+esc(PLAT[x.center]||x.center||'-')+'</td>'
+      +'<td>'+esc(x.kind||'-')+(x.work_type?'<div style="font-size:.78rem;color:var(--muted)">'+esc(x.work_type)+'</div>':'')+'</td>'
+      +'<td>'+statusPill(x.status)+'</td>'
+      +'<td class="r tnum">'+(x.amount?won(x.amount):'<span style="color:var(--muted)">확정 전</span>')+'</td>'
+      +'<td>'+(x.paid_at?fdate(x.paid_at):'<span style="color:var(--muted)">대기</span>')+'</td>'
+      +'<td class="tnum" style="color:var(--muted)">'+fdate(x.created_at)+'</td></tr>';
+  });
+  $('rows').innerHTML=h;
+  $('noRows').classList.toggle('hide',rows.length>0);
+  $('s-all').textContent=rows.length;
+  $('s-paid').textContent=paid;
+  $('s-month').textContent=mcnt;
+  $('s-amt').textContent=won(mamt);
+}
+
+/* ---------- 전용 링크 ---------- */
+var APPLY=[
+  ['홈페이지 제작','https://intomarketing.co.kr/apply/'],
+  ['블로그 · 리뷰','https://intomarketing.co.kr/apply/blog/'],
+  ['영상 제작','https://intomarketing.co.kr/apply/video/'],
+  ['그래픽 디자인','https://intomarketing.co.kr/apply/design/'],
+  ['SNS 채널 제작','https://intomarketing.co.kr/apply/sns/'],
+  ['인투마케팅 첫 화면','https://intomarketing.co.kr/'],
+  ['학원지원센터 신청서','https://intomarketing.co.kr/hakwon/apply/']
+];
+function renderLinks(){
+  $('links').innerHTML=APPLY.map(function(x,i){
+    var url=x[1]+'?p='+encodeURIComponent(ME.code);
+    return '<div class="lk"><span class="name">'+esc(x[0])+'</span>'
+      +'<input readonly value="'+esc(url)+'" onclick="this.select()">'
+      +'<button class="btn btn-p btn-s" type="button" onclick="copyLink(this,\''+esc(url)+'\')">복사</button></div>';
+  }).join('');
+}
+window.copyLink=async function(btn,url){
+  try{ await navigator.clipboard.writeText(url); btn.textContent='복사됨 ✓';
+       setTimeout(function(){btn.textContent='복사';},1400); }
+  catch(e){ window.prompt('아래 주소를 복사해 주세요',url); }
+};
+
+boot();
+})();
+</script>
+</body>
+</html>
