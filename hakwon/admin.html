@@ -487,6 +487,9 @@
       <div><select class="inp" id="d_assignee" onchange="saveField('assignee_id',this.value||null)"></select></div>
     </div>
 
+    <div class="sec-t">영업실장 <span class="muted" id="d_ref_how" style="font-weight:600;font-size:.8rem"></span></div>
+    <select class="inp" id="d_partner" onchange="setPartner(this.value)"></select>
+
     <div class="sec-t">작업 메모</div>
     <textarea class="inp" id="d_memo" placeholder="진행하면서 남길 메모를 적어주세요." onchange="saveField('memo',this.value)"></textarea>
 
@@ -816,6 +819,7 @@
     /* 소속 고르는 칸에 쓸 공동체 목록 (블로그 센터와 같은 표를 봅니다) */
     var cm=await sb.from('communities').select('id,name').order('name');
     COMMS=cm.error?[]:(cm.data||[]);
+    await loadPartners();
     Object.keys(AREAS).forEach(function(a){$('c-'+a).textContent=DATA[a].length;});
     var pend=STAFF.filter(function(s){return s.status==='pending';}).length;
     var c=$('c-staff');c.textContent=pend;c.classList.toggle('alert',pend>0);
@@ -1032,6 +1036,10 @@
   };
 
   /* ---------- 상세 ---------- */
+  function syncRow(row){
+    var arr=DATA[row.area]||[];
+    for(var i=0;i<arr.length;i++){if(arr[i].id===row.id){arr[i]=row;return;}}
+  }
   window.openDetail=function(id){
     /* 🔴 모아 보기(/admin)에서 넘어올 때는 지금 보고 있는 묶음이 아닐 수 있습니다.
           DATA[CUR] 만 뒤지면 「눌렀는데 아무 일도 안 일어나는」 일이 생깁니다. */
@@ -1056,6 +1064,7 @@
     $('d_amount').value=(r.amount==null?'':r.amount);
     $('d_paid_at').value=r.paid_at||'';
     $('d_site').value=r.site_url||'';
+    renderPartnerPick(r);
     renderTodos();
     renderQuoteBox();
     renderBlogBox();
@@ -1426,6 +1435,48 @@
     await loadAll();
     openDetail(ins.data.id);
     if(goQuote)openQuote();
+  };
+
+
+  /* ---------- 영업실장 (유입 기록) ----------
+     · 손님이 실장 전용 링크(...?p=코드)로 들어오면 신청서에 코드가 함께 저장되고,
+       서버가 코드로 실장을 찾아 붙입니다 (DB 트리거 t_request_fill_partner).
+     · 링크 없이 들어온 건은 여기서 사람이 고릅니다.
+     🔴 정산은 «여기서 확정된 값»만 봅니다. 손님이 적은 코드는 참고용입니다. */
+  var PARTNERS=[];
+  async function loadPartners(){
+    var r=await sb.from('partners').select('*').order('name');
+    PARTNERS=r.error?[]:(r.data||[]);
+  }
+  function partnerName(id){
+    for(var i=0;i<PARTNERS.length;i++)if(PARTNERS[i].id===id)return PARTNERS[i].name;
+    return null;
+  }
+  function renderPartnerPick(r){
+    var sel=$('d_partner'); if(!sel)return;
+    var on=PARTNERS.filter(function(p){return p.status==='active'||p.id===r.partner_id;});
+    sel.innerHTML='<option value="">선택 안 함 (직접 들어온 의뢰)</option>'
+      +on.map(function(p){
+        return '<option value="'+esc(p.id)+'"'+(r.partner_id===p.id?' selected':'')+'>'
+          +esc(p.name)+' ('+esc(p.code)+')'+(p.status!=='active'?' — 중지':'')+'</option>';
+      }).join('');
+    var how=$('d_ref_how');
+    if(r.ref_source==='link')how.textContent='— 전용 링크로 들어옴'+(r.ref_code?' ('+r.ref_code+')':'');
+    else if(r.ref_source==='form')how.textContent='— 신청서에 직접 적음'+(r.ref_code?' ('+r.ref_code+')':'');
+    else if(r.partner_id)how.textContent='— 관리자가 지정함';
+    else how.textContent='';
+    /* 손님이 적었는데 붙지 못한 코드는 눈에 띄게 알려 줍니다 */
+    if(r.ref_code&&!r.partner_id)how.innerHTML='— <b style="color:#C0392B">적어 주신 코드 「'+esc(r.ref_code)+'」를 찾지 못했습니다</b> · 직접 골라 주세요';
+  }
+  window.setPartner=async function(id){
+    if(!CURROW)return;
+    var patch={partner_id:id||null};
+    if(id)patch.ref_source='admin';
+    var r=await sb.from('requests').update(patch).eq('id',CURROW.id).select().maybeSingle();
+    if(r.error){toast('실패: '+r.error.message);return;}
+    if(!r.data){toast('권한이 없어 바뀌지 않았습니다');return;}
+    CURROW=r.data; syncRow(CURROW); renderPartnerPick(CURROW); renderList();
+    toast(id?('영업실장을 '+partnerName(id)+' 님으로 지정했습니다'):'영업실장 지정을 해제했습니다');
   };
 
   window.openQuote=function(){

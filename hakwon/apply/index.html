@@ -333,6 +333,7 @@ footer span{margin:0 8px;color:var(--line)}
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/ref.js"></script>
 <script>
 (function(){
 "use strict";
@@ -412,13 +413,15 @@ $('form').addEventListener('submit',async function(e){
   };
   Object.keys(details).forEach(function(k){if(!details[k])delete details[k];});
 
-  var res=await sb.from('requests').insert({
+  var row={
     /* 🔴 center='esc' 라야 학원 어드민의 「자료제작 지원」에 뜹니다.
           'mkt' 로 넣으면 인투마케팅 어드민으로 가버립니다. */
     area:'제작', center:'esc', kind:kind, method:method,
     academy_name:name, manager_name:val('f_boss'), phone:phone, email:val('f_email'),
     message:val('f_etc'), details:details, consent:true
-  });
+  };
+  if(window.IMRef) Object.assign(row, IMRef.values());   /* 영업실장 유입 기록 */
+  var res=await sb.from('requests').insert(row);
 
   if(res.error){
     btn.disabled=false; btn.textContent='신청서 제출 ↗';

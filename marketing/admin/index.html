@@ -321,6 +321,7 @@
     <div class="side-sep"></div>
     <button class="navb hide" data-nav="staff" id="navStaff" type="button">관리자 목록 <span class="cnt" id="c-staff">0</span></button>
     <button class="navb hide" data-nav="site" id="navSite" type="button">홈페이지 정보 · 푸터</button>
+    <button class="navb hide" data-nav="partner" id="navPartner" type="button">영업실장 <span class="cnt" id="c-partner">0</span></button>
     <button class="navb hide" data-nav="set" id="navSet" type="button">견적서 설정</button>
     <button class="navb" data-nav="links" type="button">🔗 주소 모음</button>
     <div class="side-foot">
@@ -408,6 +409,20 @@
       </div>
     </section>
 
+    <!-- 영업실장 -->
+    <section id="viewPartner" class="hide">
+      <div class="head"><div><h1>영업실장</h1>
+        <p>영업실장 명단과 <b>전용 신청 링크</b>입니다. 이 링크로 들어온 고객은 신청서에 자동으로 기록됩니다.</p></div></div>
+      <div class="qbox" style="display:block;line-height:1.75;margin-bottom:14px">
+        <b>쓰는 법</b> — [+ 영업실장 추가]로 만들고, 그 줄의 <b>[링크]</b>를 눌러 복사해서 실장님께 보내세요.<br>
+        명함·리플렛 QR에 그 링크를 넣으면 <b>고객이 아무것도 적지 않아도</b> 누구를 통해 왔는지 남습니다.<br>
+        <span class="muted" style="font-size:.82rem">링크 없이 들어온 의뢰는 의뢰 상세의 「영업실장」에서 직접 고르시면 됩니다.</span>
+      </div>
+      <div style="margin-bottom:12px"><button class="btn btn-primary" type="button" onclick="newPartner()">+ 영업실장 추가</button></div>
+      <div class="card" id="partnerWrap"></div>
+      <div class="empty hide" id="partnerEmpty"><b>아직 영업실장이 없습니다</b>[+ 영업실장 추가]로 만들어 주세요.</div>
+    </section>
+
     <!-- 견적서 설정 -->
     <section id="viewSet" class="hide">
       <div class="head"><div><h1>견적서 설정</h1><p>견적서에 찍히는 우리 쪽 정보입니다. 여기서 고치면 이후 발행하는 모든 견적서에 반영됩니다.</p></div></div>
@@ -480,6 +495,9 @@
       <div><input class="inp" id="d_work" list="workOpts" placeholder="예: 새로 제작 / 숏폼 / 배너" onchange="saveField('work_type',this.value)"><datalist id="workOpts"></datalist></div>
       <div><select class="inp" id="d_assignee" onchange="saveField('assignee_id',this.value||null)"></select></div>
     </div>
+
+    <div class="sec-t">영업실장 <span class="muted" id="d_ref_how" style="font-weight:600;font-size:.8rem"></span></div>
+    <select class="inp" id="d_partner" onchange="setPartner(this.value)"></select>
 
     <div class="sec-t">작업 메모</div>
     <textarea class="inp" id="d_memo" placeholder="진행하면서 남길 메모를 적어주세요." onchange="saveField('memo',this.value)"></textarea>
@@ -575,6 +593,16 @@
     <button class="btn btn-ghost" type="button" onclick="saveNew(false)">만들기만</button>
     <button class="btn btn-ghost" type="button" onclick="closeModal('newModal')">닫기</button>
   </div>
+</div></div>
+
+<!-- 영업실장 링크 -->
+<div class="modal" id="linkModal"><div class="sheet">
+  <div class="sheet-h">
+    <div><h3 id="lk_title">전용 신청 링크</h3><div class="meta">실장님께 보내 주세요. 이 링크로 들어온 고객은 자동으로 기록됩니다.</div></div>
+    <button class="x" type="button" onclick="closeModal('linkModal')">✕</button>
+  </div>
+  <div class="sheet-b" id="lk_body"></div>
+  <div class="sheet-f"><button class="btn btn-ghost" type="button" onclick="closeModal('linkModal')">닫기</button></div>
 </div></div>
 
 <!-- 견적서 편집 -->
@@ -803,7 +831,7 @@
     $('gate').classList.add('hide');$('app').classList.remove('hide');
     $('meName').textContent=(me.name||me.email||'-');
     $('meRole').textContent=ROLE_KO[me.role]||'직원';
-    if(me.role==='owner'||can('manage_staff')){$('navStaff').classList.remove('hide');$('navSet').classList.remove('hide');$('navSite').classList.remove('hide');}
+    if(me.role==='owner'||can('manage_staff')){$('navStaff').classList.remove('hide');$('navSet').classList.remove('hide');$('navSite').classList.remove('hide');$('navPartner').classList.remove('hide');}
     if(can('blog_admin')||can('blog_review'))$('navBlog').classList.remove('hide');
     await loadSettings();
     loadAll();
@@ -822,6 +850,8 @@
     /* 소속 고르는 칸에 쓸 공동체 목록 (블로그 센터와 같은 표를 봅니다) */
     var cm=await sb.from('communities').select('id,name').order('name');
     COMMS=cm.error?[]:(cm.data||[]);
+    await loadPartners();
+    var cp=$('c-partner'); if(cp)cp.textContent=PARTNERS.filter(function(p){return p.status==='active';}).length;
     Object.keys(AREAS).forEach(function(a){$('c-'+a).textContent=DATA[a].length;});
     var pend=STAFF.filter(function(s){return s.status==='pending';}).length;
     var c=$('c-staff');c.textContent=pend;c.classList.toggle('alert',pend>0);
@@ -847,9 +877,10 @@
       var k=b.getAttribute('data-nav');
       document.querySelectorAll('.navb[data-nav]').forEach(function(x){x.classList.remove('on');});
       b.classList.add('on');
-      ['viewList','viewStaff','viewSet','viewLinks','viewSite'].forEach(function(v){$(v).classList.add('hide');});
+      ['viewList','viewStaff','viewSet','viewLinks','viewSite','viewPartner'].forEach(function(v){$(v).classList.add('hide');});
       if(k==='staff'){$('viewStaff').classList.remove('hide');renderStaff();return;}
       if(k==='site'){$('viewSite').classList.remove('hide');fillSite();return;}
+      if(k==='partner'){$('viewPartner').classList.remove('hide');renderPartners();return;}
       if(k==='set'){$('viewSet').classList.remove('hide');fillSettings();return;}
       if(k==='links'){$('viewLinks').classList.remove('hide');renderLinks();return;}
       $('viewList').classList.remove('hide');
@@ -965,6 +996,10 @@
   };
 
   /* ---------- 상세 ---------- */
+  function syncRow(row){
+    var arr=DATA[groupOf(row)]||[];
+    for(var i=0;i<arr.length;i++){if(arr[i].id===row.id){arr[i]=row;return;}}
+  }
   window.openDetail=function(id){
     /* 🔴 모아 보기(/admin)에서 넘어올 때는 지금 보고 있는 묶음이 아닐 수 있습니다.
           DATA[CUR] 만 뒤지면 「눌렀는데 아무 일도 안 일어나는」 일이 생깁니다. */
@@ -989,6 +1024,7 @@
     $('d_amount').value=(r.amount==null?'':r.amount);
     $('d_paid_at').value=r.paid_at||'';
     $('d_site').value=r.site_url||'';
+    renderPartnerPick(r);
     renderTodos();
     renderQuoteBox();
     renderBlogBox();
@@ -1379,6 +1415,131 @@
     await loadAll();
     openDetail(ins.data.id);
     if(goQuote)openQuote();
+  };
+
+
+  /* ---------- 영업실장 (유입 기록) ----------
+     · 손님이 실장 전용 링크(...?p=코드)로 들어오면 신청서에 코드가 함께 저장되고,
+       서버가 코드로 실장을 찾아 붙입니다 (DB 트리거 t_request_fill_partner).
+     · 링크 없이 들어온 건은 여기서 사람이 고릅니다.
+     🔴 정산은 «여기서 확정된 값»만 봅니다. 손님이 적은 코드는 참고용입니다. */
+  var PARTNERS=[];
+  async function loadPartners(){
+    var r=await sb.from('partners').select('*').order('name');
+    PARTNERS=r.error?[]:(r.data||[]);
+  }
+  function partnerName(id){
+    for(var i=0;i<PARTNERS.length;i++)if(PARTNERS[i].id===id)return PARTNERS[i].name;
+    return null;
+  }
+  function renderPartnerPick(r){
+    var sel=$('d_partner'); if(!sel)return;
+    var on=PARTNERS.filter(function(p){return p.status==='active'||p.id===r.partner_id;});
+    sel.innerHTML='<option value="">선택 안 함 (직접 들어온 의뢰)</option>'
+      +on.map(function(p){
+        return '<option value="'+esc(p.id)+'"'+(r.partner_id===p.id?' selected':'')+'>'
+          +esc(p.name)+' ('+esc(p.code)+')'+(p.status!=='active'?' — 중지':'')+'</option>';
+      }).join('');
+    var how=$('d_ref_how');
+    if(r.ref_source==='link')how.textContent='— 전용 링크로 들어옴'+(r.ref_code?' ('+r.ref_code+')':'');
+    else if(r.ref_source==='form')how.textContent='— 신청서에 직접 적음'+(r.ref_code?' ('+r.ref_code+')':'');
+    else if(r.partner_id)how.textContent='— 관리자가 지정함';
+    else how.textContent='';
+    /* 손님이 적었는데 붙지 못한 코드는 눈에 띄게 알려 줍니다 */
+    if(r.ref_code&&!r.partner_id)how.innerHTML='— <b style="color:#C0392B">적어 주신 코드 「'+esc(r.ref_code)+'」를 찾지 못했습니다</b> · 직접 골라 주세요';
+  }
+  window.setPartner=async function(id){
+    if(!CURROW)return;
+    var patch={partner_id:id||null};
+    if(id)patch.ref_source='admin';
+    var r=await sb.from('requests').update(patch).eq('id',CURROW.id).select().maybeSingle();
+    if(r.error){toast('실패: '+r.error.message);return;}
+    if(!r.data){toast('권한이 없어 바뀌지 않았습니다');return;}
+    CURROW=r.data; syncRow(CURROW); renderPartnerPick(CURROW); renderList();
+    toast(id?('영업실장을 '+partnerName(id)+' 님으로 지정했습니다'):'영업실장 지정을 해제했습니다');
+  };
+
+  /* ---------- 영업실장 명단 (여기서만 고칩니다) ---------- */
+  window.renderPartners=function(){
+    var w=$('partnerWrap'),e=$('partnerEmpty');
+    if(!PARTNERS.length){w.innerHTML='';w.classList.add('hide');e.classList.remove('hide');return;}
+    w.classList.remove('hide');e.classList.add('hide');
+    var cnt={};
+    Object.keys(DATA).forEach(function(g){(DATA[g]||[]).forEach(function(r){
+      if(r.partner_id)cnt[r.partner_id]=(cnt[r.partner_id]||0)+1;});});
+    var h='<table><thead><tr><th>이름</th><th>코드</th><th>연락처</th><th class="num">들어온 의뢰</th><th>상태</th><th></th></tr></thead><tbody>';
+    PARTNERS.forEach(function(p){
+      h+='<tr><td><b>'+esc(p.name)+'</b>'+(p.memo?'<div class="muted" style="font-size:.8rem">'+esc(p.memo)+'</div>':'')+'</td>'
+       +'<td><code style="background:var(--surface-2);padding:2px 7px;border-radius:5px">'+esc(p.code)+'</code></td>'
+       +'<td class="muted">'+esc(p.phone||'-')+'</td>'
+       +'<td class="num tnum">'+(cnt[p.id]||0)+'</td>'
+       +'<td>'+(p.status==='active'?'<span style="color:var(--ok);font-weight:700">활동</span>'
+                                   :'<span class="muted">중지</span>')+'</td>'
+       +'<td style="text-align:right;white-space:nowrap">'
+       +'<button class="btn btn-ghost" style="padding:5px 11px;font-size:.8rem" type="button" onclick="showLinks(\''+p.id+'\')">🔗 링크</button> '
+       +'<button class="btn btn-ghost" style="padding:5px 11px;font-size:.8rem" type="button" onclick="editPartner(\''+p.id+'\')">✏️ 수정</button>'
+       +'</td></tr>';
+    });
+    $('partnerWrap').innerHTML=h+'</tbody></table>';
+  };
+  function pOf(id){for(var i=0;i<PARTNERS.length;i++)if(PARTNERS[i].id===id)return PARTNERS[i];return null;}
+
+  window.newPartner=async function(){
+    var name=prompt('영업실장 성함을 적어 주세요');
+    if(!name||!name.trim())return;
+    var code=prompt('전용 코드를 정해 주세요 (영문·숫자, 링크에 들어갑니다)\n예: park, hong2, im01');
+    if(!code||!code.trim())return;
+    code=code.trim();
+    if(!/^[A-Za-z0-9_-]{2,20}$/.test(code)){toast('코드는 영문·숫자 2~20자로 적어 주세요');return;}
+    var r=await sb.from('partners').insert({name:name.trim(),code:code}).select().maybeSingle();
+    if(r.error){toast(/duplicate|unique/i.test(r.error.message)?'이미 쓰고 있는 코드입니다':('실패: '+r.error.message));return;}
+    await loadPartners(); renderPartners();
+    toast(name.trim()+' 님을 넣었습니다');
+    showLinks(r.data&&r.data.id);
+  };
+  window.editPartner=async function(id){
+    var p=pOf(id); if(!p)return;
+    var name=prompt('성함',p.name); if(name===null)return;
+    var phone=prompt('연락처',p.phone||''); if(phone===null)return;
+    var memo=prompt('메모 (어느 플랫폼 담당인지 등)',p.memo||''); if(memo===null)return;
+    var st=confirm('지금 «활동 중»으로 둘까요?\n[확인] 활동 중 · [취소] 중지\n\n중지하면 전용 링크로 들어와도 연결되지 않습니다.');
+    var r=await sb.from('partners').update({name:name.trim()||p.name,phone:phone.trim()||null,
+              memo:memo.trim()||null,status:st?'active':'paused',updated_at:new Date().toISOString()})
+            .eq('id',id).select().maybeSingle();
+    if(r.error){toast('실패: '+r.error.message);return;}
+    if(!r.data){toast('권한이 없어 바뀌지 않았습니다');return;}
+    await loadPartners(); renderPartners(); toast('고쳤습니다');
+  };
+  /* 신청서마다 주소가 달라서 한 번에 보여 줍니다 */
+  var APPLY_LINKS=[
+    ['홈페이지 제작','https://intomarketing.co.kr/apply/'],
+    ['블로그 · 리뷰','https://intomarketing.co.kr/apply/blog/'],
+    ['영상 제작','https://intomarketing.co.kr/apply/video/'],
+    ['그래픽 디자인','https://intomarketing.co.kr/apply/design/'],
+    ['SNS 채널 제작','https://intomarketing.co.kr/apply/sns/'],
+    ['인투마케팅 홈페이지 (첫 화면)','https://intomarketing.co.kr/'],
+    ['학원지원센터 신청서','https://intomarketing.co.kr/hakwon/apply/']
+  ];
+  window.showLinks=function(id){
+    var p=pOf(id); if(!p)return;
+    $('lk_title').textContent=p.name+' 님 전용 링크';
+    $('lk_body').innerHTML='<div class="qbox" style="display:block;margin-bottom:14px;line-height:1.7">'
+      +'코드 <b>'+esc(p.code)+'</b> · 아래 주소로 들어온 고객은 <b>'+esc(p.name)+'</b> 님을 통해 온 것으로 기록됩니다.<br>'
+      +'<span class="muted" style="font-size:.82rem">고객이 링크를 눌렀다가 나중에 다시 와서 신청해도 (같은 기기라면) 90일간 기억합니다.</span></div>'
+      +APPLY_LINKS.map(function(x,i){
+        var url=x[1]+'?p='+encodeURIComponent(p.code);
+        return '<div class="fld"><label>'+esc(x[0])+'</label>'
+          +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+          +'<input class="inp" readonly id="lk'+i+'" value="'+esc(url)+'" onclick="this.select()" style="flex:1;min-width:240px;font-size:.82rem">'
+          +'<button class="btn btn-primary" style="padding:8px 14px" type="button" onclick="copyLink(this,\''+esc(url)+'\')">복사</button>'
+          +'</div></div>';
+      }).join('');
+    $('linkModal').classList.add('open');
+  };
+  window.copyLink=async function(btn,url){
+    try{await navigator.clipboard.writeText(url);btn.textContent='복사됨 ✓';
+        setTimeout(function(){btn.textContent='복사';},1400);}
+    catch(e){window.prompt('아래 주소를 복사해 주세요',url);}
   };
 
   window.openQuote=function(){
