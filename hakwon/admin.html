@@ -397,6 +397,9 @@
         <table style="min-width:640px">
           <thead><tr><th>체크 칸</th><th>켜면 되는 것</th><th>끄면</th></tr></thead>
           <tbody>
+            <tr><td><b>의뢰 관리 (문의·견적)</b></td>
+                <td>홈페이지로 들어온 <b>문의·의뢰</b>를 보고 고칩니다(상태·담당자·메모·금액·견적).</td>
+                <td>왼쪽 의뢰 메뉴가 사라집니다. 서버에서도 안 읽힙니다.</td></tr>
             <tr><td><b>홈페이지 게시판 관리</b></td>
                 <td>홈페이지 <b>공지사항</b>을 새로 쓰고 고칩니다.</td>
                 <td>공지를 읽기만 합니다.</td></tr>
@@ -438,6 +441,8 @@
         </div>
 
         <p class="muted" style="margin:14px 0 0;font-size:.85rem">
+          <b>승인된 계정은 이 어드민에 들어올 수 있습니다.</b> 무엇이 보이는지는 위 체크가 정합니다 —
+          <b>의뢰 관리</b>를 끄면 문의·견적이 안 보입니다(2026-09-29부터).<br>
           <b>[권한 해제]</b>는 그 계정의 <b>모든 접근을 막는 것</b>입니다(로그인해도 아무것도 안 열림).
           계정과 기록은 지워지지 않지만 <b>이 목록에서 사라져 화면으로는 되돌릴 수 없습니다</b> — 잠깐 쉬게 하려는 것이면
           체크만 꺼 주세요.<br>
@@ -766,7 +771,7 @@
   };
   var STATUSES=['접수','진행중','보류','완료'];
   var ROLE_KO={owner:'최고관리자',admin:'관리자',staff:'직원'};
-  var PERM_KO={site_board:'홈페이지 게시판 관리',manage_staff:'직원 승인·권한 관리',
+  var PERM_KO={requests:'의뢰 관리 (문의·견적)',site_board:'홈페이지 게시판 관리',manage_staff:'직원 승인·권한 관리',
                blog_admin:'블로그 센터 운영 (전체)',blog_review:'블로그 원고 검수만'};
 
   var QALL={};
@@ -858,6 +863,16 @@
     $('meRole').textContent=ROLE_KO[me.role]||'직원';
     if(me.role==='owner'||can('manage_staff')){$('navStaff').classList.remove('hide');$('navSet').classList.remove('hide');$('navSite').classList.remove('hide');}
     if(can('blog_admin')||can('blog_review'))$('navBlog').classList.remove('hide');
+    /* 의뢰 관리 권한이 없으면 문의·견적을 아예 안 보여 줍니다 (2026-09-29).
+       서버(RLS)도 같은 규칙이라 화면을 억지로 열어도 내용이 안 옵니다. */
+    if(!can('requests')){
+      document.querySelectorAll('.navb[data-nav]').forEach(function(b){
+        var k=b.getAttribute('data-nav');
+        if(AREAS[k]){b.classList.add('hide');b.classList.remove('on');}
+      });
+      var firstNav=document.querySelector('.navb[data-nav]:not(.hide)');
+      if(firstNav)setTimeout(function(){firstNav.click();},0);
+    }
     await loadSettings();
     loadAll();
   }
@@ -867,10 +882,12 @@
     /* 🔴 이 어드민은 학원지원센터 홈페이지에서 온 것«만» 봅니다.
           안 거르면 인투마케팅·교회 의뢰까지 여기서 고쳐집니다.
           (지금까지는 area 가 셋 중 하나인 것만 담아 우연히 안 샜을 뿐입니다) */
+    DATA={'제작':[],'인력':[],'컨텐츠':[],'마케팅':[]};
+    if(can('requests')){                       /* 의뢰 권한이 없으면 아예 안 읽습니다 (9/29) */
     var rs=await sb.from('requests').select('*').eq('center','esc').order('created_at',{ascending:false});
     if(rs.error){toast('불러오기 실패: '+rs.error.message);return;}
-    DATA={'제작':[],'인력':[],'컨텐츠':[],'마케팅':[]};
     (rs.data||[]).forEach(function(x){if(DATA[x.area])DATA[x.area].push(x);});
+    }
     var st=await sb.from('staff').select('*').order('created_at',{ascending:true});
     STAFF=st.error?[]:(st.data||[]);
     /* 소속 고르는 칸에 쓸 공동체 목록 (블로그 센터와 같은 표를 봅니다) */
