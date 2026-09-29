@@ -387,6 +387,63 @@
       </div>
       <div class="card" id="staffWrap"></div>
       <div class="empty hide" id="staffEmpty"></div>
+
+      <!-- 권한 정리표 (2026-09-29) — 어느 칸이 무엇을 여는지 헷갈려서 화면 아래에 붙였습니다 -->
+      <div class="card" style="margin-top:18px;line-height:1.7">
+        <h3 style="margin:0 0 4px;font-size:1rem">권한 정리 — 어떤 칸이 무엇을 여나</h3>
+        <p class="muted" style="margin:0 0 12px;font-size:.85rem">
+          체크는 <b>켜는 것만</b> 합니다. 끄면 그 기능만 닫히고 계정은 그대로 남습니다.</p>
+        <div style="overflow-x:auto">
+        <table style="min-width:640px">
+          <thead><tr><th>체크 칸</th><th>켜면 되는 것</th><th>끄면</th></tr></thead>
+          <tbody>
+            <tr><td><b>홈페이지 게시판 관리</b></td>
+                <td>홈페이지 <b>공지사항</b>을 새로 쓰고 고칩니다.</td>
+                <td>공지를 읽기만 합니다.</td></tr>
+            <tr><td><b>직원 승인·권한 관리</b></td>
+                <td>이 화면(관리자 목록)과 <b>견적서 설정 · 홈페이지 정보 · 푸터</b>가 열립니다.
+                    새 직원 승인 · 직분 변경 · 권한 체크 · 소속 변경까지 합니다.</td>
+                <td>왼쪽 메뉴에서 그 세 개가 사라집니다. 의뢰 관리는 그대로 봅니다.</td></tr>
+            <tr><td><b>블로그 센터 운영 (전체)</b></td>
+                <td>블로그 센터의 <b>1 블로거 관리 ~ 8 정산</b> 전부. 주문·입금·배정·검수·정산·알림 보내기.</td>
+                <td>블로그 센터가 아예 안 열립니다(아래 검수만 있으면 검수 화면만).</td></tr>
+            <tr><td><b>블로그 원고 검수만</b></td>
+                <td>블로그 센터에서 <b>원고 검수 · 올라왔는지 확인 · 진행 현황 · 내 검수 수당</b>만.</td>
+                <td>검수 화면이 닫힙니다.</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <h3 style="margin:20px 0 4px;font-size:1rem">직원 · 관리자 · 최고관리자</h3>
+        <p class="muted" style="margin:0 0 12px;font-size:.85rem">
+          <b>직원과 관리자는 할 수 있는 일이 같습니다</b> — 실제 권한은 위 체크 네 칸이 정합니다.
+          이름표는 「누가 책임자인지」 보이게 하는 용도입니다. 최고관리자만 다릅니다.</p>
+        <div style="overflow-x:auto">
+        <table style="min-width:640px">
+          <thead><tr><th>직분</th><th>기본 권한</th><th>이 직분만 되는 것</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge b-staff">직원</span></td>
+                <td>체크한 것만</td>
+                <td>-</td></tr>
+            <tr><td><span class="badge b-admin">관리자</span></td>
+                <td>체크한 것만 (직원과 같음)</td>
+                <td>-</td></tr>
+            <tr><td><span class="badge b-owner">최고관리자</span></td>
+                <td><b>체크 없이 전부</b> (그래서 체크칸이 잠겨 보입니다)</td>
+                <td>· 의뢰 삭제 · 블로그 주문 삭제<br>
+                    · 원고를 <b>낸 뒤</b>의 글 회수(그 글 원고료는 지급)<br>
+                    · 최고관리자 지정 · 다른 최고관리자 계정 수정</td></tr>
+          </tbody>
+        </table>
+        </div>
+
+        <p class="muted" style="margin:14px 0 0;font-size:.85rem">
+          <b>[권한 해제]</b>는 그 계정의 <b>모든 접근을 막는 것</b>입니다(로그인해도 아무것도 안 열림).
+          계정과 기록은 지워지지 않지만 <b>이 목록에서 사라져 화면으로는 되돌릴 수 없습니다</b> — 잠깐 쉬게 하려는 것이면
+          체크만 꺼 주세요.<br>
+          본인 계정과, 최고관리자가 아닌 사람이 보는 최고관리자 줄은 잠겨 있습니다(실수로 자기 권한을 잃지 않게).
+        </p>
+      </div>
     </section>
 
     <!-- 1대1 상담 —
