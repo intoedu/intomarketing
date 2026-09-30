@@ -288,6 +288,56 @@ footer .pol a{color:#DCE6F8;font-weight:700;cursor:pointer}
 footer .pol a:hover{text-decoration:underline}
 footer .pol span{margin:0 10px;color:#38537E}
 footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
+
+/* ══════════ 움직임 ══════════════════════════════════════════════
+   2026-09-30 — 「누를 때·화면 바뀔 때가 너무 딱딱하다」
+   · 기본은 짧고 부드럽게(0.4~0.5초). 팀 화면마다 «느낌»만 조금씩 다릅니다.
+   · 🔴 「동작 줄이기」를 켠 분에게는 위쪽 prefers-reduced-motion 규칙이 전부 꺼 줍니다.
+        그래서 떠오르는 효과(.rv)는 그 설정이 켜져 있으면 «아예 붙이지 않습니다»(index.js).
+        안 그러면 투명한 채로 남아 글이 안 보입니다.
+   ─────────────────────────────────────────────────────────────── */
+:root{--ease:cubic-bezier(.22,.9,.28,1); --rv-d:.5s; --rv-y:14px}
+
+/* 화면이 바뀔 때 — 전체가 살짝 떠오르며 나타납니다 */
+@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.view.active{animation:viewIn .42s var(--ease) both}
+
+/* 스크롤에 맞춰 덩어리가 하나씩 떠오릅니다 (index.js 가 .rv 를 붙입니다) */
+.rv{opacity:0;transform:translateY(var(--rv-y));
+    transition:opacity var(--rv-d) var(--ease),transform var(--rv-d) var(--ease)}
+.rv.in{opacity:1;transform:none}
+
+/* 팀마다 느낌 — 시간·움직이는 거리·곡선만 다릅니다 */
+#v-home  {--rv-d:.5s;  --rv-y:14px}
+#v-blog  {--rv-d:.48s; --rv-y:12px}
+#v-web   {--rv-d:.46s; --rv-y:16px}
+#v-sns   {--rv-d:.44s; --rv-y:12px}
+#v-design{--rv-d:.52s; --rv-y:16px; --ease:cubic-bezier(.34,1.4,.5,1)}  /* 살짝 튕기듯 */
+#v-video {--rv-d:.8s;  --rv-y:24px; --ease:cubic-bezier(.16,.84,.24,1)} /* 느리게, 영화처럼 */
+#v-video.active{animation-duration:.7s}
+
+/* 누를 때 — 살짝 눌리는 느낌 */
+.btn,.headcta,.sp,.item,.navlink,.brand{transition:transform .13s var(--ease),
+    background .15s,color .15s,border-color .15s,box-shadow .25s var(--ease)}
+.btn:active,.headcta:active,.sp:active,.drop a:active{transform:scale(.965)}
+.item:active{transform:translateY(-1px) scale(.985)}
+.brand:active{transform:scale(.97)}
+.navlink:active{transform:scale(.94)}
+
+/* 카드에 손을 올리면 살짝 떠오릅니다 */
+.card{transition:transform .28s var(--ease),box-shadow .28s var(--ease),border-color .2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 18px 34px -24px rgba(14,27,51,.45)}
+#v-video .card:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 18px 40px rgba(0,0,0,.5)}
+
+/* 2차 메뉴(숏폼/롱폼 같은 것) */
+@keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.subpanel.on{animation:panelIn .34s var(--ease) both}
+@keyframes pillPop{0%{transform:scale(.94)}58%{transform:scale(1.035)}100%{transform:scale(1)}}
+.sp.on{animation:pillPop .3s var(--ease)}
+
+/* 휴대폰 메뉴 */
+@keyframes sheetIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.msheet.on{animation:sheetIn .26s var(--ease) both}
 </style>
 </head>
 <body>
@@ -1388,6 +1438,61 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
   }
   paintBrowse();
 
+  /* ══ 움직임 ══════════════════════════════════════════════════
+     화면 안의 덩어리에 .rv 를 붙여 두고, 보이기 시작할 때 .in 을 켭니다.
+     🔴 「동작 줄이기」를 켠 분에게는 아예 안 붙입니다 — 붙여 두면 투명한 채로 남습니다. */
+  var LESS=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var CAN=!LESS&&('IntersectionObserver' in window);
+  var rvIO=CAN?new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in');});
+    },{threshold:0,rootMargin:'0px 0px -2% 0px'}):null;  /* 화면에 조금이라도 들어오면 켭니다 */
+
+  function markReveal(){
+    if(!CAN)return;
+    document.querySelectorAll('.view .wrap').forEach(function(w){
+      Array.prototype.forEach.call(w.children,function(el,i){
+        if(el.classList.contains('rv'))return;
+        el.classList.add('rv');
+        el.style.transitionDelay=Math.min(i,5)*55+'ms';  /* 하나씩 차례로 */
+        rvIO.observe(el);
+      });
+    });
+  }
+  /* 화면을 바꿀 때 그 화면만 다시 떠오르게 합니다 */
+  function replayReveal(view){
+    if(!CAN)return;
+    var v=document.getElementById('v-'+view); if(!v)return;
+    var els=v.querySelectorAll('.rv');
+    els.forEach(function(el){el.classList.remove('in');});
+    var run=function(){                       /* 여러 번 불려도 괜찮습니다 */
+      var h=window.innerHeight||800;
+      els.forEach(function(el){
+        if(el.getBoundingClientRect().top<h*.96)el.classList.add('in');
+      });
+    };
+    /* 그림 한 장을 넘긴 뒤에 켜야 다시 떠오릅니다.
+       🔴 창이 뒤에 숨어 있으면 requestAnimationFrame 이 멈추므로 시계도 같이 걸어 둡니다. */
+    requestAnimationFrame(function(){requestAnimationFrame(run);});
+    setTimeout(run,80);
+  }
+  markReveal();
+
+  /* 🔴 안전장치 — 어떤 이유로든 «보이기 시작함»을 못 받아 투명하게 남는 일이 없도록,
+     스크롤할 때 화면에 들어온 것은 무조건 켭니다(0.16초에 한 번만 검사). */
+  if(CAN){
+    var rvTick=false;
+    window.addEventListener('scroll',function(){
+      if(rvTick)return; rvTick=true;
+      setTimeout(function(){
+        rvTick=false;
+        var h=window.innerHeight||800;
+        document.querySelectorAll('.view.active .rv:not(.in)').forEach(function(el){
+          if(el.getBoundingClientRect().top<h*.96)el.classList.add('in');
+        });
+      },160);
+    },{passive:true});
+  }
+
   window.go=function(view,anchor){
     if(VIEWS.indexOf(view)<0)view='home';
     VIEWS.forEach(function(v){
@@ -1398,6 +1503,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
     if(nl)nl.classList.toggle('active',view!=='home');
     /* 영상 화면일 때 머리띠·바닥글도 어둡게 하려고 표시해 둡니다 */
     document.body.setAttribute('data-view',view);
+    replayReveal(view);
     closeMenu();
     if(anchor){
       window.scrollTo(0,0);
