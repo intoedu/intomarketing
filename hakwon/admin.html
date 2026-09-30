@@ -1162,9 +1162,44 @@
       if(k.charAt(0)==='_')return; /* _photos 등 내부 값은 아래에서 따로 처리 */
       var v=d[k];add(k,Array.isArray(v)?v.join(', '):v);
     });
+    INFO_TEXT='의뢰처 정보\n'+infoLines(r,'학원명').join('\n');
+    h='<div class="irow" style="border:0;padding-bottom:4px"><span class="k"></span>'
+      +'<span><button class="btn btn-ghost" style="padding:6px 12px;font-size:.8rem" type="button" '
+      +'onclick="copyInfo(this)">📋 내용 복사</button></span></div>'+h;
     $('d_info').innerHTML=h||'<div class="irow"><span class="k">-</span><span class="muted">추가 정보 없음</span></div>';
     renderPhotos(d._photos);
   }
+
+  /* ---------- 신청 내용 복사 ----------
+     카톡·메일에 그대로 붙여 넣으라고 만든 것입니다. 화면에 보이는 순서 그대로,
+     🔴 «값이 있는 줄만» 글자로 만듭니다 (빈 줄이 섞이면 붙여 넣고 지워야 합니다). */
+  var INFO_TEXT='';
+  function infoLines(r,label){
+    var out=[];
+    var add=function(k,v){
+      if(v===undefined||v===null||v==='')return;
+      if(Array.isArray(v))v=v.join(', ');
+      out.push(k+' : '+v);
+    };
+    add(label,r.academy_name); add('담당자',r.manager_name);
+    add('연락처',r.phone); add('이메일',r.email);
+    var d=r.details||{};
+    Object.keys(d).forEach(function(k){
+      if(k.charAt(0)==='_')return;                 /* _photos 같은 내부 값은 뺍니다 */
+      if(k==='등록 경로')return;                    /* 우리끼리 쓰는 표시라 복사본에는 안 넣습니다 */
+      add(k,d[k]);
+    });
+    if(r.message)add('전체적으로 원하시는 것',r.message);
+    return out;
+  }
+  window.copyInfo=async function(btn){
+    if(!INFO_TEXT){toast('복사할 내용이 없습니다');return;}
+    try{
+      await navigator.clipboard.writeText(INFO_TEXT);
+      var t=btn.textContent; btn.textContent='복사됨 ✓';
+      setTimeout(function(){btn.textContent=t;},1500);
+    }catch(e){ window.prompt('아래 내용을 복사해 주세요',INFO_TEXT); }
+  };
   /* 신청서에 올린 사진 (비공개 버킷 → 서명 URL로 열람) */
   async function renderPhotos(paths){
     var box=$('d_photos');

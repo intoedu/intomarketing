@@ -1114,7 +1114,7 @@
     if(!r)return;
     CURROW=r;
     $('d_title').textContent=r.academy_name||'-';
-    $('d_meta').textContent=AREAS[groupOf(r)]+' · 접수 '+fdatetime(r.created_at)+(r.is_premium?' · 프리미엄 회원':'');
+    $('d_meta').textContent=AREAS[groupOf(r)]+' · 접수 '+fdatetime(r.created_at);
     var sh='';STATUSES.forEach(function(s){sh+='<button class="pill'+(normStatus(r.status)===s?' on':'')+'" type="button" onclick="setStatus(\''+s+'\')">'+s+'</button>';});
     $('d_status').innerHTML=sh;
     $('workOpts').innerHTML=(WORK_OPTS[groupOf(r)]||[]).map(function(o){return '<option value="'+esc(o)+'">';}).join('');
@@ -1144,17 +1144,54 @@
   function renderInfo(r){
     var h='';
     var add=function(k,v){if(v===undefined||v===null||v==='')return;h+='<div class="irow"><span class="k">'+esc(k)+'</span><span>'+esc(v)+'</span></div>';};
-    add('학원명',r.academy_name);add('담당자',r.manager_name);add('연락처',r.phone);add('이메일',r.email);
-    add('회원',r.user_id?(r.is_premium?'프리미엄 회원':'일반 회원(로그인)'):'비회원');
+    add('업체명',r.academy_name);add('담당자',r.manager_name);add('연락처',r.phone);add('이메일',r.email);
+    /* 「회원」 줄은 뺐습니다 — 인투마케팅에는 회원제가 없습니다 (학원지원센터의 프리미엄 회원 표시였습니다).
+       대신 고객이 마이페이지에서 자기 주문을 볼 수 있게 연결됐는지만 적습니다. */
+    add('마이페이지',r.user_id?'연결됨 (고객이 진행 상황을 볼 수 있습니다)':'아직 연결 안 됨');
     if(r.message)add('전체적으로 원하시는 것',r.message);
     var d=r.details||{};
     Object.keys(d).forEach(function(k){
       if(k.charAt(0)==='_')return; /* _photos 등 내부 값은 아래에서 따로 처리 */
       var v=d[k];add(k,Array.isArray(v)?v.join(', '):v);
     });
+    INFO_TEXT='의뢰처 정보\n'+infoLines(r,'업체명').join('\n');
+    h='<div class="irow" style="border:0;padding-bottom:4px"><span class="k"></span>'
+      +'<span><button class="btn btn-ghost" style="padding:6px 12px;font-size:.8rem" type="button" '
+      +'onclick="copyInfo(this)">📋 내용 복사</button></span></div>'+h;
     $('d_info').innerHTML=h||'<div class="irow"><span class="k">-</span><span class="muted">추가 정보 없음</span></div>';
     renderPhotos(d._photos);
   }
+
+  /* ---------- 신청 내용 복사 ----------
+     카톡·메일에 그대로 붙여 넣으라고 만든 것입니다. 화면에 보이는 순서 그대로,
+     🔴 «값이 있는 줄만» 글자로 만듭니다 (빈 줄이 섞이면 붙여 넣고 지워야 합니다). */
+  var INFO_TEXT='';
+  function infoLines(r,label){
+    var out=[];
+    var add=function(k,v){
+      if(v===undefined||v===null||v==='')return;
+      if(Array.isArray(v))v=v.join(', ');
+      out.push(k+' : '+v);
+    };
+    add(label,r.academy_name); add('담당자',r.manager_name);
+    add('연락처',r.phone); add('이메일',r.email);
+    var d=r.details||{};
+    Object.keys(d).forEach(function(k){
+      if(k.charAt(0)==='_')return;                 /* _photos 같은 내부 값은 뺍니다 */
+      if(k==='등록 경로')return;                    /* 우리끼리 쓰는 표시라 복사본에는 안 넣습니다 */
+      add(k,d[k]);
+    });
+    if(r.message)add('전체적으로 원하시는 것',r.message);
+    return out;
+  }
+  window.copyInfo=async function(btn){
+    if(!INFO_TEXT){toast('복사할 내용이 없습니다');return;}
+    try{
+      await navigator.clipboard.writeText(INFO_TEXT);
+      var t=btn.textContent; btn.textContent='복사됨 ✓';
+      setTimeout(function(){btn.textContent=t;},1500);
+    }catch(e){ window.prompt('아래 내용을 복사해 주세요',INFO_TEXT); }
+  };
   /* 신청서에 올린 사진 (비공개 버킷 → 서명 URL로 열람) */
   async function renderPhotos(paths){
     var box=$('d_photos');
