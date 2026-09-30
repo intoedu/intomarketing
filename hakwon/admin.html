@@ -1911,7 +1911,7 @@
        +cyc
        +'<div class="r tot"><span>최종 청구액</span><span>'+won(t.firstPay)+'</span></div>'
      +'</div>'
-     +'<div class="p-note">'+(t.month||t.year?'※ 매월·매년 항목은 주기마다 청구됩니다. 최종 청구액은 최초 결제 기준입니다.':'※ 표시된 금액은 부가세 포함 금액입니다.')+'</div>'
+     +'<div class="p-note">※ 표시된 금액은 부가세 포함 금액입니다.'+(t.month||t.year?' 매월·매년 항목은 주기마다 청구되며, 최종 청구액은 최초 결제 기준입니다.':'')+'</div>'
      +payHTML(q)
      +(q.note?'<div class="p-sec"><h4>비고 / NOTES</h4><div class="box">'+esc(q.note)+'</div></div>':'')
      /* ── 계약 조항 — 비어 있는 칸은 아예 안 나옵니다 ── */
