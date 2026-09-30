@@ -403,7 +403,10 @@ $('form').addEventListener('submit',async function(e){
     academy_name:name, manager_name:val('f_boss'), phone:phone, email:val('f_email'),
     message:val('f_etc'), details:details, consent:true
   };
-  if(window.IMRef) Object.assign(row, IMRef.values());   /* 영업실장 유입 기록 */
+  if(window.IMRef){
+    Object.assign(row, IMRef.values());                       /* 담당 영업실장 */
+    Object.assign(row.details, IMRef.extraDetails());         /* 등록증 종류·번호 */
+  }
   var res=await sb.from('requests').insert(row);
 
   if(res.error){

@@ -124,7 +124,10 @@ if(form) form.addEventListener('submit',async function(e){
   };
   Object.keys(got.cols).forEach(function(k){ row[k]=got.cols[k]; });
   /* 어느 영업실장을 통해 들어왔는지 (ref.js). 없으면 아무것도 안 붙습니다 */
-  if(window.IMRef) Object.assign(row, IMRef.values());
+  if(window.IMRef){
+    Object.assign(row, IMRef.values());                       /* 담당 영업실장 */
+    Object.assign(row.details, IMRef.extraDetails());         /* 등록증 종류·번호 */
+  }
 
   var res=await sb.from('requests').insert(row);
   if(res.error){
