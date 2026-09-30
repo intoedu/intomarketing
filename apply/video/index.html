@@ -70,23 +70,87 @@
 
   <!-- 04 -->
   <section class="card">
+    <p class="eyebrow">Package</p>
+    <h2>패키지로 하시겠어요?</h2>
+    <p class="sub">무엇을 고를지 모르시겠으면 아래 둘 중 하나를 고르시면 됩니다.
+       패키지 금액은 <b>따로따로 고른 것과 같은 금액</b>이고, 필요하신 것만 따로 고르셔도 됩니다.</p>
+    <div class="picks" data-one data-q="패키지">
+      <label class="pick"><input type="radio" name="pk" value="따로 고르겠습니다">
+        <span class="n">00</span><b>따로 고르겠습니다</b><span>아래에서 필요한 작업만 고릅니다</span></label>
+      <label class="pick"><input type="radio" name="pk" value="스탠다드 (693,000원)">
+        <span class="n">01</span><b>스탠다드 · 693,000원</b>
+        <span>기획 + 촬영 120분 + 짐벌 + 편집<br>본편 60초 · 숏폼 30초 1편 · 수정 1회</span></label>
+      <label class="pick"><input type="radio" name="pk" value="프리미엄 (1,149,500원)">
+        <span class="n">02</span><b>프리미엄 · 1,149,500원</b>
+        <span>기획(콘티) + 촬영 240분 + 짐벌 + 드론 + 편집(모션그래픽)<br>본편 1분 30초 · 숏폼 30초 2편 · 수정 2회</span></label>
+    </div>
+    <p class="sub" style="margin-top:12px">금액은 <b>부가세 포함</b>입니다. 작업 기간은 스탠다드 7영업일,
+       프리미엄 10영업일이며 촬영일과 확인 기간은 따로입니다.</p>
+  </section>
+
+  <section class="card">
     <p class="eyebrow">Work</p>
     <h2>필요한 작업 <span class="req">*</span></h2>
     <p class="sub">고르신 작업만 진행하고, 고르신 것만 금액에 들어갑니다.
-       이미 찍어 두신 영상이 있으면 <b>편집만</b> 고르셔도 됩니다.</p>
+       이미 찍어 두신 영상이 있으면 <b>편집만</b> 고르셔도 됩니다.
+       위에서 패키지를 고르셨으면 그 구성대로 진행합니다.</p>
     <div class="chips" data-multi data-q="필요한 작업" data-req="필요한 작업">
       <label class="chip"><input type="checkbox" value="기획">기획</label>
       <label class="chip"><input type="checkbox" value="촬영">촬영</label>
       <label class="chip"><input type="checkbox" value="편집">편집</label>
+      <label class="chip"><input type="checkbox" value="촬영만 (원본 납품)">촬영만 · 원본 납품</label>
+      <label class="chip"><input type="checkbox" value="강의 영상">강의 영상</label>
     </div>
-    <div class="fld" style="margin-top:16px"><label>추가로 필요한 것</label>
-      <div class="chips" data-multi data-q="추가 촬영 장비">
-        <label class="chip"><input type="checkbox" value="짐벌 촬영">짐벌 촬영</label>
-        <label class="chip"><input type="checkbox" value="드론 촬영">드론 촬영</label>
+    <p class="sub" style="margin-top:12px">
+      <b>촬영만</b> 맡기시면 편집 없이 원본을 드립니다(120분 198,000원).
+      <b>강의 영상</b>은 홍보영상과 구조가 달라 따로 계산해 알려드립니다.</p>
+  </section>
+
+  <section class="card">
+    <p class="eyebrow">Option</p>
+    <h2>옵션 추가</h2>
+    <p class="sub">필요하신 만큼 개수를 올려 주세요. 아래는 <b>부가세 포함 기본 금액</b>이며,
+       <b>최종 금액은 견적서로</b> 알려드립니다 — 여기서 결제되지 않습니다.</p>
+    <div class="opts">
+      <div class="opt" data-qty="짐벌 촬영">
+        <div class="t"><b>짐벌 촬영 <span class="hint">55,000원</span></b>
+          <span>촬영 1회당. 화면이 흔들리지 않고 공간이 넓어 보입니다.</span></div>
+        <div class="qty"><button data-d="-">−</button><input type="number" value="0" min="0" max="5"><button data-d="+">+</button></div>
+      </div>
+      <div class="opt" data-qty="드론 촬영">
+        <div class="t"><b>드론 촬영 <span class="hint">165,000원</span></b>
+          <span>촬영 1회당. 실외만 가능하며, 비행이 되는 곳인지 먼저 확인해 드립니다.</span></div>
+        <div class="qty"><button data-d="-">−</button><input type="number" value="0" min="0" max="5"><button data-d="+">+</button></div>
+      </div>
+      <div class="opt" data-qty="인터뷰 추가">
+        <div class="t"><b>인터뷰 추가 <span class="hint">77,000원</span></b>
+          <span>출연자 한 분 기준입니다. 한 분 늘 때마다 33,000원이 더해집니다.</span></div>
+        <div class="qty"><button data-d="-">−</button><input type="number" value="0" min="0" max="10"><button data-d="+">+</button></div>
+      </div>
+      <div class="opt" data-qty="숏폼 추가">
+        <div class="t"><b>숏폼 추가 <span class="hint">55,000원</span></b>
+          <span>30초 1편. 본편에서 찍은 것으로 다시 편집합니다(추가 촬영 없음).</span></div>
+        <div class="qty"><button data-d="-">−</button><input type="number" value="0" min="0" max="10"><button data-d="+">+</button></div>
+      </div>
+      <div class="opt" data-qty="추가 수정">
+        <div class="t"><b>추가 수정 <span class="hint">영상 55,000원 · 기획서 33,000원</span></b>
+          <span>포함된 수정을 다 쓴 뒤 더 고치고 싶을 때입니다. 저희 실수는 무료로 고칩니다.</span></div>
+        <div class="qty"><button data-d="-">−</button><input type="number" value="0" min="0" max="10"><button data-d="+">+</button></div>
+      </div>
+    </div>
+    <div class="fld" style="margin-top:16px"><label>그 밖에 필요한 것</label>
+      <div class="chips" data-multi data-q="그 밖에 필요한 것">
+        <label class="chip"><input type="checkbox" value="긴급 진행">긴급 진행 (기본료 30%)</label>
+        <label class="chip"><input type="checkbox" value="토요일 촬영">토요일 촬영 (촬영비 20%)</label>
+        <label class="chip"><input type="checkbox" value="공휴일 촬영">공휴일 촬영 (촬영비 30%)</label>
+        <label class="chip"><input type="checkbox" value="모션그래픽">모션그래픽</label>
+        <label class="chip"><input type="checkbox" value="콘티">콘티</label>
         <label class="chip"><input type="checkbox" value="성우 목소리">성우 목소리</label>
         <label class="chip"><input type="checkbox" value="자막 파일">자막 파일</label>
         <label class="chip"><input type="checkbox" value="썸네일">썸네일</label>
-      </div></div>
+      </div>
+      <p class="sub" style="margin-top:10px">일요일은 촬영하지 않습니다.
+        모션그래픽·콘티·출장비는 요청하시면 따로 계산해 드립니다.</p></div>
   </section>
 
   <!-- 05 -->
@@ -122,7 +186,10 @@
         <label class="chip"><input type="checkbox" value="사내용">사내용</label>
       </div></div>
     <div class="fld"><label>촬영 장소 <span class="hint">(촬영이 필요하신 경우)</span></label>
-      <input class="inp" data-q="촬영 장소" placeholder="예: 대전 유성구 매장 / 아직 못 정함"></div>
+      <input class="inp" data-q="촬영 장소" placeholder="예: 대전 유성구 매장 / 아직 못 정함">
+      <p class="sub" style="margin-top:8px">촬영은 <b>1회 120분</b> 기준입니다(프리미엄 패키지는 240분).
+        현장에서 시간을 넘기면 30분마다 33,000원이 더해집니다.
+        촬영 장소 사용 허가와 출연자 동의는 고객님이 준비해 주셔야 합니다.</p></div>
   </section>
 
   <!-- 06 -->
