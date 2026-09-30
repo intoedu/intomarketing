@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>인투마케팅 · 블로그 · 홈페이지 · SNS · 디자인 · 영상</title>
-<meta name="description" content="인투마케팅 — 블로그·리뷰, 홈페이지 제작, SNS 채널 제작, 그래픽 디자인, 영상 제작. 다섯 영역을 외주로 넘기지 않고 직접 수행합니다. 대전 유성구.">
+<meta name="description" content="인투마케팅 — 블로그·리뷰, 홈페이지 제작, SNS 채널 제작, 디자인, 영상 제작. 다섯 영역을 외주로 넘기지 않고 직접 수행합니다. 대전 유성구.">
 <link rel="canonical" href="https://intomarketing.co.kr/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="인투마케팅">
 <meta property="og:title" content="인투마케팅 · 홍보에 필요한 것을 한 회사에서">
-<meta property="og:description" content="블로그·리뷰, 홈페이지 제작, SNS 채널 제작, 그래픽 디자인, 영상 제작.">
+<meta property="og:description" content="블로그·리뷰, 홈페이지 제작, SNS 채널 제작, 디자인, 영상 제작.">
 <meta property="og:url" content="https://intomarketing.co.kr/">
 <meta property="og:locale" content="ko_KR">
 <link rel="icon" href="hakwon/favicon-32.png" sizes="32x32" type="image/png">
@@ -304,7 +304,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
           <a onclick="go('blog')">블로그 · 리뷰<small>실 운영 블로거가 본인 계정에 직접 작성</small></a>
           <a onclick="go('web')">홈페이지 제작<small>기획 · 제작 · 배포 · 소유권 이관</small></a>
           <a onclick="go('sns')">SNS 채널 제작<small>채널 개설 · 지도 등록 · 콘텐츠 운영</small></a>
-          <a onclick="go('design')">그래픽 디자인<small>웹 배너 · 팝업 · 브로슈어 · 포스터</small></a>
+          <a onclick="go('design')">디자인<small>로고 · 명함 · 인쇄물 · 카드뉴스</small></a>
           <a onclick="go('video')">영상 제작<small>숏폼 · 롱폼 · 기획 · 촬영 · 편집</small></a>
         </div>
       </div>
@@ -323,7 +323,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
     <a onclick="go('blog')">블로그 · 리뷰</a>
     <a class="sub" onclick="go('web')">홈페이지 제작</a>
     <a class="sub" onclick="go('sns')">SNS 채널 제작</a>
-    <a class="sub" onclick="go('design')">그래픽 디자인</a>
+    <a class="sub" onclick="go('design')">디자인</a>
     <a class="sub" onclick="go('video')">영상 제작</a>
     <a href="hakwon/">학원지원센터</a>
     <a onclick="go('home','contact')">상담 문의</a>
@@ -377,7 +377,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
         </div>
         <div class="item" onclick="go('design')" role="link" tabindex="0" onkeydown="if(event.key==='Enter')go('design')">
           <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.2 0 1.9-.8 1.9-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.8-1.7 1.7-1.7H16a5 5 0 0 0 5-5c0-4-4-7.2-9-7.2z"/><circle cx="7.5" cy="11" r="1.1"/><circle cx="11" cy="7.5" r="1.1"/><circle cx="15.5" cy="9" r="1.1"/></svg></span>
-          <b>그래픽 디자인</b>
+          <b>디자인</b>
           <span>배너 · 브로슈어 · 포스터</span>
           <span class="price">상담 후 안내</span>
         </div>
@@ -726,7 +726,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
         <div class="card" style="margin-bottom:8px">
           <h3>디자인 · 상품 등록 · 업로드 포함</h3>
           <p>개설에 더해 게시물 디자인, 상품 · 메뉴 등록, 올리는 일까지 맡습니다.
-             그래픽 디자인과 함께 진행하면 채널마다 같은 모양으로 맞출 수 있습니다.</p>
+             디자인과 함께 진행하면 채널마다 같은 모양으로 맞출 수 있습니다.</p>
         </div>
       </div>
 
@@ -827,14 +827,26 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
   </div>
 </section>
 
-<!-- ══════════════ 그래픽 디자인 ══════════════ -->
+<!-- ══════════════ 디자인 ══════════════ -->
+<style>
+  /* 디자인 화면만 노랑·초록으로 (다른 화면은 남색 그대로입니다 — 디자인팀 요청 2026-09-30) */
+  #v-design{--accent:#2F9E55;--accent-ink:#217A3F;--brand:#1F6B3B;--gold:#E8B10E}
+  #v-design .kicker{color:#C9930A}
+  #v-design .sp.on{background:#2F9E55;border-color:#2F9E55;color:#fff}
+  #v-design .tag{background:#FDF6DC;color:#8A6A05;border-color:#F3E3A8}
+  #v-design .card h3{color:#1F6B3B}
+  @media(prefers-color-scheme:dark){
+    #v-design{--accent:#5FCB86;--accent-ink:#8CD9A6;--brand:#7FD6A0}
+    #v-design .tag{background:#2A2A16;color:#E8D68A;border-color:#4A4522}
+  }
+</style>
 <section class="view" id="v-design">
   <div class="sec tight">
     <div class="wrap">
       <p class="kicker">Service 04</p>
-      <h2 class="h2">그래픽 디자인</h2>
-      <p class="lead">시안 수정과 <b>인쇄 · 배송 대행</b>까지 포함합니다.
-         인쇄소를 따로 찾으실 필요가 없습니다.</p>
+      <h2 class="h2">디자인</h2>
+      <p class="lead">로고부터 카드뉴스까지, <b>브랜드의 모습을 한 결로</b> 만듭니다.
+         시안 수정과 인쇄 · 배송 대행까지 함께 진행합니다.</p>
     </div>
   </div>
 
@@ -850,12 +862,14 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
       <div class="subpanel on" id="design-logo">
         <div class="grid2">
           <div class="card"><h3>로고</h3>
-            <p>간판·명함·홈페이지·서류에 두루 쓰이는 얼굴입니다. 큰 간판부터 작은 도장 크기까지
-               뭉개지지 않게 만들고, 가로형·세로형·흑백까지 함께 드립니다.</p>
+            <p>브랜드의 첫인상을 만드는 로고를 목적과 분위기에 맞춰 디자인합니다.
+               원하는 이미지와 방향을 바탕으로 다양한 시안을 제안하고,
+               여러 매체에서 활용하기 좋은 형태로 제작합니다.</p>
             <div class="tags"><span class="tag">시안 제안</span><span class="tag">가로·세로형</span><span class="tag">원본 파일</span></div></div>
           <div class="card"><h3>명함</h3>
-            <p>로고가 이미 있으시면 그 로고에 맞춰, 없으시면 로고부터 함께 만듭니다.
-               인쇄 규격과 여백은 저희가 맞춥니다.</p>
+            <p>브랜드와 개인의 이미지를 한 눈에 보여주는 명함을 제작합니다.
+               기존 로고가 있다면 로고에 맞춰 디자인하고, 없다면 로고 제작부터
+               전체적인 분위기에 맞춰 함께 구성합니다.</p>
             <div class="tags"><span class="tag">앞·뒷면</span><span class="tag">인쇄 대행</span></div></div>
         </div>
       </div>
@@ -863,14 +877,18 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
       <!-- 2. 인쇄 · 홍보물 -->
       <div class="subpanel" id="design-print">
         <div class="grid2">
-          <div class="card"><h3>브로셔 · 리플렛 · 팜플렛</h3>
-            <p>접는 방식(2단·3단)과 면 수부터 함께 정합니다. 글이 없으셔도 됩니다 —
-               말씀해 주시면 원고부터 씁니다.</p>
+          <div class="card"><h3>브로셔</h3>
+            <p>브랜드와 서비스의 정보를 체계적으로 전달할 수 있도록 디자인합니다.
+               내용의 흐름과 정보의 가독성을 고려해 필요한 내용을 보기 쉽게 구성합니다.</p>
             <div class="tags"><span class="tag">3단 접지</span><span class="tag">원고 작성</span></div></div>
-          <div class="card"><h3>전단지 · 포스터</h3>
-            <p>붙이는 자리와 보는 거리에 따라 글자 크기가 달라집니다.
-               어디에 쓰실지 알려주시면 거기에 맞춰 잡습니다.</p>
-            <div class="tags"><span class="tag">행사 · 모집</span><span class="tag">매장 게시</span></div></div>
+          <div class="card"><h3>전단지</h3>
+            <p>행사와 상품, 서비스의 핵심 정보를 한눈에 전달할 수 있도록 디자인합니다.
+               전달하고 싶은 내용을 효과적으로 강조해 홍보 목적에 맞는 전단지를 제작합니다.</p>
+            <div class="tags"><span class="tag">행사 · 모집</span><span class="tag">배포용</span></div></div>
+          <div class="card"><h3>포스터</h3>
+            <p>행사와 캠페인의 주요 내용을 시각적으로 효과적으로 전달할 수 있도록 디자인합니다.
+               핵심 정보가 한눈에 들어오도록 이미지와 문구를 조화롭게 구성합니다.</p>
+            <div class="tags"><span class="tag">매장 게시</span><span class="tag">캠페인</span></div></div>
           <div class="card"><h3>책 (표지 · 속지)</h3>
             <p>표지만도, 속지 편집까지도 됩니다. 쪽수·판형·제본 방식을 정하고
                인쇄소에 바로 넘길 수 있는 파일로 드립니다.</p>
@@ -884,13 +902,17 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
       <!-- 3. SNS · 카드뉴스 -->
       <div class="subpanel" id="design-card">
         <div class="grid2">
-          <div class="card"><h3>웹 배너 · 썸네일</h3>
-            <p>홈페이지·SNS·광고에 쓰는 이미지입니다. 쓰는 자리마다 규격이 달라서
-               필요한 크기를 한 번에 맞춰 드립니다.</p>
-            <div class="tags"><span class="tag">메인 배너</span><span class="tag">팝업</span><span class="tag">유튜브 썸네일</span></div></div>
+          <div class="card"><h3>웹배너</h3>
+            <p>웹사이트와 온라인 채널에 필요한 배너를 목적과 규격에 맞춰 디자인합니다.
+               짧은 시간 안에 핵심 내용이 전달될 수 있도록 구성합니다.</p>
+            <div class="tags"><span class="tag">메인 배너</span><span class="tag">팝업</span></div></div>
+          <div class="card"><h3>썸네일</h3>
+            <p>콘텐츠의 핵심이 한눈에 전달될 수 있도록 썸네일을 디자인합니다.
+               콘텐츠의 성격에 맞는 이미지와 문구를 활용해 시선을 끌 수 있도록 제작합니다.</p>
+            <div class="tags"><span class="tag">유튜브</span><span class="tag">블로그</span></div></div>
           <div class="card"><h3>카드뉴스</h3>
-            <p>여러 장을 넘겨 보는 형식입니다. 무엇을 몇 장에 나눠 담을지부터 함께 정하고,
-               글이 없으셔도 원고부터 씁니다.</p>
+            <p>전달하고자 하는 정보를 여러 장의 카드로 보기 쉽게 구성합니다.
+               내용의 흐름과 가독성을 고려해 핵심 정보가 자연스럽게 전달되도록 디자인합니다.</p>
             <div class="tags"><span class="tag">장수 구성</span><span class="tag">원고 작성</span></div></div>
           <div class="card"><h3>채널 운영과 같이 하면</h3>
             <p>SNS 채널 제작·운영과 함께 하시면 올릴 것을 매달 만들어 올리는 것까지
@@ -1076,7 +1098,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
     {v:'sns',   n:'SNS 채널 제작', subs:[
       {t:'open',   n:'채널 개설',     d:'계정 개설·지도 등록·초기 세팅까지 잡아 드립니다.'},
       {t:'run',    n:'개설 + 운영',   d:'매달 올릴 것을 만들어 올리고 리포트까지 드립니다.'}]},
-    {v:'design',n:'그래픽 디자인', subs:[
+    {v:'design',n:'디자인', subs:[
       {t:'logo',   n:'로고 · 명함',       d:'로고, 명함'},
       {t:'print',  n:'인쇄 · 홍보물',     d:'브로셔, 전단지, 포스터·리플렛, 책(표지·속지)'},
       {t:'card',   n:'SNS · 카드뉴스',    d:'웹배너, 썸네일, 카드뉴스'}]},
