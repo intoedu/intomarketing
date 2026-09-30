@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- 숫자 글꼴 — 영상 화면 표에서만 씁니다 (한글은 그대로 기본 글꼴로 나옵니다) -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&family=Gowun+Batang:wght@400;700&display=swap">
 <style>
 /* ──────────────────────────────────────────────────────────────
    인투마케팅 회사 대표 페이지 (/)
@@ -509,6 +509,58 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
 </section>
 
 <!-- ══════════════ 블로그 · 리뷰 ══════════════ -->
+<style>
+  /* 블로그 화면만 「따뜻한 종이 · 읽는 화면」 — 2026-09-30
+     블로그는 «글»이 상품이라, 잡지 지면처럼 미색 종이 + 진한 와인색으로 잡았습니다.
+     디자인(초록·노랑)·영상(검정·주황)과 겹치지 않는 색입니다.
+       바탕 #FAF6EF(미색 종이) · 카드 #FFFFFF · 포인트 #A3323F(와인) · 보조 #B8862F(금색)
+     🔴 이 화면 «안에서만» 바뀝니다. 되돌리려면 이 <style> 한 덩어리만 지우면 됩니다.
+     🔴 제목만 명조(고운바탕)입니다 — 본문까지 명조로 하면 읽기 어려워집니다. */
+  #v-blog{
+    --paper:#FAF6EF; --surface:#FFFFFF; --surface-2:#F4EBDE;
+    --ink:#241C18; --muted:#6E6154; --line:#E7DBC9;
+    --accent:#A3323F; --accent-ink:#8B2533; --brand:#6E1F2A;
+    --gold:#B8862F; --band-bg:#5E1B26;
+    --rv-d:.58s; --rv-y:10px; --ease:cubic-bezier(.2,.8,.3,1);  /* 종이 넘기듯 천천히 */
+    background:#FAF6EF; color:var(--ink);
+  }
+  #v-blog .h2,#v-blog .card h3,#v-blog .bitem h4{font-family:"Gowun Batang","Apple SD Gothic Neo",serif;
+    font-weight:700;letter-spacing:-.01em}
+  #v-blog .h2{font-size:clamp(27px,3.6vw,37px)}
+  #v-blog .kicker{color:#A3323F}
+  #v-blog .card h3{color:#6E1F2A}
+  #v-blog .card{box-shadow:0 1px 2px rgba(90,60,30,.05)}
+  #v-blog .card:hover{box-shadow:0 18px 34px -24px rgba(94,27,38,.42)}
+  #v-blog .tag{background:#F4EBDE;color:#8B2533}
+  #v-blog .sp.on{background:#6E1F2A;color:#FBF3EA}
+  #v-blog .btn-primary{background:#A3323F;color:#fff}
+  #v-blog .btn-primary:hover{background:#8B2533}
+  #v-blog .bitem .bn{background:#6E1F2A;color:#FBF3EA}
+  /* 성과 띠 — 바탕이 와인색이라 파란 글씨를 따뜻한 색으로 바꿉니다 */
+  #v-blog .sgrid .k{color:#E4B9BF}
+  #v-blog .sgrid .v u{color:#F0CDD2}
+  #v-blog .sgrid .d{color:#E8C6CB}
+  #v-blog .sfoot{border-top-color:rgba(255,222,226,.26);color:#DEB6BC}
+  #v-blog .pnote{background:#F4EBDE}
+
+  /* 어두운 화면 설정일 때 — 미색 종이가 눈을 찌르지 않게 «밤에 읽는 종이»로 */
+  @media(prefers-color-scheme:dark){
+    #v-blog{
+      --paper:#15100F; --surface:#1E1816; --surface-2:#282119;
+      --ink:#F3EBE4; --muted:#A39488; --line:#352C27;
+      --accent:#E0697A; --accent-ink:#EE8D99; --brand:#E0697A; --band-bg:#3C1620;
+      background:#15100F;
+    }
+    #v-blog .kicker{color:#EE8D99}
+    #v-blog .card h3{color:#EEA6AF}
+    #v-blog .tag{background:#2A211D;color:#EEA6AF}
+    #v-blog .sp.on{background:#E0697A;color:#1A0F11}
+    #v-blog .btn-primary{background:#E0697A;color:#1A0F11}
+    #v-blog .btn-primary:hover{background:#EE8D99}
+    #v-blog .bitem .bn{background:#3C1620;color:#EEA6AF}
+    #v-blog .card{box-shadow:0 10px 24px rgba(0,0,0,.35)}
+  }
+</style>
 <section class="view" id="v-blog">
   <div class="sec tight">
     <div class="wrap">
