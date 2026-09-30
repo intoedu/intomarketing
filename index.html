@@ -17,6 +17,10 @@
 <link rel="icon" href="hakwon/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="hakwon/apple-touch-icon.png">
 <meta name="theme-color" content="#12294D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- 숫자 글꼴 — 영상 화면 표에서만 씁니다 (한글은 그대로 기본 글꼴로 나옵니다) -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap">
 <style>
 /* ──────────────────────────────────────────────────────────────
    인투마케팅 회사 대표 페이지 (/)
@@ -1040,6 +1044,44 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
 </section>
 
 <!-- ══════════════ 영상 제작 ══════════════ -->
+<style>
+  /* 영상 화면만 「다크 시네마틱」 — 2026-09-30 이은총 님이 정한 색
+     배경 #0E0F12 · 카드 #1A1C21 · 포인트 #FF5A36(주황)·#4ADE80(라임) · 글자 #F5F5F7 / #9AA0A6
+     🔴 이 화면 «안에서만» 바뀝니다. 되돌리려면 이 <style> 한 덩어리와 go() 의 data-view 줄만 지우면 됩니다.
+     🔴 밝은 화면·어두운 화면 설정과 상관없이 늘 어둡게 보입니다(id 로 덮어썼기 때문). */
+  #v-video{
+    --paper:#0E0F12; --surface:#1A1C21; --surface-2:#22252B;
+    --ink:#F5F5F7; --muted:#9AA0A6; --line:#2C3037;
+    --accent:#FF5A36; --accent-ink:#FF8460; --brand:#FF5A36;
+    --band-bg:#FF5A36; --gold:#4ADE80;
+    color:var(--ink);
+    background:radial-gradient(1200px 460px at 50% -160px,#20232B 0%,#0E0F12 62%) #0E0F12;
+  }
+  #v-video .kicker{color:#FF7A57}
+  #v-video .h2,#v-video .card h3{font-weight:800;color:#F5F5F7}
+  #v-video .lead b{color:#F5F5F7}
+  #v-video .card{box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 12px 28px rgba(0,0,0,.42)}
+  #v-video .tag{background:#23262C;color:#FFAD92}
+  #v-video .subpills{background:#16181D}
+  #v-video .sp.on{background:#FF5A36;color:#16100E}
+  #v-video .btn-primary{background:#FF5A36;color:#16100E;font-weight:800}
+  #v-video .btn-primary:hover{background:#FF7350}
+  #v-video .btn-ghost{border-color:#3A3F47}
+  #v-video .btn-ghost:hover{background:#22252B}
+  #v-video .ptw{box-shadow:0 12px 28px rgba(0,0,0,.35)}
+  #v-video .ptab th{color:#9AA0A6;letter-spacing:.02em}
+  #v-video .ptab .lo{color:#4ADE80}   /* 가장 싼 칸은 라임 */
+  #v-video .ptab td b{color:#F5F5F7}  /* 🔴 굵은 글씨는 「금액」일 때도 「줄 이름」일 때도 있어서
+                                            주황을 쓰지 않습니다 — 이름까지 주황이 되어 버립니다 */
+  /* 숫자만 Inter — 한글은 이 글꼴에 없어서 자동으로 원래 글꼴로 나옵니다 */
+  #v-video .ptab th,#v-video .ptab td{font-family:"Inter",var(--f);font-variant-numeric:tabular-nums}
+  /* 머리띠·바닥글도 이 화면에서는 같이 어둡게 (이어지는 느낌) */
+  body[data-view="video"] header{background:rgba(14,15,18,.94);border-bottom-color:#2A2E35}
+  body[data-view="video"] footer{background:#0A0B0E;color:#8C9299}
+  body[data-view="video"] footer .pol{border-top-color:rgba(255,255,255,.12)}
+  body[data-view="video"] footer .pol span{color:#3A3F47}
+  body[data-view="video"] footer .cr{color:#6C727A}
+</style>
 <section class="view" id="v-video">
   <div class="sec tight">
     <div class="wrap">
@@ -1354,6 +1396,8 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
     });
     var nl=document.getElementById('nl-svc');
     if(nl)nl.classList.toggle('active',view!=='home');
+    /* 영상 화면일 때 머리띠·바닥글도 어둡게 하려고 표시해 둡니다 */
+    document.body.setAttribute('data-view',view);
     closeMenu();
     if(anchor){
       window.scrollTo(0,0);
