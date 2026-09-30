@@ -18,8 +18,8 @@
   <div class="wrap">
     <a class="back" href="../../#blog">← 블로그 · 리뷰</a>
     <h1>블로그 · 리뷰 신청서</h1>
-    <p>실제로 방문한 블로거가 직접 쓰고 올립니다.
-       적어 주시면 담당자가 배정되어 <b>1~2일 안에</b> 연락드립니다.</p>
+    <p>실 운영 블로거가 실제 방문해 직접 작성하고 발행합니다.
+       작성해 주시면 담당자가 배정되어 <b>1~2일 안에</b> 연락드립니다.</p>
   </div>
 </header>
 
@@ -29,12 +29,12 @@
   <!-- 01 -->
   <section class="card">
     <p class="eyebrow">Type</p>
-    <h2>무엇을 도와드릴까요? <span class="req">*</span></h2>
+    <h2>신청 항목 <span class="req">*</span></h2>
     <div class="picks" data-one data-q="갈래" data-req="갈래">
       <label class="pick"><input type="radio" name="tp" value="블로그 홍보">
-        <span class="n">01</span><b>블로그 홍보</b><span>블로거가 방문해 글을 쓰고 자기 블로그에 올립니다.</span></label>
+        <span class="n">01</span><b>블로그 홍보</b><span>블로거가 방문해 원고를 작성하고 본인 계정에 발행합니다.</span></label>
       <label class="pick"><input type="radio" name="tp" value="네이버 리뷰">
-        <span class="n">02</span><b>네이버 리뷰</b><span>지도·플레이스에 방문자 리뷰를 쌓습니다.</span></label>
+        <span class="n">02</span><b>네이버 리뷰</b><span>지도 · 플레이스에 방문자 리뷰를 등록합니다.</span></label>
       <label class="pick"><input type="radio" name="tp" value="둘 다">
         <span class="n">03</span><b>둘 다</b><span>블로그와 리뷰를 같이 진행합니다.</span></label>
     </div>
@@ -43,8 +43,8 @@
   <!-- 02 -->
   <section class="card">
     <p class="eyebrow">Business</p>
-    <h2>어떤 곳인가요? <span class="req">*</span></h2>
-    <p class="sub">업종을 고르시면 아래 보기가 그 업종에 맞게 바뀝니다.</p>
+    <h2>업종 <span class="req">*</span></h2>
+    <p class="sub">업종을 선택하면 아래 보기가 해당 업종에 맞게 바뀝니다.</p>
     <div class="chips" data-one data-q="업종" data-req="업종" id="bizBox">
       <label class="chip"><input type="radio" name="biz" value="학원">학원</label>
       <label class="chip"><input type="radio" name="biz" value="음식점">음식점</label>
@@ -56,12 +56,12 @@
     </div>
 
     <div class="fld" style="margin-top:18px">
-      <label>주로 오는 고객 <span class="hint">(여러 개 고르셔도 됩니다)</span></label>
+      <label>주요 고객층 <span class="hint">(복수 선택 가능)</span></label>
       <div class="chips" data-multi data-q="주로 오는 고객" id="whoBox"></div>
     </div>
 
     <div class="fld">
-      <label>무엇을 알리고 싶으신가요? <span class="hint">(검색했을 때 걸리고 싶은 것)</span></label>
+      <label>홍보 포인트 <span class="hint">(검색 노출을 원하는 내용)</span></label>
       <div class="chips" data-multi data-q="홍보 목적" id="goalBox"></div>
     </div>
   </section>
@@ -82,9 +82,9 @@
       <div class="fld"><label for="f_email">이메일</label>
         <input class="inp" id="f_email" type="email" data-col="email"></div>
     </div>
-    <div class="fld"><label>알리고 싶은 지역 <span class="req">*</span>
-      <span class="hint">(검색어에 들어갑니다. 예: 「대전 도안동」)</span></label>
-      <input class="inp" data-q="알리고 싶은 지역" data-req="알리고 싶은 지역" placeholder="예: 대전 유성구 도안동"></div>
+    <div class="fld"><label>홍보 지역 <span class="req">*</span>
+      <span class="hint">(키워드에 포함됩니다. 예: 「대전 도안동」)</span></label>
+      <input class="inp" data-q="홍보 지역" data-req="홍보 지역" placeholder="예: 대전 유성구 도안동"></div>
     <div class="fld"><label>취급 항목 · 서비스</label>
       <input class="inp" data-q="취급 항목·서비스" placeholder="예: 핸드드립, 디저트, 단체 예약"></div>
     <div class="fld"><label>주소 · 영업 시간 · 대표 전화</label>
@@ -95,17 +95,17 @@
   <section class="card">
     <p class="eyebrow">Volume</p>
     <h2>편수 <span class="req">*</span></h2>
-    <p class="sub">한 달에 몇 편을 올릴지 정합니다. <b>10편부터 100편까지</b> 고르실 수 있고,
-       <b>기간은 한 달</b>입니다. 시작일은 자료를 다 받아 확인한 날부터 셉니다.</p>
+    <p class="sub">월 발행 편수를 정합니다. <b>10편 ~ 100편</b>에서 선택하실 수 있으며,
+       <b>기간은 30일</b>입니다. 기산일은 자료를 모두 받아 확인한 날입니다.</p>
     <div class="fld">
-      <label>원하시는 편수</label>
+      <label>주문 편수</label>
       <div class="qty" style="width:max-content">
         <button data-d="-">−</button>
         <input type="number" id="cnt" value="10" min="10" max="100" step="5" data-q="편수" style="width:60px">
         <button data-d="+">+</button>
       </div>
     </div>
-    <div class="fld"><label>언제부터 시작하고 싶으신가요?</label>
+    <div class="fld"><label>희망 시작 시기</label>
       <input class="inp" data-q="희망 시작 시기" placeholder="예: 다음 주부터 / 이번 달 안에"></div>
   </section>
 
@@ -113,28 +113,28 @@
   <section class="card">
     <p class="eyebrow">Story</p>
     <h2>글에 담을 이야기</h2>
-    <p class="sub">글이 비슷해지지 않게 하려고 여쭙습니다. 모르시면 비워 두셔도 됩니다.</p>
-    <div class="fld"><label>우리를 한 문장으로 하면?</label>
+    <p class="sub">포스팅 내용이 중복되지 않도록 확인하는 항목입니다. 확인이 어려우면 비워 두셔도 됩니다.</p>
+    <div class="fld"><label>업체 소개 (한 문장)</label>
       <input class="inp" data-q="한 문장 소개" placeholder="예: 원두를 매일 아침 직접 볶는 동네 카페"></div>
-    <div class="fld"><label>다른 곳과 다른 점</label>
-      <textarea class="inp" data-q="다른 곳과 다른 점" placeholder="예: 사장이 직접 로스팅합니다 / 주차가 10대까지 됩니다"></textarea></div>
-    <div class="fld"><label>문의 오면 꼭 보여주시는 것</label>
+    <div class="fld"><label>차별점</label>
+      <textarea class="inp" data-q="차별점" placeholder="예: 사장이 직접 로스팅합니다 / 주차가 10대까지 됩니다"></textarea></div>
+    <div class="fld"><label>문의 시 주로 안내하는 것</label>
       <input class="inp" data-q="꼭 보여주는 것" placeholder="예: 로스팅 기계, 원두 보관실"></div>
-    <div class="fld"><label>글에 쓰지 말아야 할 내용</label>
+    <div class="fld"><label>게재하지 않을 내용</label>
       <textarea class="inp" data-q="쓰지 말아야 할 내용" placeholder="예: 가격은 적지 말아 주세요 / 사장 얼굴은 빼주세요"></textarea></div>
-    <div class="fld"><label>그 밖에 하고 싶은 말</label>
+    <div class="fld"><label>그 밖의 요청사항</label>
       <textarea class="inp" data-col="message"></textarea></div>
   </section>
 
   <section class="card">
-    <p class="note">사진은 접수 뒤 진행 현황 페이지에서 올리실 수 있습니다.
-      글마다 다른 사진을 써야 해서 <b>30장 이상</b>이면 좋습니다.
-      모든 글에는 법에 따라 <b>광고 표기</b>가 들어갑니다.</p>
+    <p class="note">사진은 접수 후 전용 대시보드에서 업로드하실 수 있습니다.
+      포스팅마다 다른 사진이 필요해 <b>30장 이상</b> 권장합니다.
+      전 게시물에 법정 <b>광고 표기</b>를 포함합니다.</p>
   </section>
 
   <section class="card">
     <label class="consent"><input type="checkbox" id="f_consent">
-      <span>개인정보 수집·이용에 동의합니다. 적어 주신 정보는 <b>상담과 견적</b> 외에는 쓰지 않습니다.
+      <span>개인정보 수집·이용에 동의합니다. 작성하신 정보는 <b>상담과 견적</b> 외에는 사용하지 않습니다.
         <a href="../../privacy/" target="_blank" rel="noopener">개인정보처리방침 보기</a></span></label>
   </section>
 
@@ -150,8 +150,8 @@
   <p>담당자가 배정되어 <b>1~2일 안에</b> 연락드리겠습니다. 감사합니다.</p>
   <div class="box">
     <b>다음 순서</b><br>
-    담당자가 사진과 전달사항을 받을 <b>진행 현황 주소</b>를 보내드립니다.<br>
-    급하시면 전화 <a href="tel:01073181790">010-7318-1790</a>
+    담당자가 사진과 전달사항을 접수할 <b>전용 대시보드 주소</b>를 보내드립니다.<br>
+    긴급 연락처 · <a href="tel:01073181790">010-7318-1790</a>
   </div>
   <p style="margin-top:20px"><a href="../../#blog">← 블로그 · 리뷰로 돌아가기</a></p>
 </div>

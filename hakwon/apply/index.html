@@ -55,6 +55,9 @@ main{padding:26px 0 70px}
 .fld{margin-bottom:15px}
 .fld:last-child{margin-bottom:0}
 .fld label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px}
+/* 🔴 .fld 안에 들어간 칩은 위 규칙에 눌려 display:block 이 됩니다(선택자가 더 자세함).
+      그러면 gap 이 안 먹어 체크박스와 글씨가 붙습니다. 이 줄을 지우지 마세요. */
+.fld label.chip{display:inline-flex;align-items:center;gap:11px;margin-bottom:0;font-size:14px}
 .fld label .hint{font-weight:500}
 .inp{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
 .inp:focus{outline:none;border-color:var(--accent);background:var(--surface)}
@@ -110,8 +113,8 @@ footer span{margin:0 8px;color:var(--line)}
   <div class="wrap">
     <a class="back" href="../">← 학원지원센터</a>
     <h1>자료제작 지원 신청</h1>
-    <p>아래를 적어 주시면 담당자가 배정되어 <b>1~2일 안에</b> 연락드립니다.
-       모르는 칸은 비워 두셔도 됩니다 — 상담하면서 같이 정합니다.</p>
+    <p>작성해 주시면 담당자가 배정되어 <b>1~2일 안에</b> 연락드립니다.
+       확인이 어려운 항목은 비워 두셔도 됩니다. 상담 시 함께 정합니다.</p>
   </div>
 </header>
 
@@ -121,7 +124,7 @@ footer span{margin:0 8px;color:var(--line)}
   <!-- 00 무엇을 -->
   <section class="card">
     <p class="eyebrow">What</p>
-    <h2>무엇을 만들어 드릴까요? <span class="req">*</span></h2>
+    <h2>필요한 항목 <span class="req">*</span></h2>
     <div class="chips" data-one="kind">
       <label class="chip"><input type="radio" name="kind" value="홈페이지">홈페이지</label>
       <label class="chip"><input type="radio" name="kind" value="앱">앱</label>
@@ -133,20 +136,20 @@ footer span{margin:0 8px;color:var(--line)}
   <!-- 01 시작하기 -->
   <section class="card">
     <p class="eyebrow">Start</p>
-    <h2>어떻게 만들어 드릴까요? <span class="req">*</span></h2>
+    <h2>제작 방식 <span class="req">*</span></h2>
     <div class="picks" id="method">
       <label class="pick"><input type="radio" name="method" value="기존 그대로">
         <span class="n">01</span><b>기존 홈페이지 그대로</b>
-        <span>이미 있는 홈페이지의 내용을 그대로 옮기고 싶어요. 주소만 알려주세요.</span></label>
+        <span>기존 홈페이지 내용을 그대로 이전합니다. 주소만 알려 주시면 됩니다.</span></label>
       <label class="pick"><input type="radio" name="method" value="참고 제작">
         <span class="n">02</span><b>이런 느낌으로</b>
-        <span>참고하고 싶은 홈페이지가 있어요. 비슷한 느낌으로 새로 만들래요.</span></label>
+        <span>참고할 홈페이지를 바탕으로 새로 제작합니다.</span></label>
       <label class="pick"><input type="radio" name="method" value="새로 제작">
         <span class="n">03</span><b>새로 제작</b>
-        <span>처음부터 새로 만들고 싶어요.</span></label>
+        <span>처음부터 새로 제작합니다.</span></label>
     </div>
     <div class="fld" style="margin-top:15px">
-      <label for="f_ref">참고하거나 옮길 홈페이지 주소 <span class="hint">(있으면)</span></label>
+      <label for="f_ref">참고 · 이전할 홈페이지 주소 <span class="hint">(있는 경우)</span></label>
       <input class="inp" id="f_ref" placeholder="https://">
     </div>
   </section>
@@ -157,7 +160,7 @@ footer span{margin:0 8px;color:var(--line)}
     <h2>기본 정보</h2>
     <div class="fld"><label for="f_name">학원명 <span class="req">*</span></label>
       <input class="inp" id="f_name"></div>
-    <div class="fld"><label for="f_boss">원장님 성함</label><input class="inp" id="f_boss"></div>
+    <div class="fld"><label for="f_boss">원장 · 담당자 성함</label><input class="inp" id="f_boss"></div>
     <div class="fld"><label for="f_phone">연락처 (전화) <span class="req">*</span></label>
       <input class="inp" id="f_phone" type="tel" inputmode="tel" placeholder="010-0000-0000"></div>
     <div class="fld"><label for="f_email">이메일</label><input class="inp" id="f_email" type="email"></div>
@@ -169,7 +172,7 @@ footer span{margin:0 8px;color:var(--line)}
   <section class="card">
     <p class="eyebrow">Purpose</p>
     <h2>홈페이지의 목적</h2>
-    <div class="fld"><label>왜 만들고 싶으신가요? <span class="hint">(여러 개 고르셔도 됩니다)</span></label>
+    <div class="fld"><label>제작 목적 <span class="hint">(복수 선택 가능)</span></label>
       <div class="chips" data-multi="why">
         <label class="chip"><input type="checkbox" value="소개 / 신뢰">소개 / 신뢰</label>
         <label class="chip"><input type="checkbox" value="홍보 / 모객">홍보 / 모객</label>
@@ -178,10 +181,10 @@ footer span{margin:0 8px;color:var(--line)}
         <label class="chip"><input type="checkbox" value="온라인 수강신청">온라인 수강신청</label>
         <label class="chip"><input type="checkbox" value="수강생 모집">수강생 모집</label>
       </div></div>
-    <div class="fld"><label for="f_who">방문하는 사람들은 누구일까요?
+    <div class="fld"><label for="f_who">주요 방문자
       <span class="hint">(예: 학부모, 재원생, 신규 상담 문의자)</span></label>
       <input class="inp" id="f_who"></div>
-    <div class="fld"><label for="f_do">방문자가 무엇을 하길 바라시나요?
+    <div class="fld"><label for="f_do">방문자에게 기대하는 행동
       <span class="hint">(예: 전화 걸기, 방문, 신청서 작성, 위치 확인)</span></label>
       <input class="inp" id="f_do"></div>
   </section>
@@ -190,7 +193,7 @@ footer span{margin:0 8px;color:var(--line)}
   <section class="card">
     <p class="eyebrow">Pages</p>
     <h2>페이지(메뉴) 구성</h2>
-    <div class="fld"><label>필요한 메뉴를 골라 주세요</label>
+    <div class="fld"><label>필요한 메뉴 (복수 선택 가능)</label>
       <div class="chips" data-multi="pages">
         <label class="chip"><input type="checkbox" value="메인(홈)">메인(홈)</label>
         <label class="chip"><input type="checkbox" value="소개·인사말">소개·인사말</label>
@@ -209,7 +212,7 @@ footer span{margin:0 8px;color:var(--line)}
   <section class="card">
     <p class="eyebrow">Content</p>
     <h2>준비해 주실 자료</h2>
-    <div class="fld"><label>가지고 계신 자료 <span class="hint">(있다면 이메일로 함께 보내 주세요)</span></label>
+    <div class="fld"><label>보유 자료 <span class="hint">(이메일로 함께 보내 주시면 됩니다)</span></label>
       <div class="chips" data-multi="have">
         <label class="chip"><input type="checkbox" value="로고">로고</label>
         <label class="chip"><input type="checkbox" value="소개글 / 인사말">소개글 / 인사말</label>
@@ -217,8 +220,8 @@ footer span{margin:0 8px;color:var(--line)}
         <label class="chip"><input type="checkbox" value="영상">영상</label>
         <label class="chip"><input type="checkbox" value="기존 인쇄물·홍보물">기존 인쇄물·홍보물</label>
       </div></div>
-    <div class="fld"><label for="f_intro">우리를 한두 문장으로 소개한다면?
-      <span class="hint">(소개글이 없다면)</span></label>
+    <div class="fld"><label for="f_intro">학원 소개 (한두 문장)
+      <span class="hint">(소개글이 없는 경우)</span></label>
       <textarea class="inp" id="f_intro"></textarea></div>
     <div class="fld"><label for="f_addr">주소 · 운영시간 · 대표 연락처</label>
       <textarea class="inp" id="f_addr"></textarea></div>
@@ -228,7 +231,7 @@ footer span{margin:0 8px;color:var(--line)}
   <section class="card">
     <p class="eyebrow">Look &amp; Feel</p>
     <h2>디자인 · 분위기</h2>
-    <div class="fld"><label>원하는 느낌 <span class="hint">(여러 개 고르셔도 됩니다)</span></label>
+    <div class="fld"><label>원하는 분위기 <span class="hint">(복수 선택 가능)</span></label>
       <div class="chips" data-multi="mood">
         <label class="chip"><input type="checkbox" value="깔끔·심플">깔끔·심플</label>
         <label class="chip"><input type="checkbox" value="따뜻·친근">따뜻·친근</label>
@@ -236,9 +239,9 @@ footer span{margin:0 8px;color:var(--line)}
         <label class="chip"><input type="checkbox" value="고급·세련">고급·세련</label>
         <label class="chip"><input type="checkbox" value="활기·밝음">활기·밝음</label>
       </div></div>
-    <div class="fld"><label for="f_color">좋아하는 색 / 피하고 싶은 색</label>
+    <div class="fld"><label for="f_color">선호 색 / 제외 색</label>
       <input class="inp" id="f_color"></div>
-    <div class="fld"><label for="f_like">참고하고 싶은 디자인 / 사이트 <span class="hint">(마음에 드는 곳 1~2개)</span></label>
+    <div class="fld"><label for="f_like">참고 디자인 · 사이트 <span class="hint">(1~2곳)</span></label>
       <textarea class="inp" id="f_like"></textarea></div>
   </section>
 
@@ -264,15 +267,15 @@ footer span{margin:0 8px;color:var(--line)}
   <section class="card">
     <p class="eyebrow">Domain</p>
     <h2>도메인 · 운영</h2>
-    <div class="fld"><label>도메인(홈페이지 주소)을 가지고 계신가요?</label>
+    <div class="fld"><label>도메인(홈페이지 주소) 보유 여부</label>
       <div class="chips" data-one="domain">
         <label class="chip"><input type="radio" name="domain" value="이미 있음">이미 있음</label>
         <label class="chip"><input type="radio" name="domain" value="새로 필요함">새로 필요함</label>
         <label class="chip"><input type="radio" name="domain" value="잘 모르겠음">잘 모르겠음</label>
       </div></div>
-    <div class="fld"><label for="f_domain">원하는 주소가 있다면 <span class="hint">(예: www.example.com)</span></label>
+    <div class="fld"><label for="f_domain">희망 주소 <span class="hint">(예: www.example.com)</span></label>
       <input class="inp" id="f_domain"></div>
-    <div class="fld"><label>완성 후 직접 수정하길 원하시나요?</label>
+    <div class="fld"><label>완성 후 수정 방식</label>
       <div class="chips" data-one="edit">
         <label class="chip"><input type="radio" name="edit" value="직접 수정">직접 수정</label>
         <label class="chip"><input type="radio" name="edit" value="맡기고 싶음">맡기고 싶음</label>
@@ -286,7 +289,7 @@ footer span{margin:0 8px;color:var(--line)}
     <h2>일정 · 예산</h2>
     <div class="fld"><label for="f_when">희망 완료 시기</label>
       <input class="inp" id="f_when" placeholder="예: 한 달 안에, 급하지 않음"></div>
-    <div class="fld"><label for="f_budget">생각하시는 예산</label>
+    <div class="fld"><label for="f_budget">예산</label>
       <input class="inp" id="f_budget"></div>
   </section>
 
@@ -299,7 +302,7 @@ footer span{margin:0 8px;color:var(--line)}
 
   <section class="card">
     <label class="consent"><input type="checkbox" id="f_consent">
-      <span>개인정보 수집·이용에 동의합니다. 적어 주신 정보는 <b>상담과 견적</b> 외에는 쓰지 않습니다.
+      <span>개인정보 수집·이용에 동의합니다. 작성하신 정보는 <b>상담과 견적</b> 외에는 사용하지 않습니다.
         <a href="../../privacy/" target="_blank" rel="noopener">개인정보처리방침 보기</a></span></label>
   </section>
 
@@ -314,7 +317,7 @@ footer span{margin:0 8px;color:var(--line)}
   <h2>신청이 접수되었습니다</h2>
   <p>담당자가 배정되어 <b>1~2일 안에</b> 연락드리겠습니다. 감사합니다.</p>
   <div class="box">
-    <b>급하시면 바로 연락 주세요</b><br>
+    <b>긴급 연락처</b><br>
     전화 <a href="tel:01073181790">010-7318-1790</a><br>
     이메일 <a href="mailto:info@intomarketing.co.kr">info@intomarketing.co.kr</a><br>
     자료(로고·사진·소개글)는 위 이메일로 보내주시면 됩니다.
@@ -381,10 +384,10 @@ $('form').addEventListener('submit',async function(e){
   var kind=one('kind');
   var method=one('method');
   var name=val('f_name'), phone=val('f_phone');
-  if(!kind){err.textContent='맨 위에서 「무엇을 만들어 드릴까요?」를 골라 주세요.';window.scrollTo({top:0,behavior:'smooth'});return;}
-  if(!method){err.textContent='「어떻게 만들어 드릴까요?」를 골라 주세요.';window.scrollTo({top:0,behavior:'smooth'});return;}
-  if(!name){err.textContent='학원명을 적어 주세요.';$('f_name').focus();return;}
-  if(!phone){err.textContent='연락처를 적어 주세요.';$('f_phone').focus();return;}
+  if(!kind){err.textContent='맨 위에서 「필요한 항목」을 선택해 주십시오.';window.scrollTo({top:0,behavior:'smooth'});return;}
+  if(!method){err.textContent='「제작 방식」을 선택해 주십시오.';window.scrollTo({top:0,behavior:'smooth'});return;}
+  if(!name){err.textContent='학원명을 입력해 주십시오.';$('f_name').focus();return;}
+  if(!phone){err.textContent='연락처를 입력해 주십시오.';$('f_phone').focus();return;}
   if(!$('f_consent').checked){err.textContent='개인정보 수집·이용에 동의해 주셔야 접수됩니다.';return;}
   if(!sb){err.textContent='연결이 안 됩니다. 잠시 뒤 다시 시도해 주세요.';return;}
 

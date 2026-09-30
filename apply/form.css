@@ -41,6 +41,9 @@ main{padding:26px 0 70px}
 .fld{margin-bottom:15px}
 .fld:last-child{margin-bottom:0}
 .fld label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px}
+/* 🔴 .fld 안에 들어간 칩은 위 규칙에 눌려 display:block 이 됩니다(선택자가 더 자세함).
+      그러면 gap 이 안 먹어 체크박스와 글씨가 붙습니다. 이 줄을 지우지 마세요. */
+.fld label.chip{display:inline-flex;align-items:center;gap:11px;margin-bottom:0;font-size:14px}
 .fld label .hint{font-weight:500}
 .inp{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
 .inp:focus{outline:none;border-color:var(--accent);background:var(--surface)}

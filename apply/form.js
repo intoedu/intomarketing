@@ -104,15 +104,15 @@ if(form) form.addEventListener('submit',async function(e){
 
   var got=collect(form);
   if(got.missing){
-    err.textContent='「'+got.missing.name+'」을(를) 적거나 골라 주세요.';
+    err.textContent='「'+got.missing.name+'」을(를) 입력하거나 선택해 주십시오.';
     try{
       got.missing.el.scrollIntoView({block:'center',behavior:'smooth'});
       if(got.missing.el.focus) got.missing.el.focus({preventScroll:true});
     }catch(x){}
     return;
   }
-  if(!$('f_consent').checked){err.textContent='개인정보 수집·이용에 동의해 주셔야 접수됩니다.';return;}
-  if(!sb){err.textContent='연결이 안 됩니다. 잠시 뒤 다시 시도해 주세요.';return;}
+  if(!$('f_consent').checked){err.textContent='개인정보 수집 · 이용에 동의하셔야 접수됩니다.';return;}
+  if(!sb){err.textContent='연결에 실패했습니다. 잠시 뒤 다시 시도해 주십시오.';return;}
 
   btn.disabled=true; btn.textContent='보내는 중...';
   var row={
