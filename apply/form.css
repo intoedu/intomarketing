@@ -63,6 +63,37 @@ textarea.inp{min-height:92px;resize:vertical}
 .pick span{font-size:13px;color:var(--muted);line-height:1.6}
 .pick input{position:absolute;opacity:0;pointer-events:none}
 
+/* ── 고르는 비교표 — 세로로 견주면서 그 자리에서 고릅니다 ──
+   🔴 라디오는 그대로 둡니다. 신청서가 값을 모으는 방식(form.js readOne)이 바뀌면 안 됩니다. */
+.cmpw{margin-top:16px;overflow-x:auto;border:1px solid var(--line);border-radius:12px;
+      background:var(--surface);-webkit-overflow-scrolling:touch;
+      /* 🔴 position:relative 를 지우지 마세요 — 없으면 표(560px)가 «페이지 전체»를 옆으로
+            밀어 버립니다(안에서만 밀려야 합니다). 홈페이지 쪽은 화면 전환 효과의 transform 이
+            우연히 막아 주고 있었지만, 「동작 줄이기」를 켜면 그 효과가 꺼져 똑같이 샙니다. */
+      position:relative}
+.cmp{width:100%;border-collapse:collapse;min-width:560px}
+.cmp th,.cmp td{padding:13px 14px;border-bottom:1px solid var(--line);text-align:center;font-size:14px}
+.cmp thead th{background:var(--surface-2);padding:0;vertical-align:top}
+.cmp th:first-child,.cmp td:first-child{text-align:left;color:var(--muted);font-size:12.5px;font-weight:700;
+      white-space:nowrap;background:var(--surface-2);position:sticky;left:0;z-index:1}
+.cmp tbody tr:last-child td{border-bottom:0}
+.cmp .big{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.cmp .no{color:var(--muted);opacity:.45}
+.cmp .ok{color:var(--accent-ink);font-weight:800;font-size:16px}
+/* 머리칸 전체가 고르는 버튼입니다 */
+.cmp .ph{display:block;padding:16px 14px 18px;cursor:pointer;transition:.15s;border-bottom:3px solid transparent}
+.cmp .ph:hover{background:var(--surface)}
+.cmp .ph .dot{display:inline-block;width:15px;height:15px;border:2px solid var(--line);border-radius:50%;
+      vertical-align:-3px;margin-right:6px;transition:.15s}
+.cmp .ph .nm{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.1em}
+.cmp .ph .pr{display:block;font-size:18px;font-weight:800;color:var(--ink);margin-top:6px;letter-spacing:-.02em;
+      font-variant-numeric:tabular-nums}
+.cmp .ph input{position:absolute;opacity:0;pointer-events:none}
+.cmp .ph .pr.sm{font-size:14px;color:var(--muted);font-weight:700}  /* 금액이 아닌 칸 */
+.cmp .ph.on{background:var(--surface);border-bottom-color:var(--accent)}
+.cmp .ph.on .dot{border-color:var(--accent);background:var(--accent);box-shadow:inset 0 0 0 3px var(--surface)}
+.cmp .ph.on .nm{color:var(--accent-ink)}
+
 /* 작은 고르는 칸 */
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{border:1px solid var(--line);border-radius:999px;padding:8px 15px;background:var(--surface-2);

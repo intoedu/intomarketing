@@ -19,14 +19,16 @@ var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
 var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
 function $(id){return document.getElementById(id);}
 
-/* ── 고르면 표시 ── */
+/* ── 고르면 표시 ──
+   .pick = 카드로 고르는 것 · .ph = 비교표 머리칸으로 고르는 것 (둘 다 라디오입니다) */
 function paintPicks(box){
-  box.querySelectorAll('.pick').forEach(function(p){
+  box.querySelectorAll('.pick, .ph').forEach(function(p){
     var i=p.querySelector('input'); if(i)p.classList.toggle('on',i.checked);
   });
 }
-document.querySelectorAll('.picks').forEach(function(box){
+document.querySelectorAll('.picks, .cmpw[data-one]').forEach(function(box){
   box.addEventListener('change',function(){paintPicks(box);});
+  paintPicks(box);                       /* 뒤로 가기로 돌아왔을 때도 표시 */
 });
 document.querySelectorAll('.chips').forEach(function(box){
   box.addEventListener('change',function(e){

@@ -74,15 +74,34 @@
     <h2>패키지 선택</h2>
     <p class="sub">
        패키지 금액은 <b>개별 선택 합계와 동일</b>하며, 필요한 항목만 개별 선택하셔도 됩니다.</p>
-    <div class="picks" data-one data-q="패키지">
-      <label class="pick"><input type="radio" name="pk" value="개별 선택">
-        <span class="n">00</span><b>개별 선택</b><span>아래에서 필요한 작업만 선택합니다</span></label>
-      <label class="pick"><input type="radio" name="pk" value="스탠다드 (693,000원)">
-        <span class="n">01</span><b>스탠다드 · 693,000원</b>
-        <span>기획 + 촬영 120분 + 짐벌 + 편집<br>본편 60초 · 숏폼 30초 1편 · 수정 1회</span></label>
-      <label class="pick"><input type="radio" name="pk" value="프리미엄 (1,149,500원)">
-        <span class="n">02</span><b>프리미엄 · 1,149,500원</b>
-        <span>기획(콘티) + 촬영 240분 + 짐벌 + 드론 + 편집(모션그래픽)<br>본편 1분 30초 · 숏폼 30초 2편 · 수정 2회</span></label>
+    <div class="cmpw" data-one data-q="패키지">
+      <table class="cmp">
+        <thead>
+          <tr>
+            <th></th>
+            <th><label class="ph"><input type="radio" name="pk" value="개별 선택">
+                <span class="dot"></span><span class="nm">개별 선택</span>
+                <span class="pr sm">필요한 것만 고릅니다</span></label></th>
+            <th><label class="ph"><input type="radio" name="pk" value="스탠다드 (693,000원)">
+                <span class="dot"></span><span class="nm">STANDARD</span>
+                <span class="pr">693,000원</span></label></th>
+            <th><label class="ph"><input type="radio" name="pk" value="프리미엄 (1,149,500원)">
+                <span class="dot"></span><span class="nm">PREMIUM</span>
+                <span class="pr">1,149,500원</span></label></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>기획</td><td><span class="no">선택</span></td><td>기획</td><td>기획 + 콘티</td></tr>
+          <tr><td>촬영 시간</td><td><span class="no">선택</span></td><td class="big">120분</td><td class="big">240분</td></tr>
+          <tr><td>짐벌</td><td><span class="no">선택</span></td><td><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr>
+          <tr><td>드론</td><td><span class="no">선택</span></td><td><span class="no">—</span></td><td><span class="ok">✓</span></td></tr>
+          <tr><td>모션그래픽</td><td><span class="no">선택</span></td><td><span class="no">—</span></td><td><span class="ok">✓</span></td></tr>
+          <tr><td>본편 길이</td><td><span class="no">선택</span></td><td class="big">60초</td><td class="big">1분 30초</td></tr>
+          <tr><td>숏폼 (30초)</td><td><span class="no">선택</span></td><td class="big">1편</td><td class="big">2편</td></tr>
+          <tr><td>수정 횟수</td><td><span class="no">선택</span></td><td class="big">1회</td><td class="big">2회</td></tr>
+          <tr><td>작업일</td><td><span class="no">선택</span></td><td>7영업일</td><td>10영업일</td></tr>
+        </tbody>
+      </table>
     </div>
     <p class="sub" style="margin-top:12px">금액은 <b>부가세 포함</b>입니다. 작업 기간은 스탠다드 7영업일,
        프리미엄 10영업일이며 촬영일과 확인 기간은 따로입니다.</p>

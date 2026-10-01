@@ -224,7 +224,11 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 /* ── 비교표 — 영상 패키지 · 홈페이지 단계에 함께 씁니다 ──
    색은 var() 로만 써서, 화면마다 그 화면 색을 따라갑니다(영상=어둡게, 블로그=미색). */
 .cmpw{margin-top:22px;overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);
-      background:var(--surface);-webkit-overflow-scrolling:touch}
+      background:var(--surface);-webkit-overflow-scrolling:touch;
+      /* 🔴 position:relative 를 지우지 마세요 — 없으면 표(560px)가 «페이지 전체»를 옆으로
+            밀어 버립니다(안에서만 밀려야 합니다). 홈페이지 쪽은 화면 전환 효과의 transform 이
+            우연히 막아 주고 있었지만, 「동작 줄이기」를 켜면 그 효과가 꺼져 똑같이 샙니다. */
+      position:relative}
 .cmp{width:100%;border-collapse:collapse;min-width:620px}
 .cmp th,.cmp td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:center;font-size:14.5px}
 .cmp thead th{background:var(--surface-2);padding:20px 16px;vertical-align:bottom}
