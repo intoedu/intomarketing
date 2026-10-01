@@ -374,7 +374,7 @@ $('form').addEventListener('submit',async function(e){
   if(!name){err.textContent='단체 · 사업체명을 입력해 주십시오.';$('f_name').focus();return;}
   if(!phone){err.textContent='연락처를 입력해 주십시오.';$('f_phone').focus();return;}
   if(!$('f_consent').checked){err.textContent='개인정보 수집·이용에 동의해 주셔야 접수됩니다.';return;}
-  if(!sb){err.textContent='연결이 안 됩니다. 잠시 뒤 다시 시도해 주세요.';return;}
+  if(!sb){err.textContent='연결이 안 됩니다. 잠시 뒤 다시 시도해 주십시오.';return;}
 
   btn.disabled=true; btn.textContent='보내는 중...';
 

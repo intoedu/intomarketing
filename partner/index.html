@@ -113,16 +113,16 @@
           <input class="inp" id="su_pw" type="password" autocomplete="new-password"></div>
         <button class="btn btn-p wfull" type="button" onclick="doSignup()">계정 만들기</button>
         <div class="gnote" style="margin-top:14px;padding-top:0;border:0">
-          🔴 <b>계약서에 적어 주신 이메일</b>로 만들어 주세요. 그 이메일이어야 현황이 연결됩니다.</div>
+          🔴 <b>계약서에 적어 주신 이메일</b>로 만들어 주십시오. 그 이메일이어야 현황이 연결됩니다.</div>
       </div>
       <p class="msg" id="gMsg"></p>
-      <div class="gnote">계정이 안 만들어지거나 현황이 안 보이면 <b>010-7318-1790</b> 으로 연락 주세요.</div>
+      <div class="gnote">계정이 안 만들어지거나 현황이 안 보이면 <b>010-7318-1790</b> 으로 연락 주십시오.</div>
     </div>
 
     <div id="gNoMatch" style="display:none">
       <p class="gsub"><b>아직 명단에 연결되지 않았습니다.</b></p>
       <div class="note" style="margin:14px 0">로그인하신 이메일이 영업실장 명단에 없습니다.<br>
-        계약서에 적으신 이메일로 로그인하셨는지 확인해 주세요.<br><br>
+        계약서에 적으신 이메일로 로그인하셨는지 확인해 주십시오.<br><br>
         <b>010-7318-1790</b> 으로 연락 주시면 바로 등록해 드리겠습니다.</div>
       <button class="btn btn-g wfull" type="button" onclick="location.reload()">다시 확인</button>
       <div class="gnote"><a href="#" onclick="doLogout();return false;">다른 계정으로 로그인</a></div>
@@ -157,7 +157,7 @@
           <tbody id="rows"></tbody>
         </table>
       </div>
-      <div class="empty hide" id="noRows">아직 연결된 의뢰가 없습니다.<br>아래 전용 링크로 고객을 안내해 주세요.</div>
+      <div class="empty hide" id="noRows">아직 연결된 의뢰가 없습니다.<br>아래 전용 링크로 고객을 안내해 주십시오.</div>
       <p class="sub" style="margin:14px 0 0">표시된 금액은 <b>고객이 결제한 금액(부가세 포함)</b>입니다.
         커미션은 계약서 제7조에 따라 <b>부가세를 뺀 금액(공급가액)</b>을 기준으로 계산됩니다.</p>
     </div>
@@ -178,7 +178,7 @@
 
     <div class="card">
       <h2>문의</h2>
-      <p class="sub">현황이 실제와 다르거나 빠진 건이 있으면 바로 알려 주세요.
+      <p class="sub">현황이 실제와 다르거나 빠진 건이 있으면 바로 알려 주십시오.
         계약서 제9조에 따라 <b>확인일로부터 7일 이내</b>에 이의를 제기하실 수 있습니다.</p>
       <div style="display:flex;gap:9px;flex-wrap:wrap">
         <a class="btn btn-p" href="tel:01073181790">📞 전화하기</a>
@@ -215,8 +215,8 @@ window.switchTab=function(t){
 };
 window.doLogin=async function(){
   var e=$('li_email').value.trim(), p=$('li_pw').value;
-  if(!e||!p)return gmsg('이메일과 비밀번호를 넣어 주세요.','err');
-  if(!sb)return gmsg('연결이 안 됩니다. 새로고침해 주세요.','err');
+  if(!e||!p)return gmsg('이메일과 비밀번호를 넣어 주십시오.','err');
+  if(!sb)return gmsg('연결이 안 됩니다. 새로고침해 주십시오.','err');
   gmsg('들어가는 중…');
   var r=await sb.auth.signInWithPassword({email:e,password:p});
   if(r.error)return gmsg('로그인 실패: '+r.error.message,'err');
@@ -224,14 +224,14 @@ window.doLogin=async function(){
 };
 window.doSignup=async function(){
   var e=$('su_email').value.trim(), p=$('su_pw').value;
-  if(!e||!p)return gmsg('이메일과 비밀번호를 넣어 주세요.','err');
-  if(p.length<6)return gmsg('비밀번호는 6자 이상으로 해 주세요.','err');
-  if(!sb)return gmsg('연결이 안 됩니다. 새로고침해 주세요.','err');
+  if(!e||!p)return gmsg('이메일과 비밀번호를 넣어 주십시오.','err');
+  if(p.length<6)return gmsg('비밀번호는 6자 이상으로 해 주십시오.','err');
+  if(!sb)return gmsg('연결이 안 됩니다. 새로고침해 주십시오.','err');
   gmsg('계정 만드는 중…');
   var r=await sb.auth.signUp({email:e,password:p});
   if(r.error)return gmsg('가입 실패: '+r.error.message+' (이미 계정이 있으면 [로그인] 탭으로 들어오세요)','err');
   var s=await sb.auth.getSession();
-  if(!s.data.session)return gmsg('계정이 만들어졌습니다. [로그인] 탭에서 로그인해 주세요.','ok');
+  if(!s.data.session)return gmsg('계정이 만들어졌습니다. [로그인] 탭에서 로그인해 주십시오.','ok');
   boot();
 };
 window.doLogout=async function(){ if(sb)await sb.auth.signOut(); location.reload(); };
@@ -268,7 +268,7 @@ function show(id){
 async function loadRules(){
   var r=await sb.rpc('partner_rules');
   var v=(r&&!r.error&&r.data)?r.data:{};
-  $('p_rules').textContent=v.rules||'아직 게시된 기준이 없습니다. 담당자에게 문의해 주세요.';
+  $('p_rules').textContent=v.rules||'아직 게시된 기준이 없습니다. 담당자에게 문의해 주십시오.';
   $('p_pay').textContent=v.pay_note||'';
 }
 
@@ -325,7 +325,7 @@ function renderLinks(){
 window.copyLink=async function(btn,url){
   try{ await navigator.clipboard.writeText(url); btn.textContent='복사됨 ✓';
        setTimeout(function(){btn.textContent='복사';},1400); }
-  catch(e){ window.prompt('아래 주소를 복사해 주세요',url); }
+  catch(e){ window.prompt('아래 주소를 복사해 주십시오',url); }
 };
 
 boot();
