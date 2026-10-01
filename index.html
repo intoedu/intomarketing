@@ -220,6 +220,32 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 .pnum .k{font-size:12px;color:var(--muted);font-weight:600}
 .pnum .v{font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .pinc{margin-top:14px;font-size:13.5px;color:var(--muted);line-height:1.8}
+
+/* ── 비교표 — 영상 패키지 · 홈페이지 단계에 함께 씁니다 ──
+   색은 var() 로만 써서, 화면마다 그 화면 색을 따라갑니다(영상=어둡게, 블로그=미색). */
+.cmpw{margin-top:22px;overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);
+      background:var(--surface);-webkit-overflow-scrolling:touch}
+.cmp{width:100%;border-collapse:collapse;min-width:620px}
+.cmp th,.cmp td{padding:14px 16px;border-bottom:1px solid var(--line);text-align:center;font-size:14.5px}
+.cmp thead th{background:var(--surface-2);padding:20px 16px;vertical-align:bottom}
+/* 맨 왼쪽 항목 이름 칸 — 좁은 화면에서 옆으로 밀어도 붙어 있게 */
+.cmp th:first-child,.cmp td:first-child{text-align:left;color:var(--muted);font-size:13px;font-weight:700;
+      white-space:nowrap;background:var(--surface-2);position:sticky;left:0;z-index:1}
+.cmp tbody tr:last-child td{border-bottom:0}
+.cmp .cname{display:block;font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--muted)}
+.cmp .cprice{display:block;font-size:21px;font-weight:800;letter-spacing:-.02em;color:var(--ink);
+      margin-top:5px;font-variant-numeric:tabular-nums}
+.cmp .cdesc{text-align:left;font-size:13px;color:var(--muted);line-height:1.8}
+.cmp .cdesc b{display:block;color:var(--ink);font-size:14px;margin-bottom:6px}
+.cmp .ok{color:var(--accent-ink);font-weight:800;font-size:16px}
+.cmp .no{color:var(--muted);opacity:.45}
+.cmp .big{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.cmp .hi{background:var(--surface-2)}
+.cmp thead th.hi{box-shadow:inset 0 3px 0 var(--accent)}
+.cmp .tagbest{display:inline-block;background:var(--accent);color:#fff;font-size:11px;font-weight:800;
+      padding:3px 9px;border-radius:999px;margin-bottom:7px}
+.cmp .btn{padding:10px 18px;font-size:13.5px}
+.cmpnote{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.8}
 .pinc b{color:var(--ink);font-weight:700}
 /* 약정 표 — 가로로 길어서 좁은 화면에선 옆으로 밀립니다 */
 .ptw{margin-top:22px;overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
@@ -734,41 +760,42 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
            <b>정가</b>는 제작비를 일시 납부하고 월 관리비를 냅니다.
            <b>약정</b>은 제작비를 낮추는 대신 정한 기간 동안 이용하는 방식으로, <b>총액이 더 저렴</b>합니다.</p>
 
-        <div class="pgrid">
-          <div class="pcard">
-            <div class="pstage">1단계</div>
-            <div class="psub">단순 홍보형</div>
-            <div class="pnum">
-              <div><span class="k">제작비</span><span class="v">150,000원</span></div>
-              <div><span class="k">월 관리비</span><span class="v">50,000원</span></div>
-              <div><span class="k">페이지</span><span class="v">3장 이하</span></div>
-            </div>
-            <p class="pinc">소개, 대표 인사말, 시설·서비스 안내, 오시는 길(지도), 전화·카톡 상담 버튼</p>
-          </div>
-
-          <div class="pcard best">
-            <div class="pbest">선택 비중 1위</div>
-            <div class="pstage">2단계</div>
-            <div class="psub">소통형</div>
-            <div class="pnum">
-              <div><span class="k">제작비</span><span class="v">400,000원</span></div>
-              <div><span class="k">월 관리비</span><span class="v">80,000원</span></div>
-              <div><span class="k">페이지</span><span class="v">5장 이하</span></div>
-            </div>
-            <p class="pinc"><b>1단계에 있는 것 전부</b>, 회원가입·로그인, 공지, Q&amp;A(비밀글), 자유게시판, 갤러리</p>
-          </div>
-
-          <div class="pcard">
-            <div class="pstage">3단계</div>
-            <div class="psub">맞춤 제작형</div>
-            <div class="pnum">
-              <div><span class="k">제작비</span><span class="v">견적 후 안내</span></div>
-              <div><span class="k">월 관리비</span><span class="v">견적 후 안내</span></div>
-              <div><span class="k">페이지</span><span class="v">10장 이상</span></div>
-            </div>
-            <p class="pinc">정해진 틀 없이 요구에 맞춰 기능과 디자인을 설계합니다. 상담 후 견적을 드립니다.</p>
-          </div>
+        <div class="cmpw">
+          <table class="cmp">
+            <thead>
+              <tr>
+                <th></th>
+                <th><span class="cname">1단계 · 단순 홍보형</span><span class="cprice">150,000원</span></th>
+                <th class="hi"><span class="tagbest">선택 비중 1위</span><span class="cname">2단계 · 소통형</span><span class="cprice">400,000원</span></th>
+                <th><span class="cname">3단계 · 맞춤 제작형</span><span class="cprice">견적 후 안내</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>들어가는 것</td>
+                <td class="cdesc"><b>소개 중심</b>소개, 대표 인사말, 시설·서비스 안내, 오시는 길(지도), 전화·카톡 상담 버튼</td>
+                <td class="cdesc hi"><b>1단계 전부 + 회원·게시판</b>회원가입·로그인, 공지, Q&amp;A(비밀글), 자유게시판, 갤러리</td>
+                <td class="cdesc"><b>필요에 맞춰 설계</b>정해진 틀 없이 요구에 맞춰 기능과 디자인을 설계합니다. 상담 후 견적을 드립니다.</td></tr>
+              <tr><td>제작비 (정가)</td>
+                <td class="big">150,000원</td><td class="big hi">400,000원</td><td class="big">견적 후 안내</td></tr>
+              <tr><td>월 관리비</td>
+                <td class="big">50,000원</td><td class="big hi">80,000원</td><td class="big">견적 후 안내</td></tr>
+              <tr><td>24개월 약정 시 제작비</td>
+                <td class="big">0원</td><td class="big hi">0원</td><td>견적 금액에 같은 방식 적용</td></tr>
+              <tr><td>페이지</td>
+                <td>3장 이하</td><td class="hi">5장 이하</td><td>10장 이상</td></tr>
+              <tr><td>관리자 화면</td>
+                <td><span class="ok">✓</span></td><td class="hi"><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr>
+              <tr><td>수정 · 백업 · 장애 대응</td>
+                <td><span class="ok">✓</span></td><td class="hi"><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr>
+              <tr><td></td>
+                <td><a class="btn btn-ghost" href="apply/">신청하기</a></td>
+                <td class="hi"><a class="btn btn-primary" href="apply/">신청하기</a></td>
+                <td><a class="btn btn-ghost" href="apply/">상담 신청</a></td></tr>
+            </tbody>
+          </table>
         </div>
+        <p class="cmpnote">모든 금액은 <b style="color:var(--ink)">부가세 포함</b>이며, 최소 이용 기간은 3개월입니다.
+          약정하시면 제작비가 내려갑니다 — 아래 표를 봐 주십시오.</p>
 
         <h3 class="h3" style="margin-top:40px;font-size:1.15rem">약정 시 제작비 인하</h3>
         <p class="pnote" style="margin-top:6px">약정 기간이 길수록 제작비가 낮아지고 월 관리비는 소폭 오르며, <b style="color:var(--ink)">총액은 정가보다 저렴</b>합니다.</p>
@@ -1258,18 +1285,35 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
         <h3 class="h3" style="margin-top:44px;font-size:1.15rem">추천 패키지</h3>
         <p class="pnote" style="margin-top:6px">자주 선택되는 구성이며, 개별 항목 합계와 동일한 금액입니다.
           <b style="color:var(--ink)">편집만 필요하거나 예산이 정해진 경우 별도 구성으로 조정합니다.</b></p>
-        <div class="grid2" style="margin-top:14px">
-          <div class="card"><h3>스탠다드 · 693,000원</h3>
-            <p>매장 · 공간을 보여주는 홍보영상입니다. 첫 제작에 적합한 구성입니다.</p>
-            <div class="tags"><span class="tag">기획</span><span class="tag">촬영 120분</span><span class="tag">짐벌</span>
-              <span class="tag">본편 60초</span><span class="tag">숏폼 30초 1편</span><span class="tag">수정 1회</span></div>
-            <p class="pnote" style="margin-top:10px">작업 7영업일 (기획 3 + 편집 4)</p></div>
-          <div class="card"><h3>프리미엄 · 1,149,500원</h3>
-            <p>외관 · 주변까지 촬영하고 광고 소재로도 활용하는 구성입니다.</p>
-            <div class="tags"><span class="tag">기획 · 콘티</span><span class="tag">촬영 240분</span><span class="tag">짐벌</span>
-              <span class="tag">드론</span><span class="tag">모션그래픽</span><span class="tag">본편 1분 30초</span>
-              <span class="tag">숏폼 30초 2편</span><span class="tag">수정 2회</span></div>
-            <p class="pnote" style="margin-top:10px">작업 10영업일 (기획 5 + 편집 5)</p></div>
+        <div class="cmpw">
+          <table class="cmp">
+            <thead>
+              <tr>
+                <th></th>
+                <th><span class="cname">STANDARD</span><span class="cprice">693,000원</span></th>
+                <th class="hi"><span class="cname">PREMIUM</span><span class="cprice">1,149,500원</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>어떤 분께</td>
+                <td class="cdesc"><b>처음 만드실 때</b>매장 · 공간을 보여주는 홍보영상입니다.</td>
+                <td class="cdesc hi"><b>광고까지 쓰실 때</b>외관 · 주변까지 촬영하고 광고 소재로도 활용하는 구성입니다.</td></tr>
+              <tr><td>기획</td><td>기획</td><td class="hi">기획 + 콘티</td></tr>
+              <tr><td>촬영 시간</td><td class="big">120분</td><td class="big hi">240분</td></tr>
+              <tr><td>짐벌</td><td><span class="ok">✓</span></td><td class="hi"><span class="ok">✓</span></td></tr>
+              <tr><td>드론</td><td><span class="no">—</span></td><td class="hi"><span class="ok">✓</span></td></tr>
+              <tr><td>모션그래픽</td><td><span class="no">—</span></td><td class="hi"><span class="ok">✓</span></td></tr>
+              <tr><td>본편 길이</td><td class="big">60초</td><td class="big hi">1분 30초</td></tr>
+              <tr><td>숏폼 (30초)</td><td class="big">1편</td><td class="big hi">2편</td></tr>
+              <tr><td>수정 횟수</td><td class="big">1회</td><td class="big hi">2회</td></tr>
+              <tr><td>작업일</td>
+                <td>7영업일 <span style="font-size:12px;opacity:.75">(기획 3 + 편집 4)</span></td>
+                <td class="hi">10영업일 <span style="font-size:12px;opacity:.75">(기획 5 + 편집 5)</span></td></tr>
+              <tr><td></td>
+                <td><a class="btn btn-ghost" href="apply/video/">신청하기</a></td>
+                <td class="hi"><a class="btn btn-primary" href="apply/video/">신청하기</a></td></tr>
+            </tbody>
+          </table>
         </div>
         <p class="pnote" style="margin-top:10px">작업일은 <b style="color:var(--ink)">저희가 작업하는 기간</b>이며
           촬영일과 확인·피드백 기간은 따로입니다. 기획부터 하시면 전체 3~4주로 보시면 됩니다.</p>
