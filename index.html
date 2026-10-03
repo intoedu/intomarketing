@@ -946,19 +946,95 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:12.5px}
         </div>
       </div>
 
-      <!-- 가격 — 2026-09-20 결정: 매뉴얼 값이 「원가 확정 후 조정」 잠정이라 숫자는 내리고 상담으로.
-           원가가 확정되면 매뉴얼(SNS/매뉴얼0 4장 가격표)에서 표를 다시 넣으면 됩니다. -->
+      <!-- 가격 — 근거 = 인투마케팅 메뉴얼/SNS/채널관리_매뉴얼0 4장 가격표
+           🔴 매뉴얼은 부가세 «별도», 아래 금액은 전부 ×1.1 한 «포함» 금액입니다.
+           🔴 2026-09-20 에 「원가 확정 후 조정」 잠정값이라 한 번 내렸던 표입니다.
+              2026-10-03 PG 심사가 단가표를 요구해 다시 올렸습니다 — 원가가 바뀌면 여기도 고쳐야 합니다. -->
       <div style="margin-top:52px">
         <p class="kicker">Pricing</p>
         <h2 class="h2">비용</h2>
-        <div class="pnote">
-          <b style="color:var(--ink)">상담 후 안내드립니다.</b><br>
-          채널 수, 기존 계정 보유 여부, 지도 등록 개수, 월 업로드 개수에 따라 달라집니다. <a href="payment/">결제 시점과 환불 기준 보기 →</a>
-          필요한 채널만 선택하실 수 있으며, 선택한 항목만 금액에 포함됩니다.
+        <p class="lead">아래는 <b>기본 금액</b>이고 <b>부가세 포함</b>입니다.
+           필요한 채널만 선택하실 수 있으며, 선택한 항목만 금액에 들어갑니다.
+           <b>최종 금액은 견적서</b>로 알려드립니다.</p>
+
+        <h3 class="h3" style="margin-top:30px;font-size:1.15rem">채널 세팅 — 한 번만 내는 금액</h3>
+        <div class="ptw">
+          <table class="ptab">
+            <thead><tr><th>채널</th><th>세팅</th><th>계정이 없을 때 개설</th><th>디자인까지</th></tr></thead>
+            <tbody>
+              <tr><td style="text-align:left"><b>메인</b><span class="sm">네이버 블로그 + 인스타그램</span></td>
+                  <td>220,000</td><td>채널당 +33,000</td><td>+220,000</td></tr>
+              <tr><td style="text-align:left">블로그 또는 인스타그램 단독</td>
+                  <td>132,000</td><td>+33,000</td><td>+110,000</td></tr>
+              <tr><td style="text-align:left">유튜브 채널</td><td>121,000</td><td>+44,000</td><td>+165,000</td></tr>
+              <tr><td style="text-align:left">페이스북 페이지</td><td>44,000</td><td>+22,000</td><td>—</td></tr>
+              <tr><td style="text-align:left">스레드 <span class="sm">계정 개설 + 활용 가이드</span></td>
+                  <td>33,000</td><td>11,000</td><td>—</td></tr>
+              <tr><td style="text-align:left">상담 채널 <span class="sm">네이버 톡톡 · 카카오톡 채널 + 응대 교육</span></td>
+                  <td>110,000</td><td>—</td><td>추가 교육 회당 55,000</td></tr>
+              <tr><td style="text-align:left">샤오홍슈 <span class="sm">개설 · 기업 인증 · 중국어 세팅</span></td>
+                  <td>440,000</td><td>—</td><td>인증 수수료 실비 별도</td></tr>
+            </tbody>
+          </table>
         </div>
+
+        <h3 class="h3" style="margin-top:34px;font-size:1.15rem">지도 등록</h3>
+        <div class="ptw">
+          <table class="ptab">
+            <thead><tr><th>지도</th><th>금액</th><th>묶음</th><th>금액</th></tr></thead>
+            <tbody>
+              <tr><td style="text-align:left">네이버 지도</td><td>110,000</td>
+                  <td style="text-align:left">지도 기본 <span class="sm">네이버 + 카카오</span></td><td><b>143,000</b></td></tr>
+              <tr><td style="text-align:left">구글 지도</td><td>110,000</td>
+                  <td style="text-align:left">지도 표준 <span class="sm">네이버 + 카카오 + 구글</span></td><td><b>242,000</b></td></tr>
+              <tr><td style="text-align:left">카카오맵 · 애플 지도</td><td>각 55,000</td>
+                  <td style="text-align:left">지도 프리미엄 <span class="sm">5개 전체 + 사진 세팅</span></td><td><b>330,000</b></td></tr>
+              <tr><td style="text-align:left">티맵</td><td>33,000</td><td style="text-align:left">—</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="pnote" style="margin-top:10px">묶음으로 하시면 따로 하실 때보다 저렴합니다
+          (기본 165,000 → <b style="color:var(--ink)">143,000</b> · 표준 275,000 → <b style="color:var(--ink)">242,000</b> ·
+           프리미엄 363,000 → <b style="color:var(--ink)">330,000</b>).</p>
+
+        <h3 class="h3" style="margin-top:34px;font-size:1.15rem">정기 콘텐츠 — 매달 내는 금액</h3>
+        <div class="ptw">
+          <table class="ptab">
+            <thead><tr><th>상품</th><th>월 금액</th></tr></thead>
+            <tbody>
+              <tr><td style="text-align:left">인스타그램 게시물 <span class="sm">월 4건 / 8건 / 12건</span></td>
+                  <td><b>275,000 / 495,000 / 660,000</b></td></tr>
+              <tr><td style="text-align:left">페이스북 동시 업로드 추가</td><td>+110,000</td></tr>
+              <tr><td style="text-align:left">블로그 정기 발행 <span class="sm">월 4건 / 8건</span></td><td>330,000 / 550,000</td></tr>
+              <tr><td style="text-align:left">지도 기본 관리</td><td>110,000</td></tr>
+              <tr><td style="text-align:left">네이버 플레이스 최적화 <span class="sm">광고비 별도</span></td><td>330,000</td></tr>
+              <tr><td style="text-align:left">유튜브 채널 관리</td><td>110,000</td></tr>
+              <tr><td style="text-align:left">유튜브 업로드 관리 <span class="sm">롱폼 · 편당</span></td><td>33,000</td></tr>
+              <tr><td style="text-align:left">숏폼 업로드 관리 <span class="sm">쇼츠 · 릴스 · 편당</span></td><td>11,000</td></tr>
+              <tr><td style="text-align:left">샤오홍슈 관리</td><td>550,000 / 990,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="pnote" style="margin-top:10px">영상이 들어가면 <b style="color:var(--ink)">월 금액 = 영상 제작비 + 업로드 관리비 + 채널 관리비</b>입니다.
+          영상 제작비는 <a onclick="go('video')" style="cursor:pointer">영상 가격표</a>를 따릅니다.</p>
+
+        <h3 class="h3" style="margin-top:34px;font-size:1.15rem">추가 비용 · 할인</h3>
+        <div class="ptw">
+          <table class="ptab">
+            <thead><tr><th>항목</th><th>기준</th></tr></thead>
+            <tbody>
+              <tr><td style="text-align:left">출장 (방문 지원)</td><td style="text-align:left">근거리 기준 · 원거리 30% 할증 (원격 지원은 무료)</td></tr>
+              <tr><td style="text-align:left">지점 추가</td><td style="text-align:left">지점당 해당 항목의 70%</td></tr>
+              <tr><td style="text-align:left">장기 할인</td><td style="text-align:left">정기 콘텐츠 3개월 10% · 6개월 20% (일시불 선결제)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="pnote" style="margin-top:12px">
+          모든 금액은 <b style="color:var(--ink)">부가세 포함</b>입니다.
+          세팅은 작업 전, 정기 콘텐츠는 매달 결제합니다. <a href="payment/">결제 시점과 환불 기준 보기 →</a>
+        </p>
       </div>
 
-      <!-- 환불 -->
       <div style="margin-top:52px">
         <p class="kicker">Terms</p>
         <h2 class="h2">알아두실 것 · 환불</h2>

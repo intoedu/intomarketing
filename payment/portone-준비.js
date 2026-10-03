@@ -79,7 +79,82 @@ var PAY = (function () {
     return { ok: true, paymentId: res.paymentId, orderId: orderId };
   }
 
-  return { requestPay: requestPay, makeOrderId: makeOrderId };
+  /* ────────────────────────────────────────────────────────────────
+     휴대폰 본인인증 창 띄우기
+     쓰는 법 : var r = await PAY.verifyIdentity(); if(r.ok){ ... }
+
+     🔴 본인인증은 «별도 채널»입니다. 결제 채널키와 다른 키를 씁니다.
+     🔴 본인확인기관(KG이니시스·다날 등)과 따로 계약해야 쓸 수 있습니다. 결제 심사와 별건입니다.
+     🔴 이름·생년월일·휴대폰번호·통신사가 넘어옵니다. 개인정보처리방침의 «수집 항목»에
+        이 값들이 적혀 있어야 합니다. 지금 방침에는 없으니, 쓰기로 정해지면 방침을 먼저 고쳐야 합니다
+        (방침을 고치면 공지 의무가 생깁니다 — 행정 창에 확인). */
+  var IDENTITY_CHANNEL_KEY = 'channel-key-identity-0000';   /* 본인인증 전용 채널키 */
+
+  async function verifyIdentity() {
+    if (!window.PortOne) { alert('본인인증 모듈을 불러오지 못했습니다.'); return { ok:false }; }
+
+    var res = await window.PortOne.requestIdentityVerification({
+      storeId: STORE_ID,
+      channelKey: IDENTITY_CHANNEL_KEY,
+      identityVerificationId: makeOrderId('IDV'),
+      redirectUrl: location.origin + '/payment/done.html'     /* 휴대폰에서 돌아올 자리 */
+    });
+
+    if (res.code !== undefined) { return { ok:false, reason: res.message }; }
+
+    /* 🔴 여기서도 결과를 그대로 믿으면 안 됩니다. 서버에서 다시 물어봐야 진짜 값입니다.
+       GET https://api.portone.io/identity-verifications/{identityVerificationId}
+       서버가 돌려주는 verifiedCustomer 안에 이름·생년월일·휴대폰번호가 들어 있습니다. */
+    var v = await fetch('/api/pay/identity', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ identityVerificationId: res.identityVerificationId })
+    }).then(function(r){return r.json();}).catch(function(){return {ok:false};});
+
+    return v.ok ? { ok:true, customer:v.customer } : { ok:false, reason:'verify-failed' };
+  }
+
+  /* ────────────────────────────────────────────────────────────────
+     정기결제 — 카드 빌링키 발급
+     쓰는 법 : var r = await PAY.issueBillingKey({ buyer:{...} });  →  r.billingKey 를 서버에 저장
+
+     어디에 쓰나 : 홈페이지 «월 관리비»와 채널 «정기 콘텐츠» 월 요금처럼 매달 빠져나가는 것.
+
+     🔴 빌링키는 «카드를 대신하는 열쇠»입니다. 이것만 있으면 금액을 정해 마음대로 긁을 수 있습니다.
+        · 화면(브라우저)에 저장하지 마세요. 받자마자 서버로 보내고 화면에서는 버립니다.
+        · 서버에서도 암호화해 두고, 접근 기록을 남깁니다.
+     🔴 정기결제는 «동의»가 따로 필요합니다. 결제 전에 아래를 화면에 보여주고 체크를 받아야 합니다.
+        — 매달 빠져나가는 금액 · 결제일 · 언제까지 · 해지하는 방법
+        약관 제7조에 「최소 3개월 뒤 납부일 7일 전까지 알리면 해지」가 있으니 그 문장을 그대로 씁니다. */
+  async function issueBillingKey(opt) {
+    if (!window.PortOne) { alert('결제 모듈을 불러오지 못했습니다.'); return { ok:false }; }
+
+    var res = await window.PortOne.requestIssueBillingKey({
+      storeId: STORE_ID,
+      channelKey: CHANNEL_KEY,
+      billingKeyMethod: 'CARD',
+      issueId: makeOrderId('BK'),
+      issueName: opt && opt.name ? opt.name : '인투마케팅 정기결제 카드 등록',
+      customer: {
+        fullName: opt && opt.buyer && opt.buyer.name,
+        phoneNumber: opt && opt.buyer && opt.buyer.tel,
+        email: opt && opt.buyer && opt.buyer.email
+      },
+      redirectUrl: location.origin + '/payment/done.html'
+    });
+
+    if (res.code !== undefined) { return { ok:false, reason: res.message }; }
+
+    /* 서버로 넘겨 저장합니다. 🔴 화면에는 남기지 않습니다. */
+    var sv = await fetch('/api/pay/billing-key', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ billingKey: res.billingKey, orderRef: opt && opt.orderRef })
+    }).then(function(r){return r.json();}).catch(function(){return {ok:false};});
+
+    return sv.ok ? { ok:true } : { ok:false, reason:'save-failed' };
+  }
+
+  return { requestPay: requestPay, verifyIdentity: verifyIdentity,
+           issueBillingKey: issueBillingKey, makeOrderId: makeOrderId };
 })();
 
 /* ══════════════════════════════════════════════════════════════════
@@ -101,4 +176,18 @@ var PAY = (function () {
 
    ※ 웹훅(결제 결과 자동 통보)도 같이 받아 두는 것이 안전합니다.
       고객이 결제 직후 창을 닫아 버리면 위 3번이 실행되지 않기 때문입니다.
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════════════
+   5) 매달 긁는 것은 «서버»가 합니다 — 화면 코드로 하지 않습니다
+
+   POST https://api.portone.io/payments/{새 주문번호}/billing-key
+   헤더 Authorization: PortOne {V2 API 시크릿}
+   본문 { billingKey, orderName, customer, amount:{ total: 금액 }, currency:'KRW' }
+
+   · 매달 정해진 날에 서버가 돌면서 긁습니다(스케줄러).
+   · 실패하면(한도 초과·카드 정지) 고객에게 알리고, 정해진 횟수만 다시 시도합니다.
+   · 해지 요청이 오면 빌링키를 지웁니다 — 지우지 않으면 계속 빠져나갑니다.
+
+   🔴 V2 API 시크릿은 서버에만 둡니다. 이 파일 같은 «화면 코드»에 절대 쓰지 마세요.
    ══════════════════════════════════════════════════════════════════ */
