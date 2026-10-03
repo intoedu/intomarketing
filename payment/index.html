@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>결제 · 취소 · 환불 안내 — 인투마케팅</title>
+<meta name="description" content="인투마케팅 서비스의 결제 수단, 결제 시점, 취소 및 환불 기준 안내">
+<link rel="icon" href="../hakwon/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../hakwon/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="icon" href="../hakwon/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../hakwon/apple-touch-icon.png">
+<meta name="theme-color" content="#12294D">
+<style>
+  /* 대표 페이지(/)·학원지원센터(/hakwon/)와 같은 색·글꼴 — 같은 회사로 보이게 */
+  :root{
+    --paper:#FBFCFE; --surface:#FFFFFF; --surface-2:#F3F6FB;
+    --ink:#0E1B33; --muted:#56657F; --line:#E2E8F2;
+    --brand:#16305C; --accent:#2E5FE8; --gold:#B67A22;
+    --band-bg:#12294D; --band-text:#DCE6F8;
+    --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--paper:#0A101E;--surface:#101B30;--surface-2:#16233C;--ink:#E7EDF7;
+          --muted:#9BAAC3;--line:#22314C;--brand:#7CA0EA;--accent:#6E93FF;--gold:#E7B24A;}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);
+       line-height:1.8;-webkit-font-smoothing:antialiased;font-size:16px}
+  a{color:var(--accent)}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+
+  .top{background:var(--band-bg);color:var(--band-text);padding:38px 0 34px}
+  .mk{display:inline-flex;align-items:center;gap:10px;margin-bottom:18px;text-decoration:none;color:inherit}
+  .mk i{width:32px;height:32px;border-radius:9px;background:var(--gold);color:#12294D;
+        display:grid;place-items:center;font-weight:800;font-size:12px;font-style:normal}
+  .mk b{font-size:13px;letter-spacing:.02em;font-weight:700}
+  h1{margin:0 0 8px;font-size:26px;line-height:1.35;letter-spacing:-.01em;word-break:keep-all}
+  .eff{margin:0;color:#B9CBE8;font-size:14px}
+
+  main{padding:36px 0 8px}
+  .lead{color:var(--muted);font-size:15px;word-break:keep-all;margin:0 0 30px}
+
+  nav.toc{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+          padding:16px 20px;margin-bottom:34px}
+  nav.toc b{display:block;font-size:13px;color:var(--muted);margin-bottom:8px;font-weight:700}
+  nav.toc ol{margin:0;padding-left:20px;columns:2;column-gap:24px;font-size:14px}
+  nav.toc li{margin:3px 0;break-inside:avoid}
+  nav.toc a{text-decoration:none}
+  nav.toc a:hover{text-decoration:underline}
+  @media(max-width:560px){ nav.toc ol{columns:1} }
+
+  h2{font-size:17px;margin:36px 0 10px;letter-spacing:-.01em;scroll-margin-top:16px;word-break:keep-all}
+  h3{font-size:15px;margin:22px 0 6px;color:var(--ink)}
+  p{margin:0 0 12px;word-break:keep-all}
+  ul,ol{margin:0 0 12px;padding-left:22px}
+  li{margin:4px 0;word-break:keep-all}
+  strong{font-weight:700}
+
+  .callout{background:var(--surface-2);border-left:3px solid var(--accent);
+           padding:14px 18px;margin:14px 0 18px;font-size:14.5px;border-radius:0 8px 8px 0}
+  .callout p:last-child{margin-bottom:0}
+
+  .tbl{overflow-x:auto;margin:0 0 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+  table{border-collapse:collapse;width:100%;min-width:460px;font-size:14.5px}
+  th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{background:var(--surface-2);font-size:13.5px;white-space:nowrap}
+  tbody tr:last-child td{border-bottom:none}
+
+  /* 개정 안내 칸 — 약관 제3조 「적용일자 · 개정사유 공지」 */
+  .notice{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--gold);
+          border-radius:12px;padding:20px 22px;margin:0 0 30px;font-size:14.5px}
+  .notice h2{margin:0 0 12px;font-size:16px}
+  .notice dl{margin:0 0 12px;display:grid;grid-template-columns:max-content 1fr;gap:4px 16px}
+  .notice dt{color:var(--muted);white-space:nowrap}
+  .notice dd{margin:0;word-break:keep-all}
+  .notice .sub{display:block;margin:4px 0 4px;font-size:13.5px}
+  .notice ol{margin-bottom:10px}
+  .notice ul.dot{margin-bottom:10px;color:var(--muted)}
+  .notice .ask{margin:0;color:var(--muted);font-size:13.5px}
+  @media(max-width:480px){ .notice dl{grid-template-columns:1fr;gap:0} .notice dd{margin-bottom:6px} }
+  ul.ga{list-style:none;padding-left:4px;margin:6px 0 4px}
+  nav.toc li.nonum{list-style:none;margin-left:-20px}
+
+  .biz{background:var(--surface);border:2px solid var(--brand);border-radius:12px;
+       padding:22px 24px;margin:38px 0 8px}
+  .biz h2{margin:0 0 14px;font-size:17px}
+  .biz dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:8px 20px;font-size:15px}
+  .biz dt{color:var(--muted);white-space:nowrap}
+  .biz dd{margin:0;word-break:break-all}
+  @media(max-width:480px){ .biz dl{grid-template-columns:1fr;gap:2px 0}
+                           .biz dd{margin-bottom:8px} }
+
+  footer{border-top:1px solid var(--line);margin-top:34px;padding:24px 0 60px;
+         color:var(--muted);font-size:13px;line-height:1.9}
+  footer a{color:var(--muted)}
+  footer .nav a{margin-right:14px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mk" href="../"><i>IM</i><b>인투마케팅</b></a>
+    <h1>결제 · 취소 · 환불 안내</h1>
+    <p class="eff">2026년 10월 3일 기준 · 환불 기준은 <a href="../terms/#t7" style="color:#DCE6F8">이용약관 제7조</a>를 따릅니다</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="lead">인투마케팅은 블로그·리뷰 홍보, 홈페이지 제작, 채널 개설, 디자인, 영상 제작 서비스를 제공합니다.
+     모든 금액은 <strong>부가세 포함</strong>이며, 최종 금액은 신청 내용에 따라 <strong>견적서</strong>로 안내합니다.</p>
+
+  <nav class="toc">
+    <b>차례</b>
+    <ol>
+      <li><a href="#p1">결제 수단</a></li>
+      <li><a href="#p2">서비스와 가격</a></li>
+      <li><a href="#p3">서비스별 결제 시점</a></li>
+      <li><a href="#p4">취소 · 환불 기준</a></li>
+      <li><a href="#p5">환불 절차와 기간</a></li>
+      <li><a href="#p6">문의</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="p1">1. 결제 수단</h2>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>수단</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td>계좌 이체</td><td>견적서를 보내드린 뒤 담당자가 입금 계좌를 안내합니다.</td></tr>
+        <tr><td>신용 · 체크카드<br>간편결제</td><td>준비 중입니다. 사용할 수 있게 되면 이 페이지에 안내합니다.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>결제는 <strong>견적서를 확인하신 뒤</strong> 진행합니다. 견적서에는 작업 범위, 금액, 기간,
+     그리고 그 서비스의 환불 기준이 적혀 있습니다.</p>
+
+  <h2 id="p2">2. 서비스와 가격</h2>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>서비스</th><th>기본 금액 (부가세 포함)</th><th>자세히</th></tr></thead>
+      <tbody>
+        <tr><td>블로그 · 리뷰 홍보</td><td>편당 <strong>10,000원</strong> · 1회 주문 10편 ~ 100편</td>
+            <td><a href="../#blog">보기</a></td></tr>
+        <tr><td>홈페이지 제작</td>
+            <td>1단계 제작비 150,000원 + 월 50,000원<br>2단계 제작비 400,000원 + 월 80,000원<br>3단계 견적 후 안내 · 24개월 약정 시 제작비 0원</td>
+            <td><a href="../#web">보기</a></td></tr>
+        <tr><td>SNS 채널 제작</td><td>채널 수 · 계정 보유 여부 · 지도 등록 개수에 따라 상담 후 안내</td>
+            <td><a href="../#sns">보기</a></td></tr>
+        <tr><td>디자인</td><td>로고 66,000원 · 브로셔 110,000원 · 전단지 66,000원 · 포스터 110,000원<br>웹배너 · 썸네일 각 33,000원 · 카드뉴스 장당 11,000원</td>
+            <td><a href="../#design">보기</a></td></tr>
+        <tr><td>영상 제작</td><td>숏폼 27,500원 ~ · 홍보 영상 165,000원 ~<br>패키지 스탠다드 693,000원 · 프리미엄 1,149,500원</td>
+            <td><a href="../#video">보기</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>표의 금액은 <strong>기본 금액</strong>입니다. 제작물의 양, 촬영 시간, 수정 횟수 등에 따라 달라지며
+     최종 금액은 견적서로 알려드립니다.</p>
+
+  <h2 id="p3">3. 서비스별 결제 시점</h2>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>서비스</th><th>결제 시점</th></tr></thead>
+      <tbody>
+        <tr><td>블로그 · 리뷰</td><td>주문 금액 <strong>전액 선입금</strong>. 입금을 확인한 뒤 자료를 받고 의뢰를 시작합니다.</td></tr>
+        <tr><td>홈페이지 제작</td><td>제작비는 <strong>계약할 때</strong>, 월 관리비는 <strong>오픈일부터 매월</strong> 자동결제로 청구합니다.</td></tr>
+        <tr><td>디자인</td><td><strong>계약금 50%</strong>를 받고 작업을 시작하며, <strong>잔금 50%</strong>는 최종 시안을 확인하신 뒤 원본 파일을 드리기 전에 받습니다.</td></tr>
+        <tr><td>영상 제작</td><td>30만 원 이하는 계약이 정해지면 <strong>100% 선입금</strong>, 30만 원 초과는 <strong>선금 50% + 납품할 때 잔금 50%</strong>입니다.</td></tr>
+        <tr><td>SNS 채널 제작</td><td>세팅은 작업 전 결제, 정기 콘텐츠는 매월 결제입니다. 상담 때 안내합니다.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="p4">4. 취소 · 환불 기준</h2>
+  <div class="callout">
+    <p>아래 기준은 <strong>시행 중인 <a href="../terms/#t7">이용약관 제7조</a></strong>를 그대로 옮긴 것입니다.
+       견적서에 서비스별 세부 기준을 적을 수 있으나, <strong>약관보다 고객에게 불리한 기준을 정할 수는 없습니다.</strong></p>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>서비스</th><th>환불</th></tr></thead>
+      <tbody>
+        <tr><td>블로그 · 리뷰</td>
+            <td>담당자가 정해지지 않았거나 <strong>작성 중인 게시물은 환불</strong>합니다.
+                <strong>원고가 제출된 이후의 게시물은 환불하지 않습니다.</strong><br>
+                환불 금액은 실제로 내신 금액을 주문 편수로 나눈 단가로 계산합니다.</td></tr>
+        <tr><td>홈페이지 제작비<br>채널 개설 · 디자인 · 영상</td>
+            <td><strong>의뢰 시작일 전에는 전액 환불</strong>하고, 의뢰 시작일부터는 환불하지 않습니다.<br>
+                다만 이미 지출한 외부 비용(촬영 인력 · 장비 대여 · 인쇄 · 도메인 등)은 환불 금액에서 뺍니다.</td></tr>
+        <tr><td>홈페이지 월 관리비<br>약정 월 요금</td>
+            <td>환불하지 않습니다.<br>
+                <strong>제작비 + 월 관리비</strong> — 최소 계약 기간 3개월이 지난 뒤, 납부일 7일 전까지 알리시면 다음 납부일부터 해지됩니다.<br>
+                <strong>약정</strong> — 약정 기간 중에는 해지할 수 없습니다.</td></tr>
+        <tr><td>회사 잘못일 때</td>
+            <td>회사의 귀책사유로 서비스를 제공하지 못한 경우 <strong>제공하지 못한 부분을 환불</strong>합니다.<br>
+                블로그 · 리뷰를 주문 마감일까지 발행하지 못한 경우에는 못 올린 편수만큼 환불하고, 남은 글도 제작해 발행합니다.</td></tr>
+        <tr><td>환불 사유가 아닌 것</td>
+            <td>검색 순위 등 <strong>플랫폼의 결과</strong>는 환불 사유가 되지 않습니다.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>블로그 · 리뷰 주문은 주문 마감일이 지나면 자동으로 이어지지 않으므로 따로 해지를 알리실 필요가 없습니다.</p>
+
+  <h2 id="p5">5. 환불 절차와 기간</h2>
+  <ol>
+    <li>전화 또는 이메일로 취소 · 환불을 요청하십시오.</li>
+    <li>담당자가 진행 단계를 확인하고 환불 금액과 계산 방법을 안내합니다.</li>
+    <li><strong>환불 사유를 확인한 날부터 7영업일 안에</strong>, 결제하신 계좌로 입금합니다.</li>
+  </ol>
+  <p>송금 수수료 등 실비가 있는 경우 환불 금액에서 뺄 수 있으며, 그 내역을 함께 알려드립니다.</p>
+
+  <h2 id="p6">6. 문의</h2>
+  <p>전화 <strong>010-7318-1790</strong> · 이메일 <strong>info@intomarketing.co.kr</strong><br>
+     상담 시간 평일 09:00 ~ 18:00 (점심 12:00 ~ 13:00 · 토·일·공휴일 휴무)</p>
+
+  <!-- 🔴 카카오 비즈니스·PG 심사가 사업자 정보 노출을 요구합니다. 지우지 마세요. -->
+  <section class="biz">
+    <h2>사업자 정보</h2>
+    <dl>
+      <dt>상호</dt><dd>인투마케팅</dd>
+      <dt>대표자</dt><dd>양회광</dd>
+      <dt>사업자등록번호</dt><dd>306-24-53380</dd>
+      <dt>통신판매업 신고번호</dt><dd>2026-대전유성-1694</dd>
+      <dt>주소</dt><dd>대전광역시 유성구 은구비남로33번길 13-8, 3397호 (지족동, 양지빌딩)</dd>
+      <dt>전화</dt><dd>010-7318-1790</dd>
+      <dt>이메일</dt><dd>info@intomarketing.co.kr</dd>
+      <dt>카카오톡 채널</dt><dd>ESC 학원지원</dd>
+    </dl>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="nav">
+    <a href="../">인투마케팅</a><a href="../terms/">이용약관</a><a href="../privacy/">개인정보처리방침</a><a href="../hakwon/">학원지원센터</a>
+  </div>
+  © 2026 인투마케팅 (INTO MARKETING)
+</footer>
+</body>
+</html>
