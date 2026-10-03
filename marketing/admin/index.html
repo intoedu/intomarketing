@@ -1404,7 +1404,21 @@
         +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="openQuote()">✏️ 편집</button>'
         +'<button class="btn btn-primary" style="padding:7px 13px" type="button" onclick="savePdf(this)">💾 PDF 받기</button>'
         +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="previewQuote()">📄 미리보기</button>'
-        +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="previewQuote()">✉️ 메일 보내기</button></span>';
+        +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="previewQuote()">✉️ 메일 보내기</button>'
+        +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="payLink(this)">🔗 '
+          +(r.quote_key?'결제 링크 복사':'결제 링크 만들기')+'</button></span>'
+        +(NEEDS_SIGN.indexOf(r.kind)>=0
+           ? '<b style="flex-basis:100%;font-size:.84rem" class="'+(r.contract_signed_at?'':'warn')+'">'
+             +(r.contract_signed_at
+                ? '✓ 계약 서명 받음 · '+fdate(r.contract_signed_at)
+                : '🔴 계약 서명을 아직 안 받았습니다 — 인투오피스로 서명을 먼저 받으세요')
+             +' <button class="btn btn-ghost" style="padding:4px 10px;font-size:.78rem" type="button" '
+             +'onclick="markSigned()">'+(r.contract_signed_at?'기록 지우기':'서명 받았다고 기록')+'</button></b>'
+           : '')
+        +(r.pay_status==='paid'
+           ? '<b style="flex-basis:100%;color:#1B5E34;font-size:.84rem">✓ 카드 결제 완료 · '
+             +won(r.pay_amount)+' · '+fdate(r.pay_at)+(r.agree_name?' · 확인 '+esc(r.agree_name):'')+'</b>'
+           : (r.quote_key?'<b style="flex-basis:100%;font-size:.8rem" class="muted">결제 링크가 만들어져 있습니다. 고객이 열면 카드로 결제할 수 있습니다.</b>':''));
     }else{
       el.innerHTML='<b>아직 견적서를 만들지 않았습니다.</b>'
         +'<span style="margin-left:auto"><button class="btn btn-primary" style="padding:7px 14px" type="button" onclick="openQuote()">📋 견적서 만들기</button></span>';
@@ -1928,6 +1942,45 @@
     $('q_flow').value=t.flow; $('q_inc').value=t.include;
     $('q_exc').value=t.exclude; $('q_ref').value=t.refund;
     toast('기본 문구를 넣었습니다');
+  };
+
+  /* 🔴 계약 서명을 먼저 받아야 하는 갈래 (2026-10-03 이은총 님).
+        홈페이지는 약정·월 관리비가, SNS 는 정기 관리가 있어 계약서가 필요합니다.
+        인투오피스에 서명 요청 기능이 없어 담당자가 «두 번» 보냅니다 — ① 계약 서명 ② 결제 링크. */
+  var NEEDS_SIGN=['홈페이지','SNS'];
+
+  window.markSigned=async function(){
+    var r=CURROW; if(!r)return;
+    var v=r.contract_signed_at?null:new Date().toISOString();
+    if(!v && !confirm('계약 서명 기록을 지울까요?'))return;
+    var up=await sb.from('requests').update({contract_signed_at:v}).eq('id',r.id);
+    if(up.error){toast('기록하지 못했습니다');return;}
+    r.contract_signed_at=v; renderQuoteBox();
+    toast(v?'계약 서명을 기록했습니다':'기록을 지웠습니다');
+  };
+
+  /* 결제 링크 — 고객이 견적서를 보고 카드로 결제하는 주소.
+     🔴 열쇠는 추측할 수 없게 길어야 합니다. 짧으면 남의 견적서가 열립니다. */
+  window.payLink=async function(btn){
+    var r=CURROW; if(!r||!r.quote_no){toast('견적서를 먼저 저장해 주세요');return;}
+    if(NEEDS_SIGN.indexOf(r.kind)>=0 && !r.contract_signed_at){
+      if(!confirm('이 건은 «계약 서명»을 먼저 받아야 합니다.\n\n'
+        +'인투오피스로 계약서에 서명을 받으셨습니까?\n'
+        +'받으셨으면 [확인]을 누르면 서명 기록을 남기고 링크를 만듭니다.'))return;
+      await markSigned();
+    }
+    var key=r.quote_key;
+    if(!key){
+      var a=new Uint8Array(24); crypto.getRandomValues(a);
+      key='tk_'+Array.from(a).map(function(x){return x.toString(16).padStart(2,'0');}).join('');
+      var up=await sb.from('requests')
+        .update({quote_key:key,quote_key_at:new Date().toISOString()}).eq('id',r.id);
+      if(up.error){toast('링크를 만들지 못했습니다');return;}
+      r.quote_key=key; renderQuoteBox();
+    }
+    var url=location.origin+'/quote/?k='+key;
+    try{ await navigator.clipboard.writeText(url); toast('결제 링크를 복사했습니다'); }
+    catch(e){ window.prompt('아래 주소를 복사해 주십시오',url); }
   };
 
   window.saveQuote=async function(preview){

@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>견적서 — 인투마케팅</title>
+<link rel="icon" href="../hakwon/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../hakwon/apple-touch-icon.png">
+<meta name="theme-color" content="#12294D">
+<style>
+  /* 대표 페이지(/)·학원지원센터(/hakwon/)와 같은 색·글꼴 — 같은 회사로 보이게 */
+  :root{
+    --paper:#FBFCFE; --surface:#FFFFFF; --surface-2:#F3F6FB;
+    --ink:#0E1B33; --muted:#56657F; --line:#E2E8F2;
+    --brand:#16305C; --accent:#2E5FE8; --gold:#B67A22;
+    --band-bg:#12294D; --band-text:#DCE6F8;
+    --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--paper:#0A101E;--surface:#101B30;--surface-2:#16233C;--ink:#E7EDF7;
+          --muted:#9BAAC3;--line:#22314C;--brand:#7CA0EA;--accent:#6E93FF;--gold:#E7B24A;}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);
+       line-height:1.8;-webkit-font-smoothing:antialiased;font-size:16px}
+  a{color:var(--accent)}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+
+  .top{background:var(--band-bg);color:var(--band-text);padding:38px 0 34px}
+  .mk{display:inline-flex;align-items:center;gap:10px;margin-bottom:18px;text-decoration:none;color:inherit}
+  .mk i{width:32px;height:32px;border-radius:9px;background:var(--gold);color:#12294D;
+        display:grid;place-items:center;font-weight:800;font-size:12px;font-style:normal}
+  .mk b{font-size:13px;letter-spacing:.02em;font-weight:700}
+  h1{margin:0 0 8px;font-size:26px;line-height:1.35;letter-spacing:-.01em;word-break:keep-all}
+  .eff{margin:0;color:#B9CBE8;font-size:14px}
+
+  main{padding:36px 0 8px}
+  .lead{color:var(--muted);font-size:15px;word-break:keep-all;margin:0 0 30px}
+
+  nav.toc{background:var(--surface);border:1px solid var(--line);border-radius:12px;
+          padding:16px 20px;margin-bottom:34px}
+  nav.toc b{display:block;font-size:13px;color:var(--muted);margin-bottom:8px;font-weight:700}
+  nav.toc ol{margin:0;padding-left:20px;columns:2;column-gap:24px;font-size:14px}
+  nav.toc li{margin:3px 0;break-inside:avoid}
+  nav.toc a{text-decoration:none}
+  nav.toc a:hover{text-decoration:underline}
+  @media(max-width:560px){ nav.toc ol{columns:1} }
+
+  h2{font-size:17px;margin:36px 0 10px;letter-spacing:-.01em;scroll-margin-top:16px;word-break:keep-all}
+  h3{font-size:15px;margin:22px 0 6px;color:var(--ink)}
+  p{margin:0 0 12px;word-break:keep-all}
+  ul,ol{margin:0 0 12px;padding-left:22px}
+  li{margin:4px 0;word-break:keep-all}
+  strong{font-weight:700}
+
+  .callout{background:var(--surface-2);border-left:3px solid var(--accent);
+           padding:14px 18px;margin:14px 0 18px;font-size:14.5px;border-radius:0 8px 8px 0}
+  .callout p:last-child{margin-bottom:0}
+
+  .tbl{overflow-x:auto;margin:0 0 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+  table{border-collapse:collapse;width:100%;min-width:460px;font-size:14.5px}
+  th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{background:var(--surface-2);font-size:13.5px;white-space:nowrap}
+  tbody tr:last-child td{border-bottom:none}
+
+  /* 개정 안내 칸 — 약관 제3조 「적용일자 · 개정사유 공지」 */
+  .notice{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--gold);
+          border-radius:12px;padding:20px 22px;margin:0 0 30px;font-size:14.5px}
+  .notice h2{margin:0 0 12px;font-size:16px}
+  .notice dl{margin:0 0 12px;display:grid;grid-template-columns:max-content 1fr;gap:4px 16px}
+  .notice dt{color:var(--muted);white-space:nowrap}
+  .notice dd{margin:0;word-break:keep-all}
+  .notice .sub{display:block;margin:4px 0 4px;font-size:13.5px}
+  .notice ol{margin-bottom:10px}
+  .notice ul.dot{margin-bottom:10px;color:var(--muted)}
+  .notice .ask{margin:0;color:var(--muted);font-size:13.5px}
+  @media(max-width:480px){ .notice dl{grid-template-columns:1fr;gap:0} .notice dd{margin-bottom:6px} }
+  ul.ga{list-style:none;padding-left:4px;margin:6px 0 4px}
+  nav.toc li.nonum{list-style:none;margin-left:-20px}
+
+  .biz{background:var(--surface);border:2px solid var(--brand);border-radius:12px;
+       padding:22px 24px;margin:38px 0 8px}
+  .biz h2{margin:0 0 14px;font-size:17px}
+  .biz dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:8px 20px;font-size:15px}
+  .biz dt{color:var(--muted);white-space:nowrap}
+  .biz dd{margin:0;word-break:break-all}
+  @media(max-width:480px){ .biz dl{grid-template-columns:1fr;gap:2px 0}
+                           .biz dd{margin-bottom:8px} }
+
+  footer{border-top:1px solid var(--line);margin-top:34px;padding:24px 0 60px;
+         color:var(--muted);font-size:13px;line-height:1.9}
+  footer a{color:var(--muted)}
+  footer .nav a{margin-right:14px}
+
+  /* 견적서 */
+  .q{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px 24px;margin:0 0 20px}
+  .qhead{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:baseline;justify-content:space-between;
+         border-bottom:2px solid var(--brand);padding-bottom:14px;margin-bottom:18px}
+  .qhead h2{margin:0;font-size:20px}
+  .qhead .no{color:var(--muted);font-size:13.5px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:620px){.two{grid-template-columns:1fr}}
+  .box{background:var(--surface-2);border-radius:10px;padding:14px 16px;font-size:14px}
+  .box b{display:block;font-size:12.5px;color:var(--muted);margin-bottom:6px;font-weight:700}
+  .box div{margin:2px 0;word-break:break-all}
+  .sum{display:flex;flex-wrap:wrap;gap:8px 28px;align-items:baseline;justify-content:flex-end;
+       border-top:2px solid var(--line);margin-top:14px;padding-top:14px}
+  .sum .k{color:var(--muted);font-size:13.5px}
+  .sum .v{font-size:22px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .sum .m{font-size:16px;font-weight:700;color:var(--muted)}
+  .pre{white-space:pre-wrap;font-size:14px;color:var(--muted);line-height:1.8;margin:0}
+  .agree{display:flex;gap:12px;align-items:flex-start;background:var(--surface-2);
+         border-radius:10px;padding:16px 18px;margin:0 0 14px;font-size:14.5px}
+  .agree input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--accent);flex:none}
+  .nm{width:100%;max-width:240px;padding:11px 13px;border:1px solid var(--line);border-radius:9px;
+      font-size:15px;font-family:inherit;background:var(--surface);color:var(--ink);margin:0 0 14px}
+  .pay{display:flex;flex-wrap:wrap;gap:10px}
+  .bt{padding:15px 28px;border:0;border-radius:11px;font-size:16px;font-weight:800;cursor:pointer;
+      font-family:inherit;transition:.15s}
+  .bt.main{background:var(--accent);color:#fff}
+  .bt.main:disabled{background:var(--line);color:var(--muted);cursor:not-allowed}
+  .bt.sub{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+  .msg{margin:14px 0 0;padding:14px 16px;border-radius:10px;font-size:14.5px;display:none}
+  .msg.on{display:block}
+  .msg.err{background:#FDECEC;color:#9B1C1C}
+  .msg.ok{background:#E8F5EC;color:#1B5E34}
+  @media (prefers-color-scheme:dark){.msg.err{background:#3A1B1B;color:#F6B5B5}.msg.ok{background:#16301F;color:#A8E0BE}}
+  .done{text-align:center;padding:40px 20px}
+  .done .big{font-size:40px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.portone.io/v2/browser-sdk.js"></script>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mk" href="../"><i>IM</i><b>인투마케팅</b></a>
+    <h1>견적서</h1>
+    <p class="eff" id="eff">불러오는 중…</p>
+  </div>
+</header>
+
+<main class="wrap" id="main"><p class="lead">견적서를 불러오는 중입니다…</p></main>
+
+<footer class="wrap">
+  <div class="nav">
+    <a href="../">인투마케팅</a><a href="../payment/">결제 · 환불 안내</a><a href="../terms/">이용약관</a>
+  </div>
+  © 2026 인투마케팅 (INTO MARKETING) · 문의 010-7318-1790
+</footer>
+
+<script>
+/* ──────────────────────────────────────────────────────────────
+   견적서 링크 화면
+   🔴 금액은 «절대» 주소나 화면에서 가져오지 않습니다.
+      quote_by_key 가 DB 에서 계산해 준 once_due 만 씁니다.
+   🔴 결제가 끝나도 바로 「완료」로 치지 않습니다.
+      pay-verify(서버)가 포트원에 다시 물어보고 금액을 맞춰 본 뒤에만 완료입니다.
+   ────────────────────────────────────────────────────────────── */
+var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
+var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
+var sb=window.supabase.createClient(SB_URL,SB_KEY);
+
+/* 🔴🔴 카드 결제를 열지 말지 — PG 심사가 끝나고 «실결제 키»를 넣은 뒤에 true 로 바꾸십시오.
+      false 인 동안에는 결제 버튼이 아예 나오지 않고 「계좌 안내」만 보입니다.
+      테스트 키인 채로 열어 두면, 진짜 고객이 결제했는데 돈이 들어오지 않습니다. */
+var PG_LIVE    = false;
+
+/* 지금 값은 «테스트 키»입니다. 심사 통과 뒤 실결제 키로 바꾸고 위 PG_LIVE 를 true 로. */
+var PG_STORE   = 'store-1cf2e23e-c66a-4dfb-a69d-6f7465a81b21';
+var PG_CHANNEL = 'channel-key-5813589e-1dc7-4f36-8593-c669ed7dc907';
+
+var KEY=new URLSearchParams(location.search).get('k')||'';
+var ROW=null;
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function won(n){return Number(n||0).toLocaleString('ko-KR');}
+function dt(s){if(!s)return '';var d=new Date(s);
+  return d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일';}
+
+function fail(m){
+  $('eff').textContent='';
+  $('main').innerHTML='<div class="q"><p class="lead" style="margin:0">'+esc(m)+'</p>'
+    +'<p class="pre" style="margin-top:10px">문의 010-7318-1790 · info@intomarketing.co.kr</p></div>';
+}
+
+async function load(){
+  if(!KEY){return fail('주소가 올바르지 않습니다. 담당자가 보내 드린 링크로 들어와 주십시오.');}
+  var r=await sb.rpc('quote_by_key',{p_key:KEY});
+  if(r.error||!r.data||!r.data.length){
+    return fail('견적서를 찾을 수 없습니다. 링크가 바뀌었거나 삭제되었을 수 있습니다.');
+  }
+  ROW=r.data[0];
+  draw();
+}
+
+function itemRows(items){
+  var h='';
+  (items||[]).forEach(function(it){
+    var price=String(it.price||'').replace(/[^0-9]/g,'');
+    if(!it.name && !price) return;
+    h+='<tr><td>'+esc(it.name||'')+(it.cycle&&it.cycle!=='1회'
+          ?' <span style="color:var(--muted);font-size:12.5px">('+esc(it.cycle)+')</span>':'')+'</td>'
+      +'<td style="text-align:right;white-space:nowrap">'+esc(it.qty||'')+'</td>'
+      +'<td style="text-align:right;white-space:nowrap">'+(price?won(price)+'원':'')+'</td></tr>';
+  });
+  return h||'<tr><td colspan="3" style="color:var(--muted)">항목이 없습니다</td></tr>';
+}
+
+function draw(){
+  var q=ROW.quote||{}, to=q.to||{}, t=q.terms||{};
+  var paid=(ROW.pay_status==='paid');
+  $('eff').textContent='견적번호 '+(ROW.quote_no||'-')+' · 발행일 '+dt(ROW.quote_issued_at);
+
+  var h='';
+  if(paid){
+    h+='<div class="q done"><div class="big">✓</div><h2 style="margin:8px 0 6px">결제가 완료되었습니다</h2>'
+      +'<p class="pre">'+esc(dt(ROW.pay_at))+' · '+won(ROW.once_due)+'원<br>'
+      +'담당자가 곧 연락드립니다. 영수증이 필요하시면 말씀해 주십시오.</p></div>';
+  }
+
+  h+='<div class="q">'
+   +'<div class="qhead"><h2>'+esc(q.project||'견적서')+'</h2>'
+   +'<span class="no">견적번호 '+esc(ROW.quote_no||'-')+'</span></div>'
+   +'<div class="two">'
+     +'<div class="box"><b>공급자</b><div>인투마케팅</div><div>대표 양회광</div>'
+       +'<div>사업자등록번호 306-24-53380</div>'
+       +'<div>대전광역시 유성구 은구비남로33번길 13-8, 3397호</div>'
+       +'<div>010-7318-1790 · info@intomarketing.co.kr</div></div>'
+     +'<div class="box"><b>공급받는 분</b><div>'+esc(to.company||ROW.academy_name||'')+'</div>'
+       +(to.manager?'<div>'+esc(to.manager)+'</div>':'')
+       +(to.biz_no?'<div>사업자등록번호 '+esc(to.biz_no)+'</div>':'')
+       +(to.addr?'<div>'+esc(to.addr)+'</div>':'')
+       +(to.phone?'<div>'+esc(to.phone)+'</div>':'')
+       +(to.email?'<div>'+esc(to.email)+'</div>':'')+'</div>'
+   +'</div>'
+
+   +'<div class="tbl" style="margin-top:18px"><table><thead><tr>'
+     +'<th>항목</th><th style="text-align:right">수량</th><th style="text-align:right">금액</th>'
+     +'</tr></thead><tbody>'+itemRows(q.items)+'</tbody></table></div>'
+
+   +'<div class="sum">'
+     +(ROW.month_due?'<span><span class="k">매월 </span><span class="m">'+won(ROW.month_due)+'원</span></span>':'')
+     +(ROW.year_due?'<span><span class="k">매년 </span><span class="m">'+won(ROW.year_due)+'원</span></span>':'')
+     +'<span><span class="k">지금 결제할 금액 </span><span class="v">'+won(ROW.once_due)+'원</span></span>'
+   +'</div>'
+   +'<p class="pre" style="margin-top:10px">모든 금액은 부가세 포함입니다.'
+   +(ROW.month_due?' 매월 내는 항목은 카드 등록이 필요해 담당자가 따로 안내드립니다.':'')+'</p>'
+   +'</div>';
+
+  /* 조건들 */
+  function sec(title,txt){ return txt?'<div class="q"><h2 style="margin:0 0 10px;font-size:16px">'+title+'</h2>'
+      +'<p class="pre">'+esc(txt)+'</p></div>':''; }
+  h+=sec('포함되는 것',t.include)+sec('포함되지 않는 것',t.exclude)
+    +sec('진행 순서',t.flow)+sec('취소 · 환불 기준',t.refund);
+  h+='<p class="pre" style="margin:-6px 0 20px">환불 기준은 <a href="../terms/#t7">이용약관 제7조</a>를 따릅니다. '
+    +'견적서가 약관보다 불리한 기준을 정할 수는 없습니다. '
+    +'<a href="../payment/">결제 · 환불 안내</a></p>';
+
+  if(!paid){
+    if(ROW.expired){
+      h+='<div class="q"><p class="lead" style="margin:0">이 견적서는 <b>유효기간이 지났습니다.</b><br>'
+        +'담당자에게 새 견적서를 요청해 주십시오. 010-7318-1790</p></div>';
+    }else if(!ROW.once_due){
+      h+='<div class="q"><p class="lead" style="margin:0">지금 결제할 금액이 없습니다. 담당자에게 문의해 주십시오.</p></div>';
+    }else if(!PG_LIVE){
+      h+='<div class="q"><h2 style="margin:0 0 10px;font-size:16px">결제</h2>'
+        +'<p class="pre">카드 결제는 준비 중입니다. <b>계좌 이체</b>로 진행해 주십시오 — '
+        +'담당자가 입금 계좌를 안내해 드립니다. 010-7318-1790</p>'
+        +'<div class="pay" style="margin-top:14px">'
+        +'<button class="bt sub" id="pr" type="button">인쇄 · PDF로 저장</button></div></div>';
+    }else{
+      h+='<div class="q">'
+        +'<h2 style="margin:0 0 14px;font-size:16px">결제</h2>'
+        +'<label class="agree"><input type="checkbox" id="ag">'
+          +'<span>위 견적 내용과 <b>취소 · 환불 기준</b>을 확인했습니다. '
+          +'<b>'+won(ROW.once_due)+'원</b>을 결제합니다.</span></label>'
+        +'<input class="nm" id="nm" placeholder="확인하신 분 성함" autocomplete="name">'
+        +'<div class="pay">'
+          +'<button class="bt main" id="go" disabled>카드로 '+won(ROW.once_due)+'원 결제하기</button>'
+          +'<button class="bt sub" id="pr" type="button">인쇄 · PDF로 저장</button>'
+        +'</div>'
+        +'<p class="pre" style="margin-top:12px">계좌 이체를 원하시면 담당자에게 말씀해 주십시오. '
+        +'결제 수단과 시점은 <a href="../payment/">결제 · 환불 안내</a>에 있습니다.</p>'
+        +'<div class="msg" id="ms"></div>'
+      +'</div>';
+    }
+  }
+  $('main').innerHTML=h;
+  if($('pr')) $('pr').onclick=function(){window.print();};
+  if($('go')) bind();
+}
+
+function bind(){
+  var ag=$('ag'), nm=$('nm'), go=$('go'), ms=$('ms');
+  function chk(){ go.disabled=!(ag.checked && nm.value.trim().length>=2); }
+  ag.addEventListener('change',chk); nm.addEventListener('input',chk);
+
+  function say(cls,txt){ ms.className='msg on '+cls; ms.textContent=txt; }
+
+  go.onclick=async function(){
+    go.disabled=true; say('','결제창을 여는 중입니다…');
+    /* 동의 기록을 먼저 남깁니다 (결제가 실패해도 남습니다) */
+    try{ await sb.rpc('quote_agree',{p_key:KEY,p_name:nm.value.trim()}); }catch(e){}
+
+    var payId='IM-'+ROW.quote_no+'-'+Date.now();
+    var res;
+    try{
+      res=await PortOne.requestPayment({
+        storeId:PG_STORE, channelKey:PG_CHANNEL,
+        paymentId:payId,
+        orderName:(ROW.quote&&ROW.quote.project)||'인투마케팅 서비스',
+        totalAmount:Number(ROW.once_due), currency:'CURRENCY_KRW', payMethod:'CARD',
+        customer:{fullName:nm.value.trim(),
+                  phoneNumber:(ROW.quote&&ROW.quote.to&&ROW.quote.to.phone)||'',
+                  email:(ROW.quote&&ROW.quote.to&&ROW.quote.to.email)||''},
+        redirectUrl:location.origin+location.pathname+'?k='+encodeURIComponent(KEY)
+      });
+    }catch(e){ go.disabled=false; return say('err','결제창을 열지 못했습니다. 잠시 뒤 다시 시도해 주십시오.'); }
+
+    if(res && res.code!==undefined){
+      go.disabled=false;
+      return say('err','결제가 완료되지 않았습니다. '+(res.message||''));
+    }
+
+    /* 🔴 여기서 끝이 아닙니다. 서버가 포트원에 다시 물어봐야 진짜 완료입니다. */
+    say('','결제를 확인하는 중입니다. 창을 닫지 말아 주십시오…');
+    var v;
+    try{
+      v=await fetch(SB_URL+'/functions/v1/pay-verify',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY},
+        body:JSON.stringify({key:KEY,paymentId:payId})
+      }).then(function(x){return x.json();});
+    }catch(e){ v={ok:false,msg:'확인 요청에 실패했습니다'}; }
+
+    if(v && v.ok){
+      say('ok','결제가 완료되었습니다. 담당자가 곧 연락드립니다.');
+      setTimeout(function(){location.reload();},1500);
+    }else{
+      go.disabled=false;
+      say('err',(v&&v.msg)||'결제 확인에 실패했습니다. 결제가 되었는지 담당자에게 확인해 주십시오. 010-7318-1790');
+    }
+  };
+}
+load();
+</script>
+</body>
+</html>
