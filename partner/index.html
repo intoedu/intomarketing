@@ -132,6 +132,12 @@
 
 <!-- ───────── 현황 ───────── -->
 <div id="app" class="hide">
+  <!-- 대표 계정이 명단에 없어도 화면을 볼 수 있게 열어 둡니다 (2026-10-04).
+       🔴 이 띠를 지우지 마세요. 없으면 실장님 화면과 구별이 안 됩니다. -->
+  <div id="previewBar" class="hide"
+       style="background:#12294D;color:#fff;padding:11px 16px;text-align:center;font-size:.88rem">
+    <b>관리자 미리보기</b> — 실장님이 보시는 화면 그대로입니다.
+    소개 건과 전용 링크는 실제 실장 계정에서만 나옵니다.</div>
   <div class="top">
     <b id="p_name">-</b><span id="p_code">-</span>
     <span style="margin-left:auto"><button class="btn btn-g btn-s" type="button" onclick="doLogout()">로그아웃</button></span>
@@ -158,8 +164,13 @@
         </table>
       </div>
       <div class="empty hide" id="noRows">아직 연결된 의뢰가 없습니다.<br>아래 전용 링크로 고객을 안내해 주십시오.</div>
+      <!-- 🔴 2026-10-04 — 커미션 산정 기준은 「판매가의 10%」로 확정되었습니다.
+           예전 문장은 「부가세를 뺀 금액(공급가액) 기준」이었는데 이는 사실과 다릅니다.
+           산정은 부가세 포함 판매가로 하고, 나온 «금액»을 공급가액으로 봅니다(제7조 세무 처리).
+           이 두 가지를 섞어 적으면 실장님이 10%와 11%를 두고 다투게 됩니다. -->
       <p class="sub" style="margin:14px 0 0">표시된 금액은 <b>고객이 결제한 금액(부가세 포함)</b>입니다.
-        커미션은 계약서 제7조에 따라 <b>부가세를 뺀 금액(공급가액)</b>을 기준으로 계산됩니다.</p>
+        커미션은 이 <b>판매가의 10%</b>로 계산합니다. 계산해서 나온 금액은 계약서 제7조에 따라
+        <b>원천징수 전 총액(공급가액)</b>으로 보며, 세금은 사업자 등록 여부에 따라 처리합니다.</p>
     </div>
 
     <div class="card">
@@ -169,7 +180,7 @@
       <p class="sub" style="margin:12px 0 0" id="p_pay"></p>
     </div>
 
-    <div class="card">
+    <div class="card" id="linkCard">
       <h2>내 전용 링크</h2>
       <p class="sub">이 링크로 들어온 고객은 <b>자동으로</b> 실장님 소개 건으로 기록됩니다.
         명함·카톡·SNS에 쓰시면 됩니다.</p>
@@ -252,11 +263,21 @@ async function boot(){
   ME=me.data;
 
   $('gate').classList.add('hide'); $('app').classList.remove('hide');
-  $('p_name').textContent=ME.name+' 실장님';
-  $('p_code').textContent='코드 '+ME.code+(ME.status==='active'?'':' · 활동 중지');
-  $('mailBtn').href='mailto:info@intomarketing.co.kr?subject='
-    +encodeURIComponent('['+ME.name+' 실장] 현황 문의');
-  renderLinks();
+
+  /* 대표 계정 미리보기 — 이름표도 전용 링크도 없습니다 */
+  if(ME.preview){
+    $('previewBar').classList.remove('hide');
+    $('p_name').textContent='관리자 미리보기';
+    $('p_code').textContent='실장 명단에 등록된 계정이 아닙니다';
+    $('linkCard').classList.add('hide');
+    $('mailBtn').href='mailto:info@intomarketing.co.kr';
+  }else{
+    $('p_name').textContent=ME.name+' 실장님';
+    $('p_code').textContent='코드 '+ME.code+(ME.status==='active'?'':' · 활동 중지');
+    $('mailBtn').href='mailto:info@intomarketing.co.kr?subject='
+      +encodeURIComponent('['+ME.name+' 실장] 현황 문의');
+    renderLinks();
+  }
   await Promise.all([loadRules(), loadOrders()]);
 }
 function show(id){
