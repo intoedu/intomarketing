@@ -59,7 +59,8 @@ main{padding:26px 0 70px}
       그러면 gap 이 안 먹어 체크박스와 글씨가 붙습니다. 이 줄을 지우지 마세요. */
 .fld label.chip{display:inline-flex;align-items:center;gap:11px;margin-bottom:0;font-size:14px}
 .fld label .hint{font-weight:500}
-.inp{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.inp{width:100%;min-height:44px;padding:12px 13px;border:1px solid var(--line);border-radius:10px;
+     background:var(--surface-2)}
 .inp:focus{outline:none;border-color:var(--accent);background:var(--surface)}
 textarea.inp{min-height:92px;resize:vertical}
 
@@ -76,14 +77,15 @@ textarea.inp{min-height:92px;resize:vertical}
 .pick input{position:absolute;opacity:0;pointer-events:none}
 
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1px solid var(--line);border-radius:999px;padding:8px 15px;background:var(--surface-2);
+/* 🔴 min-height:44px — 손가락으로 누르는 최소 크기입니다. 줄이지 마세요. */
+.chip{border:1px solid var(--line);border-radius:999px;padding:9px 16px;min-height:44px;background:var(--surface-2);
       cursor:pointer;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:11px;transition:.14s}
 .chip:hover{border-color:var(--accent)}
 .chip.on{border-color:var(--accent);background:var(--surface);color:var(--accent-ink)}
-.chip input{width:16px;height:16px;accent-color:var(--accent);margin:0}
+.chip input{width:20px;height:20px;accent-color:var(--accent);margin:0;flex:0 0 auto}
 
 .consent{display:flex;gap:14px;align-items:flex-start;font-size:13.5px;color:var(--muted);line-height:1.7}
-.consent input{width:18px;height:18px;accent-color:var(--accent);margin-top:3px;flex:0 0 auto}
+.consent input{width:22px;height:22px;accent-color:var(--accent);margin-top:2px;flex:0 0 auto}
 .consent a{color:var(--accent-ink);font-weight:700}
 
 .submit{text-align:center;padding-top:8px}
@@ -340,6 +342,44 @@ document.querySelectorAll('.pick input').forEach(function(i){
     });
   });
 });
+/* ── 이름표를 칸에 묶기 (apply/form.js 와 같은 일을 합니다) ──
+   🔴 <label for> 가 없으면 음성으로 읽는 분에게는 그냥 「편집」이라고만 들립니다. */
+(function linkLabels(){
+  var n=0;
+  document.querySelectorAll('.fld').forEach(function(f){
+    var lb=f.querySelector(':scope > label');
+    if(!lb || lb.getAttribute('for') || lb.classList.contains('chip')) return;
+    var el=f.querySelector('input:not([type=hidden]),select,textarea');
+    if(!el || el.closest('label')) return;
+    if(!el.id) el.id='fld-'+(++n)+'-'+Math.random().toString(36).slice(2,7);
+    lb.setAttribute('for', el.id);
+  });
+
+  /* 수량 칸 — 이름이 「−」 「+」 뿐이라 무엇을 늘리는지 들리지 않습니다.
+     옆에 적힌 항목 이름을 그대로 가져다 붙입니다. */
+  document.querySelectorAll('.opt').forEach(function(o){
+    var nameEl=o.querySelector('.t b'); if(!nameEl)return;
+    var name=nameEl.textContent.trim();
+    var inp=o.querySelector('.qty input');
+    if(inp && !inp.getAttribute('aria-label')) inp.setAttribute('aria-label', name+' 수량');
+    o.querySelectorAll('.qty button').forEach(function(b){
+      if(b.getAttribute('aria-label'))return;
+      b.setAttribute('aria-label', name+(b.dataset.d==='+'?' 하나 늘리기':' 하나 줄이기'));
+    });
+  });
+  /* 칸이 카드 하나를 통째로 쓰는 경우 — 이름표가 따로 없고 카드 제목이 곧 이름입니다.
+     예: 「기타 요청사항」 카드의 큰 입력칸. 제목을 그대로 이름으로 붙입니다. */
+  document.querySelectorAll('.card').forEach(function(c){
+    var h=c.querySelector('h2'); if(!h)return;
+    c.querySelectorAll('input:not([type=hidden]),select,textarea').forEach(function(el){
+      if(el.labels && el.labels.length) return;
+      if(el.getAttribute('aria-label') || el.closest('label')) return;
+      el.setAttribute('aria-label', h.textContent.trim());
+    });
+  });
+
+})();
+
 document.querySelectorAll('.chip input').forEach(function(i){
   i.addEventListener('change',function(){
     if(i.type==='radio'){

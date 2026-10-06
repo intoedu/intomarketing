@@ -105,7 +105,10 @@
     +'  <h2 style="font-size:1rem;margin:0 0 4px">담당 영업실장</h2>'
     +'  <p class="im-hint" style="margin:0 0 12px">소개해 주신 분이 있으면 성함을 적어 주세요. 없으면 비워 두셔도 됩니다.</p>'
     +'  <div class="im-x fld" style="max-width:340px;margin:0">'
-    +'    <input class="inp" id="im-ref-name" placeholder="성함을 적어 주세요" autocomplete="off">'
+    /* 🔴 aria-label — 이 칸만 .fld 바깥이라 form.js 의 이름표 묶기가 닿지 않습니다.
+          없으면 음성으로 읽는 분에게 그냥 「편집」이라고만 들립니다. */
+    +'    <input class="inp" id="im-ref-name" aria-label="담당 영업실장 성함"'
+    +'           placeholder="성함을 적어 주세요" autocomplete="off">'
     +'    <div class="im-sug" id="im-ref-sug"></div>'
     +'  </div>'
     +'  <p class="im-hint" id="im-ref-msg"></p>'

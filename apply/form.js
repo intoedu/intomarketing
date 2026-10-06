@@ -19,6 +19,48 @@ var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
 var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
 function $(id){return document.getElementById(id);}
 
+/* ── 이름표를 칸에 묶기 ──
+   🔴 왜 필요한가 : 「홍보 지역」 「차별점」 같은 글씨가 눈에는 보여도 <label for> 로
+      묶여 있지 않으면, 음성으로 읽는 분에게는 그냥 「편집」이라고만 들립니다.
+      신청서 39칸 가운데 11칸이 그 상태였습니다.
+   여기서 한 번에 묶으므로 각 신청서 HTML 은 손대지 않아도 됩니다.
+   값은 data-col / data-q 로 읽으므로 id 를 붙여도 모으는 방식은 그대로입니다. */
+(function linkLabels(){
+  var n=0;
+  document.querySelectorAll('.fld').forEach(function(f){
+    var lb=f.querySelector(':scope > label');
+    if(!lb || lb.getAttribute('for') || lb.classList.contains('chip')) return;
+    var el=f.querySelector('input:not([type=hidden]),select,textarea');
+    if(!el || el.closest('label')) return;              /* 이미 label 안에 든 것은 건너뜀 */
+    if(!el.id) el.id='fld-'+(++n)+'-'+Math.random().toString(36).slice(2,7);
+    lb.setAttribute('for', el.id);
+  });
+
+  /* 수량 칸 — 이름이 「−」 「+」 뿐이라 무엇을 늘리는지 들리지 않습니다.
+     옆에 적힌 항목 이름을 그대로 가져다 붙입니다. */
+  document.querySelectorAll('.opt').forEach(function(o){
+    var nameEl=o.querySelector('.t b'); if(!nameEl)return;
+    var name=nameEl.textContent.trim();
+    var inp=o.querySelector('.qty input');
+    if(inp && !inp.getAttribute('aria-label')) inp.setAttribute('aria-label', name+' 수량');
+    o.querySelectorAll('.qty button').forEach(function(b){
+      if(b.getAttribute('aria-label'))return;
+      b.setAttribute('aria-label', name+(b.dataset.d==='+'?' 하나 늘리기':' 하나 줄이기'));
+    });
+  });
+  /* 칸이 카드 하나를 통째로 쓰는 경우 — 이름표가 따로 없고 카드 제목이 곧 이름입니다.
+     예: 「기타 요청사항」 카드의 큰 입력칸. 제목을 그대로 이름으로 붙입니다. */
+  document.querySelectorAll('.card').forEach(function(c){
+    var h=c.querySelector('h2'); if(!h)return;
+    c.querySelectorAll('input:not([type=hidden]),select,textarea').forEach(function(el){
+      if(el.labels && el.labels.length) return;
+      if(el.getAttribute('aria-label') || el.closest('label')) return;
+      el.setAttribute('aria-label', h.textContent.trim());
+    });
+  });
+
+})();
+
 /* ── 고르면 표시 ──
    .pick = 카드로 고르는 것 · .ph = 비교표 머리칸으로 고르는 것 (둘 다 라디오입니다) */
 function paintPicks(box){

@@ -25,7 +25,7 @@ button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit
 
 header{background:radial-gradient(120% 100% at 15% -20%,#1E4374 0%,#12294D 62%);color:#fff;padding:44px 0 40px}
 header .back{display:inline-flex;align-items:center;gap:6px;color:#A9C4EA;font-size:13.5px;
-             font-weight:600;text-decoration:none;margin-bottom:18px}
+             font-weight:600;text-decoration:none;margin-bottom:10px;min-height:44px}
 header .back:hover{color:#fff}
 header h1{font-size:clamp(24px,4vw,32px)}
 header p{color:#B7CBEA;margin-top:12px;font-size:15.5px;max-width:48ch}
@@ -45,7 +45,8 @@ main{padding:26px 0 70px}
       그러면 gap 이 안 먹어 체크박스와 글씨가 붙습니다. 이 줄을 지우지 마세요. */
 .fld label.chip{display:inline-flex;align-items:center;gap:11px;margin-bottom:0;font-size:14px}
 .fld label .hint{font-weight:500}
-.inp{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.inp{width:100%;min-height:44px;padding:12px 13px;border:1px solid var(--line);border-radius:10px;
+     background:var(--surface-2)}
 .inp:focus{outline:none;border-color:var(--accent);background:var(--surface)}
 textarea.inp{min-height:92px;resize:vertical}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
@@ -96,11 +97,13 @@ textarea.inp{min-height:92px;resize:vertical}
 
 /* 작은 고르는 칸 */
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1px solid var(--line);border-radius:999px;padding:8px 15px;background:var(--surface-2);
+/* 🔴 min-height:44px 를 지우지 마세요 — 손가락으로 누르는 최소 크기입니다(애플 44pt·구글 48dp).
+      예전에는 37px 이라 손가락이 굵으면 빗나갔습니다. 글씨까지가 누름 범위입니다. */
+.chip{border:1px solid var(--line);border-radius:999px;padding:9px 16px;min-height:44px;background:var(--surface-2);
       cursor:pointer;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:11px;transition:.14s}
 .chip:hover{border-color:var(--accent)}
 .chip.on{border-color:var(--accent);background:var(--surface);color:var(--accent-ink)}
-.chip input{width:16px;height:16px;accent-color:var(--accent);margin:0}
+.chip input{width:20px;height:20px;accent-color:var(--accent);margin:0;flex:0 0 auto}
 
 /* 수량 고르는 칸 (옵션 추가) */
 .opts{border:1px solid var(--line);border-radius:12px;overflow:hidden}
@@ -110,14 +113,15 @@ textarea.inp{min-height:92px;resize:vertical}
 .opt .t b{display:block;font-size:14.5px}
 .opt .t span{font-size:13px;color:var(--muted);line-height:1.6}
 .qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface-2)}
-.qty button{border:0;background:none;width:34px;height:36px;font-size:17px;cursor:pointer;color:var(--muted)}
+/* 🔴 44px — 더하기·빼기는 신청서에서 가장 많이 눌리는 단추입니다. 줄이지 마세요. */
+.qty button{border:0;background:none;width:44px;height:44px;font-size:17px;cursor:pointer;color:var(--muted)}
 .qty button:hover{color:var(--accent-ink)}
-.qty input{width:44px;height:36px;border:0;background:none;text-align:center;font-weight:800;
+.qty input{width:48px;height:44px;border:0;background:none;text-align:center;font-weight:800;
            font-variant-numeric:tabular-nums}
 .qty input::-webkit-outer-spin-button,.qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 
 .consent{display:flex;gap:14px;align-items:flex-start;font-size:13.5px;color:var(--muted);line-height:1.7}
-.consent input{width:18px;height:18px;accent-color:var(--accent);margin-top:3px;flex:0 0 auto}
+.consent input{width:22px;height:22px;accent-color:var(--accent);margin-top:2px;flex:0 0 auto}
 .consent a{color:var(--accent-ink);font-weight:700}
 
 .note{background:var(--surface-2);border-radius:11px;padding:14px 16px;font-size:13.5px;color:var(--muted);
