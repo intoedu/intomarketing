@@ -195,7 +195,7 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 /* ── 2차 메뉴 ── */
 .subpills{display:flex;flex-wrap:wrap;gap:4px;background:var(--surface);border:1px solid var(--line);
           border-radius:999px;padding:4px;margin:0 0 32px;width:max-content;max-width:100%}
-.sp{border:0;background:none;font-weight:700;font-size:var(--t-base);color:var(--muted);
+.sp{min-height:44px;border:0;background:none;font-weight:700;font-size:var(--t-base);color:var(--muted);
     padding:8px 16px;border-radius:999px;cursor:pointer;transition-property:background-color,border-color,color,transform;transition-duration:.18s;transition-timing-function:ease-out;white-space:nowrap}
 .sp:hover{color:var(--ink)}
 .sp.on{background:var(--band-bg);color:#fff}
@@ -1118,6 +1118,23 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
     </div>
   </div>
 
+  <!-- 만든 것 — 설명보다 «먼저» 보여 줍니다 -->
+  <div class="sec" style="padding-top:0">
+    <div class="wrap">
+      <h3 style="font-size:var(--t-lg);margin-bottom:8px">만든 것</h3>
+      <p class="lead" style="margin:0">아래는 실제로 제작해 납품한 인쇄물입니다.</p>
+      <div class="works">
+        <div class="work"><img src="img/work/brochure-intoedu.jpg" alt="인투유학 브로셔 표지. 짙은 남색 머리글에 INTO Global Education 제목과 지구본 사진" loading="lazy" decoding="async" width="537" height="760"><div class="cap"><b>인투유학 브로셔</b><span>유학 상담 안내 · A4</span></div></div>
+        <div class="work"><img src="img/work/brochure-blinn.jpg" alt="블린컬리지 과정 안내 브로셔 표지" loading="lazy" decoding="async" width="537" height="760"><div class="cap"><b>블린컬리지 브로셔</b><span>대학 과정 안내</span></div></div>
+        <div class="work"><img src="img/work/brochure-sports-tour.jpg" alt="스포츠 투어 캠프 모집 브로셔 표지" loading="lazy" decoding="async" width="537" height="760"><div class="cap"><b>스포츠 · 투어 캠프 브로셔</b><span>캠프 모집 안내</span></div></div>
+        <div class="work"><img src="img/work/brochure-career-camp.jpg" alt="미국 진로 설계 캠프 모집 브로셔 표지" loading="lazy" decoding="async" width="537" height="760"><div class="cap"><b>미국 진로 설계 캠프 브로셔</b><span>캠프 모집 안내</span></div></div>
+        <div class="work"><img src="img/work/brochure-schooling.jpg" alt="미국 스쿨링 단기 캠프 모집 브로셔 표지" loading="lazy" decoding="async" width="537" height="760"><div class="cap"><b>미국 스쿨링 단기 캠프 브로셔</b><span>캠프 모집 안내</span></div></div>
+        <div class="work"><img src="img/work/poster-schooling-camp.jpg" alt="미국 스쿨링 캠프 모집 포스터" loading="lazy" decoding="async" width="537" height="760"><div class="cap"><b>미국 스쿨링 캠프 포스터</b><span>모집 포스터</span></div></div>
+        <div class="work wide"><img src="img/work/logo-intorental.png" alt="인투렌탈 로고" loading="lazy" decoding="async" width="760" height="380"><div class="cap"><b>인투렌탈 로고</b><span>브랜드 로고</span></div></div>
+      </div>
+    </div>
+  </div>
+
   <div class="sec" style="padding-top:0">
     <div class="wrap">
       <div class="subpills" data-area="design">
@@ -1342,6 +1359,31 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
 @media (prefers-reduced-motion:reduce){
   .btn:active,.chip:active,.pick:active,.sp:active,.tab:active{transform:none}
 }
+
+/* ── 작업물 격자 (2026-10-06) ──────────────────────────────────
+   🔴 여기 실린 것은 «우리가 실제로 만든 것»입니다. 예시 이미지가 아닙니다.
+      새로 넣을 때는 반드시 «게재 동의»를 먼저 확인하십시오.
+      2026-10-06 기준 와이즈리더 영통본원 브로셔는 «뺐습니다».
+   🔴 aspect-ratio 를 지우지 마세요 — 그림이 늦게 뜰 때 칸이 접혔다 펴지며
+      아래 내용이 튑니다(레이아웃 밀림). */
+.works{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:32px}
+.work{display:block;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;
+      background:var(--surface);text-decoration:none;color:inherit;
+      transition-property:border-color,box-shadow,transform;transition-duration:.18s;
+      transition-timing-function:ease-out}
+.work:hover{border-color:var(--accent);box-shadow:0 12px 28px -18px rgba(14,27,51,.4);transform:translateY(-2px)}
+/* 🔴 height:auto 를 지우지 마세요 — <img height="760"> 속성이 aspect-ratio 를 눌러
+      그림이 세로로 길게 늘어납니다. width/height 속성은 그림이 뜨기 전에 칸을
+      잡아 두려고(화면 튐 방지) 넣은 것이라 지우면 안 되고, 여기서 풀어 줘야 합니다. */
+.work img{display:block;width:100%;height:auto;aspect-ratio:537/760;object-fit:cover;
+          background:var(--surface-2);outline:1px solid rgba(0,0,0,.08);outline-offset:-1px}
+.work.wide img{aspect-ratio:760/380;object-fit:contain;padding:24px;background:#fff}
+.work .cap{padding:12px 16px 16px}
+.work .cap b{display:block;font-size:var(--t-sm);font-weight:700}
+.work .cap span{font-size:var(--t-xs);color:var(--muted)}
+@media (max-width:900px){.works{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
+@media (max-width:480px){.works{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (prefers-reduced-motion:reduce){.work:hover{transform:none}}
 </style>
 <section class="view" id="v-video">
   <div class="sec tight">
