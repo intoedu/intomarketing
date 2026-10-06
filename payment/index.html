@@ -13,6 +13,19 @@
 <style>
   /* 대표 페이지(/)·학원지원센터(/hakwon/)와 같은 색·글꼴 — 같은 회사로 보이게 */
   :root{
+  /* ═══ 뼈대 토큰 (2026-10-06) ═══════════════════════════════════════
+     🔴 새 값을 만들지 말고 여기 있는 것만 쓰세요.
+        예전에는 글자 크기가 44가지, 여백이 45가지였습니다. 그래서 어디를 고치면
+        어디가 어긋나는지 아무도 알 수 없었습니다.
+     글자 — 본문·UI 는 아래 7단계만. 큰 «숫자»와 «아이콘»은 자리마다 따로 둡니다
+            (숫자를 글자 단계에 맞추면 금액이 작아 보입니다).
+     여백 — 전부 4의 배수. 7·9·11·13·17px 같은 값은 쓰지 않습니다. */
+  --t-xs:12px; --t-sm:13px; --t-base:15px; --t-md:17px;
+  --t-lg:22px; --t-xl:30px; --t-2xl:44px;
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px;
+  --s-5:24px; --s-6:32px; --s-7:48px; --s-8:72px;
+  --r-sm:6px; --r-md:12px; --r-pill:999px;
+
     --paper:#FBFCFE; --surface:#FFFFFF; --surface-2:#F3F6FB;
     --ink:#0E1B33; --muted:#56657F; --line:#E2E8F2;
     --brand:#16305C; --accent:#2E5FE8; --gold:#B67A22;
@@ -25,75 +38,75 @@
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);
-       line-height:1.8;-webkit-font-smoothing:antialiased;font-size:16px}
+       line-height:1.8;-webkit-font-smoothing:antialiased;font-size:var(--t-base)}
   a{color:var(--accent)}
   .wrap{max-width:760px;margin:0 auto;padding:0 24px}
 
-  .top{background:var(--band-bg);color:var(--band-text);padding:38px 0 34px}
-  .mk{display:inline-flex;align-items:center;gap:10px;margin-bottom:18px;text-decoration:none;color:inherit}
+  .top{background:var(--band-bg);color:var(--band-text);padding:40px 0 32px}
+  .mk{display:inline-flex;align-items:center;gap:10px;margin-bottom:16px;text-decoration:none;color:inherit}
   .mk i{width:32px;height:32px;border-radius:9px;background:var(--gold);color:#12294D;
-        display:grid;place-items:center;font-weight:800;font-size:12px;font-style:normal}
-  .mk b{font-size:13px;letter-spacing:.02em;font-weight:700}
+        display:grid;place-items:center;font-weight:800;font-size:var(--t-xs);font-style:normal}
+  .mk b{font-size:var(--t-sm);letter-spacing:.02em;font-weight:700}
   h1{margin:0 0 8px;font-size:26px;line-height:1.35;letter-spacing:-.01em;word-break:keep-all}
-  .eff{margin:0;color:#B9CBE8;font-size:14px}
+  .eff{margin:0;color:#B9CBE8;font-size:var(--t-sm)}
 
   main{padding:36px 0 8px}
-  .lead{color:var(--muted);font-size:15px;word-break:keep-all;margin:0 0 30px}
+  .lead{color:var(--muted);font-size:var(--t-base);word-break:keep-all;margin:0 0 32px}
 
   nav.toc{background:var(--surface);border:1px solid var(--line);border-radius:12px;
-          padding:16px 20px;margin-bottom:34px}
-  nav.toc b{display:block;font-size:13px;color:var(--muted);margin-bottom:8px;font-weight:700}
-  nav.toc ol{margin:0;padding-left:20px;columns:2;column-gap:24px;font-size:14px}
-  nav.toc li{margin:3px 0;break-inside:avoid}
+          padding:16px 20px;margin-bottom:32px}
+  nav.toc b{display:block;font-size:var(--t-sm);color:var(--muted);margin-bottom:8px;font-weight:700}
+  nav.toc ol{margin:0;padding-left:20px;columns:2;column-gap:24px;font-size:var(--t-sm)}
+  nav.toc li{margin:4px 0;break-inside:avoid}
   nav.toc a{text-decoration:none}
   nav.toc a:hover{text-decoration:underline}
   @media(max-width:560px){ nav.toc ol{columns:1} }
 
-  h2{font-size:17px;margin:36px 0 10px;letter-spacing:-.01em;scroll-margin-top:16px;word-break:keep-all}
-  h3{font-size:15px;margin:22px 0 6px;color:var(--ink)}
+  h2{font-size:var(--t-md);margin:36px 0 8px;letter-spacing:-.01em;scroll-margin-top:16px;word-break:keep-all}
+  h3{font-size:var(--t-base);margin:24px 0 8px;color:var(--ink)}
   p{margin:0 0 12px;word-break:keep-all}
-  ul,ol{margin:0 0 12px;padding-left:22px}
+  ul,ol{margin:0 0 12px;padding-left:24px}
   li{margin:4px 0;word-break:keep-all}
   strong{font-weight:700}
 
   .callout{background:var(--surface-2);border-left:3px solid var(--accent);
-           padding:14px 18px;margin:14px 0 18px;font-size:14.5px;border-radius:0 8px 8px 0}
+           padding:16px 16px;margin:16px 0 16px;font-size:var(--t-base);border-radius:0 8px 8px 0}
   .callout p:last-child{margin-bottom:0}
 
   .tbl{overflow-x:auto;margin:0 0 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
-  table{border-collapse:collapse;width:100%;min-width:460px;font-size:14.5px}
-  th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
-  thead th{background:var(--surface-2);font-size:13.5px;white-space:nowrap}
+  table{border-collapse:collapse;width:100%;min-width:460px;font-size:var(--t-base)}
+  th,td{padding:8px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{background:var(--surface-2);font-size:var(--t-sm);white-space:nowrap}
   tbody tr:last-child td{border-bottom:none}
 
   /* 개정 안내 칸 — 약관 제3조 「적용일자 · 개정사유 공지」 */
   .notice{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--gold);
-          border-radius:12px;padding:20px 22px;margin:0 0 30px;font-size:14.5px}
-  .notice h2{margin:0 0 12px;font-size:16px}
+          border-radius:12px;padding:20px 24px;margin:0 0 32px;font-size:var(--t-base)}
+  .notice h2{margin:0 0 12px;font-size:var(--t-base)}
   .notice dl{margin:0 0 12px;display:grid;grid-template-columns:max-content 1fr;gap:4px 16px}
   .notice dt{color:var(--muted);white-space:nowrap}
   .notice dd{margin:0;word-break:keep-all}
-  .notice .sub{display:block;margin:4px 0 4px;font-size:13.5px}
-  .notice ol{margin-bottom:10px}
-  .notice ul.dot{margin-bottom:10px;color:var(--muted)}
-  .notice .ask{margin:0;color:var(--muted);font-size:13.5px}
-  @media(max-width:480px){ .notice dl{grid-template-columns:1fr;gap:0} .notice dd{margin-bottom:6px} }
-  ul.ga{list-style:none;padding-left:4px;margin:6px 0 4px}
+  .notice .sub{display:block;margin:4px 0 4px;font-size:var(--t-sm)}
+  .notice ol{margin-bottom:8px}
+  .notice ul.dot{margin-bottom:8px;color:var(--muted)}
+  .notice .ask{margin:0;color:var(--muted);font-size:var(--t-sm)}
+  @media(max-width:480px){ .notice dl{grid-template-columns:1fr;gap:0} .notice dd{margin-bottom:8px} }
+  ul.ga{list-style:none;padding-left:4px;margin:8px 0 4px}
   nav.toc li.nonum{list-style:none;margin-left:-20px}
 
   .biz{background:var(--surface);border:2px solid var(--brand);border-radius:12px;
-       padding:22px 24px;margin:38px 0 8px}
-  .biz h2{margin:0 0 14px;font-size:17px}
-  .biz dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:8px 20px;font-size:15px}
+       padding:24px 24px;margin:40px 0 8px}
+  .biz h2{margin:0 0 16px;font-size:var(--t-md)}
+  .biz dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:8px 20px;font-size:var(--t-base)}
   .biz dt{color:var(--muted);white-space:nowrap}
   .biz dd{margin:0;word-break:break-all}
   @media(max-width:480px){ .biz dl{grid-template-columns:1fr;gap:2px 0}
                            .biz dd{margin-bottom:8px} }
 
-  footer{border-top:1px solid var(--line);margin-top:34px;padding:24px 0 60px;
-         color:var(--muted);font-size:13px;line-height:1.9}
+  footer{border-top:1px solid var(--line);margin-top:32px;padding:24px 0 60px;
+         color:var(--muted);font-size:var(--t-sm);line-height:1.9}
   footer a{color:var(--muted)}
-  footer .nav a{margin-right:14px}
+  footer .nav a{margin-right:16px}
 </style>
 </head>
 <body>

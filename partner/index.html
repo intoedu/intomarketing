@@ -17,6 +17,19 @@
 -->
 <style>
   :root{
+  /* ═══ 뼈대 토큰 (2026-10-06) ═══════════════════════════════════════
+     🔴 새 값을 만들지 말고 여기 있는 것만 쓰세요.
+        예전에는 글자 크기가 44가지, 여백이 45가지였습니다. 그래서 어디를 고치면
+        어디가 어긋나는지 아무도 알 수 없었습니다.
+     글자 — 본문·UI 는 아래 7단계만. 큰 «숫자»와 «아이콘»은 자리마다 따로 둡니다
+            (숫자를 글자 단계에 맞추면 금액이 작아 보입니다).
+     여백 — 전부 4의 배수. 7·9·11·13·17px 같은 값은 쓰지 않습니다. */
+  --t-xs:12px; --t-sm:13px; --t-base:15px; --t-md:17px;
+  --t-lg:22px; --t-xl:30px; --t-2xl:44px;
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px;
+  --s-5:24px; --s-6:32px; --s-7:48px; --s-8:72px;
+  --r-sm:6px; --r-md:12px; --r-pill:999px;
+
     --paper:#F4F7FB; --surface:#fff; --surface-2:#EFF3F9;
     --ink:#0E1B33; --muted:#5B6A82; --line:#DFE6F1;
     --accent:#2E5FE8; --accent-ink:#1E47C0; --band:#12294D;
@@ -24,7 +37,7 @@
     --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",system-ui,sans-serif;
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);line-height:1.7;font-size:15px}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);line-height:1.7;font-size:var(--t-base)}
   h1,h2,h3{margin:0;letter-spacing:-.01em;word-break:keep-all}
   .hide{display:none!important}
   .tnum{font-variant-numeric:tabular-nums}
@@ -33,55 +46,55 @@
   /* 로그인 */
   .gate{min-height:100vh;display:grid;place-items:center;padding:24px}
   .gbox{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--line);
-        border-radius:16px;padding:30px;box-shadow:0 12px 36px rgba(16,32,64,.08)}
-  .gbox h1{font-size:1.25rem;margin-bottom:6px}
-  .gsub{color:var(--muted);font-size:.9rem;margin:0 0 18px}
+        border-radius:16px;padding:32px;box-shadow:0 12px 36px rgba(16,32,64,.08)}
+  .gbox h1{font-size:var(--t-lg);margin-bottom:8px}
+  .gsub{color:var(--muted);font-size:var(--t-base);margin:0 0 16px}
   .gtabs{display:flex;gap:4px;background:var(--surface-2);padding:4px;border-radius:999px;margin:0 0 16px}
-  .gtab{flex:1;border:0;background:none;padding:9px 12px;border-radius:999px;font-weight:700;font-size:.9rem;color:var(--muted);cursor:pointer}
+  .gtab{flex:1;border:0;background:none;padding:8px 12px;border-radius:999px;font-weight:700;font-size:var(--t-base);color:var(--muted);cursor:pointer}
   .gtab.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
   .fld{margin-bottom:12px}
-  .fld label{display:block;font-size:.82rem;font-weight:700;color:var(--muted);margin-bottom:6px}
-  .inp{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:11px 13px;outline:none;font:inherit}
+  .fld label{display:block;font-size:var(--t-sm);font-weight:700;color:var(--muted);margin-bottom:8px}
+  .inp{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:12px 12px;outline:none;font:inherit}
   .inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(46,95,232,.14)}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:.9rem;
-       padding:11px 18px;border-radius:10px;border:1.5px solid transparent;cursor:pointer;font-family:inherit}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:var(--t-base);
+       padding:12px 16px;border-radius:10px;border:1.5px solid transparent;cursor:pointer;font-family:inherit}
   .btn-p{background:var(--accent);color:#fff}
   .btn-p:hover{background:var(--accent-ink)}
   .btn-g{background:var(--surface);border-color:var(--line);color:var(--ink)}
   .btn-g:hover{border-color:var(--accent);color:var(--accent)}
-  .btn-s{padding:7px 13px;font-size:.82rem;border-radius:8px}
+  .btn-s{padding:8px 12px;font-size:var(--t-sm);border-radius:8px}
   .wfull{width:100%}
   .btn[disabled]{opacity:.55;cursor:not-allowed}
-  .msg{font-size:.86rem;margin-top:11px;min-height:20px;color:var(--muted)}
+  .msg{font-size:var(--t-sm);margin-top:12px;min-height:20px;color:var(--muted)}
   .msg.err{color:var(--bad)} .msg.ok{color:var(--ok)}
-  .gnote{margin-top:16px;padding-top:13px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted);line-height:1.7}
+  .gnote{margin-top:16px;padding-top:12px;border-top:1px solid var(--line);font-size:var(--t-sm);color:var(--muted);line-height:1.7}
 
   /* 본문 */
   .top{background:var(--band);color:#fff;padding:16px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-  .top b{font-size:1rem} .top span{color:#C6D5EE;font-size:.84rem}
-  .wrap{max-width:960px;margin:0 auto;padding:22px 18px 60px}
+  .top b{font-size:var(--t-base)} .top span{color:#C6D5EE;font-size:var(--t-sm)}
+  .wrap{max-width:960px;margin:0 auto;padding:24px 16px 60px}
   .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px}
-  .card h2{font-size:1rem;margin-bottom:4px}
-  .card .sub{color:var(--muted);font-size:.85rem;margin:0 0 14px}
+  .card h2{font-size:var(--t-base);margin-bottom:4px}
+  .card .sub{color:var(--muted);font-size:var(--t-sm);margin:0 0 16px}
   .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
-  .stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
-  .stat b{display:block;font-size:1.5rem;font-weight:800}
-  .stat span{color:var(--muted);font-size:.82rem}
-  table{width:100%;border-collapse:collapse;font-size:.9rem}
-  th{text-align:left;color:var(--muted);font-size:.78rem;font-weight:800;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
-  td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px}
+  .stat b{display:block;font-size:var(--t-lg);font-weight:800}
+  .stat span{color:var(--muted);font-size:var(--t-sm)}
+  table{width:100%;border-collapse:collapse;font-size:var(--t-base)}
+  th{text-align:left;color:var(--muted);font-size:var(--t-xs);font-weight:800;padding:8px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:top}
   td.r,th.r{text-align:right}
-  .pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.76rem;font-weight:800;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+  .pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:var(--t-xs);font-weight:800;background:var(--surface-2);color:var(--muted);white-space:nowrap}
   .pill.ok{background:#E3F3EC;color:var(--ok)}
   .pill.ing{background:#E4EDFC;color:var(--accent-ink)}
-  .lk{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:9px}
-  .lk .name{width:150px;font-size:.84rem;font-weight:700;color:var(--muted)}
-  .lk input{flex:1;min-width:220px;font-size:.8rem;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--surface-2);font-family:inherit}
-  .note{background:var(--surface-2);border-radius:10px;padding:14px 16px;font-size:.86rem;white-space:pre-wrap;line-height:1.75}
-  .empty{text-align:center;color:var(--muted);padding:30px 10px;font-size:.9rem}
+  .lk{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+  .lk .name{width:150px;font-size:var(--t-sm);font-weight:700;color:var(--muted)}
+  .lk input{flex:1;min-width:220px;font-size:var(--t-sm);border:1px solid var(--line);border-radius:8px;padding:8px 8px;background:var(--surface-2);font-family:inherit}
+  .note{background:var(--surface-2);border-radius:10px;padding:16px 16px;font-size:var(--t-sm);white-space:pre-wrap;line-height:1.75}
+  .empty{text-align:center;color:var(--muted);padding:32px 8px;font-size:var(--t-base)}
   @media(max-width:620px){
     .lk .name{width:100%}
-    td,th{padding:9px 6px;font-size:.84rem}
+    td,th{padding:8px 8px;font-size:var(--t-sm)}
   }
 </style>
 </head>
@@ -112,7 +125,7 @@
         <div class="fld"><label for="su_pw">비밀번호 (6자 이상)</label>
           <input class="inp" id="su_pw" type="password" autocomplete="new-password"></div>
         <button class="btn btn-p wfull" type="button" onclick="doSignup()">계정 만들기</button>
-        <div class="gnote" style="margin-top:14px;padding-top:0;border:0">
+        <div class="gnote" style="margin-top:16px;padding-top:0;border:0">
           🔴 <b>계약서에 적어 주신 이메일</b>로 만들어 주십시오. 그 이메일이어야 현황이 연결됩니다.</div>
       </div>
       <p class="msg" id="gMsg"></p>
@@ -135,7 +148,7 @@
   <!-- 대표 계정이 명단에 없어도 화면을 볼 수 있게 열어 둡니다 (2026-10-04).
        🔴 이 띠를 지우지 마세요. 없으면 실장님 화면과 구별이 안 됩니다. -->
   <div id="previewBar" class="hide"
-       style="background:#12294D;color:#fff;padding:11px 16px;text-align:center;font-size:.88rem">
+       style="background:#12294D;color:#fff;padding:12px 16px;text-align:center;font-size:.88rem">
     <b>관리자 미리보기</b> — 실장님이 보시는 화면 그대로입니다.
     소개 건과 전용 링크는 실제 실장 계정에서만 나옵니다.</div>
   <div class="top">
@@ -308,10 +321,10 @@ async function loadOrders(){
   rows.forEach(function(x){
     if(x.paid_at){ paid++; if(String(x.paid_at).slice(0,7)===ym){ mcnt++; mamt+=Number(x.amount)||0; } }
     h+='<tr><td><b>'+esc(x.customer||'-')+'</b>'
-      +(x.how==='link'?'<div class="sub" style="font-size:.76rem;color:var(--muted)">전용 링크</div>':'')
+      +(x.how==='link'?'<div class="sub" style="font-size:var(--t-xs);color:var(--muted)">전용 링크</div>':'')
       +'</td>'
       +'<td>'+esc(PLAT[x.center]||x.center||'-')+'</td>'
-      +'<td>'+esc(x.kind||'-')+(x.work_type?'<div style="font-size:.78rem;color:var(--muted)">'+esc(x.work_type)+'</div>':'')+'</td>'
+      +'<td>'+esc(x.kind||'-')+(x.work_type?'<div style="font-size:var(--t-xs);color:var(--muted)">'+esc(x.work_type)+'</div>':'')+'</td>'
       +'<td>'+statusPill(x.status)+'</td>'
       +'<td class="r tnum">'+(x.amount?won(x.amount):'<span style="color:var(--muted)">확정 전</span>')+'</td>'
       +'<td>'+(x.paid_at?fdate(x.paid_at):'<span style="color:var(--muted)">대기</span>')+'</td>'

@@ -3,6 +3,19 @@
    🔴 여기를 고치면 신청서 네 장이 한꺼번에 바뀝니다.
    ────────────────────────────────────────────────────────── */
 :root{
+  /* ═══ 뼈대 토큰 (2026-10-06) ═══════════════════════════════════════
+     🔴 새 값을 만들지 말고 여기 있는 것만 쓰세요.
+        예전에는 글자 크기가 44가지, 여백이 45가지였습니다. 그래서 어디를 고치면
+        어디가 어긋나는지 아무도 알 수 없었습니다.
+     글자 — 본문·UI 는 아래 7단계만. 큰 «숫자»와 «아이콘»은 자리마다 따로 둡니다
+            (숫자를 글자 단계에 맞추면 금액이 작아 보입니다).
+     여백 — 전부 4의 배수. 7·9·11·13·17px 같은 값은 쓰지 않습니다. */
+  --t-xs:12px; --t-sm:13px; --t-base:15px; --t-md:17px;
+  --t-lg:22px; --t-xl:30px; --t-2xl:44px;
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px;
+  --s-5:24px; --s-6:32px; --s-7:48px; --s-8:72px;
+  --r-sm:6px; --r-md:12px; --r-pill:999px;
+
   --paper:#F4F7FB; --surface:#FFFFFF; --surface-2:#EFF3F9;
   --ink:#0E1B33; --muted:#56657F; --line:#DFE6F1;
   --accent:#2E5FE8; --accent-ink:#1E47C0; --band:#12294D;
@@ -14,7 +27,7 @@
         --line:#22314C;--accent:#6E93FF;--accent-ink:#8FAAFF;--ok:#4FBF95;--bad:#F08A85;}
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.75;
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);font-size:var(--t-base);line-height:1.75;
      -webkit-font-smoothing:antialiased}
 a{color:inherit}
 h1,h2,h3{margin:0;letter-spacing:-.02em;line-height:1.3;word-break:keep-all}
@@ -24,28 +37,28 @@ button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit
 .wrap{max-width:780px;margin:0 auto;padding:0 20px}
 
 header{background:radial-gradient(120% 100% at 15% -20%,#1E4374 0%,#12294D 62%);color:#fff;padding:44px 0 40px}
-header .back{display:inline-flex;align-items:center;gap:6px;color:#A9C4EA;font-size:13.5px;
-             font-weight:600;text-decoration:none;margin-bottom:10px;min-height:44px}
+header .back{display:inline-flex;align-items:center;gap:6px;color:#A9C4EA;font-size:var(--t-sm);
+             font-weight:600;text-decoration:none;margin-bottom:8px;min-height:44px}
 header .back:hover{color:#fff}
 header h1{font-size:clamp(24px,4vw,32px)}
-header p{color:#B7CBEA;margin-top:12px;font-size:15.5px;max-width:48ch}
+header p{color:#B7CBEA;margin-top:12px;font-size:var(--t-base);max-width:48ch}
 
-main{padding:26px 0 70px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:24px 22px;margin-bottom:14px}
-.eyebrow{font-size:11.5px;font-weight:800;letter-spacing:.18em;color:var(--accent-ink);text-transform:uppercase}
-.card h2{font-size:18px;margin:5px 0 18px}
-.card h2 .req{color:var(--bad);font-size:14px}
-.hint{color:var(--muted);font-size:13.5px;font-weight:400}
-.sub{color:var(--muted);font-size:13.5px;margin:-10px 0 16px;line-height:1.7}
+main{padding:24px 0 72px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:24px 24px;margin-bottom:16px}
+.eyebrow{font-size:var(--t-xs);font-weight:800;letter-spacing:.18em;color:var(--accent-ink);text-transform:uppercase}
+.card h2{font-size:var(--t-md);margin:4px 0 16px}
+.card h2 .req{color:var(--bad);font-size:var(--t-sm)}
+.hint{color:var(--muted);font-size:var(--t-sm);font-weight:400}
+.sub{color:var(--muted);font-size:var(--t-sm);margin:-8px 0 16px;line-height:1.7}
 
-.fld{margin-bottom:15px}
+.fld{margin-bottom:16px}
 .fld:last-child{margin-bottom:0}
-.fld label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px}
+.fld label{display:block;font-size:var(--t-sm);font-weight:700;margin-bottom:8px}
 /* 🔴 .fld 안에 들어간 칩은 위 규칙에 눌려 display:block 이 됩니다(선택자가 더 자세함).
       그러면 gap 이 안 먹어 체크박스와 글씨가 붙습니다. 이 줄을 지우지 마세요. */
-.fld label.chip{display:inline-flex;align-items:center;gap:11px;margin-bottom:0;font-size:14px}
+.fld label.chip{display:inline-flex;align-items:center;gap:11px;margin-bottom:0;font-size:var(--t-sm)}
 .fld label .hint{font-weight:500}
-.inp{width:100%;min-height:44px;padding:12px 13px;border:1px solid var(--line);border-radius:10px;
+.inp{width:100%;min-height:44px;padding:12px 12px;border:1px solid var(--line);border-radius:10px;
      background:var(--surface-2)}
 .inp:focus{outline:none;border-color:var(--accent);background:var(--surface)}
 textarea.inp{min-height:92px;resize:vertical}
@@ -55,13 +68,13 @@ textarea.inp{min-height:92px;resize:vertical}
 /* 큰 고르는 칸 */
 .picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 @media(max-width:640px){.picks{grid-template-columns:1fr}}
-.pick{border:1px solid var(--line);border-radius:12px;padding:16px 15px;background:var(--surface-2);cursor:pointer;
+.pick{border:1px solid var(--line);border-radius:12px;padding:16px 16px;background:var(--surface-2);cursor:pointer;
       transition:.14s;display:block;position:relative}
 .pick:hover{border-color:var(--accent)}
 .pick.on{border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px rgba(46,95,232,.13)}
-.pick .n{font-size:12px;font-weight:800;color:var(--accent-ink);font-style:italic}
-.pick b{display:block;font-size:15px;margin:4px 0 5px}
-.pick span{font-size:13px;color:var(--muted);line-height:1.6}
+.pick .n{font-size:var(--t-xs);font-weight:800;color:var(--accent-ink);font-style:italic}
+.pick b{display:block;font-size:var(--t-base);margin:4px 0 4px}
+.pick span{font-size:var(--t-sm);color:var(--muted);line-height:1.6}
 .pick input{position:absolute;opacity:0;pointer-events:none}
 
 /* ── 고르는 비교표 — 세로로 견주면서 그 자리에서 고릅니다 ──
@@ -73,24 +86,24 @@ textarea.inp{min-height:92px;resize:vertical}
             우연히 막아 주고 있었지만, 「동작 줄이기」를 켜면 그 효과가 꺼져 똑같이 샙니다. */
       position:relative}
 .cmp{width:100%;border-collapse:collapse;min-width:560px}
-.cmp th,.cmp td{padding:13px 14px;border-bottom:1px solid var(--line);text-align:center;font-size:14px}
+.cmp th,.cmp td{padding:12px 16px;border-bottom:1px solid var(--line);text-align:center;font-size:var(--t-sm)}
 .cmp thead th{background:var(--surface-2);padding:0;vertical-align:top}
-.cmp th:first-child,.cmp td:first-child{text-align:left;color:var(--muted);font-size:12.5px;font-weight:700;
+.cmp th:first-child,.cmp td:first-child{text-align:left;color:var(--muted);font-size:var(--t-xs);font-weight:700;
       white-space:nowrap;background:var(--surface-2);position:sticky;left:0;z-index:1}
 .cmp tbody tr:last-child td{border-bottom:0}
 .cmp .big{font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
 .cmp .no{color:var(--muted);opacity:.45}
-.cmp .ok{color:var(--accent-ink);font-weight:800;font-size:16px}
+.cmp .ok{color:var(--accent-ink);font-weight:800;font-size:var(--t-base)}
 /* 머리칸 전체가 고르는 버튼입니다 */
-.cmp .ph{display:block;padding:16px 14px 18px;cursor:pointer;transition:.15s;border-bottom:3px solid transparent}
+.cmp .ph{display:block;padding:16px 16px 16px;cursor:pointer;transition:.15s;border-bottom:3px solid transparent}
 .cmp .ph:hover{background:var(--surface)}
 .cmp .ph .dot{display:inline-block;width:15px;height:15px;border:2px solid var(--line);border-radius:50%;
-      vertical-align:-3px;margin-right:6px;transition:.15s}
-.cmp .ph .nm{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.1em}
-.cmp .ph .pr{display:block;font-size:18px;font-weight:800;color:var(--ink);margin-top:6px;letter-spacing:-.02em;
+      vertical-align:-3px;margin-right:8px;transition:.15s}
+.cmp .ph .nm{font-size:var(--t-xs);font-weight:800;color:var(--muted);letter-spacing:.1em}
+.cmp .ph .pr{display:block;font-size:var(--t-md);font-weight:800;color:var(--ink);margin-top:8px;letter-spacing:-.02em;
       font-variant-numeric:tabular-nums}
 .cmp .ph input{position:absolute;opacity:0;pointer-events:none}
-.cmp .ph .pr.sm{font-size:14px;color:var(--muted);font-weight:700}  /* 금액이 아닌 칸 */
+.cmp .ph .pr.sm{font-size:var(--t-sm);color:var(--muted);font-weight:700}  /* 금액이 아닌 칸 */
 .cmp .ph.on{background:var(--surface);border-bottom-color:var(--accent)}
 .cmp .ph.on .dot{border-color:var(--accent);background:var(--accent);box-shadow:inset 0 0 0 3px var(--surface)}
 .cmp .ph.on .nm{color:var(--accent-ink)}
@@ -99,51 +112,51 @@ textarea.inp{min-height:92px;resize:vertical}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 /* 🔴 min-height:44px 를 지우지 마세요 — 손가락으로 누르는 최소 크기입니다(애플 44pt·구글 48dp).
       예전에는 37px 이라 손가락이 굵으면 빗나갔습니다. 글씨까지가 누름 범위입니다. */
-.chip{border:1px solid var(--line);border-radius:999px;padding:9px 16px;min-height:44px;background:var(--surface-2);
-      cursor:pointer;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:11px;transition:.14s}
+.chip{border:1px solid var(--line);border-radius:999px;padding:8px 16px;min-height:44px;background:var(--surface-2);
+      cursor:pointer;font-size:var(--t-sm);font-weight:600;display:inline-flex;align-items:center;gap:11px;transition:.14s}
 .chip:hover{border-color:var(--accent)}
 .chip.on{border-color:var(--accent);background:var(--surface);color:var(--accent-ink)}
 .chip input{width:20px;height:20px;accent-color:var(--accent);margin:0;flex:0 0 auto}
 
 /* 수량 고르는 칸 (옵션 추가) */
 .opts{border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.opt{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.opt{display:flex;align-items:center;gap:14px;padding:16px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .opt:last-child{border-bottom:0}
 .opt .t{flex:1;min-width:190px}
-.opt .t b{display:block;font-size:14.5px}
-.opt .t span{font-size:13px;color:var(--muted);line-height:1.6}
+.opt .t b{display:block;font-size:var(--t-base)}
+.opt .t span{font-size:var(--t-sm);color:var(--muted);line-height:1.6}
 .qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface-2)}
 /* 🔴 44px — 더하기·빼기는 신청서에서 가장 많이 눌리는 단추입니다. 줄이지 마세요. */
-.qty button{border:0;background:none;width:44px;height:44px;font-size:17px;cursor:pointer;color:var(--muted)}
+.qty button{border:0;background:none;width:44px;height:44px;font-size:var(--t-md);cursor:pointer;color:var(--muted)}
 .qty button:hover{color:var(--accent-ink)}
 .qty input{width:48px;height:44px;border:0;background:none;text-align:center;font-weight:800;
            font-variant-numeric:tabular-nums}
 .qty input::-webkit-outer-spin-button,.qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 
-.consent{display:flex;gap:14px;align-items:flex-start;font-size:13.5px;color:var(--muted);line-height:1.7}
+.consent{display:flex;gap:14px;align-items:flex-start;font-size:var(--t-sm);color:var(--muted);line-height:1.7}
 .consent input{width:22px;height:22px;accent-color:var(--accent);margin-top:2px;flex:0 0 auto}
 .consent a{color:var(--accent-ink);font-weight:700}
 
-.note{background:var(--surface-2);border-radius:11px;padding:14px 16px;font-size:13.5px;color:var(--muted);
+.note{background:var(--surface-2);border-radius:11px;padding:16px 16px;font-size:var(--t-sm);color:var(--muted);
       line-height:1.8}
 .note b{color:var(--ink)}
 
 .submit{text-align:center;padding-top:8px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 34px;border-radius:11px;
-     font-weight:800;font-size:16px;border:0;cursor:pointer;background:var(--band);color:#fff;transition:.14s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:16px 32px;border-radius:11px;
+     font-weight:800;font-size:var(--t-base);border:0;cursor:pointer;background:var(--band);color:#fff;transition:.14s}
 .btn:hover{background:#1B3A69}
 .btn[disabled]{opacity:.55;cursor:default}
-.err{color:var(--bad);font-size:14px;margin-top:12px;min-height:20px;font-weight:600}
+.err{color:var(--bad);font-size:var(--t-sm);margin-top:12px;min-height:20px;font-weight:600}
 
-.done{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:44px 26px;text-align:center}
+.done{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:44px 24px;text-align:center}
 .done .ic{font-size:40px}
-.done h2{font-size:21px;margin:12px 0 8px}
-.done p{color:var(--muted);font-size:15px}
-.done .box{background:var(--surface-2);border-radius:11px;padding:14px 16px;margin-top:20px;
-           font-size:14px;text-align:left;color:var(--muted);line-height:1.8}
+.done h2{font-size:var(--t-lg);margin:12px 0 8px}
+.done p{color:var(--muted);font-size:var(--t-base)}
+.done .box{background:var(--surface-2);border-radius:11px;padding:16px 16px;margin-top:20px;
+           font-size:var(--t-sm);text-align:left;color:var(--muted);line-height:1.8}
 .done .box b{color:var(--ink)}
 
-footer{border-top:1px solid var(--line);padding:22px 0 46px;color:var(--muted);font-size:12.5px;line-height:1.9}
+footer{border-top:1px solid var(--line);padding:24px 0 48px;color:var(--muted);font-size:var(--t-xs);line-height:1.9}
 footer a{color:var(--ink);font-weight:700;text-decoration:none}
 footer a:hover{text-decoration:underline}
 footer span.sep{margin:0 8px;color:var(--line)}
