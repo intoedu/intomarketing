@@ -54,7 +54,10 @@
   --brand:#16305C; --accent:#2E5FE8; --accent-ink:#1E47C0;
   --gold:#B67A22; --on-brand:#EAF0FB;
   --band-bg:#12294D; --band-line:#2A436E; --band-text:#DCE6F8; --band-gold:#E7B24A;
-  --radius:14px; --maxw:1120px;
+  --radius:14px;
+  /* 🔴 내용 최대 폭. 1120 → 1400 (2026-10-06) — 넓은 화면에서 양옆이 너무 비어 보였습니다.
+        본문은 .lead 의 max-width:62ch 가 따로 잡아 주므로 글줄이 길어지지는 않습니다. */
+  --maxw:1480px;
   --f:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
 }
 @media (prefers-color-scheme:dark){
@@ -74,7 +77,9 @@ h1,h2,h3,h4{margin:0;letter-spacing:-.015em;line-height:1.28;word-break:keep-all
 p{margin:0;word-break:keep-all}
 button{font-family:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
-.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+/* 양옆 여백 — 좁은 화면에서는 20px, 넓어질수록 최대 40px.
+   폭을 1400 으로 넓혔더니 1440 짜리 노트북에서 양옆이 거의 안 남아 숨 쉴 틈을 둡니다. */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,2.6vw,40px)}
 .tnum{font-variant-numeric:tabular-nums}
 .skip{position:absolute;left:-9999px}
 .skip:focus{left:12px;top:12px;z-index:99;background:var(--accent);color:#fff;padding:8px 16px;border-radius:8px}
