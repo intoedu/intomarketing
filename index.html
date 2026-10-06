@@ -1087,11 +1087,20 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
 <!-- ══════════════ 디자인 ══════════════ -->
 <style>
   /* 디자인 화면만 노랑·초록으로 (다른 화면은 남색 그대로입니다 — 디자인팀 요청 2026-09-30) */
-  #v-design{--accent:#2F9E55;--accent-ink:#217A3F;--brand:#1F6B3B;--gold:#E8B10E}
-  #v-design .kicker{color:#C9930A}
-  #v-design .sp.on{background:#2F9E55;border-color:#2F9E55;color:#fff}
-  #v-design .tag{background:#FDF6DC;color:#8A6A05;border-color:#F3E3A8}
+  /* 🔴 2026-10-06 — 색은 그대로 두되 «글자·단추로 쓰는 값»만 짙은 쪽으로 옮겼습니다.
+        밝은 초록 #2F9E55 는 흰 글자를 올리면 3.42:1 이라 글씨가 흐려 보입니다(기준 4.5).
+        금색 #C9930A 도 글자로는 2.67:1 입니다. 그래서
+          · 글자·단추 = 짙은 초록 #1F6B3B(6.51:1) · 짙은 금색 #7A5C04(6.09:1)
+          · 밝은 초록·금색 = 면·선·점에만
+        색을 바꾼 게 아니라 «쓰는 자리»를 바꾼 것입니다. 되돌리지 마세요. */
+  #v-design{--accent:#1F6B3B;--accent-ink:#217A3F;--brand:#1F6B3B;--gold:#E8B10E;--gold-ink:#7A5C04}
+  #v-design .kicker{color:var(--gold-ink)}
+  #v-design .sp.on{background:#1F6B3B;border-color:#1F6B3B;color:#fff}
+  #v-design .tag{background:#FDF6DC;color:#7A5C04;border-color:#F3E3A8}
   #v-design .card h3{color:#1F6B3B}
+  /* 밝은 초록은 여기 — 면과 선 */
+  #v-design .card:hover{border-color:#2F9E55}
+  #v-design .ico{color:#2F9E55}
   @media(prefers-color-scheme:dark){
     #v-design{--accent:#5FCB86;--accent-ink:#8CD9A6;--brand:#7FD6A0}
     #v-design .tag{background:#2A2A16;color:#E8D68A;border-color:#4A4522}
