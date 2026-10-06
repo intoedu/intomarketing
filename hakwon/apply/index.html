@@ -68,7 +68,7 @@ textarea.inp{min-height:92px;resize:vertical}
 .picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 @media(max-width:640px){.picks{grid-template-columns:1fr}}
 .pick{border:1px solid var(--line);border-radius:12px;padding:16px 15px;background:var(--surface-2);cursor:pointer;
-      transition:.14s;display:block;position:relative}
+      transition-property:background-color,border-color,box-shadow;transition-duration:.14s;transition-timing-function:ease-out;display:block;position:relative}
 .pick:hover{border-color:var(--accent)}
 .pick.on{border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px rgba(46,95,232,.13)}
 .pick .n{font-size:12px;font-weight:800;color:var(--accent-ink);font-style:italic}
@@ -79,7 +79,7 @@ textarea.inp{min-height:92px;resize:vertical}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 /* 🔴 min-height:44px — 손가락으로 누르는 최소 크기입니다. 줄이지 마세요. */
 .chip{border:1px solid var(--line);border-radius:999px;padding:9px 16px;min-height:44px;background:var(--surface-2);
-      cursor:pointer;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:11px;transition:.14s}
+      cursor:pointer;font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:11px;transition-property:background-color,border-color,color;transition-duration:.14s;transition-timing-function:ease-out}
 .chip:hover{border-color:var(--accent)}
 .chip.on{border-color:var(--accent);background:var(--surface);color:var(--accent-ink)}
 .chip input{width:20px;height:20px;accent-color:var(--accent);margin:0;flex:0 0 auto}
@@ -90,7 +90,7 @@ textarea.inp{min-height:92px;resize:vertical}
 
 .submit{text-align:center;padding-top:8px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 34px;border-radius:11px;
-     font-weight:800;font-size:16px;border:0;cursor:pointer;background:var(--band);color:#fff;transition:.14s}
+     font-weight:800;font-size:16px;border:0;cursor:pointer;background:var(--band);color:#fff;transition-property:background-color,transform;transition-duration:.14s;transition-timing-function:ease-out}
 .btn:hover{background:#1B3A69}
 .btn[disabled]{opacity:.55;cursor:default}
 .err{color:var(--bad);font-size:14px;margin-top:12px;min-height:20px;font-weight:600}
@@ -107,6 +107,24 @@ footer{border-top:1px solid var(--line);padding:22px 0 46px;color:var(--muted);f
 footer a{color:var(--ink);font-weight:700;text-decoration:none}
 footer a:hover{text-decoration:underline}
 footer span{margin:0 8px;color:var(--line)}
+
+/* ── 세부 다듬기 (2026-10-06) ─────────────────────────────────────
+   🔴 왜 넣었는지 적어 둡니다. 지우기 전에 읽어 주세요.
+   ① 제목 줄바꿈 — 「홍보에 필요한 것을 / 한 회사에서」처럼 윗줄만 길고 아랫줄에
+      한두 글자만 남는 모양을 막습니다(text-wrap:balance).
+   ② 설명글 줄바꿈 — 마지막 줄에 한 낱말만 떨어지는 것을 막습니다(pretty).
+   ③ 누를 때 — 살짝 눌리는 느낌만 줍니다. 크게 움직이면 어지럽습니다.
+   ④ 글자 매끄럽게 — 맥에서 글씨가 두껍게 뭉개지는 것을 막습니다.
+   ⑤ 「동작 줄이기」를 켠 분에게는 ③이 꺼집니다. */
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+h1,h2,h3,.h2,.h1{text-wrap:balance}
+.lead,.sub,.hint,.pnote,.note,.card p,.gsub{text-wrap:pretty}
+.btn:active,.chip:active,.pick:active,.sp:active,.tab:active{transform:scale(.97)}
+img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
+@media (prefers-color-scheme:dark){img{outline-color:rgba(255,255,255,.1)}}
+@media (prefers-reduced-motion:reduce){
+  .btn:active,.chip:active,.pick:active,.sp:active,.tab:active{transform:none}
+}
 </style>
 </head>
 <body>

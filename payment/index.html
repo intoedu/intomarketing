@@ -107,6 +107,24 @@
          color:var(--muted);font-size:var(--t-sm);line-height:1.9}
   footer a{color:var(--muted)}
   footer .nav a{margin-right:16px}
+
+/* ── 세부 다듬기 (2026-10-06) ─────────────────────────────────────
+   🔴 왜 넣었는지 적어 둡니다. 지우기 전에 읽어 주세요.
+   ① 제목 줄바꿈 — 「홍보에 필요한 것을 / 한 회사에서」처럼 윗줄만 길고 아랫줄에
+      한두 글자만 남는 모양을 막습니다(text-wrap:balance).
+   ② 설명글 줄바꿈 — 마지막 줄에 한 낱말만 떨어지는 것을 막습니다(pretty).
+   ③ 누를 때 — 살짝 눌리는 느낌만 줍니다. 크게 움직이면 어지럽습니다.
+   ④ 글자 매끄럽게 — 맥에서 글씨가 두껍게 뭉개지는 것을 막습니다.
+   ⑤ 「동작 줄이기」를 켠 분에게는 ③이 꺼집니다. */
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+h1,h2,h3,.h2,.h1{text-wrap:balance}
+.lead,.sub,.hint,.pnote,.note,.card p,.gsub{text-wrap:pretty}
+.btn:active,.chip:active,.pick:active,.sp:active,.tab:active{transform:scale(.97)}
+img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
+@media (prefers-color-scheme:dark){img{outline-color:rgba(255,255,255,.1)}}
+@media (prefers-reduced-motion:reduce){
+  .btn:active,.chip:active,.pick:active,.sp:active,.tab:active{transform:none}
+}
 </style>
 </head>
 <body>

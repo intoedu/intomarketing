@@ -59,16 +59,16 @@
   /* header */
   header{position:sticky;top:0;z-index:80;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   .nav{display:flex;align-items:center;gap:24px;height:64px}
-  .brand{display:flex;align-items:baseline;gap:8px;font-weight:800;letter-spacing:-.02em;font-size:var(--t-md);cursor:pointer;background:none;border:0;font-family:inherit}
+  .brand{min-height:44px;display:flex;align-items:baseline;gap:8px;font-weight:800;letter-spacing:-.02em;font-size:var(--t-md);cursor:pointer;background:none;border:0;font-family:inherit}
   .brand .mk{color:var(--brand)}
   .brand small{font-weight:600;font-size:var(--t-xs);color:var(--muted);letter-spacing:0}
   .links{display:flex;gap:24px;margin-left:auto;align-items:center;height:100%}
   .navlink{background:none;border:0;font-family:inherit;font-size:var(--t-base);font-weight:600;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:0}
   .navlink:hover,.navlink.active{color:var(--ink)}
   .navitem{position:relative;display:flex;align-items:center;height:100%}
-  .caret{width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:.2s;opacity:.7}
+  .caret{width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition-property:transform;transition-duration:.2s;transition-timing-function:ease-out;opacity:.7}
   .navitem:hover .caret{transform:rotate(225deg) translateY(-2px)}
-  .drop{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(8px);background:var(--surface);border:1px solid var(--line);border-radius:13px;box-shadow:0 22px 46px -26px rgba(16,27,51,.55);padding:8px;min-width:230px;opacity:0;visibility:hidden;transition:.18s;z-index:90}
+  .drop{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(8px);background:var(--surface);border:1px solid var(--line);border-radius:13px;box-shadow:0 22px 46px -26px rgba(16,27,51,.55);padding:8px;min-width:230px;opacity:0;visibility:hidden;transition-property:opacity,transform,visibility;transition-duration:.18s;transition-timing-function:ease-out;z-index:90}
   .navitem:hover .drop{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
   .drop a{display:block;padding:12px 12px;border-radius:9px;font-size:var(--t-base);font-weight:700;color:var(--ink);cursor:pointer}
   .drop a small{display:block;color:var(--muted);font-weight:500;font-size:var(--t-xs);margin-top:1px}
@@ -89,7 +89,7 @@
   .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
   .btn-light{background:#fff;color:var(--band-bg)}
   .btn-light:hover{transform:translateY(-1px)}
-  .burger{display:none;margin-left:auto;background:none;border:1px solid var(--line);border-radius:9px;width:42px;height:38px;cursor:pointer;color:var(--ink);align-items:center;justify-content:center}
+  .burger{min-height:44px;display:none;margin-left:auto;background:none;border:1px solid var(--line);border-radius:9px;width:42px;height:38px;cursor:pointer;color:var(--ink);align-items:center;justify-content:center}
   .burger svg{width:20px;height:20px}
   .msheet{display:none;border-bottom:1px solid var(--line);background:var(--surface)}
   .msheet.open{display:block}
@@ -176,7 +176,8 @@
   .stats{margin-top:40px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
   @media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
   .stat{border-top:2px solid var(--band-gold);padding-top:16px}
-  .stat .big{font-size:clamp(1.8rem,3.6vw,2.5rem);font-weight:800;color:#fff;letter-spacing:-.02em}
+  .stat .big{font-size:clamp(1.8rem,3.6vw,2.5rem);font-weight:800;color:#fff;letter-spacing:-.02em;
+             font-variant-numeric:tabular-nums}
   .stat .lab{font-size:var(--t-sm);color:#A9BBDA;margin-top:4px}
   .stat .sub{font-size:var(--t-xs);color:#7E93BC;margin-top:8px}
 
@@ -199,7 +200,8 @@
   .psub{font-size:var(--t-md);font-weight:800;color:var(--ink);margin-top:4px;line-height:1.3}
   .ptip{font-size:var(--t-sm);color:var(--muted);margin-top:8px;line-height:1.55;min-height:2.5em}
   .pmoney{margin:16px 0 16px;padding:16px 0 16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .pbig{font-size:1.85rem;font-weight:850;color:var(--gold);line-height:1.15;letter-spacing:-.02em}
+  .pbig{font-size:1.85rem;font-weight:850;color:var(--gold);line-height:1.15;letter-spacing:-.02em;
+        font-variant-numeric:tabular-nums}
   .pbig small{font-size:var(--t-sm);font-weight:700;color:var(--muted);letter-spacing:0}
   .pbig.quote{font-size:var(--t-lg);color:var(--accent)}
   .psmall{font-size:var(--t-sm);color:var(--muted);margin-top:8px}
@@ -213,7 +215,7 @@
   .pinc li{position:relative;padding-left:20px;font-size:var(--t-sm);color:var(--muted);line-height:1.6;margin-bottom:8px}
   .pinc li::before{content:'✓';position:absolute;left:0;top:0;color:var(--accent);font-weight:800;font-size:var(--t-sm)}
   .pcard.best .pinc li::before{color:var(--gold)}
-  .pbtn{width:100%;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);
+  .pbtn{min-height:44px;width:100%;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);
        border-radius:10px;padding:12px 16px;font-size:var(--t-sm);font-weight:800;cursor:pointer;
        transition:background .15s,border-color .15s,color .15s}
   .pbtn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
@@ -238,7 +240,7 @@
   .fs-lab .dot{width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:var(--t-xs)}
   .picker{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
   @media(max-width:720px){.picker{grid-template-columns:repeat(2,1fr)}}
-  .pick{border:1.5px solid var(--line);background:var(--paper);border-radius:11px;padding:16px 16px;cursor:pointer;text-align:left;font-family:inherit;transition:.18s;display:flex;flex-direction:column;gap:8px;color:inherit}
+  .pick{border:1.5px solid var(--line);background:var(--paper);border-radius:11px;padding:16px 16px;cursor:pointer;text-align:left;font-family:inherit;transition-property:background-color,border-color,box-shadow,color;transition-duration:.18s;transition-timing-function:ease-out;display:flex;flex-direction:column;gap:8px;color:inherit}
   .pick:hover{border-color:var(--accent)}
   .pick.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--surface));box-shadow:inset 0 0 0 1px var(--accent)}
   .pick .ic{width:34px;height:34px;border-radius:9px;background:var(--surface-2);color:var(--brand);display:grid;place-items:center}
@@ -367,7 +369,7 @@
   .page-hero h1{font-size:clamp(1.8rem,3.6vw,2.6rem)}
   .page-hero .lead{max-width:54ch}
   .subpills{display:flex;gap:8px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px;width:max-content;max-width:100%;margin-bottom:36px}
-  .sp{border:0;background:none;font-family:inherit;font-weight:700;font-size:var(--t-base);color:var(--muted);padding:8px 16px;border-radius:999px;cursor:pointer;transition:.18s;white-space:nowrap}
+  .sp{border:0;background:none;font-family:inherit;font-weight:700;font-size:var(--t-base);color:var(--muted);padding:8px 16px;border-radius:999px;cursor:pointer;transition-property:background-color,color;transition-duration:.18s;transition-timing-function:ease-out;white-space:nowrap}
   .sp:hover{color:var(--ink)}
   .sp.on{background:var(--band-bg);color:#fff}
   .subpanel{display:none}
@@ -407,7 +409,8 @@
   .bcard.on{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 8%,var(--surface));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold) 40%,transparent)}
   .bcard .bl{font-size:var(--t-sm);font-weight:800;color:var(--muted);letter-spacing:.02em;display:flex;align-items:center;gap:8px}
   .bcard.on .bl{color:var(--gold)}
-  .bcard .bv{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;margin-top:8px;line-height:1.1}
+  .bcard .bv{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;margin-top:8px;line-height:1.1;
+             font-variant-numeric:tabular-nums}
   .bcard .bv small{font-size:var(--t-base);font-weight:700;color:var(--muted);margin-left:4px}
   .bcard .bd{font-size:var(--t-sm);color:var(--muted);margin-top:8px}
   .bcard .bnow{font-size:var(--t-xs);font-weight:800;background:var(--gold);color:#fff;padding:2px 8px;border-radius:999px}
@@ -713,6 +716,24 @@
   .about{color:#A9BBDA;font-size:var(--t-base);max-width:34ch;margin-top:12px}
   .legal{border-top:1px solid var(--band-line);padding:20px 24px;font-size:var(--t-sm);color:#8fa3c9;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .legal a{color:var(--band-gold);cursor:pointer}
+
+/* ── 세부 다듬기 (2026-10-06) ─────────────────────────────────────
+   🔴 왜 넣었는지 적어 둡니다. 지우기 전에 읽어 주세요.
+   ① 제목 줄바꿈 — 「홍보에 필요한 것을 / 한 회사에서」처럼 윗줄만 길고 아랫줄에
+      한두 글자만 남는 모양을 막습니다(text-wrap:balance).
+   ② 설명글 줄바꿈 — 마지막 줄에 한 낱말만 떨어지는 것을 막습니다(pretty).
+   ③ 누를 때 — 살짝 눌리는 느낌만 줍니다. 크게 움직이면 어지럽습니다.
+   ④ 글자 매끄럽게 — 맥에서 글씨가 두껍게 뭉개지는 것을 막습니다.
+   ⑤ 「동작 줄이기」를 켠 분에게는 ③이 꺼집니다. */
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+h1,h2,h3,.h2,.h1{text-wrap:balance}
+.lead,.sub,.hint,.pnote,.note,.card p,.gsub{text-wrap:pretty}
+.btn:active,.chip:active,.pick:active,.sp:active,.tab:active{transform:scale(.97)}
+img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
+@media (prefers-color-scheme:dark){img{outline-color:rgba(255,255,255,.1)}}
+@media (prefers-reduced-motion:reduce){
+  .btn:active,.chip:active,.pick:active,.sp:active,.tab:active{transform:none}
+}
 </style>
 
 
@@ -2788,5 +2809,31 @@
 </script>
 <!-- 실장 전용 링크(?p=코드)로 들어온 것을 기억해 둡니다 — 신청서에서 씁니다 -->
 <script src="/ref.js"></script>
+<script>
+"use strict";
+/* ── 폼 칸에 이름 붙이기 (2026-10-06) ───────────────────────────
+   🔴 「전체적으로 원하시는 것」 같은 글씨가 <span class="fflabel"> 이라
+      칸과 묶여 있지 않았습니다. 음성으로 읽는 분에게는 「편집」이라고만 들립니다.
+      22칸이 그 상태였습니다.
+   보이는 글씨를 그대로 가리키므로(aria-labelledby) 글씨를 고치면 이름도 같이 바뀝니다. */
+(function nameFields(){
+  var n=0;
+  document.querySelectorAll('.ff').forEach(function(ff){
+    var lb=ff.querySelector('.fflabel'); if(!lb)return;
+    if(!lb.id) lb.id='ffl-'+(++n);
+    ff.querySelectorAll('input:not([type=hidden]),select,textarea').forEach(function(el){
+      if(el.labels&&el.labels.length)return;
+      if(el.getAttribute('aria-label')||el.getAttribute('aria-labelledby'))return;
+      el.setAttribute('aria-labelledby', lb.id);
+    });
+  });
+  /* 이름표 없이 «안내 글씨»만 있는 칸 — 그 글씨를 이름으로 씁니다 */
+  document.querySelectorAll('input:not([type=hidden]),select,textarea').forEach(function(el){
+    if(el.labels&&el.labels.length)return;
+    if(el.getAttribute('aria-label')||el.getAttribute('aria-labelledby')||el.closest('label'))return;
+    if(el.placeholder) el.setAttribute('aria-label', el.placeholder);
+  });
+})();
+</script>
 </body>
 </html>

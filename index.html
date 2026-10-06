@@ -77,14 +77,14 @@ button{font-family:inherit}
 header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
        backdrop-filter:saturate(150%) blur(10px);border-bottom:1px solid var(--band-line)}
 .nav{display:flex;align-items:center;gap:8px;height:62px}
-.brand{display:flex;align-items:center;gap:8px;background:none;border:0;cursor:pointer;padding:0;color:#fff}
+.brand{min-height:44px;display:flex;align-items:center;gap:8px;background:none;border:0;cursor:pointer;padding:0;color:#fff}
 .brand .mk{width:32px;height:32px;border-radius:8px;background:var(--accent);display:grid;place-items:center;
            font-weight:800;font-size:var(--t-xs);letter-spacing:.02em;color:#fff}
 .brand b{font-size:var(--t-base);font-weight:800;letter-spacing:-.01em}
 .brand small{display:block;font-size:var(--t-xs);font-weight:600;color:#93B0DE;letter-spacing:.04em;line-height:1.2}
 .links{margin-left:auto;display:flex;align-items:center;gap:2px}
 .navlink{background:none;border:0;cursor:pointer;color:#C6D8F4;font-size:var(--t-base);font-weight:600;
-         padding:8px 12px;border-radius:9px;transition:.15s}
+         padding:8px 12px;border-radius:9px;transition-property:background-color,color,transform;transition-duration:.15s;transition-timing-function:ease-out}
 .navlink:hover{color:#fff;background:rgba(255,255,255,.09)}
 .navlink.active{color:#fff;background:rgba(255,255,255,.13)}
 .navitem{position:relative}
@@ -93,7 +93,7 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 .drop{position:absolute;top:calc(100% + 6px);right:0;min-width:286px;background:var(--surface);
       border:1px solid var(--line);border-radius:12px;padding:8px;
       box-shadow:0 18px 44px -18px rgba(14,27,51,.42);opacity:0;visibility:hidden;transform:translateY(-6px);
-      transition:.16s}
+      transition-property:opacity,transform,visibility;transition-duration:.16s;transition-timing-function:ease-out}
 .navitem:hover .drop,.navitem:focus-within .drop{opacity:1;visibility:visible;transform:none}
 .drop a{display:block;padding:8px 12px;border-radius:9px;font-size:var(--t-base);font-weight:700;cursor:pointer}
 .drop a:hover{background:var(--surface-2)}
@@ -127,7 +127,7 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
    예전에는 .btn-primary / .btn-p / .btn-light 가 파일마다 따로 있어서
    「기본 버튼」 하나 고치려면 세 군데를 찾아야 했습니다.
    min-height:44px 는 손가락으로 누르는 최소 크기입니다. 줄이지 마세요. */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:12px 24px;border-radius:var(--r-md);font-family:inherit;font-weight:700;font-size:var(--t-base);border:1px solid transparent;cursor:pointer;white-space:nowrap;transition:.15s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:12px 24px;border-radius:var(--r-md);font-family:inherit;font-weight:700;font-size:var(--t-base);border:1px solid transparent;cursor:pointer;white-space:nowrap;transition-property:background-color,transform,filter;transition-duration:.15s;transition-timing-function:ease-out}
 .btn-s{min-height:36px;padding:8px 12px;font-size:var(--t-sm);border-radius:var(--r-sm)}
 .btn-lg{padding:16px 32px;font-size:var(--t-md)}
 .btn-primary{background:var(--accent);color:#fff}
@@ -151,7 +151,7 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 @media(max-width:980px){.items{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:640px){.items{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}}
 .item{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
-      padding:24px 16px 20px;text-align:center;cursor:pointer;transition:.16s;
+      padding:24px 16px 20px;text-align:center;cursor:pointer;transition-property:border-color,box-shadow,transform;transition-duration:.16s;transition-timing-function:ease-out;
       display:flex;flex-direction:column;align-items:center}
 .item:hover{border-color:var(--accent);transform:translateY(-3px);
             box-shadow:0 16px 34px -20px rgba(46,95,232,.5)}
@@ -161,6 +161,7 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 .item b{font-size:var(--t-base);font-weight:800;letter-spacing:-.01em}
 .item span{display:block;font-size:var(--t-xs);color:var(--muted);margin-top:8px;line-height:1.6;font-weight:500}
 .item .price{margin-top:12px;font-size:var(--t-xs);font-weight:700;color:var(--accent-ink);
+             font-variant-numeric:tabular-nums;
              background:var(--surface-2);border-radius:999px;padding:4px 12px}
 
 /* ── 일반 카드 ── */
@@ -195,7 +196,7 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 .subpills{display:flex;flex-wrap:wrap;gap:4px;background:var(--surface);border:1px solid var(--line);
           border-radius:999px;padding:4px;margin:0 0 32px;width:max-content;max-width:100%}
 .sp{border:0;background:none;font-weight:700;font-size:var(--t-base);color:var(--muted);
-    padding:8px 16px;border-radius:999px;cursor:pointer;transition:.18s;white-space:nowrap}
+    padding:8px 16px;border-radius:999px;cursor:pointer;transition-property:background-color,border-color,color,transform;transition-duration:.18s;transition-timing-function:ease-out;white-space:nowrap}
 .sp:hover{color:var(--ink)}
 .sp.on{background:var(--band-bg);color:#fff}
 .subpanel{display:none}
@@ -213,13 +214,13 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 @media(max-width:820px){.bgrp{border-top:0;padding:0;flex:0 0 auto}}
 .bgrp>b{display:block;font-size:var(--t-base);font-weight:800;margin-bottom:8px;cursor:pointer}
 .bgrp>b:hover{color:var(--accent-ink,#1E47C0)}
-.bleaf{display:block;width:100%;text-align:left;border:0;background:none;font:inherit;cursor:pointer;
+.bleaf{min-height:44px;display:block;width:100%;text-align:left;border:0;background:none;font:inherit;cursor:pointer;
   font-size:var(--t-sm);color:var(--muted);padding:4px 0}
 .bleaf:hover{color:var(--ink)}
 .bleaf.on{color:var(--accent-ink,#1E47C0);font-weight:800}
 .bcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(212px,1fr));gap:16px}
 .bcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;
-  cursor:pointer;transition:.14s;text-align:left;font:inherit}
+  cursor:pointer;transition-property:border-color,transform;transition-duration:.14s;transition-timing-function:ease-out;text-align:left;font:inherit}
 .bcard:hover{border-color:var(--accent);transform:translateY(-2px)}
 .bcard .tag{font-size:var(--t-xs);font-weight:800;color:var(--muted)}
 .bcard b{display:block;font-size:var(--t-base);margin:8px 0 4px}
@@ -282,7 +283,7 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 .ptab tbody tr:last-child td{border-bottom:0}
 .ptab td b{font-weight:800}
 .ptab td .sm{display:block;font-size:var(--t-xs);color:var(--muted);font-weight:500;margin-top:2px}
-.ptab .lo{color:var(--accent-ink,#1E47C0);font-weight:800}
+.ptab .lo{color:var(--accent-ink,#1E47C0);font-weight:800;font-variant-numeric:tabular-nums}
 .pnote{margin-top:16px;font-size:var(--t-sm);color:var(--muted);background:var(--surface-2);
        border-radius:10px;padding:12px 16px;line-height:1.8}
 
@@ -1323,6 +1324,24 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   body[data-view="video"] footer .pol{border-top-color:rgba(255,255,255,.12)}
   body[data-view="video"] footer .pol span{color:#3A3F47}
   body[data-view="video"] footer .cr{color:#6C727A}
+
+/* ── 세부 다듬기 (2026-10-06) ─────────────────────────────────────
+   🔴 왜 넣었는지 적어 둡니다. 지우기 전에 읽어 주세요.
+   ① 제목 줄바꿈 — 「홍보에 필요한 것을 / 한 회사에서」처럼 윗줄만 길고 아랫줄에
+      한두 글자만 남는 모양을 막습니다(text-wrap:balance).
+   ② 설명글 줄바꿈 — 마지막 줄에 한 낱말만 떨어지는 것을 막습니다(pretty).
+   ③ 누를 때 — 살짝 눌리는 느낌만 줍니다. 크게 움직이면 어지럽습니다.
+   ④ 글자 매끄럽게 — 맥에서 글씨가 두껍게 뭉개지는 것을 막습니다.
+   ⑤ 「동작 줄이기」를 켠 분에게는 ③이 꺼집니다. */
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+h1,h2,h3,.h2,.h1{text-wrap:balance}
+.lead,.sub,.hint,.pnote,.note,.card p,.gsub{text-wrap:pretty}
+.btn:active,.chip:active,.pick:active,.sp:active,.tab:active{transform:scale(.97)}
+img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
+@media (prefers-color-scheme:dark){img{outline-color:rgba(255,255,255,.1)}}
+@media (prefers-reduced-motion:reduce){
+  .btn:active,.chip:active,.pick:active,.sp:active,.tab:active{transform:none}
+}
 </style>
 <section class="view" id="v-video">
   <div class="sec tight">

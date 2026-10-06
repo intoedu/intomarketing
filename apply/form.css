@@ -69,7 +69,7 @@ textarea.inp{min-height:92px;resize:vertical}
 .picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 @media(max-width:640px){.picks{grid-template-columns:1fr}}
 .pick{border:1px solid var(--line);border-radius:12px;padding:16px 16px;background:var(--surface-2);cursor:pointer;
-      transition:.14s;display:block;position:relative}
+      transition-property:background-color,border-color,box-shadow;transition-duration:.14s;transition-timing-function:ease-out;display:block;position:relative}
 .pick:hover{border-color:var(--accent)}
 .pick.on{border-color:var(--accent);background:var(--surface);box-shadow:0 0 0 3px rgba(46,95,232,.13)}
 .pick .n{font-size:var(--t-xs);font-weight:800;color:var(--accent-ink);font-style:italic}
@@ -95,10 +95,10 @@ textarea.inp{min-height:92px;resize:vertical}
 .cmp .no{color:var(--muted);opacity:.45}
 .cmp .ok{color:var(--accent-ink);font-weight:800;font-size:var(--t-base)}
 /* 머리칸 전체가 고르는 버튼입니다 */
-.cmp .ph{display:block;padding:16px 16px 16px;cursor:pointer;transition:.15s;border-bottom:3px solid transparent}
+.cmp .ph{display:block;padding:16px 16px 16px;cursor:pointer;transition-property:background-color,border-bottom-color,color;transition-duration:.15s;transition-timing-function:ease-out;border-bottom:3px solid transparent}
 .cmp .ph:hover{background:var(--surface)}
 .cmp .ph .dot{display:inline-block;width:15px;height:15px;border:2px solid var(--line);border-radius:50%;
-      vertical-align:-3px;margin-right:8px;transition:.15s}
+      vertical-align:-3px;margin-right:8px;transition-property:background-color,border-color,box-shadow;transition-duration:.15s;transition-timing-function:ease-out}
 .cmp .ph .nm{font-size:var(--t-xs);font-weight:800;color:var(--muted);letter-spacing:.1em}
 .cmp .ph .pr{display:block;font-size:var(--t-md);font-weight:800;color:var(--ink);margin-top:8px;letter-spacing:-.02em;
       font-variant-numeric:tabular-nums}
@@ -113,7 +113,7 @@ textarea.inp{min-height:92px;resize:vertical}
 /* 🔴 min-height:44px 를 지우지 마세요 — 손가락으로 누르는 최소 크기입니다(애플 44pt·구글 48dp).
       예전에는 37px 이라 손가락이 굵으면 빗나갔습니다. 글씨까지가 누름 범위입니다. */
 .chip{border:1px solid var(--line);border-radius:999px;padding:8px 16px;min-height:44px;background:var(--surface-2);
-      cursor:pointer;font-size:var(--t-sm);font-weight:600;display:inline-flex;align-items:center;gap:12px;transition:.14s}
+      cursor:pointer;font-size:var(--t-sm);font-weight:600;display:inline-flex;align-items:center;gap:12px;transition-property:background-color,border-color,color;transition-duration:.14s;transition-timing-function:ease-out}
 .chip:hover{border-color:var(--accent)}
 .chip.on{border-color:var(--accent);background:var(--surface);color:var(--accent-ink)}
 .chip input{width:20px;height:20px;accent-color:var(--accent);margin:0;flex:0 0 auto}
@@ -149,7 +149,7 @@ textarea.inp{min-height:92px;resize:vertical}
    예전에는 .btn-primary / .btn-p / .btn-light 가 파일마다 따로 있어서
    「기본 버튼」 하나 고치려면 세 군데를 찾아야 했습니다.
    min-height:44px 는 손가락으로 누르는 최소 크기입니다. 줄이지 마세요. */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:12px 24px;border-radius:var(--r-md);font-family:inherit;font-weight:700;font-size:var(--t-base);border:1px solid transparent;cursor:pointer;white-space:nowrap;transition:.14s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:12px 24px;border-radius:var(--r-md);font-family:inherit;font-weight:700;font-size:var(--t-base);border:1px solid transparent;cursor:pointer;white-space:nowrap;transition-property:background-color,transform;transition-duration:.14s;transition-timing-function:ease-out}
 .btn-s{min-height:36px;padding:8px 12px;font-size:var(--t-sm);border-radius:var(--r-sm)}
 .btn-lg{padding:16px 32px;font-size:var(--t-md)}
 /* 신청서의 「내기」 단추는 큰 치수를 씁니다 */
@@ -171,3 +171,21 @@ footer{border-top:1px solid var(--line);padding:24px 0 48px;color:var(--muted);f
 footer a{color:var(--ink);font-weight:700;text-decoration:none}
 footer a:hover{text-decoration:underline}
 footer span.sep{margin:0 8px;color:var(--line)}
+
+/* ── 세부 다듬기 (2026-10-06) ─────────────────────────────────────
+   🔴 왜 넣었는지 적어 둡니다. 지우기 전에 읽어 주세요.
+   ① 제목 줄바꿈 — 「홍보에 필요한 것을 / 한 회사에서」처럼 윗줄만 길고 아랫줄에
+      한두 글자만 남는 모양을 막습니다(text-wrap:balance).
+   ② 설명글 줄바꿈 — 마지막 줄에 한 낱말만 떨어지는 것을 막습니다(pretty).
+   ③ 누를 때 — 살짝 눌리는 느낌만 줍니다. 크게 움직이면 어지럽습니다.
+   ④ 글자 매끄럽게 — 맥에서 글씨가 두껍게 뭉개지는 것을 막습니다.
+   ⑤ 「동작 줄이기」를 켠 분에게는 ③이 꺼집니다. */
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+h1,h2,h3,.h2,.h1{text-wrap:balance}
+.lead,.sub,.hint,.pnote,.note,.card p,.gsub{text-wrap:pretty}
+.btn:active,.chip:active,.pick:active,.sp:active,.tab:active{transform:scale(.97)}
+img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
+@media (prefers-color-scheme:dark){img{outline-color:rgba(255,255,255,.1)}}
+@media (prefers-reduced-motion:reduce){
+  .btn:active,.chip:active,.pick:active,.sp:active,.tab:active{transform:none}
+}
