@@ -3,6 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 🔴 Pretendard — 사이트 전체가 «같은 글꼴»로 보이게 합니다 (2026-10-06).
+     없으면 맥은 애플산돌고딕, 윈도우는 맑은고딕으로 «기기마다 다르게» 보입니다.
+     dynamic-subset = 화면에 실제로 쓰인 글자만 내려받는 가벼운 판입니다.
+     우리교회지원센터(church/)가 쓰는 것과 같은 주소입니다. 버전을 따로 올리지 마세요. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <title>모아 보기 · 인투마케팅 관리자</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" href="../hakwon/favicon-32.png" sizes="32x32" type="image/png">
@@ -30,7 +36,7 @@
   --ink:#0E1B33; --muted:#5B6A82; --line:#DFE6F1;
   --accent:#2E5FE8; --accent-ink:#1E47C0; --band:#12294D;
   --ok:#12805C; --warn:#B67A22; --bad:#C2413B;
-  --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --f:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
 }
 @media (prefers-color-scheme:dark){
   :root{--paper:#0A101E;--surface:#101B30;--surface-2:#16233C;--ink:#E7EDF7;--muted:#9BAAC3;

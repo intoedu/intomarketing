@@ -3,6 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 🔴 Pretendard — 사이트 전체가 «같은 글꼴»로 보이게 합니다 (2026-10-06).
+     없으면 맥은 애플산돌고딕, 윈도우는 맑은고딕으로 «기기마다 다르게» 보입니다.
+     dynamic-subset = 화면에 실제로 쓰인 글자만 내려받는 가벼운 판입니다.
+     우리교회지원센터(church/)가 쓰는 것과 같은 주소입니다. 버전을 따로 올리지 마세요. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <title>인투마케팅 · 블로그 · 홈페이지 · SNS · 디자인 · 영상</title>
 <meta name="description" content="인투마케팅 — 블로그·리뷰, 홈페이지 제작, SNS 채널 제작, 디자인, 영상 제작. 다섯 영역을 외주로 넘기지 않고 직접 수행합니다. 대전 유성구.">
 <link rel="canonical" href="https://intomarketing.co.kr/">
@@ -49,7 +55,7 @@
   --gold:#B67A22; --on-brand:#EAF0FB;
   --band-bg:#12294D; --band-line:#2A436E; --band-text:#DCE6F8; --band-gold:#E7B24A;
   --radius:14px; --maxw:1120px;
-  --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --f:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
 }
 @media (prefers-color-scheme:dark){
   :root{--paper:#0A101E;--surface:#101B30;--surface-2:#16233C;--ink:#E7EDF7;--muted:#9BAAC3;
@@ -101,7 +107,8 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 .headcta{background:var(--accent);color:#fff;font-weight:700;font-size:var(--t-base);
          padding:8px 16px;border-radius:9px;margin-left:8px;cursor:pointer}
 .headcta:hover{background:#3D6BF0}
-.burger{display:none;background:none;border:0;color:#DCE6F8;cursor:pointer;padding:8px;margin-left:8px}
+.burger{display:none;background:none;border:0;color:#DCE6F8;cursor:pointer;padding:8px;margin-left:8px;
+        min-height:44px;min-width:44px;align-items:center;justify-content:center}
 .burger svg{width:24px;height:24px}
 .msheet{display:none;background:var(--band-bg);border-top:1px solid var(--band-line);padding:8px 24px 16px}
 .msheet a{display:block;padding:12px 4px;color:#DCE6F8;font-weight:700;font-size:var(--t-base);cursor:pointer;

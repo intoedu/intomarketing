@@ -20,7 +20,7 @@
   --ink:#0E1B33; --muted:#56657F; --line:#DFE6F1;
   --accent:#2E5FE8; --accent-ink:#1E47C0; --band:#12294D;
   --ok:#12805C; --bad:#C2413B;
-  --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --f:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
 }
 @media (prefers-color-scheme:dark){
   :root{--paper:#0A101E;--surface:#101B30;--surface-2:#16233C;--ink:#E7EDF7;--muted:#9BAAC3;

@@ -5,7 +5,7 @@
   --ink:#0E1B33; --muted:#5B6A82; --line:#DFE6F1;
   --accent:#2E5FE8; --accent-ink:#1E47C0; --brand:#12294D;
   --ok:#12805C; --warn:#B67A22; --bad:#C2413B;
-  --f:-apple-system,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",system-ui,sans-serif;
+  --f:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);line-height:1.7;font-size:15px}
@@ -21,13 +21,14 @@ a{color:var(--accent)}
 .gbox h1{font-size:1.25rem;margin-bottom:6px}
 .gsub{color:var(--muted);font-size:.9rem;margin:0 0 18px}
 .gtabs{display:flex;gap:4px;background:var(--surface-2);padding:4px;border-radius:999px;margin:0 0 16px}
-.gtab{flex:1;border:0;background:none;padding:9px 12px;border-radius:999px;font-weight:700;font-size:.9rem;color:var(--muted);cursor:pointer;font-family:inherit}
+/* 🔴 min-height:44px — 손가락으로 누르는 최소 크기입니다 */
+.gtab{flex:1;border:0;background:none;min-height:44px;padding:9px 12px;border-radius:999px;font-weight:700;font-size:.9rem;color:var(--muted);cursor:pointer;font-family:inherit}
 .gtab.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .fld{margin-bottom:12px}
 .fld label{display:block;font-size:.82rem;font-weight:700;color:var(--muted);margin-bottom:6px}
 .inp{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:11px 13px;outline:none;font:inherit}
 .inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(46,95,232,.14)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:.9rem;
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font-weight:700;font-size:.9rem;
      padding:11px 18px;border-radius:10px;border:1.5px solid transparent;cursor:pointer;font-family:inherit;text-decoration:none}
 .btn-p{background:var(--accent);color:#fff}
 .btn-p:hover{background:var(--accent-ink)}
