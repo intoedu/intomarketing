@@ -56,13 +56,21 @@
   .fld label{display:block;font-size:var(--t-sm);font-weight:700;color:var(--muted);margin-bottom:8px}
   .inp{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:12px 12px;outline:none;font:inherit}
   .inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(46,95,232,.14)}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:var(--t-base);
-       padding:12px 16px;border-radius:10px;border:1.5px solid transparent;cursor:pointer;font-family:inherit}
-  .btn-p{background:var(--accent);color:#fff}
-  .btn-p:hover{background:var(--accent-ink)}
-  .btn-g{background:var(--surface);border-color:var(--line);color:var(--ink)}
-  .btn-g:hover{border-color:var(--accent);color:var(--accent)}
-  .btn-s{padding:8px 12px;font-size:var(--t-sm);border-radius:8px}
+  /* ── 버튼 한 벌 (2026-10-06) ──────────────────────────────────
+     🔴 새 버튼 클래스를 만들지 마세요. 이 세 가지면 됩니다.
+        .btn + .btn-primary (채운 것) / .btn-ghost (테두리만)
+        크기는 .btn-s (작게) · .btn-lg (크게) 로만 바꿉니다.
+     예전에는 .btn-primary / .btn-p / .btn-light 가 파일마다 따로 있어서
+     「기본 버튼」 하나 고치려면 세 군데를 찾아야 했습니다.
+     min-height:44px 는 손가락으로 누르는 최소 크기입니다. 줄이지 마세요. */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:12px 24px;border-radius:var(--r-md);font-family:inherit;font-weight:700;font-size:var(--t-base);border:1px solid transparent;cursor:pointer;white-space:nowrap}
+  .btn-s{min-height:36px;padding:8px 12px;font-size:var(--t-sm);border-radius:var(--r-sm)}
+  .btn-lg{padding:16px 32px;font-size:var(--t-md)}
+  /* 짧은 이름은 남겨 둡니다 — 이 쪽 HTML 이 .btn-p / .btn-g 를 쓰고 있습니다 */
+  .btn-primary,.btn-p{background:var(--accent);color:#fff}
+  .btn-primary:hover,.btn-p:hover{background:var(--accent-ink)}
+  .btn-ghost,.btn-g{background:var(--surface);border-color:var(--line);color:var(--ink)}
+  .btn-ghost:hover,.btn-g:hover{border-color:var(--accent);color:var(--accent)}
   .wfull{width:100%}
   .btn[disabled]{opacity:.55;cursor:not-allowed}
   .msg{font-size:var(--t-sm);margin-top:12px;min-height:20px;color:var(--muted)}
@@ -134,7 +142,7 @@
 
     <div id="gNoMatch" style="display:none">
       <p class="gsub"><b>아직 명단에 연결되지 않았습니다.</b></p>
-      <div class="note" style="margin:14px 0">로그인하신 이메일이 영업실장 명단에 없습니다.<br>
+      <div class="note" style="margin:16px 0">로그인하신 이메일이 영업실장 명단에 없습니다.<br>
         계약서에 적으신 이메일로 로그인하셨는지 확인해 주십시오.<br><br>
         <b>010-7318-1790</b> 으로 연락 주시면 바로 등록해 드리겠습니다.</div>
       <button class="btn btn-g wfull" type="button" onclick="location.reload()">다시 확인</button>
@@ -181,7 +189,7 @@
            예전 문장은 「부가세를 뺀 금액(공급가액) 기준」이었는데 이는 사실과 다릅니다.
            산정은 부가세 포함 판매가로 하고, 나온 «금액»을 공급가액으로 봅니다(제7조 세무 처리).
            이 두 가지를 섞어 적으면 실장님이 10%와 11%를 두고 다투게 됩니다. -->
-      <p class="sub" style="margin:14px 0 0">표시된 금액은 <b>고객이 결제한 금액(부가세 포함)</b>입니다.
+      <p class="sub" style="margin:16px 0 0">표시된 금액은 <b>고객이 결제한 금액(부가세 포함)</b>입니다.
         커미션은 이 <b>판매가의 10%</b>로 계산합니다. 계산해서 나온 금액은 계약서 제7조에 따라
         <b>원천징수 전 총액(공급가액)</b>으로 보며, 세금은 사업자 등록 여부에 따라 처리합니다.</p>
     </div>
@@ -204,7 +212,7 @@
       <h2>문의</h2>
       <p class="sub">현황이 실제와 다르거나 빠진 건이 있으면 바로 알려 주십시오.
         계약서 제9조에 따라 <b>확인일로부터 7일 이내</b>에 이의를 제기하실 수 있습니다.</p>
-      <div style="display:flex;gap:9px;flex-wrap:wrap">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
         <a class="btn btn-p" href="tel:01073181790">📞 전화하기</a>
         <a class="btn btn-g" href="sms:01073181790">💬 문자 보내기</a>
         <a class="btn btn-g" id="mailBtn" href="#">✉️ 메일 보내기</a>

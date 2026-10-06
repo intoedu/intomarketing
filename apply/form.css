@@ -37,7 +37,7 @@ button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit
 .wrap{max-width:780px;margin:0 auto;padding:0 20px}
 
 header{background:radial-gradient(120% 100% at 15% -20%,#1E4374 0%,#12294D 62%);color:#fff;padding:44px 0 40px}
-header .back{display:inline-flex;align-items:center;gap:6px;color:#A9C4EA;font-size:var(--t-sm);
+header .back{display:inline-flex;align-items:center;gap:8px;color:#A9C4EA;font-size:var(--t-sm);
              font-weight:600;text-decoration:none;margin-bottom:8px;min-height:44px}
 header .back:hover{color:#fff}
 header h1{font-size:clamp(24px,4vw,32px)}
@@ -56,7 +56,7 @@ main{padding:24px 0 72px}
 .fld label{display:block;font-size:var(--t-sm);font-weight:700;margin-bottom:8px}
 /* 🔴 .fld 안에 들어간 칩은 위 규칙에 눌려 display:block 이 됩니다(선택자가 더 자세함).
       그러면 gap 이 안 먹어 체크박스와 글씨가 붙습니다. 이 줄을 지우지 마세요. */
-.fld label.chip{display:inline-flex;align-items:center;gap:11px;margin-bottom:0;font-size:var(--t-sm)}
+.fld label.chip{display:inline-flex;align-items:center;gap:12px;margin-bottom:0;font-size:var(--t-sm)}
 .fld label .hint{font-weight:500}
 .inp{width:100%;min-height:44px;padding:12px 12px;border:1px solid var(--line);border-radius:10px;
      background:var(--surface-2)}
@@ -66,7 +66,7 @@ textarea.inp{min-height:92px;resize:vertical}
 @media(max-width:620px){.g2{grid-template-columns:1fr}}
 
 /* 큰 고르는 칸 */
-.picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.picks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 @media(max-width:640px){.picks{grid-template-columns:1fr}}
 .pick{border:1px solid var(--line);border-radius:12px;padding:16px 16px;background:var(--surface-2);cursor:pointer;
       transition:.14s;display:block;position:relative}
@@ -113,14 +113,14 @@ textarea.inp{min-height:92px;resize:vertical}
 /* 🔴 min-height:44px 를 지우지 마세요 — 손가락으로 누르는 최소 크기입니다(애플 44pt·구글 48dp).
       예전에는 37px 이라 손가락이 굵으면 빗나갔습니다. 글씨까지가 누름 범위입니다. */
 .chip{border:1px solid var(--line);border-radius:999px;padding:8px 16px;min-height:44px;background:var(--surface-2);
-      cursor:pointer;font-size:var(--t-sm);font-weight:600;display:inline-flex;align-items:center;gap:11px;transition:.14s}
+      cursor:pointer;font-size:var(--t-sm);font-weight:600;display:inline-flex;align-items:center;gap:12px;transition:.14s}
 .chip:hover{border-color:var(--accent)}
 .chip.on{border-color:var(--accent);background:var(--surface);color:var(--accent-ink)}
 .chip input{width:20px;height:20px;accent-color:var(--accent);margin:0;flex:0 0 auto}
 
 /* 수량 고르는 칸 (옵션 추가) */
 .opts{border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.opt{display:flex;align-items:center;gap:14px;padding:16px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.opt{display:flex;align-items:center;gap:16px;padding:16px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .opt:last-child{border-bottom:0}
 .opt .t{flex:1;min-width:190px}
 .opt .t b{display:block;font-size:var(--t-base)}
@@ -133,7 +133,7 @@ textarea.inp{min-height:92px;resize:vertical}
            font-variant-numeric:tabular-nums}
 .qty input::-webkit-outer-spin-button,.qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 
-.consent{display:flex;gap:14px;align-items:flex-start;font-size:var(--t-sm);color:var(--muted);line-height:1.7}
+.consent{display:flex;gap:16px;align-items:flex-start;font-size:var(--t-sm);color:var(--muted);line-height:1.7}
 .consent input{width:22px;height:22px;accent-color:var(--accent);margin-top:2px;flex:0 0 auto}
 .consent a{color:var(--accent-ink);font-weight:700}
 
@@ -142,8 +142,19 @@ textarea.inp{min-height:92px;resize:vertical}
 .note b{color:var(--ink)}
 
 .submit{text-align:center;padding-top:8px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:16px 32px;border-radius:11px;
-     font-weight:800;font-size:var(--t-base);border:0;cursor:pointer;background:var(--band);color:#fff;transition:.14s}
+/* ── 버튼 한 벌 (2026-10-06) ──────────────────────────────────
+   🔴 새 버튼 클래스를 만들지 마세요. 이 세 가지면 됩니다.
+      .btn + .btn-primary (채운 것) / .btn-ghost (테두리만)
+      크기는 .btn-s (작게) · .btn-lg (크게) 로만 바꿉니다.
+   예전에는 .btn-primary / .btn-p / .btn-light 가 파일마다 따로 있어서
+   「기본 버튼」 하나 고치려면 세 군데를 찾아야 했습니다.
+   min-height:44px 는 손가락으로 누르는 최소 크기입니다. 줄이지 마세요. */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:12px 24px;border-radius:var(--r-md);font-family:inherit;font-weight:700;font-size:var(--t-base);border:1px solid transparent;cursor:pointer;white-space:nowrap;transition:.14s}
+.btn-s{min-height:36px;padding:8px 12px;font-size:var(--t-sm);border-radius:var(--r-sm)}
+.btn-lg{padding:16px 32px;font-size:var(--t-md)}
+/* 신청서의 「내기」 단추는 큰 치수를 씁니다 */
+.submit .btn,.btn-primary{background:var(--band);color:#fff}
+.submit .btn{padding:16px 32px;font-size:var(--t-md)}
 .btn:hover{background:#1B3A69}
 .btn[disabled]{opacity:.55;cursor:default}
 .err{color:var(--bad);font-size:var(--t-sm);margin-top:12px;min-height:20px;font-weight:600}
