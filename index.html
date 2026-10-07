@@ -94,7 +94,7 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 .brand b{font-size:var(--t-base);font-weight:800;letter-spacing:-.01em}
 .brand small{display:block;font-size:var(--t-xs);font-weight:600;color:#93B0DE;letter-spacing:.04em;line-height:1.2}
 .links{margin-left:auto;display:flex;align-items:center;gap:2px}
-.navlink{background:none;border:0;cursor:pointer;color:#C6D8F4;font-size:var(--t-base);font-weight:600;
+.navlink{min-height:44px;display:inline-flex;align-items:center;background:none;border:0;cursor:pointer;color:#C6D8F4;font-size:var(--t-base);font-weight:600;
          padding:8px 12px;border-radius:9px;transition-property:background-color,color,transform;transition-duration:.15s;transition-timing-function:ease-out}
 .navlink:hover{color:#fff;background:rgba(255,255,255,.09)}
 .navlink.active{color:#fff;background:rgba(255,255,255,.13)}
@@ -220,16 +220,33 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 @media(max-width:820px){.bw{grid-template-columns:1fr;gap:16px}}
 .btree{position:sticky;top:78px}
 @media(max-width:820px){.btree{position:static;display:flex;gap:8px;overflow-x:auto;padding-bottom:8px}}
-.btree .all{display:block;width:100%;text-align:left;border:0;background:none;font:inherit;cursor:pointer;
-  font-size:var(--t-base);font-weight:800;color:var(--accent-ink,#1E47C0);padding:0 0 12px}
-.bgrp{border-top:1px solid var(--line);padding:16px 0 4px}
+/* ── 분류해서 보기 — 체크로 «여러 개» 고릅니다 (2026-10-07) ──────────────
+   🔴 굵은 묶음 제목은 그 갈래로 «넘어가지 않습니다». 그 묶음 안을 통째로 켜고 끕니다.
+      넘어가는 것은 오른쪽 카드의 「보러 가기」입니다.
+   🔴 전부 꺼져 있으면 «전체»를 보여 줍니다. 처음 들어온 사람에게 빈 화면을 보이지 않으려는 것입니다.
+   🔴 체크 칸은 글씨까지가 누름 범위입니다(label 로 감쌈). 44px 아래로 줄이지 마세요. */
+.btree .all{display:flex;align-items:center;gap:12px;width:100%;min-height:44px;cursor:pointer;
+  font-size:var(--t-base);font-weight:800;color:var(--accent-ink,#1E47C0);padding:0 0 8px}
+.bgrp{border-top:1px solid var(--line);padding:12px 0 8px}
 @media(max-width:820px){.bgrp{border-top:0;padding:0;flex:0 0 auto}}
-.bgrp>b{display:block;font-size:var(--t-base);font-weight:800;margin-bottom:8px;cursor:pointer}
-.bgrp>b:hover{color:var(--accent-ink,#1E47C0)}
-.bleaf{min-height:44px;display:block;width:100%;text-align:left;border:0;background:none;font:inherit;cursor:pointer;
-  font-size:var(--t-sm);color:var(--muted);padding:4px 0}
+.bhead{display:flex;align-items:center;gap:12px;min-height:44px;cursor:pointer;
+  font-size:var(--t-base);font-weight:800;color:var(--ink)}
+.bhead:hover{color:var(--accent-ink,#1E47C0)}
+.bleaf{display:flex;align-items:center;gap:12px;min-height:44px;width:100%;cursor:pointer;
+  font-size:var(--t-sm);color:var(--muted);padding:0 0 0 12px}
 .bleaf:hover{color:var(--ink)}
 .bleaf.on{color:var(--accent-ink,#1E47C0);font-weight:800}
+.btree input[type=checkbox]{width:20px;height:20px;flex:0 0 auto;margin:0;cursor:pointer;
+  accent-color:var(--accent)}
+.btree label:focus-within{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+/* 고른 것 알림 줄 */
+.bsum{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 16px;
+  font-size:var(--t-sm);color:var(--muted)}
+.bsum b{color:var(--ink);font-variant-numeric:tabular-nums}
+.bclear{min-height:44px;border:1px solid var(--line);background:var(--surface);cursor:pointer;
+  border-radius:var(--r-pill);padding:0 16px;font:inherit;font-size:var(--t-sm);font-weight:700;
+  color:var(--muted);transition-property:border-color,color;transition-duration:.15s}
+.bclear:hover{border-color:var(--accent);color:var(--accent-ink,#1E47C0)}
 .bcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(212px,1fr));gap:16px}
 .bcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;
   cursor:pointer;transition-property:border-color,transform;transition-duration:.14s;transition-timing-function:ease-out;text-align:left;font:inherit}
@@ -520,7 +537,9 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
     <div class="wrap">
       <p class="kicker">Browse</p>
       <h2 class="h2">분류해서 보기</h2>
-      <p class="lead">왼쪽 분류를 선택하면 오른쪽에 상세 안내가 표시됩니다.</p>
+      <p class="lead">왼쪽에서 항목을 고르면 오른쪽에 모아서 보여 드립니다. 여러 개를 고르실 수 있습니다.<br>
+         굵은 제목을 누르면 그 묶음이 한 번에 선택됩니다.</p>
+      <p class="bsum" id="bsum"></p>
       <div class="bw">
         <nav class="btree" id="btree"></nav>
         <div class="bcards" id="bcards"></div>
@@ -1780,7 +1799,11 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
       {t:'short',  n:'숏폼',  d:'세로 짧은 영상. 릴스·쇼츠·틱톡.'},
       {t:'long',   n:'롱폼',  d:'홍보 스케치, 인터뷰, 정보전달 영상.'}]}
   ];
-  var bPick=null;   /* null 이면 전체 */
+  /* 고른 항목들. 비어 있으면 «전체»를 보여 줍니다. (2026-10-07 — 하나만 고르던 것에서 바뀜) */
+  var bSel = Object.create(null);
+  function bKeys(){ return Object.keys(bSel); }
+  function bHas(k){ return !!bSel[k]; }
+  function bSet(k,on){ if(on) bSel[k]=1; else delete bSel[k]; }
 
   window.goSub=function(view,t){
     go(view);
@@ -1796,21 +1819,41 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
   function paintBrowse(){
     var tree=document.getElementById('btree'), box=document.getElementById('bcards');
     if(!tree||!box)return;
-    var h='<button class="all" type="button" data-all>전체</button>';
+    var sum=document.getElementById('bsum');
+
+    /* ── 왼쪽 목록 ── */
+    var h='<label class="all"><input type="checkbox" id="b-all"><span>전체</span></label>';
     CATS.forEach(function(c){
-      h+='<div class="bgrp"><b data-go="'+c.v+'">'+c.n+'</b>';
+      h+='<div class="bgrp">'
+        +'<label class="bhead"><input type="checkbox" data-grp="'+c.v+'"><b>'+c.n+'</b></label>';
       c.subs.forEach(function(sb){
         var key=c.v+'/'+sb.t;
-        h+='<button class="bleaf'+(bPick===key?' on':'')+'" type="button" data-key="'+key+'">'+sb.n+'</button>';
+        h+='<label class="bleaf'+(bHas(key)?' on':'')+'">'
+          +'<input type="checkbox" data-key="'+key+'"'+(bHas(key)?' checked':'')+'>'
+          +'<span>'+sb.n+'</span></label>';
       });
       h+='</div>';
     });
     tree.innerHTML=h;
 
+    /* 묶음 체크 — 다 켜졌으면 체크, 일부면 «반쯤»(indeterminate) */
+    CATS.forEach(function(c){
+      var on=c.subs.filter(function(sb){return bHas(c.v+'/'+sb.t);}).length;
+      var g=tree.querySelector('[data-grp="'+c.v+'"]');
+      g.checked = on===c.subs.length && on>0;
+      g.indeterminate = on>0 && on<c.subs.length;
+    });
+    var total=0; CATS.forEach(function(c){total+=c.subs.length;});
+    var picked=bKeys().length;
+    var all=tree.querySelector('#b-all');
+    all.checked = picked===total && total>0;
+    all.indeterminate = picked>0 && picked<total;
+
+    /* ── 오른쪽 카드 ── */
     var list=[];
     CATS.forEach(function(c){ c.subs.forEach(function(sb){
       var key=c.v+'/'+sb.t;
-      if(bPick===null||bPick===key)list.push({c:c,sb:sb,key:key});
+      if(picked===0 || bHas(key)) list.push({c:c,sb:sb,key:key});
     });});
     box.innerHTML=list.map(function(x){
       return '<button class="bcard" type="button" data-key="'+x.key+'">'
@@ -1818,12 +1861,32 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
         +'<span class="more">보러 가기 →</span></button>';
     }).join('');
 
-    tree.querySelector('[data-all]').onclick=function(){bPick=null;paintBrowse();};
-    tree.querySelectorAll('[data-go]').forEach(function(b){
-      b.onclick=function(){go(b.dataset.go);};
+    /* ── 고른 개수 알림 ── */
+    if(sum){
+      /* 고르기 «전»에는 비워 둡니다 — 바로 위 설명과 같은 말이라 두 번 읽히게 됩니다 */
+      sum.innerHTML = picked===0
+        ? ''
+        : '<span><b>'+picked+'</b>개 선택 · '+list.length+'개 표시</span>'
+          +'<button class="bclear" type="button" id="bclear">선택 해제</button>';
+      var cl=document.getElementById('bclear');
+      if(cl) cl.onclick=function(){ bSel=Object.create(null); paintBrowse(); };
+    }
+
+    /* ── 누르면 ── */
+    all.onchange=function(){
+      bSel=Object.create(null);
+      if(all.checked) CATS.forEach(function(c){ c.subs.forEach(function(sb){ bSet(c.v+'/'+sb.t,true); }); });
+      paintBrowse();
+    };
+    tree.querySelectorAll('[data-grp]').forEach(function(g){
+      g.onchange=function(){
+        var c=CATS.filter(function(x){return x.v===g.dataset.grp;})[0];
+        c.subs.forEach(function(sb){ bSet(c.v+'/'+sb.t, g.checked); });
+        paintBrowse();
+      };
     });
-    tree.querySelectorAll('.bleaf').forEach(function(b){
-      b.onclick=function(){bPick=(bPick===b.dataset.key?null:b.dataset.key);paintBrowse();};
+    tree.querySelectorAll('[data-key]').forEach(function(i){
+      i.onchange=function(){ bSet(i.dataset.key, i.checked); paintBrowse(); };
     });
     box.querySelectorAll('.bcard').forEach(function(b){
       b.onclick=function(){var p=b.dataset.key.split('/');goSub(p[0],p[1]);};

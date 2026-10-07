@@ -69,7 +69,7 @@
   .brand .mk{color:var(--brand)}
   .brand small{font-weight:600;font-size:var(--t-xs);color:var(--muted);letter-spacing:0}
   .links{display:flex;gap:24px;margin-left:auto;align-items:center;height:100%}
-  .navlink{background:none;border:0;font-family:inherit;font-size:var(--t-base);font-weight:600;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:0}
+  .navlink{min-height:44px;display:inline-flex;align-items:center;background:none;border:0;font-family:inherit;font-size:var(--t-base);font-weight:600;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:0}
   .navlink:hover,.navlink.active{color:var(--ink)}
   .navitem{position:relative;display:flex;align-items:center;height:100%}
   .caret{width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition-property:transform;transition-duration:.2s;transition-timing-function:ease-out;opacity:.7}
@@ -565,7 +565,7 @@
 
   /* auth */
   .authArea{display:flex;align-items:center;gap:8px}
-  .authArea .lg{background:none;border:0;font-family:inherit;font-weight:600;font-size:var(--t-base);color:var(--muted);cursor:pointer;white-space:nowrap}
+  .authArea .lg{min-height:44px;display:inline-flex;align-items:center;background:none;border:0;font-family:inherit;font-weight:600;font-size:var(--t-base);color:var(--muted);cursor:pointer;white-space:nowrap}
   .authArea .lg:hover{color:var(--ink)}
   .authArea .me{font-size:var(--t-sm);font-weight:700;color:var(--brand);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   @media(max-width:860px){.authArea{display:none}}
@@ -669,7 +669,7 @@
   .meempty{font-size:var(--t-sm);color:var(--muted);text-align:center;padding:24px 8px;line-height:1.7}
   .merow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:20px;
        padding-top:16px;border-top:1px solid var(--line)}
-  .merow .lg{background:none;border:0;font-family:inherit;font-weight:700;font-size:var(--t-base);
+  .merow .lg{min-height:44px;display:inline-flex;align-items:center;background:none;border:0;font-family:inherit;font-weight:700;font-size:var(--t-base);
        color:var(--muted);cursor:pointer;padding:8px 2px}
   .merow .lg:hover{color:#c0392b}
   .authArea .me{cursor:pointer;border:0;background:none;font-family:inherit}
