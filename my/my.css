@@ -70,3 +70,7 @@ a{color:var(--accent)}
 .note{background:var(--surface-2);border-radius:10px;padding:14px 16px;font-size:.86rem;line-height:1.75}
 .empty{text-align:center;color:var(--muted);padding:26px 10px;font-size:.9rem}
 @media(max-width:620px){ .rowline .k{width:88px} }
+
+/* 내 정보 — 두 칸씩 (2026-10-07) */
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
+@media(max-width:620px){.g2{grid-template-columns:1fr}}

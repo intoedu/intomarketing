@@ -74,10 +74,16 @@ async function boot(){
   var r=await sb.rpc('my_orders',{p_center:C.center});
   if(r.error){ show('gAuth'); return gmsg('조회 실패: '+r.error.message,'err'); }
   ORDERS=r.data||[];
-  if(!ORDERS.length){ show('gClaim'); return; }
+  /* 🔴 2026-10-07 — 주문이 없어도 «들어올 수 있어야» 합니다.
+     신청이 로그인 필수가 되면서, 갓 가입한 분은 주문이 0건인 채로 들어옵니다.
+     전에는 여기서 「주문 찾기」 화면에 갇혀 내 정보를 채울 수도 없었습니다.
+     예전에 비로그인으로 신청하신 분을 위한 「주문 찾기」는 아래 안내로 남겨 둡니다. */
 
   $('gate').classList.add('hide'); $('app').classList.remove('hide');
+  loadProfile();                       /* 저장해 둔 내 정보 채우기 */
   render();
+  var none=$('noOrder');
+  if(none) none.style.display = ORDERS.length ? 'none' : '';
 }
 function show(id){
   ['gAuth','gClaim'].forEach(function(x){ if($(x))$(x).style.display=(x===id?'':'none'); });
@@ -133,4 +139,57 @@ function render(){
 }
 
 boot();
+
+/* ── 내 정보 (2026-10-07) ────────────────────────────────────────
+   신청서에서 모인 기본 정보를 여기서 고칠 수 있습니다.
+   🔴 profiles 의 본인 행만 건드립니다. is_admin · is_premium 은 손대지 않습니다
+      (손대려 해도 profiles_guard 트리거가 되돌립니다).
+   여기 저장한 값을 apply/account.js 의 prefill 이 읽어 신청서를 채웁니다. */
+var P_FIELDS=[['p_academy','academy_name'],['p_manager','manager_name'],
+              ['p_phone','phone'],['p_email','email'],
+              ['p_biz','biz_no'],['p_industry','industry'],['p_address','address']];
+
+async function loadProfile(){
+  if(!sb) return;
+  var u=await sb.auth.getUser();
+  var me=(u&&u.data)?u.data.user:null; if(!me) return;
+  var r=await sb.from('profiles')
+    .select('academy_name,manager_name,phone,email,biz_no,industry,address')
+    .eq('id',me.id).maybeSingle();
+  var d=(r&&r.data)||{};
+  P_FIELDS.forEach(function(x){
+    var e=document.getElementById(x[0]);
+    if(e) e.value=d[x[1]]||'';
+  });
+  if(!d.email && me.email){
+    var em=document.getElementById('p_email');
+    if(em && !em.value) em.value=me.email;        /* 로그인 메일을 먼저 보여 줍니다 */
+  }
+}
+
+async function saveProfile(){
+  var msg=document.getElementById('pMsg'), btn=document.getElementById('pSave');
+  function show(t,k){ if(msg){ msg.textContent=t||''; msg.className='msg'+(k?' '+k:''); } }
+  if(!sb) return show('연결이 안 됩니다.','err');
+  var u=await sb.auth.getUser();
+  var me=(u&&u.data)?u.data.user:null;
+  if(!me) return show('로그인이 필요합니다.','err');
+  var o={updated_at:new Date().toISOString()};
+  P_FIELDS.forEach(function(x){
+    var e=document.getElementById(x[0]);
+    o[x[1]]=e ? (e.value||'').trim() || null : null;
+  });
+  btn.disabled=true; show('저장 중...');
+  var r=await sb.from('profiles').update(o).eq('id',me.id).select().maybeSingle();
+  btn.disabled=false;
+  if(r.error) return show('저장 실패: '+r.error.message,'err');
+  show('저장했습니다. 다음 신청서부터 자동으로 채워집니다.','ok');
+}
+
+/* 내 정보 — 화면 열릴 때 불러오고, 단추에 걸어 둡니다 */
+if(document.getElementById('pSave')) document.getElementById('pSave').onclick=saveProfile;
+/* 「그 신청 가져오기」 — 예전 주문 찾기 화면을 다시 엽니다 */
+if(document.getElementById('claimLink')) document.getElementById('claimLink').onclick=function(e){
+  e.preventDefault(); show('gClaim');
+};
 })();
