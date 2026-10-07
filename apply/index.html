@@ -349,6 +349,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="account.js"></script>
 <script src="/ref.js"></script>
 <script>
 (function(){
@@ -356,6 +357,8 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
 var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
 var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
 var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
+/* 로그인·내 정보. 🔴 2026-10-07 부터 신청은 로그인한 분만 할 수 있습니다. */
+if(window.IMAccount){ IMAccount.init(sb); IMAccount.prefill(); }
 function $(id){return document.getElementById(id);}
 
 /* 고른 칸에 표시 */
@@ -474,7 +477,18 @@ $('form').addEventListener('submit',async function(e){
     Object.assign(row, IMRef.values());                       /* 담당 영업실장 */
     Object.assign(row.details, IMRef.extraDetails());         /* 등록증 종류·번호 */
   }
+  /* 🔴 로그인 확인 — 없으면 창이 뜨고, 로그인하면 «적은 내용 그대로» 이어집니다 */
+  if(window.IMAccount){
+    var me=await IMAccount.need();
+    if(!me){
+      btn.disabled=false; btn.textContent='신청서 제출 ↗';
+      err.textContent='로그인하셔야 접수됩니다. 적으신 내용은 그대로 있습니다.';
+      return;
+    }
+    row.user_id=me.id;          /* DB 규칙이 «본인 것»만 받습니다 */
+  }
   var res=await sb.from('requests').insert(row);
+  if(!res.error && window.IMAccount) IMAccount.remember(row, row.details);
 
   if(res.error){
     btn.disabled=false; btn.textContent='신청서 제출 ↗';

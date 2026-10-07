@@ -19,6 +19,9 @@ var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
 var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
 function $(id){return document.getElementById(id);}
 
+/* 로그인·내 정보 (account.js). 🔴 2026-10-07 부터 신청은 로그인한 분만 할 수 있습니다. */
+if(window.IMAccount){ IMAccount.init(sb); IMAccount.prefill(); }
+
 /* ── 이름표를 칸에 묶기 ──
    🔴 왜 필요한가 : 「홍보 지역」 「차별점」 같은 글씨가 눈에는 보여도 <label for> 로
       묶여 있지 않으면, 음성으로 읽는 분에게는 그냥 「편집」이라고만 들립니다.
@@ -158,6 +161,14 @@ if(form) form.addEventListener('submit',async function(e){
   if(!$('f_consent').checked){err.textContent='개인정보 수집 · 이용에 동의하셔야 접수됩니다.';return;}
   if(!sb){err.textContent='연결에 실패했습니다. 잠시 뒤 다시 시도해 주십시오.';return;}
 
+  /* 🔴 로그인 확인 — 없으면 창이 뜨고, 로그인하면 «적은 내용 그대로» 이어집니다.
+        이 자리를 폼 맨 위로 옮기지 마세요. 다 쓰고 나서 묻는 편이 덜 번거롭습니다. */
+  var me=null;
+  if(window.IMAccount){
+    me=await IMAccount.need();
+    if(!me){ err.textContent='로그인하셔야 접수됩니다. 적으신 내용은 그대로 있습니다.'; return; }
+  }
+
   btn.disabled=true; btn.textContent='보내는 중...';
   var row={
     area:   form.dataset.area || '제작',
@@ -167,6 +178,7 @@ if(form) form.addEventListener('submit',async function(e){
     details:got.details
   };
   Object.keys(got.cols).forEach(function(k){ row[k]=got.cols[k]; });
+  if(me) row.user_id=me.id;        /* DB 규칙이 «본인 것»만 받습니다 */
   /* 어느 영업실장을 통해 들어왔는지 (ref.js). 없으면 아무것도 안 붙습니다 */
   if(window.IMRef){
     Object.assign(row, IMRef.values());                       /* 담당 영업실장 */
@@ -180,6 +192,9 @@ if(form) form.addEventListener('submit',async function(e){
       +' — 010-7318-1790 으로 연락 주시면 바로 도와드리겠습니다.';
     return;
   }
+  /* 다음 신청서에서 자동으로 채워지도록 기본 정보를 남깁니다 */
+  if(window.IMAccount) IMAccount.remember(row, got.details);
+
   form.style.display='none';
   $('done').style.display='';
   window.scrollTo({top:0,behavior:'smooth'});

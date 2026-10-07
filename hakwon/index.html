@@ -1732,6 +1732,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../apply/account.js"></script>
 <script>
   var VIEWS=['home','doc','hr','content','mkt','board'];
   function scrollId(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});closeMenu();}
@@ -2056,6 +2057,8 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
   var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
   var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
   var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
+  /* 로그인·내 정보. 🔴 2026-10-07 부터 신청은 로그인한 분만 할 수 있습니다. */
+  if(window.IMAccount){ IMAccount.init(sb); }
   var AREA_KO={doc:"자료제작",hr:"인력",cnt:"컨텐츠",mkt:"마케팅"};
   /* ===== 신청서 사진 업로드 ===== */
   var PHOTO_MAX=10*1024*1024; /* 파일당 10MB (버킷 설정과 동일) */
@@ -2147,8 +2150,21 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
       btn.disabled=false;btn.textContent='신청서 제출';
       return setErr(e.message||'사진 업로드에 실패했습니다. 사진을 빼고 제출하시거나 링크로 남겨주십시오.');
     }
+    /* 🔴 로그인 확인 — 없으면 창이 뜨고, 로그인하면 «적은 내용 그대로» 이어집니다 */
+    var me=null;
+    if(window.IMAccount){
+      me=await IMAccount.need();
+      if(!me){
+        btn.disabled=false; btn.textContent='신청서 제출';
+        return setErr('로그인하셔야 접수됩니다. 적으신 내용은 그대로 있습니다.');
+      }
+    }
     btn.textContent='제출 중...';
-    var res=await sb.from('requests').insert({area:AREA_KO[area]||area,academy_name:academy,manager_name:manager,phone:phone,email:email,message:message,details:details,consent:consent});
+    var row={area:AREA_KO[area]||area,academy_name:academy,manager_name:manager,
+             phone:phone,email:email,message:message,details:details,consent:consent};
+    if(me) row.user_id=me.id;        /* DB 규칙이 «본인 것»만 받습니다 */
+    var res=await sb.from('requests').insert(row);
+    if(!res.error && window.IMAccount) IMAccount.remember(row, details);
     if(res.error){btn.disabled=false;btn.textContent='신청서 제출';setErr('제출 실패: '+res.error.message);return;}
     document.getElementById('doneWhat').textContent='접수 내용 · '+(AREA_KO[area]||area)+' 지원 · '+academy;
     document.getElementById('applyForm').style.display='none';
