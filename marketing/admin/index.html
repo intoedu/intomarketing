@@ -953,7 +953,14 @@
     if(can('requests')){                       /* 의뢰 권한이 없으면 아예 안 읽습니다 (9/29) */
       var rs=await sb.from('requests').select('*').eq('center','mkt').order('created_at',{ascending:false});
       if(rs.error){toast('불러오기 실패: '+rs.error.message);return;}
-      (rs.data||[]).forEach(function(x){DATA[groupOf(x)].push(x);});
+      (rs.data||[]).forEach(function(x){
+        var g=groupOf(x);
+        DATA[g].push(x);
+        /* 🔴 정기 콘텐츠를 영상·디자인에서 신청한 건은 «SNS 목록에도» 올립니다 (2026-10-07).
+              신청은 1건 그대로이고, 같은 줄을 두 목록에서 보는 것뿐입니다.
+              돈(견적·계약·결제)은 원래 팀에서 처리하고, SNS 는 작업 정보만 봅니다. */
+        if(x.content_sub && g!=='sns') DATA.sns.push(x);
+      });
     }
     var st=await sb.from('staff').select('*').order('created_at',{ascending:true});
     STAFF=st.error?[]:(st.data||[]);
@@ -1091,7 +1098,11 @@
       h+='<tr onclick="openDetail(\''+r.id+'\')">'
        +'<td class="num tnum">'+(i+1)+'</td>'
        +'<td><span class="nm">'+esc(r.academy_name||'-')+'</span>'+(r.is_premium?' <span class="badge b-prem">프리미엄</span>':'')+'<span class="sub">'+esc(r.manager_name||'')+(r.phone?' · '+esc(r.phone):'')+'</span></td>'
-       +'<td>'+(r.work_type?esc(r.work_type):'<span class="muted">-</span>')+'</td>'
+       +'<td>'+(r.work_type?esc(r.work_type):'<span class="muted">-</span>')
+             /* 정기 콘텐츠가 붙은 건은 한눈에 보이게. SNS 목록에서는 «어느 팀 건인지»도 적습니다. */
+             +(r.content_sub?' <span class="badge" style="background:#EAF0FE;color:#1E47C0">정기 월'
+                 +esc(r.content_monthly||'?')+(CUR==='sns'&&groupOf(r)!=='sns'?' · '+esc(r.kind):'')
+                 +'</span>':'')+'</td>'
        +'<td>'+(r.assignee_id?esc(staffName(r.assignee_id)||'-'):'<span class="muted">미배정</span>')+'</td>'
        +'<td class="muted" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(r.memo?esc(r.memo):'-')+'</td>'
        +'<td>'+(todos.length?'<div class="prog"><div class="bar"><i style="width:'+pct+'%"></i></div><span class="muted tnum" style="font-size:.78rem">'+done+'/'+todos.length+'</span></div>':'<span class="muted">-</span>')+'</td>'
@@ -1160,6 +1171,27 @@
       if(k.charAt(0)==='_')return; /* _photos 등 내부 값은 아래에서 따로 처리 */
       var v=d[k];add(k,Array.isArray(v)?v.join(', '):v);
     });
+    /* ── 정기 콘텐츠 — SNS 팀이 보는 칸 (2026-10-07) ──
+       🔴 영상·디자인에서 신청한 건도 여기 그대로 보입니다. 따로 신청을 받지 마세요.
+       🔴 계정 아이디·비밀번호는 신청서로 «안 받습니다». SNS 담당자가 따로 받습니다. */
+    if(r.content_sub){
+      var ci=r.content_info||{};
+      var ch=[].concat(ci['채널']||[]).join(', ');
+      var ty=[].concat(ci['콘텐츠 종류']||[]).join(', ');
+      var disc=(r.kind==='영상'||r.kind==='디자인');
+      h+='<div class="irow" style="margin-top:14px;border-top:2px solid var(--accent);padding-top:14px">'
+        +'<span class="k" style="color:var(--accent-ink,#1E47C0);font-weight:800">정기 콘텐츠</span>'
+        +'<span><b>월 '+esc(r.content_monthly||'?')+'개</b>'
+        +(disc?' · <b style="color:#12805C">관리비 10% 할인</b> (우리가 만든 '+esc(r.kind)+'을 올림)':'')
+        +'<br><span class="muted">'+esc(r.kind)+' 신청서에서 접수</span></span></div>';
+      add('올릴 채널', ch);
+      add('콘텐츠 종류', ty);
+      add('촬영 필요', ci['촬영 필요']);
+      add('개수 메모', ci['월 콘텐츠 수']);
+      h+='<div class="irow"><span class="k"></span><span class="muted">'
+        +'🔴 계정 아이디 · 비밀번호는 신청서로 받지 않습니다. 담당자가 따로 받아 주십시오.'
+        +'</span></div>';
+    }
     INFO_TEXT='의뢰처 정보\n'+infoLines(r,'업체명').join('\n');
     h='<div class="irow" style="border:0;padding-bottom:4px"><span class="k"></span>'
       +'<span><button class="btn btn-ghost" style="padding:6px 12px;font-size:.8rem" type="button" '
@@ -1187,6 +1219,12 @@
       if(k==='등록 경로')return;                    /* 우리끼리 쓰는 표시라 복사본에는 안 넣습니다 */
       add(k,d[k]);
     });
+    if(r.content_sub){
+      var ci=r.content_info||{};
+      add('정기 콘텐츠', '월 '+(r.content_monthly||'?')+'개 ('+(r.kind||'')+' 신청서에서)');
+      add('올릴 채널', ci['채널']); add('콘텐츠 종류', ci['콘텐츠 종류']);
+      add('촬영 필요', ci['촬영 필요']); add('개수 메모', ci['월 콘텐츠 수']);
+    }
     if(r.message)add('전체적으로 원하시는 것',r.message);
     return out;
   }
