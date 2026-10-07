@@ -21,6 +21,8 @@ function $(id){return document.getElementById(id);}
 
 /* 로그인·내 정보 (account.js). 🔴 2026-10-07 부터 신청은 로그인한 분만 할 수 있습니다. */
 if(window.IMAccount){ IMAccount.init(sb); IMAccount.prefill(); }
+/* 정기 콘텐츠 구역 (content-sub.js). 자리(<div id="content-sub">)가 있는 신청서에만 그려집니다. */
+if(window.IMContentSub) IMContentSub.init(sb);
 
 /* ── 이름표를 칸에 묶기 ──
    🔴 왜 필요한가 : 「홍보 지역」 「차별점」 같은 글씨가 눈에는 보여도 <label for> 로
@@ -158,6 +160,15 @@ if(form) form.addEventListener('submit',async function(e){
     }catch(x){}
     return;
   }
+  /* 정기 콘텐츠를 켜 두고 덜 채운 경우 */
+  if(window.IMContentSub){
+    var csMiss=IMContentSub.missing();
+    if(csMiss){
+      err.textContent='「'+csMiss.name+'」을(를) 선택하거나 입력해 주십시오.';
+      try{ csMiss.el.scrollIntoView({block:'center',behavior:'smooth'}); }catch(x){}
+      return;
+    }
+  }
   if(!$('f_consent').checked){err.textContent='개인정보 수집 · 이용에 동의하셔야 접수됩니다.';return;}
   if(!sb){err.textContent='연결에 실패했습니다. 잠시 뒤 다시 시도해 주십시오.';return;}
 
@@ -179,6 +190,18 @@ if(form) form.addEventListener('submit',async function(e){
   };
   Object.keys(got.cols).forEach(function(k){ row[k]=got.cols[k]; });
   if(me) row.user_id=me.id;        /* DB 규칙이 «본인 것»만 받습니다 */
+
+  /* 정기 콘텐츠 — 로그인한 «뒤»에 다시 확인합니다.
+     🔴 로그인 전에는 이미 신청했는지 알 수 없어, 창을 닫고 들어온 지금이 처음 아는 시점입니다.
+        여기서 다시 안 보면 같은 손님에게 정기 콘텐츠가 두 건 생깁니다. */
+  if(window.IMContentSub){
+    var cs=IMContentSub.values();                 /* ① 화면이 멀쩡할 때 «먼저» 읽습니다 */
+    if(cs){
+      var already=await IMContentSub.check();     /* ② 그다음 이미 있는지 봅니다 (화면은 안 건드림) */
+      if(already) cs=null;                        /*    있으면 두 번 넣지 않습니다 */
+    }
+    if(cs){ row.content_sub=true; row.content_monthly=cs.content_monthly; row.content_info=cs.content_info; }
+  }
   /* 어느 영업실장을 통해 들어왔는지 (ref.js). 없으면 아무것도 안 붙습니다 */
   if(window.IMRef){
     Object.assign(row, IMRef.values());                       /* 담당 영업실장 */

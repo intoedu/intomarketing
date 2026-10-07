@@ -82,6 +82,9 @@
   <section class="card">
     <p class="eyebrow">Regular</p>
     <h2>정기 콘텐츠 <span class="hint">(맡기시는 경우에만)</span></h2>
+    <!-- 🔴 영상·디자인 신청서에서 이미 신청하셨으면 여기에 알려 드립니다.
+         두 번 신청하는 일이 없어야 합니다. (apply/content-sub.js 가 채웁니다) -->
+    <div class="note" id="cs-have" style="display:none;margin-bottom:16px"></div>
     <p class="sub">매월 콘텐츠를 제작 · 업로드합니다. 위에서 「정기 콘텐츠」를 선택하지 않으셨다면 비워 두셔도 됩니다.</p>
     <div class="fld"><label>월 업로드 개수</label>
       <input class="inp" data-q="월 콘텐츠 수" placeholder="예: 인스타 게시물 8개 + 유튜브 영상 2편"></div>
@@ -166,6 +169,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/ref.js"></script>
 <script src="../account.js"></script>
+<script src="../content-sub.js"></script>
 <script src="../form.js"></script>
 </body>
 </html>
