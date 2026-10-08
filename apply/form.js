@@ -16,7 +16,7 @@
 "use strict";
 var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
 var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
-var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
+var sb=window.IMSB||((window.supabase&&window.supabase.createClient)?(window.IMSB=window.supabase.createClient(SB_URL,SB_KEY)):null);  /* 쪽에 한 벌만 — 머리띠(authbar.js)와 같은 것을 씁니다 */
 function $(id){return document.getElementById(id);}
 
 /* 로그인·내 정보 (account.js). 🔴 2026-10-07 부터 신청은 로그인한 분만 할 수 있습니다. */

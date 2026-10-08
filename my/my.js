@@ -12,7 +12,7 @@
 "use strict";
 var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
 var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
-var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
+var sb=window.IMSB||((window.supabase&&window.supabase.createClient)?(window.IMSB=window.supabase.createClient(SB_URL,SB_KEY)):null);  /* 쪽에 한 벌만 — 머리띠(authbar.js)와 같은 것을 씁니다 */
 var C=window.MY||{center:'mkt',brand:'인투마케팅',phone:'010-7318-1790',email:'info@intomarketing.co.kr'};
 
 function $(id){return document.getElementById(id);}

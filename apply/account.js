@@ -77,15 +77,22 @@ function style(){
 }
 
 /* ── 로그인 창 — 끝나면 사용자(또는 null)를 돌려줍니다 ── */
-function sheet(){
+/* 부르는 쪽이 말을 정합니다 — 신청서에서 띄울 때와 머리띠에서 띄울 때가 다릅니다.
+   o.title / o.sub / o.cancel / o.go2 / o.keep (null 이면 그 줄이 안 나옵니다) */
+function sheet(o){
+  o=o||{};
+  var T =o.title  || '신청하려면 로그인이 필요합니다';
+  var S =o.sub    || '메일과 비밀번호만 있으면 됩니다. 다음부터는 사업자 정보가 자동으로 채워집니다.';
+  var X =o.cancel || '나중에 하기';
+  var G2=o.go2    || '계정 만들고 이어서 신청';
+  var K =('keep' in o) ? o.keep : '적으신 내용은 그대로 있습니다. 로그인하면 이어서 접수됩니다.';
   style();
   return new Promise(function(done){
     var back=el('div','ima-back');
     back.innerHTML=
       '<div class="ima-box" role="dialog" aria-modal="true" aria-labelledby="ima-t">'
-     +  '<h3 id="ima-t">신청하려면 로그인이 필요합니다</h3>'
-     +  '<p class="ima-sub">메일과 비밀번호만 있으면 됩니다. '
-     +     '다음부터는 사업자 정보가 자동으로 채워집니다.</p>'
+     +  '<h3 id="ima-t">'+T+'</h3>'
+     +  '<p class="ima-sub">'+S+'</p>'
      +  '<div class="ima-tabs" role="tablist">'
      +    '<button class="ima-tab" role="tab" aria-selected="true"  data-m="in">로그인</button>'
      +    '<button class="ima-tab" role="tab" aria-selected="false" data-m="up">계정 만들기</button>'
@@ -96,8 +103,8 @@ function sheet(){
      +    '<input id="ima-p" type="password" autocomplete="current-password"></div>'
      +  '<button class="ima-go" type="button" id="ima-go">로그인</button>'
      +  '<p class="ima-msg" id="ima-m" role="status"></p>'
-     +  '<button class="ima-x" type="button" id="ima-x">나중에 하기</button>'
-     +  '<p class="ima-keep">적으신 내용은 그대로 있습니다. 로그인하면 이어서 접수됩니다.</p>'
+     +  '<button class="ima-x" type="button" id="ima-x">'+X+'</button>'
+     +  (K ? ('<p class="ima-keep">'+K+'</p>') : '')
      + '</div>';
     document.body.appendChild(back);
 
@@ -113,7 +120,7 @@ function sheet(){
         mode=t.dataset.m;
         back.querySelectorAll('.ima-tab').forEach(function(o){o.setAttribute('aria-selected','false');});
         t.setAttribute('aria-selected','true');
-        GO.textContent = mode==='in' ? '로그인' : '계정 만들고 이어서 신청';
+        GO.textContent = mode==='in' ? '로그인' : G2;
         P.autocomplete = mode==='in' ? 'current-password' : 'new-password';
         msg('');
       };
@@ -164,7 +171,10 @@ function sheet(){
 }
 
 window.IMAccount = {
-  init:function(client){ sb=client; },
+  /* 🔴 클라이언트는 쪽마다 «한 벌»만 씁니다. 두 벌을 만들면 supabase 가
+        «Multiple GoTrueClient» 경고를 내고, 한쪽에서 로그인한 것을
+        다른 쪽(머리띠 표시)이 못 알아봅니다. */
+  init:function(client){ if(client){ sb=client; window.IMSB=client; } return sb; },
 
   /* 지금 로그인된 사람 (없으면 null) */
   user:async function(){
@@ -174,10 +184,35 @@ window.IMAccount = {
   },
 
   /* 로그인을 «요구»합니다. 이미 되어 있으면 바로, 아니면 창을 띄우고 기다립니다. */
-  need:async function(){
+  need:async function(o){
     var u=await this.user();
     if(u) return u;
-    return await sheet();
+    return await sheet(o);
+  },
+
+  /* 머리띠의 「로그인」 단추가 쓰는 길. 이미 되어 있으면 창을 띄우지 않습니다.
+     🔴 끝나고 쪽을 다시 불러오지 마세요 — 신청서를 쓰던 중일 수 있습니다. */
+  signIn:async function(){
+    return await this.need({
+      title :'로그인',
+      sub   :'메일과 비밀번호만 있으면 됩니다. 계정이 없으시면 「계정 만들기」로 바로 만드실 수 있습니다.',
+      cancel:'닫기',
+      go2   :'계정 만들기',
+      keep  :null
+    });
+  },
+
+  /* 로그아웃. 화면을 치우는 것은 부르는 쪽이 합니다(authbar.js 가 쪽을 다시 불러옵니다). */
+  signOut:async function(){
+    if(!sb) return;
+    cached=null;
+    try{ await sb.auth.signOut(); }catch(e){}
+  },
+
+  /* 로그인 상태가 바뀔 때 알려 줍니다 — 머리띠 표시를 고치는 데 씁니다 */
+  onChange:function(cb){
+    if(!sb || typeof cb!=='function') return;
+    try{ sb.auth.onAuthStateChange(function(){ cached=null; cb(); }); }catch(e){}
   },
 
   /* 저장해 둔 내 정보 */

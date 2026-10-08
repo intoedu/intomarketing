@@ -2056,7 +2056,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
   /* ===== Supabase: 의뢰서(신청) 저장 ===== */
   var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
   var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
-  var sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
+  var sb=window.IMSB||((window.supabase&&window.supabase.createClient)?(window.IMSB=window.supabase.createClient(SB_URL,SB_KEY)):null);  /* 쪽에 한 벌만 — 머리띠(authbar.js)와 같은 것을 씁니다 */
   /* 로그인·내 정보. 🔴 2026-10-07 부터 신청은 로그인한 분만 할 수 있습니다. */
   if(window.IMAccount){ IMAccount.init(sb); }
   var AREA_KO={doc:"자료제작",hr:"인력",cnt:"컨텐츠",mkt:"마케팅"};
@@ -2272,6 +2272,8 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
       var tail=premium?'<span class="pbadge">프리미엄</span>':'<button class="up" type="button" onclick="openPremium()">프리미엄 전환</button>';
       /* 관리자 계정 전용: 프리미엄 화면을 껐다 켜며 확인 */
       if(window.__isOwner){tail+='<button class="lg" type="button" title="최고관리자 전용 · 프리미엄 표시 확인용" onclick="togglePremiumSelf()">프리미엄 '+(premium?'OFF':'ON')+'</button>';}
+      /* 로그아웃이 「내 계정」 창 안에만 있어서 안 보였습니다 — 머리띠에 꺼내 둡니다 */
+      tail+='<button class="lg" type="button" onclick="doLogout()">로그아웃</button>';
       area.innerHTML='<button class="me" type="button" title="내 계정 · 신청 내역 보기" onclick="openMe()">'
         +esc(name)+' 님 ▾</button>'+tail;
       if(ma){ma.textContent='내 계정 · 신청 내역';ma.setAttribute('onclick','openMe()');}

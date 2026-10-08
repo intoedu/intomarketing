@@ -112,6 +112,8 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 .headcta{background:var(--accent);color:#fff;font-weight:700;font-size:var(--t-base);
          padding:8px 16px;border-radius:9px;margin-left:8px;cursor:pointer}
 .headcta:hover{background:#3D6BF0}
+.imab{color:#C6D8F4;margin-left:6px}   /* 🔴 inherit 쓰지 마세요 — 어두운 띠에서 글자가 사라집니다 */
+.msheet #authbar-m a,.msheet .imab-m{color:#DCE6F8}
 .burger{display:none;background:none;border:0;color:#DCE6F8;cursor:pointer;padding:8px;margin-left:8px;
         min-height:44px;min-width:44px;align-items:center;justify-content:center}
 .burger svg{width:24px;height:24px}
@@ -449,6 +451,8 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       <button class="navlink" onclick="go('home','contact')">문의</button>
       <!-- 맡기신 일의 진행 상황을 보는 곳. 로그인은 그 화면에서 합니다 -->
       <a class="navlink" href="/my/">마이페이지</a>
+      <!-- 로그인 상태 · 로그인/로그아웃 단추 (authbar.js 가 채웁니다) -->
+      <span class="imab" id="authbar"></span>
     </nav>
     <a class="headcta" onclick="go('home','contact')">상담 문의</a>
     <button class="burger" id="burger" aria-label="메뉴 열기" aria-expanded="false">
@@ -465,6 +469,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
     <a href="hakwon/">학원지원센터</a>
     <a onclick="go('home','contact')">상담 문의</a>
     <a href="/my/">마이페이지</a>
+    <div id="authbar-m"></div>
   </div>
 </header>
 
@@ -1450,9 +1455,12 @@ body[data-view="home"] .brand small{color:var(--muted)}
 body[data-view="home"] .navlink{color:var(--muted)}
 body[data-view="home"] .navlink:hover{color:var(--ink);background:rgba(14,27,51,.06)}
 body[data-view="home"] .navlink.active{color:var(--ink);background:rgba(46,95,232,.10)}
-body[data-view="home"] .burger{color:var(--ink)}
+body[data-view="home"] .burger,
+body[data-view="home"] .imab{color:var(--ink)}
 body[data-view="home"] .msheet{background:rgba(255,255,255,.92);border-top-color:rgba(14,27,51,.08)}
 body[data-view="home"] .msheet a{color:var(--ink);border-bottom-color:rgba(14,27,51,.07)}
+body[data-view="home"] .msheet #authbar-m a,
+body[data-view="home"] .msheet .imab-m{color:var(--ink)}
 body[data-view="home"] .msheet a.sub{color:var(--muted)}
 
 /* 히어로 — 큰 둥근 흰 카드 + 오른쪽에 겹친 파랑 면 */
@@ -1513,7 +1521,8 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
   :root:not([data-theme="light"]) body[data-view="home"] .navlink{color:#9BAAC3}
   :root:not([data-theme="light"]) body[data-view="home"] .navlink:hover,
   :root:not([data-theme="light"]) body[data-view="home"] .navlink.active{color:#E7EDF7}
-  :root:not([data-theme="light"]) body[data-view="home"] .burger{color:#E7EDF7}
+  :root:not([data-theme="light"]) body[data-view="home"] .burger,
+  :root:not([data-theme="light"]) body[data-view="home"] .imab{color:#E7EDF7}
   :root:not([data-theme="light"]) #v-home .heroCard{background:rgba(16,24,44,.72);
     box-shadow:0 40px 90px -50px rgba(0,0,0,.9)}
   :root:not([data-theme="light"]) #v-home .hero h1{color:#E7EDF7}
@@ -2005,5 +2014,9 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
 
 <!-- 실장 전용 링크(?p=코드)로 들어온 것을 기억해 둡니다 — 신청서에서 씁니다 -->
 <script src="/ref.js"></script>
+<!-- 머리띠에 로그인 상태를 보여 줍니다 -->
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="/apply/account.js"></script>
+<script defer src="/authbar.js"></script>
 </body>
 </html>
