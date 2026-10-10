@@ -141,6 +141,13 @@ textarea.inp{min-height:92px;resize:vertical}
       line-height:1.8}
 .note b{color:var(--ink)}
 
+/* 개인정보 수집 · 이용 고지 상자 (동의 체크 칸 바로 위) */
+.pinfo{background:var(--surface-2);border-radius:11px;padding:16px;margin-bottom:16px;font-size:var(--t-sm);color:var(--muted);line-height:1.8}
+.pinfo b{color:var(--ink)}
+.pinfo ul{list-style:none;margin:6px 0 0;padding:0}
+.pinfo li{position:relative;padding-left:14px}
+.pinfo li::before{content:"·";position:absolute;left:3px;font-weight:800}
+
 .submit{text-align:center;padding-top:8px}
 /* ── 버튼 한 벌 (2026-10-06) ──────────────────────────────────
    🔴 새 버튼 클래스를 만들지 마세요. 이 세 가지면 됩니다.

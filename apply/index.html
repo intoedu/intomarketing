@@ -93,6 +93,11 @@ textarea.inp{min-height:92px;resize:vertical}
 .consent{min-height:44px;display:flex;gap:14px;align-items:flex-start;font-size:13.5px;color:var(--muted);line-height:1.7}
 .consent input{width:22px;height:22px;accent-color:var(--accent);margin-top:2px;flex:0 0 auto}
 .consent a{color:var(--accent-ink);font-weight:700}
+.pinfo{background:var(--surface-2);border-radius:11px;padding:16px;margin-bottom:16px;font-size:13.5px;color:var(--muted);line-height:1.8}
+.pinfo b{color:var(--ink)}
+.pinfo ul{list-style:none;margin:6px 0 0;padding:0}
+.pinfo li{position:relative;padding-left:14px}
+.pinfo li::before{content:"·";position:absolute;left:3px;font-weight:800}
 
 .submit{text-align:center;padding-top:8px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 34px;border-radius:11px;
@@ -318,8 +323,22 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
   </section>
 
   <section class="card">
+    <!-- 🔴 개인정보 수집 · 이용 고지 — 행정 창 확정본(2026-10-10). 개인정보 보호법 제15조 제2항이
+         요구하는 네 가지(목적 · 항목 · 보유 기간 · 거부 권리)입니다. 한 줄도 빼지 마십시오.
+         고쳐 쓰지 마시고, 바꿀 일이 생기면 행정 창에 먼저 묻고 «신청서 7쪽을 함께» 바꾸십시오.
+         (선택)이라고 적은 칸은 비워도 접수되어야 합니다 — 필수로 바꾸려면 이 글도 같이 바꿉니다. -->
+    <div class="pinfo">
+      <b>개인정보 수집 · 이용 안내</b>
+      <ul>
+        <li>이용 목적 — 서비스 의뢰 접수, 견적 발송, 진행 현황 안내, 대금 정산</li>
+        <li>수집 항목 — (필수) 상호, 연락처, 로그인 계정(이메일 주소, 비밀번호)<br>
+            (선택) 담당자 이름, 이메일 주소, 기관 등록증 종류 · 번호, 담당 영업실장 이름, 의뢰 내용</li>
+        <li>보유 기간 — 거래 종료 후 5년</li>
+        <li>동의를 거부하실 수 있습니다. 다만 거부하시면 신청을 접수할 수 없습니다.</li>
+      </ul>
+    </div>
     <label class="consent"><input type="checkbox" id="f_consent">
-      <span>개인정보 수집·이용에 동의합니다. 작성하신 정보는 <b>상담과 견적</b> 외에는 사용하지 않습니다.
+      <span>위 내용을 확인했으며 개인정보 수집·이용에 동의합니다.
         <a href="../privacy/" target="_blank" rel="noopener">개인정보처리방침 보기</a></span></label>
   </section>
 
