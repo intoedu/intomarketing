@@ -116,12 +116,19 @@ function readMulti(box){
 /* ── 모으기 ── */
 function collect(form){
   var cols={}, details={}, missing=null;
+  /* 🔴 빠진 칸은 «화면에서 가장 위에 있는 것»부터 알려 줍니다 (2026-10-12).
+        전에는 표로 바로 가는 칸(상호 · 연락처)을 먼저 봐서, 맨 위 질문을 비워도 「상호」부터 물었습니다.
+        신청서가 길어지면 화면이 위아래로 튀어 헷갈립니다. */
+  function miss(el,name){
+    if(!missing || (el.compareDocumentPosition(missing.el) & Node.DOCUMENT_POSITION_FOLLOWING))
+      missing={el:el, name:name};
+  }
 
   /* 표의 칸으로 바로 가는 것 */
   form.querySelectorAll('[data-col]').forEach(function(el){
     var v=(el.value||'').trim();
     cols[el.dataset.col]=v||null;
-    if(!v && el.dataset.req && !missing) missing={el:el, name:el.dataset.req};
+    if(!v && el.dataset.req) miss(el, el.dataset.req);
   });
 
   /* details 로 가는 것 */
@@ -130,7 +137,7 @@ function collect(form){
     if(el.hasAttribute('data-multi'))      v=readMulti(el).join(', ');
     else if(el.hasAttribute('data-one'))   v=readOne(el);
     else                                   v=(el.value||'').trim();
-    if(!v && el.dataset.req && !missing) missing={el:el, name:el.dataset.req};
+    if(!v && el.dataset.req) miss(el, el.dataset.req);
     if(v) details[q]=v;
   });
 
