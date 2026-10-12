@@ -1763,8 +1763,20 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
       if(r.top < (window.innerHeight||800)*0.92){el.classList.add('in');}
     });
   }
-  function go(view,anchor){
+  /* ══ 「이전」(뒤로 가기) — 2026-10-12. 인투마케팅 메인(/index.html)과 «같은 규칙»입니다 ══
+     기록은 세 층으로만 쌓습니다.   홈(0층) → 지원사업 화면(1층) → 신청서(다른 쪽)
+       · 홈 → 지원사업 화면        : 한 칸 쌓습니다.  그래서 「이전」을 누르면 홈으로 옵니다.
+       · 지원사업 화면 → 다른 화면  : 쌓지 않고 자리만 바꿉니다.
+       · 지원사업 화면 → 홈(메뉴 · 신청하기) : 새로 쌓지 않고 한 칸 물러납니다.
+       · 주소(#hr)로 바로 들어온 경우 : 밑에 홈을 한 칸 깔아 둡니다.
+     🔴 예전에는 replaceState 로 덮어쓰기만 해서, 지원사업 화면에서 「이전」을 누르면 홈페이지 밖으로 나갔습니다.
+     🔴 show() 는 «화면만» 바꿉니다. 기록은 go() 와 popstate 에서만 건드립니다. 섞지 마세요. */
+  var CUR='home', PENDING=null, SY={};
+  function st(view){return {esc:1,view:view,depth:(view==='home'?0:1)};}
+  function mine(){var s=history.state;return (s&&s.esc&&VIEWS.indexOf(s.view)>=0)?s:null;}
+  function show(view,anchor,keepScroll){
     if(VIEWS.indexOf(view)<0)view='home';
+    CUR=view;
     VIEWS.forEach(function(v){var el=document.getElementById('v-'+v);if(el)el.classList.toggle('active',v===view);});
     document.getElementById('nl-support').classList.toggle('active',view!=='home');
     if(view==='board'&&typeof loadBoard==='function'){loadBoard();}
@@ -1772,9 +1784,47 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
     if(anchor){
       window.scrollTo(0,0);
       setTimeout(function(){var el=document.getElementById(anchor);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},40);
-    }else{window.scrollTo({top:0,behavior:'auto'});}
+    }else if(!keepScroll){window.scrollTo({top:0,behavior:'auto'});}
     setTimeout(function(){revealIn(document.getElementById('v-'+view));},60);
-    if(history&&history.replaceState){history.replaceState(null,'','#'+view);}
+  }
+  function go(view,anchor){
+    if(VIEWS.indexOf(view)<0)view='home';
+    var s=mine();
+    if(!(history&&history.pushState)){show(view,anchor);return;}
+    if(view===CUR){show(view,anchor);return;}                       /* 같은 화면 — 기록은 그대로 */
+    SY[CUR]=window.scrollY||0;
+    if(view==='home'){
+      if(s&&s.depth===1){PENDING=anchor||null;history.back();return;}   /* 물러나면 popstate 가 그립니다 */
+      show('home',anchor);history.replaceState(st('home'),'','#home');return;
+    }
+    show(view,anchor);
+    if(s&&s.depth===1){history.replaceState(st(view),'','#'+view);}  /* 지원사업 화면 → 다른 화면 */
+    else{
+      if(s&&s.depth===0){try{history.replaceState({esc:1,view:'home',depth:0,y:SY.home||0},'');}catch(e){}}
+      history.pushState(st(view),'','#'+view);                       /* 홈 → 지원사업 화면 */
+    }
+  }
+  window.addEventListener('popstate',function(){
+    var s=mine(),h=(location.hash||'').replace('#','');
+    var v=s?s.view:(VIEWS.indexOf(h)>=0?h:null);
+    if(!v){if(!h)v='home';else return;}
+    var a=PENDING;PENDING=null;
+    SY[CUR]=window.scrollY||0;
+    show(v,a,true);
+    /* 🔴 behavior:'instant' — html 에 scroll-behavior:smooth 가 있어, 안 적으면 맨 위에서부터 스르륵 내려옵니다 */
+    if(!a){window.scrollTo({top:(s&&s.y!=null)?s.y:(SY[v]||0),behavior:'instant'});}
+  });
+  /* 신청서 등 다른 쪽으로 떠날 때 보던 자리를 그 칸에 적어 둡니다 */
+  window.addEventListener('pagehide',function(){
+    var s=mine();if(!s)return;
+    try{history.replaceState({esc:1,view:s.view,depth:s.depth,y:window.scrollY||0},'');}catch(e){}
+  });
+  /* 홈 화면이 실제로 나온 뒤에 할 일 — 물러나기(history.back)는 한 박자 늦게 끝납니다 */
+  function whenHome(fn){
+    var n=0;(function t(){
+      if(CUR==='home'||n++>12){fn();return;}
+      setTimeout(t,60);
+    })();
   }
   /* 자료제작 신청은 «우리 신청서»로 받습니다 (2026-09-12 바꿈).
      예전에는 제작 파트너 @IM(koreayjk.github.io/aim) 으로 내보냈는데,
@@ -1784,7 +1834,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
   function goAim(){location.href='apply/';}
   function applyWith(k){
     if(k==='doc'){goAim();return;}
-    go('home','apply');setTimeout(function(){applyAgain(true);selectPick(k,true);},80);
+    go('home','apply');setTimeout(function(){whenHome(function(){applyAgain(true);selectPick(k,true);});},80);
   }
 
   /* form picker */
@@ -2071,8 +2121,28 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
   document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
 
   /* initial route */
-  var h=(location.hash||'').replace('#','');
-  if(VIEWS.indexOf(h)>=0){go(h);}else{revealIn(document.getElementById('v-home'));}
+  /* 🔴 신청서에서 「이전」으로 돌아온 경우에는 이미 표시(history.state)가 있습니다.
+        그때는 기록을 또 쌓지 않고 그 화면과 보던 자리만 되살립니다. */
+  (function(){
+    var h=(location.hash||'').replace('#',''), s=mine(), base=location.pathname+location.search;
+    if(!(history&&history.pushState)){
+      if(VIEWS.indexOf(h)>=0){show(h);}else{revealIn(document.getElementById('v-home'));}
+      return;
+    }
+    if(s){
+      show(s.view,null,true);
+      if(s.y){var y=s.y;setTimeout(function(){window.scrollTo({top:y,behavior:'instant'});},60);}
+      return;
+    }
+    if(VIEWS.indexOf(h)>=0&&h!=='home'){
+      history.replaceState(st('home'),'',base);      /* 밑에 홈을 한 칸 깔고 */
+      history.pushState(st(h),'',base+'#'+h);        /* 그 위에 지원사업 화면 */
+      show(h);
+    }else{
+      history.replaceState(st('home'),'',location.href);
+      revealIn(document.getElementById('v-home'));
+    }
+  })();
 
   /* ===== Supabase: 의뢰서(신청) 저장 ===== */
   var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
