@@ -183,7 +183,8 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
     <div class="fld"><label for="f_name">단체 / 사업체명 <span class="req">*</span></label>
       <input class="inp" id="f_name"></div>
     <div class="fld"><label for="f_boss">대표자 성함</label><input class="inp" id="f_boss"></div>
-    <div class="fld"><label for="f_phone">연락처 (전화) <span class="req">*</span></label>
+    <div class="fld"><!-- 🔴 010 만 받게 막지 마십시오 — 병의원 · 요식업은 유선번호만 쓰는 곳이 많습니다 (2026-10-12 행정 창) -->
+    <label for="f_phone">연락처(휴대전화) <span class="req">*</span></label>
       <input class="inp" id="f_phone" type="tel" inputmode="tel" placeholder="010-0000-0000"></div>
     <div class="fld"><label for="f_email">이메일</label><input class="inp" id="f_email" type="email"></div>
     <div class="fld"><label for="f_biz">분야 / 업종</label>
