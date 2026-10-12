@@ -15,8 +15,30 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="../../hakwon/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="../../hakwon/favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#12294D">
+<meta name="theme-color" content="#365C29">
 <link rel="stylesheet" href="../form.css">
+<!-- 🔴 디자인 신청서만 노랑 · 초록입니다 (2026-10-12 디자인팀 요청 — 홈페이지 「디자인」 화면과 같은 색).
+     form.css 는 신청서 네 장이 같이 쓰므로 거기를 고치지 말고 여기서만 덧씌웁니다.
+     노랑 #ECD545 는 면과 선에만 씁니다. 글자로 쓰면 읽히지 않습니다. -->
+<style>
+:root{--accent:#365C29;--accent-ink:#365C29;--band:#365C29;
+      --ink:#1F2E1A;--muted:#56634F;--line:#E3E6D2;--surface-2:#F8F7E6;--paper:#FAF9EE}
+header{background:radial-gradient(120% 100% at 15% -20%,#4A7A39 0%,#365C29 62%)}
+header .back{color:#D3E0C9}
+header p{color:#DCE8D3}
+.eyebrow{display:inline-block;padding:0 4px;background:linear-gradient(transparent 58%,#ECD545 58%)}
+.chip.on{background:#FBF7D4;color:#2A4A1F}
+.pick.on{box-shadow:0 0 0 3px rgba(54,92,41,.16)}
+.btn:hover{background:#2A4A1F}
+@media (prefers-color-scheme:dark){
+  :root{--accent:#9CCB86;--accent-ink:#B4DBA0;--band:#3F6B30;
+        --ink:#E9EFE4;--muted:#A9B5A1;--line:#2C3A26;--surface-2:#1A2416;--paper:#0E140C}
+  header{background:radial-gradient(120% 100% at 15% -20%,#35542A 0%,#223A19 62%)}
+  .eyebrow{background:none;padding:0;color:#ECD545}
+  .chip.on{background:#22271A;color:#B4DBA0}
+  .btn:hover{background:#4B7D3A}
+}
+</style>
 </head>
 <body>
 

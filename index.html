@@ -1136,17 +1136,78 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
           · 글자·단추 = 짙은 초록 #1F6B3B(6.51:1) · 짙은 금색 #7A5C04(6.09:1)
           · 밝은 초록·금색 = 면·선·점에만
         색을 바꾼 게 아니라 «쓰는 자리»를 바꾼 것입니다. 되돌리지 마세요. */
-  #v-design{--accent:#1F6B3B;--accent-ink:#217A3F;--brand:#1F6B3B;--gold:#E8B10E;--gold-ink:#7A5C04}
-  #v-design .kicker{color:var(--gold-ink)}
-  #v-design .sp.on{background:#1F6B3B;border-color:#1F6B3B;color:#fff}
-  #v-design .tag{background:#FDF6DC;color:#7A5C04;border-color:#F3E3A8}
-  #v-design .card h3{color:#1F6B3B}
-  /* 밝은 초록은 여기 — 면과 선 */
-  #v-design .card:hover{border-color:#2F9E55}
-  #v-design .ico{color:#2F9E55}
+  /* 🔴 2026-10-12 디자인팀 요청으로 색을 바꿨습니다.
+        · 노랑 — 더 밝게            #ECD545 (보내 준 견본 그대로)
+        · 초록 — 먹이 많이 섞인 초록  #365C29 (보내 준 견본 그대로)
+        · 글자 — 짙은 초록빛 먹색     #1F2E1A
+        · 표   — 초록 머리 + 옅은 노랑 줄
+        · 맨 위 메뉴바와 맨 아래 사업자 정보 띠도 같은 초록 (이 화면에서만)
+        쓰는 자리의 원칙은 10/6 과 같습니다 — «노랑은 면과 선에만, 그 위 글자는 짙은 초록».
+        노랑 글자는 흰 바탕에서 1.5:1 이라 읽히지 않습니다. 글자색으로 쓰지 마세요.
+        (흰 글자 위 초록 7.7:1 · 노랑 위 짙은 초록 9.4:1 · 초록 위 노랑 5.2:1) */
+  #v-design{--d-green:#365C29;--d-green-2:#2A4A1F;--d-yellow:#ECD545;--d-yellow-pale:#FBF7D4;--d-yellow-line:#E6DB86;
+            --accent:#365C29;--accent-ink:#365C29;--brand:#365C29;--gold:#ECD545;--gold-ink:#365C29;
+            --ink:#1F2E1A;--muted:#56634F;--line:#E3E6D2;--surface-2:#F8F6DF;
+            color:var(--ink)}
+  /* 작은 머리글 — 노랑 형광펜을 그은 모양 */
+  #v-design .kicker{display:inline-block;padding:0 4px;color:var(--d-green);
+                    background:linear-gradient(transparent 58%,var(--d-yellow) 58%)}
+  #v-design .h2{color:var(--d-green)}
+  #v-design .card h3{color:var(--d-green)}
+  #v-design .ico{color:var(--d-green)}
+  #v-design .sp.on{background:var(--d-green);border-color:var(--d-green);color:#fff}
+  #v-design .tag{background:var(--d-yellow-pale);color:var(--d-green-2);border-color:var(--d-yellow-line)}
+  #v-design .card:hover{border-color:var(--d-yellow)}
+  #v-design .work:hover{border-color:var(--d-green)}
+  #v-design .btn-primary{background:var(--d-green);color:#fff}
+  #v-design .btn-primary:hover{background:var(--d-green-2)}
+  #v-design .btn-ghost{color:var(--d-green);border-color:var(--d-green)}
+  #v-design .btn-ghost:hover{background:var(--d-yellow-pale)}
+  /* 표 — 초록 머리 + 옅은 노랑.
+     🔴 분류 칸이 여러 줄을 묶은 표(rowspan)에 줄무늬를 넣으면 묶음마다 무늬가 어긋납니다.
+        그런 표는 «묶인 분류 칸만» 노랑으로, 묶음이 없는 표만 한 줄 건너 노랑으로 칠합니다. */
+  #v-design .ptw{border-color:var(--d-yellow-line)}
+  #v-design .ptab th{background:var(--d-green);color:#fff}
+  #v-design .ptab th,#v-design .ptab td{border-bottom-color:#ECE7B8}
+  #v-design .ptab td[rowspan]{background:var(--d-yellow-pale)}
+  #v-design .ptab:not(:has(td[rowspan])) tbody tr:nth-child(even) td{background:var(--d-yellow-pale)}
+  #v-design .ptab .lo{color:var(--d-green)}
+  #v-design .pnote{background:var(--d-yellow-pale)}
+
+  /* 맨 위 메뉴바 · 맨 아래 띠 — 디자인 화면에서만 초록 */
+  body[data-view="design"] header{background:rgba(54,92,41,.96);border-bottom-color:#4C7340}
+  body[data-view="design"] .brand .mk{background:#ECD545;color:#1F2E1A}
+  body[data-view="design"] .brand small{color:#C9DBBE}
+  body[data-view="design"] .navlink{color:#E3EDDB}
+  body[data-view="design"] .navlink:hover{color:#fff;background:rgba(255,255,255,.12)}
+  body[data-view="design"] .navlink.active{color:#1F2E1A;background:#ECD545}
+  body[data-view="design"] .headcta{background:#ECD545;color:#1F2E1A}
+  body[data-view="design"] .headcta:hover{background:#F4E06A}
+  body[data-view="design"] .imab,
+  body[data-view="design"] .burger{color:#E3EDDB}
+  body[data-view="design"] .msheet{background:#365C29;border-top-color:#4C7340}
+  body[data-view="design"] .msheet a{color:#E3EDDB;border-bottom-color:rgba(255,255,255,.12)}
+  body[data-view="design"] .msheet a.sub{color:#C9DBBE}
+  body[data-view="design"] footer{background:#365C29;color:#D3E0C9}
+  body[data-view="design"] footer .biz b,
+  body[data-view="design"] footer .pol a{color:#F1F6EC}
+  body[data-view="design"] footer .pol{border-top-color:rgba(255,255,255,.22)}
+  body[data-view="design"] footer .pol span{color:#7C9C6E}
+  body[data-view="design"] footer .cr{color:#C2D4B7}
+
+  /* 어두운 화면 — 바탕이 어두우므로 초록은 밝게, 형광펜은 끕니다(밝은 글자 뒤 노랑은 안 읽힙니다) */
   @media(prefers-color-scheme:dark){
-    #v-design{--accent:#5FCB86;--accent-ink:#8CD9A6;--brand:#7FD6A0}
-    #v-design .tag{background:#2A2A16;color:#E8D68A;border-color:#4A4522}
+    #v-design{--d-green:#3F6B30;--d-green-2:#4B7D3A;--d-yellow-pale:#22271A;--d-yellow-line:#3F4A2A;
+              --accent:#9CCB86;--accent-ink:#B4DBA0;--brand:#9CCB86;--gold-ink:#ECD545;
+              --ink:#E9EFE4;--muted:#A9B5A1;--line:#2C3A26;--surface-2:#1A2416}
+    #v-design .kicker{background:none;padding:0;color:#ECD545}
+    #v-design .h2,#v-design .card h3,#v-design .ico,#v-design .ptab .lo{color:#B4DBA0}
+    #v-design .tag{color:#E9DC7A}
+    #v-design .btn-ghost{color:#B4DBA0;border-color:#4B7D3A}
+    #v-design .ptab th,#v-design .ptab td{border-bottom-color:#2C3A26}
+    body[data-view="design"] header{background:rgba(34,58,25,.96);border-bottom-color:#35542A}
+    body[data-view="design"] .msheet,
+    body[data-view="design"] footer{background:#223A19}
   }
 </style>
 <section class="view" id="v-design">
