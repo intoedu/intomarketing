@@ -104,6 +104,21 @@ document.querySelectorAll('.qty').forEach(function(q){
   });
 });
 
+/* ── 「← 팀 화면」 링크 (2026-10-12) ──
+   방금 그 화면에서 넘어왔으면 «새로 가지 않고» 한 칸 물러납니다.
+   🔴 새로 가면 기록이 [팀 화면 → 신청서 → 팀 화면] 으로 쌓여, 거기서 「이전」을 누르면
+      신청서로 되돌아옵니다. 그 뒤로는 화면이 뒤죽박죽이 됩니다.
+   다른 곳(검색 · 즐겨찾기)에서 바로 들어온 경우에는 원래대로 링크를 따라갑니다. */
+document.querySelectorAll('a[data-back]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    try{
+      var r=document.referrer?new URL(document.referrer):null;
+      var fromMain=r && r.origin===location.origin && (r.pathname==='/'||r.pathname==='/index.html');
+      if(fromMain && history.length>1){ e.preventDefault(); history.back(); }
+    }catch(x){}
+  });
+});
+
 /* ── 값 읽기 ── */
 function readOne(box){
   var el=box.querySelector('input:checked');

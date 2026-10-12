@@ -2014,8 +2014,21 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
     },{passive:true});
   }
 
-  window.go=function(view,anchor){
+  /* ══ 「이전」(뒤로 가기) — 2026-10-12 ══════════════════════════════════════
+     기록은 «세 층»으로만 쌓습니다.   메인(0층) → 팀 화면(1층) → 신청서(다른 쪽)
+       · 메인 → 팀 화면      : 한 칸 쌓습니다(pushState).   그래서 「이전」을 누르면 메인으로 옵니다.
+       · 팀 화면 → 다른 팀    : 쌓지 않고 자리만 바꿉니다.    어느 팀에 있든 「이전」 한 번이면 메인입니다.
+       · 팀 화면 → 메인(메뉴) : 새로 쌓지 않고 한 칸 «물러납니다». 안 그러면 메인이 두 겹이 됩니다.
+       · 팀 주소(#design)로 바로 들어온 경우 : 밑에 메인을 한 칸 깔아 둡니다.
+     🔴 예전에는 replaceState 로 덮어쓰기만 해서, 팀 화면에서 「이전」을 누르면 홈페이지 밖으로 나갔습니다.
+     🔴 show() 는 «화면만» 바꿉니다. 기록은 go() 와 popstate 에서만 건드립니다. 섞지 마세요. */
+  var cur='home', pendingAnchor=null, SY={};
+  function st(view){return {im:1,view:view,depth:(view==='home'?0:1)};}
+  function mine(){var s=history.state; return (s&&s.im&&VIEWS.indexOf(s.view)>=0)?s:null;}
+
+  function show(view,anchor,keepScroll){
     if(VIEWS.indexOf(view)<0)view='home';
+    cur=view;
     VIEWS.forEach(function(v){
       var el=document.getElementById('v-'+v);
       if(el)el.classList.toggle('active',v===view);
@@ -2032,11 +2045,41 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
         var el=document.getElementById(anchor);
         if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
       },40);
-    }else{
+    }else if(!keepScroll){
       window.scrollTo({top:0,behavior:'auto'});
     }
-    if(history&&history.replaceState)history.replaceState(null,'','#'+view);
+  }
+
+  window.go=function(view,anchor){
+    if(VIEWS.indexOf(view)<0)view='home';
+    var s=mine();
+    if(!(history&&history.pushState)){ show(view,anchor); return; }
+    if(view===cur){ show(view,anchor); return; }                      /* 같은 화면 — 기록은 그대로 */
+    SY[cur]=window.scrollY||0;                                        /* 떠나는 화면의 위치를 기억해 둡니다 */
+    if(view==='home'){
+      if(s&&s.depth===1){ pendingAnchor=anchor||null; history.back(); return; }   /* 물러나면 popstate 가 그립니다 */
+      show('home',anchor); history.replaceState(st('home'),'','#home'); return;
+    }
+    show(view,anchor);
+    if(s&&s.depth===1) history.replaceState(st(view),'','#'+view);    /* 팀 → 팀 */
+    else{
+      /* 메인 → 팀 : 메인 칸에 «보던 자리»를 적어 두고 한 칸 쌓습니다.
+         신청서까지 다녀오면 쪽을 새로 읽어 기억(SY)이 사라지므로, 칸에 적어 둬야 메인으로 돌아왔을 때 그 자리가 나옵니다. */
+      if(s&&s.depth===0){ try{ history.replaceState({im:1,view:'home',depth:0,y:SY.home||0},''); }catch(e){} }
+      history.pushState(st(view),'','#'+view);
+    }
   };
+
+  /* 「이전」·「다음」을 눌렀을 때 — 그 칸에 적어 둔 화면을 다시 그립니다 */
+  window.addEventListener('popstate',function(){
+    var s=mine(), h=(location.hash||'').replace('#','');
+    var v=s?s.view:(VIEWS.indexOf(h)>=0?h:null);
+    if(!v){ if(!h) v='home'; else return; }       /* #main 같은 화면 안 이동은 건드리지 않습니다 */
+    var a=pendingAnchor; pendingAnchor=null;
+    SY[cur]=window.scrollY||0;
+    show(v,a,true);
+    if(!a){ window.scrollTo({top:(s&&s.y!=null)?s.y:(SY[v]||0),behavior:'instant'}); }   /* 떠날 때 보던 자리로 (스르륵 움직이지 않게) */
+  });
 
   /* 2차 메뉴 — /hakwon/ 과 같은 방식입니다 (.subpills > .sp[data-t] → .subpanel#영역-값) */
   document.querySelectorAll('.subpills').forEach(function(bar){
@@ -2062,9 +2105,34 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
     burger.setAttribute('aria-expanded',on?'true':'false');
   });
 
-  /* 주소에 #blog 처럼 붙어 들어오면 그 화면부터 */
-  var h=(location.hash||'').replace('#','');
-  if(VIEWS.indexOf(h)>=0)go(h);
+  /* 다른 쪽(신청서 등)으로 떠날 때 보던 자리를 그 칸에 적어 둡니다 — 돌아왔을 때 같은 자리가 보이게 */
+  window.addEventListener('pagehide',function(){
+    var s=mine(); if(!s) return;
+    try{ history.replaceState({im:1,view:s.view,depth:s.depth,y:window.scrollY||0},''); }catch(e){}
+  });
+
+  /* 처음 들어올 때 — 주소에 #blog 처럼 붙어 있으면 그 화면부터.
+     🔴 신청서에서 「이전」으로 돌아온 경우에는 이미 표시(history.state)가 있습니다.
+        그때는 기록을 또 쌓지 않고 그 화면만 다시 그립니다(위치도 브라우저가 되돌려 줍니다). */
+  (function(){
+    var h=(location.hash||'').replace('#',''), s=mine();
+    var base=location.pathname+location.search;
+    if(!(history&&history.pushState)){ if(VIEWS.indexOf(h)>=0)show(h); return; }
+    if(s){
+      show(s.view,null,true);
+      /* 신청서로 떠날 때 적어 둔 자리로 — 브라우저가 화면을 통째로 되살리지 못하고 새로 읽은 경우 */
+      /* 🔴 behavior:'instant' — html 에 scroll-behavior:smooth 가 걸려 있어, 안 적으면 맨 위에서부터 스르륵 내려옵니다 */
+      if(s.y){ var y=s.y; setTimeout(function(){ window.scrollTo({top:y,behavior:'instant'}); },60); }
+      return;
+    }
+    if(VIEWS.indexOf(h)>=0 && h!=='home'){
+      history.replaceState(st('home'),'',base);        /* 밑에 메인을 한 칸 깔고 */
+      history.pushState(st(h),'',base+'#'+h);          /* 그 위에 팀 화면 */
+      show(h);
+    }else{
+      history.replaceState(st('home'),'',location.href);
+    }
+  })();
 })();
 </script>
 
