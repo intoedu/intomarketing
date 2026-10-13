@@ -224,6 +224,27 @@ if(form) form.addEventListener('submit',async function(e){
     }
     if(cs){ row.content_sub=true; row.content_monthly=cs.content_monthly; row.content_info=cs.content_info; }
   }
+  /* SNS 신청서 — 「정기 콘텐츠」를 고르면 정기 콘텐츠 건으로 표시합니다 (2026-10-13).
+     🔴 전에는 영상 · 디자인 신청서에서 넣은 것만 표시가 붙었습니다. 그래서 SNS 신청서로 먼저 신청한 분이
+        나중에 영상 신청서를 열면 「정기 콘텐츠도 함께 신청합니다」를 또 물었습니다(두 번 신청).
+     이미 신청되어 있으면 또 표시하지 않습니다 — 영상 · 디자인 쪽과 같은 규칙입니다. */
+  if(form.dataset.kind==='SNS' && /정기 콘텐츠/.test(row.details['신청 유형']||'') && !row.content_sub){
+    var hasCs=window.IMContentSub ? await IMContentSub.check() : false;
+    if(!hasCs){
+      var d=row.details, sum=0;
+      ['정기 — 인스타 월 건수','정기 — 블로그 월 건수','정기 — 쇼츠·릴스 월 편수','정기 — 유튜브 롱폼 월 편수'].forEach(function(k){
+        var n=parseInt(d[k],10); if(!isNaN(n)&&n>0) sum+=n;
+      });
+      var ch=[];
+      if(d['정기 — 인스타 월 건수'])       ch.push('인스타그램');
+      if(d['정기 — 블로그 월 건수'])       ch.push('네이버 블로그 (공식 블로그)');
+      if(d['정기 — 쇼츠·릴스 월 편수'])    ch.push('유튜브 쇼츠 · 인스타 릴스');
+      if(d['정기 — 유튜브 롱폼 월 편수'])  ch.push('유튜브 롱폼');
+      row.content_sub=true;
+      row.content_monthly=sum||null;
+      row.content_info={'채널':ch,'콘텐츠 종류':[],'촬영 필요':d['촬영 필요']||'','월 콘텐츠 수':''};
+    }
+  }
   /* 어느 영업실장을 통해 들어왔는지 (ref.js). 없으면 아무것도 안 붙습니다 */
   if(window.IMRef){
     Object.assign(row, IMRef.values());                       /* 담당 영업실장 */

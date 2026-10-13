@@ -1178,11 +1178,10 @@
       var ci=r.content_info||{};
       var ch=[].concat(ci['채널']||[]).join(', ');
       var ty=[].concat(ci['콘텐츠 종류']||[]).join(', ');
-      var disc=(r.kind==='영상'||r.kind==='디자인');
+      /* 「관리비 10% 할인」 표시는 2026-10-13 에 뺐습니다 — 그 할인이 없어졌습니다. 다시 넣지 마세요. */
       h+='<div class="irow" style="margin-top:14px;border-top:2px solid var(--accent);padding-top:14px">'
         +'<span class="k" style="color:var(--accent-ink,#1E47C0);font-weight:800">정기 콘텐츠</span>'
         +'<span><b>월 '+esc(r.content_monthly||'?')+'개</b>'
-        +(disc?' · <b style="color:#12805C">관리비 10% 할인</b> (우리가 만든 '+esc(r.kind)+'을 올림)':'')
         +'<br><span class="muted">'+esc(r.kind)+' 신청서에서 접수</span></span></div>';
       add('올릴 채널', ch);
       add('콘텐츠 종류', ty);

@@ -442,7 +442,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         <div class="drop">
           <a onclick="go('blog')">블로그 · 리뷰<small>실 운영 블로거가 본인 계정에 직접 작성</small></a>
           <a onclick="go('web')">홈페이지 제작<small>기획 · 제작 · 배포 · 소유권 이관</small></a>
-          <a onclick="go('sns')">SNS 채널 제작<small>채널 개설 · 지도 등록 · 콘텐츠 운영</small></a>
+          <a onclick="go('sns')">SNS 채널 제작<small>채널 세팅 · 지도 등록 · 정기 콘텐츠</small></a>
           <a onclick="go('design')">디자인<small>로고 · 명함 · 인쇄물 · 카드뉴스</small></a>
           <a onclick="go('video')">영상 제작<small>숏폼 · 롱폼 · 기획 · 촬영 · 편집</small></a>
         </div>
@@ -518,7 +518,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         <div class="item" onclick="go('sns')" role="link" tabindex="0" onkeydown="if(event.key==='Enter')go('sns')">
           <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="17.5" cy="6" r="2.6"/><circle cx="6.5" cy="12" r="2.6"/><circle cx="17.5" cy="18" r="2.6"/><path d="M9 10.7 15 7.4M9 13.3l6 3.3"/></svg></span>
           <b>SNS 채널 제작</b>
-          <span>채널 개설 · 지도 등록</span>
+          <span>채널 세팅 · 지도 등록</span>
           <span class="price">상담 후 안내</span>
         </div>
         <div class="item" onclick="go('design')" role="link" tabindex="0" onkeydown="if(event.key==='Enter')go('design')">
@@ -925,67 +925,75 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
     <div class="wrap">
       <p class="kicker">Service 03</p>
       <h2 class="h2">SNS 채널 제작</h2>
-      <p class="lead">채널 개설까지만 의뢰하셔도 되고, 콘텐츠 업로드까지 의뢰하셔도 됩니다.
+      <p class="lead">채널 세팅만 의뢰하셔도 되고, 매달 콘텐츠 업로드(정기 콘텐츠)까지 의뢰하셔도 됩니다.
          지도 등록은 검색 유입 시 가장 먼저 노출되는 영역이라 함께 진행합니다.</p>
       <div class="acts" style="margin-top:24px"><a class="btn btn-primary" href="apply/sns/">SNS 신청서 쓰기 →</a></div>
     </div>
   </div>
 
+  <!-- 🔴 2026-10-13 상품 구성을 통째로 바꿨습니다 (SNS 채널팀 최종 매뉴얼 · 2026-10-12).
+       근거 = 인투마케팅 매뉴얼/가격:환불 모음/가격·환불-모음 1012.md 1-5 · 2-5
+       · 없어진 것 : 진단비 · 계정 개설 · 페이스북 · 스레드 · 샤오홍슈 · 출장(방문) · 댓글과 DM 응대 · 애플 지도
+       · 지도는 「등록」과 「디자인 세팅」을 따로 받습니다
+       · 정기 콘텐츠는 «묶음 상품»이 아니라 기본 운영비 + 건당 금액입니다
+       · 금액은 매뉴얼의 부가세 포함 값을 «그대로» 옮깁니다. 1.1 을 곱하지 마세요.
+       다시 넣지 마세요 — 「계정을 만들어 드립니다」 「댓글에 답해 드립니다」 「방문해서 도와드립니다」. -->
   <div class="sec" style="padding-top:0">
     <div class="wrap">
       <div class="subpills" data-area="sns">
-        <button class="sp on" data-t="open" type="button">채널 개설</button>
-        <button class="sp" data-t="run" type="button">개설 + 운영</button>
+        <button class="sp on" data-t="open" type="button">채널 세팅</button>
+        <button class="sp" data-t="run" type="button">세팅 + 정기 콘텐츠</button>
       </div>
 
       <div class="subpanel on" id="sns-open">
         <div class="card" style="margin-bottom:8px">
-          <h3>생성 및 프로필 설정</h3>
-          <p>계정 개설 후 프로필 · 소개 · 연락처 · 영업시간을 설정합니다.
-             개설한 계정의 권한은 전부 고객께 이관합니다.</p>
+          <h3>프로필 · 디자인 세팅</h3>
+          <p>보유하신 계정에 <b>관리자 권한</b>을 받아 프로필 · 소개 · 연락처 · 영업시간과 채널 디자인을 세팅합니다.
+             세팅이 끝나면 운영 방법을 원격으로 안내해 드립니다. 계정은 처음부터 끝까지 고객 소유입니다.</p>
         </div>
       </div>
 
       <div class="subpanel" id="sns-run">
         <div class="card" style="margin-bottom:8px">
-          <h3>디자인 · 상품 등록 · 업로드 포함</h3>
-          <p>개설에 더해 게시물 디자인, 상품 · 메뉴 등록, 업로드까지 수행합니다.
-             디자인과 함께 진행하면 채널별 이미지를 일관되게 구축할 수 있습니다.</p>
+          <h3>디자인 · 업로드까지</h3>
+          <p>세팅에 더해 매달 게시물 디자인과 업로드를 맡습니다.
+             업로드 일정과 내용은 <b>계획표</b>로 먼저 확인받고, 확정하신 대로 진행합니다.</p>
         </div>
       </div>
 
       <div class="plat">
         <div class="platbox">
-          <h4>SNS · 계정</h4>
-          <div class="row"><span>카카오 비즈니스</span><span>네이버</span><span>구글 계정</span><span>인스타그램</span></div>
+          <h4>채널</h4>
+          <div class="row"><span>네이버 블로그</span><span>인스타그램</span><span>유튜브</span><span>상담 채널</span></div>
         </div>
         <div class="platbox">
           <h4>지도 등록</h4>
-          <div class="row"><span>네이버 지도</span><span>카카오맵</span><span>구글 지도</span><span>티맵</span></div>
+          <div class="row"><span>네이버 지도</span><span>구글 지도</span><span>카카오맵</span><span>티맵</span></div>
         </div>
       </div>
 
-      <!-- 채널 구분 · 근거 = 인투마케팅 메뉴얼/SNS/매뉴얼0 2장 -->
       <div style="margin-top:52px">
         <p class="kicker">Channels</p>
         <h2 class="h2">어떤 채널을 맡나요</h2>
         <p class="lead">기본 구성은 <b>네이버 블로그 + 인스타그램</b>이며, 필요한 채널만 선택하실 수 있습니다.</p>
         <div class="grid2">
           <div class="card"><h3>메인</h3>
-            <p>네이버 블로그 + 인스타그램. 세팅의 기본 구성이며 단일 채널만도 가능합니다.</p></div>
+            <p>네이버 블로그(홈페이지형) + 인스타그램. 둘을 묶으면 따로 하실 때보다 저렴하며,
+               한 채널만 하셔도 됩니다.</p></div>
           <div class="card"><h3>유튜브</h3>
-            <p>채널 세팅과 정기 영상 업로드까지 함께 합니다.</p></div>
+            <p>채널을 세팅합니다. 정기 콘텐츠로 영상 업로드 관리까지 함께 맡기실 수 있습니다.</p></div>
           <div class="card"><h3>지도</h3>
-            <p>네이버 지도 · 카카오맵 · 구글 지도 · 티맵 · 애플 지도.
-               검색 유입 시 가장 먼저 노출되는 영역이라 함께 등록합니다.</p></div>
+            <p>네이버 지도 · 구글 지도 · 카카오맵 · 티맵.
+               <b>신규 등록</b>과 <b>디자인 세팅</b>(사진 · 정보 정리)을 따로 고르실 수 있어,
+               이미 등록된 지도는 디자인 세팅만 하셔도 됩니다.</p></div>
           <div class="card"><h3>상담 채널</h3>
-            <p>네이버 톡톡 · 카카오톡 채널을 연결하고 기본 설정을 잡은 뒤,
-               <b>응대 교육을 제공합니다.</b> 실제 고객 응대는 현장에서 직접 하셔야 합니다.</p></div>
-          <div class="card"><h3>페이스북 · 스레드</h3>
-            <p>페이스북은 메인에 추가로 세팅합니다. 스레드는 <b>계정 개설과 활용 가이드 제공</b>까지이며,
-               세팅 · 운영은 포함하지 않습니다.</p></div>
-          <div class="card"><h3>샤오홍슈</h3>
-            <p>중국인 고객 비중이 있는 업종에 한해, 요청 시 개설 · 중국어 세팅을 진행합니다.</p></div>
+            <p>네이버 톡톡 · 카카오톡 채널을 연결하고 자동응답을 설정한 뒤,
+               <b>사용 교육을 제공합니다.</b> 실제 고객 응대는 현장에서 직접 하셔야 합니다.</p></div>
+          <div class="card"><h3>하지 않는 것</h3>
+            <p><b>계정 개설 · 방문(출장) 작업 · 댓글과 DM 응대</b>는 하지 않습니다.
+               페이스북 · 스레드 · 샤오홍슈도 맡지 않습니다. 모든 작업과 교육은 원격으로 진행합니다.</p></div>
+          <div class="card"><h3>따로 드는 것</h3>
+            <p>광고비, 사진 촬영, 모델 · 장소 섭외, 로고 제작은 세팅과 정기 콘텐츠 금액에 들어 있지 않습니다.</p></div>
         </div>
       </div>
 
@@ -998,10 +1006,10 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         <div class="grid2">
           <div class="card"><h3>한 달 흐름</h3>
             <p>계획표 공유(시작 5영업일 전) → 확정(3영업일 전) → 제작 →
-               업로드 2영업일 전 <b>사전 공유</b> → 업로드 → 댓글 응대 → 월간 리포트</p></div>
+               업로드 2영업일 전 <b>사전 공유</b> → 업로드 → 월간 리포트</p></div>
           <div class="card"><h3>만드는 것</h3>
-            <p>인스타 게시물·카드뉴스, 릴스·쇼츠, 유튜브 영상, 블로그 글.
-               사진은 전달받거나 별도 촬영으로 진행합니다.</p></div>
+            <p>인스타 게시물 · 카드뉴스, 쇼츠 · 릴스, 유튜브 영상, 고객 공식 블로그의 글.
+               사진 · 영상 소스는 전달받거나 별도 촬영으로 진행합니다.</p></div>
           <div class="card"><h3>사전 공유 기준</h3>
             <p>의견이 없으면 계획대로 업로드합니다. 다만 <b>의료 · 금융 등 광고 규정 업종</b>,
                가격 · 할인 · 이벤트, 고객 후기 · 전후 사진이 포함된 게시물은 <b>확정 전 업로드하지 않습니다.</b></p></div>
@@ -1010,10 +1018,6 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         </div>
       </div>
 
-      <!-- 가격 — 근거 = 인투마케팅 메뉴얼/SNS/채널관리_매뉴얼0 4장 가격표
-           🔴 매뉴얼은 부가세 «별도», 아래 금액은 전부 ×1.1 한 «포함» 금액입니다.
-           🔴 2026-09-20 에 「원가 확정 후 조정」 잠정값이라 한 번 내렸던 표입니다.
-              2026-10-03 PG 심사가 단가표를 요구해 다시 올렸습니다 — 원가가 바뀌면 여기도 고쳐야 합니다. -->
       <div style="margin-top:52px">
         <p class="kicker">Pricing</p>
         <h2 class="h2">비용</h2>
@@ -1024,78 +1028,84 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         <h3 class="h3" style="margin-top:32px;font-size:1.15rem">채널 세팅 — 한 번만 내는 금액</h3>
         <div class="ptw">
           <table class="ptab">
-            <thead><tr><th>채널</th><th>세팅</th><th>계정이 없을 때 개설</th><th>디자인까지</th></tr></thead>
+            <thead><tr><th>상품</th><th>금액</th><th style="text-align:left">포함</th></tr></thead>
             <tbody>
-              <tr><td style="text-align:left"><b>메인</b><span class="sm">네이버 블로그 + 인스타그램</span></td>
-                  <td>220,000</td><td>채널당 +33,000</td><td>+220,000</td></tr>
-              <tr><td style="text-align:left">블로그 또는 인스타그램 단독</td>
-                  <td>132,000</td><td>+33,000</td><td>+110,000</td></tr>
-              <tr><td style="text-align:left">유튜브 채널</td><td>121,000</td><td>+44,000</td><td>+165,000</td></tr>
-              <tr><td style="text-align:left">페이스북 페이지</td><td>44,000</td><td>+22,000</td><td>—</td></tr>
-              <tr><td style="text-align:left">스레드 <span class="sm">계정 개설 + 활용 가이드</span></td>
-                  <td>33,000</td><td>11,000</td><td>—</td></tr>
-              <tr><td style="text-align:left">상담 채널 <span class="sm">네이버 톡톡 · 카카오톡 채널 + 응대 교육</span></td>
-                  <td>110,000</td><td>—</td><td>추가 교육 회당 55,000</td></tr>
-              <tr><td style="text-align:left">샤오홍슈 <span class="sm">개설 · 기업 인증 · 중국어 세팅</span></td>
-                  <td>440,000</td><td>—</td><td>인증 수수료 실비 별도</td></tr>
+              <tr><td style="text-align:left">네이버 블로그 <span class="sm">홈페이지형</span></td>
+                  <td><b>330,000</b></td><td style="text-align:left">세팅 · 디자인 · 글쓰기와 위젯 안내 30분</td></tr>
+              <tr><td style="text-align:left">인스타그램</td>
+                  <td><b>220,000</b></td><td style="text-align:left">세팅 · 디자인 · 게시와 하이라이트 안내 30분</td></tr>
+              <tr><td style="text-align:left"><b>블로그 + 인스타그램 묶음</b></td>
+                  <td><b>495,000</b></td><td style="text-align:left">세팅 · 디자인 · 통합 안내 1시간</td></tr>
+              <tr><td style="text-align:left">유튜브 채널</td>
+                  <td><b>231,000</b></td><td style="text-align:left">세팅 · 디자인 · 업로드와 설정 안내 30분</td></tr>
+              <tr><td style="text-align:left">상담 채널 <span class="sm">네이버 톡톡 · 카카오톡 채널</span></td>
+                  <td><b>110,000</b></td><td style="text-align:left">연결 · 자동응답 설정 · 사용 교육 1시간</td></tr>
             </tbody>
           </table>
         </div>
+        <p class="pnote" style="margin-top:8px">채널 점검과 원격 교육이 들어 있는 금액입니다.
+          <b style="color:var(--ink)">계정 개설은 포함하지 않습니다</b> — 계정이 없으시면 먼저 만드신 뒤 작업을 시작합니다.</p>
 
-        <h3 class="h3" style="margin-top:32px;font-size:1.15rem">지도 등록</h3>
+        <h3 class="h3" style="margin-top:32px;font-size:1.15rem">지도 — 등록과 디자인 세팅을 따로 고릅니다</h3>
         <div class="ptw">
           <table class="ptab">
-            <thead><tr><th>지도</th><th>금액</th><th>묶음</th><th>금액</th></tr></thead>
+            <thead><tr><th>지도</th><th>① 등록 (신규)</th><th>② 디자인 세팅</th><th>① + ②</th></tr></thead>
             <tbody>
-              <tr><td style="text-align:left">네이버 지도</td><td>110,000</td>
-                  <td style="text-align:left">지도 기본 <span class="sm">네이버 + 카카오</span></td><td><b>143,000</b></td></tr>
-              <tr><td style="text-align:left">구글 지도</td><td>110,000</td>
-                  <td style="text-align:left">지도 표준 <span class="sm">네이버 + 카카오 + 구글</span></td><td><b>242,000</b></td></tr>
-              <tr><td style="text-align:left">카카오맵 · 애플 지도</td><td>각 55,000</td>
-                  <td style="text-align:left">지도 프리미엄 <span class="sm">5개 전체 + 사진 세팅</span></td><td><b>330,000</b></td></tr>
-              <tr><td style="text-align:left">티맵</td><td>33,000</td><td style="text-align:left">—</td><td>—</td></tr>
+              <tr><td style="text-align:left">네이버 지도</td><td>66,000</td><td>88,000</td><td>154,000</td></tr>
+              <tr><td style="text-align:left">구글 지도</td><td>66,000</td><td>66,000</td><td>132,000</td></tr>
+              <tr><td style="text-align:left">카카오맵</td><td>55,000</td><td>55,000</td><td>110,000</td></tr>
+              <tr><td style="text-align:left">티맵</td><td>33,000</td><td>22,000</td><td>55,000</td></tr>
+              <tr><td style="text-align:left"><b>4개 전체</b></td><td><b>187,000</b></td><td><b>198,000</b></td><td><b>385,000</b></td></tr>
             </tbody>
           </table>
         </div>
-        <p class="pnote" style="margin-top:8px">묶음으로 하시면 따로 하실 때보다 저렴합니다
-          (기본 165,000 → <b style="color:var(--ink)">143,000</b> · 표준 275,000 → <b style="color:var(--ink)">242,000</b> ·
-           프리미엄 363,000 → <b style="color:var(--ink)">330,000</b>).</p>
+        <p class="pnote" style="margin-top:8px">4개를 함께 하시면 따로 하실 때보다 저렴합니다
+          (등록 220,000 → <b style="color:var(--ink)">187,000</b> · 디자인 세팅 231,000 → <b style="color:var(--ink)">198,000</b> ·
+           둘 다 451,000 → <b style="color:var(--ink)">385,000</b>).
+          이미 등록된 지도는 ② 디자인 세팅만 하시면 됩니다.</p>
 
         <h3 class="h3" style="margin-top:32px;font-size:1.15rem">정기 콘텐츠 — 매달 내는 금액</h3>
+        <p class="pnote" style="margin-top:8px"><b style="color:var(--ink)">월 금액 = 기본 운영비 + (건당 금액 × 건수) + 영상 제작비</b>입니다.
+          묶음 상품이 아니라 올리는 만큼 더하는 방식입니다.</p>
         <div class="ptw">
           <table class="ptab">
-            <thead><tr><th>상품</th><th>월 금액</th></tr></thead>
+            <thead><tr><th>항목</th><th>금액</th></tr></thead>
             <tbody>
-              <tr><td style="text-align:left">인스타그램 게시물 <span class="sm">월 4건 / 8건 / 12건</span></td>
-                  <td><b>275,000 / 495,000 / 660,000</b></td></tr>
-              <tr><td style="text-align:left">페이스북 동시 업로드 추가</td><td>+110,000</td></tr>
-              <tr><td style="text-align:left">블로그 정기 발행 <span class="sm">월 4건 / 8건</span></td><td>330,000 / 550,000</td></tr>
-              <tr><td style="text-align:left">지도 기본 관리</td><td>110,000</td></tr>
-              <tr><td style="text-align:left">네이버 플레이스 최적화 <span class="sm">광고비 별도</span></td><td>330,000</td></tr>
-              <tr><td style="text-align:left">유튜브 채널 관리</td><td>110,000</td></tr>
-              <tr><td style="text-align:left">유튜브 업로드 관리 <span class="sm">롱폼 · 편당</span></td><td>33,000</td></tr>
-              <tr><td style="text-align:left">숏폼 업로드 관리 <span class="sm">쇼츠 · 릴스 · 편당</span></td><td>11,000</td></tr>
-              <tr><td style="text-align:left">샤오홍슈 관리</td><td>550,000 / 990,000</td></tr>
+              <tr><td style="text-align:left"><b>기본 운영비</b> <span class="sm">채널 1개</span></td><td><b>월 132,000</b></td></tr>
+              <tr><td style="text-align:left">채널 추가마다</td><td>월 +44,000</td></tr>
+              <tr><td style="text-align:left">인스타 디자인 제작</td><td>장당 10,000</td></tr>
+              <tr><td style="text-align:left">인스타 업로드 · 기획 <span class="sm">한 달 건수에 따라 건당 금액이 달라집니다</span></td>
+                  <td>건당 22,000 <span class="sm">월 1 ~ 7건</span>
+                      16,500 <span class="sm">월 8 ~ 11건</span>
+                      11,000 <span class="sm">월 12건 이상</span></td></tr>
+              <tr><td style="text-align:left">블로그 글 <span class="sm">고객 공식 블로그에 작성 · 발행. 이미지 제작은 따로 더합니다</span></td><td>건당 77,000</td></tr>
+              <tr><td style="text-align:left">쇼츠 · 릴스 업로드 관리</td><td>편당 11,000</td></tr>
+              <tr><td style="text-align:left">유튜브 롱폼 업로드 관리</td><td>편당 33,000</td></tr>
+              <tr><td style="text-align:left">유튜브 채널 관리</td><td>월 66,000</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="pnote" style="margin-top:8px">영상이 들어가면 <b style="color:var(--ink)">월 금액 = 영상 제작비 + 업로드 관리비 + 채널 관리비</b>입니다.
-          영상 제작비는 <a onclick="go('video')" style="cursor:pointer">영상 가격표</a>를 따릅니다.</p>
+        <p class="pnote" style="margin-top:8px">예) 인스타 게시물을 한 건에 3장씩 올리면 —
+          월 4건 <b style="color:var(--ink)">340,000</b> · 월 8건 <b style="color:var(--ink)">504,000</b> · 월 12건 <b style="color:var(--ink)">624,000</b>
+          (기본 운영비 132,000 + (디자인 30,000 + 업로드 건당 금액) × 건수).<br>
+          영상이 들어가면 영상 제작비는 <a onclick="go('video')" style="cursor:pointer">영상 가격표</a>를 따릅니다.</p>
 
-        <h3 class="h3" style="margin-top:32px;font-size:1.15rem">추가 비용 · 할인</h3>
+        <h3 class="h3" style="margin-top:32px;font-size:1.15rem">추가 금액 · 할인</h3>
         <div class="ptw">
           <table class="ptab">
-            <thead><tr><th>항목</th><th>기준</th></tr></thead>
+            <thead><tr><th>항목</th><th style="text-align:left">기준</th></tr></thead>
             <tbody>
-              <tr><td style="text-align:left">출장 (방문 지원)</td><td style="text-align:left">근거리 기준 · 원거리 30% 할증 (원격 지원은 무료)</td></tr>
+              <tr><td style="text-align:left">계획표에 없는 추가 건</td><td style="text-align:left">인스타 — 디자인 장당 10,000 + 업로드 22,000 · 블로그 건당 77,000 · 영상은 영상 가격표</td></tr>
               <tr><td style="text-align:left">지점 추가</td><td style="text-align:left">지점당 해당 항목의 70%</td></tr>
-              <tr><td style="text-align:left">장기 할인</td><td style="text-align:left">정기 콘텐츠 3개월 10% · 6개월 20% (일시불 선결제)</td></tr>
+              <tr><td style="text-align:left">세팅안 추가 수정</td><td style="text-align:left">회당 33,000 (포함된 수정 1회 이후)</td></tr>
+              <tr><td style="text-align:left">장기 계약 할인</td><td style="text-align:left">정기 콘텐츠 3개월 10% · 6개월 20% (일시불 선결제)</td></tr>
+              <tr><td style="text-align:left">세팅비 할인</td><td style="text-align:left">정기 콘텐츠를 3개월 이상 계약하시면 메인 세팅비 165,000 할인 (중도 해지 시 할인분 공제)</td></tr>
             </tbody>
           </table>
         </div>
         <p class="pnote" style="margin-top:12px">
           모든 금액은 <b style="color:var(--ink)">부가세 포함</b>입니다.
-          세팅은 작업 전, 정기 콘텐츠는 매달 결제합니다. <a href="payment/">결제 시점과 환불 기준 보기 →</a>
+          세팅은 작업 전 전액, 정기 콘텐츠는 매달 결제일에 먼저 결제합니다. <a href="payment/">결제 시점과 환불 기준 보기 →</a>
         </p>
       </div>
 
@@ -1104,19 +1114,25 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         <h2 class="h2">알아두실 것 · 환불</h2>
         <div class="grid2">
           <div class="card"><h3>계정 소유권</h3>
-            <p>신규 계정은 <b>고객 명의</b>로 개설합니다. 본인 · 사업자 인증은 고객이 직접 진행하며,
-               저희가 절차를 안내합니다. 해지 시 계정 정보와 권한을 그대로 이관합니다.</p></div>
+            <p>계정은 고객이 직접 만드시고 끝까지 <b>고객 소유</b>입니다.
+               저희는 관리자 권한을 받아 작업하며, 해지하시면 권한을 그대로 돌려드립니다.</p></div>
           <div class="card"><h3>심사 기간 제외</h3>
-            <p>지도 등록 승인, 구글 인증, 샤오홍슈 기업 인증 등 <b>플랫폼 심사 기간</b>은
+            <p>지도 등록 승인, 구글 인증 등 <b>플랫폼 심사 기간</b>은
                단축이 불가해 작업 기한에서 제외하고 날짜로 다시 안내합니다.</p></div>
           <div class="card"><h3>세팅 환불</h3>
             <p><b>의뢰 시작 전</b>에는 전액 환불합니다.
-               의뢰 시작 후에는 기수행 작업(진단 · 개설 · 세팅)을 제외하고 환불하며,
-               세팅안 <b>확정 후에는</b> 환불되지 않습니다.</p></div>
+               의뢰 시작 후에는 <b>시작한 작업 금액만</b> 빼고 환불합니다(채널 점검은 빼지 않습니다).
+               당사 사유로 진행할 수 없으면 전액 환불합니다.</p></div>
           <div class="card"><h3>정기 콘텐츠 해지</h3>
-            <p>다음 달 해지는 <b>결제일 7영업일 전까지</b> 서면으로 통보해 주시면 됩니다.
+            <p>다음 달 해지는 <b>결제일 7영업일 전까지</b> 글로 알려 주시면 되고 위약금은 없습니다.
                월 중 해지는 계획표 확정 전이면 전액,
-               확정 후면 기진행분을 제외하고 환불합니다.</p></div>
+               확정 후에는 기본 운영비와 사전 공유한 건수만큼 빼고 환불합니다.</p></div>
+          <div class="card"><h3>장기 계약을 중간에 해지하면</h3>
+            <p>할인받은 계약을 중간에 해지하시면 이용한 달을 <b>할인 전 금액</b>으로 다시 계산하고,
+               할인받은 세팅비도 함께 뺍니다.</p></div>
+          <div class="card"><h3>환불 처리</h3>
+            <p>금액 산정 내역을 먼저 안내드리고, 계좌를 확인한 뒤 <b>5영업일 안에</b> 보내드립니다.
+               광고비는 고객 계정에 직접 충전하므로 환불 대상이 아닙니다.</p></div>
         </div>
       </div>
 
@@ -1293,14 +1309,14 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
           <table class="ptab">
             <thead><tr><th>분류</th><th>항목</th><th>가격</th></tr></thead>
             <tbody>
-              <tr><td rowspan="2"><b>로고 · 명함</b></td><td style="text-align:left">로고</td><td>66,000</td></tr>
-              <tr><td style="text-align:left">명함</td><td>로고 비용 + 33,000</td></tr>
+              <tr><td rowspan="2"><b>로고 · 명함</b></td><td style="text-align:left">로고</td><td>70,000</td></tr>
+              <tr><td style="text-align:left">명함</td><td>로고 비용 + 30,000</td></tr>
               <tr><td rowspan="3"><b>인쇄 · 홍보물</b></td><td style="text-align:left">브로셔</td><td>110,000</td></tr>
-              <tr><td style="text-align:left">전단지</td><td>66,000</td></tr>
+              <tr><td style="text-align:left">전단지</td><td>70,000</td></tr>
               <tr><td style="text-align:left">포스터</td><td>110,000</td></tr>
-              <tr><td rowspan="3"><b>SNS · 카드뉴스</b></td><td style="text-align:left">웹배너 (첫 화면)</td><td>33,000</td></tr>
-              <tr><td style="text-align:left">썸네일</td><td>33,000</td></tr>
-              <tr><td style="text-align:left">카드뉴스 (한 장당)</td><td>11,000</td></tr>
+              <tr><td rowspan="3"><b>SNS · 카드뉴스</b></td><td style="text-align:left">웹배너 (첫 화면)</td><td>30,000</td></tr>
+              <tr><td style="text-align:left">썸네일</td><td>30,000</td></tr>
+              <tr><td style="text-align:left">카드뉴스 (한 장당)</td><td>10,000</td></tr>
             </tbody>
           </table>
         </div>
@@ -1308,9 +1324,8 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
           <table class="ptab">
             <thead><tr><th>추가 비용</th><th>가격</th></tr></thead>
             <tbody>
-              <tr><td style="text-align:left">추가 시안 <span class="sm">기본 시안 2개 외에 1개 더</span></td><td>+5,500</td></tr>
-              <tr><td style="text-align:left">추가 수정 <span class="sm">무료 수정 2회를 다 쓴 뒤, 1회당</span></td><td>+11,000</td></tr>
-              <tr><td style="text-align:left">원본 파일 <span class="sm">직접 고치실 수 있는 편집 파일</span></td><td>+33,000</td></tr>
+              <tr><td style="text-align:left">추가 시안 <span class="sm">기본 시안 2개 외에 1개 더</span></td><td>+10,000</td></tr>
+              <tr><td style="text-align:left">추가 수정 <span class="sm">무료 수정 2회를 다 쓴 뒤, 1회당</span></td><td>+5,000</td></tr>
             </tbody>
           </table>
         </div>
@@ -1646,20 +1661,20 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
             <thead><tr><th>영상 유형</th><th>편집</th><th>촬영 + 편집</th><th>기획 + 편집</th><th>기획 + 촬영 + 편집</th></tr></thead>
             <tbody>
               <tr><td><b>숏폼</b><span class="sm">릴스 · 쇼츠 · 틱톡</span></td>
-                  <td class="lo">27,500</td><td>82,500</td><td>115,500</td><td>170,500</td></tr>
+                  <td class="lo">25,000</td><td>75,000</td><td>105,000</td><td>155,000</td></tr>
               <tr><td><b>홍보 스케치</b><span class="sm">현장 분위기를 담는 영상</span></td>
-                  <td>165,000</td><td>363,000</td><td>385,000</td><td>583,000</td></tr>
+                  <td>150,000</td><td>330,000</td><td>350,000</td><td>530,000</td></tr>
               <tr><td><b>홍보 인터뷰</b><span class="sm">사람이 말하는 영상</span></td>
-                  <td>220,000</td><td>440,000</td><td>440,000</td><td>660,000</td></tr>
+                  <td>200,000</td><td>400,000</td><td>400,000</td><td>600,000</td></tr>
               <tr><td><b>정보전달 영상</b><span class="sm">설명 · 강의 · 안내</span></td>
-                  <td>220,000</td><td>440,000</td><td>440,000</td><td>660,000</td></tr>
+                  <td>200,000</td><td>400,000</td><td>400,000</td><td>600,000</td></tr>
             </tbody>
           </table>
         </div>
         <p class="pnote" style="margin-top:12px">
           단위는 원, <b style="color:var(--ink)">부가세 포함</b>입니다.
           <b style="color:var(--ink)">60초가 넘으면</b> 60초마다 합계의 50%가 더해집니다(61초도 한 단위).
-          촬영은 <b style="color:var(--ink)">1회 120분</b> 기준이고, 넘으면 30분마다 33,000원이 더해집니다.
+          촬영은 <b style="color:var(--ink)">1회 120분</b> 기준이고, 넘으면 30분마다 30,000원이 더해집니다.
         </p>
 
         <!-- 추천 패키지 -->
@@ -1671,8 +1686,8 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
             <thead>
               <tr>
                 <th></th>
-                <th><span class="cname">STANDARD</span><span class="cprice">693,000원</span></th>
-                <th class="hi"><span class="cname">PREMIUM</span><span class="cprice">1,149,500원</span></th>
+                <th><span class="cname">STANDARD</span><span class="cprice">630,000원</span></th>
+                <th class="hi"><span class="cname">PREMIUM</span><span class="cprice">1,045,000원</span></th>
               </tr>
             </thead>
             <tbody>
@@ -1705,19 +1720,19 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
           <table class="ptab">
             <thead><tr><th>옵션</th><th>금액</th><th>기준</th></tr></thead>
             <tbody>
-              <tr><td style="text-align:left">짐벌 촬영</td><td>55,000</td>
+              <tr><td style="text-align:left">짐벌 촬영</td><td>50,000</td>
                   <td style="text-align:left">촬영 1회당 · 공간이 넓어 보이는 효과</td></tr>
-              <tr><td style="text-align:left">드론 촬영</td><td>165,000</td>
+              <tr><td style="text-align:left">드론 촬영</td><td>150,000</td>
                   <td style="text-align:left">촬영 1회당 · 실외만 가능 (비행 가능 여부를 먼저 확인합니다)</td></tr>
-              <tr><td style="text-align:left">인터뷰 추가</td><td>77,000</td>
-                  <td style="text-align:left">출연자 1명 기준 · 한 명 늘 때마다 33,000</td></tr>
-              <tr><td style="text-align:left">숏폼 추가</td><td>55,000</td>
+              <tr><td style="text-align:left">인터뷰 추가</td><td>70,000</td>
+                  <td style="text-align:left">출연자 1명 기준 · 한 명 늘 때마다 30,000</td></tr>
+              <tr><td style="text-align:left">숏폼 추가</td><td>50,000</td>
                   <td style="text-align:left">30초 1편 · 본편 소스를 다시 편집 (추가 촬영 없음)</td></tr>
               <tr><td style="text-align:left">러닝타임 추가</td><td>기본료의 50%</td>
                   <td style="text-align:left">60초 넘으면 60초마다 (90초 = 1.5배)</td></tr>
-              <tr><td style="text-align:left">촬영 시간 초과</td><td>33,000</td>
+              <tr><td style="text-align:left">촬영 시간 초과</td><td>30,000</td>
                   <td style="text-align:left">30분당 · 예약 시간 미사용분은 환불되지 않습니다</td></tr>
-              <tr><td style="text-align:left">추가 수정</td><td>영상 55,000 · 기획서 33,000</td>
+              <tr><td style="text-align:left">추가 수정</td><td>영상 50,000 · 기획서 30,000</td>
                   <td style="text-align:left">회당 · 포함 수정 소진 후 (당사 귀책은 무료)</td></tr>
               <tr><td style="text-align:left">긴급 진행</td><td>기본료의 30%</td>
                   <td style="text-align:left">일정을 당길 때 · 담당자가 일정을 확인한 뒤 받습니다</td></tr>
@@ -1733,13 +1748,13 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
 
         <!-- 촬영만 · 강의 영상 -->
         <div class="grid2" style="margin-top:32px">
-          <div class="card"><h3>촬영만 맡기실 때 · 198,000원</h3>
+          <div class="card"><h3>촬영만 맡기실 때 · 180,000원</h3>
             <p>편집 없이 <b>원본만</b> 납품하는 구성입니다. 촬영 · 조명 · 음향 장비가 포함되고
-               120분 기준이며, 넘으면 30분마다 33,000원입니다. 원본은 촬영일부터 2영업일 안에 드립니다.</p>
+               120분 기준이며, 넘으면 30분마다 30,000원입니다. 원본은 촬영일부터 2영업일 안에 드립니다.</p>
             <div class="tags"><span class="tag">장비 포함</span><span class="tag">색보정 없음</span></div></div>
           <div class="card"><h3>강의 영상 · 따로 계산합니다</h3>
-            <p>홍보영상과 구조가 달라 별도 견적으로 안내합니다. 촬영은 10분당 13,200원(종일 480분 이상은 440,000원 고정),
-               편집은 자막까지 넣으면 1분당 11,000원, 컷편집만 하면 1분당 3,300원입니다.
+            <p>홍보영상과 구조가 달라 별도 견적으로 안내합니다. 촬영은 10분당 12,000원(종일 480분 이상은 400,000원 고정),
+               편집은 자막까지 넣으면 1분당 10,000원, 컷편집만 하면 1분당 3,000원입니다.
                <b>러닝타임 50% 규칙은 적용하지 않습니다.</b></p>
             <div class="tags"><span class="tag">여러 편 가능</span><span class="tag">인트로·아웃트로 별도</span></div></div>
         </div>
@@ -1854,8 +1869,8 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
     {v:'web',   n:'홈페이지 제작', subs:[
       {t:'',       n:'홈페이지 제작', d:'1~3단계 중에 고르시면 됩니다. 정가와 약정 두 가지가 있습니다.'}]},
     {v:'sns',   n:'SNS 채널 제작', subs:[
-      {t:'open',   n:'채널 개설',     d:'계정 개설·지도 등록·초기 세팅까지 잡아 드립니다.'},
-      {t:'run',    n:'개설 + 운영',   d:'매달 올릴 것을 만들어 올리고 리포트까지 드립니다.'}]},
+      {t:'open',   n:'채널 세팅',     d:'프로필·디자인 세팅과 지도 등록까지 잡아 드립니다.'},
+      {t:'run',    n:'세팅 + 정기 콘텐츠', d:'매달 올릴 것을 만들어 올리고 리포트까지 드립니다.'}]},
     {v:'design',n:'디자인', subs:[
       {t:'logo',   n:'로고 · 명함',       d:'로고, 명함'},
       {t:'print',  n:'인쇄 · 홍보물',     d:'브로셔, 전단지, 포스터·리플렛, 책(표지·속지)'},
