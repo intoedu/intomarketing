@@ -191,15 +191,15 @@ if(form) form.addEventListener('submit',async function(e){
       return;
     }
   }
-  if(!$('f_consent').checked){err.textContent='개인정보 수집 · 이용에 동의하셔야 접수됩니다.';return;}
-  if(!sb){err.textContent='연결에 실패했습니다. 잠시 뒤 다시 시도해 주십시오.';return;}
+  if(!$('f_consent').checked){err.textContent='개인정보 수집 · 이용 동의 후 접수됩니다.';return;}
+  if(!sb){err.textContent='연결에 실패했습니다. 잠시 후 다시 시도해 주십시오.';return;}
 
   /* 🔴 로그인 확인 — 없으면 창이 뜨고, 로그인하면 «적은 내용 그대로» 이어집니다.
         이 자리를 폼 맨 위로 옮기지 마세요. 다 쓰고 나서 묻는 편이 덜 번거롭습니다. */
   var me=null;
   if(window.IMAccount){
     me=await IMAccount.need();
-    if(!me){ err.textContent='로그인하셔야 접수됩니다. 적으신 내용은 그대로 있습니다.'; return; }
+    if(!me){ err.textContent='로그인 후 접수됩니다. 입력 내용은 유지됩니다.'; return; }
   }
 
   btn.disabled=true; btn.textContent='보내는 중...';
@@ -255,7 +255,7 @@ if(form) form.addEventListener('submit',async function(e){
   if(res.error){
     btn.disabled=false; btn.textContent=btn.dataset.label||'신청서 제출 ↗';
     err.textContent='제출에 실패했습니다: '+res.error.message
-      +' — 010-7318-1790 으로 연락 주시면 바로 도와드리겠습니다.';
+      +' — 010-7318-1790 으로 문의해 주십시오.';
     return;
   }
   /* 다음 신청서에서 자동으로 채워지도록 기본 정보를 남깁니다 */

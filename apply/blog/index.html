@@ -53,7 +53,7 @@ details.fold[open]>summary{margin-bottom:16px}
     </div>
     <h1>블로그 · 리뷰 신청서</h1>
     <p>실 운영 블로거가 본인 계정에 직접 작성하고 발행합니다.
-       작성해 주시면 담당자가 배정되어 <b>1~2영업일 안에</b> 연락드립니다.</p>
+       접수 후 담당자가 배정되어 <b>1~2영업일 안에</b> 연락합니다.</p>
   </div>
 </header>
 
@@ -77,8 +77,8 @@ details.fold[open]>summary{margin-bottom:16px}
   <!-- 02 -->
   <section class="card">
     <p class="eyebrow">Keyword</p>
-    <h2>업종과 검색어 <span class="req">*</span></h2>
-    <p class="sub">업종을 선택하면 아래 보기와 예시가 해당 업종에 맞게 바뀝니다.</p>
+    <h2>업종과 키워드 <span class="req">*</span></h2>
+    <p class="sub">업종을 선택하면 아래 보기와 예시가 해당 업종에 맞게 변경됩니다.</p>
     <div class="chips" data-one data-q="업종" data-req="업종" id="bizBox">
       <label class="chip"><input type="radio" name="biz" value="학원">학원</label>
       <label class="chip"><input type="radio" name="biz" value="음식점">음식점</label>
@@ -94,39 +94,39 @@ details.fold[open]>summary{margin-bottom:16px}
          업종을 고르면 낱말(과목 ↔ 취급 항목 · 학부모 ↔ 고객)과 예시가 바뀝니다 — 맨 아래 스크립트의 BIZ.
          data-q 이름은 업종이 바뀌어도 같습니다(어드민이 그 이름으로 보여 줍니다). -->
     <div class="guide" style="margin-top:24px">
-      <b>검색어는 이렇게 만들어집니다</b>
-      <p>블로거들이 각자의 블로그에 글을 올리고, 글마다 서로 다른 검색어를 하나씩 배정합니다.
-         아래 네 가지를 채워 주시면 <b id="ex_kw1"></b>, <b id="ex_kw2"></b>처럼
-         <span data-w="cust">고객</span>이 실제로 검색하는 말에 맞춘 글이 만들어집니다.</p>
+      <b>키워드 구성 방식</b>
+      <p>블로거가 각자의 블로그에 포스팅을 발행하며, 포스팅마다 키워드를 분리 배정합니다.
+         아래 네 가지를 입력하면 <b id="ex_kw1"></b>, <b id="ex_kw2"></b>처럼
+         <span data-w="cust">고객</span>의 실제 검색어에 맞춘 포스팅을 작성합니다.</p>
       <table class="gtbl">
         <tr><td>지역</td><td id="ex_region"></td></tr>
         <tr><td data-w="item">취급 항목</td><td id="ex_item"></td></tr>
         <tr><td>대상</td><td id="ex_who"></td></tr>
         <tr><td>상황</td><td id="ex_goal"></td></tr>
       </table>
-      <p>많이 적어 주실수록 서로 다른 글이 많이 나오고, 검색에 걸리는 폭이 넓어집니다.</p>
+      <p>입력 항목이 많을수록 키워드 조합이 늘어 검색 노출 범위가 넓어집니다.</p>
     </div>
 
     <div class="fld"><label>홍보 지역 <span class="req">*</span></label>
       <input class="inp" id="q_region" data-q="홍보 지역" data-req="홍보 지역" placeholder="예: 대전 도안동, 유성온천역, 목원대">
-      <span class="fhint"><span data-w="cust">고객</span>이 검색할 만한 동네 이름을 모두 적어 주십시오.
-        주변 지하철역 · 큰 건물도 넣으시면 됩니다. 쉼표로 나눠 적습니다.</span></div>
+      <span class="fhint">검색에 사용될 지역명을 모두 입력해 주십시오.
+        인근 지하철역 · 주요 건물도 포함할 수 있습니다. 쉼표로 구분합니다.</span></div>
 
     <div class="fld"><label><span data-w="item">취급 항목 · 서비스</span> <span class="req">*</span></label>
       <input class="inp" id="q_item" data-q="취급 항목·서비스" data-req="취급 항목 · 서비스">
-      <span class="fhint">쉼표로 나눠 적어 주십시오. 상호와 상황은 아래 칸에서 따로 받습니다.</span></div>
+      <span class="fhint">쉼표로 구분해 입력해 주십시오. 상호와 상황은 아래 항목에서 별도로 받습니다.</span></div>
 
     <div class="fld">
       <label>주요 고객층 <span class="req">*</span> <span class="hint">(복수 선택 가능)</span></label>
       <div class="chips" data-multi data-q="주로 오는 고객" data-req="주요 고객층" id="whoBox"></div>
-      <span class="fhint">받으시는 <span data-w="cust">고객</span>을 모두 선택해 주십시오.</span>
+      <span class="fhint">해당하는 대상을 모두 선택해 주십시오.</span>
     </div>
 
     <div class="fld">
       <label>검색되고 싶은 상황 <span class="req">*</span> <span class="hint">(홍보 목적 · 복수 선택 가능)</span></label>
       <div class="chips" data-multi data-q="홍보 목적" data-req="검색되고 싶은 상황" id="goalBox"></div>
-      <span class="fhint"><span data-w="cust">고객</span>이 <span data-w="item">취급 항목</span> 뒤에 함께 치는 말입니다.
-        여러 개 고르실수록 서로 다른 글이 많이 나옵니다.</span>
+      <span class="fhint"><span data-w="item">취급 항목</span> 뒤에 함께 검색되는 단어입니다.
+        선택 항목이 많을수록 키워드 조합이 늘어납니다.</span>
     </div>
   </section>
 
@@ -149,19 +149,19 @@ details.fold[open]>summary{margin-bottom:16px}
     </div>
 
     <div class="guide" style="margin-top:8px">
-      <b>모든 글에 똑같이 들어갈 정보</b>
-      <p>아래 내용은 모든 글에 그대로 들어갑니다. 정확하게 적어 주십시오.</p>
+      <b>전체 포스팅 공통 기재 정보</b>
+      <p>아래 내용은 모든 포스팅에 동일하게 기재됩니다. 정확하게 입력해 주십시오.</p>
     </div>
     <div class="fld"><label>주소 <span class="req">*</span></label>
       <input class="inp" data-q="주소" data-req="주소" placeholder="예: 대전 유성구 도안대로 00, 2층"></div>
     <div class="g2">
-      <div class="fld"><label>대표 전화 <span class="req">*</span> <span class="hint">(글에 실리는 번호)</span></label>
+      <div class="fld"><label>대표 전화 <span class="req">*</span> <span class="hint">(포스팅에 기재되는 번호)</span></label>
         <input class="inp" type="tel" inputmode="tel" data-q="대표 전화" data-req="대표 전화" placeholder="예: 042-000-0000"></div>
       <div class="fld"><label><span data-w="hours">영업 시간</span></label>
         <input class="inp" id="q_hours" data-q="영업 시간"></div>
     </div>
     <div class="fld"><label>홈페이지 · 블로그 · 플레이스 주소</label>
-      <input class="inp" type="url" inputmode="url" data-q="홈페이지·블로그 주소" placeholder="https://…  (없으면 비워 두셔도 됩니다)"></div>
+      <input class="inp" type="url" inputmode="url" data-q="홈페이지·블로그 주소" placeholder="https://…  (없으면 생략)"></div>
   </section>
 
   <!-- 04 -->
@@ -169,9 +169,9 @@ details.fold[open]>summary{margin-bottom:16px}
     <p class="eyebrow">Volume</p>
     <h2>편수 <span class="req">*</span></h2>
     <!-- 🔴 「월 발행 편수」라고 쓰지 마십시오 — 블로그는 1회 주문이고 자동으로 이어지지 않습니다(약관 · 견적서). -->
-    <p class="sub">주문 편수를 정합니다. <b>10편 ~ 100편</b>에서 선택하실 수 있으며,
-       <b>기간은 30일</b>입니다. 기산일은 자료 확인 후 작업 시작을 안내드린 날입니다.
-       편수가 많을수록 검색에 걸리는 폭이 넓어집니다.</p>
+    <p class="sub">주문 편수를 선택합니다. <b>10편 ~ 100편</b>범위이며,
+       <b>기간은 30일</b>입니다. 기산일은 자료 확인 후 작업 시작을 안내한 날입니다.
+       편수가 많을수록 검색 노출 범위가 넓어집니다.</p>
     <div class="fld">
       <label>주문 편수</label>
       <div class="qty" style="width:max-content">
@@ -189,33 +189,33 @@ details.fold[open]>summary{margin-bottom:16px}
     <p class="eyebrow">Photo</p>
     <h2>사진</h2>
     <div class="guide">
-      <p>글마다 다른 사진을 써야 검색에 잘 걸립니다. <b>30장 이상 권장합니다.</b>
-         간판 · 건물 바깥, 내부, <span data-w="photo">메뉴 · 상품</span>, 안내문 등
-         <b>사람 얼굴이 나오지 않는 사진</b>이면 무엇이든 좋습니다.</p>
-      <p><b>지금 다 모으기 어려우시면 비워 두셔도 됩니다.</b>
-         사진을 올리실 <b>전용 대시보드 주소</b>는 <b>입금 확인 뒤</b>에 따로 안내해 드립니다.</p>
+      <p>포스팅마다 다른 사진을 사용해야 검색 노출에 유리합니다. <b>30장 이상 권장합니다.</b>
+         간판 · 외관, 내부, <span data-w="photo">메뉴 · 상품</span>, 안내문 등
+         <b>인물 얼굴이 나오지 않는 사진</b>이면 모두 사용할 수 있습니다.</p>
+      <p><b>지금 준비가 어려우면 생략할 수 있습니다.</b>
+         사진 업로드용 <b>전용 대시보드 주소</b>는 <b>입금 확인 후</b> 별도로 안내합니다.</p>
     </div>
     <div class="fld"><label>사진 링크 <span class="hint">(구글 드라이브 · 네이버 MYBOX)</span></label>
-      <input class="inp" type="url" inputmode="url" data-q="사진 링크" placeholder="이미 모아 두신 사진이 있으면 링크를 적어 주십시오"></div>
+      <input class="inp" type="url" inputmode="url" data-q="사진 링크" placeholder="보유하신 사진이 있으면 링크를 입력해 주십시오"></div>
   </section>
 
   <!-- 06 -->
   <section class="card">
     <p class="eyebrow">Story</p>
-    <h2>글에 담을 이야기</h2>
-    <div class="fld"><label>꼭 알리고 싶은 점</label>
-      <textarea class="inp" data-q="차별점" placeholder="다른 곳과 다른 점, 알리고 싶은 것을 적어 주십시오. 글에 반영합니다."></textarea></div>
+    <h2>포스팅 소재</h2>
+    <div class="fld"><label>핵심 홍보 사항</label>
+      <textarea class="inp" data-q="차별점" placeholder="타 업체와의 차별점, 홍보할 내용을 입력해 주십시오. 포스팅에 반영합니다."></textarea></div>
 
     <div class="story">
-      <span class="t">여기가 가장 중요합니다 — 검색 노출이 여기서 갈립니다</span>
-      <p>요즘 네이버는 <b>어디에나 들어맞는 소개글을 좋게 보지 않습니다.</b>
-         상호 · 취급 항목 · 주소만 있는 글은 다른 곳의 글과 비슷하다고 판단해 <b>검색에서 밀어냅니다.</b></p>
-      <p>반대로 <b>그곳에서 실제로 있었던 일</b>이 담긴 글은 다른 어디에도 없는 내용이라
-         <b>검색 상위에 올라가고 오래 남습니다.</b> 읽는 <span data-w="cust">고객</span>도 그 대목에서 전화를 겁니다.</p>
-      <p><b>한 줄만 적으셔도 됩니다.</b> <span id="ex_story">손님이 했던 말, 자주 받는 질문, 일하다 있었던 일</span>
-         — 무엇이든 <b>실제로 있었던 일</b>이면 됩니다.</p>
-      <p class="warn">※ <span data-w="cust">고객</span> 이름 · 얼굴 사진은 넣지 마십시오. <b id="ex_anon">「30대 직장인 손님」</b>처럼만 적어 주시면 됩니다.<br>
-         ※ 저희는 <b>지어내지 않습니다.</b> 여기 적어 주신 것만 글에 씁니다.</p>
+      <span class="t">가장 중요한 항목 — 검색 노출을 좌우합니다</span>
+      <p>네이버는 <b>어느 업체에나 적용되는 일반적인 소개글을 낮게 평가합니다.</b>
+         상호 · 취급 항목 · 주소만 있는 글은 유사 문서로 판단해 <b>검색 순위를 낮춥니다.</b></p>
+      <p>반면 <b>해당 업체의 실제 사례</b>가 담긴 글은 고유한 내용으로 인정되어
+         <b>검색 상위에 노출되고 오래 유지됩니다.</b> <span data-w="cust">고객</span> 문의로 이어지는 부분도 실제 사례입니다.</p>
+      <p><b>한 줄 분량도 충분합니다.</b> <span id="ex_story">고객이 했던 말, 자주 받는 질문, 업무 중 있었던 일</span>
+         — <b>실제 사례</b>이면 모두 가능합니다.</p>
+      <p class="warn">※ <span data-w="cust">고객</span> 이름 · 얼굴 사진은 넣지 마십시오. <b id="ex_anon">「30대 직장인 고객」</b><span id="ex_anon_tail">처럼 입력해 주십시오.</span><br>
+         ※ 당사는 <b>내용을 창작하지 않습니다.</b> 입력한 내용만 포스팅에 사용합니다.</p>
       <!-- 🔴 문구는 행정 창 확인본입니다(2026-10-13). 줄이거나 풀어 쓰지 마십시오.
               병원 · 의원은 환자 치료 경험담을 광고에 쓸 수 없습니다(의료법 제56조).
               업종을 「병원 · 의원」으로 고르면 이 줄이 나타납니다. 지우지 마십시오. -->
@@ -227,52 +227,52 @@ details.fold[open]>summary{margin-bottom:16px}
     <div class="fld"><label>실제 에피소드 · 구체적 사례 <span class="req">*</span></label>
       <textarea class="inp tall" id="q_story" data-q="실제 에피소드·구체적 사례" data-req="실제 에피소드 · 구체적 사례"></textarea>
       <!-- 🔴 지우지 마십시오 — 손님 · 직원 이야기는 «제3자의 개인정보»라 동의 없이 받을 수 없습니다 (2026-10-13 행정 창) -->
-      <span class="fhint">숫자가 들어가면 더 구체적입니다.<br>
+      <span class="fhint">수치를 포함하면 구체성이 높아집니다.<br>
         <b>다른 사람(직원 · 고객 등)을 알아볼 수 있는 내용은 적지 마십시오.</b></span></div>
 
-    <div class="fld"><label>쓰지 말아야 할 것</label>
-      <textarea class="inp" data-q="쓰지 말아야 할 내용" placeholder="언급을 피하고 싶은 내용이 있으면 적어 주십시오 (예: 가격, 특정 경쟁 업체)"></textarea></div>
-    <div class="fld"><label>그 밖의 요청사항</label>
+    <div class="fld"><label>제외할 내용</label>
+      <textarea class="inp" data-q="쓰지 말아야 할 내용" placeholder="언급을 제외할 내용이 있으면 입력해 주십시오 (예: 가격, 특정 경쟁 업체)"></textarea></div>
+    <div class="fld"><label>기타 요청 사항</label>
       <textarea class="inp" data-col="message"></textarea></div>
 
     <div class="guide" style="margin:16px 0 0">
       <b>접수 후 10분 통화</b>
-      <p>신청서를 받으면 담당자가 <b>10분 정도 전화로 몇 가지 더 여쭙습니다.</b>
-         글보다 말씀으로 들을 때 더 나은 글감이 나옵니다. 아래 칸은 미리 알려 주실 수 있는 만큼만 적어 주십시오.</p>
+      <p>신청서 접수 후 담당자가 <b>약 10분간 전화로 추가 사항을 확인합니다.</b>
+         통화에서 구체적인 소재를 확보합니다. 아래 항목은 사전에 전달 가능한 범위만 입력해 주십시오.</p>
     </div>
   </section>
 
   <!-- 07 — 접어 둔 선택 칸. 비워도 접수됩니다. 🔴 여기에 data-req 를 달지 마십시오(접힌 채로는 못 채웁니다). -->
   <section class="card">
     <details class="fold">
-      <summary><span>글이 훨씬 좋아집니다 — 5분만 더 쓰시면<small>안 쓰셔도 신청은 됩니다</small></span></summary>
+      <summary><span>추가 정보 (선택) — 포스팅의 구체성을 높이는 항목<small>미입력 시에도 접수됩니다</small></span></summary>
       <div class="guide">
-        <p>상호 · 주소 · 취급 항목만으로는 <b>어느 곳에나 들어맞는 뻔한 글</b>이 됩니다. 그런 글은 검색에서도 밀립니다.
-           아래는 <b>대표님이 가장 잘 아시는 내용</b>입니다. 한 줄씩만 적어 주셔도 글이 완전히 달라집니다.</p>
+        <p>상호 · 주소 · 취급 항목만으로는 <b>일반적인 소개글</b>이 되어 검색 노출에 불리합니다.
+           아래 항목은 <b>업체 고유의 정보</b>입니다. 항목당 한 줄 분량으로도 포스팅의 구체성이 높아집니다.</p>
       </div>
-      <div class="fld"><label><span data-w="cust">고객</span>이 자주 묻는 질문 ①</label>
+      <div class="fld"><label><span data-w="cust">고객</span> 주요 문의 ①</label>
         <input class="inp" id="q_faq1" data-q="자주 묻는 질문 ①"></div>
-      <div class="fld"><label><span data-w="cust">고객</span>이 자주 묻는 질문 ②</label>
+      <div class="fld"><label><span data-w="cust">고객</span> 주요 문의 ②</label>
         <input class="inp" id="q_faq2" data-q="자주 묻는 질문 ②"></div>
-      <div class="fld"><label><span data-w="cust">고객</span>이 자주 묻는 질문 ③</label>
+      <div class="fld"><label><span data-w="cust">고객</span> 주요 문의 ③</label>
         <input class="inp" id="q_faq3" data-q="자주 묻는 질문 ③"></div>
-      <div class="fld"><label>우리를 한 문장으로</label>
+      <div class="fld"><label>한 문장 소개</label>
         <input class="inp" id="q_one" data-q="한 문장 소개"></div>
-      <div class="fld"><label>다른 곳과 다른 점 <span class="hint">(복수 선택 가능)</span></label>
+      <div class="fld"><label>차별점 <span class="hint">(복수 선택 가능)</span></label>
         <div class="chips" data-multi data-q="다른 곳과 다른 점" id="diffBox"></div></div>
-      <div class="fld"><label>주로 어떤 일로 오시나요</label>
+      <div class="fld"><label>주요 이용 목적</label>
         <input class="inp" id="q_why" data-q="주로 오는 이유"></div>
-      <div class="fld"><label><span data-w="flow">한 번 이용하면 어떻게 진행되나요</span></label>
+      <div class="fld"><label><span data-w="flow">이용 절차</span></label>
         <textarea class="inp" id="q_flow" data-q="이용 과정"></textarea></div>
-      <div class="fld"><label><span data-w="tool">쓰는 재료 · 장비 · 프로그램 이름</span></label>
+      <div class="fld"><label><span data-w="tool">사용 재료 · 장비 · 프로그램</span></label>
         <input class="inp" id="q_tool" data-q="재료·장비·프로그램"></div>
-      <div class="fld"><label>최근 성과 <span class="hint">(숫자로)</span></label>
+      <div class="fld"><label>최근 성과 <span class="hint">(수치)</span></label>
         <input class="inp" id="q_result" data-q="최근 성과"></div>
-      <div class="fld"><label>대표 경력 한 줄</label>
+      <div class="fld"><label>대표 경력</label>
         <input class="inp" id="q_career" data-q="대표 경력"></div>
-      <div class="fld"><label>시설 중 자랑하고 싶은 것</label>
+      <div class="fld"><label>주요 시설</label>
         <input class="inp" id="q_fac" data-q="자랑하고 싶은 시설"></div>
-      <div class="fld"><label>문의 오면 꼭 보여주시는 것</label>
+      <div class="fld"><label>상담 시 제시 자료</label>
         <input class="inp" id="q_show" data-q="꼭 보여주는 것"></div>
     </details>
   </section>
@@ -314,11 +314,11 @@ details.fold[open]>summary{margin-bottom:16px}
 <div class="done" id="done" style="display:none">
   <div class="ic">✅</div>
   <h2>신청이 접수되었습니다</h2>
-  <p>담당자가 배정되어 <b>1~2영업일 안에</b> 연락드리겠습니다. 감사합니다.</p>
+  <p>담당자 배정 후 <b>1~2영업일 안에</b> 연락합니다.</p>
   <div class="box">
     <b>다음 순서</b><br>
-    담당자가 연락드려 내용을 확인하고 <b>견적서</b>를 보내드립니다.<br>
-    사진을 올리실 <b>대시보드 주소</b>는 <b>입금 확인 뒤</b> 안내드립니다.<br>
+    담당자가 내용을 확인한 뒤 <b>견적서</b>를 발송합니다.<br>
+    사진 업로드용 <b>대시보드 주소</b>는 <b>입금 확인 후</b> 안내합니다.<br>
     긴급 연락처 · <a href="tel:01073181790">010-7318-1790</a>
   </div>
   <p style="margin-top:20px"><a data-back href="../../#blog">← 블로그 · 리뷰로 돌아가기</a></p>
@@ -348,10 +348,10 @@ details.fold[open]>summary{margin-bottom:16px}
       who:['초등','예비중','중등','예비고','고등','재수·N수','성인'],
       goal:['내신','학원 추천','레벨테스트','방학특강','선행','기초 다지기','소수정예','관리형','원어민','1:1 맞춤','입시 상담','수행평가'],
       diff:['소수정예','원어민 수업','자체 교재','관리형(숙제·출결 관리)','1:1 맞춤','성적 향상 보장','상담이 잦음','오래된 학원','학원 차량 운행'],
-      w:{cust:'학부모',item:'과목',hours:'수업 시간',photo:'교재 · 시간표',flow:'수업 한 타임이 어떻게 진행되나요',tool:'쓰는 교재 · 커리큘럼 이름'},
+      w:{cust:'학부모',item:'과목',hours:'수업 시간',photo:'교재 · 시간표',flow:'수업 진행 순서',tool:'사용 교재 · 커리큘럼'},
       kw:['「도안동 초등 영어 내신」','「유성온천역 예비중 영어 레벨테스트」'],
       item:'영어, 영어회화, 영어독해', hours:'예: 평일 15:00~22:00 / 토 10:00~14:00',
-      story:'성적이 오른 학생, 학부모가 했던 말, 수업 중 있었던 일, 상담 때 자주 나오는 이야기', anon:'「중2 남학생」 「고1 학부모님」',
+      story:'성적이 오른 학생, 학부모가 했던 말, 수업 중 있었던 일, 상담 때 자주 나오는 이야기', anon:'「중2 남학생」 「고1 학부모」',
       ep:'예) 중2 남학생이 3월에 영어 42점으로 왔는데, 단어 시험을 매일 다시 보게 했더니 1학기 기말에 88점이 됐습니다.\n예) 학부모님이 "숙제를 봐줄 사람이 없다"고 하셔서, 수업 끝나고 30분 자습을 붙여 드렸습니다.',
       faq:['예: 우리 아이 레벨이 어느 정도인가요?','예: 숙제는 얼마나 나가나요?','예: 중간에 반을 바꿀 수 있나요?'],
       one:'예: 도안동에서 12년째, 중등 내신만 파는 소수정예 영어학원', why:'예: 내신 대비 / 선행 / 기초 다지기',
@@ -362,7 +362,7 @@ details.fold[open]>summary{margin-bottom:16px}
       who:['가족','직장인','데이트','단체','혼밥'], goal:['맛집','배달','회식','주차','예약','룸','브런치','야식'],
       kw:['「도안동 가족 고깃집 주차」','「유성온천역 직장인 점심 회식」'],
       item:'삼겹살, 점심 특선, 단체 회식', photo:'메뉴 · 상차림',
-      story:'손님이 했던 말, 자주 받는 주문, 메뉴가 생긴 사연', anon:'「30대 직장인 손님」 「아이와 온 가족」',
+      story:'고객이 했던 말, 자주 받는 주문, 메뉴가 생긴 배경', anon:'「30대 직장인 고객」 「아이와 온 가족」',
       ep:'예) 점심에 오신 직장인 손님들이 "20분 안에 먹고 가야 한다"고 하셔서, 11시 반부터 반찬을 미리 차려 둡니다.\n예) 고기는 매일 아침 6시에 받아 그날 다 씁니다. 남으면 직원 식사로 돌립니다.',
       faq:['예: 주차는 몇 대까지 되나요?','예: 단체 예약은 몇 명까지 되나요?','예: 아이 의자가 있나요?'],
       one:'예: 매일 아침 받은 고기만 내는 도안동 고깃집', why:'예: 가족 외식 / 회식 / 점심',
@@ -372,8 +372,8 @@ details.fold[open]>summary{margin-bottom:16px}
       who:['소아','성인','노인','임산부'], goal:['야간진료','주말진료','비급여','건강검진','예약','주차'],
       kw:['「도안동 소아과 야간진료」','「유성온천역 내과 건강검진 예약」'],
       item:'소아과, 예방접종, 영유아 검진', hours:'예: 평일 09:00~19:00 / 토 09:00~13:00 (진료 시간)', photo:'접수대 · 진료실 · 장비',
-      w:{cust:'환자 · 보호자',hours:'진료 시간',flow:'처음 오시면 어떻게 진행되나요',tool:'쓰는 장비 · 검사 이름'},
-      story:'진료 시간을 바꾼 이유, 접수 · 대기 방식, 시설을 그렇게 만든 까닭', anon:'환자 이야기는 적지 않습니다',
+      w:{cust:'환자 · 보호자',hours:'진료 시간',flow:'초진 진행 절차',tool:'사용 장비 · 검사'},
+      story:'진료 시간을 바꾼 이유, 접수 · 대기 방식, 시설 구성 배경', anon:'환자 사례는 입력하지 않습니다.',
       ep:'예) 퇴근 뒤에 오시는 보호자가 많아 화 · 목은 저녁 8시까지 진료합니다.\n예) 대기실과 예방접종실을 따로 두어, 아픈 아이와 접종하러 온 아이가 마주치지 않습니다.',
       faq:['예: 예약 없이 가도 되나요?','예: 주차는 어디에 하나요?','예: 야간 진료는 무슨 요일인가요?'],
       one:'예: 저녁 8시까지 여는 도안동 소아청소년과', why:'예: 예방접종 / 건강검진 / 야간 진료',
@@ -383,7 +383,7 @@ details.fold[open]>summary{margin-bottom:16px}
       who:['남성','여성','학생'], goal:['펌','염색','클리닉','예약','남성컷','가격'],
       kw:['「도안동 남성컷 예약」','「유성온천역 여성 펌 가격」'],
       item:'커트, 펌, 염색, 네일아트', photo:'시술 공간 · 제품',
-      story:'손님이 했던 말, 자주 받는 요청, 시술 방식을 바꾼 이유', anon:'「20대 직장인 손님」 「단골 남성 손님」',
+      story:'고객이 했던 말, 자주 받는 요청, 시술 방식을 바꾼 이유', anon:'「20대 직장인 고객」 「단골 남성 고객」',
       ep:'예) "손질이 어렵다"는 말을 많이 들어서, 시술 뒤 집에서 말리는 방법을 5분 동안 직접 보여 드립니다.\n예) 예약은 한 시간에 한 분만 받습니다. 기다리는 손님이 없습니다.',
       faq:['예: 예약 없이 가도 되나요?','예: 펌은 얼마나 걸리나요?','예: 손상 모발도 염색이 되나요?'],
       one:'예: 한 시간에 한 분만 받는 도안동 1인 미용실', why:'예: 커트 / 펌 / 염색',
@@ -393,7 +393,7 @@ details.fold[open]>summary{margin-bottom:16px}
       who:['초보','직장인','시니어','산전산후'], goal:['PT','그룹수업','1:1','체험','등록비','샤워시설'],
       kw:['「도안동 초보 필라테스 체험」','「유성온천역 직장인 PT 등록비」'],
       item:'개인 PT, 필라테스 그룹, 체형 교정', photo:'기구 · 수업 공간',
-      w:{cust:'회원',hours:'운영 시간',flow:'수업 한 번이 어떻게 진행되나요',tool:'쓰는 기구 · 프로그램 이름'},
+      w:{cust:'회원',hours:'운영 시간',flow:'수업 진행 순서',tool:'사용 기구 · 프로그램'},
       story:'회원이 했던 말, 자주 받는 질문, 수업 방식을 바꾼 이유', anon:'「40대 직장인 회원」 「출산 후 6개월 회원」',
       ep:'예) 처음 오신 분은 운동 전에 20분 동안 자세부터 봅니다. 그날은 기구를 거의 쓰지 않습니다.\n예) 그룹 수업은 6명까지만 받습니다. 한 명씩 자세를 잡아 드리려면 그 이상은 어렵습니다.',
       faq:['예: 운동을 처음 해도 되나요?','예: 체험 수업이 있나요?','예: 샤워실이 있나요?'],
@@ -404,7 +404,7 @@ details.fold[open]>summary{margin-bottom:16px}
       who:['혼자','스터디','모임','반려동물'], goal:['콘센트','주차','디저트','24시','테라스'],
       kw:['「도안동 스터디 카페 콘센트」','「유성온천역 모임 카페 주차」'],
       item:'핸드드립, 디저트, 단체 예약', photo:'메뉴 · 좌석',
-      story:'손님이 했던 말, 자주 받는 주문, 메뉴가 생긴 사연', anon:'「노트북 들고 오신 손님」 「주말 모임 손님」',
+      story:'고객이 했던 말, 자주 받는 주문, 메뉴가 생긴 배경', anon:'「노트북을 사용하는 고객」 「주말 모임 고객」',
       ep:'예) 원두는 매일 아침 그날 쓸 만큼만 볶습니다. 남은 원두는 다음 날 쓰지 않습니다.\n예) 공부하러 오시는 분이 많아 창가 자리 전부에 콘센트를 달았습니다.',
       faq:['예: 주차가 되나요?','예: 단체 예약이 되나요?','예: 노트북 써도 되나요?'],
       one:'예: 원두를 매일 아침 직접 볶는 동네 카페', why:'예: 공부 / 모임 / 디저트',
@@ -414,7 +414,7 @@ details.fold[open]>summary{margin-bottom:16px}
       who:['신규 고객','단골','가족','직장인','학생'], goal:['위치','주차','예약','가격','영업시간','신규 오픈'],
       kw:['「도안동 ○○ 예약」','「유성온천역 ○○ 가격」'],
       item:'대표 상품, 서비스 이름, 출장 여부', photo:'상품 · 작업 공간',
-      story:'손님이 했던 말, 자주 받는 질문, 일하다 있었던 일', anon:'「30대 직장인 손님」',
+      story:'고객이 했던 말, 자주 받는 질문, 업무 중 있었던 일', anon:'「30대 직장인 고객」',
       ep:'예) 손님이 "설명이 어렵다"고 하셔서, 견적서를 한 장짜리 그림으로 바꿨습니다.\n예) 문의의 절반이 같은 질문이라, 그 답을 입구에 크게 붙여 두었습니다.',
       faq:['예: 예약해야 하나요?','예: 주차가 되나요?','예: 가격이 어떻게 되나요?'],
       one:'예: 도안동에서 10년째 한자리를 지키는 ○○', why:'예: 처음 이용 / 재방문 / 소개',
@@ -422,7 +422,7 @@ details.fold[open]>summary{margin-bottom:16px}
       result:'예: 소개로 오시는 손님이 절반', career:'예: 이 일만 15년', fac:'예: 주차 5대', show:'예: 작업 사례'}
   };
   var W0={cust:'고객',item:'취급 항목 · 서비스',hours:'영업 시간',photo:'메뉴 · 상품',
-          flow:'한 번 이용하면 어떻게 진행되나요',tool:'쓰는 재료 · 장비 · 프로그램 이름'};
+          flow:'이용 절차',tool:'사용 재료 · 장비 · 프로그램'};
   function $(id){return document.getElementById(id);}
   /* 🔴 다시 그려도 «이미 고른 것»은 남깁니다 — 업종을 잘못 눌렀다 고쳐도 다시 고르지 않게 */
   function draw(box,list){
@@ -443,6 +443,7 @@ details.fold[open]>summary{margin-bottom:16px}
     tx('ex_region','도안동, 유성온천역, 목원대, 도안신도시');
     tx('ex_item',b.item); tx('ex_who',b.who.slice(0,4).join(', ')); tx('ex_goal',b.goal.slice(0,4).join(', '));
     tx('ex_story',b.story); tx('ex_anon',b.anon);
+    var at=$('ex_anon_tail'); if(at) at.style.display=(v==='병원·의원')?'none':'';   /* 병원은 뒤에 「처럼 입력해 주십시오」가 붙지 않는 문장 */
     ph('q_item','예: '+b.item.replace(/^예: /,'')); ph('q_hours',b.hours||'예: 매일 10:00~22:00 / 월요일 휴무');
     ph('q_story',b.ep);
     ph('q_faq1',b.faq[0]); ph('q_faq2',b.faq[1]); ph('q_faq3',b.faq[2]);

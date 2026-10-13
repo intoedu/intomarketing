@@ -926,23 +926,23 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
       <div class="sec-head reveal">
         <div class="kicker">Apply</div>
         <h2>지원 신청</h2>
-        <p>필요한 지원을 고르면 그에 맞는 항목만 나타납니다. <b style="color:var(--gold)">프리미엄 회원</b>은 로그인 후 신청하시면 회원가로 견적을 받으실 수 있습니다.</p>
+        <p>필요한 지원을 선택하면 해당 항목만 표시됩니다. <b style="color:var(--gold)">프리미엄 회원</b>은 로그인 후 신청하면 회원가로 견적을 받습니다.</p>
       </div>
       <div class="form reveal" id="applyForm">
         <div class="form-step">
-          <div class="fs-lab"><span class="dot">1</span>어떤 지원이 필요하세요?</div>
+          <div class="fs-lab"><span class="dot">1</span>지원 영역 선택</div>
           <div class="picker" id="picker">
             <button class="pick link" data-k="doc" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg></span><b>자료제작</b><span>홈페이지·디자인</span><span class="ext">제작 신청서 작성</span></button>
             <button class="pick" data-k="hr" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.9-4.6 5.5-4.6S13.9 16 14.5 19M16 8.2a3 3 0 0 1 0 5.4M18 19c-.3-1.6-1-2.8-2-3.6"/></svg></span><b>인력지원</b><span>원어민 매칭</span></button>
             <button class="pick" data-k="cnt" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H12v16H6.5A2.5 2.5 0 0 0 4 21.5zM20 5.5A2.5 2.5 0 0 0 17.5 3H12v16h5.5A2.5 2.5 0 0 1 20 21.5z"/></svg></span><b>컨텐츠지원</b><span>유학·VOCA·오피스</span></button>
             <button class="pick" data-k="mkt" type="button"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 15v-4h4l7-4v12l-7-4H4zM19 9a4 4 0 0 1 0 6"/></svg></span><b>마케팅·광고</b><span>블로그 홍보</span></button>
           </div>
-          <div class="cnote" id="pickHint" style="margin-top:16px">👆 위에서 <b>필요한 지원을 선택</b>하시면 신청 항목이 이어서 나타납니다. <b>자료제작</b>은 별도 제작 신청서로 연결됩니다.</div>
+          <div class="cnote" id="pickHint" style="margin-top:16px">👆 위에서 <b>지원 영역을 선택</b>하면 신청 항목이 표시됩니다. <b>자료제작</b>은 별도 제작 신청서로 연결됩니다.</div>
         </div>
         <div class="form-step" id="fstep2" style="display:none">
           <div class="fs-lab"><span class="dot">2</span>세부 항목 <span style="color:var(--muted);font-weight:600;font-size:.8rem">(선택한 지원에 따라 달라집니다)</span></div>
           <div class="fields" id="fields"></div>
-          <div class="ff" style="margin-top:24px"><span class="fflabel">전체적으로 원하시는 것 (자유롭게)</span><textarea class="inp" id="f_message" placeholder="큰 그림을 자유롭게 적어주십시오. 예: 어떤 목적으로 · 어떤 느낌으로 · 특별히 신경 쓰고 싶은 점 등"></textarea></div>
+          <div class="ff" style="margin-top:24px"><span class="fflabel">전체적으로 원하시는 것 (자유롭게)</span><textarea class="inp" id="f_message" placeholder="전체 방향을 입력해 주십시오. 예: 목적 · 원하는 분위기 · 중점 사항"></textarea></div>
         </div>
         <div class="form-step" id="fstep3" style="display:none">
           <div class="fs-lab"><span class="dot">3</span>기본 정보</div>
@@ -952,7 +952,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
             <input class="inp" id="f_phone" placeholder="연락처 *" inputmode="tel" autocomplete="tel">
             <input class="inp" id="f_email" placeholder="이메일" inputmode="email" autocomplete="email">
           </div>
-          <div class="ff" style="margin-top:16px"><span class="fflabel">기타 요청사항</span><textarea class="inp" id="f_extra" placeholder="작은 바람이라도 좋습니다." style="min-height:70px"></textarea></div>
+          <div class="ff" style="margin-top:16px"><span class="fflabel">기타 요청사항</span><textarea class="inp" id="f_extra" placeholder="추가 요청 사항을 입력해 주십시오." style="min-height:70px"></textarea></div>
           <!-- 🔴 개인정보 수집 · 이용 고지 — 행정 창 확정본(2026-10-10). 개인정보 보호법 제15조 제2항이
                요구하는 네 가지(목적 · 항목 · 보유 기간 · 거부 권리)입니다. 한 줄도 빼지 마십시오.
                고쳐 쓰지 마시고, 바꿀 일이 생기면 행정 창에 먼저 묻고 «신청서 7쪽을 함께» 바꾸십시오.
@@ -976,20 +976,20 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
         </div>
         <div class="form-actions" id="fstepActions" style="display:none">
           <button class="btn btn-primary" type="button" id="submitBtn" onclick="submitRequest()">신청서 제출</button>
-          <span class="hint" id="formHint">제출하면 담당자가 배정되어 1~2일 내 연락드립니다.</span>
+          <span class="hint" id="formHint">제출 후 담당자가 배정되어 1~2일 내 연락합니다.</span>
         </div>
       </div>
       <div class="form reveal in" id="formDone" style="display:none">
         <div style="padding:52px 28px 44px;text-align:center">
           <div style="font-size:2.6rem">✅</div>
           <h3 style="font-size:var(--t-lg);font-weight:800;margin:16px 0 8px">신청이 접수되었습니다</h3>
-          <p style="color:var(--muted);max-width:44ch;margin:0 auto">담당자가 배정되어 1~2일 내에 연락드리겠습니다. 감사합니다.</p>
+          <p style="color:var(--muted);max-width:44ch;margin:0 auto">담당자 배정 후 1~2일 내에 연락합니다.</p>
           <p id="doneWhat" style="color:var(--muted);font-size:var(--t-sm);margin-top:12px"></p>
           <div style="margin-top:24px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
             <button class="btn btn-primary" type="button" onclick="applyAgain()">+ 추가 신청하기</button>
             <a class="btn btn-ghost" onclick="go('board')">공지·문의 보기</a>
           </div>
-          <p style="color:var(--muted);font-size:var(--t-sm);margin-top:16px">필요한 지원이 여러 개라면 <b>영역별로 각각 신청</b>하실 수 있습니다.</p>
+          <p style="color:var(--muted);font-size:var(--t-sm);margin-top:16px">지원 영역이 여러 개이면 <b>영역별로 각각 신청</b>하실 수 있습니다.</p>
         </div>
       </div>
     </div>
@@ -1223,7 +1223,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
           <div class="fcard"><b>🤝 협의 가능</b><p>한국시간 <b>밤 9시 이후</b> — 선생님 지역·일정에 따라 가능한 경우가 있습니다.</p></div>
           <div class="fcard"><b>🚫 어려움</b><p>한국시간 <b>오후 1시~오후 8시</b> — 미국 현지 심야로 수업이 불가합니다.</p></div>
         </div>
-        <div class="tzbox"><b>⏰ 시차 안내</b><ul><li>미국은 한국보다 <b style="color:inherit">14시간</b> 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 적어 주십시오.</li><li>미국 선생님은 한국시간 <b style="color:inherit">오후 1시~오후 8시</b> 수업이 어렵습니다(현지 심야).</li><li>방과 후 시간대가 꼭 필요하다면 <b style="color:inherit">필리핀 원어민</b>을 함께 검토하실 수 있습니다.</li></ul></div>
+        <div class="tzbox"><b>⏰ 시차 안내</b><ul><li>미국은 한국보다 <b style="color:inherit">14시간</b> 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 입력해 주십시오.</li><li>미국 선생님은 한국시간 <b style="color:inherit">오후 1시~오후 8시</b> 수업이 어렵습니다(현지 심야).</li><li>방과 후 시간대가 꼭 필요하다면 <b style="color:inherit">필리핀 원어민</b>을 함께 검토하실 수 있습니다.</li></ul></div>
         <div class="cnote">💰 <b>비용:</b> 미국 원어민은 필리핀 원어민보다 비용이 높습니다. 수업 형태·횟수에 따라 <b>신청 시 견적으로 안내</b>합니다.</div>
         <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('hr')">구인공고 등록하기 →</a><a class="btn btn-ghost" onclick="document.querySelector('#v-hr .sp[data-t=ph]').click()">필리핀 원어민 비교</a></div>
       </div>
@@ -1252,7 +1252,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
           <div class="fcard"><b>학생 연령·인원</b><p>1:1인지 그룹인지 판단합니다.</p></div>
           <div class="fcard"><b>시작 희망일</b><p>언제부터 수업이 필요한지.</p></div>
         </div>
-        <div class="tzbox"><b>⏰ 시차 안내</b><ul><li>필리핀은 한국보다 1시간, 미국은 14시간 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 적어 주십시오.</li><li>미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다.</li></ul></div>
+        <div class="tzbox"><b>⏰ 시차 안내</b><ul><li>필리핀은 한국보다 1시간, 미국은 14시간 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 입력해 주십시오.</li><li>미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다.</li></ul></div>
         <div class="cnote">🔁 <b>맞지 않으면 교체해 드립니다.</b> 수업이 학원·학생과 맞지 않을 경우 담당자에게 알려주시면 다른 선생님으로 다시 매칭합니다.</div>
         <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('hr')">구인공고 등록하기 →</a></div>
       </div>
@@ -1876,37 +1876,37 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
       {t:'text',k:'시작 희망일'}
     ],
     mkt:[
-      {t:'qty',k:'원하시는 편수',req:1,hint:'편수를 고르시면 작성 기간과 금액이 함께 정해집니다. 많을수록 검색에 걸리는 폭이 넓어집니다.'},
+      {t:'qty',k:'원하시는 편수',req:1,hint:'편수를 선택하면 작성 기간과 금액이 함께 정해집니다. 편수가 많을수록 검색 노출 범위가 넓어집니다.'},
       {t:'note',note:'blogkeyword'},
-      {t:'text',k:'지역',req:1,ph:'예: 성수동, 성수역, 뚝섬, 서울숲',hint:'학부모가 검색할 만한 동네 이름을 모두 적어 주십시오. 학원 주변 지하철역 · 큰 건물도 넣으시면 됩니다.'},
-      {t:'text',k:'과목',req:1,ph:'예: 영어, 영어회화, 영어독해',hint:'가르치시는 과목만 나눠 적어 주십시오. (학원 이름 · 상황은 아래 칸에 있습니다)'},
+      {t:'text',k:'지역',req:1,ph:'예: 성수동, 성수역, 뚝섬, 서울숲',hint:'학부모가 검색할 지역명을 모두 입력해 주십시오. 학원 인근 지하철역 · 주요 건물도 포함할 수 있습니다.'},
+      {t:'text',k:'과목',req:1,ph:'예: 영어, 영어회화, 영어독해',hint:'지도 과목만 구분해 입력해 주십시오. (학원명 · 상황은 아래 항목에서 받습니다)'},
       {t:'check',k:'학년·대상',req:1,opts:['초등','예비중','중등','예비고','고등','재수·N수','성인'],
-        hint:'받으시는 학생을 모두 선택해 주십시오.'},
+        hint:'대상 학생을 모두 선택해 주십시오.'},
       {t:'check',k:'검색되고 싶은 상황 (홍보 목적)',req:1,
         opts:['내신','학원 추천','레벨테스트','방학특강','선행','기초 다지기','소수정예','관리형','원어민','1:1 맞춤','입시 상담','수행평가'],
-        hint:'학부모가 과목 뒤에 함께 치는 말입니다. 여러 개 고르실수록 서로 다른 글이 많이 나옵니다.'},
+        hint:'학부모가 과목과 함께 검색하는 단어입니다. 선택 항목이 많을수록 키워드 조합이 늘어납니다.'},
       {t:'note',note:'blogpurpose'},
       {t:'note',note:'blogfixed'},
       {t:'text',k:'학원 정식 명칭',req:1,ph:'예: 성수영어학원'},
       {t:'text',k:'주소',req:1,ph:'예: 서울 성동구 성수이로 00, 3층'},
       {t:'text',k:'전화번호',req:1,ph:'예: 02-000-0000'},
       {t:'text',k:'수업 시간',ph:'예: 평일 15:00~22:00 / 토 10:00~14:00'},
-      {t:'text',k:'홈페이지·블로그 주소',ph:'https://…  (없으면 비워두셔도 됩니다)'},
+      {t:'text',k:'홈페이지·블로그 주소',ph:'https://…  (없으면 생략)'},
       {t:'note',note:'blogphoto'},
       {t:'files',k:'학원 사진'},
-      {t:'text',k:'사진 링크 (드라이브·MYBOX)',ph:'업로드가 어려우면 링크를 적어 주십시오'},
-      {t:'textarea',k:'꼭 알리고 싶은 점',ph:'다른 학원과 다른 점, 알리고 싶은 것을 적어 주십시오. 글에 반영합니다.'},
+      {t:'text',k:'사진 링크 (드라이브·MYBOX)',ph:'업로드가 어려우면 링크를 입력해 주십시오'},
+      {t:'textarea',k:'꼭 알리고 싶은 점',ph:'타 학원과의 차별점, 홍보할 내용을 입력해 주십시오. 포스팅에 반영합니다.'},
       {t:'note',note:'blogstory'},
       {t:'textarea',k:'실제 에피소드 · 구체적 사례',hi:1,req:1,
         ph:'예) 중2 남학생이 3월에 영어 42점으로 왔는데, 단어 시험을 매일 다시 보게 했더니 1학기 기말에 88점이 됐습니다.\n'
           +'예) 학부모님이 "숙제를 봐줄 사람이 없다"고 하셔서, 수업 끝나고 30분 자습을 붙여 드렸습니다. 지금은 그 반 전체가 그렇게 합니다.\n'
           +'예) 겨울방학에 예비중 8명이 왔는데 그중 6명이 지금도 다니고 있습니다.',
         /* 🔴 「다른 사람을 알아볼 수 있는 내용은 적지 마십시오」를 지우지 마십시오 — 제3자의 개인정보입니다 (2026-10-13 행정 창) */
-        hint:'이름은 빼고 「중2 남학생」처럼 적어 주십시오. 숫자가 들어가면 더 구체적입니다. 다른 사람(직원 · 학생 · 학부모 등)을 알아볼 수 있는 내용은 적지 마십시오.'},
-      {t:'textarea',k:'쓰지 말아야 할 것',ph:'언급을 피하고 싶은 내용이 있으면 적어 주십시오 (예: 수강료, 특정 경쟁 학원)'},
+        hint:'이름은 제외하고 「중2 남학생」과 같이 입력해 주십시오. 수치를 포함하면 구체성이 높아집니다. 다른 사람(직원 · 학생 · 학부모 등)을 알아볼 수 있는 내용은 적지 마십시오.'},
+      {t:'textarea',k:'쓰지 말아야 할 것',ph:'언급을 제외할 내용이 있으면 입력해 주십시오 (예: 수강료, 특정 경쟁 학원)'},
       {t:'note',note:'blogcall'},
       /* ── 여기부터 접어둔 선택 칸 ── */
-      {t:'foldstart',k:'글이 훨씬 좋아집니다 — 5분만 더 쓰시면',sub:'안 쓰셔도 신청은 됩니다'},
+      {t:'foldstart',k:'추가 정보 (선택) — 포스팅의 구체성을 높이는 항목',sub:'미입력 시에도 접수됩니다'},
       {t:'note',note:'blogwhy'},
       {t:'text',k:'학부모가 자주 묻는 질문 ①',ph:'예: 우리 아이 레벨이 어느 정도인가요?'},
       {t:'text',k:'학부모가 자주 묻는 질문 ②',ph:'예: 숙제는 얼마나 나가나요?'},
@@ -1980,26 +1980,26 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
     var schema=FORM_SCHEMA[k]||[],h='';
     for(var i=0;i<schema.length;i++){var f=schema[i];
       if(f.t==='note'){
-        if(f.note==='tz')h+='<div class="tzbox"><b>⏰ 시차 안내</b><ul><li>필리핀은 한국보다 1시간, 미국은 14시간 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 적어 주십시오.</li><li>미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다.</li></ul></div>';
-        else if(f.note==='blogkeyword')h+='<div class="guidebox"><b>📌 적는 방법</b>'
-          +'<p>저희는 블로거 100여 명이 각자의 블로그에 학원을 소개하는 글을 올립니다. 글마다 서로 다른 검색어를 하나씩 배정하기 때문에, 아래 네 가지를 <b>쉼표로 나눠</b> 적어주시면 <b>"성수동 초등 영어 내신"</b>, <b>"성수역 예비중 영어 레벨테스트"</b> 처럼 학부모가 실제로 검색하는 말에 맞춘 글이 만들어집니다.</p>'
+        if(f.note==='tz')h+='<div class="tzbox"><b>⏰ 시차 안내</b><ul><li>필리핀은 한국보다 1시간, 미국은 14시간 느립니다.</li><li>원하는 시간은 <b style="color:inherit">한국시간 기준</b>으로 입력해 주십시오.</li><li>미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다.</li></ul></div>';
+        else if(f.note==='blogkeyword')h+='<div class="guidebox"><b>📌 입력 방법</b>'
+          +'<p>실 운영 블로거 100여 명이 본인 블로그에 학원 소개 포스팅을 발행합니다. 포스팅마다 키워드를 분리 배정하므로, 아래 네 가지를 <b>쉼표로 구분해</b> 입력하면 <b>"성수동 초등 영어 내신"</b>, <b>"성수역 예비중 영어 레벨테스트"</b>처럼 학부모의 실제 검색어에 맞춘 포스팅을 작성합니다.</p>'
           +'<table class="gtbl"><tr><td>지역</td><td>성수동, 성수역, 뚝섬, 서울숲</td></tr><tr><td>과목</td><td>영어, 영어회화, 영어독해</td></tr><tr><td>대상</td><td>초등, 예비중, 중등, 고등</td></tr><tr><td>상황</td><td>내신, 학원 추천, 레벨테스트, 방학특강</td></tr></table>'
-          +'<p style="margin-top:8px">많이 적어주실수록 서로 다른 글이 많이 나오고, 검색에 걸리는 폭이 넓어집니다.</p></div>';
-        else if(f.note==='blogpurpose')h+='<div class="cnote" style="margin:-8px 0 4px">💡 <b>「영어학원」·「수학학원」 같은 말은 고르지 않으셔도 됩니다.</b> 과목은 위 칸에서 이미 받았고, 여기에 또 넣으면 <b>「영어 내신 수학학원」</b> 처럼 말이 안 되는 검색어가 만들어집니다.</div>';
-        else if(f.note==='blogfixed')h+='<div class="guidebox mini"><b>📋 모든 글에 똑같이 들어갈 정보</b><p>이 내용은 모든 글에 그대로 들어갑니다. 정확하게 적어 주십시오.</p></div>';
-        else if(f.note==='blogphoto')h+='<div class="guidebox mini"><b>📷 사진</b><p>글마다 다른 사진을 써야 검색에 잘 걸립니다. <b>30장 이상 권장합니다.</b> 간판·건물 바깥, 강의실, 교재, 시간표, 안내문, 수업 자료 등 <b>학생 얼굴이 나오지 않는 사진</b>이면 무엇이든 좋습니다.</p><p style="margin-top:8px"><b>지금 다 모으기 어려우시면 비워두셔도 됩니다.</b> 접수 후 <b>사진을 언제든 올리실 수 있는 주소</b>를 따로 안내해 드립니다. 드라이브·MYBOX 링크로 주셔도 됩니다.</p></div>';
-        else if(f.note==='blogstory')h+='<div class="storybox"><b>여기가 가장 중요합니다 — 검색 노출이 여기서 갈립니다</b>'
-          +'<p>요즘 네이버는 <b>어디에나 들어맞는 소개글을 좋게 보지 않습니다.</b> '
-          +'학원 이름·과목·주소만 있는 글은 다른 학원 글과 비슷하다고 판단해 <b>검색에서 밀어냅니다.</b></p>'
-          +'<p>반대로 <b>그 학원에서 실제로 있었던 일</b>이 담긴 글은 다른 어디에도 없는 내용이라 '
-          +'<b>검색 상위에 올라가고 오래 남습니다.</b> 읽는 학부모도 그 대목에서 전화를 겁니다.</p>'
-          +'<p style="margin-top:8px"><b>한 줄만 적으셔도 됩니다.</b> 성적이 오른 학생, 학부모가 했던 말, '
-          +'수업 중 있었던 일, 상담 때 자주 나오는 이야기 — 무엇이든 <b>실제로 있었던 일</b>이면 됩니다.</p>'
-          +'<p class="sbwarn">※ 학생 이름·사진은 넣지 마세요. <b>「중2 남학생」「고1 학부모님」</b> 처럼만 적어 주시면 됩니다.<br>'
-          +'※ 저희는 <b>지어내지 않습니다.</b> 여기 적어주신 것만 글에 씁니다.</p></div>';
+          +'<p style="margin-top:8px">입력 항목이 많을수록 키워드 조합이 늘어 검색 노출 범위가 넓어집니다.</p></div>';
+        else if(f.note==='blogpurpose')h+='<div class="cnote" style="margin:-8px 0 4px">💡 <b>「영어학원」·「수학학원」은 선택하지 않습니다.</b> 과목은 위 항목에서 받았으며, 중복 선택 시 <b>「영어 내신 수학학원」</b>과 같은 부정확한 키워드가 생성됩니다.</div>';
+        else if(f.note==='blogfixed')h+='<div class="guidebox mini"><b>📋 전체 포스팅 공통 기재 정보</b><p>이 내용은 모든 포스팅에 동일하게 기재됩니다. 정확하게 입력해 주십시오.</p></div>';
+        else if(f.note==='blogphoto')h+='<div class="guidebox mini"><b>📷 사진</b><p>포스팅마다 다른 사진을 사용해야 검색 노출에 유리합니다. <b>30장 이상 권장합니다.</b> 간판·외관, 강의실, 교재, 시간표, 안내문, 수업 자료 등 <b>학생 얼굴이 나오지 않는 사진</b>이면 모두 사용할 수 있습니다.</p><p style="margin-top:8px"><b>지금 준비가 어려우면 생략할 수 있습니다.</b> 접수 후 <b>사진을 상시 업로드할 수 있는 주소</b>를 별도로 안내합니다. 드라이브·MYBOX 링크로도 제출할 수 있습니다.</p></div>';
+        else if(f.note==='blogstory')h+='<div class="storybox"><b>가장 중요한 항목 — 검색 노출을 좌우합니다</b>'
+          +'<p>네이버는 <b>어느 학원에나 적용되는 일반적인 소개글을 낮게 평가합니다.</b> '
+          +'학원명·과목·주소만 있는 글은 유사 문서로 판단해 <b>검색 순위를 낮춥니다.</b></p>'
+          +'<p>반면 <b>해당 학원의 실제 사례</b>가 담긴 글은 고유한 내용으로 인정되어 '
+          +'<b>검색 상위에 노출되고 오래 유지됩니다.</b> 학부모 문의로 이어지는 부분도 실제 사례입니다.</p>'
+          +'<p style="margin-top:8px"><b>한 줄 분량도 충분합니다.</b> 성적이 오른 학생, 학부모가 했던 말, '
+          +'수업 중 있었던 일, 상담 때 자주 나오는 이야기 — <b>실제 사례</b>이면 모두 가능합니다.</p>'
+          +'<p class="sbwarn">※ 학생 이름·사진은 넣지 마십시오. <b>「중2 남학생」「고1 학부모」</b>와 같이 입력해 주십시오.<br>'
+          +'※ 당사는 <b>내용을 창작하지 않습니다.</b> 입력한 내용만 포스팅에 사용합니다.</p></div>';
         else if(f.note==='blogad')h+='<div class="cnote" style="margin-top:4px">📣 관련 법(공정거래위원회 추천·보증 심사지침)에 따라 <b>모든 글 하단에는 광고임을 알리는 문구가 표기</b>됩니다.</div>';
-        else if(f.note==='blogcall')h+='<div class="guidebox mini"><b>☎️ 접수 후 10분 통화</b><p>신청서를 받으면 담당자가 <b>10분 정도 전화로 몇 가지 더 여쭙습니다.</b> 글보다 말씀으로 들을 때 더 나은 글감이 나옵니다. 아래 칸은 <b>미리 알려주실 수 있는 만큼만</b> 적어 주십시오.</p></div>';
-        else if(f.note==='blogwhy')h+='<div class="ffoldwhy">학원 이름·주소·과목만으로는 <b>어느 학원에나 들어맞는 뻔한 글</b>이 됩니다. 그런 글은 검색에서도 밀립니다.<br>아래는 <b>원장이 가장 잘 아시는 내용</b>입니다. 한 줄씩만 적어주셔도 글이 완전히 달라집니다. <b>비워두셔도 신청은 정상 접수됩니다.</b></div>';
+        else if(f.note==='blogcall')h+='<div class="guidebox mini"><b>☎️ 접수 후 10분 통화</b><p>신청서 접수 후 담당자가 <b>약 10분간 전화로 추가 사항을 확인합니다.</b> 통화에서 구체적인 소재를 확보합니다. 아래 항목은 <b>사전에 전달 가능한 범위만</b> 입력해 주십시오.</p></div>';
+        else if(f.note==='blogwhy')h+='<div class="ffoldwhy">학원명·주소·과목만으로는 <b>일반적인 소개글</b>이 되어 검색 노출에 불리합니다.<br>아래 항목은 <b>학원 고유의 정보</b>입니다. 항목당 한 줄 분량으로도 포스팅의 구체성이 높아집니다. <b>미입력 시에도 정상 접수됩니다.</b></div>';
         continue;
       }
       if(f.t==='foldstart'){
@@ -2022,7 +2022,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
         h+='<textarea class="inp ffinput" data-k="'+esc(f.k)+'" style="min-height:'+(f.hi?150:90)+'px"'+(f.ph?' placeholder="'+esc(f.ph)+'"':'')+'></textarea>';
       }else if(f.t==='files'){
         h+='<input type="file" class="inp ffinput ffiles" data-k="'+esc(f.k)+'" accept="image/*" multiple onchange="onPhotoPick(this)">'
-          +'<div class="fnote" id="photoInfo">아직 선택한 사진이 없습니다.</div>';
+          +'<div class="fnote" id="photoInfo">선택한 사진이 없습니다.</div>';
       }else if(f.t==='qty'){
         h+='<div class="qtyopts" id="qtyOpts">'+qtyCards(CUR_PREMIUM,f.k)+'</div><div id="qtySum"></div>';
       }else if(f.t==='number'){
@@ -2175,7 +2175,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
   function onPhotoPick(input){
     var info=document.getElementById('photoInfo');if(!info)return;
     var files=input.files?Array.prototype.slice.call(input.files):[];
-    if(!files.length){info.textContent='아직 선택한 사진이 없습니다.';info.className='fnote';return;}
+    if(!files.length){info.textContent='선택한 사진이 없습니다.';info.className='fnote';return;}
     var mb=files.reduce(function(a,f){return a+f.size;},0)/1048576;
     info.className='fnote ok';
     info.textContent='✓ '+files.length+'장 선택됨 ('+mb.toFixed(1)+'MB)'
@@ -2216,7 +2216,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
     var paths=[];
     for(var i=0;i<files.length;i++){
       var f=await shrinkPhoto(files[i]);
-      if(f.size>PHOTO_MAX)throw new Error('「'+files[i].name+'」은 줄여도 10MB가 넘습니다. 이 사진만 빼고 다시 시도해 주십시오.');
+      if(f.size>PHOTO_MAX)throw new Error('「'+files[i].name+'」은 압축 후에도 10MB를 넘습니다. 해당 사진을 제외하고 다시 시도해 주십시오.');
       /* 안 줄여지고 원본 그대로 갈 수도 있어서 실제 형식에 맞춰 확장자를 붙입니다 */
       var ext=(f.type==='image/jpeg')?'jpg':((f.type.split('/')[1]||'jpg').replace(/[^a-z0-9]/g,'')||'jpg');
       var path=folder+'/'+String(i+1).padStart(3,'0')+'.'+ext;
@@ -2231,13 +2231,13 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
     var hint=document.getElementById('formHint');
     var setErr=function(m){hint.textContent=m;hint.style.color="#c0392b";};
     var pick=document.querySelector('#picker .pick.on');
-    if(!pick)return setErr('먼저 필요한 지원을 선택해 주십시오.');
+    if(!pick)return setErr('지원 영역을 먼저 선택해 주십시오.');
     var area=pick.getAttribute('data-k');
     if(area==='doc')return goAim();
     if(area==='mkt'&&!document.querySelector('#qtyOpts .qopt:has(input:checked)'))
-      return setErr('원하시는 편수를 골라 주십시오.');
+      return setErr('편수를 선택해 주십시오.');
     var miss=firstMissing(area);
-    if(miss){focusField(miss);return setErr('「'+miss.k+'」 칸을 채워 주십시오.');}
+    if(miss){focusField(miss);return setErr('「'+miss.k+'」 항목을 입력해 주십시오.');}
     var academy=document.getElementById('f_academy').value.trim();
     var manager=document.getElementById('f_manager').value.trim();
     var phone=document.getElementById('f_phone').value.trim();
@@ -2258,7 +2258,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
       if(up){details['학원 사진']=up.paths.length+'장';details['_photos']=up.paths;}
     }catch(e){
       btn.disabled=false;btn.textContent='신청서 제출';
-      return setErr(e.message||'사진 업로드에 실패했습니다. 사진을 빼고 제출하시거나 링크로 남겨주십시오.');
+      return setErr(e.message||'사진 업로드에 실패했습니다. 사진을 제외하고 제출하거나 링크로 입력해 주십시오.');
     }
     /* 🔴 로그인 확인 — 없으면 창이 뜨고, 로그인하면 «적은 내용 그대로» 이어집니다 */
     var me=null;
@@ -2286,7 +2286,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
     ['f_academy','f_manager','f_phone','f_email','f_message','f_extra'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
     var cs=document.getElementById('f_consent');if(cs)cs.checked=false;
     var btn=document.getElementById('submitBtn');if(btn){btn.disabled=false;btn.textContent='신청서 제출';}
-    var hint=document.getElementById('formHint');if(hint){hint.textContent='제출하면 담당자가 배정되어 1~2일 내 연락드립니다.';hint.style.color='';}
+    var hint=document.getElementById('formHint');if(hint){hint.textContent='제출 후 담당자가 배정되어 1~2일 내 연락합니다.';hint.style.color='';}
     collapsePicks();
     document.getElementById('formDone').style.display='none';
     document.getElementById('applyForm').style.display='';
