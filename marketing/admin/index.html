@@ -1193,9 +1193,10 @@
     }
     /* 홈페이지 신청서(6차) — 계약서 서명 후 고객에게 보낼 「제작 자료」 링크 (신청 값은 링크의 # 뒤에만 담김).
        지시서 3-1 의 자리. 그 뒤에 정기 콘텐츠 칸이 끼어들어 「찾기」가 안 맞아 손으로 넣었습니다(2026-10-13). */
-    MAT_LINK=d._자료?location.origin+'/apply/#m='+d._자료:'';
+    /* 🔴 링크에는 신청 건의 id 만 넣습니다 — 신청 값은 넣지 않습니다(2026-10-14 행정 창). 고객이 «신청한 계정으로 로그인»해야 열립니다. */
+    MAT_LINK=(d._신청값&&r.id)?location.origin+'/apply/#m='+r.id:'';
     if(MAT_LINK)h+='<div class="irow"><span class="k">제작 자료 링크</span><span><button class="btn btn-ghost" style="padding:6px 12px;font-size:.8rem" type="button" '
-      +'onclick="copyMatLink(this)">🔗 링크 복사</button> <span class="muted" style="font-size:.8rem">계약서 서명 후 고객에게 보냅니다</span></span></div>';
+      +'onclick="copyMatLink(this)">🔗 링크 복사</button> <span class="muted" style="font-size:.8rem">계약서 서명 후 고객에게 보냅니다 · 고객이 <b>신청한 계정으로 로그인</b>해야 열립니다</span></span></div>';
     INFO_TEXT='의뢰처 정보\n'+infoLines(r,'업체명').join('\n');
     h='<div class="irow" style="border:0;padding-bottom:4px"><span class="k"></span>'
       +'<span><button class="btn btn-ghost" style="padding:6px 12px;font-size:.8rem" type="button" '

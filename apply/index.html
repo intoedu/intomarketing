@@ -24,6 +24,11 @@
         3. 「← 홈페이지 제작」 — a[data-back] (새로 가지 않고 한 칸 물러남)
         4. 개인정보 고지 — 행정 창 문구 (7쪽 공통 + 이 신청서에서 더 받는 것)
         5. Supabase 클라이언트 한 벌 — window.IMSB
+        6. 🔴 「제작 자료」 링크에는 «신청 값을 담지 않습니다» (2026-10-14 행정 창).
+           링크는 /apply/#m=<신청 건의 id> 뿐이고, 신청 값은 서버(details._신청값)에 둡니다.
+           로그인한 «본인»만 my_apply_snapshot() 로 받아 옵니다. 홈페이지 팀 원본은 값을 통째로
+           링크에 넣는 방식(#m=<값>)입니다 — 그 방식으로 되돌리지 마십시오. 링크는 기록에 남고
+           전달되면 막을 수 없습니다.
    ══════════════════════════════════════════════════════════════ */
 /* ──────────────────────────────────────────────────────────────
    홈페이지 제작 신청서  ( intomarketing.co.kr/apply/ )   2026-10-03 판
@@ -648,7 +653,7 @@ footer span{margin:0 8px;color:var(--line)}
 </style>
 </head>
 <body>
-<script>document.body.className=/^#m=/.test(window.__IM_HASH||location.hash)?'mode-material':'mode-apply';</script>
+<script>document.body.className=/^#m=/.test(location.hash)?'mode-material':'mode-apply';</script>
 
 <header>
   <div class="wrap">
@@ -1294,7 +1299,9 @@ footer span{margin:0 8px;color:var(--line)}
             </table>
           </div>
           <div class="fld" style="margin:12px 0 18px"><label class="consent"><input type="checkbox" id="f_dom_consent">
-            <span>(필수) 도메인 등록을 위한 개인정보 제3자 제공에 동의합니다.</span></label></div>
+            <!-- 🔴 수집 · 이용 동의(맨 아래)와 «따로» 받는 칸입니다. 하나로 합치지 마십시오 — 합치면 동의가 무효가 될 수 있습니다.
+                 동의하지 않아도 신청은 됩니다(위에서 「직접 구매」 · 「무료 주소」를 고르면 이 칸이 없어집니다). (행정 창 2026-10-14) -->
+            <span>(선택) 도메인 등록을 위한 개인정보 제3자 제공에 동의합니다.</span></label></div>
         </div>
       </div>
     </div>
@@ -1414,7 +1421,8 @@ footer span{margin:0 8px;color:var(--line)}
 <script src="account.js"></script>
 <script src="/ref.js"></script>
 <script>
-(function(){
+/* MAT_ID = 제작 자료 링크의 신청 건 id (신청서 화면이면 빈 값) · SNAP_IN = 서버에서 받아 온 신청 값 · SNAP_WHY = 못 받았을 때 이유 */
+function __imMain(MAT_ID, SNAP_IN, SNAP_WHY){
 "use strict";
 /* ═══════════════ 설정 — 바꿀 일이 생기면 여기만 ═══════════════ */
 var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
@@ -1550,15 +1558,11 @@ var REP={
 var POSTCODE_SRC="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
 /* 임시 저장 — 이 브라우저에만, DRAFT_DAYS 일 동안. 판이 바뀌어 칸이 달라지면 키 끝 번호를 올리세요. */
 /* ── 신청서 / 제작 자료 (10/4 5차) — 주소 끝이 #m=… 이면 「제작 자료」 화면
-   신청서를 낼 때 신청 값(도메인 소유자 · 동의 · 영업실장은 빼고)을 details._자료 에 담고,
-   어드민 「제작 자료 링크 복사」가 /apply/#m=<그 값> 링크를 만듭니다. #(해시)는 서버로 가지 않습니다. */
+   신청서를 낼 때 신청 값(도메인 소유자 · 동의 · 영업실장 · 법인등록번호는 빼고)을 details._신청값 에 담아 «서버에» 두고,
+   어드민 「제작 자료 링크 복사」가 /apply/#m=<신청 건 id> 링크를 만듭니다. 링크에는 값이 없습니다(2026-10-14). */
 function b64enc(t){ return btoa(unescape(encodeURIComponent(t))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
 function b64dec(t){ t=t.replace(/-/g,'+').replace(/_/g,'/'); while(t.length%4)t+='='; return decodeURIComponent(escape(atob(t))); }
-var MODE='apply', SNAP=null;
-(function(){
-  var m=/^#m=([A-Za-z0-9_-]+)$/.exec(window.__IM_HASH||location.hash||''); if(!m)return; MODE='material';   /* window.__IM_HASH — 시연 화면(Artifact)이 링크 없이 제작 자료 화면을 열 때만 씀 (사이트에서는 쓰지 않음) */
-  try{ var o=JSON.parse(b64dec(m[1])); if(o&&o.v===1&&o.no&&o.d&&o.d.f)SNAP=o; }catch(e){}
-})();
+var MODE=MAT_ID?'material':'apply', SNAP=SNAP_IN||null;   /* 신청 값은 링크가 아니라 서버에서 받습니다 — 맨 아래 시작 부분 */
 document.body.classList.remove('mode-apply','mode-material'); document.body.classList.add('mode-'+MODE);
 window.addEventListener('hashchange',function(){ if(MODE==='material'||/^#m=/.test(location.hash))location.reload(); });
 var BTN_TXT=MODE==='material'?'제작 자료 보내기 ↗':'신청서 제출 ↗';
@@ -2089,7 +2093,9 @@ function syncDomain(){
   $('owner_box').classList.toggle('show',d==='유료 도메인 새로'&&!!ow);
   $('own_org').classList.toggle('show',ow==='기관');
   $('f_dom_reg_etc').classList.toggle('show',val('f_dom_reg')==='기타');
-  $('dom_registrar').textContent=registrar()?registrar()+' (위에서 고르신 도메인 등록 회사)':'위에서 고르실 도메인 등록 회사';
+  /* 🔴 「받는 곳」은 «이름»으로 알려야 합니다 — 「위에서 고르실 회사」만으로는 누구에게 가는지 알 수 없습니다 (행정 창 2026-10-14) */
+  $('dom_registrar').textContent=registrar()?registrar()+' (고객님이 선택하신 도메인 등록 회사 · 이곳으로만 제공합니다)'
+                                             :'고객님이 선택하신 도메인 등록 회사 (가비아 · 후이즈 · 카페24 등, 선택하신 곳으로만 제공합니다)';
   $('lab_own_name').textContent=ow==='기관'?'소유자명 (기관명)':'소유자명 (이름)';
   $('f_own_en').placeholder=ow==='기관'?'예: INTO MARKETING':'예: HONG GILDONG (여권 영문 이름과 같게)';
   /* 소유자 추천 — 「업체 정보」에서 고른 등록증 기준 */
@@ -2265,7 +2271,7 @@ var CHECKS=[
   C('step8','f_own_addr','주소 (한글)',has('f_own_addr'),'주소(한글)를 적어 주십시오.',owning),
   C('step8','f_own_addr2','상세 주소',has('f_own_addr2'),'상세 주소를 적어 주십시오. 건물 전체를 쓰시면 「건물 전체」라고 적어 주십시오.',owning),
   C('step8','f_own_addr_en','주소 (영문)',function(){return /[A-Za-z]/.test(val('f_own_addr_en'));},'주소(영문)를 적어 주십시오. 「우편번호 검색」을 누르면 채워집니다.',owning),
-  C('step8','f_dom_consent','도메인 제3자 제공 동의',function(){return $('f_dom_consent').checked;},'도메인 등록을 위한 개인정보 제3자 제공에 동의해 주셔야 대신 등록할 수 있습니다.',owning),
+  C('step8','f_dom_consent','도메인 제3자 제공 동의',function(){return $('f_dom_consent').checked;},'새 도메인을 대신 등록해 드리려면 제3자 제공 동의가 필요합니다. 동의하지 않으시면 위에서 「직접 구매」나 「무료 주소」로 바꿔 주십시오.',owning),
   C('step8','seg_when','희망 오픈 시기',picked1('when'),'희망 오픈 시기를 골라 주십시오.'),
   C('step8','f_when_date','희망 오픈 날짜',function(){var v=val('f_when_date');return !!v&&v>=todayStr();},'희망 오픈 날짜를 골라 주십시오. (오늘 이후)',is('when','날짜 정함')),
   C('step8','seg_etc','그 밖에 바라는 것',picked1('tg_etc'),'그 밖에 바라는 것이 있으신지 골라 주십시오.'),
@@ -3370,7 +3376,7 @@ $('form').addEventListener('submit',async function(e){
     if(!APPLY_NO)APPLY_NO=genNo();
     details['신청 번호']=APPLY_NO;
     details['제작 자료']='계약서 서명 후 아래 「제작 자료 링크」의 「링크 복사」로 보냄';
-    details['_자료']=b64enc(JSON.stringify({v:1,no:APPLY_NO,at:Date.now(),d:snapApply()}));
+    details['_신청값']=snapApply();   /* 🔴 링크에 넣지 않습니다 — 서버에만 둡니다. 「제작 자료」 화면이 본인 확인 뒤 받아 갑니다 */
   }
   Object.keys(details).forEach(function(k){ if(details[k]===''||details[k]==null)delete details[k]; });
 
@@ -3404,7 +3410,13 @@ $('form').addEventListener('submit',async function(e){
 function showDraftNote(D){ var t=new Date(D.at); $('draft_when').textContent=(t.getMonth()+1)+'월 '+t.getDate()+'일 '+pad2(t.getHours())+':'+pad2(t.getMinutes()); $('draft_note').hidden=false; }
 var D=null;
 if(MODE==='material'){
-  if(!SNAP){   /* 링크가 깨졌거나 잘렸음 */
+  if(!SNAP){   /* 신청 값을 못 받음 — 이유를 알려 줍니다 */
+    var WHY={
+      login  :'<b>로그인하셔야 열립니다.</b> 신청하실 때 쓰신 계정으로 로그인해 주십시오. <button type="button" class="linkbtn" onclick="location.reload()">다시 시도</button>',
+      notmine:'<b>이 계정에는 해당 신청이 없습니다.</b> 「제작 자료」는 신청하실 때 쓰신 계정으로 로그인해야 열립니다. 오른쪽 위에서 로그아웃한 뒤 그 계정으로 다시 들어와 주십시오. 계정이 기억나지 않으시면 전화 <a href="tel:01073181790">010-7318-1790</a>',
+      conn   :'<b>신청 내용을 불러오지 못했습니다.</b> 잠시 뒤 다시 열어 주십시오. 계속 안 되면 전화 <a href="tel:01073181790">010-7318-1790</a>'
+    };
+    if(WHY[SNAP_WHY]) $('mat_bad').innerHTML=WHY[SNAP_WHY];
     $('mat_bad').hidden=false; $('form').style.display='none'; document.querySelector('.bar').style.display='none'; $('mat_sum').style.display='none';
   } else {
     try{ applyDraft(SNAP.d); }catch(x){}
@@ -3428,7 +3440,40 @@ DRAFT_ON=true;
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ setupSteps(); refresh(); });
 /* 시험용 — 화면 확인 스크립트가 계산 · 제작 자료 링크 값을 직접 부를 수 있게 (저장 · 전송 없음) */
 window.__applyCalc=calc;
-window.__applySnap=function(){ return b64enc(JSON.stringify({v:1,no:'0000-TEST',at:Date.now(),d:snapApply()})); };
+window.__applySnap=function(){ return snapApply(); };
+}
+
+/* ══════════ 시작 ══════════
+   · 신청서 화면        → 바로 시작합니다 (전과 같음).
+   · 제작 자료 화면      → ① 로그인 확인 ② 서버에서 «본인의» 신청 값을 받아 온 뒤 시작합니다.
+   🔴 링크에는 신청 건의 id 뿐입니다. id 를 알아도 본인 계정으로 로그인하지 않으면 아무것도 볼 수 없습니다. */
+(function(){
+  var h=location.hash||'';
+  var m=/^#m=([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i.exec(h);
+  if(!/^#m=/.test(h)){ __imMain('', null, ''); return; }       /* 신청서 */
+  if(!m){ __imMain('x', null, 'bad'); return; }                /* 모양이 다른 링크 — 「링크가 올바르지 않습니다」 */
+  (async function(){
+    var snap=null, why='conn';
+    try{
+      var sb=window.IMSB||((window.supabase&&window.supabase.createClient)
+               ?(window.IMSB=window.supabase.createClient("https://qkvebwxewttqtcryfycy.supabase.co","sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa")):null);
+      if(sb && window.IMAccount){
+        IMAccount.init(sb);
+        var me=await IMAccount.need({
+          title :'제작 자료를 보내시려면 로그인해 주십시오',
+          sub   :'신청하실 때 쓰신 계정으로 로그인해 주십시오. 신청하신 내용을 불러옵니다.',
+          cancel:'닫기', go2:'계정 만들기', keep:null });
+        if(!me) why='login';
+        else{
+          var r=await sb.rpc('my_apply_snapshot',{p_id:m[1]});
+          if(r.error) why='conn';
+          else if(r.data && r.data.no && r.data.snap && r.data.snap.f) snap={v:1,no:r.data.no,at:r.data.at,d:r.data.snap};
+          else why='notmine';
+        }
+      }
+    }catch(e){ why='conn'; }
+    __imMain(m[1], snap, snap?'':why);
+  })();
 })();
 </script>
 <script src="/authbar.js"></script>
