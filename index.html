@@ -305,7 +305,8 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 .cmpnote{margin-top:8px;font-size:var(--t-sm);color:var(--muted);line-height:1.8}
 .pinc b{color:var(--ink);font-weight:700}
 /* 약정 표 — 가로로 길어서 좁은 화면에선 옆으로 밀립니다 */
-.ptw{margin-top:24px;overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+.ptw{margin-top:24px;overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);
+     position:relative}  /* 🔴 .cmpw 와 같은 이유로 지우지 마세요 — 없으면 표가 페이지 전체를 옆으로 밉니다 */
 .ptab{width:100%;border-collapse:collapse;min-width:520px}
 .ptab th,.ptab td{padding:12px 16px;text-align:right;border-bottom:1px solid var(--line);
   font-size:var(--t-base);font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -315,6 +316,14 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 .ptab td b{font-weight:800}
 .ptab td .sm{display:block;font-size:var(--t-xs);color:var(--muted);font-weight:500;margin-top:2px}
 .ptab .lo{color:var(--accent-ink,#1E47C0);font-weight:800;font-variant-numeric:tabular-nums}
+/* 2026-10-01 «기본 + 기능» 가격표 — 휴대폰에서도 옆으로 밀지 않고 한 화면에 보이게 */
+.ptab.fit{min-width:0}
+.ptab.fit th,.ptab.fit td{padding:12px 12px}
+@media(max-width:480px){.ptab.fit th,.ptab.fit td{padding:12px 8px;font-size:var(--t-sm)}}
+.ptab.plan th{white-space:normal;vertical-align:bottom}
+.ptab.plan th .sm{display:block;font-weight:500;margin-top:2px}
+.ptab.plan td:first-child b{white-space:nowrap}
+.ptab.plan th{word-break:keep-all}
 .pnote{margin-top:16px;font-size:var(--t-sm);color:var(--muted);background:var(--surface-2);
        border-radius:10px;padding:12px 16px;line-height:1.8}
 
@@ -441,7 +450,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         <button class="navlink" id="nl-svc">지원 항목 <i class="caret"></i></button>
         <div class="drop">
           <a onclick="go('blog')">블로그 · 리뷰<small>실 운영 블로거가 본인 계정에 직접 작성</small></a>
-          <a onclick="go('web')">홈페이지 제작<small>기획 · 제작 · 배포 · 소유권 이관</small></a>
+          <a onclick="go('web')">홈페이지 제작<small>기획 · 제작 · 배포 · 월 관리</small></a>
           <a onclick="go('sns')">SNS 채널 제작<small>채널 세팅 · 지도 등록 · 정기 콘텐츠</small></a>
           <a onclick="go('design')">디자인<small>로고 · 명함 · 인쇄물 · 카드뉴스</small></a>
           <a onclick="go('video')">영상 제작<small>숏폼 · 롱폼 · 기획 · 촬영 · 편집</small></a>
@@ -513,7 +522,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
           <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18M7 6.5h.01M9.7 6.5h.01"/></svg></span>
           <b>홈페이지 제작</b>
           <span>홈페이지 · 앱</span>
-          <span class="price">월 45,000원부터</span>
+          <span class="price">월 50,000원부터</span>
         </div>
         <div class="item" onclick="go('sns')" role="link" tabindex="0" onkeydown="if(event.key==='Enter')go('sns')">
           <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="17.5" cy="6" r="2.6"/><circle cx="6.5" cy="12" r="2.6"/><circle cx="17.5" cy="18" r="2.6"/><path d="M9 10.7 15 7.4M9 13.3l6 3.3"/></svg></span>
@@ -564,7 +573,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         <div class="step"><div class="n">STEP 02</div><h4>상담 · 견적</h4><p>범위와 일정을 정리해 견적서를 발송합니다. 상담과 견적은 무료입니다.</p></div>
         <div class="step"><div class="n">STEP 03</div><h4>작업</h4><p>전담 인력이 직접 수행합니다. 진행 현황은 마이페이지에서 상시 확인하실 수 있습니다.</p></div>
         <div class="step"><div class="n">STEP 04</div><h4>검수</h4><p>내부 검수 후 확인을 요청드리고, 수정 요청을 반영합니다.</p></div>
-        <div class="step"><div class="n">STEP 05</div><h4>납품 · 사후</h4><p>결과물과 권한을 이관하고, 이후 관리도 이어서 수행합니다.</p></div>
+        <div class="step"><div class="n">STEP 05</div><h4>납품 · 사후</h4><p>결과물을 전달하고, 이후 관리도 이어서 수행합니다.</p></div>
       </div>
     </div>
   </section>
@@ -798,8 +807,8 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
     <div class="wrap">
       <p class="kicker">Service 02</p>
       <h2 class="h2">홈페이지 제작</h2>
-      <p class="lead">기획부터 제작 · 배포까지 직접 수행하고, <b>완성 후 소유권과 관리 권한을 이관</b>합니다.
-         제작한 홈페이지는 고객의 자산입니다.</p>
+      <p class="lead">기획부터 제작 · 배포까지 직접 수행하고, <b>오픈 이후에도 매월 관리</b>합니다.
+         도메인은 고객 명의로 등록합니다.</p>
       <div class="acts" style="margin-top:24px"><a class="btn btn-primary" href="apply/">제작 신청서 쓰기 →</a></div>
     </div>
   </div>
@@ -809,7 +818,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       <div class="grid3">
         <div class="card">
           <h3>필요한 범위만</h3>
-          <p>소개 중심 사이트와 신청 · 결제까지 처리하는 사이트는 요건이 다릅니다.
+          <p>소개 중심 사이트와 회원 · 게시판이 필요한 사이트는 요건이 다릅니다.
              필요한 기능에 맞춰 범위를 설계합니다.</p>
         </div>
         <div class="card">
@@ -818,96 +827,84 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         </div>
         <div class="card">
           <h3>제작 이후 관리</h3>
-          <p>월 관리비에 수정 · 백업 · 장애 대응이 포함됩니다.
-             직접 수정하실 수 있도록 관리자 화면을 함께 제공합니다.</p>
+          <p>월 관리비에 <b>작은 수정(월 1회)</b> · 백업 · 장애 대응이 포함됩니다.
+             당사 원인의 오류는 횟수와 관계없이 무료로 수정합니다.</p>
         </div>
       </div>
 
       <div style="margin-top:56px">
         <p class="kicker">Pricing</p>
-        <h2 class="h2">단계별 가격</h2>
-        <p class="lead">두 가지 방식 중 선택하실 수 있습니다.
-           <b>정가</b>는 제작비를 일시 납부하고 월 관리비를 냅니다.
-           <b>약정</b>은 제작비를 낮추는 대신 정한 기간 동안 이용하는 방식으로, <b>총액이 더 저렴</b>합니다.</p>
+        <h2 class="h2">가격</h2>
+        <p class="lead"><b>기본 홈페이지</b>에 필요한 기능을 더하는 방식입니다.
+           페이지 수에 따른 추가 요금은 없으며, 페이지 구성은 내용에 맞춰 담당자가 정합니다.
+           <b>약정</b>하시면 제작비가 내려가고, <b>24개월 약정은 제작비가 무료</b>입니다.</p>
 
-        <div class="cmpw">
-          <table class="cmp">
-            <thead>
-              <tr>
-                <th></th>
-                <th><span class="cname">1단계 · 단순 홍보형</span><span class="cprice">150,000원</span></th>
-                <th class="hi"><span class="tagbest">선택 비중 1위</span><span class="cname">2단계 · 소통형</span><span class="cprice">400,000원</span></th>
-                <th><span class="cname">3단계 · 맞춤 제작형</span><span class="cprice">견적 후 안내</span></th>
-              </tr>
-            </thead>
+        <!-- 🔴 2026-10-01 가격 구조 변경 — 단계(1·2·3단계) 대신 «기본 홈페이지 + 기능».
+              값을 바꾸면 hakwon/index.html(WEB_ITEMS) · apply/index.html(PRICE) · 매뉴얼 1번도 같이 바꾸십시오.
+              약정 할인 금액은 만원 단위로 «올림» (2026-10-01 밤 결정). 게시판은 회원가입을 고른 경우에만.
+              2026-10-03 오후: 카드 결제 제작비 300,000 · 신청서 제작비 20,000 · 한·영 월 5,000 · 공지 월 5,000
+              2026-10-03 오후: 약정 3개월 없앰 · 6개월 30% · 12개월 60% · 24개월 무료
+              2026-10-03 오후: 정가 최소 이용 기간 3개월
+              2026-10-04 저녁: 기본 홈페이지 제작비 100,000 · 공지 무료 · 계약 시에는 제작비만 (월 관리비는 오픈일부터 CMS) -->
+        <div class="ptw">
+          <table class="ptab fit">
+            <thead><tr><th>항목</th><th>제작비</th><th>월 관리비</th></tr></thead>
             <tbody>
-              <tr><td>포함 항목</td>
-                <td class="cdesc"><b>소개 중심</b>소개, 대표 인사말, 시설·서비스 안내, 오시는 길(지도), 전화·카톡 상담 버튼</td>
-                <td class="cdesc hi"><b>1단계 전부 + 회원·게시판</b>회원가입·로그인, 공지, Q&amp;A(비밀글), 자유게시판, 갤러리</td>
-                <td class="cdesc"><b>맞춤 설계</b>정해진 틀 없이 요구에 맞춰 기능과 디자인을 설계합니다. 상담 후 견적을 드립니다.</td></tr>
-              <tr><td>제작비 (정가)</td>
-                <td class="big">150,000원</td><td class="big hi">400,000원</td><td class="big">견적 후 안내</td></tr>
-              <tr><td>월 관리비</td>
-                <td class="big">50,000원</td><td class="big hi">80,000원</td><td class="big">견적 후 안내</td></tr>
-              <tr><td>24개월 약정 시 제작비</td>
-                <td class="big">0원</td><td class="big hi">0원</td><td>견적 금액에 같은 방식 적용</td></tr>
-              <tr><td>페이지</td>
-                <td>3장 이하</td><td class="hi">5장 이하</td><td>10장 이상</td></tr>
-              <tr><td>관리자 화면</td>
-                <td><span class="ok">✓</span></td><td class="hi"><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr>
-              <tr><td>수정 · 백업 · 장애 대응</td>
-                <td><span class="ok">✓</span></td><td class="hi"><span class="ok">✓</span></td><td><span class="ok">✓</span></td></tr>
-              <tr><td></td>
-                <td><a class="btn btn-ghost" href="apply/">신청하기</a></td>
-                <td class="hi"><a class="btn btn-primary" href="apply/">신청하기</a></td>
-                <td><a class="btn btn-ghost" href="apply/">상담 신청</a></td></tr>
+              <tr><td><b>기본 홈페이지</b><span class="sm">필수 · 소개, 대표 인사말, 시설·서비스 안내, 오시는 길(지도), 전화·카톡 상담 버튼</span></td>
+                  <td>100,000</td><td>50,000</td></tr>
+              <tr><td><b>+ 회원가입</b><span class="sm">회원가입·로그인, 관리자 화면</span></td>
+                  <td>100,000</td><td>20,000</td></tr>
+              <tr><td><b>+ 게시판</b><span class="sm">회원가입과 함께 고릅니다 · Q&amp;A(비밀글) · 자유게시판 · 갤러리 중 1개. 1개 더할 때마다 월 10,000원</span></td>
+                  <td>50,000</td><td>10,000</td></tr>
+              <tr><td><b>+ 공지</b><span class="sm">보내 주시는 공지 · 소식 글을 월 1건, 매달 수정 때 함께 올려 드립니다 (회원가입 없이)</span></td>
+                  <td class="lo">무료</td><td class="lo">무료</td></tr>
+              <tr><td><b>+ 신청서</b><span class="sm">상담 · 예약 · 신청을 이메일로 받습니다</span></td>
+                  <td>20,000</td><td>10,000</td></tr>
+              <tr><td><b>+ 목록 · 검색</b><span class="sm">여러 항목을 목록으로 보여 주고 검색합니다</span></td>
+                  <td>30,000</td><td>10,000</td></tr>
+              <tr><td><b>+ 한 · 영 함께 표기</b><span class="sm">한국어와 영어 두 언어</span></td>
+                  <td>20,000</td><td>5,000</td></tr>
+              <tr><td><b>+ 카드 결제</b><span class="sm">온라인 카드 결제. 결제 회사 가입과 심사는 고객이 직접 진행합니다</span></td>
+                  <td>300,000</td><td>50,000</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="cmpnote">모든 금액은 <b style="color:var(--ink)">부가세 포함</b>이며, 최소 이용 기간은 3개월입니다.
-          약정하시면 제작비가 내려갑니다 — 아래 표를 봐 주십시오. <a href="payment/">결제 시점과 환불 기준 보기 →</a></p>
+        <p class="cmpnote">표에 없는 기능은 상담 후 견적을 드립니다.
+          <a href="apply/" style="color:var(--accent-ink);font-weight:700">신청서</a>에서 기능을 고르시면 예상 금액이 바로 계산됩니다.
+          <a href="payment/">결제 시점과 환불 기준 보기 →</a></p>
 
-        <h3 class="h3" style="margin-top:40px;font-size:1.15rem">약정 시 제작비 인하</h3>
-        <p class="pnote" style="margin-top:8px">약정 기간이 길수록 제작비가 낮아지고 월 관리비는 소폭 오르며, <b style="color:var(--ink)">총액은 정가보다 저렴</b>합니다.</p>
+        <h3 class="h3" style="margin-top:40px;font-size:1.15rem">약정 시 제작비 할인</h3>
+        <p class="pnote" style="margin-top:8px"><b style="color:var(--ink)">월 관리비는 약정과 관계없이 같습니다.</b> 약정하시면 고르신 항목의 제작비 합계에서 할인하며, 할인한 금액은 만원 단위로 올려 계산합니다 (예: 175,000원 → 180,000원).</p>
         <div class="ptw">
-          <table class="ptab">
-            <thead><tr><th>약정 기간</th>
-              <th>1단계 제작비</th><th>1단계 월</th>
-              <th>2단계 제작비</th><th>2단계 월</th>
-              <th>총액</th></tr></thead>
+          <table class="ptab fit plan">
+            <thead><tr><th>요금 방식</th><th>제작비<br>할인</th><th>예시 1<span class="sm">기본 홈페이지</span></th><th>예시 2<span class="sm">기본 + 회원가입 + 게시판</span></th></tr></thead>
             <tbody>
-              <tr><td><b>정가</b><span class="sm">약정 없음</span></td>
-                  <td>150,000</td><td>50,000</td><td>400,000</td><td>80,000</td>
-                  <td style="color:var(--muted)">기준</td></tr>
-              <tr><td><b>3개월</b></td>
-                  <td>105,000</td><td>62,000</td><td>280,000</td><td>113,600</td>
-                  <td>3% 저렴</td></tr>
+              <tr><td><b>정가</b><span class="sm">약정 없음 · 최소 3개월</span></td>
+                  <td style="color:var(--muted)">없음</td><td>100,000</td><td>250,000</td></tr>
               <tr><td><b>6개월</b></td>
-                  <td>75,000</td><td>58,750</td><td>200,000</td><td>106,000</td>
-                  <td>5% 저렴</td></tr>
+                  <td>30%</td><td>70,000</td><td>180,000</td></tr>
               <tr><td><b>12개월</b></td>
-                  <td>45,000</td><td>54,380</td><td>120,000</td><td>95,400</td>
-                  <td>7% 저렴</td></tr>
+                  <td>60%</td><td>40,000</td><td>100,000</td></tr>
               <tr><td><b>24개월</b></td>
-                  <td class="lo">0</td><td>51,190</td><td class="lo">0</td><td>87,970</td>
-                  <td class="lo">9% 저렴</td></tr>
-              <tr><td><b>3단계</b> 맞춤 제작형<span class="sm">10페이지 이상</span></td>
-                  <td colspan="5" style="text-align:center;color:var(--muted)">견적 금액에 같은 방식을 적용합니다</td></tr>
+                  <td class="lo">무료</td><td class="lo">무료</td><td class="lo">무료</td></tr>
+              <tr><td><b>월 관리비</b><span class="sm">모든 요금 방식 같음</span></td>
+                  <td></td><td>50,000</td><td>80,000</td></tr>
             </tbody>
           </table>
         </div>
         <p class="pnote" style="margin-top:12px">
           모든 금액은 <b style="color:var(--ink)">부가세 포함</b>입니다.
-          제작비는 <b style="color:var(--ink)">계약 시</b>, 월 관리비는 <b style="color:var(--ink)">오픈일부터</b> 매월 자동결제로 청구합니다.
-          최소 이용 기간은 <b style="color:var(--ink)">3개월</b>이며, 약정 시 해당 기간 동안 이용하셔야 합니다.
+          계약 시에는 <b style="color:var(--ink)">제작비만</b> 청구하고, 월 관리비는 <b style="color:var(--ink)">오픈일부터</b> 매월 CMS 자동이체로 청구합니다. 약정 기간도 오픈일부터 셉니다.
+          약정은 <b style="color:var(--ink)">6개월</b>부터이며, 약정 기간 중 해지 시 위약금은 계약서에 명시합니다. 정가는 최소 이용 기간이 3개월이며, 3개월이 지나면 언제든 해지하실 수 있습니다.
         </p>
         <p class="pnote" style="margin-top:8px">
-          <b style="color:var(--ink)">페이지 산정 기준</b> — 메뉴 선택 시 표시되는 내용 화면 1개를 1페이지로 봅니다(메인 포함).
-          게시판 · 로그인 · 회원가입 · 신청 화면과 개인정보처리방침 · 이용약관은 산정에서 제외합니다.
+          모든 홈페이지에 <b style="color:var(--ink)">모바일 화면 대응</b>과 <b style="color:var(--ink)">네이버 · 구글 검색 등록</b>이 포함됩니다.
+          시안 1개와 제작 중 수정 5회를 제공하며, 자료를 모두 받은 날부터 <b style="color:var(--ink)">1주 이내 디자인 초안, 2주 이내 완성본</b>을 전달합니다.
+          환불 기준은 견적서와 계약서에 명시합니다.
         </p>
 
         <div class="pnote">
-          ※ <b style="color:var(--ink)">유료 도메인은 고객 부담</b>입니다(연 1~2만원대).
+          ※ <b style="color:var(--ink)">유료 도메인은 고객 부담</b>이며, 비용은 등록 회사와 주소 종류에 따라 다릅니다(연 1~2만원을 넘을 수 있습니다).
           사용 여부는 신청 시 선택하실 수 있으며, <b style="color:var(--ink)">도메인은 고객 소유</b>가 됩니다.
         </div>
       </div>
@@ -1867,7 +1864,7 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
       {t:'post',   n:'블로그 홍보',   d:'실 운영 블로거가 본인 계정에 직접 쓰고 올립니다.'},
       {t:'review', n:'네이버 리뷰',   d:'지도·플레이스에 방문자 리뷰를 쌓습니다.'}]},
     {v:'web',   n:'홈페이지 제작', subs:[
-      {t:'',       n:'홈페이지 제작', d:'1~3단계 중에 고르시면 됩니다. 정가와 약정 두 가지가 있습니다.'}]},
+      {t:'',       n:'홈페이지 제작', d:'기본 홈페이지에 필요한 기능을 더합니다. 정가와 약정 두 가지가 있습니다.'}]},
     {v:'sns',   n:'SNS 채널 제작', subs:[
       {t:'open',   n:'채널 세팅',     d:'프로필·디자인 세팅과 지도 등록까지 잡아 드립니다.'},
       {t:'run',    n:'세팅 + 정기 콘텐츠', d:'매달 올릴 것을 만들어 올리고 리포트까지 드립니다.'}]},
