@@ -364,7 +364,9 @@ window.reload=async function(){
   var a=await sb.from('settings').select('value').eq('key','platforms').maybeSingle();
   PLATS=((a.data&&a.data.value)||{}).list||[];
   var b=await sb.from('requests').select('*').order('created_at',{ascending:false});
-  REQS=b.data||[];
+  /* 홈페이지 「제작 자료」(2차) 건은 의뢰가 아니라 받은 자료라 건수에서 뺍니다 (2026-10-13).
+     인투마케팅 어드민에서 신청 건 밑에 붙어 보입니다. */
+  REQS=(b.data||[]).filter(function(r){var d=r.details||{};return !(r.kind==='홈페이지'&&d['접수 구분']==='제작 자료');});
   var c=await sb.from('staff').select('id,name').eq('status','approved');
   STAFF=c.data||[];
   paint();

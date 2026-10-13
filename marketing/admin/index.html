@@ -145,6 +145,16 @@
   .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
   .pgrid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;border:1px solid var(--line);display:block;background:var(--surface-2)}
   .pgrid a:hover img{border-color:var(--accent)}
+  .pitem{min-width:0}
+  .pdl{display:block;margin-top:4px;font-size:.72rem;font-weight:700;color:var(--accent-ink);text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pdl:hover{text-decoration:underline}
+  /* 홈페이지 신청서(1차)와 제작 자료(2차)를 가르는 줄 */
+  .irow.cutrow{background:var(--surface-2);border-top:3px solid var(--brand)}
+  .irow.cutrow.first{border-top:0}
+  .irow.cutrow .k{color:var(--brand);font-weight:800;font-size:.86rem}
+  .irow.cutrow>span:last-child{font-weight:700}
+  .info .irow>span:last-child{white-space:pre-wrap;word-break:break-word}
+  pre.brief{white-space:pre-wrap;word-break:break-word;font:inherit;font-size:.8rem;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:10px;max-height:320px;overflow:auto;margin:8px 0 0}
   .sheet-f{padding:16px 24px;border-top:1px solid var(--line);display:flex;gap:9px;align-items:center;background:var(--surface-2)}
   .saved{font-size:.82rem;color:var(--ok);font-weight:700;opacity:0;transition:.2s}
   .saved.on{opacity:1}
@@ -845,6 +855,25 @@
   var QALL={};
 
   var ME=null, STAFF=[], COMMS=[], DATA={}, CUR='web', CURROW=null, STTAB='wait', SET={}, QD=null;
+  /* ---------- 홈페이지 6차 — 「제작 자료」(2차) 건을 신청(1차) 건에 붙여 보기 (2026-10-13) ----------
+     DB 에는 신청 건과 제작 자료 건이 «따로» 들어옵니다(고객은 이미 낸 건을 고칠 수 없습니다).
+     화면에서만 한 건으로 봅니다. 짝 = 같은 「신청 번호」 + 같은 고객 계정(user_id).
+     🔴 짝을 못 찾은 제작 자료 건은 목록에 그대로 둡니다 — 숨기면 화면에서 사라집니다.
+     🔴 신청 번호만으로 짝짓지 마세요. 번호는 고객 화면이 적어 보내는 값이라, 계정까지 같아야 합니다. */
+  var MATS={}, MAT_PARENT={}, MAT_SKIP={'신청 번호':1,'접수 구분':1,'Claude Code 제작 지시서':1};
+  function isMat(x){var d=(x&&x.details)||{};return !!x&&x.kind==='홈페이지'&&d['접수 구분']==='제작 자료'&&!!d['신청 번호'];}
+  function attachMats(){
+    MATS={}; MAT_PARENT={};
+    var web=DATA.web||[], byNo={};
+    web.forEach(function(x){var d=x.details||{}; if(!isMat(x)&&x.kind==='홈페이지'&&d['신청 번호']&&x.user_id)byNo[d['신청 번호']+'|'+x.user_id]=x;});
+    DATA.web=web.filter(function(x){
+      if(!isMat(x))return true;
+      var p=x.user_id?byNo[x.details['신청 번호']+'|'+x.user_id]:null;
+      if(!p)return true;
+      (MATS[p.id]=MATS[p.id]||[]).push(x); MAT_PARENT[x.id]=p.id; return false;
+    });
+    Object.keys(MATS).forEach(function(k){MATS[k].sort(function(a,b){return a.created_at<b.created_at?-1:1;});});
+  }
   window.BLOG_URL="https://center.intomarketing.co.kr/";  /* 인라인 onclick에서 쓰므로 전역 */
 
   function $(id){return document.getElementById(id);}
@@ -961,6 +990,7 @@
               돈(견적·계약·결제)은 원래 팀에서 처리하고, SNS 는 작업 정보만 봅니다. */
         if(x.content_sub && g!=='sns') DATA.sns.push(x);
       });
+      attachMats();   /* 홈페이지 「제작 자료」 건을 신청 건 밑으로 */
     }
     var st=await sb.from('staff').select('*').order('created_at',{ascending:true});
     STAFF=st.error?[]:(st.data||[]);
@@ -1102,7 +1132,8 @@
              /* 정기 콘텐츠가 붙은 건은 한눈에 보이게. SNS 목록에서는 «어느 팀 건인지»도 적습니다. */
              +(r.content_sub?' <span class="badge" style="background:#EAF0FE;color:#1E47C0">정기 월'
                  +esc(r.content_monthly||'?')+(CUR==='sns'&&groupOf(r)!=='sns'?' · '+esc(r.kind):'')
-                 +'</span>':'')+'</td>'
+                 +'</span>':'')
+             +(MATS[r.id]?' <span class="badge" style="background:#E7F6EC;color:#1B6B3A">제작 자료 도착 '+esc(fdate(MATS[r.id][MATS[r.id].length-1].created_at).slice(5))+'</span>':'')+'</td>'
        +'<td>'+(r.assignee_id?esc(staffName(r.assignee_id)||'-'):'<span class="muted">미배정</span>')+'</td>'
        +'<td class="muted" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(r.memo?esc(r.memo):'-')+'</td>'
        +'<td>'+(todos.length?'<div class="prog"><div class="bar"><i style="width:'+pct+'%"></i></div><span class="muted tnum" style="font-size:.78rem">'+done+'/'+todos.length+'</span></div>':'<span class="muted">-</span>')+'</td>'
@@ -1128,6 +1159,7 @@
     Object.keys(DATA).forEach(function(g){
       (DATA[g]||[]).forEach(function(x){if(x.id===id)r=x;});
     });
+    if(!r&&MAT_PARENT[id])return openDetail(MAT_PARENT[id]);   /* 제작 자료 건은 신청 건에서 함께 봅니다 */
     if(!r)return;
     CURROW=r;
     $('d_title').textContent=r.academy_name||'-';
@@ -1161,6 +1193,10 @@
   function renderInfo(r){
     var h='';
     var add=function(k,v){if(v===undefined||v===null||v==='')return;h+='<div class="irow"><span class="k">'+esc(k)+'</span><span>'+esc(v)+'</span></div>';};
+    var d0=r.details||{};
+    var cut=function(t,sub,first){return '<div class="irow cutrow'+(first?' first':'')+'"><span class="k">'+esc(t)+'</span><span>'+sub+'</span></div>';};
+    if(isMat(r))h+=cut('2차 · 제작 자료','받은 날 '+esc(fdatetime(r.created_at))+' <span class="muted" style="font-weight:600">· 짝이 되는 신청 건을 찾지 못했습니다 (신청 번호 '+esc(d0['신청 번호'])+')</span>',true);
+    else if(d0._신청값)h+=cut('1차 · 신청서','받은 날 '+esc(fdatetime(r.created_at)),true);
     add('업체명',r.academy_name);add('담당자',r.manager_name);add('연락처',r.phone);add('이메일',r.email);
     /* 「회원」 줄은 뺐습니다 — 인투마케팅에는 회원제가 없습니다 (학원지원센터의 프리미엄 회원 표시였습니다).
        대신 고객이 마이페이지에서 자기 주문을 볼 수 있게 연결됐는지만 적습니다. */
@@ -1197,12 +1233,37 @@
     MAT_LINK=(d._신청값&&r.id)?location.origin+'/apply/#m='+r.id:'';
     if(MAT_LINK)h+='<div class="irow"><span class="k">제작 자료 링크</span><span><button class="btn btn-ghost" style="padding:6px 12px;font-size:.8rem" type="button" '
       +'onclick="copyMatLink(this)">🔗 링크 복사</button> <span class="muted" style="font-size:.8rem">계약서 서명 후 고객에게 보냅니다 · 고객이 <b>신청한 계정으로 로그인</b>해야 열립니다</span></span></div>';
-    INFO_TEXT='의뢰처 정보\n'+infoLines(r,'업체명').join('\n');
+    /* ── 2차 · 제작 자료 — 신청 건 밑에 이어서 보여 줍니다. 신청서와 «같은 값»은 다시 적지 않습니다 ── */
+    var mats=MATS[r.id]||[], matText='';
+    BRIEFS=[];
+    if(d._신청값&&!mats.length)h+=cut('2차 · 제작 자료','<span class="muted" style="font-weight:600">아직 받지 않았습니다 — 계약서 서명 후 위 링크를 보내 주십시오</span>');
+    mats.forEach(function(m,i){
+      var md=m.details||{};
+      h+=cut('2차 · 제작 자료','받은 날 '+esc(fdatetime(m.created_at))+(mats.length>1?' <span class="muted" style="font-weight:600">· '+(i+1)+'번째 (모두 '+mats.length+'번 보내심)</span>':''));
+      matText+='\n\n── 2차 · 제작 자료 (받은 날 '+fdatetime(m.created_at)+') ──';
+      Object.keys(md).forEach(function(k){
+        if(k.charAt(0)==='_'||MAT_SKIP[k])return;
+        var v=md[k], pv=d[k];
+        v=Array.isArray(v)?v.join(', '):v; pv=Array.isArray(pv)?pv.join(', '):pv;
+        if(v===undefined||v===null||v===''||v===pv)return;
+        add(k,v); matText+='\n'+k+' : '+v;
+      });
+      if(md['Claude Code 제작 지시서']){
+        BRIEFS.push(''+md['Claude Code 제작 지시서']);
+        h+='<div class="irow"><span class="k">Claude Code 제작 지시서</span><span><button class="btn btn-ghost" style="padding:6px 12px;font-size:.8rem" type="button" '
+          +'onclick="copyBrief('+(BRIEFS.length-1)+',this)">📋 지시서 복사</button>'
+          +'<details><summary class="muted" style="cursor:pointer;font-size:.82rem;margin-top:8px">펼쳐 보기</summary><pre class="brief">'+esc(md['Claude Code 제작 지시서'])+'</pre></details></span></div>';
+      }
+    });
+    INFO_TEXT='의뢰처 정보\n'+infoLines(r,'업체명').join('\n')+matText;
     h='<div class="irow" style="border:0;padding-bottom:4px"><span class="k"></span>'
       +'<span><button class="btn btn-ghost" style="padding:6px 12px;font-size:.8rem" type="button" '
       +'onclick="copyInfo(this)">📋 내용 복사</button></span></div>'+h;
     $('d_info').innerHTML=h||'<div class="irow"><span class="k">-</span><span class="muted">추가 정보 없음</span></div>';
-    renderPhotos(d._photos);
+    var sets=[];
+    if(d._photos&&d._photos.length)sets.push({t:'올린 사진',paths:d._photos});
+    mats.forEach(function(m,i){var p=(m.details||{})._photos; if(p&&p.length)sets.push({t:'2차 · 제작 자료 사진'+(mats.length>1?' · '+(i+1)+'번째':''),paths:p});});
+    renderPhotos(sets,('사진_'+(d['신청 번호']||'')+'_'+(r.academy_name||'')).replace(/[\\/:*?"<>|\s]+/g,'_').replace(/_+$/,''));
   }
 
   /* ---------- 신청 내용 복사 ----------
@@ -1210,6 +1271,15 @@
      🔴 «값이 있는 줄만» 글자로 만듭니다 (빈 줄이 섞이면 붙여 넣고 지워야 합니다). */
   var INFO_TEXT='';
   var MAT_LINK='';
+  var BRIEFS=[];
+  window.copyBrief=async function(i,btn){
+    if(!BRIEFS[i]){toast('지시서가 없습니다');return;}
+    try{
+      await navigator.clipboard.writeText(BRIEFS[i]);
+      var t=btn.textContent; btn.textContent='복사됨 ✓';
+      setTimeout(function(){btn.textContent=t;},1500);
+    }catch(e){ toast('복사하지 못했습니다. 「펼쳐 보기」에서 직접 복사해 주십시오'); }
+  };
   window.copyMatLink=async function(btn){
     if(!MAT_LINK){toast('링크가 없습니다');return;}
     try{
@@ -1250,22 +1320,74 @@
       setTimeout(function(){btn.textContent=t;},1500);
     }catch(e){ window.prompt('아래 내용을 복사해 주세요',INFO_TEXT); }
   };
-  /* 신청서에 올린 사진 (비공개 버킷 → 서명 URL로 열람) */
-  async function renderPhotos(paths){
-    var box=$('d_photos');
-    if(!paths||!paths.length){box.classList.add('hide');box.innerHTML='';return;}
+  /* 신청서 · 제작 자료에 올린 사진 (비공개 버킷 → 1시간짜리 서명 URL로 열람)
+     한 장씩(사진 아래 이름) 또는 한꺼번에(「모두 내려받기」 = zip 한 개) 받을 수 있습니다 (2026-10-13).
+     sets = [{t:제목, paths:[...]}] — 신청 건 자체의 사진과, 딸린 제작 자료 건의 사진을 따로 묶어 보여 줍니다. */
+  var PHOTO_SETS=[], PHOTO_SEQ=0;
+  async function renderPhotos(sets,zipBase){
+    var box=$('d_photos'), seq=++PHOTO_SEQ;
+    sets=(sets||[]).filter(function(s){return s.paths&&s.paths.length;});
+    PHOTO_SETS=[];
+    if(!sets.length){box.classList.add('hide');box.innerHTML='';return;}
     box.classList.remove('hide');
-    box.innerHTML='<div class="sec-t">올린 사진 ('+paths.length+'장)</div><div class="muted" style="font-size:.84rem">불러오는 중…</div>';
-    var r=await sb.storage.from('request-photos').createSignedUrls(paths,60*60);
-    if(r.error){box.innerHTML='<div class="sec-t">올린 사진</div><div class="muted" style="font-size:.84rem">사진을 불러오지 못했습니다: '+esc(r.error.message)+'</div>';return;}
-    var urls=(r.data||[]).filter(function(x){return x.signedUrl;});
-    var h='<div class="sec-t">올린 사진 ('+urls.length+'장) <span class="muted" style="font-weight:600">· 클릭하면 원본이 열립니다</span></div><div class="pgrid">';
-    urls.forEach(function(x,i){
-      h+='<a href="'+esc(x.signedUrl)+'" target="_blank" rel="noopener"><img src="'+esc(x.signedUrl)+'" loading="lazy" alt="사진 '+(i+1)+'"></a>';
-    });
-    h+='</div>';
+    box.innerHTML='<div class="sec-t">올린 사진</div><div class="muted" style="font-size:.84rem">불러오는 중…</div>';
+    var h='', done=[];
+    for(var si=0;si<sets.length;si++){
+      var s=sets[si];
+      var r=await sb.storage.from('request-photos').createSignedUrls(s.paths,60*60);
+      if(seq!==PHOTO_SEQ)return;   /* 그 사이 다른 건을 열었으면 버립니다 */
+      if(r.error){h+='<div class="sec-t">'+esc(s.t)+'</div><div class="muted" style="font-size:.84rem">사진을 불러오지 못했습니다: '+esc(r.error.message)+'</div>';continue;}
+      var items=[];
+      (r.data||[]).forEach(function(x,i){
+        if(!x.signedUrl)return;
+        var n=(''+(x.path||s.paths[i]||('photo-'+(i+1)))).split('/').pop();
+        /* 서명 URL 뒤에 download=이름 을 붙이면 새 창으로 열리지 않고 그 이름으로 저장됩니다 */
+        items.push({url:x.signedUrl,name:n,dl:x.signedUrl+(x.signedUrl.indexOf('?')>=0?'&':'?')+'download='+encodeURIComponent(n)});
+      });
+      done.push({items:items,zip:(zipBase||'사진')+(sets.length>1?'_'+(si+1):'')});
+      h+='<div class="sec-t">'+esc(s.t)+' ('+items.length+'장) <span class="muted" style="font-weight:600">· 사진을 누르면 원본이 열립니다</span>'
+        +(items.length?' <button class="btn btn-ghost" style="padding:5px 11px;font-size:.78rem;margin-left:6px" type="button" onclick="downloadPhotos('+(done.length-1)+',this)">⬇ 모두 내려받기</button>':'')
+        +'</div><div class="pgrid">';
+      items.forEach(function(it,i){
+        h+='<div class="pitem"><a href="'+esc(it.url)+'" target="_blank" rel="noopener"><img src="'+esc(it.url)+'" loading="lazy" alt="사진 '+(i+1)+'"></a>'
+          +'<a class="pdl" href="'+esc(it.dl)+'" title="'+esc(it.name)+' 내려받기">⬇ '+esc(it.name)+'</a></div>';
+      });
+      h+='</div>';
+    }
+    PHOTO_SETS=done;
     box.innerHTML=h;
   }
+  function loadScript(src){return new Promise(function(ok,no){var s=document.createElement('script');s.src=src;s.onload=function(){ok();};s.onerror=function(){no(new Error('불러오기 실패'));};document.head.appendChild(s);});}
+  window.downloadPhotos=async function(idx,btn){
+    var set=PHOTO_SETS[idx]; if(!set||!set.items.length)return;
+    var t=btn.textContent; btn.disabled=true;
+    try{
+      if(!window.JSZip)await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+      var zip=new JSZip();
+      for(var i=0;i<set.items.length;i++){
+        btn.textContent='받는 중 '+(i+1)+'/'+set.items.length;
+        var res=await fetch(set.items[i].url);
+        if(!res.ok)throw new Error('사진 '+(i+1)+' ('+res.status+')');
+        zip.file(set.items[i].name,await res.blob());
+      }
+      btn.textContent='묶는 중…';
+      var blob=await zip.generateAsync({type:'blob',compression:'STORE'});   /* 사진은 이미 압축돼 있어 다시 누르지 않습니다 */
+      var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=set.zip+'.zip';
+      document.body.appendChild(a); a.click();
+      setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},4000);
+    }catch(e){
+      /* 묶지 못하면 한 장씩 받습니다. 브라우저가 「여러 파일 내려받기」를 물으면 허용해 주세요.
+         열어 둔 지 1시간이 넘었으면 주소가 만료된 것이니 상세를 닫았다 다시 엽니다. */
+      try{ console.error('사진 묶음 실패',e); }catch(x){}
+      toast('묶음이 안 되어 한 장씩 내려받습니다');
+      for(var j=0;j<set.items.length;j++){
+        var b=document.createElement('a'); b.href=set.items[j].dl; b.download=set.items[j].name; b.rel='noopener';
+        document.body.appendChild(b); b.click(); b.remove();
+        await new Promise(function(ok){setTimeout(ok,700);});
+      }
+    }
+    btn.disabled=false; btn.textContent=t;
+  };
 
   function renderTodos(){
     var r=CURROW;var todos=Array.isArray(r.todos)?r.todos:[];

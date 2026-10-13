@@ -108,6 +108,14 @@ function render(){
   var ing=0, monthly=0, paid=0;
   var h='';
   ORDERS.forEach(function(o){
+    /* 홈페이지 「제작 자료」(2차)는 주문이 아니라 보내 주신 자료입니다 (2026-10-13).
+       주문 카드로 그리면 「결제 금액 확정 전 · 입금 확인 전」인 주문이 하나 더 있는 것처럼 보입니다. 받았다는 한 줄만 보여 줍니다. */
+    if(o.kind==='홈페이지' && /^제작 자료 \(신청 번호 /.test(o.work_type||'')){
+      h+='<div class="ord"><div class="h"><b>홈페이지</b>'
+        +'<span class="pill">'+esc(o.work_type)+'</span><span class="pill ok">자료 받음</span>'
+        +'<span style="margin-left:auto;color:var(--muted);font-size:.82rem">보내신 날 '+fdate(o.created_at)+'</span></div></div>';
+      return;
+    }
     var st=(o.status==='신청접수')?'접수':(o.status||'접수');
     if(st==='진행중')ing++;
     if(o.paid_at)paid++;
