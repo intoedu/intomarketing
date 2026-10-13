@@ -88,6 +88,15 @@ details.fold[open]>summary{margin-bottom:16px}
       <label class="chip"><input type="radio" name="biz" value="카페">카페</label>
       <label class="chip"><input type="radio" name="biz" value="기타">기타</label>
     </div>
+    <!-- 🔴 병원 · 의원 — 블로거 개인 블로그 홍보와 네이버 리뷰는 팔지 않습니다(2026-10-13 이은총 님 · 행정 창 · 매뉴얼 창).
+         가능한 것은 병원 자체 블로그에 글을 쓰는 방식 하나입니다. 업종을 「병원 · 의원」으로 고르면 이 안내가 뜨고
+         위 「신청 항목」의 「네이버 리뷰」 · 「둘 다」는 고를 수 없게 됩니다. 병원 신청은 담당자가 견적을 내지 않고 관리자에게 넘깁니다.
+         문구는 매뉴얼 창 초안을 문체 규칙으로 옮긴 것 — 행정 창 확인 전입니다. -->
+    <div class="note" id="medOnly" style="display:none;margin-top:14px">
+      <b>병원 · 의원 안내</b><br>
+      병원 · 의원은 블로거 블로그 홍보와 네이버 리뷰를 진행하지 않습니다.
+      병원이 운영하는 공식 블로그에 포스팅을 작성하는 방식만 가능합니다. 신청 후 담당자가 연락해 안내합니다.
+    </div>
 
     <!-- 🔴 아래 질문 구성은 ESC 학원지원센터 블로그 신청서를 옮긴 것입니다 (2026-10-12).
          옮긴 기준 = 학원지원센터/신청서/블로그마케팅-신청서-내용정리.md 「부록 B — 다른 업종용으로 바꿀 때」.
@@ -450,6 +459,13 @@ details.fold[open]>summary{margin-bottom:16px}
     ph('q_one',b.one); ph('q_why',b.why); ph('q_flow',b.flow); ph('q_tool',b.tool);
     ph('q_result',b.result); ph('q_career',b.career); ph('q_fac',b.fac); ph('q_show',b.show);
     var m=$('medWarn'); if(m) m.style.display=(v==='병원·의원')?'':'none';
+    /* 병원 · 의원 — 네이버 리뷰 · 둘 다 는 고를 수 없음. 이미 골랐으면 풀어 둡니다(다시 고르게) */
+    var med=(v==='병원·의원'), mo=$('medOnly'); if(mo) mo.style.display=med?'':'none';
+    document.querySelectorAll('input[name="tp"]').forEach(function(r){
+      var off=med&&r.value!=='블로그 홍보';
+      r.disabled=off; if(off&&r.checked){ r.checked=false; r.dispatchEvent(new Event('change',{bubbles:true})); }
+      var lb=r.closest('label'); if(lb){ lb.style.opacity=off?'.45':''; lb.style.pointerEvents=off?'none':''; lb.classList.toggle('on',r.checked); }
+    });
   }
   $('bizBox').addEventListener('change',function(e){
     if(e.target&&e.target.name==='biz')pickBiz(e.target.value);

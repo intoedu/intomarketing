@@ -1295,7 +1295,7 @@ footer span{margin:0 8px;color:var(--line)}
           </div>
           <div class="fld" style="margin:12px 0 18px"><label class="consent"><input type="checkbox" id="f_dom_consent">
             <!-- 🔴 수집 · 이용 동의(하단)와 «따로» 받는 칸입니다. 하나로 합치지 마십시오 — 합치면 동의가 무효가 될 수 있습니다.
-                 동의하지 않아도 신청은 됩니다(위에서 「직접 구매」 · 「무료 주소」를 고르면 이 칸이 없어집니다). (행정 창 2026-10-14) -->
+                 동의하지 않아도 신청은 됩니다 — 이 칸은 제출을 막지 않고 노란 주의만 띄웁니다. 동의가 없으면 등록을 대행하지 않고 담당자가 직접 구매를 안내합니다. (행정 창 2026-10-13 · 10-14) -->
             <span>(선택) 도메인 등록을 위한 개인정보 제3자 제공에 동의합니다.</span></label></div>
         </div>
       </div>
@@ -2266,7 +2266,7 @@ var CHECKS=[
   C('step8','f_own_addr','주소 (한글)',has('f_own_addr'),'주소(한글)를 입력해 주십시오.',owning),
   C('step8','f_own_addr2','상세 주소',has('f_own_addr2'),'상세 주소를 입력해 주십시오. 건물 전체를 사용하면 「건물 전체」라고 입력해 주십시오.',owning),
   C('step8','f_own_addr_en','주소 (영문)',function(){return /[A-Za-z]/.test(val('f_own_addr_en'));},'주소(영문)를 입력해 주십시오. 「우편번호 검색」을 누르면 자동 입력됩니다.',owning),
-  C('step8','f_dom_consent','도메인 제3자 제공 동의',function(){return $('f_dom_consent').checked;},'새 도메인 등록 대행에는 제3자 제공 동의가 필요합니다. 동의하지 않으시면 위에서 「이미 있음」 또는 「무료 주소」로 변경해 주십시오.',owning),
+  /* 도메인 제3자 제공 동의는 «검사하지 않습니다» — 거부해도 신청은 되어야 합니다(행정 창 2026-10-13). 아래 WARNS 에서 주의만 띄웁니다. */
   C('step8','seg_when','희망 오픈 시기',picked1('when'),'희망 오픈 시기를 선택해 주십시오.'),
   C('step8','f_when_date','희망 오픈 날짜',function(){var v=val('f_when_date');return !!v&&v>=todayStr();},'희망 오픈 날짜를 선택해 주십시오. (오늘 이후)',is('when','날짜 정함')),
   C('step8','seg_etc','기타 요청 사항',picked1('tg_etc'),'기타 요청 사항 유무를 선택해 주십시오.'),
@@ -2366,6 +2366,8 @@ var WARNS=[
   W('step7','drop_main','대표 사진',function(){return !!mainPhotoWarn();},function(){return mainPhotoWarn();},{now:true}),
   W('step7','drop_photo','그 밖의 사진',function(){return smallPhotos()>0;},
     function(){return '작은 사진 '+smallPhotos()+'장(긴 변 '+PHOTO_MIN_PX+'px 미만)은 큰 화면에서 흐릿할 수 있습니다. 원본 사진으로 교체를 권장합니다.';},{now:true}),
+  W('step8','f_dom_consent','도메인 제3자 제공 동의',function(){return owning()&&!$('f_dom_consent').checked;},
+    '제3자 제공에 동의하지 않으면 도메인 등록을 대행할 수 없습니다. 이 경우 담당자가 직접 구매 방법을 안내합니다. 등록 대행을 원하시면 동의해 주십시오.',{now:true}),
   W('step8','f_dom_want1','원하는 주소 · 한글',function(){var v=val('f_dom_want1');return /[가-힣]/.test(v)&&domOK(v);},'한글 주소는 일부 메일 · 메신저에서 깨져 보일 수 있어 영문 주소를 권장합니다.'),
   W('step8','f_dom_want2','원하는 주소 · 한글',function(){var v=val('f_dom_want2');return /[가-힣]/.test(v)&&domOK(v);},'한글 주소는 일부 메일 · 메신저에서 깨져 보일 수 있어 영문 주소를 권장합니다.'),
   W('step8','seg_owner','도메인 소유자',function(){var r=regInfo();return buying()&&one('owner')==='기관'&&!!r&&r.rec==='개인';},
@@ -3351,7 +3353,7 @@ $('form').addEventListener('submit',async function(e){
     '참고 사이트':o.like.length?fmt(o.like):'없음',
     '올린 자료':'로고 '+(o.hasLogo?o.nLogo+'장':'없음 (상호를 글자로)')+' · 대표 사진 '+o.nMain+'장 · 그 밖의 사진 '+o.nPhoto+'장',
     '검색어':o.kw, '도메인':domainLine(o), '도메인 등록 회사':o.domReg,
-    '도메인 소유자 정보':owner, '도메인 제3자 제공 동의':(buy&&!mat)?'동의함 (받는 곳: '+o.domReg+')':'',
+    '도메인 소유자 정보':owner, '도메인 제3자 제공 동의':(buy&&!mat)?($('f_dom_consent').checked?'동의함 (받는 곳: '+o.domReg+')':'동의하지 않음 — 등록 대행 불가 · 담당자가 직접 구매 방법 안내'):'',
     '희망 오픈':whenText(o),
     '영업실장 소개':o.ref==='있음'?'소개받음 ('+o.refName+')':(o.ref==='없음'?'직접 신청':''),
     '받아야 할 것':mat?(b.missing.length?b.missing.join(', '):'없음'):'',
