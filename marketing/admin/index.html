@@ -1191,6 +1191,11 @@
         +'🔴 계정 아이디 · 비밀번호는 신청서로 받지 않습니다. 담당자가 따로 받아 주십시오.'
         +'</span></div>';
     }
+    /* 홈페이지 신청서(6차) — 계약서 서명 후 고객에게 보낼 「제작 자료」 링크 (신청 값은 링크의 # 뒤에만 담김).
+       지시서 3-1 의 자리. 그 뒤에 정기 콘텐츠 칸이 끼어들어 「찾기」가 안 맞아 손으로 넣었습니다(2026-10-13). */
+    MAT_LINK=d._자료?location.origin+'/apply/#m='+d._자료:'';
+    if(MAT_LINK)h+='<div class="irow"><span class="k">제작 자료 링크</span><span><button class="btn btn-ghost" style="padding:6px 12px;font-size:.8rem" type="button" '
+      +'onclick="copyMatLink(this)">🔗 링크 복사</button> <span class="muted" style="font-size:.8rem">계약서 서명 후 고객에게 보냅니다</span></span></div>';
     INFO_TEXT='의뢰처 정보\n'+infoLines(r,'업체명').join('\n');
     h='<div class="irow" style="border:0;padding-bottom:4px"><span class="k"></span>'
       +'<span><button class="btn btn-ghost" style="padding:6px 12px;font-size:.8rem" type="button" '
@@ -1203,6 +1208,15 @@
      카톡·메일에 그대로 붙여 넣으라고 만든 것입니다. 화면에 보이는 순서 그대로,
      🔴 «값이 있는 줄만» 글자로 만듭니다 (빈 줄이 섞이면 붙여 넣고 지워야 합니다). */
   var INFO_TEXT='';
+  var MAT_LINK='';
+  window.copyMatLink=async function(btn){
+    if(!MAT_LINK){toast('링크가 없습니다');return;}
+    try{
+      await navigator.clipboard.writeText(MAT_LINK);
+      var t=btn.textContent; btn.textContent='복사됨 ✓';
+      setTimeout(function(){btn.textContent=t;},1500);
+    }catch(e){ window.prompt('아래 링크를 복사해 주세요',MAT_LINK); }
+  };
   function infoLines(r,label){
     var out=[];
     var add=function(k,v){
@@ -1240,11 +1254,11 @@
     var box=$('d_photos');
     if(!paths||!paths.length){box.classList.add('hide');box.innerHTML='';return;}
     box.classList.remove('hide');
-    box.innerHTML='<div class="sec-t">신청서 사진 ('+paths.length+'장)</div><div class="muted" style="font-size:.84rem">불러오는 중…</div>';
+    box.innerHTML='<div class="sec-t">올린 사진 ('+paths.length+'장)</div><div class="muted" style="font-size:.84rem">불러오는 중…</div>';
     var r=await sb.storage.from('request-photos').createSignedUrls(paths,60*60);
-    if(r.error){box.innerHTML='<div class="sec-t">신청서 사진</div><div class="muted" style="font-size:.84rem">사진을 불러오지 못했습니다: '+esc(r.error.message)+'</div>';return;}
+    if(r.error){box.innerHTML='<div class="sec-t">올린 사진</div><div class="muted" style="font-size:.84rem">사진을 불러오지 못했습니다: '+esc(r.error.message)+'</div>';return;}
     var urls=(r.data||[]).filter(function(x){return x.signedUrl;});
-    var h='<div class="sec-t">신청서 사진 ('+urls.length+'장) <span class="muted" style="font-weight:600">· 클릭하면 원본이 열립니다</span></div><div class="pgrid">';
+    var h='<div class="sec-t">올린 사진 ('+urls.length+'장) <span class="muted" style="font-weight:600">· 클릭하면 원본이 열립니다</span></div><div class="pgrid">';
     urls.forEach(function(x,i){
       h+='<a href="'+esc(x.signedUrl)+'" target="_blank" rel="noopener"><img src="'+esc(x.signedUrl)+'" loading="lazy" alt="사진 '+(i+1)+'"></a>';
     });
