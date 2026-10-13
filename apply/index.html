@@ -957,7 +957,7 @@ footer span{margin:0 8px;color:var(--line)}
         <label class="plan"><input type="radio" name="plan" value="약정 12개월"><b>12개월 약정</b><span class="off">제작비 60% 할인</span><span class="due">계약할 때<em data-due="약정 12개월"></em></span></label>
         <label class="plan"><input type="radio" name="plan" value="약정 24개월"><b>24개월 약정</b><span class="off">제작비 무료</span><span class="due">계약할 때<em data-due="약정 24개월"></em></span></label>
       </div>
-      <p class="ex">정가는 최소 3개월, 그 뒤에는 언제든 해지하실 수 있습니다(납부일 7일 전 알림). 정가 3개월이나 약정 기간 전에 해지하시면 위약금이 있습니다(기준은 견적서 · 계약서).</p></div>
+      <p class="ex">정가는 최소 3개월, 그 뒤에는 언제든 해지하실 수 있습니다(납부일 7일 전 알림). 정가 3개월이나 약정 기간 중에 해지하시면 위약금이 있습니다. 자세한 기준은 제작 · 관리 계약서에 따릅니다.</p></div>
   </section>
 
   <!-- 고른 기능 설정 — 신청서 · 목록 · 한·영 · 카드 결제 중 하나라도 고르면 나옵니다 (2026-10-03) -->
@@ -1484,7 +1484,7 @@ var EX={
 var GOALS=['전화 문의','카카오톡 상담','방문','신청 · 예약'];
 /* 등록증 (2026-10-03 · 7가지) — 화면 카드(name="reg")의 value 와 같아야 합니다.
    no = 번호 칸 이름(없으면 번호를 받지 않음) · digits10 = 10자리 숫자 · sum = 검증번호를 반드시 맞춤(사업자등록번호)
-   biz = 사업자 고객(위약금 30%) · cust = 고객 구분(매뉴얼 1, 10/1 결정) · own = 도메인 「등록증 종류」 자동 채움 · rec = 도메인 소유자 추천 */
+   biz = 사업자 고객 · cust = 고객 구분(매뉴얼 1, 10/1 결정) · own = 도메인 「등록증 종류」 자동 채움 · rec = 도메인 소유자 추천 */
 var REG={
   '개인사업자':     {no:'사업자등록번호', digits10:true, sum:true,  biz:true,  cust:'사업자 고객 (개인사업자)', own:'사업자등록증 (개인사업자)', rec:'둘 다',
                      boss:'사업자등록증에 적힌 대표자입니다.'},
