@@ -59,10 +59,10 @@ function already(s){
   +   '<h2>정기 콘텐츠 · 채널 관리</h2>'
   +   '<div class="note">'
   +     '<b>이미 신청되어 있습니다.</b><br>'
-  +     (s.monthly ? ('월 <b>'+esc(s.monthly)+'개</b>로 신청하셨습니다. ') : '')
+  +     (s.monthly ? ('월 <b>'+esc(s.monthly)+'개</b>로 신청되어 있습니다. ') : '')
   +     from + '접수된 건입니다.<br>'
-  +     '이 신청서에서 다시 신청하지 않으셔도 됩니다. '
-  +     '개수를 바꾸시려면 담당자에게 말씀해 주십시오.'
+  +     '이 신청서에서 다시 신청할 필요가 없습니다. '
+  +     '수량 변경은 담당자에게 요청해 주십시오.'
   +   '</div>'
   + '</section>';
 }
@@ -72,31 +72,31 @@ function offer(kindLabel){
   return ''
   + '<section class="card">'
   +   '<p class="eyebrow">Monthly</p>'
-  +   '<h2>정기 콘텐츠 · 채널 관리 <span class="hint">(원하시는 경우에만)</span></h2>'
-  +   '<p class="sub">만든 것을 <b>매달 올려 드리고 채널을 관리</b>해 드립니다. '
-  +     '위의 1회성 옵션과 달리 <b>매달 나가는 요금</b>이라 계약서를 함께 씁니다.</p>'
+  +   '<h2>정기 콘텐츠 · 채널 관리 <span class="hint">(해당 시)</span></h2>'
+  +   '<p class="sub">제작한 콘텐츠를 <b>매월 업로드하고 채널을 관리</b>합니다. '
+  +     '위의 1회성 옵션과 달리 <b>매월 발생하는 요금</b>이며 계약서를 함께 작성합니다.</p>'
   +   '<div class="chips" style="margin-bottom:4px">'
   +     '<label class="chip"><input type="checkbox" id="cs-on">정기 콘텐츠도 함께 신청합니다</label>'
   +   '</div>'
   +   '<div class="note" style="margin-top:16px">'
-  +     '기본 운영비 <b>월 132,000원</b>에 올리는 건수만큼 더하는 방식입니다. '
-  +     '3개월 이상 계약하시면 <b>장기 계약 할인</b>이 있습니다. 금액은 견적서로 알려드립니다.'
+  +     '기본 운영비 <b>월 132,000원</b>에 업로드 건수만큼 합산하는 방식입니다. '
+  +     '3개월 이상 계약 시 <b>장기 계약 할인</b>이 적용됩니다. 금액은 견적서로 안내합니다.'
   +   '</div>'
   +   '<div id="cs-body" style="display:none;margin-top:24px;'
   +        'border-top:1px solid var(--line);padding-top:24px">'
-  +     '<div class="fld"><label>어떤 채널에 올릴까요 <span class="req">*</span></label>'
+  +     '<div class="fld"><label>업로드 채널 <span class="req">*</span></label>'
   +       '<div class="chips" id="cs-ch">'+chips('cs_ch',CHANNELS,true)+'</div></div>'
-  +     '<div class="fld"><label for="cs-mo">월 몇 개 <span class="req">*</span></label>'
+  +     '<div class="fld"><label for="cs-mo">월 콘텐츠 수 <span class="req">*</span></label>'
   +       '<input class="inp" id="cs-mo" inputmode="numeric" placeholder="예: 8"></div>'
-  +     '<div class="fld"><label for="cs-mo2">개수를 나눠서 적으시려면</label>'
+  +     '<div class="fld"><label for="cs-mo2">채널별 수량 (선택)</label>'
   +       '<input class="inp" id="cs-mo2" placeholder="예: 인스타 8개 + 유튜브 2편"></div>'
   +     '<div class="fld"><label>콘텐츠 종류</label>'
   +       '<div class="chips" id="cs-ty">'+chips('cs_ty',TYPES,true)+'</div></div>'
-  +     '<div class="fld"><label>촬영이 필요한가요</label>'
+  +     '<div class="fld"><label>촬영 필요 여부</label>'
   +       '<div class="chips" id="cs-sh">'+chips('cs_sh',SHOOT,false)+'</div></div>'
   +     '<div class="note">'
-  +       '🔴 <b>계정 아이디와 비밀번호는 여기에 적지 마십시오.</b><br>'
-  +       '담당자가 따로 받습니다. 신청서에 적으시면 그대로 저장됩니다.'
+  +       '🔴 <b>계정 아이디와 비밀번호는 여기에 입력하지 마십시오.</b><br>'
+  +       '담당자가 별도로 받습니다. 신청서에 입력하면 그대로 저장됩니다.'
   +     '</div>'
   +   '</div>'
   + '</section>';
@@ -133,9 +133,9 @@ async function render(){
     if(state && state.active){
       have.style.display='';
       have.innerHTML='<b>이미 신청되어 있습니다.</b><br>'
-        + (state.monthly ? ('월 <b>'+esc(state.monthly)+'개</b>로 신청하셨습니다. ') : '')
+        + (state.monthly ? ('월 <b>'+esc(state.monthly)+'개</b>로 신청되어 있습니다. ') : '')
         + (state.kind ? ('「'+esc(state.kind)+'」 신청서에서 ') : '') + '접수된 건입니다.<br>'
-        + '아래를 다시 채우지 않으셔도 됩니다. 개수를 바꾸시려면 담당자에게 말씀해 주십시오.';
+        + '아래 항목은 다시 입력할 필요가 없습니다. 수량 변경은 담당자에게 요청해 주십시오.';
     }else{
       have.style.display='none';
     }

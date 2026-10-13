@@ -82,10 +82,10 @@ function style(){
 function sheet(o){
   o=o||{};
   var T =o.title  || '신청하려면 로그인이 필요합니다';
-  var S =o.sub    || '메일과 비밀번호만 있으면 됩니다. 다음부터는 사업자 정보가 자동으로 채워집니다.';
+  var S =o.sub    || '이메일과 비밀번호로 로그인합니다. 다음 신청부터 사업자 정보가 자동 입력됩니다.';
   var X =o.cancel || '나중에 하기';
   var G2=o.go2    || '계정 만들고 이어서 신청';
-  var K =('keep' in o) ? o.keep : '적으신 내용은 그대로 있습니다. 로그인하면 이어서 접수됩니다.';
+  var K =('keep' in o) ? o.keep : '입력 내용은 유지됩니다. 로그인 후 이어서 접수됩니다.';
   style();
   return new Promise(function(done){
     var back=el('div','ima-back');
@@ -97,7 +97,7 @@ function sheet(o){
      +    '<button class="ima-tab" role="tab" aria-selected="true"  data-m="in">로그인</button>'
      +    '<button class="ima-tab" role="tab" aria-selected="false" data-m="up">계정 만들기</button>'
      +  '</div>'
-     +  '<div class="ima-f"><label for="ima-e">메일</label>'
+     +  '<div class="ima-f"><label for="ima-e">이메일</label>'
      +    '<input id="ima-e" type="email" autocomplete="email" inputmode="email"></div>'
      +  '<div class="ima-f"><label for="ima-p">비밀번호</label>'
      +    '<input id="ima-p" type="password" autocomplete="current-password"></div>'
@@ -128,8 +128,8 @@ function sheet(o){
 
     GO.onclick=async function(){
       var mail=(E.value||'').trim(), pw=P.value||'';
-      if(!mail || !pw) return msg('메일과 비밀번호를 넣어 주세요.','err');
-      if(mode==='up' && pw.length<6) return msg('비밀번호는 6자 이상으로 해 주세요.','err');
+      if(!mail || !pw) return msg('이메일과 비밀번호를 입력해 주십시오.','err');
+      if(mode==='up' && pw.length<6) return msg('비밀번호는 6자 이상으로 입력해 주십시오.','err');
       GO.disabled=true; msg('잠시만요...');
       try{
         var r;
@@ -144,7 +144,7 @@ function sheet(o){
             var s=await sb.auth.signInWithPassword({email:mail,password:pw});
             if(s.error){
               GO.disabled=false;
-              return msg('계정은 만들어졌습니다. 메일에서 확인을 마친 뒤 로그인해 주세요.','ok');
+              return msg('계정이 생성되었습니다. 이메일 인증 후 로그인해 주십시오.','ok');
             }
             r=s;
           }
@@ -154,9 +154,9 @@ function sheet(o){
       }catch(e){
         GO.disabled=false;
         var m=String((e && e.message) || e);
-        if(/Invalid login/i.test(m)) m='메일이나 비밀번호가 맞지 않습니다.';
-        else if(/already registered|already been/i.test(m)) m='이미 있는 메일입니다. 「로그인」으로 들어와 주세요.';
-        else if(/at least/i.test(m)) m='비밀번호는 6자 이상으로 해 주세요.';
+        if(/Invalid login/i.test(m)) m='이메일 또는 비밀번호가 일치하지 않습니다.';
+        else if(/already registered|already been/i.test(m)) m='이미 등록된 이메일입니다. 「로그인」을 이용해 주십시오.';
+        else if(/at least/i.test(m)) m='비밀번호는 6자 이상으로 입력해 주십시오.';
         msg(m,'err');
       }
     };
@@ -195,7 +195,7 @@ window.IMAccount = {
   signIn:async function(){
     return await this.need({
       title :'로그인',
-      sub   :'메일과 비밀번호만 있으면 됩니다. 계정이 없으시면 「계정 만들기」로 바로 만드실 수 있습니다.',
+      sub   :'이메일과 비밀번호로 로그인합니다. 계정이 없으면 「계정 만들기」에서 생성할 수 있습니다.',
       cancel:'닫기',
       go2   :'계정 만들기',
       keep  :null

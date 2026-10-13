@@ -136,7 +136,7 @@ async function login(){
 
 async function logout(){
   var sb=sbc(); if(!sb) return;
-  if(!window.confirm('로그아웃하시겠습니까?\n이 화면에 적어 두신 내용은 사라집니다.')) return;
+  if(!window.confirm('로그아웃합니다.\n이 화면에 입력한 내용은 삭제됩니다.')) return;
   try{ await sb.auth.signOut(); }catch(e){}
   location.reload();   /* 🔴 자동으로 채운 전화·사업자 정보를 화면에서 치웁니다 */
 }
