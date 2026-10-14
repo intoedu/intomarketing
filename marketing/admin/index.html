@@ -2194,6 +2194,12 @@
     catch(e){ window.prompt('아래 주소를 복사해 주십시오',url); }
   };
 
+  var QNO_CODE={web:'WEB',blog:'BLG',sns:'SNS',design:'DSN',video:'VID',etc:'ETC'};
+  function mktQuoteNo(raw,row){
+    var m=/^[A-Z]+-(\d{4})-(\d+)$/.exec(String(raw||''));
+    if(!m) return String(raw||'').replace(/^ESC-/,'ITM-');          /* 모양이 다르면 앞머리만 */
+    return 'ITM-'+(QNO_CODE[groupOf(row)]||'ETC')+'-'+m[1].slice(2)+'-'+m[2];
+  }
   window.saveQuote=async function(preview){
     QD.to={company:$('q_to_company').value.trim(),manager:$('q_to_manager').value.trim(),phone:$('q_to_phone').value.trim(),email:$('q_to_email').value.trim(),
            biz_no:$('q_to_bizno').value.trim(),addr:$('q_to_addr').value.trim()};
@@ -2226,9 +2232,12 @@
       var no=await sb.rpc('next_quote_no');
       if(no.error){toast('견적번호 생성 실패: '+no.error.message);return;}
       /* 🔴 next_quote_no() 는 어디서 부르든 «ESC-2026-0011» 꼴로 줍니다(DB 함수에 「ESC-」가 박혀 있음).
-            인투마케팅 견적서는 앞머리만 「IM-」으로 바꿔 씁니다 — 일련번호는 ESC 와 한 줄로 이어져 겹치지 않습니다 (2026-10-14).
-            결제창 주문번호(quote/index.html 의 payId)는 번호 앞에 다시 'IM-' 를 붙이므로 그대로 둡니다. */
-      patch.quote_no=String(no.data||'').replace(/^ESC-/,'IM-');patch.quote_issued_at=new Date().toISOString();
+            인투마케팅 견적서는 «ITM-서비스-연도 두 자리-번호» 로 바꿔 씁니다 (2026-10-14 이은총 님 결정).
+              예) ESC-2026-0012 → ITM-WEB-26-0012   · 서비스 약자 = QNO_CODE
+            일련번호는 ESC 와 한 줄로 이어져 겹치지 않습니다(서비스마다 1부터 세지 않습니다).
+            🔴 한글 · 긴 앞머리를 쓰지 마십시오 — 이 번호가 카드 결제 주문번호(IM-<견적번호>-<시각>)에 그대로 들어가고,
+               서버(pay-verify)가 그 모양을 검사합니다. 결제사 주문번호 한도(짧은 곳 40자) 안이어야 합니다. */
+      patch.quote_no=mktQuoteNo(no.data, CURROW);patch.quote_issued_at=new Date().toISOString();
     }
     var r=await sb.from('requests').update(patch).eq('id',CURROW.id).select().maybeSingle();
     if(r.error){toast('저장 실패: '+r.error.message);return;}
