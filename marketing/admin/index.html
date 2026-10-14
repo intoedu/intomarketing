@@ -264,7 +264,7 @@
 <!-- ================= 로그인 / 승인 대기 게이트 ================= -->
 <div class="gate" id="gate">
   <div class="gate-card">
-    <div class="gate-logo"><b>ESC</b><span>학원지원센터 · 관리자</span></div>
+    <div class="gate-logo"><b>IM</b><span>인투마케팅 · 관리자</span></div>
 
     <!-- 로그인/가입 -->
     <div id="gAuth">
@@ -2225,7 +2225,10 @@
     if(!CURROW.quote_no){
       var no=await sb.rpc('next_quote_no');
       if(no.error){toast('견적번호 생성 실패: '+no.error.message);return;}
-      patch.quote_no=no.data;patch.quote_issued_at=new Date().toISOString();
+      /* 🔴 next_quote_no() 는 어디서 부르든 «ESC-2026-0011» 꼴로 줍니다(DB 함수에 「ESC-」가 박혀 있음).
+            인투마케팅 견적서는 앞머리만 「IM-」으로 바꿔 씁니다 — 일련번호는 ESC 와 한 줄로 이어져 겹치지 않습니다 (2026-10-14).
+            결제창 주문번호(quote/index.html 의 payId)는 번호 앞에 다시 'IM-' 를 붙이므로 그대로 둡니다. */
+      patch.quote_no=String(no.data||'').replace(/^ESC-/,'IM-');patch.quote_issued_at=new Date().toISOString();
     }
     var r=await sb.from('requests').update(patch).eq('id',CURROW.id).select().maybeSingle();
     if(r.error){toast('저장 실패: '+r.error.message);return;}
@@ -2283,7 +2286,7 @@
     return '<div class="paper" id="paperBody">'
      +'<div class="p-h"><div><h1>견 적 서</h1><div class="qsub">QUOTATION</div></div>'
      +'<div class="p-from'+(SET.stamp?' has-stamp':'')+'"><div>'
-       +'<b>'+esc(SET.company||'ESC 학원지원센터')+'</b><br>'
+       +'<b>'+esc(SET.company||'인투마케팅')+'</b><br>'
        +(SET.legal&&SET.legal!==SET.company?esc(SET.legal)+'<br>':'')
        +(SET.owner?'대표 '+esc(SET.owner)+'<br>':'')
        +(SET.biz_no?'사업자등록번호 '+esc(SET.biz_no)+'<br>':'')
@@ -2294,7 +2297,7 @@
      +'<div class="p-line"></div>'
      +'<div class="p-cols">'
        +'<div><h4>받는 곳 / TO</h4>'
-         +'<div class="pr"><span>단체/학원</span><span>'+esc((q.to&&q.to.company)||r.academy_name||'')+'</span></div>'
+         +'<div class="pr"><span>상호</span><span>'+esc((q.to&&q.to.company)||r.academy_name||'')+'</span></div>'
          +'<div class="pr"><span>담당자</span><span>'+esc((q.to&&q.to.manager)||'')+'</span></div>'
          +'<div class="pr"><span>연락처</span><span>'+esc((q.to&&q.to.phone)||'')+'</span></div>'
          +'<div class="pr"><span>이메일</span><span>'+esc((q.to&&q.to.email)||'')+'</span></div>'
@@ -2423,7 +2426,7 @@
   function quoteText(){
     var r=CURROW,q=r.quote||{},t=quoteTotals(q);
     var lines=[];
-    lines.push((q.to&&q.to.manager?q.to.manager+' 님, ':'')+'안녕하세요. '+(SET.company||'ESC 학원지원센터')+'입니다.');
+    lines.push((q.to&&q.to.manager?q.to.manager+' 님, ':'')+'안녕하세요. '+(SET.company||'인투마케팅')+'입니다.');
     lines.push('요청하신 '+(q.project||'지원')+' 건의 견적서를 보내드립니다.');
     lines.push('');
     lines.push('[ 견적 요약 ]');
@@ -2455,7 +2458,7 @@
   function quoteTextShort(){
     var r=CURROW,q=r.quote||{},t=quoteTotals(q);
     var lines=[];
-    lines.push((q.to&&q.to.manager?q.to.manager+' 님, ':'')+'안녕하세요. '+(SET.company||'ESC 학원지원센터')+'입니다.');
+    lines.push((q.to&&q.to.manager?q.to.manager+' 님, ':'')+'안녕하세요. '+(SET.company||'인투마케팅')+'입니다.');
     lines.push('요청하신 '+(q.project||'지원')+' 건의 견적서를 첨부 파일(PDF)로 보내드립니다.');
     lines.push('');
     lines.push('· 견적번호: '+(r.quote_no||''));
@@ -2473,7 +2476,7 @@
     if(!CURROW||!CURROW.quote){toast('먼저 견적서를 작성해 주세요');return null;}
     var q=CURROW.quote,to=(q.to&&q.to.email)||CURROW.email||'';
     if(!to){toast('고객 이메일이 없습니다. 견적서 편집에서 이메일을 입력해 주세요');return null;}
-    return {to:to, subject:'['+(SET.company||'ESC')+'] '+(CURROW.academy_name||'')+' 견적서 안내 ('+(CURROW.quote_no||'')+')', body:quoteTextShort()};
+    return {to:to, subject:'['+(SET.company||'인투마케팅')+'] '+(CURROW.academy_name||'')+' 견적서 안내 ('+(CURROW.quote_no||'')+')', body:quoteTextShort()};
   }
   window.mailQuoteGmail=function(){
     var p=quoteMailParts();if(!p)return;
