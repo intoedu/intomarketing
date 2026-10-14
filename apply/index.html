@@ -30,6 +30,16 @@
            링크에 넣는 방식(#m=<값>)입니다 — 그 방식으로 되돌리지 마십시오. 링크는 기록에 남고
            전달되면 막을 수 없습니다.
    ══════════════════════════════════════════════════════════════ */
+/* 2026-10-13 홈페이지 팀 — 「더 쓰기 쉽게」 (9번 창 판 위에 얹음 · 위 사이트 규칙 여섯 가지는 그대로)
+   A. 도메인 「새로 구매」는 구매 방법(등록 대행 / 직접 구매)을 먼저 묻고, 등록 대행일 때만 등록 회사 · 소유자 정보 · 제3자 제공 동의를 받음
+   B. 업종별 예시(영문 상호 · 결제 받을 것 · 도메인 · 소유자 영문 이름) · 「최초 등록 항목」 사진 안내 · 머리 줄 로그인 표시 오른쪽 끝(제작 자료) ·
+      법인등록번호 위 빈 줄 · 제작 자료 요약 「기능」 쉼표 · 「한눈에 보기」 단계 이름 · 접수 안내 「1~2영업일」(다른 신청서와 같은 말)
+   C1. 사진 전달 방법 — 이 화면에서 첨부 / 카카오톡으로 따로 전달(채널 KAKAO_CH · 신청 번호와 함께 · 원본 화질). 카카오톡이면 첨부 칸을 검사하지 않고
+       지시서 0 · 7 · 12장과 details 「사진 전달」에 남김 (10/4 5차에 없앤 「사진은 나중에 전달」을 카카오톡 전달로 되살림 — 10/13 전도사님 결정)
+   C2. 글쓰기 도움 — 「홈페이지 미리 보기」(입력한 글이 들어간 작은 홈페이지 · 입력 중인 칸의 자리 표시 · 검색 결과 예) ·
+       「문장별로 나눠 쓰기」 · 「업종 예시 보기」(넣으면 ○○ 자리를 바꿔야 제출) — 글은 «고객 글 그대로 · 맞춤법만» 원칙 그대로
+   C3. 디자인 — 테마 카드에 상호를 넣은 실제 화면 예시 + 큰 화면 예시(PC · 휴대폰) · 원하는 색 · 피하고 싶은 색 · 참고 홈페이지는 선택 사항(접어 둠)
+   🔴 미리 보기는 이해를 돕는 그림입니다. 지시서 · 시안은 이 그림을 따르지 않습니다(시안은 담당자가 테마대로). */
 /* ──────────────────────────────────────────────────────────────
    홈페이지 제작 신청서  ( intomarketing.co.kr/apply/ )   2026-10-03 판
 
@@ -132,6 +142,7 @@ header::after{content:"";position:absolute;right:-140px;bottom:-260px;width:560p
               background:radial-gradient(circle,rgba(110,147,255,.22),transparent 66%);pointer-events:none}
 header .wrap{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:28px;align-items:end}
 @media(max-width:900px){header .wrap{grid-template-columns:minmax(0,1fr)}}
+header .wrap>.imab-row{grid-column:1/-1;margin-bottom:-12px}   /* 머리 줄은 두 칸 너비 — 제작 자료 화면(두 칸)에서 로그인 표시가 오른쪽 끝 (10/13) */
 body.mode-apply header .wrap{grid-template-columns:minmax(0,1fr)}   /* 신청서 머리에는 오른쪽 상자가 없습니다 (2026-10-13) */
 header .back{display:inline-flex;align-items:center;gap:6px;color:#A9C4EA;font-size:13.5px;font-weight:600;text-decoration:none;margin-bottom:16px}
 header .back:hover{color:#fff}
@@ -225,8 +236,6 @@ textarea.inp.tall{min-height:150px}
 .guide span{font-size:12.5px;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:3px 9px;color:var(--muted)}
 .mini{border:1px solid var(--line-2);background:var(--surface-2);color:var(--accent-ink);border-radius:999px;padding:2px 10px;font-size:12.5px;font-weight:700;cursor:pointer;margin-left:4px;line-height:1.7}
 .mini:hover{border-color:var(--accent)}
-.nonebar{margin:-6px 0 22px;font-size:13.5px;color:var(--muted);line-height:1.9}
-.nonebar .mini{margin-left:8px}
 .msg{display:none;color:var(--bad);font-size:13px;font-weight:700;margin-top:8px}
 .msg::before{content:"! ";font-weight:900}
 .fld.is-bad>.msg{display:block}
@@ -289,7 +298,8 @@ textarea.inp.tall{min-height:150px}
 .fld.is-bad .regpick{border-color:var(--bad);background:var(--badbg)}
 .reglist{margin-top:8px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2);padding:10px}
 .reglist .regs{grid-template-columns:minmax(0,1fr);gap:6px}
-#reg_box .row2+#corp_no_box{margin-top:26px}   /* 법인등록번호 — 위 두 칸(row2)의 마지막 칸은 아래 여백이 0 */
+#reg_box .row2+#corp_no_box{margin-top:26px}
+@media(min-width:641px){#reg_box .row2>.fld{margin-bottom:0}}   /* 넓은 화면 — 두 칸이 나란하므로 아래 여백은 법인등록번호 쪽 26px 하나만 (10/13) */   /* 법인등록번호 — 위 두 칸(row2)의 마지막 칸은 아래 여백이 0 */
 .reglist .opt{background:var(--surface)}
 .rg-h{grid-column:1 / -1;margin:8px 4px 0;font-size:12px;font-weight:800;letter-spacing:.04em;color:var(--muted)}
 .rg-h:first-child{margin-top:2px}
@@ -648,6 +658,7 @@ body.mode-material .layout{grid-template-columns:minmax(0,1fr);max-width:880px}
 .matsum dl{display:grid;grid-template-columns:96px minmax(0,1fr);gap:4px 12px;margin:10px 0 6px}
 .matsum dt{color:var(--muted);font-weight:700}.matsum dd{margin:0;min-width:0}
 .matsum p{margin:0;font-size:12.8px;color:var(--muted)}
+.matsum p.matdom{margin:0 0 6px;color:var(--ink)}
 .matbad{border:1px solid var(--bad);background:var(--badbg);color:var(--bad);border-radius:14px;padding:16px;margin:0 0 16px}
 .doneno{font-size:15px}.doneno b{letter-spacing:.04em}
 footer{border-top:1px solid var(--line);padding:22px 0 46px;color:var(--muted);font-size:12.5px;line-height:1.9}
@@ -655,18 +666,263 @@ footer a{color:var(--ink);font-weight:700;text-decoration:none}
 footer a:hover{text-decoration:underline}
 footer span{margin:0 8px;color:var(--line)}
 @media(max-width:1000px){footer{padding-bottom:120px}}
+
+/* 사진 전달 방법 (10/13) — 카카오톡이면 첨부 칸을 숨김 · 고르기 전에는 로고 · 사진 칸을 숨김 */
+.note.kk{color:var(--ink)}
+.note.kk ol{margin:6px 0 8px;padding-left:20px}
+.note.kk li{margin:3px 0}
+.note.kk p{margin-top:6px;color:var(--muted)}
+.note.kk .kk-left{color:var(--warn);font-weight:700}
+.kurl{margin-left:6px;font-size:12.5px;font-weight:800;color:var(--accent-ink);white-space:nowrap}
+.kurl::after{content:" ↗"}
+.kk-only{display:none}
+#step7.via-none #fld_logo,#step7.via-none #fld_main,#step7.via-none #fld_photo{display:none}
+#step7.via-kk #drop_logo,#step7.via-kk #th_logo,#step7.via-kk #note_logo,#step7.via-kk .att-only,#step7.via-kk #fld_main,#step7.via-kk #fld_photo{display:none}
+#step7.via-kk .kk-only{display:block}
+.done .box.kk{background:var(--warnbg);color:var(--warn)}
+.done .box.kk b{color:var(--ink)}
+
+/* 디자인 (10/13) — 큰 화면 예시 · 선택 사항 묶음 */
+.opt>.mock.real{height:auto;border-radius:10px;background:#fff}
+.tpv{margin:-6px 0 22px;border:1px solid var(--line);border-radius:16px;background:var(--surface-2);padding:14px 14px 16px}
+.tpv-h{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.tpv-h b{font-size:14.5px}
+.tpv-s{font-size:12.5px;color:var(--muted);margin:4px 0 12px;line-height:1.6}
+.devsw{display:inline-flex;gap:3px;padding:3px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.devsw button{border:0;background:transparent;border-radius:7px;padding:4px 12px;font-size:12.5px;font-weight:800;color:var(--muted);cursor:pointer;font-family:inherit}
+.devsw button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.tpv-stage{display:flex;justify-content:center}
+.tpv-stage .pvf{width:100%}
+.tpv-stage .pvf.mo{width:300px;max-width:100%}
+details.more{border:1px solid var(--line);border-radius:14px;background:var(--surface);margin:0 0 6px}
+details.more>summary{list-style:none;cursor:pointer;padding:13px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"+";flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--surface-2);border:1px solid var(--line);display:grid;place-items:center;font-size:14px;font-weight:900;color:var(--accent-ink);line-height:1}
+details.more[open]>summary::before{content:"−"}
+details.more>summary b{font-size:14.5px}
+details.more>summary span{font-size:12.5px;color:var(--muted)}
+details.more[open]>summary{border-bottom:1px solid var(--line)}
+details.more>.fld{margin:18px 16px 22px}
+
+/* ── 홈페이지 미리 보기 그림 (10/13) — .pvs 는 실제 크기(PC 1200px · 휴대폰 390px)로 그리고 transform 으로 줄임 ── */
+.pvf{position:relative;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.pvf.mo{border:7px solid #1E2430;border-radius:24px}
+.pv-chrome{display:flex;align-items:center;gap:6px;height:30px;padding:0 10px;background:#EEF1F5;border-bottom:1px solid #DDE2E9}
+.pv-chrome .d{width:9px;height:9px;border-radius:50%;background:#C9CFD8;flex:0 0 auto}
+.pv-chrome .u{margin-left:8px;flex:1;min-width:0;height:20px;border-radius:999px;background:#fff;font-size:11px;color:#56657F;display:flex;align-items:center;padding:0 10px;overflow:hidden;white-space:nowrap}
+.pvf.mo .pv-chrome{justify-content:center;height:26px}
+.pvf.mo .pv-chrome .d{display:none}
+.pvf.mo .pv-chrome .u{margin:0;flex:0 1 auto;max-width:92%}
+.pvs-wrap{position:relative;overflow:hidden}
+.pvs{position:absolute;left:0;top:0;transform-origin:0 0;background:var(--pb);color:var(--pt);font-family:var(--f);font-size:17px;line-height:1.65;letter-spacing:-.01em;word-break:keep-all;overflow-wrap:break-word;text-align:left}
+.pvs.pc{width:1200px}
+.pvs.mo{width:390px;font-size:15px}
+.pvs h1,.pvs h3,.pvs p{margin:0}
+.pvs.thumb{min-height:700px}
+.pvs b{font-weight:800}
+.pv-ph{opacity:.42;font-style:italic}
+mark.pv-oo{background:#FFE08A;color:#7A4B00;border-radius:3px;padding:0 2px}
+.pv-nav{display:flex;align-items:center;gap:24px;height:76px;padding:0 56px;background:#fff;border-bottom:1px solid rgba(0,0,0,.07)}
+.pvs.mo .pv-nav{height:58px;padding:0 18px}
+.pv-logo{font-weight:850;font-size:22px;letter-spacing:-.03em;color:var(--pm);display:flex;align-items:center;min-width:0;max-width:46%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.pv-logo img{max-height:44px;max-width:220px;object-fit:contain;display:block}
+.pvs.mo .pv-logo{font-size:18px;max-width:70%}
+.pvs.mo .pv-logo img{max-height:34px;max-width:170px}
+.pv-menu{display:flex;gap:26px;margin-left:auto;font-size:15px;font-weight:600;opacity:.85;white-space:nowrap}
+.pvs.mo .pv-menu{display:none}
+.pv-burger{display:none;margin-left:auto;font-size:22px;opacity:.7}
+.pvs.mo .pv-burger{display:block}
+.pv-navbtn{padding:10px 18px;border-radius:var(--pr);background:var(--pp);color:var(--ppt);font-weight:800;font-size:14px;white-space:nowrap}
+.pvs.mo .pv-navbtn{display:none}
+.pvs.vA .pv-nav{background:var(--pm);color:#fff;border-bottom:0}
+.pvs.vA .pv-logo{color:#fff}
+.pvs.vC .pv-nav{background:var(--pm);color:#fff;border-bottom:1px solid rgba(255,255,255,.08)}
+.pvs.vC .pv-logo{color:#fff}
+.pv-hero{position:relative}
+.pv-eb{display:inline-block;font-size:14px;font-weight:800;color:var(--pp);letter-spacing:.02em;margin-bottom:12px}
+.pv-hero h1{font-size:46px;line-height:1.28;font-weight:850;letter-spacing:-.035em}
+.pvs.mo .pv-hero h1{font-size:28px}
+.pv-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.pv-btn{display:inline-flex;align-items:center;gap:6px;padding:14px 22px;border-radius:var(--pr);background:var(--pp);color:var(--ppt);font-weight:800;font-size:16px;border:2px solid var(--pp);white-space:nowrap}
+.pv-btn.o{background:transparent;color:var(--pp)}
+.pvs.mo .pv-btn{padding:11px 15px;font-size:14px}
+.pv-tile{display:block;position:relative;border-radius:var(--pr);background:var(--pimg) center/cover no-repeat;overflow:hidden}
+.pv-img{min-height:360px;display:grid;place-items:center}
+.pv-il{font-size:14px;font-weight:800;color:rgba(0,0,0,.45);background:rgba(255,255,255,.6);border-radius:999px;padding:6px 14px;white-space:nowrap}
+.pvs.mo .pv-img{min-height:200px}
+.hA{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:76px 56px 72px}
+.pvs.mo .hA{grid-template-columns:1fr;gap:26px;padding:34px 20px 38px}
+.hB{padding:28px 40px 56px}
+.hB .pv-img{min-height:440px}
+.pv-hrow{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-top:30px}
+.hB .pv-btn{border-radius:999px}
+.hB .pv-btns{margin-top:0;flex:0 0 auto}
+.pvs.mo .hB{padding:14px 14px 34px}
+.pvs.mo .hB .pv-img{min-height:250px}
+.pvs.mo .pv-hrow{display:block;margin-top:22px}
+.pvs.mo .hB .pv-btns{margin-top:20px}
+.hC{background:var(--pm) center/cover no-repeat;color:#fff;padding:104px 56px 96px}
+.hC h1{font-size:64px;font-weight:900;letter-spacing:-.04em;max-width:920px}
+.pvs.mo .hC{padding:56px 20px 52px}
+.pvs.mo .hC h1{font-size:34px}
+.hC>.pv-il{position:absolute;right:56px;bottom:28px;color:rgba(255,255,255,.65);background:rgba(255,255,255,.1)}
+.pvs.mo .hC>.pv-il{right:16px;bottom:14px;font-size:12px}
+.pv-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:10px 56px 0;background:#fff}
+.pv-strip .pv-tile{height:150px}
+.pvs.mo .pv-strip{padding:8px 14px 0;gap:6px}
+.pvs.mo .pv-strip .pv-tile{height:78px}
+.pv-sec{padding:64px 56px}
+.pvs.mo .pv-sec{padding:38px 20px}
+.pv-sec h3{font-size:28px;font-weight:850;letter-spacing:-.03em;margin-bottom:22px}
+.pvs.mo .pv-sec h3{font-size:21px;margin-bottom:14px}
+.pv-why{background:rgba(0,0,0,.025)}
+.pv-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.pvs.mo .pv-cards{grid-template-columns:1fr;gap:10px}
+.pv-card{background:#fff;border-radius:var(--pr);padding:24px;border:1px solid rgba(0,0,0,.06)}
+.pv-card>b{display:block;font-size:19px;margin-bottom:6px;color:var(--pm)}
+.pvs.vC .pv-card>b{color:var(--pt)}
+.pv-card>span{font-size:15px;opacity:.75}
+.pv-about{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:start}
+.pvs.mo .pv-about{grid-template-columns:1fr;gap:18px}
+.pv-about p{font-size:17px;line-height:1.85;white-space:pre-line}
+.pvs.mo .pv-about p{font-size:15px}
+.pv-pg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pv-pg .pv-tile{height:160px;display:grid;place-items:center}
+.pvs.mo .pv-pg .pv-tile{height:110px}
+.pv-greet{padding-top:0}
+.pv-gbox{background:#fff;border-radius:var(--pr);padding:32px 36px;border:1px solid rgba(0,0,0,.06)}
+.pvs.mo .pv-gbox{padding:22px 20px}
+.pv-gbox p{white-space:pre-line;line-height:1.85}
+.pv-sign{margin-top:14px;text-align:right;font-weight:800}
+.pv-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.pvs.mo .pv-list{grid-template-columns:1fr;gap:8px}
+.pv-li{background:#fff;border-radius:var(--pr);padding:18px 20px;border:1px solid rgba(0,0,0,.06)}
+.pv-li>b{display:block;font-size:17px}
+.pv-li>span{font-size:14.5px;opacity:.75}
+.pv-qa{border-bottom:1px solid rgba(0,0,0,.08);padding:14px 0}
+.pv-qa>b{display:block;font-size:16.5px}
+.pv-qa>b::before{content:"Q. ";color:var(--pp)}
+.pv-qa>span{display:block;font-size:15px;opacity:.78;margin-top:4px}
+.pv-none{font-size:13px;opacity:.6;margin-top:10px}
+.pv-mapg{display:grid;grid-template-columns:1.1fr .9fr;gap:28px}
+.pv-mapg.one,.pvs.mo .pv-mapg{grid-template-columns:1fr;gap:14px}
+.pv-mapbox{min-height:230px;border-radius:var(--pr);background:repeating-linear-gradient(45deg,#E6EAF0 0 14px,#EEF1F5 14px 28px);display:grid;place-items:center;font-size:30px}
+.pvs.mo .pv-mapbox{min-height:150px}
+.pv-info p{padding:8px 0;border-bottom:1px dashed rgba(0,0,0,.1);font-size:15.5px}
+.pv-info p>b{display:inline-block;min-width:84px;opacity:.6;font-weight:700}
+.pv-foot{background:var(--pm);color:rgba(255,255,255,.85);padding:40px 56px;font-size:14px}
+.pvs.vC .pv-foot{background:#0B0D10}
+.pvs.mo .pv-foot{padding:28px 20px}
+.pv-foot b{display:block;color:#fff;font-size:18px;margin-bottom:6px}
+.pv-sns{display:flex;gap:8px;margin-top:10px}
+.pv-sns>span{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);display:grid;place-items:center;font-size:12px;font-weight:800}
+.pv-foot small{display:block;margin-top:12px;opacity:.6;font-size:12px}
+/* 지금 입력하는 칸의 자리 */
+.pv-hl{outline:4px solid #FF7A00!important;outline-offset:-2px;position:relative;z-index:1}
+.pvs .pv-hl::after{content:attr(data-pvl);position:absolute;right:8px;top:8px;z-index:3;background:#FF7A00;color:#fff;font-size:13px;font-weight:800;font-style:normal;
+                   line-height:1.5;padding:3px 10px;border-radius:999px;white-space:nowrap;letter-spacing:0}
+.pv-serp .pv-hl,.pv-fbar .pv-hl{outline-width:3px;border-radius:6px}
+
+/* ── 미리 보기 패널 (제작 자료 · 넓은 화면은 오른쪽 · 좁은 화면은 하단 막대 → 펼침) ── */
+.pvside{position:sticky;top:66px}
+.pv-panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 40px -28px rgba(18,41,77,.5);display:flex;flex-direction:column;max-height:calc(100vh - 84px);overflow:hidden}
+.pv-head{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.pv-head>div:first-child{flex:1;min-width:0}
+.pv-head b{display:block;font-size:14.5px;line-height:1.4}
+.pv-sub{display:block;font-size:11.5px;color:var(--muted);line-height:1.5}
+.pv-x{display:none;border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700;cursor:pointer;color:var(--ink);font-family:inherit}
+.pv-scroll{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;padding:12px 12px 0}
+.pv-serp{background:#fff;color:#202124;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:12px}
+.pv-sl{font-size:11px;font-weight:800;color:#5f6368;margin-bottom:4px}
+.pv-sr .u{display:block;font-size:11.5px;color:#188038;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pv-sr .t{display:block;font-size:15px;color:#1a0dab;font-weight:600;line-height:1.4}
+.pv-sr .d{display:block;font-size:12.5px;color:#4d5156;line-height:1.55;margin-top:2px}
+.pv-note{font-size:11.5px;color:var(--muted);margin:10px 2px 12px;line-height:1.6}
+.pv-fbar{position:sticky;bottom:0;margin:0 -12px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:var(--surface);border-top:1px solid var(--line)}
+.pv-fb{display:flex;gap:6px}
+.pv-fb span{flex:1;min-width:0;text-align:center;padding:9px 4px;border-radius:10px;background:var(--pp);color:var(--ppt);font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-mini{display:none}
+body.pv-off .pvside,body.pv-off .pv-mini{display:none!important}
+html.pv-lock,html.pv-lock body{overflow:hidden}
+@media(min-width:1180px){
+  body.mode-material .layout{grid-template-columns:minmax(0,1fr) 380px;max-width:1320px}
+  body.mode-material.pv-off .layout{grid-template-columns:minmax(0,1fr);max-width:880px}
+}
+@media(max-width:1179px){
+  .pvside{display:none;position:fixed;inset:0;z-index:70;background:rgba(8,14,28,.55);align-items:flex-end;justify-content:center}
+  .pvside.open{display:flex}
+  .pv-panel{width:min(480px,100%);max-height:92vh;border-radius:18px 18px 0 0;border-bottom:0}
+  .pv-x{display:inline-block}
+  .pv-mini{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;align-items:center;gap:12px;justify-content:space-between;
+           background:var(--band);color:#fff;padding:12px 18px calc(12px + env(safe-area-inset-bottom));box-shadow:0 -10px 26px -14px rgba(0,0,0,.45);
+           cursor:pointer;border:0;width:100%;text-align:left;font-family:inherit}
+  .pv-mini .t{font-size:11.5px;color:#B7CBEA;font-weight:700;display:block}
+  .pv-mini .m{font-size:14.5px;font-weight:800;display:block;line-height:1.35}
+  .pv-mini .go{flex:0 0 auto;font-size:12.5px;font-weight:800;background:rgba(255,255,255,.14);border-radius:999px;padding:7px 12px}
+  body.mode-material .layout{padding-bottom:110px}
+  body.mode-material footer{padding-bottom:120px}
+}
+/* 칸 이름 옆 「…」 이름표 — 제작 자료에서는 눌러서 미리 보기의 그 자리로 */
+body.mode-material .where.pvw{cursor:pointer;border:1px solid transparent}
+body.mode-material .where.pvw::after{content:" · 자리 보기"}
+body.mode-material .where.pvw:hover,body.mode-material .where.pvw:focus-visible{border-color:var(--accent)}
+
+/* ── 글쓰기 도움 (10/13) ── */
+.hp{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.hpb{border:1px dashed var(--accent);background:var(--surface);color:var(--accent-ink);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit}
+.hpb:hover,.hpb.on{background:var(--accent-soft)}
+.hpbox{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 10px}
+.hpt{font-size:12.8px;color:var(--muted);margin-bottom:8px;line-height:1.6}
+.hpt b{color:var(--ink)}
+.hpq{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px;align-items:center;margin-bottom:8px}
+.hpq label{font-size:13px;font-weight:800;color:var(--ink)}
+.hpq .inp{min-height:42px;padding:9px 12px;font-size:14.5px;background:var(--surface)}
+@media(max-width:640px){.hpq{grid-template-columns:1fr;gap:4px}}
+.hpact{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:4px}
+.hpact .sbtn{min-height:40px;font-size:13.5px}
+.hpact .sbtn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.hpact .sbtn.arm{background:var(--bad);color:#fff}
+.hpwhy{display:none;font-size:12px;color:var(--muted)}
+.hpact .sbtn:disabled+.hpwhy{display:inline}
+.hpmsg{font-size:12.5px;color:var(--ok);font-weight:700;margin-top:6px}
+.hpmsg:empty{display:none}
+.hxp{white-space:pre-line;font-size:14px;line-height:1.8;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+
+/* 아이콘 (10/13 밤 · 이모티콘 대신) — 선 아이콘은 글자 색을 따라감 */
+svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.14em}
+.goal .gi{color:var(--accent-ink)}
+.goal .gi svg.ic{width:22px;height:22px}
+.hpb{display:inline-flex;align-items:center;gap:6px}
+.hpb svg.ic{width:15px;height:15px}
+.pvs svg.ic{width:1.15em;height:1.15em;vertical-align:-.2em}
+.pv-burger svg.ic{width:24px;height:24px;display:block}
+.pv-mapbox svg.ic{width:40px;height:40px;color:#7A8597}
+.pv-sns svg.ic{width:14px;height:14px}
+.pv-fb span{display:flex;align-items:center;justify-content:center;gap:5px}
 </style>
 </head>
 <body>
 <script>document.body.className=/^#m=/.test(location.hash)?'mode-material':'mode-apply';</script>
 
+<!-- 아이콘 한 벌 (10/13 밤 · 이모티콘 대신 · 직접 그린 선 아이콘) — <svg class="ic"><use href="#ic-이름"/></svg> 로 씀. 선 굵기 · 색은 CSS svg.ic -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="ic-tel" viewBox="0 0 24 24"><path d="M5.2 4h3.1l1.8 4.6-2.3 1.5a11.6 11.6 0 0 0 6.1 6.1l1.5-2.3 4.6 1.8v3.1A2.2 2.2 0 0 1 17.8 21 16.8 16.8 0 0 1 3 6.2 2.2 2.2 0 0 1 5.2 4z"/></symbol>
+  <symbol id="ic-chat" viewBox="0 0 24 24"><path d="M12 4c4.7 0 8.5 3 8.5 6.8s-3.8 6.8-8.5 6.8c-.8 0-1.6-.1-2.3-.3L5.5 19.6l.9-3.6C4.6 14.7 3.5 12.9 3.5 10.8 3.5 7 7.3 4 12 4z"/></symbol>
+  <symbol id="ic-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.9-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 15.1 12 21 12 21z"/><circle cx="12" cy="9.8" r="2.4"/></symbol>
+  <symbol id="ic-form" viewBox="0 0 24 24"><path d="M9 4.5H7.2A2.2 2.2 0 0 0 5 6.7v12.1A2.2 2.2 0 0 0 7.2 21h9.6a2.2 2.2 0 0 0 2.2-2.2V6.7a2.2 2.2 0 0 0-2.2-2.2H15"/><rect x="9" y="3" width="6" height="3.2" rx="1"/><path d="m9 13.2 2.1 2.1 4-4"/></symbol>
+  <symbol id="ic-pen" viewBox="0 0 24 24"><path d="M4 20h4L18.7 9.3a2.6 2.6 0 0 0-3.7-3.7L4.3 16.3z"/><path d="m13.6 7 3.4 3.4"/><path d="M13 20h7"/></symbol>
+  <symbol id="ic-doc" viewBox="0 0 24 24"><path d="M14 3H7.2A2.2 2.2 0 0 0 5 5.2v13.6A2.2 2.2 0 0 0 7.2 21h9.6a2.2 2.2 0 0 0 2.2-2.2V8z"/><path d="M14 3v5h5"/><path d="M8.5 12.5h7M8.5 16.5h5"/></symbol>
+  <symbol id="ic-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+  <symbol id="ic-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="ic-play" viewBox="0 0 24 24"><path d="M8.5 6.2v11.6L18 12z" fill="currentColor" stroke="none"/></symbol>
+</svg>
 <header>
   <div class="wrap">
+    <div class="imab-row">
+      <a class="back" data-back href="../#web" style="margin-bottom:0">← 홈페이지 제작</a>
+      <span class="imab" id="authbar"></span>
+    </div>
     <div>
-      <div class="imab-row" style="margin-bottom:16px">
-        <a class="back" data-back href="../#web" style="margin-bottom:0">← 홈페이지 제작</a>
-        <span class="imab" id="authbar"></span>
-      </div>
       <h1 data-mode-show="apply">홈페이지 제작 신청</h1>
       <h1 data-mode-show="material">제작 자료 보내기</h1>
       <p class="intro" data-mode-show="apply">기능 · 디자인 · 도메인을 선택하면 <b>예상 금액이 자동 계산</b>되며, 이 내용으로 견적서와 계약서를 작성합니다.
@@ -678,7 +934,7 @@ footer span{margin:0 8px;color:var(--line)}
       <b>준비 자료</b>
       <ul>
         <li>로고 파일 (보유 시)</li>
-        <li>사진 3장 이상 (첫 화면에 넣을 가로 사진 1장 포함 · 원본 파일)</li>
+        <li>사진 3장 이상 (첫 화면에 넣을 가로 사진 1장 포함 · 원본 파일 · 카카오톡 전달 가능)</li>
         <li>메뉴 · 서비스와 가격</li>
         <li>자주 받는 질문 (있는 경우)</li>
       </ul>
@@ -821,13 +1077,13 @@ footer span{margin:0 8px;color:var(--line)}
     <div class="card-h"><span class="no">2</span><div class="tt"><p class="eyebrow">STEP 2</p><h2>홈페이지의 목적</h2>
       <p class="sub">홈페이지 방문자에게 유도할 행동을 <b>모두</b> 선택해 주십시오.</p></div><span class="state"></span></div>
 
-    <div class="fld" id="fld_goals"><div class="lab-row"><span class="lab">방문자 행동</span><span class="where">첫 화면 버튼 · 휴대폰 아래 막대</span></div>
+    <div class="fld" id="fld_goals"><div class="lab-row"><span class="lab">전환 목표</span><span class="where">첫 화면 버튼 · 휴대폰 아래 막대</span></div>
       <p class="desc">해당 항목을 <b>모두</b> 선택해 주십시오. 선택 항목마다 홈페이지에 버튼을 배치합니다.</p>
-      <div class="goals" id="goals" role="group" aria-label="방문자 행동 (여러 개)">
-        <label class="goal"><input type="checkbox" name="goal" value="전화 문의"><i class="gi">📞</i><span><b>전화 문의</b><span class="gd">버튼을 누르면 전화로 연결됩니다</span></span></label>
-        <label class="goal"><input type="checkbox" name="goal" value="카카오톡 상담"><i class="gi">💬</i><span><b>카카오톡 상담</b><span class="gd">카카오톡 채널 채팅으로 연결됩니다</span></span></label>
-        <label class="goal"><input type="checkbox" name="goal" value="방문"><i class="gi">📍</i><span><b>방문</b><span class="gd">지도 · 길 찾기 · 주차 안내를 강조해 표시합니다</span></span></label>
-        <label class="goal"><input type="checkbox" name="goal" value="신청 · 예약"><i class="gi">📝</i><span><b>신청 · 예약</b><span class="gd">신청 · 예약 접수 화면으로 연결됩니다</span></span></label>
+      <div class="goals" id="goals" role="group" aria-label="전환 목표 (여러 개)">
+        <label class="goal"><input type="checkbox" name="goal" value="전화 문의"><i class="gi"><svg class="ic" aria-hidden="true" focusable="false"><use href="#ic-tel"/></svg></i><span><b>전화 문의</b><span class="gd">버튼을 누르면 전화로 연결됩니다</span></span></label>
+        <label class="goal"><input type="checkbox" name="goal" value="카카오톡 상담"><i class="gi"><svg class="ic" aria-hidden="true" focusable="false"><use href="#ic-chat"/></svg></i><span><b>카카오톡 상담</b><span class="gd">카카오톡 채널 채팅으로 연결됩니다</span></span></label>
+        <label class="goal"><input type="checkbox" name="goal" value="방문"><i class="gi"><svg class="ic" aria-hidden="true" focusable="false"><use href="#ic-pin"/></svg></i><span><b>방문</b><span class="gd">지도 · 길 찾기 · 주차 안내를 강조해 표시합니다</span></span></label>
+        <label class="goal"><input type="checkbox" name="goal" value="신청 · 예약"><i class="gi"><svg class="ic" aria-hidden="true" focusable="false"><use href="#ic-form"/></svg></i><span><b>신청 · 예약</b><span class="gd">신청 · 예약 접수 화면으로 연결됩니다</span></span></label>
       </div></div>
 
     <div class="fld stage" id="main_box"><div class="lab-row"><span class="lab">첫 화면 큰 버튼</span><span class="where">첫 화면 가운데</span></div>
@@ -997,7 +1253,7 @@ footer span{margin:0 8px;color:var(--line)}
         <p class="desc">목록 대상과 항목별 표시 정보입니다.</p>
         <input class="inp" id="f_list_what"></div>
       <div class="fld"><label class="lab sm" for="f_list_items">최초 등록 항목</label>
-        <p class="desc">한 줄에 하나씩 입력해 주십시오. 사진은 「그 밖의 사진」에 함께 첨부해 주십시오.</p>
+        <p class="desc">한 줄에 하나씩 입력해 주십시오. 항목 사진은 계약 후 「제작 자료」 단계에서 다른 사진과 함께 전달해 주십시오.</p>
         <textarea class="inp" id="f_list_items" placeholder="예: 이름 · 설명 · 가격 (한 줄에 하나)"></textarea>
         <p class="note warn stage" id="list_realty">매물 등록 시 매물별 종류 · 거래 형태 · 소재지 · 면적 · 가격 등을 함께 입력해 주십시오(공인중개사법 제18조의2).</p></div>
     </div>
@@ -1027,7 +1283,7 @@ footer span{margin:0 8px;color:var(--line)}
   <!-- 4. 들어갈 글 -->
   <section class="card" id="step4" data-step data-phase="material">
     <div class="card-h"><span class="no">4</span><div class="tt"><p class="eyebrow">STEP 4</p><h2>들어갈 글</h2>
-      <p class="sub">입력한 글을 <b>그대로</b> 사용합니다. 맞춤법만 교정하며 원고를 새로 작성하지 않습니다.</p></div><span class="state"></span></div>
+      <p class="sub">입력한 글을 <b>그대로</b> 사용합니다. 맞춤법만 교정하며 원고를 새로 작성하지 않습니다. 글이 들어가는 자리는 「홈페이지 미리 보기」(넓은 화면은 오른쪽, 휴대폰은 하단 막대)에서 바로 확인할 수 있습니다.</p></div><span class="state"></span></div>
 
     <div class="note warn stage" id="med_note" style="margin:0 0 22px"><b>의료 관련 홈페이지는 광고 규정이 엄격합니다.</b> 병원 · 의원은 의료법 제56조에 따라 치료 경험담 · 후기, 다른 곳과 비교하는 말, 「완치」 · 「100%」 · 「부작용 없음」 같은 표현을 넣을 수 없습니다. 아래 글은 사실만 입력해 주십시오.</div>
 
@@ -1039,9 +1295,25 @@ footer span{margin:0 8px;color:var(--line)}
       <div class="cnt" id="head_cnt"></div>
       <p class="ex" id="ex_head"></p></div>
 
-    <div class="fld"><div class="lab-row"><label class="lab" for="f_about">소개 글</label><span class="where">소개 화면</span></div>
-      <p class="desc">소개 화면에 들어가는 글입니다. 아래 순서로 3~6문장을 작성해 주십시오.</p>
+    <div class="fld" id="fld_about"><div class="lab-row"><label class="lab" for="f_about">소개 글</label><span class="where">소개 화면</span></div>
+      <p class="desc">소개 화면에 들어가는 글입니다. 아래 순서로 3~6문장을 작성해 주십시오. 쓰기 어려우면 「문장별로 나눠 쓰기」로 한 문장씩 입력할 수 있습니다.</p>
       <div class="guide"><span>① 설립 시기 · 장소</span><span>② 주요 사업 · 서비스</span><span>③ 강점 (사실 기준)</span><span>④ 적합한 대상</span></div>
+      <div class="hp"><button type="button" class="hpb" data-hp="about" aria-expanded="false" aria-controls="hp_about"><svg class="ic" aria-hidden="true" focusable="false"><use href="#ic-pen"/></svg>문장별로 나눠 쓰기</button><button type="button" class="hpb" data-hx="about" aria-expanded="false" aria-controls="hx_about"><svg class="ic" aria-hidden="true" focusable="false"><use href="#ic-doc"/></svg>업종 예시 보기</button></div>
+      <div class="hpbox" id="hp_about" hidden>
+        <p class="hpt">칸마다 한 문장씩 입력하면 아래 소개 글 칸에 이어서 넣습니다. 모르는 칸은 비워 두어도 됩니다.</p>
+        <div class="hpq"><label for="hq_about_1">① 설립 시기 · 장소</label><input class="inp" id="hq_about_1" data-hq="about"></div>
+        <div class="hpq"><label for="hq_about_2">② 주요 사업 · 서비스</label><input class="inp" id="hq_about_2" data-hq="about"></div>
+        <div class="hpq"><label for="hq_about_3">③ 강점 (사실 기준)</label><input class="inp" id="hq_about_3" data-hq="about"></div>
+        <div class="hpq"><label for="hq_about_4">④ 적합한 대상</label><input class="inp" id="hq_about_4" data-hq="about"></div>
+        <div class="hpact"><button type="button" class="sbtn" data-hput="about" disabled>소개 글 칸에 넣기</button><button type="button" class="sbtn ghost" data-hadd="about" hidden>지금 글 끝에 붙이기</button></div>
+        <p class="hpmsg" id="hpm_about" role="status"></p>
+      </div>
+      <div class="hpbox" id="hx_about" hidden>
+        <p class="hpt"><b class="hx-cat">기본 업종</b> 예시입니다. 그대로 쓰지 말고 실제 내용으로 고쳐 입력해 주십시오.</p>
+        <p class="hxp" id="hxp_about"></p>
+        <div class="hpact"><button type="button" class="sbtn ghost" data-hxput="about">예시를 소개 글 칸에 넣고 고치기</button><span class="hpwhy">소개 글 칸이 비어 있을 때 넣을 수 있습니다</span></div>
+        <p class="hpmsg" id="hxm_about" role="status"></p>
+      </div>
       <textarea class="inp tall" id="f_about"></textarea>
       <div class="cnt" id="about_cnt"></div></div>
 
@@ -1051,6 +1323,21 @@ footer span{margin:0 8px;color:var(--line)}
       <div class="reveal" data-show="tg_greet=넣음">
         <p class="desc">아래 순서로 3~5문장을 작성해 주십시오.</p>
         <div class="guide"><span>① 인사</span><span>② 설립 배경</span><span>③ 고객에 대한 약속</span></div>
+        <div class="hp"><button type="button" class="hpb" data-hp="greet" aria-expanded="false" aria-controls="hp_greet"><svg class="ic" aria-hidden="true" focusable="false"><use href="#ic-pen"/></svg>문장별로 나눠 쓰기</button><button type="button" class="hpb" data-hx="greet" aria-expanded="false" aria-controls="hx_greet"><svg class="ic" aria-hidden="true" focusable="false"><use href="#ic-doc"/></svg>업종 예시 보기</button></div>
+        <div class="hpbox" id="hp_greet" hidden>
+          <p class="hpt">칸마다 한 문장씩 입력하면 아래 인사말 칸에 줄을 바꿔 넣습니다. 모르는 칸은 비워 두어도 됩니다.</p>
+          <div class="hpq"><label for="hq_greet_1">① 인사</label><input class="inp" id="hq_greet_1" data-hq="greet"></div>
+          <div class="hpq"><label for="hq_greet_2">② 설립 배경</label><input class="inp" id="hq_greet_2" data-hq="greet"></div>
+          <div class="hpq"><label for="hq_greet_3">③ 고객에 대한 약속</label><input class="inp" id="hq_greet_3" data-hq="greet"></div>
+          <div class="hpact"><button type="button" class="sbtn" data-hput="greet" disabled>인사말 칸에 넣기</button><button type="button" class="sbtn ghost" data-hadd="greet" hidden>지금 글 끝에 붙이기</button></div>
+          <p class="hpmsg" id="hpm_greet" role="status"></p>
+        </div>
+        <div class="hpbox" id="hx_greet" hidden>
+          <p class="hpt"><b class="hx-cat">기본 업종</b> 예시입니다. 그대로 쓰지 말고 실제 내용으로 고쳐 입력해 주십시오.</p>
+          <p class="hxp" id="hxp_greet"></p>
+          <div class="hpact"><button type="button" class="sbtn ghost" data-hxput="greet">예시를 인사말 칸에 넣고 고치기</button><span class="hpwhy">인사말 칸이 비어 있을 때 넣을 수 있습니다</span></div>
+          <p class="hpmsg" id="hxm_greet" role="status"></p>
+        </div>
         <textarea class="inp" id="f_greet" aria-label="대표 인사말"></textarea>
         <div class="cnt" id="greet_cnt"></div></div></div>
 
@@ -1133,7 +1420,7 @@ footer span{margin:0 8px;color:var(--line)}
       <p class="sub">분위기별 가격 차이는 없습니다. 선택한 분위기로 시안 1개를 제작합니다.</p></div><span class="state"></span></div>
 
     <div class="fld" id="fld_theme"><div class="lab-row"><span class="lab">분위기</span><span class="where">홈페이지 전체</span></div>
-      <p class="desc">1개를 선택해 주십시오. 선택이 어려우면 「업종에 맞춰」를 선택해 주십시오.</p>
+      <p class="desc">1개를 선택해 주십시오. 카드를 누르면 아래에 상호를 넣은 화면 예시가 크게 표시됩니다. 선택이 어려우면 「업종에 맞춰」를 선택해 주십시오.</p>
       <div class="opts themes" id="theme" role="radiogroup" aria-label="디자인 분위기">
         <label class="opt"><input type="radio" name="theme" value="A 신뢰형"><span class="mock mA"><i class="k-nav"></i><i class="k-t1"></i><i class="k-t2"></i><i class="k-btn"></i><i class="k-img"></i></span>
           <b>신뢰형</b><span>남색 · 넓은 여백 · 글자 중심</span><span class="fit">학원 · 병원 · 기업</span></label>
@@ -1144,8 +1431,18 @@ footer span{margin:0 8px;color:var(--line)}
         <label class="opt"><input type="radio" name="theme" value="추천에 맡김"><span class="mock mR"><i class="k-s1"></i><i class="k-s2"></i><i class="k-s3"></i></span>
           <b>업종에 맞춰</b><span id="rec_txt">업종에 맞는 분위기를 담당자가 선정합니다</span></label>
       </div></div>
+    <!-- 화면 예시 (10/13) — 상호 · 업종 예시 글 · 고른 버튼으로 그린 첫 화면. 실제 글 · 사진은 계약 후 「제작 자료」로 받음 -->
+    <div class="tpv" id="tpv">
+      <div class="tpv-h"><b id="tpv_t">화면 예시</b>
+        <div class="devsw" role="group" aria-label="화면 크기"><button type="button" data-tdev="pc" aria-pressed="true">PC</button><button type="button" data-tdev="mo" aria-pressed="false">휴대폰</button></div></div>
+      <p class="tpv-s">상호와 업종 예시 글로 만든 화면 예시입니다. 실제 글 · 사진은 계약 후 「제작 자료」로 받으며, 시안은 담당자가 제작합니다.</p>
+      <div class="tpv-stage"><div class="pvf" id="tpv_frame" aria-hidden="true"></div></div>
+    </div>
 
-    <p class="nonebar" id="design_none_bar">원하는 색 · 피하고 싶은 색 · 참고할 홈페이지가 모두 없는 경우<button type="button" class="mini" id="design_none">모두 없음</button></p>
+    <!-- 10/13 홈페이지 팀 — 원하는 색 · 피하고 싶은 색 · 참고할 홈페이지는 «선택 사항»(접어 둠). 지정하지 않으면 테마 색 · 테마대로 제작합니다.
+         「있음」을 고른 칸만 검사합니다(색 1개 이상 · 주소와 참고할 점). 「모두 없음」 줄은 없앴습니다. -->
+    <details class="more" id="design_more">
+      <summary><b>원하는 색 · 피하고 싶은 색 · 참고할 홈페이지</b><span>선택 사항 · 지정하지 않으면 테마 색으로 제작합니다</span></summary>
     <div class="fld" id="fld_color"><div class="lab-row"><span class="lab">원하는 색</span><span class="where">포인트 색 · 보조 색</span></div>
       <p class="desc">선호 색상을 누른 순서대로 1 · 2 · 3순위로 지정합니다. 1개만 선택해도 됩니다.</p>
       <div class="seg" id="seg_color" role="radiogroup" aria-label="원하는 색"><label><input type="radio" name="tg_color" value="있음"><span>있음</span></label><label><input type="radio" name="tg_color" value="없음"><span>없음</span></label></div>
@@ -1167,6 +1464,7 @@ footer span{margin:0 8px;color:var(--line)}
       <div class="seg" id="seg_like" role="radiogroup" aria-label="참고할 홈페이지"><label><input type="radio" name="tg_like" value="있음"><span>있음</span></label><label><input type="radio" name="tg_like" value="없음"><span>없음</span></label></div>
       <div class="reveal" data-show="tg_like=있음"><p class="desc" style="margin-top:2px">주소와 참고할 점을 입력해 주십시오. 해당 부분만 참고하며, 디자인 · 글은 복제하지 않습니다.</p>
         <div class="rep" id="rep_like"></div></div></div>
+    </details>
   </section>
 
   <!-- 7. 로고 · 사진 -->
@@ -1182,13 +1480,32 @@ footer span{margin:0 8px;color:var(--line)}
     <p class="note info stage" id="photo_newbiz" style="margin:-8px 0 22px">개업 준비 중으로 공간 사진이 없으면, 상품 · 메뉴 · 대표 · 작업 사진 또는 인테리어 시안을 첨부해 주십시오.</p>
     <p class="note warn stage" id="photo_med" style="margin:-8px 0 22px">병원 · 의원은 치료 전후 비교 사진이나 시술 장면처럼 치료 효과를 보여 주는 사진을 넣지 않습니다(의료광고 규정).</p>
 
+    <!-- 🔴 사진 전달 방법 (10/13 전도사님 결정 · 홈페이지 팀) — 이 화면에서 첨부 / 카카오톡으로 따로 전달.
+         카카오톡이면 로고 · 사진 첨부 칸을 숨기고 검사하지 않습니다(로고 있음 / 없음은 그대로 받음). 지시서 0 · 7 · 12장 · details 「사진 전달」에 남습니다.
+         채널 이름 · 주소는 스크립트의 KAKAO_CH · KAKAO_URL 한 곳에서 바꿉니다(.kch 칸 · .kurl 링크를 채움). 신청 번호는 .kno 칸에 채웁니다. -->
+    <div class="fld" id="fld_pvia"><div class="lab-row"><span class="lab">사진 전달 방법</span><span class="where">로고 · 사진</span></div>
+      <p class="desc">로고 · 사진을 이 화면에서 첨부하거나, 카카오톡으로 따로 보낼 수 있습니다.</p>
+      <div class="seg" id="seg_pvia" role="radiogroup" aria-label="사진 전달 방법"><label><input type="radio" name="tg_pvia" value="첨부"><span>이 화면에서 첨부</span></label><label><input type="radio" name="tg_pvia" value="카카오톡"><span>카카오톡으로 따로 전달</span></label></div>
+      <div class="note info kk" data-show="tg_pvia=카카오톡">
+        <b>카카오톡으로 보내는 방법</b>
+        <ol>
+          <li>카카오톡에서 「<b class="kch">인투마케팅</b>」 채널을 검색해 추가합니다<a class="kurl" href="https://pf.kakao.com/_qlkxiX" target="_blank" rel="noopener">채널 바로 가기</a></li>
+          <li>채팅창에 <b>신청 번호 <span class="kno"></span></b>와 상호를 먼저 입력합니다.</li>
+          <li>사진 화질을 <b>「원본」</b>으로 선택해 보냅니다. 일반 화질로 보내면 화질이 낮아질 수 있습니다.</li>
+          <li>첫 화면에 넣을 <b>가로 사진 1장</b>을 먼저 보내고 「대표 사진」이라고 입력합니다. 이어서 그 밖의 사진 <b>2장 이상</b>(10장 안팎 권장)과 로고 파일(있는 경우)을 보냅니다.</li>
+        </ol>
+        <p>사진도 제출 기한(계약 · 입금 후 1주) 안에 보내 주십시오. 작업 시작일은 사진까지 모두 받은 뒤 안내합니다.</p>
+        <p class="kk-left" id="kk_left" hidden></p>
+      </div></div>
+
     <div class="fld" id="fld_logo"><div class="lab-row"><span class="lab">로고</span><span class="where">상단 · 브라우저 탭 아이콘</span></div>
       <p class="desc">로고 파일 보유 여부를 선택해 주십시오.</p>
       <div class="seg" id="seg_logo" role="radiogroup" aria-label="로고"><label><input type="radio" name="tg_logo" value="있음"><span>있음</span></label><label><input type="radio" name="tg_logo" value="없음"><span>없음 · 상호를 글자로</span></label></div>
       <div class="reveal" data-show="tg_logo=있음">
         <label class="drop" id="drop_logo"><input type="file" id="f_logo" accept="image/png,image/jpeg,image/webp"><span class="di">🏷</span><b>로고 파일 선택</b><span>PNG · JPG 1장 · 배경이 투명한 PNG 권장</span></label>
         <div class="thumbs" id="th_logo"></div><p class="ex" id="note_logo" hidden></p>
-        <p class="ex">AI · PDF · SVG 파일만 있으면 로고 제작처에서 PNG로 받아 첨부해 주십시오.</p></div>
+        <p class="ex att-only">AI · PDF · SVG 파일만 있으면 로고 제작처에서 PNG로 받아 첨부해 주십시오.</p>
+        <p class="ex kk-only">로고 파일(PNG · JPG)도 카카오톡으로 함께 보내 주십시오. AI · PDF · SVG 파일만 있으면 로고 제작처에서 PNG로 받아 보내 주십시오.</p></div>
       <p class="note info" data-show="tg_logo=없음">상호를 홈페이지 분위기에 맞는 서체로 표기합니다.</p></div>
 
 
@@ -1213,9 +1530,9 @@ footer span{margin:0 8px;color:var(--line)}
 
 
     <div class="fld" id="fld_domain"><div class="lab-row"><span class="lab">홈페이지 주소(도메인)</span><span class="where">주소창 · 명함 · 검색 결과</span></div>
-      <p class="desc">인터넷 주소입니다(예: oocoffee.co.kr). 「새로 구매」를 권장합니다. 고객 명의로 등록하므로 해지 후에도 주소는 고객 소유로 유지됩니다.</p>
+      <p class="desc">인터넷 주소입니다(예: <span id="dom_ex">example.co.kr</span>). 「새로 구매」를 권장합니다. 고객 명의로 등록하므로 해지 후에도 주소는 고객 소유로 유지됩니다.</p>
       <div class="opts" id="domain" role="radiogroup" aria-label="홈페이지 주소(도메인)">
-        <label class="opt"><input type="radio" name="domain" value="유료 도메인 새로"><b>새로 구매 <em class="badge">권장</em></b><span>고객 명의로 등록 대행 · 비용은 고객 부담 (등록 회사 · 주소에 따라 다름)</span></label>
+        <label class="opt"><input type="radio" name="domain" value="유료 도메인 새로"><b>새로 구매 <em class="badge">권장</em></b><span>고객 명의 · 비용은 고객 부담 (등록 회사 · 주소에 따라 다름) · 등록 대행 또는 직접 구매</span></label>
         <label class="opt"><input type="radio" name="domain" value="이미 있음"><b>이미 있음</b><span>보유하신 도메인에 연결</span></label>
         <label class="opt"><input type="radio" name="domain" value="무료 주소"><b>무료 주소</b><span>비용 없음 · 해지 시 주소 소멸</span></label>
       </div>
@@ -1232,8 +1549,21 @@ footer span{margin:0 8px;color:var(--line)}
       <!-- 무료 주소 -->
       <div class="note warn stage" id="dom_free">무료 주소는 비용이 없으나, <b>해지 시 주소가 소멸됩니다.</b></div>
 
-      <!-- 새로 구매 → 소유자 정보 (도메인 등록 회사의 「소유자 정보」 화면과 같은 항목) -->
+      <!-- 새로 구매 → 🔴 구매 방법을 먼저 묻습니다 (10/10 결정 · 10/13 홈페이지 팀). 소유자 정보 · 제3자 제공 동의는 «등록 대행»일 때만 받습니다.
+           직접 구매는 고객이 등록 회사에서 구매하고 비용도 직접 결제하므로 소유자 정보가 필요 없습니다. -->
       <div class="dom stage" id="dom_buy">
+        <div class="fld" id="fld_dombuy"><span class="lab sm">구매 방법</span>
+          <div class="seg" id="seg_dombuy" role="radiogroup" aria-label="도메인 구매 방법"><label><input type="radio" name="dombuy" value="대행"><span>등록 대행</span></label><label><input type="radio" name="dombuy" value="직접"><span>직접 구매</span></label></div>
+          <p class="ex">등록 대행은 담당자가 고객 명의로 등록하고 홈페이지 연결까지 진행하며, 등록 회사에 전달할 소유자 정보를 받습니다. 직접 구매는 소유자 정보를 받지 않으며, 구매 후 연결 값(DNS)을 안내합니다.</p></div>
+
+        <!-- 직접 구매 — 구매할 주소만 -->
+        <div class="stage" id="dom_self">
+          <div class="fld"><label class="lab sm" for="f_dom_self">구매할 주소</label><input class="inp" id="f_dom_self" placeholder="예: example.co.kr" style="max-width:420px">
+            <p class="ex">등록 회사(가비아 · 후이즈 · 카페24 등)에서 고객 명의로 구매하며, 비용은 고객이 직접 결제합니다. 이미 등록된 주소이면 다른 주소로 구매해도 됩니다. 구매 후 담당자에게 주소를 알려 주시면 홈페이지 연결 값(DNS)을 안내합니다. 완성본 제공 전까지 구매하면 오픈일에 바로 연결합니다. <b>도메인 관리 비밀번호는 보내지 마십시오.</b></p></div>
+        </div>
+
+        <!-- 등록 대행 — 원하는 주소 · 등록 회사 · 소유자 정보 (도메인 등록 회사의 「소유자 정보」 화면과 같은 항목) -->
+        <div class="stage" id="dom_agent">
         <div class="row2">
           <div class="fld"><label class="lab sm" for="f_dom_want1">원하는 주소 (1순위)</label><input class="inp" id="f_dom_want1" placeholder="예: example.co.kr"></div>
           <div class="fld"><label class="lab sm" for="f_dom_want2">원하는 주소 (2순위)</label><input class="inp" id="f_dom_want2" placeholder="1순위가 이미 등록된 경우">
@@ -1298,6 +1628,7 @@ footer span{margin:0 8px;color:var(--line)}
                  동의하지 않아도 신청은 됩니다 — 이 칸은 제출을 막지 않고 노란 주의만 띄웁니다. 동의가 없으면 등록을 대행하지 않고 담당자가 직접 구매를 안내합니다. (행정 창 2026-10-13 · 10-14) -->
             <span>(선택) 도메인 등록을 위한 개인정보 제3자 제공에 동의합니다.</span></label></div>
         </div>
+        </div>
       </div>
     </div>
 
@@ -1351,14 +1682,15 @@ footer span{margin:0 8px;color:var(--line)}
 <div class="done" id="done" style="display:none">
   <div class="ic">✅</div>
   <h2>신청이 접수되었습니다</h2>
-  <p>담당자 배정 후 <b>영업일 1~2일 안에</b> 연락합니다.</p>
+  <p>담당자 배정 후 <b>1~2영업일 안에</b> 연락합니다.</p>
   <p class="doneno">신청 번호 <b id="done_no"></b></p>
   <div class="box">
     <b>다음 순서</b><br>
     ① 담당자가 신청 내용을 확인한 뒤 견적서를 발송합니다 (최종 금액은 견적서로 확정)<br>
     ② 계약서 서명 · 제작비 입금 (월 관리비는 오픈일부터 매달)<br>
     ③ 계약서 서명 후 <b>「제작 자료」 링크</b>를 발송합니다. 글 · 연락 정보 · 로고 · 사진을 계약 · 입금 후 1주 안에 제출하면, 전체 접수일부터 1주 안에 디자인 초안, 2주 안에 완성본을 제공합니다<br>
-    <span id="done_dom" style="display:none">④ 새 도메인은 계약 후 소유자 이름으로 등록합니다. 등록 회사에서 <b>소유자 확인 메일 · 문자</b>가 발송되면 확인해 주십시오<br></span><br>
+    <span id="done_dom" style="display:none">④ 새 도메인은 계약 후 소유자 이름으로 등록합니다. 등록 회사에서 <b>소유자 확인 메일 · 문자</b>가 발송되면 확인해 주십시오<br></span>
+    <span id="done_dom_self" style="display:none">④ 도메인은 직접 구매해 주십시오. 구매 후 담당자에게 주소를 알려 주시면 홈페이지 연결 값(DNS)을 안내합니다. <b>도메인 관리 비밀번호는 보내지 마십시오</b><br></span><br>
     <b>긴급 문의</b> 전화 <a href="tel:01073181790">010-7318-1790</a> · 이메일 <a href="mailto:info@intomarketing.co.kr">info@intomarketing.co.kr</a><br>
     <b>영업시간</b> 월~금 09:00~20:00 (주말 · 공휴일 제외)
   </div>
@@ -1368,8 +1700,15 @@ footer span{margin:0 8px;color:var(--line)}
   <div class="ic">✅</div>
   <h2>제작 자료를 받았습니다</h2>
   <p>담당자가 자료를 확인한 뒤 <b>작업 시작일</b>을 안내합니다. 그날부터 1주 안에 디자인 초안, 2주 안에 완성본을 제공합니다.</p>
+  <div class="box kk" id="done_kk" style="display:none">
+    <b>사진을 카카오톡으로 보내 주십시오</b><br>
+    ① 카카오톡에서 「<b class="kch">인투마케팅</b>」 채널을 검색해 추가합니다<a class="kurl" href="https://pf.kakao.com/_qlkxiX" target="_blank" rel="noopener">채널 바로 가기</a><br>
+    ② 채팅창에 신청 번호 <b class="kno"></b>와 상호를 먼저 입력합니다<br>
+    ③ 사진 화질을 「원본」으로 선택해 대표 사진 1장(「대표 사진」이라고 입력) · 그 밖의 사진 2장 이상 · 로고 파일(있는 경우)을 보냅니다<br>
+    작업 시작일은 사진까지 모두 받은 뒤 안내합니다.
+  </div>
   <div class="box">
-    <b>추가 사진</b>은 원본 파일로 담당자에게 전달해 주십시오. 메신저로 전송하면 화질이 저하될 수 있습니다.<br><br>
+    <b>추가 사진</b>은 카카오톡 채널 「<b class="kch">인투마케팅</b>」으로 보내 주십시오. 사진 화질은 「원본」으로 선택해 주십시오. 일반 화질로 보내면 화질이 낮아질 수 있습니다.<br><br>
     <b>긴급 문의</b> 전화 <a href="tel:01073181790">010-7318-1790</a> · 이메일 <a href="mailto:info@intomarketing.co.kr">info@intomarketing.co.kr</a><br>
     <b>영업시간</b> 월~금 09:00~20:00 (주말 · 공휴일 제외)
   </div>
@@ -1398,10 +1737,32 @@ footer span{margin:0 8px;color:var(--line)}
       <tbody id="q_tab"></tbody>
     </table>
     <p class="q-note" id="q_dom" hidden>새로 사는 도메인 비용은 이 금액에 들어 있지 않습니다. 고객 명의로 등록하고 비용은 고객이 부담하며, 등록 회사 · 주소에 따라 연 1~2만원을 넘을 수 있습니다.</p>
+    <p class="q-note" id="q_dom_self" hidden>직접 구매하는 도메인 비용은 이 금액에 들어 있지 않습니다. 등록 회사에 직접 결제하며, 등록 회사 · 주소에 따라 연 1~2만원을 넘을 수 있습니다.</p>
     <p class="q-note">줄을 누르면 해당 요금 방식으로 변경됩니다. 약정 할인은 제작비 합계에 적용하며, 할인한 금액은 만원 단위로 올림합니다.
       <b>신청서 기준 예상 금액이며, 최종 금액은 견적서로 확정합니다.</b></p>
   </div>
 </aside>
+
+<!-- 홈페이지 미리 보기 (10/13 · 제작 자료 화면만) — 넓은 화면: 오른쪽에 붙어 따라옴 · 좁은 화면: 하단 막대 → 누르면 펼침.
+     입력한 글이 바로 들어가고, 지금 입력하는 칸의 자리가 주황 테두리로 보입니다. 칸 이름 옆 「…」 이름표를 눌러도 그 자리로 갑니다. -->
+<aside class="pvside" id="pvside" data-mode-show="material" aria-label="홈페이지 미리 보기">
+  <div class="pv-panel">
+    <div class="pv-head">
+      <div><b>홈페이지 미리 보기</b><span class="pv-sub">입력한 글이 바로 들어갑니다 · 주황 테두리는 지금 입력하는 칸의 자리</span></div>
+      <div class="devsw" role="group" aria-label="화면 크기"><button type="button" data-pdev="mo" aria-pressed="true">휴대폰</button><button type="button" data-pdev="pc" aria-pressed="false">PC</button></div>
+      <button type="button" class="pv-x" id="pv_close">닫기 ✕</button>
+    </div>
+    <div class="pv-scroll" id="pv_scroll">
+      <div class="pv-serp" id="pv_serp"></div>
+      <div class="pvf" id="pv_frame" aria-hidden="true"></div>
+      <p class="pv-note">이해를 돕기 위한 화면 예시입니다. 실제 디자인은 담당자가 만드는 시안으로 확인합니다.</p>
+      <div class="pv-fbar" id="pv_fbar" hidden></div>
+    </div>
+  </div>
+</aside>
+<button type="button" class="pv-mini" id="pv_mini" data-mode-show="material" aria-controls="pvside" aria-expanded="false">
+  <span><span class="t">홈페이지 미리 보기</span><span class="m" id="pv_mini_m">입력한 글이 들어가는 자리 보기</span></span>
+  <span class="go">열기 ▲</span></button>
 </div>
 
 <footer class="wrap">
@@ -1427,6 +1788,8 @@ var RETENTION="계약하시면 거래 종료 후 5년(전자상거래법), 계�
 var PHOTO_MAX=10*1024*1024, PHOTO_LONG_SIDE=2000, PHOTO_QUALITY=0.85;
 /* 사진 — 대표 사진 1장 + 그 밖의 사진 PHOTO_MIN장 이상 (2026-10-01 밤 2차 · 모든 칸 필수) */
 var PHOTO_MIN=2, PHOTO_MORE_MAX=19;
+/* 사진을 카카오톡으로 따로 받을 때 안내하는 회사 채널 (10/13 밤 — 매뉴얼 창: 채널 「인투마케팅」 승인). 바뀌면 여기만 고치십시오(.kch 칸 · .kurl 링크를 채움 · 주소를 비우면 링크를 숨김) */
+var KAKAO_CH='인투마케팅', KAKAO_URL='https://pf.kakao.com/_qlkxiX';
 /* 글 최소 글자 수 — 한두 단어로 넘어가지 않게 */
 var MIN_LEN={f_about:50, f_greet:30};
 /* 💰 가격 (부가세 포함, 원) — 2026-10-01 결정. 🔴 메인 index.html 가격표 · hakwon/index.html(WEB_ITEMS) · 매뉴얼 1번과 같은 값 */
@@ -1460,20 +1823,69 @@ var THEME_BY_CAT={
 function recTheme(cat){ return THEME_BY_CAT[cat]||'A 신뢰형'; }
 /* 업종별 예시 — 업종을 고르면 칸 안의 회색 예시가 그 업종에 맞게 바뀝니다 (저장되는 값 아님) */
 var EX={
-  '':{name:'예: 지족동 ○○ 커피 · ○○ 세무회계 · ○○ 공방',head:'10년째 같은 자리, 아침마다 볶는 커피',who:'동네 주민, 근처 직장인, 처음 오시는 분',kw:'지족동 카페, 유성 세무사',dom:'example.co.kr',svc:['대표 상품 · 서비스','가격 · 시간 · 대상'],why:['당일 처리','오전에 맡기시면 그날 안에'],more:'유튜브 영상 넣기, 직원 소개 페이지',hours:'평일 9~18시 · 토 10~15시 · 일 휴무',faq:['주차할 곳이 있습니까?','건물 뒤에 6대까지 주차하실 수 있습니다.'],park:'건물 뒤 주차 6대 · 1층 편의점 옆 입구',list:'상품 · 이름 · 가격 · 사진',form:'상담 신청'},
-  '카페·음식점':{name:'예: 지족동 ○○ 커피',head:'10년째 같은 자리, 아침마다 볶는 커피',who:'근처 직장인, 동네 주민',kw:'지족동 카페, 유성 핸드드립',dom:'oocoffee.co.kr',svc:['핸드드립','원두 3종 · 6,000원'],why:['매일 로스팅','그날 볶은 원두만 씀'],more:'메뉴판 사진, 단체 주문 안내',hours:'매일 8~21시 · 월 휴무',faq:['단체 주문이 됩니까?','10잔 이상은 하루 전에 전화로 예약해 주십시오.'],park:'건물 앞 2대 · 맞은편 공영주차장',list:'메뉴 · 이름 · 가격 · 사진',form:'단체 주문 문의'},
-  '매장·소매':{name:'예: ○○ 꽃집',head:'오늘 들어온 꽃으로 그날 만드는 꽃다발',who:'선물을 고르는 직장인',kw:'유성 꽃집, 꽃다발 배달',dom:'ooflower.co.kr',svc:['꽃다발','3만원부터 · 당일 픽업'],why:['당일 제작','주문한 날 만들어 드림'],more:'상품 사진 목록, 배달 지역 안내',hours:'매일 10~20시',faq:['배달이 됩니까?','유성구 안은 당일 배달합니다.'],park:'매장 앞 1대 · 맞은편 공영주차장',list:'상품 · 이름 · 가격 · 사진',form:'꽃다발 주문'},
-  '뷰티·미용':{name:'예: ○○ 헤어',head:'손질이 쉬운 머리, 한 분씩 오래 봐 드립니다',who:'동네 주민, 근처 직장인',kw:'지족동 미용실, 유성 커트',dom:'oohair.co.kr',svc:['커트','30분 · 예약제'],why:['1인 예약제','한 번에 한 분만'],more:'시술 전후 사진, 가격표',hours:'화~일 10~20시 · 월 휴무',faq:['예약 없이 가도 됩니까?','예약 손님을 먼저 모십니다. 전화로 빈 시간을 확인해 주십시오.'],park:'건물 지하 1시간 무료',list:'시술 · 이름 · 시간 · 가격',form:'시술 예약'},
-  '병원·의원·약국':{name:'예: ○○ 내과의원',head:'예약제로 운영하는 동네 내과',who:'근처 직장인, 어르신',kw:'유성 내과, 건강검진',dom:'ooclinic.co.kr',svc:['건강검진','예약 · 소요 시간 · 준비 사항'],why:['예약 진료','예약 시간에 맞춰 진료'],more:'의료진 소개, 진료 시간표',hours:'평일 9~18시 · 토 9~13시 · 점심 13~14시',faq:['주차가 됩니까?','건물 지하 주차장을 2시간 무료로 쓰실 수 있습니다.'],park:'건물 지하 2시간 무료 · 엘리베이터 3층',list:'의료진 · 이름 · 진료 과목 · 진료 시간',form:'진료 예약 문의'},
-  '학원·교습소':{name:'예: ○○ 영어학원',head:'한 명씩 끝까지 책임지는 동네 영어학원',who:'초등 자녀를 둔 학부모',kw:'유성 영어학원, 지족동 초등영어',dom:'ooenglish.co.kr',svc:['초등 정규반','주 3회 · 한 반 8명'],why:['소수 정예','한 반 8명까지만'],more:'강사 소개, 시간표',hours:'평일 14~22시 · 토 10~15시',faq:['레벨 테스트가 있습니까?','첫 상담 때 20분 테스트로 반을 정합니다.'],park:'건물 뒤 잠시 정차 가능 · 셔틀 운행',list:'강좌 · 과목 · 대상 · 시간',form:'상담 신청'},
-  '공방·클래스':{name:'예: ○○ 도자기 공방',head:'두 시간이면 나만의 컵 하나',who:'주말 데이트 커플, 취미를 찾는 직장인',kw:'대전 도자기 공방, 원데이클래스',dom:'oocraft.co.kr',svc:['원데이 클래스','2시간 · 최대 6명'],why:['소수 수업','한 번에 6명까지'],more:'작품 사진, 클래스 일정표',hours:'화~일 11~20시',faq:['혼자 가도 됩니까?','네, 1명부터 신청하실 수 있습니다.'],park:'골목 끝 공영주차장 이용',list:'클래스 · 이름 · 시간 · 가격',form:'클래스 예약'},
-  '스포츠·레저':{name:'예: ○○ 필라테스',head:'한 명씩 자세를 봐 주는 소규모 필라테스',who:'운동을 처음 시작하는 직장인',kw:'유성 필라테스, 지족동 PT',dom:'oopilates.co.kr',svc:['1:1 레슨','50분 · 주 2회'],why:['소규모 수업','한 반 4명까지'],more:'강사 소개, 수업 시간표',hours:'평일 7~22시 · 토 9~14시',faq:['운동복을 빌려줍니까?','운동복과 수건을 드립니다.'],park:'건물 지하 2시간 무료',list:'수업 · 이름 · 요일 · 시간',form:'체험 수업 신청'},
-  '숙박·여행':{name:'예: ○○ 펜션',head:'창문을 열면 바로 바다, 하루 네 팀만',who:'가족 여행객, 커플',kw:'○○ 펜션, ○○ 바다 숙소',dom:'oostay.co.kr',svc:['바다 전망 객실','2인 기준 · 바비큐 가능'],why:['하루 네 팀','조용히 쉬실 수 있게'],more:'객실 사진, 주변 관광지 안내',hours:'입실 15시 · 퇴실 11시',faq:['반려동물과 함께 묵을 수 있습니까?','소형견 1마리까지 함께 묵으실 수 있습니다.'],park:'객실마다 1대',list:'객실 · 이름 · 인원 · 가격 · 사진',form:'숙박 문의'},
-  '전문직(세무·법무·노무 등)':{name:'예: ○○ 세무회계',head:'사장님 장부, 신고 기한 전에 먼저 챙겨 드립니다',who:'처음 창업한 사장님',kw:'유성 세무사, 기장 대리',dom:'ootax.co.kr',svc:['기장 대리','매출 규모별 · 월 단위'],why:['먼저 연락','신고 기한 전에 먼저 안내'],more:'담당자 소개, 상담 예약 안내',hours:'평일 9~18시',faq:['첫 상담에 비용이 있습니까?','첫 상담 30분은 비용을 받지 않습니다.'],park:'건물 지하 1시간 무료',list:'업무 분야 · 이름 · 설명',form:'상담 신청'},
-  '제조·기업(B2B)':{name:'예: ○○ 정밀',head:'도면 하나로 시제품까지',who:'기업 구매 · 개발 담당자',kw:'대전 정밀가공, 시제품 제작',dom:'ooprecision.co.kr',svc:['정밀 가공','소량 가능 · 납기 2주'],why:['소량 주문','1개부터 제작'],more:'설비 목록, 납품 실적',hours:'평일 8~17시',faq:['1개도 만들어 주십니까?','시제품은 1개부터 제작합니다.'],park:'공장 앞 방문 주차 5대',list:'제품 · 이름 · 규격 · 사진',form:'견적 문의'},
-  '부동산 중개':{name:'예: ○○ 공인중개사사무소',head:'직접 보고 확인한 매물만 알려 드립니다',who:'이사를 준비하는 가족, 근처 직장인',kw:'지족동 부동산, 유성 원룸',dom:'oorealty.co.kr',svc:['아파트 매매 · 전월세','상담 · 현장 안내'],why:['직접 확인','방문해 본 매물만 소개'],more:'매물 목록, 동네 안내',hours:'평일 9~19시 · 토 10~16시',faq:['중개 보수는 얼마입니까?','법정 한도 안에서 계약 전에 미리 알려 드립니다.'],park:'사무소 앞 2대',list:'매물 · 종류 · 소재지 · 면적 · 가격',form:'매물 문의'},
-  '학교·공공기관·복지시설':{name:'예: ○○ 복지관 · ○○ 도서관',head:'누구나 편하게 이용하는 동네 복지관',who:'지역 주민, 어르신, 학부모',kw:'○○동 복지관, ○○구 도서관',dom:'oo.or.kr',svc:['프로그램','대상 · 요일 · 시간'],why:['무료 프로그램','주민 누구나 참여'],more:'프로그램 일정표, 공지 사항',hours:'평일 9~18시 · 주말 휴관',faq:['누구나 이용할 수 있습니까?','지역 주민이면 누구나 이용하실 수 있습니다.'],park:'건물 앞 주차장 10대',list:'프로그램 · 이름 · 대상 · 일정',form:'프로그램 신청'},
-  '종교·비영리 단체':{name:'예: ○○교회 · ○○ 협회',head:'이웃과 함께하는 지역 공동체',who:'처음 오시는 분, 지역 주민',kw:'유성 ○○교회, 대전 ○○ 협회',dom:'oo.or.kr',svc:['정기 모임','매주 ○요일 ○시 · 누구나'],why:['열린 모임','처음 오셔도 함께할 수 있음'],more:'행사 사진, 후원 안내',hours:'모임 시간 · 사무실 운영 시간',faq:['처음 가도 됩니까?','누구나 오실 수 있습니다. 입구에서 안내해 드립니다.'],park:'건물 앞 주차장 20대',list:'모임 · 이름 · 요일 · 시간',form:'모임 참여 신청'}
+  '':{name:'예: 지족동 ○○ 커피 · ○○ 세무회계 · ○○ 공방',head:'10년째 같은 자리, 아침마다 볶는 커피',who:'동네 주민, 근처 직장인, 처음 오시는 분',kw:'지족동 카페, 유성 세무사',dom:'example.co.kr',svc:['대표 상품 · 서비스','가격 · 시간 · 대상'],why:['당일 처리','오전에 맡기시면 그날 안에'],more:'유튜브 영상 넣기, 직원 소개 페이지',hours:'평일 9~18시 · 토 10~15시 · 일 휴무',faq:['주차할 곳이 있습니까?','건물 뒤에 6대까지 주차하실 수 있습니다.'],park:'건물 뒤 주차 6대 · 1층 편의점 옆 입구',list:'상품 · 이름 · 가격 · 사진',form:'상담 신청',en:'OO COFFEE · OO STUDIO',pay:'예약금 10,000원 · 대표 상품 14,000원'},
+  '카페·음식점':{name:'예: 지족동 ○○ 커피',head:'10년째 같은 자리, 아침마다 볶는 커피',who:'근처 직장인, 동네 주민',kw:'지족동 카페, 유성 핸드드립',dom:'oocoffee.co.kr',svc:['핸드드립','원두 3종 · 6,000원'],why:['매일 로스팅','그날 볶은 원두만 씀'],more:'메뉴판 사진, 단체 주문 안내',hours:'매일 8~21시 · 월 휴무',faq:['단체 주문이 됩니까?','10잔 이상은 하루 전에 전화로 예약해 주십시오.'],park:'건물 앞 2대 · 맞은편 공영주차장',list:'메뉴 · 이름 · 가격 · 사진',form:'단체 주문 문의',en:'OO COFFEE',pay:'원두 200g 14,000원 · 드립백 10개 12,000원'},
+  '매장·소매':{name:'예: ○○ 꽃집',head:'오늘 들어온 꽃으로 그날 만드는 꽃다발',who:'선물을 고르는 직장인',kw:'유성 꽃집, 꽃다발 배달',dom:'ooflower.co.kr',svc:['꽃다발','3만원부터 · 당일 픽업'],why:['당일 제작','주문한 날 만들어 드림'],more:'상품 사진 목록, 배달 지역 안내',hours:'매일 10~20시',faq:['배달이 됩니까?','유성구 안은 당일 배달합니다.'],park:'매장 앞 1대 · 맞은편 공영주차장',list:'상품 · 이름 · 가격 · 사진',form:'꽃다발 주문',en:'OO FLOWER',pay:'꽃다발 30,000원 · 꽃바구니 50,000원'},
+  '뷰티·미용':{name:'예: ○○ 헤어',head:'손질이 쉬운 머리, 한 분씩 오래 봐 드립니다',who:'동네 주민, 근처 직장인',kw:'지족동 미용실, 유성 커트',dom:'oohair.co.kr',svc:['커트','30분 · 예약제'],why:['1인 예약제','한 번에 한 분만'],more:'시술 전후 사진, 가격표',hours:'화~일 10~20시 · 월 휴무',faq:['예약 없이 가도 됩니까?','예약 손님을 먼저 모십니다. 전화로 빈 시간을 확인해 주십시오.'],park:'건물 지하 1시간 무료',list:'시술 · 이름 · 시간 · 가격',form:'시술 예약',en:'OO HAIR',pay:'커트 예약금 10,000원 · 펌 예약금 20,000원'},
+  '병원·의원·약국':{name:'예: ○○ 내과의원',head:'예약제로 운영하는 동네 내과',who:'근처 직장인, 어르신',kw:'유성 내과, 건강검진',dom:'ooclinic.co.kr',svc:['건강검진','예약 · 소요 시간 · 준비 사항'],why:['예약 진료','예약 시간에 맞춰 진료'],more:'의료진 소개, 진료 시간표',hours:'평일 9~18시 · 토 9~13시 · 점심 13~14시',faq:['주차가 됩니까?','건물 지하 주차장을 2시간 무료로 쓰실 수 있습니다.'],park:'건물 지하 2시간 무료 · 엘리베이터 3층',list:'의료진 · 이름 · 진료 과목 · 진료 시간',form:'진료 예약 문의',en:'OO CLINIC',pay:'건강검진 예약금 30,000원'},
+  '학원·교습소':{name:'예: ○○ 영어학원',head:'한 명씩 끝까지 책임지는 동네 영어학원',who:'초등 자녀를 둔 학부모',kw:'유성 영어학원, 지족동 초등영어',dom:'ooenglish.co.kr',svc:['초등 정규반','주 3회 · 한 반 8명'],why:['소수 정예','한 반 8명까지만'],more:'강사 소개, 시간표',hours:'평일 14~22시 · 토 10~15시',faq:['레벨 테스트가 있습니까?','첫 상담 때 20분 테스트로 반을 정합니다.'],park:'건물 뒤 잠시 정차 가능 · 셔틀 운행',list:'강좌 · 과목 · 대상 · 시간',form:'상담 신청',en:'OO ENGLISH ACADEMY',pay:'수강료 1개월 250,000원 · 교재비 15,000원'},
+  '공방·클래스':{name:'예: ○○ 도자기 공방',head:'두 시간이면 나만의 컵 하나',who:'주말 데이트 커플, 취미를 찾는 직장인',kw:'대전 도자기 공방, 원데이클래스',dom:'oocraft.co.kr',svc:['원데이 클래스','2시간 · 최대 6명'],why:['소수 수업','한 번에 6명까지'],more:'작품 사진, 클래스 일정표',hours:'화~일 11~20시',faq:['혼자 가도 됩니까?','네, 1명부터 신청하실 수 있습니다.'],park:'골목 끝 공영주차장 이용',list:'클래스 · 이름 · 시간 · 가격',form:'클래스 예약',en:'OO CRAFT STUDIO',pay:'원데이 클래스 45,000원 · 재료비 10,000원'},
+  '스포츠·레저':{name:'예: ○○ 필라테스',head:'한 명씩 자세를 봐 주는 소규모 필라테스',who:'운동을 처음 시작하는 직장인',kw:'유성 필라테스, 지족동 PT',dom:'oopilates.co.kr',svc:['1:1 레슨','50분 · 주 2회'],why:['소규모 수업','한 반 4명까지'],more:'강사 소개, 수업 시간표',hours:'평일 7~22시 · 토 9~14시',faq:['운동복을 빌려줍니까?','운동복과 수건을 드립니다.'],park:'건물 지하 2시간 무료',list:'수업 · 이름 · 요일 · 시간',form:'체험 수업 신청',en:'OO PILATES',pay:'체험 수업 20,000원 · 1:1 레슨 10회 500,000원'},
+  '숙박·여행':{name:'예: ○○ 펜션',head:'창문을 열면 바로 바다, 하루 네 팀만',who:'가족 여행객, 커플',kw:'○○ 펜션, ○○ 바다 숙소',dom:'oostay.co.kr',svc:['바다 전망 객실','2인 기준 · 바비큐 가능'],why:['하루 네 팀','조용히 쉬실 수 있게'],more:'객실 사진, 주변 관광지 안내',hours:'입실 15시 · 퇴실 11시',faq:['반려동물과 함께 묵을 수 있습니까?','소형견 1마리까지 함께 묵으실 수 있습니다.'],park:'객실마다 1대',list:'객실 · 이름 · 인원 · 가격 · 사진',form:'숙박 문의',en:'OO STAY',pay:'객실 예약금 50,000원 · 바비큐 20,000원'},
+  '전문직(세무·법무·노무 등)':{name:'예: ○○ 세무회계',head:'사장님 장부, 신고 기한 전에 먼저 챙겨 드립니다',who:'처음 창업한 사장님',kw:'유성 세무사, 기장 대리',dom:'ootax.co.kr',svc:['기장 대리','매출 규모별 · 월 단위'],why:['먼저 연락','신고 기한 전에 먼저 안내'],more:'담당자 소개, 상담 예약 안내',hours:'평일 9~18시',faq:['첫 상담에 비용이 있습니까?','첫 상담 30분은 비용을 받지 않습니다.'],park:'건물 지하 1시간 무료',list:'업무 분야 · 이름 · 설명',form:'상담 신청',en:'OO TAX & ACCOUNTING',pay:'첫 상담 50,000원 · 기장 대리 월 100,000원'},
+  '제조·기업(B2B)':{name:'예: ○○ 정밀',head:'도면 하나로 시제품까지',who:'기업 구매 · 개발 담당자',kw:'대전 정밀가공, 시제품 제작',dom:'ooprecision.co.kr',svc:['정밀 가공','소량 가능 · 납기 2주'],why:['소량 주문','1개부터 제작'],more:'설비 목록, 납품 실적',hours:'평일 8~17시',faq:['1개도 만들어 주십니까?','시제품은 1개부터 제작합니다.'],park:'공장 앞 방문 주차 5대',list:'제품 · 이름 · 규격 · 사진',form:'견적 문의',en:'OO PRECISION',pay:'샘플 제작 100,000원'},
+  '부동산 중개':{name:'예: ○○ 공인중개사사무소',head:'직접 보고 확인한 매물만 알려 드립니다',who:'이사를 준비하는 가족, 근처 직장인',kw:'지족동 부동산, 유성 원룸',dom:'oorealty.co.kr',svc:['아파트 매매 · 전월세','상담 · 현장 안내'],why:['직접 확인','방문해 본 매물만 소개'],more:'매물 목록, 동네 안내',hours:'평일 9~19시 · 토 10~16시',faq:['중개 보수는 얼마입니까?','법정 한도 안에서 계약 전에 미리 알려 드립니다.'],park:'사무소 앞 2대',list:'매물 · 종류 · 소재지 · 면적 · 가격',form:'매물 문의',en:'OO REALTY',pay:'서비스 이름 50,000원'},
+  '학교·공공기관·복지시설':{name:'예: ○○ 복지관 · ○○ 도서관',head:'누구나 편하게 이용하는 동네 복지관',who:'지역 주민, 어르신, 학부모',kw:'○○동 복지관, ○○구 도서관',dom:'oo.or.kr',svc:['프로그램','대상 · 요일 · 시간'],why:['무료 프로그램','주민 누구나 참여'],more:'프로그램 일정표, 공지 사항',hours:'평일 9~18시 · 주말 휴관',faq:['누구나 이용할 수 있습니까?','지역 주민이면 누구나 이용하실 수 있습니다.'],park:'건물 앞 주차장 10대',list:'프로그램 · 이름 · 대상 · 일정',form:'프로그램 신청',en:'OO COMMUNITY CENTER',pay:'프로그램 재료비 10,000원 · 수강료 30,000원'},
+  '종교·비영리 단체':{name:'예: ○○교회 · ○○ 협회',head:'이웃과 함께하는 지역 공동체',who:'처음 오시는 분, 지역 주민',kw:'유성 ○○교회, 대전 ○○ 협회',dom:'oo.or.kr',svc:['정기 모임','매주 ○요일 ○시 · 누구나'],why:['열린 모임','처음 오셔도 함께할 수 있음'],more:'행사 사진, 후원 안내',hours:'모임 시간 · 사무실 운영 시간',faq:['처음 가도 됩니까?','누구나 오실 수 있습니다. 입구에서 안내해 드립니다.'],park:'건물 앞 주차장 20대',list:'모임 · 이름 · 요일 · 시간',form:'모임 참여 신청',en:'OO ASSOCIATION',pay:'행사 참가비 20,000원 · 회비 10,000원'}
+};
+/* 업종별 글 예시 (10/13 홈페이지 팀) — 「업종 예시 보기」 · 「문장별로 나눠 쓰기」 칸 안 회색 예시 · 미리 보기의 빈 자리 · 신청서 디자인 화면 예시
+   about = 소개 글 4문장(① 설립 시기 · 장소 ② 주요 사업 · 서비스 ③ 강점 (사실 기준) ④ 적합한 대상) · greet = 인사말 3문장(① 인사 ② 설립 배경 ③ 고객에 대한 약속)
+   한 문장 = [보여 줄 예시, 칸에 넣을 때(사실 자리는 ○○)] — 두 번째가 없으면 같은 문장을 넣음 · why = 디자인 화면 예시의 「우리의 강점」 3개
+   🔴 고객 홈페이지에 들어갈 글의 «예»라 문체 규칙 대상이 아닙니다(EX 와 같음). 과장 · 의료광고 표현(HYPE · MED)과 종교 용어는 넣지 않습니다.
+   🔴 칸에 넣은 예시의 ○○ 는 실제 내용으로 바꿔야 제출되고(필수 검사), 예시 문장이 그대로 남으면 노란 주의 → 담당자 확인(지시서 13장). */
+var EX_TXT={
+  '':{about:[['2015년 지족동에서 문을 열었습니다.','○○○○년 ○○동에서 문을 열었습니다.'],['주요 서비스는 생활 수선과 맞춤 제작입니다.','주요 서비스는 ○○입니다.'],['모든 작업은 대표가 처음부터 끝까지 직접 맡습니다.'],['처음 이용하시는 분도 편하게 상담받으실 수 있습니다.']],
+      greet:[['안녕하십니까. 대표 홍길동입니다.','안녕하십니까. ○○ 대표 ○○○입니다.'],['가까운 곳에서 믿고 맡길 수 있는 가게가 되고 싶어 문을 열었습니다.'],['앞으로도 한 분 한 분 정성껏 모시겠습니다.']],
+      why:[['직접 상담','대표가 처음부터 끝까지 맡습니다'],['예약 운영','기다리지 않게 시간을 맞춥니다'],['가까운 가게','동네에서 바로 찾을 수 있습니다']]},
+  '카페·음식점':{about:[['2015년 지족동 골목에서 문을 열었습니다.','○○○○년 ○○동에서 문을 열었습니다.'],['매일 아침 직접 볶은 원두로 핸드드립 커피를 내립니다.','대표 메뉴는 ○○입니다.'],['원두는 그날 볶은 것만 쓰고, 디저트도 매장에서 직접 굽습니다.'],['조용히 커피 한잔하며 쉬어 가고 싶은 분들께 잘 맞습니다.']],
+      greet:[['안녕하십니까. 지족동 커피집 대표 홍길동입니다.','안녕하십니까. ○○ 대표 ○○○입니다.'],['좋아하는 커피를 이웃과 나누고 싶어 작은 가게를 열었습니다.'],['오늘도 같은 맛, 같은 마음으로 한 잔씩 내리겠습니다.']],
+      why:[['매일 로스팅','그날 볶은 원두만 씁니다'],['직접 굽는 디저트','매장에서 매일 굽습니다'],['조용한 자리','오래 머물러도 편합니다']]},
+  '매장·소매':{about:[['2018년 봉명동에서 문을 열었습니다.','○○○○년 ○○동에서 문을 열었습니다.'],['매일 새벽 들여온 꽃으로 꽃다발과 꽃바구니를 만듭니다.','주요 상품은 ○○입니다.'],['주문을 받은 날 바로 만들어 신선한 상태로 전합니다.'],['기념일 선물이나 행사 꽃을 준비하는 분들이 많이 찾습니다.']],
+      greet:[['안녕하십니까. 꽃집 대표 홍길동입니다.','안녕하십니까. ○○ 대표 ○○○입니다.'],['꽃 한 송이로 하루가 달라지는 순간을 함께하고 싶어 가게를 열었습니다.'],['받는 분의 마음까지 생각하며 정성껏 만들겠습니다.']],
+      why:[['당일 제작','주문한 날 바로 만듭니다'],['새벽 입고','그날 들어온 꽃만 씁니다'],['당일 배달','유성구 안은 그날 배달합니다']]},
+  '뷰티·미용':{about:[['2016년 지족동에서 문을 열었습니다.','○○○○년 ○○동에서 문을 열었습니다.'],['커트와 펌, 염색을 예약제로 운영합니다.','주요 시술은 ○○입니다.'],['한 번에 한 분만 모셔 상담부터 마무리까지 한 사람이 맡습니다.'],['집에서도 손질하기 쉬운 머리를 원하는 분들께 잘 맞습니다.']],
+      greet:[['안녕하십니까. 원장 홍길동입니다.','안녕하십니까. ○○ 원장 ○○○입니다.'],['오래 다녀도 편한 미용실을 만들고 싶어 문을 열었습니다.'],['한 분 한 분의 머리를 끝까지 책임지고 손질하겠습니다.']],
+      why:[['1인 예약제','한 번에 한 분만 모십니다'],['상담 먼저','원하는 머리를 먼저 묻습니다'],['손질 안내','집에서 하는 방법까지 알려 줍니다']]},
+  '병원·의원·약국':{about:[['2012년 지족동에 개원했습니다.','○○○○년 ○○동에 개원했습니다.'],['내과 진료와 건강검진을 하고 있습니다.','진료 과목은 ○○입니다.'],['예약제로 운영해 기다리는 시간을 줄였습니다.'],['근처 직장인과 어르신들이 많이 찾습니다.']],
+      greet:[['안녕하십니까. 원장 홍길동입니다.','안녕하십니까. ○○ 원장 ○○○입니다.'],['동네에서 편하게 찾을 수 있는 의원을 만들고자 개원했습니다.'],['환자분의 이야기를 충분히 듣고 쉽게 설명하겠습니다.']],
+      why:[['예약 진료','예약 시간에 맞춰 진료합니다'],['토요일 진료','토요일 오전에도 문을 엽니다'],['주차 가능','건물 지하 주차장을 이용합니다']]},
+  '학원·교습소':{about:[['2014년 지족동에서 문을 열었습니다.','○○○○년 ○○동에서 문을 열었습니다.'],['초등부와 중등부 영어 정규반을 운영합니다.','운영 과목은 ○○입니다.'],['한 반을 8명 이하로 운영해 수업 중 질문을 바로 해결합니다.','한 반을 ○명 이하로 운영합니다.'],['기초부터 차근차근 다시 잡고 싶은 학생에게 잘 맞습니다.']],
+      greet:[['안녕하십니까. 원장 홍길동입니다.','안녕하십니까. ○○ 원장 ○○○입니다.'],['아이들이 스스로 공부하는 힘을 기르도록 돕고 싶어 학원을 열었습니다.'],['학생 한 명 한 명의 변화를 학부모님과 함께 살피겠습니다.']],
+      why:[['소수 정예','한 반 8명까지만'],['수준별 반','첫 상담 때 반을 정합니다'],['매달 상담','학부모 상담을 매달 합니다']]},
+  '공방·클래스':{about:[['2019년 유성구에서 공방을 열었습니다.','○○○○년 ○○동에서 공방을 열었습니다.'],['도자기 원데이 클래스와 정규 과정을 운영합니다.','주요 클래스는 ○○입니다.'],['한 번에 6명까지만 받아 한 분씩 옆에서 함께 만듭니다.','한 번에 ○명까지만 받습니다.'],['처음 해 보는 분도 두 시간이면 작품 하나를 완성할 수 있습니다.']],
+      greet:[['안녕하십니까. 공방 대표 홍길동입니다.','안녕하십니까. ○○ 대표 ○○○입니다.'],['손으로 만드는 즐거움을 더 많은 분과 나누고 싶어 공방을 열었습니다.'],['편하게 오셔서 즐겁게 만들고 가실 수 있게 준비하겠습니다.']],
+      why:[['소수 수업','한 번에 6명까지'],['재료 포함','따로 준비할 것이 없습니다'],['당일 완성','두 시간이면 작품 하나']]},
+  '스포츠·레저':{about:[['2017년 지족동에서 문을 열었습니다.','○○○○년 ○○동에서 문을 열었습니다.'],['기구 필라테스 개인 레슨과 소규모 그룹 수업을 운영합니다.','주요 프로그램은 ○○입니다.'],['그룹 수업도 4명까지만 받아 한 분씩 자세를 봅니다.','그룹 수업은 ○명까지만 받습니다.'],['운동을 처음 시작하거나 오랜만에 다시 시작하는 분께 잘 맞습니다.']],
+      greet:[['안녕하십니까. 대표 강사 홍길동입니다.','안녕하십니까. ○○ 대표 ○○○입니다.'],['누구나 무리 없이 꾸준히 운동할 수 있는 곳을 만들고 싶었습니다.'],['회원님의 몸 상태에 맞춰 한 걸음씩 함께하겠습니다.']],
+      why:[['소규모 수업','한 반 4명까지'],['1:1 레슨','자세를 한 분씩 봅니다'],['체험 수업','등록 전에 한 번 해 봅니다']]},
+  '숙박·여행':{about:[['2020년 바닷가 마을에 문을 열었습니다.','○○○○년 ○○에 문을 열었습니다.'],['바다가 보이는 객실 네 개를 운영합니다.','객실은 ○개입니다.'],['하루 네 팀만 받아 조용히 쉬어 가실 수 있습니다.','하루 ○팀만 받습니다.'],['가족 여행이나 둘만의 여행을 계획하는 분들께 잘 맞습니다.']],
+      greet:[['안녕하십니까. 주인 홍길동입니다.','안녕하십니까. ○○ 대표 ○○○입니다.'],['바다를 보며 쉬어 가는 시간을 나누고 싶어 숙소를 열었습니다.'],['머무는 동안 불편함이 없도록 세심하게 살피겠습니다.']],
+      why:[['하루 네 팀','조용히 쉬실 수 있게'],['바다 전망','객실 창으로 바다가 보입니다'],['바비큐','객실마다 바비큐 자리']]},
+  '전문직(세무·법무·노무 등)':{about:[['2011년 유성구에서 사무소를 열었습니다.','○○○○년 ○○에서 사무소를 열었습니다.'],['개인사업자와 법인의 기장, 세무 신고, 세무 상담을 합니다.','주요 업무는 ○○입니다.'],['신고 기한 전에 필요한 자료를 먼저 안내합니다.'],['처음 창업해 세무가 낯선 사장님들께 잘 맞습니다.']],
+      greet:[['안녕하십니까. 대표 세무사 홍길동입니다.','안녕하십니까. ○○ 대표 ○○○입니다.'],['사업에만 집중할 수 있도록 곁에서 돕는 사무소가 되고자 합니다.'],['어려운 용어 대신 쉬운 말로 설명하고, 기한보다 먼저 연락하겠습니다.']],
+      why:[['먼저 연락','신고 기한 전에 먼저 안내'],['쉬운 설명','어려운 용어 없이 설명'],['첫 상담','첫 상담 30분은 비용이 없습니다']]},
+  '제조·기업(B2B)':{about:[['2008년 대덕산업단지에서 설립했습니다.','○○○○년 ○○에서 설립했습니다.'],['정밀 가공 부품과 시제품을 제작합니다.','주요 제품은 ○○입니다.'],['도면 검토부터 가공, 검사까지 한 공장에서 진행합니다.'],['소량 시제품이 필요한 개발 담당자와 연구소에서 많이 찾습니다.']],
+      greet:[['안녕하십니까. 대표이사 홍길동입니다.','안녕하십니까. ○○ 대표 ○○○입니다.'],['도면 한 장으로 아이디어를 제품으로 만드는 일을 해 왔습니다.'],['약속한 납기와 품질을 지키는 회사가 되겠습니다.']],
+      why:[['소량 주문','1개부터 제작'],['한 공장에서','설계부터 검사까지'],['납기 준수','약속한 날짜에 납품']]},
+  '부동산 중개':{about:[['2013년 지족동에서 문을 열었습니다.','○○○○년 ○○동에서 문을 열었습니다.'],['아파트 매매와 전월세, 상가 중개를 합니다.','주요 중개 분야는 ○○입니다.'],['직접 방문해 확인한 매물만 소개합니다.'],['이사를 준비하는 가족과 근처 직장인이 많이 찾습니다.']],
+      greet:[['안녕하십니까. 대표 공인중개사 홍길동입니다.','안녕하십니까. ○○ 대표 ○○○입니다.'],['이 동네에서 오래 지내며 쌓은 정보를 정직하게 나누고 있습니다.'],['계약이 끝날 때까지 꼼꼼하게 확인하겠습니다.']],
+      why:[['직접 확인','방문해 본 매물만 소개'],['동네 정보','학교 · 교통 · 생활 정보'],['계약까지','계약서까지 꼼꼼히 확인']]},
+  '학교·공공기관·복지시설':{about:[['2005년 지역 주민을 위한 복지관으로 문을 열었습니다.','○○○○년 문을 열었습니다.'],['어르신 돌봄, 아동 학습 지원, 평생교육 프로그램을 운영합니다.','주요 프로그램은 ○○입니다.'],['대부분의 프로그램은 지역 주민이면 누구나 무료로 참여할 수 있습니다.'],['가까운 곳에서 배우고 쉬고 싶은 주민 누구에게나 열려 있습니다.']],
+      greet:[['안녕하십니까. 관장 홍길동입니다.','안녕하십니까. ○○ 관장 ○○○입니다.'],['주민 누구나 편하게 찾는 열린 공간을 만들고자 합니다.'],['지역과 함께 성장하는 기관이 되겠습니다.']],
+      why:[['무료 프로그램','주민 누구나 참여'],['가까운 공간','걸어서 오는 동네 복지관'],['다양한 강좌','어르신부터 아이까지']]},
+  '종교·비영리 단체':{about:[['1998년 지역 주민들의 모임으로 시작했습니다.','○○○○년 ○○로 시작했습니다.'],['정기 모임과 봉사 활동, 지역 나눔 행사를 이어 오고 있습니다.','주요 활동은 ○○입니다.'],['처음 오시는 분도 부담 없이 함께할 수 있도록 안내합니다.'],['이웃과 함께 의미 있는 활동을 하고 싶은 분들께 열려 있습니다.']],
+      greet:[['안녕하십니까. 대표 홍길동입니다.','안녕하십니까. ○○ 대표 ○○○입니다.'],['이웃과 함께 나누는 공동체를 만들고자 모임을 이어 왔습니다.'],['앞으로도 지역에 보탬이 되는 일을 꾸준히 하겠습니다.']],
+      why:[['열린 모임','처음 오셔도 함께합니다'],['나눔 활동','이웃을 돕는 정기 봉사'],['지역 행사','주민과 함께하는 행사']]}
 };
 /* 손님이 할 일 (「홈페이지의 목적」) — 화면 카드의 value 와 같아야 합니다. 첫 화면 큰 버튼을 뺀 나머지 버튼은 이 순서 */
 var GOALS=['전화 문의','카카오톡 상담','방문','신청 · 예약'];
@@ -1558,6 +1970,9 @@ var POSTCODE_SRC="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.
 function b64enc(t){ return btoa(unescape(encodeURIComponent(t))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
 function b64dec(t){ t=t.replace(/-/g,'+').replace(/_/g,'/'); while(t.length%4)t+='='; return decodeURIComponent(escape(atob(t))); }
 var MODE=MAT_ID?'material':'apply', SNAP=SNAP_IN||null;   /* 신청 값은 링크가 아니라 서버에서 받습니다 — 하단 시작 부분 */
+/* 구매 방법(등록 대행 / 직접 구매)이 생기기 전에 낸 신청 — 그때 「새로 구매」는 «등록 대행»뿐이었으므로 구매 방법이 없으면 등록 대행으로 읽음 (10/13)
+   제작 자료 화면에서는 도메인 단계를 고칠 수 없어, 없으면 요약 · 지시서의 주소 · 등록 회사 · 소유자가 빈칸이 됩니다 */
+if(SNAP&&SNAP.d&&SNAP.d.r&&SNAP.d.f&&SNAP.d.r.domain==='유료 도메인 새로'&&!SNAP.d.r.dombuy&&SNAP.d.f.f_dom_want1)SNAP.d.r.dombuy='대행';
 document.body.classList.remove('mode-apply','mode-material'); document.body.classList.add('mode-'+MODE);
 window.addEventListener('hashchange',function(){ if(MODE==='material'||/^#m=/.test(location.hash))location.reload(); });
 var BTN_TXT=MODE==='material'?'제작 자료 보내기 ↗':'신청서 제출 ↗';
@@ -1739,7 +2154,8 @@ function drawQuote(){
       +'<td class="tnum">'+(x.total!=null?won(x.total):'—')+'</td></tr>';
   }).join('');
   $('mini_plan').textContent=p?p.v:'정가 기준';
-  $('q_dom').hidden=one('domain')!=='유료 도메인 새로';
+  $('q_dom').hidden=one('domain')!=='유료 도메인 새로'||one('dombuy')==='직접';
+  $('q_dom_self').hidden=!selfBuy();
   $('mini_txt').innerHTML='<span style="white-space:nowrap">계약 시 '+won(show.due)+'원</span> · <span style="white-space:nowrap">매달 '+won(c.mon)+'원</span>';
   $('board_cnt').textContent='지금 게시판 '+c.nBoard+'개 → 게시판 제작비 +'+won(PRICE.board.make)+'원 · 월 관리비 +'+won(PRICE.board.mon+(c.nBoard-1)*PRICE.board.extraMon)+'원';
 }
@@ -1808,6 +2224,8 @@ function applyExamples(){
   ph('f_name',e.name); ph('f_head','예: '+e.head); ph('f_who_add','예: '+e.who); ph('f_kw','예: '+e.kw);
   ph('f_dom_want1','예: '+e.dom); ph('f_more','예: '+e.more); ph('f_hours','예: '+e.hours); ph('f_park','예: '+e.park);
   ph('f_list_what','예: '+e.list); ph('f_form_title','예: '+e.form);
+  ph('f_en_name','예: '+e.en); ph('f_pay_what','예: '+e.pay); ph('f_dom_self','예: '+e.dom); $('dom_ex').textContent=e.dom;   /* 업종에 맞는 예시 (10/13) */
+  if(one('owner')==='기관') $('f_own_en').placeholder='예: '+e.en;
   $('ex_head').innerHTML='좋은 예: 「'+esc(e.head)+'」 · 피할 것: 「최고의 서비스」처럼 어디에나 쓸 수 있는 말';
   drawListMock();
   $('ex_svc').textContent='예: 「'+e.svc[0]+'」 · 「'+e.svc[1]+'」';
@@ -1839,12 +2257,6 @@ function drawFaqSugs(){
   var html=left.length?'<span class="lb">자주 받는 질문 예시 (누르면 입력)</span>'+left.map(function(q){ return '<button type="button" data-faq="'+esc(q)+'">+ '+esc(q)+'</button>'; }).join(''):'';
   if($('faq_sugs').innerHTML!==html)$('faq_sugs').innerHTML=html;
 }
-/* 6단계 「모두 없음」 — 세 칸(원하는 색 · 피하고 싶은 색 · 참고할 홈페이지)의 「없음」을 한 번에 고름 (확인된 없음은 그대로 남음) */
-$('design_none').addEventListener('click',function(){
-  ['tg_color','tg_avoid','tg_like'].forEach(function(n){ var r=document.querySelector('input[name="'+n+'"][value="없음"]'); if(r&&!r.disabled){ r.checked=true; r.dispatchEvent(new Event('change',{bubbles:true})); } });
-  touched(); refresh();
-});
-function syncNoneBar(){ var b=$('design_none_bar'); if(b)b.hidden=!!(one('tg_color')&&one('tg_avoid')&&one('tg_like')); }
 /* 색 고르기 (10/4 저녁) — 원하는 색은 누른 순서대로 1 · 2 · 3순위, 피하고 싶은 색은 3개까지. 1개만 골라도 됨.
    고른 것은 숨은 칸(f_colors · f_avoid_colors)에 [{k:이름,h:색값,c:직접 고른 색이면 1}] 으로 남아 임시 저장 · 링크에 같이 들어감.
    한쪽에서 고른 색은 다른 쪽에서 고를 수 없음 (원하는 색이면서 피하는 색이 되지 않게) */
@@ -2055,6 +2467,13 @@ function syncReg(){
   $('reg_code').textContent=hint;
 }
 /* 주소 공개 — 방문 · 카드 결제가 있으면 반드시 공개(지도 · 전자상거래법), 없을 때만 고객에게 물음 */
+/* 사진 전달 방법 (10/13) — 고르기 전에는 로고 · 사진 칸을 숨기고, 카카오톡이면 첨부 칸을 숨김 */
+function syncPhotoVia(){
+  var st=$('step7'); if(!st)return;
+  st.classList.toggle('via-none',!one('tg_pvia')); st.classList.toggle('via-kk',photoKakao());
+  var n=FILES.logo.length+FILES.main.length+FILES.photo.length, kl=$('kk_left');
+  if(kl){ kl.hidden=!(photoKakao()&&n); kl.textContent=n?'이 화면에 첨부한 사진 '+n+'장은 보내지 않습니다. 카카오톡으로 함께 보내 주십시오.':''; }
+}
 function addrForced(){ return hasGoal('방문')?'방문':(hasFeat('pay')?'카드 결제':(isRealty()?'부동산 중개':'')); }
 function addrPublic(){ return !!addrForced()||one('tg_addrpub')==='공개'; }
 function syncAddr(){
@@ -2085,14 +2504,16 @@ function syncDomain(){
   $('dom_have').classList.toggle('show',d==='이미 있음');
   $('dom_free').classList.toggle('show',d==='무료 주소');
   $('dom_buy').classList.toggle('show',d==='유료 도메인 새로');
-  $('owner_box').classList.toggle('show',d==='유료 도메인 새로'&&!!ow);
+  $('dom_self').classList.toggle('show',selfBuy());
+  $('dom_agent').classList.toggle('show',agent());
+  $('owner_box').classList.toggle('show',agent()&&!!ow);
   $('own_org').classList.toggle('show',ow==='기관');
   $('f_dom_reg_etc').classList.toggle('show',val('f_dom_reg')==='기타');
   /* 🔴 「받는 곳」은 «이름»으로 알려야 합니다 — 「위에서 고르실 회사」만으로는 누구에게 가는지 알 수 없습니다 (행정 창 2026-10-14) */
   $('dom_registrar').textContent=registrar()?registrar()+' (고객님이 선택하신 도메인 등록 회사 · 이곳으로만 제공합니다)'
                                              :'고객님이 선택하신 도메인 등록 회사 (가비아 · 후이즈 · 카페24 등, 선택하신 곳으로만 제공합니다)';
   $('lab_own_name').textContent=ow==='기관'?'소유자명 (기관명)':'소유자명 (이름)';
-  $('f_own_en').placeholder=ow==='기관'?'예: INTO MARKETING':'예: HONG GILDONG (여권 영문 이름과 같게)';
+  $('f_own_en').placeholder=ow==='기관'?'예: '+(EX[val('f_bizcat')]||EX['']).en:'예: HONG GILDONG (여권 영문 이름과 같게)';
   /* 소유자 추천 — 「업체 정보」에서 고른 등록증 기준 */
   var r=regInfo(), k=regKind(), rec='';
   if(r&&r.rec==='기관') rec='추천: 기관 · 등록증이 「'+k+'」이므로 도메인도 '+(k==='법인사업자'?'법인':'기관')+' 명의 등록을 권장합니다.';
@@ -2114,8 +2535,8 @@ function syncVisuals(){
 function drawCounts(){
   $('head_cnt').textContent=val('f_head').length+' / 60자';
   [['f_about','about_cnt'],['f_greet','greet_cnt']].forEach(function(x){
-    var n=val(x[0]).length, m=MIN_LEN[x[0]], el=$(x[1]);
-    el.textContent=n+'자'+(n<m?' · '+m+'자 이상 입력해 주십시오':' ✓'); el.classList.toggle('short',n<m);
+    var n=val(x[0]).length, m=MIN_LEN[x[0]], el=$(x[1]), oo=(val(x[0]).match(/○+/g)||[]).length;   /* 예시를 넣고 아직 바꾸지 않은 ○○ (10/13) */
+    el.textContent=n+'자'+(oo?' · 「○○」 '+oo+'곳을 실제 내용으로 바꿔 주십시오':(n<m?' · '+m+'자 이상 입력해 주십시오':' ✓')); el.classList.toggle('short',n<m||!!oo);
   });
   var pc=FILES.photo.length;
   $('photo_cnt').textContent='지금 '+pc+'장'+(pc<PHOTO_MIN?' · '+PHOTO_MIN+'장 이상 첨부해 주십시오':' ✓');
@@ -2137,7 +2558,11 @@ function is(name,v){ return function(){ return one(name)===v; }; }
 function picked1(name){ return function(){ return !!one(name); }; }
 function feat(k){ return function(){ return hasFeat(k); }; }
 var buying=is('domain','유료 도메인 새로');
-function owning(){ return buying()&&!!one('owner'); }
+function photoAtt(){ return one('tg_pvia')==='첨부'; }        /* 로고 · 사진을 이 화면에서 첨부 */
+function photoKakao(){ return one('tg_pvia')==='카카오톡'; }  /* 로고 · 사진을 카카오톡으로 따로 (10/13) */
+function agent(){ return buying()&&one('dombuy')==='대행'; }     /* 새 도메인 · 인투마케팅이 고객 명의로 등록 대행 → 소유자 정보 · 동의를 받음 (10/10) */
+function selfBuy(){ return buying()&&one('dombuy')==='직접'; }   /* 새 도메인 · 고객이 직접 구매 → 소유자 정보를 받지 않음 */
+function owning(){ return agent()&&!!one('owner'); }
 function isAcad(){ return val('f_bizcat')==='학원·교습소'&&regKind()!=='학교 · 공공기관'; }   /* 학교는 학원 등록번호가 없음 */
 function isRealty(){ return val('f_bizcat')==='부동산 중개'; }
 function bookOn(){ return hasGoal('신청 · 예약'); }
@@ -2158,7 +2583,7 @@ function regNoMsg(){
 /* 도메인 — 형식 · 블로그 · SNS 주소 · 1순위와 같은지 */
 function domMsg(id,two){
   var v=val(id);
-  if(!v) return two?'1순위와 다른 2순위 주소를 입력해 주십시오.':'원하는 도메인 주소(1순위)를 입력해 주십시오. (예: example.co.kr)';
+  if(!v) return id==='f_dom_self'?'구매할 도메인 주소를 입력해 주십시오. (예: example.co.kr)':(two?'1순위와 다른 2순위 주소를 입력해 주십시오.':'원하는 도메인 주소(1순위)를 입력해 주십시오. (예: example.co.kr)');
   if(isPlatform(v)) return '「'+wantDomain(v)+'」는 블로그 · SNS 등 타사 서비스의 주소로 신규 등록할 수 없습니다. 원하는 도메인 이름을 입력해 주십시오. (예: example.co.kr)';
   if(!domOK(v)) return '도메인 형식이 맞지 않습니다. 영문 · 숫자 · 줄표(-)로 쓰고 끝에 .co.kr · .com 등을 붙여 주십시오. 띄어쓰기와 밑줄(_)은 쓸 수 없습니다.';
   if(two&&wantDomain(v)===wantDomain(val('f_dom_want1'))) return '1순위와 다른 주소를 입력해 주십시오.';
@@ -2189,7 +2614,7 @@ var CHECKS=[
   C('step1','f_realty_no','중개사무소 등록번호',has('f_realty_no'),'중개사무소 등록번호를 입력해 주십시오.',isRealty),
   C('step1','f_realty_name','대표 공인중개사 성함',has('f_realty_name'),'대표 공인중개사(개업공인중개사) 성함을 입력해 주십시오.',isRealty),
 
-  C('step2','goals','방문자 행동',function(){return chosenGoals().length>0;},'방문자 행동을 1개 이상 선택해 주십시오.'),
+  C('step2','goals','전환 목표',function(){return chosenGoals().length>0;},'전환 목표를 1개 이상 선택해 주십시오.'),
   C('step2','seg_main','첫 화면 큰 버튼',function(){return !!mainGoal();},'선택 항목 중 첫 화면에 가장 크게 배치할 버튼 1개를 선택해 주십시오.',function(){return chosenGoals().length>=2;}),
   C('step2','via','신청 · 예약 받는 방법',picked1('via'),'신청 · 예약 접수 방법을 선택해 주십시오.',bookOn),
   C('step2','f_book_url','예약 페이지 주소',function(){return RE_WEB.test(val('f_book_url'));},'사용 중인 예약 페이지 주소를 입력해 주십시오.',function(){return bookOn()&&one('via')==='쓰고 있는 예약 페이지';}),
@@ -2213,9 +2638,9 @@ var CHECKS=[
   C('step_feat','f_pub_mail','홈페이지에 공개할 이메일',function(){return RE_MAIL.test(val('f_pub_mail'));},'홈페이지 하단에 공개할 이메일을 입력해 주십시오.',feat('pay')),
 
   C('step4','f_head','한 줄 소개',has('f_head'),'한 줄 소개를 입력해 주십시오. 첫 화면 제목이 됩니다.'),
-  C('step4','f_about','소개 글',function(){return val('f_about').length>=MIN_LEN.f_about;},function(){return '소개 글을 '+MIN_LEN.f_about+'자 이상(3문장 이상) 입력해 주십시오. (지금 '+val('f_about').length+'자)';}),
+  C('step4','f_about','소개 글',function(){return val('f_about').length>=MIN_LEN.f_about&&!/○/.test(val('f_about'));},function(){return /○/.test(val('f_about'))?'소개 글의 「○○」 부분을 실제 내용으로 바꿔 주십시오.':'소개 글을 '+MIN_LEN.f_about+'자 이상(3문장 이상) 입력해 주십시오. (지금 '+val('f_about').length+'자)';}),
   C('step4','seg_greet','대표 인사말',picked1('tg_greet'),'대표 인사말 포함 여부를 선택해 주십시오.'),
-  C('step4','f_greet','대표 인사말',function(){return val('f_greet').length>=MIN_LEN.f_greet;},function(){return '대표 인사말을 '+MIN_LEN.f_greet+'자 이상 입력해 주십시오. (지금 '+val('f_greet').length+'자)';},greetOn),
+  C('step4','f_greet','대표 인사말',function(){return val('f_greet').length>=MIN_LEN.f_greet&&!/○/.test(val('f_greet'));},function(){return /○/.test(val('f_greet'))?'대표 인사말의 「○○」 부분을 실제 내용으로 바꿔 주십시오.':'대표 인사말을 '+MIN_LEN.f_greet+'자 이상 입력해 주십시오. (지금 '+val('f_greet').length+'자)';},greetOn),
   C('step4','fld_sign','인사말 서명 직함',picked1('sign'),'인사말 끝에 넣을 직함을 선택해 주십시오. 대표자가 아니면 「+」를 눌러 직함과 성함을 입력해 주십시오.',function(){return greetOn()&&!signOther();}),
   C('step4','f_sign_title','서명 직함 (기타)',has('f_sign_title'),'직함을 입력해 주십시오. (예: 센터장)',function(){return greetOn()&&!signOther()&&one('sign')==='기타';}),
   C('step4','f_sign_name','서명 (직함과 성함)',has('f_sign_name'),'인사말 끝에 넣을 직함과 성함을 입력해 주십시오. (예: 부원장 김영희)',function(){return greetOn()&&signOther();}),
@@ -2234,27 +2659,27 @@ var CHECKS=[
   C('step5','f_sns','SNS · 블로그 주소',function(){return RE_WEB.test(val('f_sns'));},'SNS · 블로그 주소를 한 줄에 하나씩 입력해 주십시오.',is('tg_sns','있음')),
 
   C('step6','theme','분위기',picked1('theme'),'디자인 분위기를 하나 선택해 주십시오.'),
-  C('step6','seg_color','원하는 색',picked1('tg_color'),'원하는 색 유무를 선택해 주십시오.'),
   C('step6','cpal_like','원하는 색',function(){return cRead('like').length>=1;},'원하는 색을 1개 이상 눌러 주십시오. (누른 순서대로 1 · 2 · 3순위)',is('tg_color','있음')),
-  C('step6','seg_avoid','피하고 싶은 색',picked1('tg_avoid'),'피하고 싶은 색 유무를 선택해 주십시오.'),
   C('step6','cpal_avoid','피하고 싶은 색',function(){return cRead('avoid').length>=1;},'피하고 싶은 색을 1개 이상 눌러 주십시오. (3개까지)',is('tg_avoid','있음')),
-  C('step6','seg_like','참고할 홈페이지',picked1('tg_like'),'참고할 홈페이지 유무를 선택해 주십시오.'),
   C('step6','rep_like','참고할 홈페이지 주소',function(){return repOK('rep_like',function(a){return RE_WEB.test(a);});},function(){ return repMsg('rep_like','참고할 홈페이지의 주소(https://…)와 참고할 점을 입력해 주십시오.'); },is('tg_like','있음')),
 
-  C('step7','seg_logo','로고',picked1('tg_logo'),'로고 파일 보유 여부를 선택해 주십시오.'),
-  C('step7','drop_logo','로고 파일',function(){return FILES.logo.length>0;},'로고 파일을 첨부해 주십시오.',is('tg_logo','있음')),
-  C('step7','drop_main','대표 사진',function(){return FILES.main.length>0;},'첫 화면에 넣을 대표 사진 1장을 첨부해 주십시오.'),
-  C('step7','drop_photo','그 밖의 사진',function(){return FILES.photo.length>=PHOTO_MIN;},function(){return '사진을 '+PHOTO_MIN+'장 이상 첨부해 주십시오. (지금 '+FILES.photo.length+'장)';}),
+  C('step7','seg_pvia','사진 전달 방법',picked1('tg_pvia'),'로고 · 사진 전달 방법(이 화면에서 첨부 / 카카오톡으로 따로 전달)을 선택해 주십시오.'),
+  C('step7','seg_logo','로고',picked1('tg_logo'),'로고 파일 보유 여부를 선택해 주십시오.',picked1('tg_pvia')),
+  C('step7','drop_logo','로고 파일',function(){return FILES.logo.length>0;},'로고 파일을 첨부해 주십시오.',function(){return one('tg_logo')==='있음'&&photoAtt();}),
+  C('step7','drop_main','대표 사진',function(){return FILES.main.length>0;},'첫 화면에 넣을 대표 사진 1장을 첨부해 주십시오.',photoAtt),
+  C('step7','drop_photo','그 밖의 사진',function(){return FILES.photo.length>=PHOTO_MIN;},function(){return '사진을 '+PHOTO_MIN+'장 이상 첨부해 주십시오. (지금 '+FILES.photo.length+'장)';},photoAtt),
 
   C('step8','domain','홈페이지 주소(도메인)',picked1('domain'),'홈페이지 주소(도메인) 준비 방법을 선택해 주십시오.'),
   C('step8','f_dom_have','지금 쓰는 도메인',function(){var v=val('f_dom_have');return domOK(v)&&!isPlatform(v);},
     function(){var v=val('f_dom_have');return isPlatform(v)?'「'+wantDomain(v)+'」는 블로그 · SNS · 홈페이지 서비스 회사의 주소라 연결할 수 없습니다. 직접 구매한 도메인이 아니면 「새로 구매」 또는 「무료 주소」를 선택해 주십시오.':'지금 쓰는 도메인 주소를 입력해 주십시오. (예: www.example.com)';},is('domain','이미 있음')),
   C('step8','f_dom_where','도메인 구매처',has('f_dom_where'),'도메인 구매처를 입력해 주십시오. (예: 가비아)',is('domain','이미 있음')),
-  C('step8','f_dom_want1','원하는 주소 (1순위)',function(){return !domMsg('f_dom_want1');},function(){return domMsg('f_dom_want1');},buying),
-  C('step8','f_dom_want2','원하는 주소 (2순위)',function(){return !domMsg('f_dom_want2',true);},function(){return domMsg('f_dom_want2',true);},buying),
-  C('step8','f_dom_reg','도메인 등록 회사',has('f_dom_reg'),'도메인 등록 회사를 선택해 주십시오.',buying),
-  C('step8','f_dom_reg_etc','도메인 등록 회사 이름',has('f_dom_reg_etc'),'도메인 등록 회사 이름을 입력해 주십시오.',function(){return buying()&&val('f_dom_reg')==='기타';}),
-  C('step8','seg_owner','도메인 소유자 구분',picked1('owner'),'도메인 소유자 구분(개인 / 기관)을 선택해 주십시오.',buying),
+  C('step8','seg_dombuy','도메인 구매 방법',picked1('dombuy'),'도메인 구매 방법(등록 대행 / 직접 구매)을 선택해 주십시오.',buying),
+  C('step8','f_dom_self','구매할 주소',function(){return !domMsg('f_dom_self');},function(){return domMsg('f_dom_self');},selfBuy),
+  C('step8','f_dom_want1','원하는 주소 (1순위)',function(){return !domMsg('f_dom_want1');},function(){return domMsg('f_dom_want1');},agent),
+  C('step8','f_dom_want2','원하는 주소 (2순위)',function(){return !domMsg('f_dom_want2',true);},function(){return domMsg('f_dom_want2',true);},agent),
+  C('step8','f_dom_reg','도메인 등록 회사',has('f_dom_reg'),'도메인 등록 회사를 선택해 주십시오.',agent),
+  C('step8','f_dom_reg_etc','도메인 등록 회사 이름',has('f_dom_reg_etc'),'도메인 등록 회사 이름을 입력해 주십시오.',function(){return agent()&&val('f_dom_reg')==='기타';}),
+  C('step8','seg_owner','도메인 소유자 구분',picked1('owner'),'도메인 소유자 구분(개인 / 기관)을 선택해 주십시오.',agent),
   C('step8','f_own_name','소유자명',has('f_own_name'),'소유자명을 입력해 주십시오.',owning),
   C('step8','f_own_en','소유자명 (영문)',function(){var v=val('f_own_en');return /^[A-Za-z0-9 .,&()'\-]+$/.test(v)&&/[A-Za-z]/.test(v);},'소유자명(영문)을 영문으로 입력해 주십시오.',owning),
   C('step8','f_own_kind','등록증 종류',has('f_own_kind'),'등록증 종류를 선택해 주십시오.',function(){return owning()&&one('owner')==='기관';}),
@@ -2356,6 +2781,8 @@ var WARNS=[
   adW('step4','f_head','한 줄 소개'),
   adW('step4','f_about','소개 글'),
   adW('step4','f_greet','대표 인사말'),
+  W('step4','f_about','소개 글 · 업종 예시 문장',function(){return !!exLeft('about');},function(){return '업종 예시 문장이 그대로 있습니다(「'+cut(exLeft('about'),30)+'」). 실제와 다르면 고쳐 주십시오.';}),
+  W('step4','f_greet','대표 인사말 · 업종 예시 문장',function(){return greetOn()&&!!exLeft('greet');},function(){return '업종 예시 문장이 그대로 있습니다(「'+cut(exLeft('greet'),30)+'」). 실제와 다르면 고쳐 주십시오.';}),
   adW('step4','rep_svc','서비스 · 메뉴'),
   adW('step4','rep_why','우리의 강점'),
   adW('step4','rep_faq','자주 받는 질문'),
@@ -2367,10 +2794,12 @@ var WARNS=[
   W('step7','drop_photo','그 밖의 사진',function(){return smallPhotos()>0;},
     function(){return '작은 사진 '+smallPhotos()+'장(긴 변 '+PHOTO_MIN_PX+'px 미만)은 큰 화면에서 흐릿할 수 있습니다. 원본 사진으로 교체를 권장합니다.';},{now:true}),
   W('step8','f_dom_consent','도메인 제3자 제공 동의',function(){return owning()&&!$('f_dom_consent').checked;},
-    '제3자 제공에 동의하지 않으면 도메인 등록을 대행할 수 없습니다. 이 경우 담당자가 직접 구매 방법을 안내합니다. 등록 대행을 원하시면 동의해 주십시오.',{now:true}),
+    '제3자 제공에 동의하지 않으면 도메인 등록을 대행할 수 없습니다. 이 경우 담당자가 직접 구매 방법을 안내합니다. 등록 대행을 원하시면 동의해 주십시오. 직접 구매하시려면 위 「구매 방법」에서 「직접 구매」를 선택해 주십시오.',
+    {now:true,fixLab:'직접 구매로 바꾸기',fix:function(){ var r=document.querySelector('input[name="dombuy"][value="직접"]'); if(r){ r.checked=true; r.dispatchEvent(new Event('change',{bubbles:true})); } }}),
   W('step8','f_dom_want1','원하는 주소 · 한글',function(){var v=val('f_dom_want1');return /[가-힣]/.test(v)&&domOK(v);},'한글 주소는 일부 메일 · 메신저에서 깨져 보일 수 있어 영문 주소를 권장합니다.'),
   W('step8','f_dom_want2','원하는 주소 · 한글',function(){var v=val('f_dom_want2');return /[가-힣]/.test(v)&&domOK(v);},'한글 주소는 일부 메일 · 메신저에서 깨져 보일 수 있어 영문 주소를 권장합니다.'),
-  W('step8','seg_owner','도메인 소유자',function(){var r=regInfo();return buying()&&one('owner')==='기관'&&!!r&&r.rec==='개인';},
+  W('step8','f_dom_self','구매할 주소 · 한글',function(){var v=val('f_dom_self');return /[가-힣]/.test(v)&&domOK(v);},'한글 주소는 일부 메일 · 메신저에서 깨져 보일 수 있어 영문 주소를 권장합니다.'),
+  W('step8','seg_owner','도메인 소유자',function(){var r=regInfo();return agent()&&one('owner')==='기관'&&!!r&&r.rec==='개인';},
     '기관으로 등록하려면 기관 등록증과 번호가 필요합니다. 등록증이 없으시면 「개인」을 선택해 주십시오.',{now:true}),
   mailW('step8','f_own_mail','소유자 이메일'),
   W('step8','f_when_date','희망 오픈 날짜',function(){var v=val('f_when_date');return one('when')==='날짜 정함'&&!!v&&v>=todayStr()&&daysUntil(v)<OPEN_SOON_DAYS;},
@@ -2501,7 +2930,7 @@ function drawProgress(){
     var dot=$('dots').children[i]; if(dot){ dot.classList.toggle('done',n===0); }
   });
   $('fin_t').textContent=fail.length?'미입력 항목이 '+fail.length+'개 있습니다':'모든 항목을 입력했습니다';
-  $('fin_s').textContent=fail.length?'아래 이름을 누르면 해당 항목으로 이동합니다.':(MODE==='material'?'제출 후 담당자가 확인하여 작업 시작일을 안내합니다.':'제출 후 담당자가 영업일 1~2일 안에 연락합니다.');
+  $('fin_s').textContent=fail.length?'아래 이름을 누르면 해당 항목으로 이동합니다.':(MODE==='material'?'제출 후 담당자가 확인하여 작업 시작일을 안내합니다.':'제출 후 담당자가 1~2영업일 안에 연락합니다.');
   var ll=fail.slice(0,12).map(function(c){
     return '<button type="button" data-jump="'+CHECKS.indexOf(c)+'">'+esc(c.lab)+'</button>';
   }).join('')+(fail.length>12?'<span class="more">외 '+(fail.length-12)+'개</span>':'');
@@ -2517,6 +2946,7 @@ function jumpTo(c){
   var el=$(c.id); if(!el)return;
   if(c.id==='reg'){ regOpen(true); REG_HOLD=true; setTimeout(function(){ REG_HOLD=false; },0); }
   openSheet(false);
+  var dt=el.closest&&el.closest('details'); if(dt&&!dt.open)dt.open=true;   /* 접어 둔 선택 사항 안의 칸 (10/13) */
   var f=fldOf(el)||el;
   f.scrollIntoView({block:'center',behavior:'smooth'});
   var foc=el.matches('input,select,textarea')?el:el.querySelector('input:not(:disabled):not([type=hidden]),select,textarea,button:not(:disabled)');
@@ -2535,13 +2965,311 @@ $('dots').addEventListener('click',function(e){
   var b=e.target.closest('[data-goto]'); if(b){ var c=$(b.getAttribute('data-goto')); if(c)c.scrollIntoView({block:'start',behavior:'smooth'}); }
 });
 
+/* ═════════ 홈페이지 미리 보기 · 글쓰기 도움 (10/13 홈페이지 팀) ═════════
+   고객 말 「소개 글은 어디에 들어가는지 아예 모르겠다 · 쓰기 어렵다」 → 입력한 글 · 고른 디자인으로 작은 홈페이지를 그려 보여 줍니다.
+   · 신청서 디자인 단계: 테마 카드마다 상호를 넣은 첫 화면 + 카드 아래 큰 화면 예시(PC · 휴대폰) — drawThemePv()
+   · 제작 자료: 오른쪽(좁은 화면은 하단 막대 → 펼침)에 입력한 글이 바로 들어간 홈페이지 · 지금 입력하는 칸의 자리를 주황 테두리로 — drawPv()
+   그림(.pvs)은 실제 크기(PC 1200px · 휴대폰 390px)로 그린 뒤 transform 으로 줄여 보여 줍니다(pvFit).
+   🔴 이해를 돕는 그림입니다. 지시서 · 시안은 이 그림을 따르지 않습니다. 고객 글은 esc() 로만 넣습니다(글이 HTML 로 실행되지 않게).
+   🔴 그림 안에서는 <i> · <footer> 를 쓰지 않습니다 — 이 파일의 .mock i · footer 규칙이 그림을 깨뜨립니다. */
+var PV_GOAL={'전화 문의':'전화 문의','카카오톡 상담':'카카오톡 상담','방문':'오시는 길','신청 · 예약':'신청 · 예약'};
+var PV_GICON={'전화 문의':'tel','카카오톡 상담':'chat','방문':'pin','신청 · 예약':'form'};   /* 버튼 아이콘 (10/13 밤 · 이모티콘 대신) */
+function pvIc(n){ return n?'<svg class="ic" aria-hidden="true" focusable="false"><use href="#ic-'+n+'"/></svg>':''; }
+function pvGoalHtml(g){ return pvIc(PV_GICON[g])+esc(PV_GOAL[g]||g); }
+var PV_GKEY={'전화 문의':'tel','카카오톡 상담':'kakao','방문':'map','신청 · 예약':'book'};
+var PV_IMG={A:'linear-gradient(135deg,#C9D6EA,#E8EEF6)',B:'linear-gradient(135deg,#D7B68A,#F1E3CF)',C:'linear-gradient(135deg,#E3E5E8,#CDD1D6)'};
+var PV_LAB={head:'한 줄 소개',about:'소개 글',greet:'대표 인사말',svc:'서비스 · 메뉴',why:'우리의 강점',faq:'자주 받는 질문',search:'키워드 · 검색 결과',
+            tel:'대표 전화',hours:'운영 시간 · 휴무',map:'오시는 길',kakao:'카카오톡',sns:'SNS · 블로그',logo:'로고',main:'대표 사진',photo:'그 밖의 사진',book:'신청 · 예약'};
+/* 제작 자료 칸 → 미리 보기 자리 (칸 id · 칸 묶음 id) */
+var PV_MAP={f_head:'head',fld_about:'about',f_about:'about',fld_greet:'greet',fld_sign:'greet',fld_svc:'svc',fld_why:'why',fld_faq:'faq',fld_kw:'search',f_kw:'search',
+            addr_pub_box:'map',f_tel:'tel',f_hours:'hours',seg_kakao:'kakao',f_kakao:'kakao',park_box:'map',seg_sns:'sns',f_sns:'sns',
+            fld_pvia:'photo',fld_logo:'logo',fld_main:'main',fld_photo:'photo'};
+var PV_URLS=(window.Map?new Map():null);
+function pvUrl(f){ if(!f||!PV_URLS)return ''; var u=PV_URLS.get(f); if(!u){ try{ u=URL.createObjectURL(f); }catch(x){ return ''; } PV_URLS.set(f,u); } return u; }
+function pvPrune(){ if(!PV_URLS)return; var live=FILES.logo.concat(FILES.main,FILES.photo); PV_URLS.forEach(function(u,f){ if(live.indexOf(f)<0){ URL.revokeObjectURL(u); PV_URLS.delete(f); } }); }
+function pvEsc(s){ return esc(s).replace(/○+/g,function(m){ return '<mark class="pv-oo">'+m+'</mark>'; }); }   /* 예시를 넣고 아직 안 바꾼 ○○ 는 노랗게 */
+function pvThemeKey(t){ t=(t==null)?one('theme'):t; return (!t||t==='추천에 맡김')?recTheme(val('f_bizcat')):(THEMES[t]?t:'A 신뢰형'); }
+function pvPoint(){ if(one('tg_color')!=='있음')return ''; var l=cRead('like'), h=l.length?l[0].h:''; return (h&&/^#[0-9a-f]{6}$/i.test(h)&&h.toUpperCase()!=='#FFFFFF')?h:''; }   /* 원하는 색 1순위 → 포인트 색 */
+function pvInk(h){ var r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16); return (0.299*r+0.587*g+0.114*b)>170?'#16181D':'#FFFFFF'; }
+function pvMenu(){ var k=calc().keys, m=['소개','서비스'];
+  if(k.indexOf('list')>=0)m.push('목록'); if(k.indexOf('notice')>=0)m.push('공지'); if(k.indexOf('board')>=0)m.push('게시판'); if(k.indexOf('form')>=0)m.push('신청');
+  return m; }
+function pvDom(e){ var dm=one('domain'), v='';
+  if(dm==='이미 있음')v=wantDomain(val('f_dom_have'));
+  else if(dm==='유료 도메인 새로')v=wantDomain(val(one('dombuy')==='직접'?'f_dom_self':'f_dom_want1'));
+  return v||e.dom; }
+function pvSnsIcon(u){ var t=/instagram/i.test(u)?'IG':(/blog\.naver|naver\.me/i.test(u)?'N':(/youtu/i.test(u)?pvIc('play'):(/facebook/i.test(u)?'f':(/kakao/i.test(u)?'K':pvIc('link'))))); return '<span>'+t+'</span>'; }
+
+/* 그림 한 장 — d: 넣을 글 · 사진 · 테마, o: {dev:'pc'|'mo', part:'hero'|'top'|'full'} */
+function pvSite(d,o){
+  var v=d.th.charAt(0), th=THEMES[d.th]||THEMES['A 신뢰형'], part=o.part||'full', pp=d.point||th.point;
+  var X=function(s){ return d.ex?esc(s):pvEsc(s); };
+  var P=function(s){ return '<span class="pv-ph">'+esc(s)+'</span>'; };
+  var T=function(s,eg){ return s?X(s):P(eg||''); };
+  var st='--pm:'+th.main+';--pp:'+pp+';--ppt:'+(d.point?pvInk(pp):'#FFFFFF')+';--pb:'+th.bg+';--pt:'+th.text+';--pr:'+th.radius+';--pimg:'+PV_IMG[v];
+  var gl=(d.goals&&d.goals.length)?d.goals:['전화 문의'];
+  var btn=function(g,i){ return '<span class="pv-btn'+(i?' o':'')+'" data-pv="'+(PV_GKEY[g]||'')+'">'+pvGoalHtml(g)+'</span>'; };
+  var btns='<div class="pv-btns">'+gl.slice(0,2).map(btn).join('')+'</div>';
+  var tile=function(cls,u,lab,key){ return '<span class="pv-tile'+(cls?' '+cls:'')+(u?' has':'')+'"'+(key?' data-pv="'+key+'"':'')+(u?' style="background-image:url(\''+u+'\')"':'')+'>'
+                                            +(lab&&!u?'<span class="pv-il">'+esc(lab)+'</span>':'')+'</span>'; };
+  var mainLab=d.kakaoVia?'카카오톡으로 보낼 대표 사진':'대표 사진';
+  var pub=d.addrPub!==false, fq=(d.faq&&d.faq.length)?d.faq:null;
+  var menu=(d.menu||['소개','서비스']).concat(fq?['자주 묻는 질문']:[]).concat([pub?'오시는 길':'연락']);
+  var nav='<div class="pv-nav"><span class="pv-logo" data-pv="logo">'+(d.logo?'<img src="'+d.logo+'" alt="">':X(d.name))+'</span>'
+     +'<span class="pv-menu">'+menu.slice(0,6).map(function(m){ return '<span>'+esc(m)+'</span>'; }).join('')+'</span>'
+     +'<span class="pv-navbtn" data-pv="'+(PV_GKEY[gl[0]]||'')+'">'+pvGoalHtml(gl[0])+'</span><span class="pv-burger">'+pvIc('menu')+'</span></div>';
+  var eb='<span class="pv-eb">'+X(d.name)+'</span>', h1='<h1 data-pv="head">'+T(d.head,d.headEx)+'</h1>', hero;
+  if(v==='B') hero='<div class="pv-hero hB">'+tile('pv-img',d.main,mainLab,'main')+'<div class="pv-hrow"><div>'+eb+h1+'</div>'+btns+'</div></div>';
+  else if(v==='C') hero='<div class="pv-hero hC" data-pv="main"'+(d.main?' style="background-image:linear-gradient(rgba(17,20,24,.72),rgba(17,20,24,.88)),url(\''+d.main+'\')"':'')+'>'+eb+h1+btns
+     +(d.main?'':'<span class="pv-il">'+esc(mainLab)+'</span>')+'</div>'
+     +'<div class="pv-strip" data-pv="photo">'+[0,1,2].map(function(i){ return tile('',d.photos&&d.photos[i],'',''); }).join('')+'</div>';
+  else hero='<div class="pv-hero hA"><div>'+eb+h1+btns+'</div>'+tile('pv-img',d.main,mainLab,'main')+'</div>';
+  var html=nav+hero;
+  if(part!=='hero'){
+    var why=(d.why&&d.why.length)?d.why:null;
+    html+='<div class="pv-sec pv-why" data-pv="why"><h3>우리의 강점</h3><div class="pv-cards">'+(why||d.whyEx||[]).slice(0,6).map(function(x){
+      return '<div class="pv-card"><b>'+(why?X(x.a):P(x.a))+'</b><span>'+(why?X(x.b):P(x.b))+'</span></div>'; }).join('')+'</div></div>';
+  }
+  if(part==='full'){
+    html+='<div class="pv-sec pv-about"><div data-pv="about"><h3>소개</h3><p>'+T(d.about,d.aboutEx)+'</p></div>'
+      +'<div class="pv-pg" data-pv="photo">'+[0,1].map(function(i){ return tile('',d.photos&&d.photos[i],'사진',''); }).join('')+'</div></div>';
+    if(d.greetOn!==false) html+='<div class="pv-sec pv-greet" data-pv="greet"><div class="pv-gbox"><h3>대표 인사말</h3><p>'+T(d.greet,d.greetEx)+'</p>'
+      +'<p class="pv-sign">'+(d.sign?'— '+X(d.sign):P('— 대표 홍길동'))+'</p></div></div>';
+    var svc=(d.svc&&d.svc.length)?d.svc:null;
+    html+='<div class="pv-sec pv-svc" data-pv="svc"><h3>서비스 · 메뉴</h3><div class="pv-list">'+(svc||d.svcEx||[]).map(function(x){
+      return '<div class="pv-li"><b>'+(svc?X(x.a):P(x.a))+'</b><span>'+(svc?X(x.b):P(x.b))+'</span></div>'; }).join('')+'</div></div>';
+    html+='<div class="pv-sec pv-faq" data-pv="faq"><h3>자주 묻는 질문</h3>'+(fq||d.faqEx||[]).map(function(x){
+      return '<div class="pv-qa"><b>'+(fq?X(x.a):P(x.a))+'</b><span>'+(fq?X(x.b):P(x.b))+'</span></div>'; }).join('')
+      +(fq?'':'<p class="pv-none">질문을 입력하지 않으면 이 부분은 만들지 않습니다.</p>')+'</div>';
+    html+='<div class="pv-sec pv-map"><h3>'+(pub?'오시는 길':'연락 안내')+'</h3><div class="pv-mapg'+(pub?'':' one')+'">'+(pub?'<div class="pv-mapbox" data-pv="map">'+pvIc('pin')+'</div>':'')
+      +'<div class="pv-info">'+(pub?'<p data-pv="map"><b>주소</b>'+T(d.addr,'주소')+'</p>':'')
+      +'<p data-pv="hours"><b>운영 시간</b>'+T(d.hours,d.hoursEx)+'</p>'
+      +(pub?'<p data-pv="map"><b>주차</b>'+T(d.park,d.parkEx)+'</p>':'')
+      +'<p data-pv="tel"><b>전화</b>'+T(d.tel,'000-0000-0000')+'</p>'
+      +(d.kakao?'<p data-pv="kakao"><b>카카오톡</b>'+X(d.kakao)+'</p>':'')+'</div></div></div>';
+    html+='<div class="pv-foot"><b>'+X(d.name)+'</b><p><span data-pv="tel">전화 '+T(d.tel,'000-0000-0000')+'</span>'+(d.hours?' · <span data-pv="hours">'+X(d.hours)+'</span>':'')+'</p>'
+      +(pub&&d.addr?'<p>'+X(d.addr)+'</p>':'')
+      +((d.sns&&d.sns.length)?'<div class="pv-sns" data-pv="sns">'+d.sns.slice(0,5).map(pvSnsIcon).join('')+'</div>'
+        :(d.snsAns?'':'<div class="pv-sns" data-pv="sns"><span class="pv-ph"></span><span class="pv-ph"></span></div>'))
+      +'<small>사업자 정보 · 개인정보처리방침</small></div>';
+  }
+  return '<div class="pvs v'+v+' '+(o.dev==='mo'?'mo':'pc')+(o.thumb?' thumb':'')+'" style="'+st+'">'+html+'</div>';
+}
+/* 휴대폰 화면 아래 고정 막대 (고른 버튼 · 최대 4개) */
+function pvBar(d){ var gl=(d.goals&&d.goals.length)?d.goals:['전화 문의'], th=THEMES[d.th]||THEMES['A 신뢰형'], pp=d.point||th.point;
+  return '<div class="pv-fb" style="--pp:'+pp+';--ppt:'+(d.point?pvInk(pp):'#FFFFFF')+'">'+gl.slice(0,4).map(function(g){ return '<span data-pv="'+(PV_GKEY[g]||'')+'">'+pvGoalHtml(g)+'</span>'; }).join('')+'</div>'; }
+/* 검색 결과 예 — 제목 = 상호 | 첫 키워드 (지시서 8장 <title> 초안과 같게) · 설명 = 한 줄 소개 */
+function pvSerp(d){ var kw1=String(d.kw||'').split(/[,·]/)[0].trim(), ek=String(d.kwEx||'').split(/[,·]/)[0].trim();
+  return '<p class="pv-sl">검색 결과 예 (네이버 · 구글)</p><div class="pv-sr"><span class="u">'+esc(d.dom)+'</span>'
+    +'<b class="t" data-pv="search">'+pvEsc(d.name)+' | '+(kw1?pvEsc(kw1):'<span class="pv-ph">'+esc(ek)+'</span>')+'</b>'
+    +'<span class="d" data-pv="head">'+(d.head?pvEsc(d.head):'<span class="pv-ph">'+esc(d.headEx)+'</span>')+'</span></div>'; }
+/* 틀(fr)에 그림을 넣고 틀 너비에 맞게 줄임 — W = 그림 너비(1200 · 390), H = 잘라 보일 높이(없으면 전부), url = 주소 줄, fix = 늘 H 높이(카드 그림) */
+function pvMount(fr,html,W,H,url,fix){
+  if(!fr)return;
+  fr.classList.toggle('mo',W<600); fr.classList.toggle('pc',W>=600);
+  fr.setAttribute('data-pvw',W); fr.setAttribute('data-pvh',H||''); fr.setAttribute('data-pvfix',fix?'1':'');
+  fr.innerHTML=(url?'<div class="pv-chrome"><span class="d"></span><span class="d"></span><span class="d"></span><span class="u">'+esc(url)+'</span></div>':'')+'<div class="pvs-wrap">'+html+'</div>';
+  pvFit(fr);
+}
+function pvFit(fr){
+  var wrap=fr.querySelector('.pvs-wrap'), site=wrap&&wrap.firstElementChild; if(!site)return;
+  var w=wrap.clientWidth; if(!w)return;                          /* 숨어 있으면 펼칠 때 다시 맞춤 */
+  var W=Number(fr.getAttribute('data-pvw'))||1200, H=Number(fr.getAttribute('data-pvh'))||0, s=w/W;
+  site.style.transform='scale('+s+')';
+  wrap.style.height=Math.ceil((H&&fr.getAttribute('data-pvfix')?H:(H?Math.min(H,site.offsetHeight):site.offsetHeight))*s)+'px';
+}
+function pvFitAll(){ [].forEach.call(document.querySelectorAll('[data-pvw]'),pvFit); }
+
+/* ── 신청서 디자인 단계 — 테마 카드 첫 화면 + 큰 화면 예시 ── */
+var TPV_DEV=(window.innerWidth<640)?'mo':'pc', TPV_HOVER='', TPV_SIG='', TPV_TSIG='';
+function pvExData(k){
+  var cat=val('f_bizcat'), e=EX[cat]||EX[''], t=EX_TXT[cat]||EX_TXT[''];
+  return {th:k, ex:true, point:pvPoint(), name:val('f_name')||String(e.name).replace(/^예:\s*/,'').split(' · ')[0],
+          head:e.head, why:t.why.map(function(x){ return {a:x[0],b:x[1]}; }), goals:orderedGoals(), menu:pvMenu(), addrPub:true, main:'', photos:[], logo:'', dom:pvDom(e)};
+}
+function drawThemePv(){
+  if(MODE!=='apply'||!$('tpv_frame'))return;
+  var sel=TPV_HOVER||one('theme'), key=pvThemeKey(sel), d=pvExData(key), base=JSON.stringify([d.name,val('f_bizcat'),d.goals,d.menu,d.point,d.dom]);
+  if(base!==TPV_TSIG){ TPV_TSIG=base;          /* 카드 그림은 상호 · 업종 · 버튼 · 색이 바뀔 때만 다시 그림 */
+    ['A 신뢰형','B 따뜻형','C 활동형'].forEach(function(k){
+      var inp=document.querySelector('#theme input[value="'+k+'"]'), m=inp&&inp.closest('.opt').querySelector('.mock'); if(!m)return;
+      m.classList.add('real'); m.setAttribute('aria-hidden','true');
+      pvMount(m,pvSite(pvExData(k),{dev:'pc',part:'hero',thumb:true}),1200,700,'',true);
+    });
+  }
+  var cur=one('theme'), sig=base+'|'+sel+'|'+cur+'|'+key+'|'+TPV_DEV; if(sig===TPV_SIG)return; TPV_SIG=sig;
+  var nm=key.slice(2);
+  $('tpv_t').textContent='화면 예시 · '+(sel==='추천에 맡김'?'업종에 맞춰 ('+nm+')':(sel?nm:nm+' (업종 추천 · 아직 선택하지 않음)'))+(TPV_HOVER&&TPV_HOVER!==cur?' — 미리 보는 중':'');
+  pvMount($('tpv_frame'),pvSite(d,{dev:TPV_DEV,part:'top'}),TPV_DEV==='pc'?1200:390,TPV_DEV==='pc'?820:760,d.dom);
+  [].forEach.call(document.querySelectorAll('[data-tdev]'),function(b){ b.setAttribute('aria-pressed',b.getAttribute('data-tdev')===TPV_DEV?'true':'false'); });
+}
+(function(){
+  var box=$('theme'); if(!box)return;
+  box.addEventListener('mouseover',function(e){ var l=e.target.closest&&e.target.closest('.opt'), i=l&&l.querySelector('input'); if(i&&i.value!==TPV_HOVER){ TPV_HOVER=i.value; drawThemePv(); } });
+  box.addEventListener('mouseleave',function(){ if(TPV_HOVER){ TPV_HOVER=''; drawThemePv(); } });
+  document.addEventListener('click',function(e){ var b=e.target.closest&&e.target.closest('[data-tdev]'); if(b){ TPV_DEV=b.getAttribute('data-tdev'); drawThemePv(); } });
+})();
+
+/* ── 제작 자료 — 오른쪽 미리 보기 ── */
+var PV_HL='', PV_DEV='mo', PV_SIG='';
+function pvWide(){ return !!(window.matchMedia&&window.matchMedia('(min-width:1180px)').matches); }
+function pvMatData(){
+  var cat=val('f_bizcat'), e=EX[cat]||EX[''], t=EX_TXT[cat]||EX_TXT[''], kv=photoKakao(), gv=one('tg_greet');
+  var first=function(a){ return a.map(function(x){ return x[0]; }); };
+  return {th:pvThemeKey(), ex:false, point:pvPoint(), name:val('f_name')||'상호',
+    head:val('f_head'), headEx:'예: '+e.head,
+    about:val('f_about'), aboutEx:'예: '+first(t.about).join(' '),
+    greetOn:gv==='넣음'?true:(gv==='넣지 않음'?false:null), greet:gv==='넣음'?val('f_greet'):'', greetEx:'예: '+first(t.greet).join('\n'), sign:gv==='넣음'?signText():'',
+    svc:repRead('rep_svc'), svcEx:[{a:'예: '+e.svc[0],b:e.svc[1]}],
+    why:repRead('rep_why'), whyEx:[{a:'예: '+e.why[0],b:e.why[1]}],
+    faq:repRead('rep_faq'), faqEx:[{a:'예: '+e.faq[0],b:e.faq[1]}],
+    goals:orderedGoals(), menu:pvMenu(), tel:val('f_tel'), hours:val('f_hours'), hoursEx:'예: '+e.hours,
+    addrPub:addrForced()?true:one('tg_addrpub')!=='공개 안 함', addr:val('f_addr'), park:val('f_park'), parkEx:'예: '+e.park,
+    kakao:one('tg_kakao')==='있음'?val('f_kakao'):'', snsAns:one('tg_sns'),
+    sns:one('tg_sns')==='있음'?val('f_sns').split(/\n+/).map(function(s){ return s.trim(); }).filter(Boolean):[],
+    logo:(!kv&&one('tg_logo')==='있음'&&FILES.logo[0])?pvUrl(FILES.logo[0]):'',
+    main:(!kv&&FILES.main[0])?pvUrl(FILES.main[0]):'', photos:kv?[]:FILES.photo.slice(0,3).map(pvUrl), kakaoVia:kv,
+    dom:pvDom(e), kw:val('f_kw'), kwEx:e.kw};
+}
+function drawPv(){
+  if(MODE!=='material'||!SNAP||document.body.classList.contains('pv-off')||!$('pv_frame'))return;
+  pvPrune();
+  var d=pvMatData(), html=pvSite(d,{dev:PV_DEV,part:'full'}), serp=pvSerp(d), bar=PV_DEV==='mo'?pvBar(d):'', sig=PV_DEV+html+serp+bar;
+  if(sig!==PV_SIG){ PV_SIG=sig;
+    var sc=$('pv_scroll'), top=sc.scrollTop;
+    pvMount($('pv_frame'),html,PV_DEV==='pc'?1200:390,0,d.dom);
+    $('pv_serp').innerHTML=serp; $('pv_fbar').innerHTML=bar; $('pv_fbar').hidden=!bar;
+    sc.scrollTop=top;
+  }
+  pvMark();
+}
+/* 지금 입력하는 칸의 자리 — 주황 테두리 + 이름표 */
+function pvMark(){
+  var box=$('pvside'); if(!box)return;
+  [].forEach.call(box.querySelectorAll('.pv-hl'),function(e){ e.classList.remove('pv-hl'); });
+  var m=$('pv_mini_m'); if(m)m.textContent=PV_HL?'「'+PV_LAB[PV_HL]+'」 자리 보기':'입력한 글이 들어가는 자리 보기';
+  if(!PV_HL)return;
+  [].forEach.call(box.querySelectorAll('[data-pv~="'+PV_HL+'"]'),function(e){ e.classList.add('pv-hl'); e.setAttribute('data-pvl',PV_LAB[PV_HL]+' 자리'); });
+}
+function pvGo(k,smooth){
+  var sc=$('pv_scroll'), el=sc&&sc.querySelector('[data-pv~="'+k+'"]'); if(!el)return;
+  var r=el.getBoundingClientRect(), sr=sc.getBoundingClientRect(); if(!sr.height)return;
+  var top=Math.max(0,sc.scrollTop+(r.top-sr.top)-48);
+  try{ sc.scrollTo({top:top,behavior:smooth===false?'auto':'smooth'}); }catch(x){ sc.scrollTop=top; }
+}
+function pvOpen(on){
+  var p=$('pvside'); if(!p)return;
+  var was=p.classList.contains('open');
+  if(pvWide())on=false;                                          /* 넓은 화면은 늘 옆에 보임 */
+  p.classList.toggle('open',on); document.documentElement.classList.toggle('pv-lock',on);
+  $('pv_mini').setAttribute('aria-expanded',on?'true':'false');
+  if(on){ pvFitAll(); pvMark(); if(PV_HL)setTimeout(function(){ pvGo(PV_HL,false); },30); try{ $('pv_close').focus({preventScroll:true}); }catch(x){} }
+  else if(was){ try{ $('pv_mini').focus({preventScroll:true}); }catch(x){} }
+}
+/* 칸(또는 그 칸의 「…」 이름표)이 들어가는 자리 */
+function pvKeyOf(el){
+  if(!el||!el.closest)return '';
+  var card=el.closest('[data-step]'); if(!card||card.getAttribute('data-phase')!=='material')return '';
+  for(var n=el;n&&n!==card;n=n.parentNode){ if(n.id&&PV_MAP[n.id])return PV_MAP[n.id]; }
+  var f=el.closest('.fld'); if(f){ var ids=f.querySelectorAll('[id]'); for(var i=0;i<ids.length;i++){ if(PV_MAP[ids[i].id])return PV_MAP[ids[i].id]; } }
+  return '';
+}
+function pvInit(){
+  [].forEach.call(document.querySelectorAll('#form [data-phase="material"] .where'),function(w){
+    if(!pvKeyOf(w))return;
+    w.classList.add('pvw'); w.setAttribute('role','button'); w.setAttribute('tabindex','0'); w.setAttribute('title','홈페이지 미리 보기에서 이 자리 보기');
+  });
+  document.addEventListener('focusin',function(e){ var k=pvKeyOf(e.target); if(!k||k===PV_HL)return; PV_HL=k; pvMark(); if(pvWide())pvGo(k); });
+  document.addEventListener('click',function(e){
+    var w=e.target.closest&&e.target.closest('.where.pvw'); if(!w)return;
+    var k=pvKeyOf(w); if(k){ PV_HL=k; pvMark(); }
+    if(pvWide()){ if(k)pvGo(k); } else pvOpen(true);
+  });
+  document.addEventListener('keydown',function(e){
+    var t=e.target;
+    if((e.key==='Enter'||e.key===' ')&&t&&t.classList&&t.classList.contains('pvw')){ e.preventDefault(); t.click(); }
+    if(e.key==='Escape'&&$('pvside').classList.contains('open'))pvOpen(false);
+  });
+  $('pv_mini').addEventListener('click',function(){ pvOpen(true); });
+  $('pv_close').addEventListener('click',function(){ pvOpen(false); });
+  $('pvside').addEventListener('click',function(e){ if(e.target===this)pvOpen(false); });
+  [].forEach.call(document.querySelectorAll('[data-pdev]'),function(b){ b.addEventListener('click',function(){
+    PV_DEV=b.getAttribute('data-pdev');
+    [].forEach.call(document.querySelectorAll('[data-pdev]'),function(x){ x.setAttribute('aria-pressed',x===b?'true':'false'); });
+    drawPv(); if(PV_HL)pvGo(PV_HL,false);
+  }); });
+}
+var PV_RT=null;
+window.addEventListener('resize',function(){ clearTimeout(PV_RT); PV_RT=setTimeout(function(){ pvFitAll(); if(pvWide()&&$('pvside')&&$('pvside').classList.contains('open'))pvOpen(false); },120); });
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){ pvFitAll(); });
+
+/* ── 글쓰기 도움 — 「문장별로 나눠 쓰기」 · 「업종 예시 보기」 ──
+   🔴 글은 고객이 씁니다(맞춤법만 교정 · 원고를 새로 쓰지 않음). 이 도움은 고객이 입력한 문장을 이어 붙이거나,
+      업종 예시를 «사실 자리는 ○○ 로 비운 채» 넣어 줄 뿐입니다. ○○ 가 남으면 제출되지 않고(필수 검사), 예시 문장이 그대로 남으면 노란 주의 → 담당자 확인. */
+var HP={about:{n:4,ta:'f_about',sep:' ',lab:'소개 글'},greet:{n:3,ta:'f_greet',sep:'\n',lab:'인사말'}}, HP_ARM={}, HP_CAT=null;
+function hpEx(){ return EX_TXT[val('f_bizcat')]||EX_TXT['']; }
+function hpJoin(k){ var a=[]; for(var i=1;i<=HP[k].n;i++){ var v=val('hq_'+k+'_'+i); if(v)a.push(/[.!?。…~]$/.test(v)?v:v+'.'); } return a.join(HP[k].sep); }
+function hpExText(k,ins){ return hpEx()[k].map(function(x){ return ins?(x[1]||x[0]):x[0]; }).join(HP[k].sep); }
+/* 칸에 업종 예시 문장이 그대로 남았는지 (○○ 를 바꿔 넣은 문장은 빼고 · 고친 문장은 빼고) */
+function exLeft(k){
+  var v=val(HP[k].ta), hit=''; if(!v)return '';
+  hpEx()[k].some(function(x){ return [x[0],x[1]||''].some(function(s){ if(s&&s.indexOf('○')<0&&s.length>=10&&v.indexOf(s)>=0){ hit=s; return true; } return false; }); });
+  return hit;
+}
+function syncHelp(){
+  if(MODE!=='material'||!$('hp_about'))return;
+  var cat=val('f_bizcat');
+  if(cat!==HP_CAT){ HP_CAT=cat; var t=hpEx();
+    Object.keys(HP).forEach(function(k){
+      t[k].forEach(function(x,i){ var el=$('hq_'+k+'_'+(i+1)); if(el)el.placeholder='예: '+x[0]; });
+      var p=$('hxp_'+k); if(p)p.textContent=hpExText(k,false);
+    });
+    [].forEach.call(document.querySelectorAll('.hx-cat'),function(b){ b.textContent=(cat&&EX_TXT[cat]?'「'+cat+'」':'기본')+' 업종'; });
+  }
+  Object.keys(HP).forEach(function(k){
+    var has=!!val(HP[k].ta), j=hpJoin(k), put=document.querySelector('[data-hput="'+k+'"]'), add=document.querySelector('[data-hadd="'+k+'"]'), xp=document.querySelector('[data-hxput="'+k+'"]');
+    if(put){ put.disabled=!j; put.classList.toggle('arm',!!HP_ARM[k]);
+             put.textContent=HP_ARM[k]?'한 번 더 누르면 지금 글이 바뀝니다':(has?'지금 글을 이 내용으로 바꾸기':HP[k].lab+' 칸에 넣기'); }
+    if(add){ add.hidden=!has; add.disabled=!j; }
+    if(xp) xp.disabled=has;
+  });
+}
+function hpDone(k,pre,msg){
+  var ta=$(HP[k].ta); touched(); refresh();
+  var m=$(pre+k); if(m){ m.textContent=msg; setTimeout(function(){ if(m.textContent===msg)m.textContent=''; },7000); }
+  try{ ta.focus({preventScroll:true}); }catch(x){} ta.scrollIntoView({block:'center',behavior:'smooth'});
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('[data-hp],[data-hx],[data-hput],[data-hadd],[data-hxput]'); if(!b)return;
+  var k=b.getAttribute('data-hp')||b.getAttribute('data-hx');
+  if(k){ var box=$((b.hasAttribute('data-hp')?'hp_':'hx_')+k), on=box.hidden; box.hidden=!on; b.setAttribute('aria-expanded',on?'true':'false'); b.classList.toggle('on',on);
+         if(on&&b.hasAttribute('data-hp')){ try{ $('hq_'+k+'_1').focus(); }catch(x){} } return; }
+  k=b.getAttribute('data-hput')||b.getAttribute('data-hadd');
+  if(k){ var j=hpJoin(k), ta=$(HP[k].ta); if(!j)return;
+    if(b.hasAttribute('data-hput')&&ta.value.trim()&&!HP_ARM[k]){ HP_ARM[k]=true; syncHelp(); setTimeout(function(){ HP_ARM[k]=false; syncHelp(); },4000); return; }   /* 지금 글을 지우기 전에 한 번 더 */
+    HP_ARM[k]=false;
+    ta.value=b.hasAttribute('data-hadd')?(ta.value.replace(/\s+$/,'')+HP[k].sep+j):j;
+    hpDone(k,'hpm_',HP[k].lab+' 칸에 넣었습니다. 아래 칸에서 이어서 고칠 수 있습니다.'); return; }
+  k=b.getAttribute('data-hxput');
+  if(k){ var ta2=$(HP[k].ta); if(ta2.value.trim())return;
+    ta2.value=hpExText(k,true);
+    hpDone(k,'hxm_','예시를 넣었습니다. 「○○」 부분과 실제와 다른 내용을 고쳐 주십시오.'); }
+});
+/* 나눠 쓰기 칸에서 Enter — 다음 칸으로 (마지막 칸이면 「넣기」 단추로) */
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter'||e.isComposing||e.keyCode===229)return;
+  var t=e.target, k=t&&t.getAttribute&&t.getAttribute('data-hq'); if(!k)return;
+  var nx=$('hq_'+k+'_'+(Number(t.id.split('_').pop())+1));
+  if(nx)nx.focus(); else { var b=document.querySelector('[data-hput="'+k+'"]'); if(b&&!b.disabled)b.focus(); }
+});
+
 /* ── 화면 갱신 ── */
 function refresh(){
   $('academy_box').classList.toggle('show',isAcad());
   $('realty_box').classList.toggle('show',isRealty());
   $('bizcat_etc_box').classList.toggle('show',val('f_bizcat')==='기타');
   applyExamples(); syncReg(); syncLocks(); syncGoals(); syncFeatures(); syncWho(); syncAddr(); syncSign(); syncDomain(); syncShows(); syncVisuals();
-  drawQuote(); drawCounts(); drawFaqSugs(); syncNoneBar(); syncRepBtns(); drawColors();
+  drawQuote(); drawCounts(); drawFaqSugs(); syncRepBtns(); drawColors(); syncPhotoVia(); syncHelp(); drawThemePv(); drawPv();
   $('cta_note').hidden=!(CTA_WARN&&bookOn()&&!one('via'));
   var fail=drawProgress();
   saveDraftSoon();
@@ -2550,6 +3278,10 @@ function refresh(){
 document.addEventListener('change',function(e){
   var i=e.target; if(!i||!i.closest||!i.closest('#form'))return;
   if(i.name==='main') MAIN_GOAL=i.value;
+  if(i.name==='dombuy'){   /* 등록 대행 ↔ 직접 구매를 바꾸면 입력해 둔 주소를 옮겨 줌 (10/10) */
+    if(i.value==='직접'&&!val('f_dom_self')&&val('f_dom_want1')) $('f_dom_self').value=val('f_dom_want1');
+    if(i.value==='대행'&&!val('f_dom_want1')&&val('f_dom_self')) $('f_dom_want1').value=val('f_dom_self');
+  }
   /* 「홈페이지 신청서」로 받으면 신청서 기능을 함께 고름 · 신청서 기능을 빼면 받는 방법을 다시 묻기 */
   if(i.name==='via'){ CTA_WARN=false;
     if(i.value==='홈페이지 신청서'){ var ff=document.querySelector('[data-feat="form"]'); if(!ff.checked){ ff.checked=true; AUTO_FORM=true; } } }
@@ -2787,9 +3519,10 @@ function drawMatSum(){
   var o=collect(), c=o.calc, th=o.theme==='추천에 맡김'?'업종에 맞춰 ('+recTheme(o.bizcat).slice(2)+')':(o.theme?o.theme.slice(2):'');
   $('mat_sum').innerHTML='<b>신청 내용</b><span class="no">신청 번호 '+esc(SNAP.no)+'</span><dl>'
     +'<dt>상호</dt><dd>'+esc(o.name)+'</dd>'
-    +'<dt>기능</dt><dd>'+esc(c.lines.map(function(l){return l.n;}).join(' · '))+'</dd>'
+    +'<dt>기능</dt><dd>'+esc(c.lines.map(function(l){return l.n;}).join(', '))+'</dd>'
     +'<dt>디자인</dt><dd>'+esc(th)+'</dd>'
     +'<dt>홈페이지 주소</dt><dd>'+esc(domainShort(o))+'</dd></dl>'
+    +(o.domain==='유료 도메인 새로'&&o.domBuy==='직접'?'<p class="matdom">도메인을 아직 구매하지 않았으면 완성본 제공 전까지 구매해 주십시오. 구매 후 담당자에게 주소를 알려 주시면 홈페이지 연결 값(DNS)을 안내합니다. <b>도메인 관리 비밀번호는 보내지 마십시오.</b></p>':'')
     +'<p>신청 내용 변경은 담당자에게 요청해 주십시오.</p>';
 }
 function saveDraft(){
@@ -2927,7 +3660,9 @@ var BOARD_SPEC={
 function today(){ return todayStr(); }
 function whenText(o){ return o.when==='날짜 정함'?(o.whenDate+' (날짜를 정해 둠)'):o.when; }
 function domainLine(o){
-  if(o.domain==='유료 도메인 새로') return '새로 구매 — 1순위 '+o.domWant1+' · 2순위 '+o.domWant2
+  if(o.domain==='유료 도메인 새로'&&o.domBuy==='직접') return '새로 구매 · 직접 구매 — 구매할 주소 '+o.domWant1
+    +' (고객이 등록 회사에서 직접 구매 · 비용도 직접 결제 · 소유자 정보는 받지 않음 · 구매 후 주소를 담당자에게 알려 줌 → 담당자가 연결 값(DNS)을 안내하고 고객이 등록 회사 화면에 넣음 · 다른 주소로 살 수도 있음)';
+  if(o.domain==='유료 도메인 새로') return '새로 구매 · 등록 대행 — 1순위 '+o.domWant1+' · 2순위 '+o.domWant2
     +' · 등록 회사 '+o.domReg+' · 소유자 '+o.owner+' (담당자가 고객 명의로 등록한 뒤 연결. 소유자 정보는 어드민 의뢰 상세에만 있음)';
   if(o.domain==='이미 있음') return '이미 있음 — '+o.domHave+' (산 곳: '+o.domWhere+') · 연결은 담당자가 함';
   if(o.domain==='무료 주소') return '무료 주소 (해지하면 사라진다고 안내됨)';
@@ -2935,7 +3670,9 @@ function domainLine(o){
 }
 /* 「한눈에 보기」용 (고객이 보는 글) */
 function domainShort(o){
-  if(o.domain==='유료 도메인 새로') return ['새로 구매','1순위 '+(o.domWant1||'(빈칸)'),'2순위 '+(o.domWant2||'(빈칸)'),o.domReg,o.owner?'소유자 '+o.owner:''].filter(Boolean).join(' · ');
+  if(o.domain==='유료 도메인 새로'&&o.domBuy==='직접') return ['새로 구매 · 직접 구매','구매할 주소 '+(o.domWant1||'(빈칸)')].join(' · ');
+  if(o.domain==='유료 도메인 새로'&&o.domBuy!=='대행') return '새로 구매 · 구매 방법 (빈칸)';
+  if(o.domain==='유료 도메인 새로') return ['새로 구매 · 등록 대행','1순위 '+(o.domWant1||'(빈칸)'),'2순위 '+(o.domWant2||'(빈칸)'),o.domReg,o.owner?'소유자 '+o.owner:''].filter(Boolean).join(' · ');
   if(o.domain==='이미 있음') return ['이미 있음',o.domHave,o.domWhere?'산 곳 '+o.domWhere:''].filter(Boolean).join(' · ');
   if(o.domain==='무료 주소') return '무료 주소';
   return '';
@@ -2966,8 +3703,10 @@ function brief(o){
   if(o.warns.length) add('> 제작 자료 화면이 노란색으로 표시한 **확인할 것 '+o.warns.length+'건**이 13장에 있습니다. 담당자가 고객에게 확인한 결과대로 반영합니다.');
   add('');
   add('## 0. 작업 방법');
-  [(o.hasLogo?'이 폴더의 사진부터 확인합니다. `000-logo` 가 로고, ':'이 폴더의 사진부터 확인합니다. ')
-     +'`001-main` 이 **첫 화면 대표 사진**(고객이 고름)이고, 나머지(`002`~)는 올린 순서입니다. 사진 내용(공간 · 상품 · 사람)을 보고 알맞은 자리에 넣습니다.',
+  [(o.photoVia==='카카오톡'
+      ?'**사진은 고객이 카카오톡으로 따로 보냈습니다(7장)** — 담당자가 받은 사진을 '+(o.hasLogo?'`000-logo`(로고) · ':'')+'`001-main`(고객이 「대표 사진」이라고 한 사진) · `002`~(받은 순서) 이름으로 이 폴더에 넣었는지 먼저 확인합니다. 사진 내용(공간 · 상품 · 사람)을 보고 알맞은 자리에 넣습니다.'
+      :(o.hasLogo?'이 폴더의 사진부터 확인합니다. `000-logo` 가 로고, ':'이 폴더의 사진부터 확인합니다. ')
+     +'`001-main` 이 **첫 화면 대표 사진**(고객이 고름)이고, 나머지(`002`~)는 올린 순서입니다. 사진 내용(공간 · 상품 · 사람)을 보고 알맞은 자리에 넣습니다.'),
    '**빌드 없는 정적 HTML · CSS · JS** 로 만들어 GitHub Pages 에 그대로 올릴 수 있게 합니다. 서버 · 데이터베이스는 회원가입 · 게시판 · 카드 결제를 고른 경우에만 씁니다(10장).',
    '업체 정보(상호 · 전화 · '+(o.addrPub?'주소 · ':'')+'운영 시간 · SNS)는 `assets/js/site.js` 맨 위 `SITE` 한 곳에 두고 머리말 · 꼬리말 · 버튼이 거기서 읽게 합니다. 색 · 여백은 `assets/css/style.css` 맨 위 `:root` 에 둡니다. 오픈 후 수정을 한 곳에서 하기 위해서입니다.',
    '저장소 맨 위에 `CLAUDE.md` 를 만들어 10장 규칙과 「어디에 무엇이 있나」 표(바꿀 것 → 파일)를 남깁니다. 오픈 후 수정 때 씁니다.',
@@ -3070,21 +3809,22 @@ function brief(o){
       ?('업종에 맞춰 (고객이 맡김) → 업종 「'+o.bizcatFull+'」 기준 **'+thKey+'** ('+th.feel+')')
       :(o.theme+' ('+th.feel+')'));
   line('색 (`:root`)', '메인 '+th.main+' · 포인트 '+th.point+' · 바탕 '+th.bg+' · 글자 '+th.text); line('모서리', th.radius);
-  add('- 원하는 색 (고객이 고른 순위): '+(o.color?o.color+' — 1순위를 포인트 색, 2 · 3순위를 보조 색으로 쓰고 테마 바탕과 톤을 맞춤. 글자 · 바탕 대비(4.5:1 이상)를 확인':'없음 (테마 색 그대로)'));
-  add('- 피할 색: '+(o.avoid?o.avoid+' — 쓰지 않음':'없음 (고객 확인)'));
+  add('- 원하는 색 (고객이 고른 순위): '+(o.color?o.color+' — 1순위를 포인트 색, 2 · 3순위를 보조 색으로 쓰고 테마 바탕과 톤을 맞춤. 글자 · 바탕 대비(4.5:1 이상)를 확인':(o.colorAns==='없음'?'없음 (고객 확인) — 테마 색 그대로':'지정 안 함 — 테마 색 그대로')));
+  add('- 피할 색: '+(o.avoid?o.avoid+' — 쓰지 않음':(o.avoidAns==='없음'?'없음 (고객 확인)':'지정 안 함')));
   if(o.like.length){
     add('- 참고 홈페이지 (고객이 좋다고 한 점만 참고 · 디자인 · 글을 베끼지 않음):');
     o.like.forEach(function(x){ add('  - '+x.a+' — '+x.b); });
-  } else add('- 참고 홈페이지: 없음 (고객 확인) — 테마대로');
+  } else add('- 참고 홈페이지: '+(o.likeAns==='없음'?'없음 (고객 확인)':'지정 안 함')+' — 테마대로');
   add('- 시안은 1개 · 움직임은 `prefers-reduced-motion` 에서 꺼지게');
   add('');
   add('## 7. 사진 · 로고');
+  if(o.photoVia==='카카오톡') add('- **전달: 고객이 카카오톡 채널 「'+KAKAO_CH+'」로 따로 보냄** (신청 번호 '+(SNAP?SNAP.no:'')+'와 함께 · 원본 화질로 요청함) — 어드민 「올린 사진」에는 없음. 담당자가 받아 아래 이름으로 작업 폴더에 넣음');
   add('- 로고: '+(o.hasLogo
       ?'`000-logo` 1장 — 맨 위에 넣고 파비콘도 로고로 만듦 (투명 배경이 아니면 바탕색을 맞춤)'
       :'없음 (고객 확인) — 상호를 글자 로고로 (테마 글꼴 · 굵게). 파비콘은 상호 첫 글자'));
-  add('- 대표 사진: `001-main` — 첫 화면에 가장 크게 (고객이 고른 사진)');
-  add('- 그 밖의 사진: '+o.nPhoto+'장 (`002`~) — 소개 · 서비스 안내'+(has('list')?' · 목록':'')+(has('board')&&c.boards.indexOf('갤러리')>=0?' · 갤러리 첫 글':''));
-  add('- 웹용으로 줄여(긴 변 2000px 이하) `assets/img/` 에 두고, `alt` 는 사진 내용대로 씁니다. (어드민 의뢰 상세 「올린 사진」에서 받기)');
+  add('- 대표 사진: `001-main` — 첫 화면에 가장 크게 ('+(o.photoVia==='카카오톡'?'고객이 「대표 사진」이라고 보낸 사진':'고객이 고른 사진')+')');
+  add('- 그 밖의 사진: '+(o.photoVia==='카카오톡'?'카카오톡으로 받은 사진 (`002`~ 받은 순서 · 2장 이상)':o.nPhoto+'장 (`002`~)')+' — 소개 · 서비스 안내'+(has('list')?' · 목록':'')+(has('board')&&c.boards.indexOf('갤러리')>=0?' · 갤러리 첫 글':''));
+  add('- 웹용으로 줄여(긴 변 2000px 이하 · 사진 속 촬영 정보(위치 등)는 지움) `assets/img/` 에 두고, `alt` 는 사진 내용대로 씁니다. '+(o.photoVia==='카카오톡'?'(카카오톡 채팅에서 원본으로 받기)':'(어드민 의뢰 상세 「올린 사진」에서 받기)'));
   if(o.photoNames&&o.photoNames.length) add('- 사진 원래 이름 (고객이 올린 파일 이름 · 목록 항목과 맞출 때): '+o.photoNames.join(' / '));
   add('');
   add('## 8. 검색 등록');
@@ -3142,11 +3882,13 @@ function brief(o){
   var miss=[];
   /* 모든 칸이 필수라 보통은 비어 있습니다. 아래는 그래도 빠질 수 있는 것과, 오픈 전에 고객이 해야 하는 것입니다. */
   if(!o.head)miss.push('한 줄 소개'); if(!o.about)miss.push('소개 글'); if(!o.svc.length)miss.push('서비스 · 메뉴');
-  if(!o.addr)miss.push('주소'); if(!o.hours)miss.push('운영 시간'); if(!o.tel)miss.push('대표 전화'); if(!o.nMain)miss.push('대표 사진');
-  if(o.hasLogo&&!o.nLogo)miss.push('로고 파일');
+  if(!o.addr)miss.push('주소'); if(!o.hours)miss.push('운영 시간'); if(!o.tel)miss.push('대표 전화'); if(!o.nMain&&o.photoVia!=='카카오톡')miss.push('대표 사진');
+  if(o.hasLogo&&!o.nLogo&&o.photoVia!=='카카오톡')miss.push('로고 파일');
+  if(o.photoVia==='카카오톡')miss.push((o.hasLogo?'로고 · ':'')+'사진 — 고객이 카카오톡 「'+KAKAO_CH+'」 채널로 보냄 (대표 가로 사진 1장 + 2장 이상 · 원본 화질). 받으면 '+(o.hasLogo?'`000-logo` · ':'')+'`001-main` · `002`~ 로 이름을 바꿔 작업 폴더에 넣고 작업 시작일 안내');
   if(o.regKind==='개업 준비 중')miss.push('사업자등록번호 (개업 후 · 세금계산서 · 맨 아래 사업자 정보)');
   if(has('lang'))miss.push('영문 문구 확인 (고객 · 오픈 전)');
   if(has('pay')&&!o.pay.mailorder)miss.push('통신판매업 신고번호 (오픈 전 · 맨 아래 표시)');
+  if(o.domain==='유료 도메인 새로'&&o.domBuy==='직접')miss.push('고객이 구매한 도메인 주소 (고객이 직접 구매 · 구매 후 담당자가 연결 값(DNS)을 안내 · 오픈 전)');
   if(miss.length) miss.forEach(function(x){ add('- [ ] '+x); }); else add('- 없음 — 바로 제작할 수 있습니다');
   add('');
   add('## 13. 확인할 것 (제작 자료 화면이 노란색으로 표시한 것 · 담당자가 고객에게 확인)');
@@ -3174,7 +3916,7 @@ function custType(kind){ return (REG[kind]&&REG[kind].cust)||'확인 필요'; }
 
 /* ── 제출 ── */
 function collect(){
-  var c=calc(), buy=one('domain')==='유료 도메인 새로', k=regKind(), r=REG[k]||{}, needNo=!!r.no;
+  var c=calc(), buy=one('domain')==='유료 도메인 새로', ag=buy&&one('dombuy')==='대행', sf=buy&&one('dombuy')==='직접', k=regKind(), r=REG[k]||{}, needNo=!!r.no;
   var hasK=function(x){return c.keys.indexOf(x)>=0;};
   var book=hasGoal('신청 · 예약'), via=book?one('via'):'';
   var ff=multi('formfields'), who=multi('who');          /* 「기타… + 추가」로 더한 것도 그대로 들어 있음 */
@@ -3196,17 +3938,18 @@ function collect(){
     more:one('tg_more')==='있음'?val('f_more'):'',
     old:one('tg_old')==='있음'?val('f_old'):'', head:val('f_head'), about:val('f_about'),
     greetAns:one('tg_greet'), greet:greetOn()?val('f_greet'):'', sign:greetOn()?signText():'',
-    photoNames:photoNames(one('tg_logo')==='있음'),
+    photoVia:one('tg_pvia'), photoNames:photoAtt()?photoNames(one('tg_logo')==='있음'):[],
     svc:repRead('rep_svc'), why:repRead('rep_why'), faq:repRead('rep_faq'),
     addr:val('f_addr'), addrPub:pub, addrForced:addrForced(), tel:val('f_tel'), kakao:one('tg_kakao')==='있음'?val('f_kakao'):'',
     hours:val('f_hours'), park:pub?val('f_park'):'',
     sns:one('tg_sns')==='있음'?val('f_sns'):'',
     theme:one('theme'), color:one('tg_color')==='있음'?cText(cRead('like'),true):'', avoid:one('tg_avoid')==='있음'?cText(cRead('avoid'),false):'',
-    like:one('tg_like')==='있음'?repRead('rep_like'):[], likeAns:one('tg_like'),
-    hasLogo:one('tg_logo')==='있음', nLogo:one('tg_logo')==='있음'?FILES.logo.length:0, nMain:FILES.main.length, nPhoto:FILES.photo.length,
+    like:one('tg_like')==='있음'?repRead('rep_like'):[], likeAns:one('tg_like'), colorAns:one('tg_color'), avoidAns:one('tg_avoid'),
+    hasLogo:one('tg_logo')==='있음', nLogo:(one('tg_logo')==='있음'&&photoAtt())?FILES.logo.length:0, nMain:photoAtt()?FILES.main.length:0, nPhoto:photoAtt()?FILES.photo.length:0,
     kw:val('f_kw'), domain:one('domain'),
     domHave:one('domain')==='이미 있음'?domainOf(val('f_dom_have')):'', domWhere:one('domain')==='이미 있음'?val('f_dom_where'):'',
-    domWant1:buy?wantDomain(val('f_dom_want1')):'', domWant2:buy?wantDomain(val('f_dom_want2')):'', owner:buy?one('owner'):'', domReg:buy?registrar():'',
+    domBuy:buy?one('dombuy'):'',   /* 대행 / 직접 (10/10) */
+    domWant1:ag?wantDomain(val('f_dom_want1')):(sf?wantDomain(val('f_dom_self')):''), domWant2:ag?wantDomain(val('f_dom_want2')):'', owner:ag?one('owner'):'', domReg:ag?registrar():'',
     when:one('when'), whenDate:one('when')==='날짜 정함'?val('f_when_date'):'',
     etc:one('tg_etc')==='있음'?val('f_etc'):'',
     ref:one('tg_ref'), refName:one('tg_ref')==='있음'?val('im-ref-name'):'',
@@ -3236,7 +3979,7 @@ function drawReview(){
       o.acad?['학원 표시',[o.acadNo,o.acadFee].filter(Boolean).join('\n')]:null,
       o.realty?['중개사무소 표시',[o.realty.no,o.realty.name].filter(Boolean).join(' · ')]:null]],
     ['step2','홈페이지의 목적',[
-      ['방문자 행동',o.goals.map(function(g,i){ return (i===0&&o.goals.length>1&&mainGoal()?'★ 첫 화면 큰 버튼 · ':'')+g; }).join('\n')],
+      ['전환 목표',o.goals.map(function(g,i){ return g+(i===0&&o.goals.length>1&&mainGoal()?' (첫 화면 큰 버튼)':''); }).join('\n')],
       hasGoal('신청 · 예약')?['신청 · 예약',o.via?o.via+(o.bookUrl?' ('+o.bookUrl+')':''):'']:null,
       ['주요 방문자',o.who]]],
     ['step3','기능 · 요금',[
@@ -3253,16 +3996,19 @@ function drawReview(){
       ['한 줄 소개',o.head],['소개 글',cut(o.about,120)],
       ['대표 인사말',o.greetAns==='넣지 않음'?'넣지 않음 (소개 글만)':(o.greet?cut(o.greet,80)+'\n서명: '+o.sign:'')],
       ['서비스 · 메뉴',names(o.svc)],['우리의 강점',names(o.why)],['자주 받는 질문',o.faq.length?o.faq.length+'개 · '+cut(names(o.faq),80):'없음 (홈페이지에 넣지 않음)'],['검색어',o.kw]]]);
-  S.push(['step5','연락 · 위치',[
+  S.push(['step5','연락 · 위치 정보',[
       ['주소 공개',o.addrPub?'공개 (지도 · 오시는 길)':(one('tg_addrpub')?'공개 안 함 (계약서에만)':'')],['대표 전화',o.tel],['운영 시간',o.hours],
       ['카카오톡',said('tg_kakao',o.kakao)],o.addrPub?['주차 · 오는 길',o.park]:null,['SNS',said('tg_sns',o.sns.replace(/\n+/g,' · '))]]]);
   S.push(['step6','디자인',[
       ['분위기',o.theme==='추천에 맡김'?'업종에 맞춰 ('+recTheme(o.bizcat).slice(2)+')':(o.theme?o.theme.slice(2):'')],
-      ['원하는 색',said('tg_color',o.color)],['피하고 싶은 색',said('tg_avoid',o.avoid)],
-      ['참고 홈페이지',said('tg_like',o.like.map(function(x){return x.a;}).join('\n'))]]]);
-  S.push(['step7','로고 · 사진',[
+      ['원하는 색',one('tg_color')?said('tg_color',o.color):'지정 안 함 (테마 색)'],['피하고 싶은 색',one('tg_avoid')?said('tg_avoid',o.avoid):'지정 안 함'],
+      ['참고 홈페이지',one('tg_like')?said('tg_like',o.like.map(function(x){return x.a;}).join('\n')):'지정 안 함 (테마대로)']]]);
+  S.push(['step7','로고 · 사진',o.photoVia==='카카오톡'?[
+      ['전달 방법','카카오톡으로 따로 전달 (「'+KAKAO_CH+'」 채널 · 신청 번호 '+(SNAP?SNAP.no:'')+' · 원본 화질)'],
+      ['로고',one('tg_logo')?(o.hasLogo?'있음 (카카오톡으로 함께 전달)':'없음 (상호를 글자로)'):'']]:[
+      ['전달 방법',o.photoVia?'이 화면에서 첨부':''],
       ['로고',one('tg_logo')?(o.hasLogo?(o.nLogo?'1장':''):'없음 (상호를 글자로)'):''],['대표 사진',o.nMain?'1장':''],['그 밖의 사진',o.nPhoto?o.nPhoto+'장':'']]]);
-  S.push(['step8','도메인 · 일정',[
+  S.push(['step8','홈페이지 주소 · 일정',[
       ['도메인',domainShort(o)],['희망 오픈',o.when?whenText(o):''],['기타 요청 사항',said('tg_etc',cut(o.etc,80))]]]);
   var html=S.filter(function(sec){ var cd=$(sec[0]); return cd&&!cd.hidden; }).map(function(sec){
     var card=$(sec[0]), no=card?card.querySelector('.card-h .no'):null;
@@ -3301,11 +4047,11 @@ $('form').addEventListener('submit',async function(e){
   btn.disabled=true; btn.textContent='보내는 중...';
   var mat=MODE==='material';   /* 신청서(견적 · 계약용) / 제작 자료(글 · 사진 · 지시서) */
   var extra=(!mat&&window.IMRef)?IMRef.extraDetails():{};
-  var o=collect(), c=o.calc, buy=o.domain==='유료 도메인 새로';
+  var o=collect(), c=o.calc, buy=o.domain==='유료 도메인 새로'&&o.domBuy==='대행', selfB=o.domain==='유료 도메인 새로'&&o.domBuy==='직접';   /* buy = 등록 대행 (소유자 정보 · 동의) */
 
   /* 사진 먼저 (제작 자료에서만 받음) */
   var paths=null, upk=upKey(o.hasLogo);
-  if(!mat) paths=null;
+  if(!mat||o.photoVia==='카카오톡') paths=null;   /* 카카오톡으로 따로 받으면 올리지 않음 (10/13) */
   else if(UP_CACHE&&UP_CACHE.key===upk) paths=UP_CACHE.paths;
   else try{ paths=await uploadAll(o.hasLogo,function(d,t){btn.textContent='사진 올리는 중 '+d+'/'+t;}); UP_CACHE={key:upk,paths:paths}; }
   catch(x){ btn.disabled=false; btn.textContent=BTN_TXT;
@@ -3349,9 +4095,10 @@ $('form').addEventListener('submit',async function(e){
     '지금 홈페이지':o.old||'없음 (처음 만듦)', '한 줄 소개':o.head, '소개 글':o.about, '대표 인사말':o.greet?o.greet+'\n— '+o.sign:(o.greetAns==='넣지 않음'?'넣지 않음 (소개 글만)':''),
     '서비스·프로그램':fmt(o.svc), '우리의 강점':fmt(o.why), '자주 묻는 질문':o.faq.length?fmt(o.faq):'없음 (고객이 적지 않음 · 홈페이지에 넣지 않음)',
     '대표 전화':o.tel, '카카오톡 채널':o.kakao||'없음', '운영 시간':o.hours, '주차·찾아오는 길':o.addrPub?o.park:'주소 비공개 (받지 않음)', 'SNS':o.sns||'없음',
-    '테마':o.theme==='추천에 맡김'?'업종에 맞춰 → '+thKey:o.theme, '원하는 색':o.color||'없음 (테마 색 그대로)', '피할 색':o.avoid||'없음',
-    '참고 사이트':o.like.length?fmt(o.like):'없음',
-    '올린 자료':'로고 '+(o.hasLogo?o.nLogo+'장':'없음 (상호를 글자로)')+' · 대표 사진 '+o.nMain+'장 · 그 밖의 사진 '+o.nPhoto+'장',
+    '테마':o.theme==='추천에 맡김'?'업종에 맞춰 → '+thKey:o.theme, '원하는 색':o.color||(o.colorAns==='없음'?'없음 (테마 색 그대로)':'지정 안 함 (테마 색 그대로)'), '피할 색':o.avoid||(o.avoidAns==='없음'?'없음':'지정 안 함'),
+    '참고 사이트':o.like.length?fmt(o.like):(o.likeAns==='없음'?'없음':'지정 안 함'),
+    '올린 자료':o.photoVia==='카카오톡'?'로고 · 사진은 카카오톡으로 따로 전달 (로고 '+(o.hasLogo?'있음':'없음 · 상호를 글자로')+')':'로고 '+(o.hasLogo?o.nLogo+'장':'없음 (상호를 글자로)')+' · 대표 사진 '+o.nMain+'장 · 그 밖의 사진 '+o.nPhoto+'장',
+    '사진 전달':o.photoVia==='카카오톡'?'카카오톡으로 따로 (채널 「'+KAKAO_CH+'」 · 신청 번호와 함께 · 원본 화질 요청) — 받은 뒤 작업 시작일 안내':'',
     '검색어':o.kw, '도메인':domainLine(o), '도메인 등록 회사':o.domReg,
     '도메인 소유자 정보':owner, '도메인 제3자 제공 동의':(buy&&!mat)?($('f_dom_consent').checked?'동의함 (받는 곳: '+o.domReg+')':'동의하지 않음 — 등록 대행 불가 · 담당자가 직접 구매 방법 안내'):'',
     '희망 오픈':whenText(o),
@@ -3364,7 +4111,7 @@ $('form').addEventListener('submit',async function(e){
   /* 견적서가 「받는 곳」 칸을 자동으로 채우는 이름 (어드민 defaultQuote) */
   if(o.regNo&&REG[o.regKind]&&REG[o.regKind].biz) details['사업자등록번호']=o.regNo;
   if(paths) details['_photos']=paths;
-  if(mat) details['사진 원래 이름']=photoNames(o.hasLogo).join('\n');
+  if(mat&&o.photoVia!=='카카오톡') details['사진 원래 이름']=photoNames(o.hasLogo).join('\n');
   if(mat){
     details['신청 번호']=SNAP.no; details['접수 구분']='제작 자료';
   } else {
@@ -3397,11 +4144,12 @@ $('form').addEventListener('submit',async function(e){
   /* 다음 신청서에서 자동으로 채워지도록 기본 정보를 남깁니다 (마이페이지 「내 정보」) */
   if(window.IMAccount){ try{ IMAccount.remember(row, details); }catch(x){} }
   clearDraft(); DRAFT_ON=false;
-  $('done_dom').style.display=buy?'':'none';
+  $('done_dom').style.display=buy?'':'none'; $('done_dom_self').style.display=(selfB&&!mat)?'':'none';
   $('form').style.display='none'; document.querySelector('.bar').style.display='none'; $('side').style.display='none';
   $('draft_note').hidden=true; $('mat_sum').style.display='none';
+  if($('pvside').classList.contains('open'))pvOpen(false); document.body.classList.add('pv-off');   /* 미리 보기 닫음 (10/13) */
   if(!mat)$('done_no').textContent=APPLY_NO;
-  $(mat?'done_mat':'done').style.display=''; window.scrollTo({top:0,behavior:'smooth'});
+  $(mat?'done_mat':'done').style.display=''; if(mat&&o.photoVia==='카카오톡')$('done_kk').style.display=''; window.scrollTo({top:0,behavior:'smooth'});
 });
 
 /* ── 시작 ── */
@@ -3433,6 +4181,13 @@ $('f_when_date').min=todayStr();
 setupSteps();
 refresh();
 if(MODE==='material'&&SNAP)drawMatSum();
+/* 10/13 — 카카오톡 채널 이름 · 신청 번호 칸 채우기 · 미리 보기 시작 · 디자인 선택 사항을 이미 고른 경우 펼침 */
+[].forEach.call(document.querySelectorAll('.kch'),function(b){ b.textContent=KAKAO_CH; });
+[].forEach.call(document.querySelectorAll('.kurl'),function(a){ if(KAKAO_URL)a.href=KAKAO_URL; else a.hidden=true; });
+if(MODE==='material'){
+  if(SNAP){ [].forEach.call(document.querySelectorAll('.kno'),function(b){ b.textContent=SNAP.no; }); pvInit(); PV_SIG=''; drawPv(); }
+  else document.body.classList.add('pv-off');
+} else if($('design_more')&&(one('tg_color')==='있음'||one('tg_avoid')==='있음'||one('tg_like')==='있음')) $('design_more').open=true;
 DRAFT_ON=true;
 /* /ref.js 칸은 DOMContentLoaded 에 붙습니다 → 붙은 뒤 한 번 더 맞춤 */
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ setupSteps(); refresh(); });
