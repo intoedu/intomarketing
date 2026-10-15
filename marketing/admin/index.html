@@ -226,6 +226,26 @@
   .paper.pdf .p-sec,.paper.pdf .p-sign{margin-top:20px}
   .paper.pdf .p-f{margin-top:22px}
   .p-f{margin-top:34px;padding-top:16px;border-top:1px solid #e3e8f0;text-align:center;font-size:.78rem;color:#888;line-height:1.7}
+  /* 계약서 쪽 (2026-10-16) — 매월 · 매년 금액이 있는 견적서의 다음 쪽 */
+  .p-break{height:0;border-top:2px dashed #c9d2e0;margin:44px -52px 40px}
+  .paper.pdf .p-break{border:0;margin:0}
+  .c-doc{font-size:.84rem;line-height:1.72;color:#222}
+  .c-doc .c-title{font-size:1.5rem;font-weight:800;text-align:center;letter-spacing:.14em;margin:0}
+  .c-doc .c-sub{text-align:center;font-size:.72rem;color:#888;letter-spacing:.24em;margin:2px 0 22px}
+  .c-doc h5{font-size:.9rem;font-weight:800;color:#12294D;margin:18px 0 6px}
+  .c-doc p{margin:6px 0}
+  .c-doc ol,.c-doc ul{margin:0;padding-left:1.45em}
+  .c-doc li{margin:2px 0}
+  .c-doc ul li.sub{list-style:circle}
+  .c-doc table{width:100%;border-collapse:collapse;margin:8px 0;font-size:.8rem}
+  .c-doc th,.c-doc td{border:1px solid #d5dce8;padding:6px 8px;text-align:left;vertical-align:top}
+  .c-doc th{background:#f1f4f9;font-weight:700}
+  .c-doc .box{border:1px solid #dce3ee;border-radius:6px;padding:10px 12px;white-space:pre-wrap;margin:6px 0}
+  .c-blank{display:inline-block;min-width:5em;border-bottom:1px solid #9aa6b8;height:1.05em;vertical-align:-3px}
+  .c-blank.s{min-width:2em}
+  .c-doc tr.c-sg td{height:62px;vertical-align:middle}
+  .c-stamp{width:60px;height:60px;object-fit:contain}
+  .c-n{font-size:.76rem;color:#777}
   @media print{
     body{background:#fff}
     .app,.modal:not(#paperModal),.toast{display:none!important}
@@ -234,6 +254,7 @@
     #paperModal .sheet-h,#paperModal .sheet-f{display:none!important}
     #paperModal .sheet-b{padding:0}
     .paper{max-width:none;padding:0}
+    .p-break{border:0;margin:0;break-before:page;page-break-before:always}
   }
 
   .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(12px);background:var(--band-bg);color:#fff;padding:11px 20px;border-radius:999px;font-size:.86rem;font-weight:700;opacity:0;pointer-events:none;transition:.22s;z-index:90}
@@ -821,6 +842,7 @@
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="contract-web.js"></script>   <!-- 홈페이지 제작 · 관리 계약서 틀 (6차 정본에서 만듦 · 손으로 고치지 말 것) -->
 <script>
 (function(){
   var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
@@ -1622,7 +1644,7 @@
            ? '<b style="flex-basis:100%;font-size:.84rem" class="'+(r.contract_signed_at?'':'warn')+'">'
              +(r.contract_signed_at
                 ? '✓ 계약 서명 받음 · '+fdate(r.contract_signed_at)
-                : '🔴 계약 서명을 아직 안 받았습니다 — 인투오피스로 서명을 먼저 받으세요')
+                : '🔴 계약 서명을 아직 안 받았습니다 — 견적서 PDF 뒤쪽의 계약서로 서명을 먼저 받으세요')
              +' <button class="btn btn-ghost" style="padding:4px 10px;font-size:.78rem" type="button" '
              +'onclick="markSigned()">'+(r.contract_signed_at?'기록 지우기':'서명 받았다고 기록')+'</button></b>'
            : '')
@@ -2157,7 +2179,7 @@
 
   /* 🔴 계약 서명을 먼저 받아야 하는 갈래 (2026-10-03 이은총 님).
         홈페이지는 약정·월 관리비가, SNS 는 정기 관리가 있어 계약서가 필요합니다.
-        인투오피스에 서명 요청 기능이 없어 담당자가 «두 번» 보냅니다 — ① 계약 서명 ② 결제 링크. */
+        2026-10-16부터 서명은 견적서 PDF 뒤쪽의 계약서로 받습니다(매월 · 매년 금액이 있는 견적). 담당자가 «두 번» 보냅니다 — ① 계약 서명 ② 결제 링크. */
   var NEEDS_SIGN=['홈페이지','SNS'];
 
   window.markSigned=async function(){
@@ -2176,7 +2198,7 @@
     var r=CURROW; if(!r||!r.quote_no){toast('견적서를 먼저 저장해 주세요');return;}
     if(NEEDS_SIGN.indexOf(r.kind)>=0 && !r.contract_signed_at){
       if(!confirm('이 건은 «계약 서명»을 먼저 받아야 합니다.\n\n'
-        +'인투오피스로 계약서에 서명을 받으셨습니까?\n'
+        +'견적서 PDF 뒤쪽의 계약서에 서명을 받으셨습니까?\n'
         +'받으셨으면 [확인]을 누르면 서명 기록을 남기고 링크를 만듭니다.'))return;
       await markSigned();
     }
@@ -2336,7 +2358,7 @@
      +termSec('포함되는 것 / INCLUDED',(q.terms||{}).include)
      +termSec('포함되지 않는 것 / NOT INCLUDED',(q.terms||{}).exclude)
      +termSec('환불 규정 / REFUND',(q.terms||{}).refund)
-     +(hasTerms(q)?('<div class="p-sign">'
+     +(hasTerms(q)&&!needContract(t)?('<div class="p-sign">'
          +'<div class="sg-t">위 견적 내용과 조항에 동의하며 작업을 의뢰합니다.</div>'
          +'<div class="sg-row">'
            +'<div class="sg"><span>의뢰인</span><i></i></div>'
@@ -2348,7 +2370,78 @@
        +(SET.owner?' · 대표 '+esc(SET.owner):'')
        +(SET.biz_no?' · '+esc(SET.biz_no):'')
        +(SET.email?' · '+esc(SET.email):'')+'</div>'
+     +(needContract(t)?contractHTML(r,q,t):'')
      +'</div>';
+  }
+
+  /* ══════════ 계약서 쪽 (2026-10-16 이은총 님) ══════════
+     · 견적 품목에 «매월» 또는 «매년» 결제가 하나라도 있으면 견적서 다음 쪽에 계약서를 붙이고, 견적서 맨 밑 서명란은 뺍니다.
+       (돈을 여러 번 내는 건만 계약서로 받음 — 1회성 견적은 지금처럼 견적서 서명란)
+     · 홈페이지 갈래 = 6차 정본 「홈페이지 제작 · 관리 계약서」 18개 조문 그대로 (contract-web.js · WEB_CONTRACT_TPL).
+       견적서에 있는 값(상호 · 견적번호 · 제작비 · 월 관리비 · 고른 기능 · 고객 연락처)만 채우고, 나머지 빈칸은 서명할 때 채웁니다.
+     · 그 밖의 갈래(SNS 정기 콘텐츠 등) = 견적서의 작업 순서 · 포함 · 불포함 · 환불 규정을 조문으로 옮긴 계약서 (genContractHTML).
+       🔴 문장을 바꿀 때는 행정 창에 먼저 묻습니다. */
+  function needContract(t){ return !!(t&&(t.month||t.year)); }
+  function cWon(n){ n=Number(n)||0; return n?n.toLocaleString('ko-KR')+'원':'<span class="c-blank"></span>'; }
+  function cVal(v){ v=(v==null?'':(''+v)).trim(); return v?esc(v):'<span class="c-blank"></span>'; }
+  function cCust(q,r){ var to=q.to||{}; return {
+      name:to.company||r.academy_name||'', biz:to.biz_no||'', addr:to.addr||'',
+      contact:[to.phone,to.email].filter(function(x){return x&&(''+x).trim();}).join(' · ') }; }
+  function cStamp(){ return SET.stamp?'<img class="c-stamp" alt="" src="'+SET.stamp+'">':''; }
+  function contractHTML(r,q,t){
+    var g=groupOf(r);
+    var body=(g==='web'&&window.WEB_CONTRACT_TPL)?webContractHTML(r,q,t):genContractHTML(r,q,t);
+    return '<div class="p-break html2pdf__page-break"></div><div class="c-doc">'+body+'</div>';
+  }
+  function webContractHTML(r,q,t){
+    var c=cCust(q,r), names=(q.items||[]).map(function(it){return (it&&it.name||'').trim();}).filter(Boolean);
+    var all=names.join(' / ');
+    /* 제2조 「항목」에는 제작 품목만 — 매월 · 매년 품목(월 관리비 등)은 제3조 금액에 들어갑니다 */
+    var made=(q.items||[]).filter(function(it){return it&&(it.name||'').trim()&&!/매월|매년/.test(it.cycle||'');}).map(function(it){return it.name.trim();});
+    if(made.length)names=made;
+    var FEAT=[/회원/,/게시판/,/공지/,/신청서|신청 ?폼/,/목록/,/한\s*·?\s*영|영문|영어/,/카드/];
+    var v={'상호':cVal(c.name),'품목':cVal(names.join(' · ')),'견적번호':cVal(r.quote_no),
+           '제작비':cWon(t.once),'월관리비':(t.month?'월 '+cWon(t.month):cWon(0)),
+           '등록번호':cVal(c.biz),'주소':cVal(c.addr),'연락처':cVal(c.contact),'직인':cStamp()};
+    FEAT.forEach(function(re,i){ v['F'+i]=re.test(all)?'☑':'☐'; });
+    return '<h1 class="c-title">홈페이지 제작 · 관리 계약서</h1><div class="c-sub">CONTRACT</div>'
+      +window.WEB_CONTRACT_TPL.replace(/\{\{([^}]+)\}\}/g,function(m,k){ return (k in v)?v[k]:m; });
+  }
+  function genContractHTML(r,q,t){
+    var c=cCust(q,r), tm=q.terms||{}, no=cVal(r.quote_no), n=0;
+    function art(title,html){ n++; return '<h5>제'+n+'조 ('+title+')</h5>'+html; }
+    function box(s){ s=(s||'').trim(); return s?'<div class="box">'+esc(s)+'</div>':''; }
+    var rows=(q.items||[]).filter(function(it){return it&&(it.name||'').trim();}).map(function(it){
+      return '<tr><td>'+esc(it.name)+'</td><td>'+esc(it.cycle||'1회')+'</td><td style="text-align:right">'+cWon(it.price)+'</td></tr>'; }).join('');
+    var pay=((q.pay||'').trim()||(SET.pay_note||'').trim()), bank=((q.bank||'').trim()||(SET.bank||'').trim());
+    var money=[]; if(t.once)money.push('1회성 비용 '+cWon(t.once)); if(t.month)money.push('매월 '+cWon(t.month)); if(t.year)money.push('매년 '+cWon(t.year));
+    var h='<h1 class="c-title">'+esc((AREAS[groupOf(r)]||'서비스'))+' 이용 계약서</h1><div class="c-sub">CONTRACT</div>'
+      +'<p><strong>'+esc(SET.company||'인투마케팅')+'</strong>(이하 "회사")과 <strong>'+cVal(c.name)+'</strong>(이하 "고객")은 견적서 <strong>'+no+'</strong>에 적은 서비스에 관하여 다음과 같이 계약합니다.</p>';
+    h+=art('목적과 효력','<ol><li>이 계약은 회사가 견적서 '+no+'에 적은 서비스를 제공하는 데 필요한 권리와 의무를 정하는 것을 목적으로 합니다.</li>'
+      +'<li>이 계약은 회사와 고객이 서명한 날부터 효력이 생깁니다.</li></ol>');
+    h+=art('서비스 내용','<p>품목과 금액은 견적서 '+no+'와 같습니다 (모두 부가세 포함).</p>'
+      +'<table><thead><tr><th>항목</th><th>결제 주기</th><th style="text-align:right">금액</th></tr></thead><tbody>'+rows+'</tbody></table>'
+      +((tm.include||'').trim()?'<p>포함되는 것</p>'+box(tm.include):'')
+      +((tm.exclude||'').trim()?'<p>포함되지 않는 것</p>'+box(tm.exclude):''));
+    h+=art('요금과 결제','<ol><li>요금은 '+money.join(' · ')+'입니다 (부가세 포함).</li>'
+      +(pay||bank?'<li>결제 조건'+box(pay+(bank?((pay?'\n':'')+'[ 입금 계좌 ] '+bank):''))+'</li>':'')+'</ol>');
+    if((tm.flow||'').trim())h+=art('진행',box(tm.flow));
+    if((tm.refund||'').trim())h+=art('해지와 환불',box(tm.refund));
+    h+=art('약관과의 관계','<p>이 계약에 없는 사항은 회사의 이용약관을 따릅니다. 이 계약과 이용약관이 다르면 이 계약을 따릅니다. 다만 이 계약이 이용약관보다 고객에게 불리한 경우에는 이용약관을 따릅니다.</p>');
+    h+=art('통지와 영업일','<ol><li>이 계약에 따른 안내와 통지는 회사의 카카오톡 채널(인투마케팅), 계약서에 적은 이메일 또는 휴대전화(문자 · 카카오톡)로 합니다. 연락처가 바뀌면 바로 상대방에게 알립니다.</li>'
+      +'<li>「영업일」은 토요일, 일요일 및 「관공서의 공휴일에 관한 규정」에 따른 공휴일을 제외한 날이며, 회사의 영업시간은 영업일 09:00부터 20:00까지입니다.</li></ol>');
+    h+=art('분쟁의 해결','<p>이 계약과 관련해 분쟁이 생기면 회사와 고객은 먼저 성실히 협의합니다. 협의가 되지 않으면 민사소송법에 따른 관할 법원에서 해결합니다.</p>');
+    var blank='20&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;.';
+    h+='<h5>서명</h5><table><thead><tr><th></th><th>회사</th><th>고객</th></tr></thead><tbody>'
+      +'<tr><td>상호 (이름)</td><td>'+esc(SET.company||'인투마케팅')+'</td><td>'+cVal(c.name)+'</td></tr>'
+      +'<tr><td>대표자</td><td>'+esc(SET.owner||'')+'</td><td><span class="c-blank"></span></td></tr>'
+      +'<tr><td>등록번호</td><td>'+(SET.biz_no?'사업자등록번호 '+esc(SET.biz_no):'')+'</td><td>'+cVal(c.biz)+'</td></tr>'
+      +'<tr><td>주소</td><td>'+esc(SET.addr||'')+'</td><td>'+cVal(c.addr)+'</td></tr>'
+      +'<tr><td>연락처</td><td>'+esc([SET.phone,SET.email].filter(Boolean).join(' · '))+'</td><td>'+cVal(c.contact)+'</td></tr>'
+      +'<tr><td>날짜</td><td>'+blank+'</td><td>'+blank+'</td></tr>'
+      +'<tr class="c-sg"><td>서명 (인)</td><td>'+cStamp()+'</td><td></td></tr></tbody></table>'
+      +'<p class="c-n">회사와 고객은 이 계약의 내용을 확인하고 서명합니다. 개인 고객의 주민등록번호는 받지 않습니다.</p>';
+    return h;
   }
   /* ---------- PDF 바로 저장 ----------
      예전엔 「PDF로 저장」이 인쇄 창(window.print)을 열었습니다.
@@ -2405,7 +2498,7 @@
         html2canvas:{scale:2,backgroundColor:'#ffffff',useCORS:true},
         jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
         /* 표 한 줄·조항 한 칸·서명란이 쪽 경계에서 반으로 잘리지 않게 */
-        pagebreak:{mode:['css','legacy'],avoid:['tr','.p-h','.p-cols','.p-sum','.p-sec','.p-sign','.p-f']}
+        pagebreak:{mode:['css','legacy'],avoid:['tr','.p-h','.p-cols','.p-sum','.p-sec','.p-sign','.p-f','.c-doc h5','.c-doc li','.c-doc p','.c-doc .box']}
       }).from(paper).save();
       toast('PDF를 저장했습니다 · '+name);
     }catch(e){
