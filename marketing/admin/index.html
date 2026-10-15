@@ -89,6 +89,13 @@
   .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
   .toolbar .inp{max-width:280px}
   .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .fee{margin-bottom:20px}
+  .fee>summary{padding:14px 18px;cursor:pointer;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+  .fee>summary span{font-size:.85rem;color:var(--muted)}
+  .fee[open]>summary{border-bottom:1px solid var(--line)}
+  .fee th.r,.fee td.r{text-align:right}
+  .fee tbody tr{cursor:pointer}
+  .fee-n{font-size:.78rem;color:var(--muted);padding:10px 18px 14px}
   table{width:100%;border-collapse:collapse}
   th{font-size:.76rem;font-weight:700;color:var(--muted);text-align:left;padding:13px 14px;background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap}
   td{padding:13px 14px;border-bottom:1px solid var(--line);font-size:.89rem;vertical-align:middle}
@@ -380,6 +387,13 @@
         <div class="stat"><b class="tnum" id="s-ing">0</b><span>진행중</span></div>
         <div class="stat"><b class="tnum" id="s-done">0</b><span>완료</span></div>
       </div>
+      <!-- 월 관리비 받는 곳 (2026-10-16 이은총 님) — 홈페이지 제작 화면에서만. 저장된 견적서를 읽기만 합니다 -->
+      <details class="card fee hide" id="feeBox">
+        <summary><b>월 관리비 받는 곳</b><span id="feeSum"></span></summary>
+        <table><thead><tr><th>상호명</th><th class="r">월 관리비</th><th>견적번호</th><th>상태</th><th>계약 서명</th></tr></thead>
+          <tbody id="feeRows"></tbody></table>
+        <div class="fee-n">매월 · 매년 품목이 있는 견적서만 모읍니다. 금액은 견적서에 적은 그대로이며, 실제 입금은 따로 확인합니다.</div>
+      </details>
       <div class="toolbar">
         <input class="inp" id="q" placeholder="상호명·담당자·메모 검색" oninput="renderList()">
         <select class="inp" id="fStatus" style="max-width:150px" onchange="renderList()">
@@ -1122,7 +1136,26 @@
     }).join('');
   };
 
+  /* 월 관리비 받는 곳 — 홈페이지 갈래에서 매월 · 매년 품목이 있는 견적서만 (2026-10-16) */
+  function renderFee(){
+    var box=$('feeBox'); if(!box)return;
+    if(CUR!=='web'){box.classList.add('hide');return;}
+    var ORD={'진행중':0,'완료':1,'접수':2,'보류':3};
+    var list=(DATA.web||[]).filter(function(r){return r.quote;}).map(function(r){return {r:r,t:quoteTotals(r.quote)};})
+      .filter(function(x){return x.t.month||x.t.year;})
+      .sort(function(a,b){var oa=ORD[normStatus(a.r.status)], ob=ORD[normStatus(b.r.status)]; return (oa==null?9:oa)-(ob==null?9:ob)||(b.t.month-a.t.month);});
+    box.classList.toggle('hide',!list.length);
+    var on=list.filter(function(x){var s=normStatus(x.r.status);return s==='진행중'||s==='완료';});
+    var m=on.reduce(function(s,x){return s+(x.t.month||0);},0), y=on.reduce(function(s,x){return s+(x.t.year||0);},0);
+    $('feeSum').textContent='진행중 · 완료 '+on.length+'건 · 월 합계 '+won(m)+(y?' · 매년 '+won(y):'')+' (전체 '+list.length+'건)';
+    $('feeRows').innerHTML=list.map(function(x){var r=x.r;
+      return '<tr onclick="openDetail(\''+r.id+'\')"><td>'+esc(r.academy_name||'')+'</td>'
+        +'<td class="r tnum">'+(x.t.month?won(x.t.month):'—')+(x.t.year?'<br><span class="muted">매년 '+won(x.t.year)+'</span>':'')+'</td>'
+        +'<td>'+esc(r.quote_no||'—')+'</td><td>'+esc(normStatus(r.status))+'</td>'
+        +'<td>'+(r.contract_signed_at?'✓ '+fdate(r.contract_signed_at):'<span class="muted">아직</span>')+'</td></tr>';}).join('');
+  }
   window.renderList=function(){
+    renderFee();
     var rows=DATA[CUR]||[];
     var q=($('q').value||'').trim().toLowerCase();
     var fs=$('fStatus').value, fm=$('fMine').value;
