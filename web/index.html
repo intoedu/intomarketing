@@ -1,0 +1,1281 @@
+<!doctype html>
+<html lang="ko" class="no-js">
+<!-- ══════════════════════════════════════════════════════════════
+   홈페이지 제작 세부페이지 ( intomarketing.co.kr/web/ )   2026-10-15 판
+   기준: intomarketing-web-detail-spec.md (3차 수정) · design-main.png
+
+   🔴 메인을 고치면 /web/ 도 같이 고쳐야 합니다
+      머리말(header) · 손전화 메뉴(msheet) · 하단(footer)은 메인 index.html 에서
+      «복사해 온» 것입니다. 사이트에 공통 파일이 없어서 그렇습니다.
+      메인의 메뉴 항목 · 사업자 정보 · 하단 링크를 바꾸면 이 파일의 같은 자리도 바꾸십시오.
+      (색만 이 쪽에 맞춰 어둡게 바꿨습니다 — 아래 「머리띠 · 바닥글 색」)
+
+   🔴 가격 · 조건은 아래 <script> 맨 위 PRICE · PLANS 한 곳에서 읽습니다.
+      /apply/index.html 의 PRICE · PLANS, 메인 가격표, hakwon/index.html WEB_ITEMS 와 같은 값이어야 합니다.
+
+   🔴 이미지는 /web/img/ 에 «같은 이름»으로 넣으면 바로 바뀝니다 (img/README.md).
+      지금 들어 있는 같은 이름의 파일은 1×1 빈 자리표시 파일입니다.
+      design-main.png · 레퍼런스(Canva 템플릿) 속 그림은 어떤 형태로도 쓰지 않습니다.
+
+   글꼴은 Pretendard 하나만 씁니다 (메인과 같은 주소 · 버전을 올리지 마세요).
+   ══════════════════════════════════════════════════════════════ -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 🔴 Pretendard — 사이트 전체가 «같은 글꼴»로 보이게 합니다 (2026-10-06). 버전을 따로 올리지 마세요. -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<title>홈페이지 제작 · 인투마케팅</title>
+<meta name="description" content="인투마케팅 홈페이지 제작 — 기본 제작비 10만 원 · 월 5만 원부터 · 페이지 수 제한 없음 · 도메인 고객 소유 (부가세 포함). 기획부터 제작 · 배포까지 직접 수행하고, 오픈 이후에도 매월 관리합니다.">
+<link rel="canonical" href="https://intomarketing.co.kr/web/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="인투마케팅">
+<meta property="og:title" content="홈페이지 제작 · 인투마케팅">
+<meta property="og:description" content="기본 제작비 10만 원 · 월 5만 원부터 · 페이지 수 제한 없음 · 도메인 고객 소유 (부가세 포함)">
+<meta property="og:url" content="https://intomarketing.co.kr/web/">
+<meta property="og:locale" content="ko_KR">
+<link rel="icon" href="/hakwon/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/hakwon/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="icon" href="/hakwon/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/hakwon/apple-touch-icon.png">
+<meta name="theme-color" content="#1B1D20">
+<meta name="color-scheme" content="dark">
+<script>document.documentElement.className='js';</script>
+<style>
+:root{
+  /* ═══ 뼈대 토큰 — 메인 index.html 과 같은 값 (2026-10-06) ═══ */
+  --t-xs:12px; --t-sm:13px; --t-base:15px; --t-md:17px;
+  --t-lg:22px; --t-xl:30px; --t-2xl:44px;
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px;
+  --s-5:24px; --s-6:32px; --s-7:48px; --s-8:72px;
+  --r-sm:6px; --r-md:12px; --r-pill:999px;
+  --paper:#FBFCFE; --surface:#FFFFFF; --surface-2:#F3F6FB;
+  --ink:#0E1B33; --muted:#56657F; --line:#E2E8F2;
+  --brand:#16305C; --accent:#2E5FE8; --accent-ink:#1E47C0;
+  --band-bg:#12294D; --band-line:#2A436E; --band-text:#DCE6F8;
+  --f:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --ease:cubic-bezier(.22,.9,.28,1);
+
+  /* ═══ 이 쪽 디자인 토큰 — design-main.png 에서 뽑은 색 ═══ */
+  --hd-bg:#1B1D20;      /* 머리말 */
+  --hd-pill:#2E3239;    /* 머리말 「지원 항목」 활성 */
+  --hd-cta:#333333;     /* 머리말 「상담 문의」 · IM 상자 */
+  --sky:#72AEE1;        /* 히어로 맨 위 하늘색 */
+  --blue:#1C69CF;
+  --navy:#0B2B56;
+  --btn:#006EEF;        /* 신청 버튼 */
+  --btn-hi:#1F82FF;
+  --yellow:#F8F107;     /* 노란 강조 (가장 진한 곳 #FFF500) */
+  --sky-lt:#75D2FD;     /* 상자 맨 아래 밝은 하늘색 */
+  --num:#8FD3FF;        /* 숫자 카드 큰 숫자 */
+  --txt:#FFFFFF;
+  --txt-2:#D3DCEA;      /* 어두운 바탕 본문 */
+  --txt-3:#9AA6BA;      /* 어두운 바탕 흐린 글씨 */
+  --glass:rgba(255,255,255,.055);
+  --glass-line:rgba(255,255,255,.14);
+  --cw:1210px;          /* 내용 폭 (1366 화면에서 상자 폭 1211) */
+  --gut:clamp(20px,4vw,40px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{margin:0;background:#000;color:var(--txt-2);font-family:var(--f);line-height:1.7;font-size:var(--t-md);overflow-x:clip;
+     word-break:keep-all;overflow-wrap:break-word}
+[hidden]{display:none!important}
+button,input,select,textarea{font:inherit}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{text-wrap:balance;color:var(--txt)}
+p{text-wrap:pretty}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:12px;top:12px;z-index:99;background:var(--btn);color:#fff;padding:8px 16px;border-radius:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:2px solid #8FC2FF;outline-offset:3px}
+.wrap{max-width:1480px;margin:0 auto;padding:0 clamp(20px,2.6vw,40px)}
+.w{max-width:calc(var(--cw) + var(--gut)*2);margin:0 auto;padding:0 var(--gut)}
+section[id]{scroll-margin-top:72px}
+
+/* ══════════ 머리띠 — 메인 index.html 에서 복사 (모양 · 크기 그대로) ══════════ */
+header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
+       backdrop-filter:saturate(150%) blur(10px);border-bottom:1px solid var(--band-line)}
+.nav{display:flex;align-items:center;gap:8px;height:62px}
+.brand{min-height:44px;display:flex;align-items:center;gap:8px;background:none;border:0;cursor:pointer;padding:0;color:#fff;line-height:1.75}
+.brand .mk{width:32px;height:32px;border-radius:8px;background:var(--accent);display:grid;place-items:center;
+           font-weight:800;font-size:var(--t-xs);letter-spacing:.02em;color:#fff}
+.brand b{font-size:var(--t-base);font-weight:800;letter-spacing:-.01em}
+.brand small{display:block;font-size:var(--t-xs);font-weight:600;color:#93B0DE;letter-spacing:.04em;line-height:1.2}
+.links{margin-left:auto;display:flex;align-items:center;gap:2px}
+.navlink{min-height:44px;display:inline-flex;align-items:center;background:none;border:0;cursor:pointer;color:#C6D8F4;font-size:var(--t-base);font-weight:600;
+         padding:8px 12px;border-radius:9px;transition-property:background-color,color,transform;transition-duration:.15s;transition-timing-function:ease-out}
+.navlink:hover{color:#fff;background:rgba(255,255,255,.09)}
+.navlink.active{color:#fff;background:rgba(255,255,255,.13)}
+.navitem{position:relative}
+.caret{display:inline-block;width:0;height:0;margin-left:4px;vertical-align:2px;
+       border:4px solid transparent;border-top-color:currentColor}
+.drop{position:absolute;top:calc(100% + 6px);right:0;min-width:286px;background:var(--surface);color:var(--ink);
+      border:1px solid var(--line);border-radius:12px;padding:8px;line-height:1.75;
+      box-shadow:0 18px 44px -18px rgba(14,27,51,.42);opacity:0;visibility:hidden;transform:translateY(-6px);
+      transition-property:opacity,transform,visibility;transition-duration:.16s;transition-timing-function:ease-out}
+.navitem:hover .drop,.navitem:focus-within .drop{opacity:1;visibility:visible;transform:none}
+.drop a{display:block;padding:8px 12px;border-radius:9px;font-size:var(--t-base);font-weight:700;cursor:pointer}
+.drop a:hover{background:var(--surface-2)}
+.drop a small{display:block;font-size:var(--t-xs);font-weight:500;color:var(--muted);margin-top:1px}
+.headcta{background:var(--accent);color:#fff;font-weight:700;font-size:var(--t-base);line-height:1.75;
+         padding:8px 16px;border-radius:9px;margin-left:8px;cursor:pointer}
+.headcta:hover{background:#3D6BF0}
+.imab{color:#C6D8F4;margin-left:6px}
+.msheet #authbar-m a,.msheet .imab-m{color:#DCE6F8}
+.burger{display:none;background:none;border:0;color:#DCE6F8;cursor:pointer;padding:8px;margin-left:8px;
+        min-height:44px;min-width:44px;align-items:center;justify-content:center}
+.burger svg{width:24px;height:24px}
+.msheet{display:none;background:var(--band-bg);border-top:1px solid var(--band-line);padding:8px 24px 16px}
+.msheet a{display:block;padding:12px 4px;color:#DCE6F8;font-weight:700;font-size:var(--t-base);cursor:pointer;
+          border-bottom:1px solid rgba(255,255,255,.07)}
+.msheet a.sub{padding-left:16px;font-weight:600;color:#A8C0E6;font-size:var(--t-sm)}
+.msheet.on{display:block;animation:sheetIn .26s var(--ease) both}
+@keyframes sheetIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@media(max-width:900px){.links,.headcta{display:none}.burger{display:block;margin-left:auto}}
+.brand:active{transform:scale(.97)} .navlink:active{transform:scale(.94)} .headcta:active{transform:scale(.965)}
+
+/* ── 머리띠 · 바닥글 색 — design-main.png (메인의 영상 화면처럼 이 쪽에서만 어둡게) ── */
+header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
+.brand .mk{background:var(--hd-cta)}
+.brand small{color:#8A9099}
+.navlink{color:#B4BAC4}
+.navlink:hover{color:#fff;background:rgba(255,255,255,.08)}
+.navlink.active{color:#fff;background:var(--hd-pill)}
+.headcta{background:var(--hd-cta)}
+.headcta:hover{background:#444851}
+.imab,.burger{color:#C9CED6}
+.msheet{background:var(--hd-bg);border-top-color:#2A2D33}
+.msheet a{color:#E3E6EB}
+.msheet a.sub{color:#A9AFB8}
+
+/* ══════════ 공통 — 제목의 가는 줄 / 굵은 줄 (Pretendard 300 / 800) ══════════ */
+.ttl{font-size:clamp(32px,4.2vw,58px);line-height:1.12;letter-spacing:-.035em;font-weight:300}
+.ttl .l{display:block;font-weight:300}
+.ttl .b{display:block;font-weight:800}
+.ttl.one .l,.ttl.one .b{display:inline}
+.lead{font-size:clamp(var(--t-md),1.5vw,20px);color:var(--txt-2);line-height:1.75;max-width:62ch;margin-top:var(--s-5)}
+.sec{padding:clamp(88px,10vw,140px) 0}
+.sec-head{margin-bottom:clamp(40px,5vw,64px)}
+.sec-head.c{text-align:center}
+.sec-head.c .lead{margin-left:auto;margin-right:auto}
+.glass{background:var(--glass);border:1px solid var(--glass-line);border-radius:28px;
+       box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 28px;border-radius:10px;
+     font-weight:600;font-size:var(--t-md);cursor:pointer;border:1px solid transparent;
+     transition:background-color .15s,border-color .15s,transform .13s var(--ease)}
+.btn:active{transform:scale(.97)}
+.btn-p{background:var(--btn);color:#fff}
+.btn-p:hover{background:var(--btn-hi)}
+.btn-g{background:rgba(255,255,255,.04);color:#fff;border-color:rgba(255,255,255,.32)}
+.btn-g:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+.more{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:#9CCBFF;font-weight:700;font-size:var(--t-base)}
+.more:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
+
+/* ── 이미지 자리 (2-5) — 파일이 1×1 자리표시이면 data-tbd 가 남고 아래 모양으로 보입니다 ── */
+.slot{position:relative}
+.slot img{width:100%;height:100%}
+.slot[data-tbd] img{opacity:0}
+.slot[data-tbd].solid{background:#0B0E13;box-shadow:inset 0 0 0 1px rgba(255,255,255,.10)}
+.slot[data-tbd].line{background:transparent;outline:1px dashed rgba(255,255,255,.18);outline-offset:-1px;border-radius:32px}
+
+/* ══════════ 1. 히어로 ══════════ */
+.hero{position:relative;overflow:hidden;
+  /* design-main.png 의 하늘색 → 파랑 → 검정. 「INTO MARKETING」 뒤가 4.5:1 이 되도록 파랑을 22px 위로 당겼습니다 */
+  background:linear-gradient(180deg,#72AEE1 0,#599ADC 52px,#3B81D5 104px,#1C69CF 150px,#185EBC 182px,
+             #134A93 262px,#0B2B56 352px,#06162D 412px,#030C18 442px,#000 500px)}
+.hero-in{position:relative;display:grid;grid-template-columns:minmax(0,clamp(480px,43vw,610px)) minmax(0,1fr);
+  column-gap:clamp(32px,4.1vw,64px);
+  padding:80px 0 84px max(var(--gut),calc((100% - var(--cw))/2))}
+/* 유리 카드 — 오른쪽 위 모서리를 비스듬히 자른 모양은 스크립트가 크기에 맞춰 그립니다(없으면 둥근 네모) */
+.hcard{position:relative;z-index:2;min-height:616px;border-radius:72px;
+  padding:64px clamp(28px,4.4vw,60px) 52px;display:flex;flex-direction:column;
+  background:
+    radial-gradient(60% 9% at 0 0,rgba(255,255,255,.26),rgba(255,255,255,0)),
+    linear-gradient(165deg,rgba(255,255,255,.06) 0%,rgba(255,255,255,.045) 45%,rgba(255,255,255,.035) 100%);
+  /* 🔴 saturate 를 넣으면 「INTO MARKETING」 뒤 파랑이 밝아져 4.5:1 아래로 떨어집니다 */
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45)}
+.hcard.cut{border-radius:0;box-shadow:none}
+.hcard-line{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:none}
+.hcard.cut .hcard-line{display:block}
+.kick{font-size:var(--t-md);font-weight:600;letter-spacing:.04em;color:#fff;line-height:1.2;
+      text-shadow:0 1px 2px rgba(0,30,80,.35)}
+.hero h1{margin-top:52px;font-size:clamp(52px,7.05vw,102px);line-height:1.04;letter-spacing:-.045em;color:#fff}
+.hero h1 .l{display:block;font-weight:300}
+.hero h1 .b{display:block;font-weight:800;margin-top:.06em}
+.hsub{margin-top:52px;font-size:clamp(19px,2.05vw,var(--t-xl));line-height:1.3;color:#fff;font-weight:400;letter-spacing:-.02em}
+.hact{margin-top:auto;padding-top:56px;display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.hbtn{min-height:60px;padding:0 24px;border-radius:8px;font-size:clamp(20px,2.05vw,28px);font-weight:400;letter-spacing:-.02em}
+.badge{display:inline-flex;align-items:center;min-height:34px;padding:0 13px;border-radius:999px;
+       background:var(--yellow);color:#15171A;font-size:var(--t-sm);font-weight:800;letter-spacing:-.01em;white-space:nowrap}
+.hcond{margin-top:16px;font-size:var(--t-base);line-height:1.6;color:rgba(255,255,255,.66);letter-spacing:-.01em}
+.hcond span{white-space:nowrap}
+.hphoto{position:relative;z-index:1;border-radius:50px 0 0 50px;overflow:hidden;min-height:616px}
+.hphoto img{position:absolute;inset:0;object-fit:cover}
+.deco{position:absolute;z-index:3;pointer-events:none}
+.deco img{object-fit:contain}
+.deco-top{top:-28px;right:-60px;width:clamp(180px,22vw,320px);height:clamp(170px,20vw,290px)}
+.deco-bottom{left:-150px;top:519px;width:clamp(160px,18vw,250px);height:clamp(160px,17vw,236px)}
+
+/* ══════════ 2. 문제 제기 ══════════ */
+.problem{background:#000;padding:118px 0 clamp(88px,10vw,140px)}
+.ptitle{text-align:center;font-size:clamp(28px,4.7vw,66px);line-height:1.08;letter-spacing:-.045em;color:#fff}
+.ptitle .l{display:block;font-weight:300}
+.ptitle .b{display:block;font-weight:800;margin-top:.04em}
+.pbox{position:relative;margin-top:clamp(56px,8vw,112px);border-radius:34px;
+  padding:44px 40px 64px;
+  /* 위 짙은 남색 → 아래 밝은 하늘색. 밝은 하늘색은 마지막 문장 «아래» 여백으로만 내렸습니다 (노란 글씨 대비) */
+  background:linear-gradient(180deg,#040E1C 0,#071931 12%,#0C2D59 28%,#103F7E calc(100% - 150px),
+             #1757AD calc(100% - 96px),#2268C4 calc(100% - 56px),#3C8FE0 calc(100% - 36px),
+             #62BCF3 calc(100% - 14px),var(--sky-lt) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(255,255,255,.08)}
+.pbox p{font-size:clamp(17px,1.95vw,28px);line-height:1.3;color:#fff;letter-spacing:-.02em;font-weight:400}
+.pbox .em{margin-top:1.3em;color:var(--yellow);font-weight:600;text-shadow:0 1px 2px rgba(0,16,48,.45)}
+.deco-problem{position:absolute;right:28px;bottom:-79px;width:290px;height:265px}
+.nums{list-style:none;padding:0;margin:clamp(96px,9vw,128px) 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.num{padding:28px 24px 24px;display:flex;flex-direction:column;min-height:220px}
+.num .n{font-size:clamp(44px,4.4vw,60px);line-height:1;color:var(--num);letter-spacing:-.04em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.num .n b{font-weight:300}
+.num .n i{font-style:normal;font-weight:800;font-size:.55em;margin-left:2px;letter-spacing:-.02em}
+.num .d{margin-top:20px;color:#fff;font-size:var(--t-md);font-weight:600;line-height:1.5}
+.num .s{margin-top:auto;padding-top:16px;font-size:var(--t-sm);color:var(--txt-3);line-height:1.5}
+
+/* ══════════ 3. 채널과 홈페이지의 역할 ══════════ */
+.role{background:linear-gradient(180deg,#000 0,#000 45%,#06162D 75%,#0B2B56 100%)}
+.flow{display:grid;grid-template-columns:minmax(0,1fr) 56px minmax(0,1fr) 56px minmax(0,1fr);align-items:center;gap:8px;
+      padding:clamp(28px,4vw,48px)}
+.flow .col{display:flex;flex-direction:column;gap:14px}
+.pill{display:flex;align-items:center;justify-content:center;text-align:center;min-height:64px;padding:12px 20px;border-radius:999px;
+      color:#fff;font-size:clamp(var(--t-md),1.6vw,20px);font-weight:600;letter-spacing:-.01em;
+      background:linear-gradient(180deg,rgba(28,105,207,.9) 0%,rgba(114,174,225,.75) 100%);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 0 0 1px rgba(255,255,255,.28)}
+.pill.home{min-height:96px;font-size:clamp(22px,2.3vw,30px);font-weight:800;
+      background:linear-gradient(180deg,#006EEF 0%,#1C69CF 55%,#72AEE1 100%);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 0 0 6px rgba(0,110,239,.16),0 18px 60px -20px rgba(0,110,239,.8)}
+.pill.out{background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
+.arr{display:grid;place-items:center;color:#8FC2FF}
+.arr svg{width:40px;height:24px}
+.role-links{margin-top:var(--s-5);display:flex;flex-wrap:wrap;gap:8px 28px}
+
+/* ══════════ 4. 기본 구성 ══════════ */
+.basic{background:radial-gradient(70% 45% at 50% 38%,rgba(28,105,207,.30),rgba(28,105,207,0) 70%),linear-gradient(180deg,#0B2B56 0,#071D3E 40%,#030C18 75%,#000 100%)}
+.tiles{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.tile{position:relative;display:flex;align-items:center;gap:18px;min-height:112px;padding:22px 24px;border-radius:26px;
+      background:linear-gradient(160deg,rgba(40,110,220,.28) 0%,rgba(10,40,90,.35) 60%,rgba(6,20,45,.5) 100%);
+      box-shadow:inset 0 0 0 1px rgba(150,195,255,.22),inset 0 1px 0 rgba(255,255,255,.18);
+      transition:box-shadow .3s var(--ease),transform .3s var(--ease)}
+.tile:hover{box-shadow:inset 0 0 0 1px rgba(170,210,255,.55),inset 0 1px 0 rgba(255,255,255,.3),0 0 40px -6px rgba(60,143,224,.55)}
+.ico{flex:0 0 auto;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;color:#BFE0FF;
+     background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.ico svg{width:26px;height:26px}
+.tile b{color:#fff;font-size:clamp(var(--t-md),1.5vw,19px);font-weight:700;line-height:1.4;letter-spacing:-.01em}
+.points{list-style:none;padding:0;margin:clamp(32px,4vw,48px) 0 0;display:grid;gap:12px}
+.points li{display:flex;gap:14px;align-items:flex-start;padding:18px 24px;border-radius:18px;background:rgba(0,0,0,.28);
+           box-shadow:inset 0 0 0 1px rgba(255,255,255,.10);color:#fff;font-size:var(--t-md);line-height:1.6}
+.points li::before{content:"";flex:0 0 auto;width:8px;height:8px;margin-top:.62em;border-radius:50%;background:var(--yellow)}
+.points small{color:var(--txt-2);font-size:inherit}
+
+/* ══════════ 5. 업종별 추천 구성 ══════════ */
+.industry{background:#000}
+.tabs{display:inline-flex;flex-wrap:wrap;gap:6px;padding:6px;border-radius:999px;background:rgba(255,255,255,.06);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.tab{min-height:48px;padding:0 22px;border-radius:999px;border:0;background:transparent;color:#C6CDD8;cursor:pointer;
+     font-size:var(--t-base);font-weight:700;transition:background-color .2s,color .2s}
+.tab:hover{color:#fff}
+.tab[aria-selected="true"]{background:var(--btn);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+.panels{margin-top:var(--s-5)}
+.panel{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);padding:clamp(28px,4vw,48px)}
+.panel + .panel{margin-top:16px}
+.js .panel + .panel{margin-top:0}
+.panel h3{font-size:clamp(24px,2.6vw,34px);letter-spacing:-.03em;line-height:1.25}
+.panel h3 small{display:block;font-size:var(--t-base);font-weight:600;color:var(--txt-3);letter-spacing:0;margin-bottom:8px}
+.kv{margin:24px 0 0;display:grid;gap:14px}
+.kv div{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:12px}
+.kv dt{color:var(--txt-3);font-size:var(--t-base);font-weight:600}
+.kv dd{margin:0;color:#fff;font-size:var(--t-md);line-height:1.6}
+.money{display:grid;gap:12px;align-content:center}
+.money div{padding:20px 24px;border-radius:20px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.money dt{font-size:var(--t-sm);color:var(--txt-3);font-weight:600}
+.money dd{margin:4px 0 0;color:#fff;font-size:clamp(28px,3vw,40px);font-weight:300;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.2}
+.money dd b{font-weight:800}
+.note{margin-top:var(--s-5);color:var(--txt-3);font-size:var(--t-base);line-height:1.8}
+.moods-h{margin-top:clamp(64px,8vw,96px);font-size:clamp(22px,2.4vw,30px);letter-spacing:-.03em;font-weight:300}
+.moods-h b{font-weight:800}
+.moods{list-style:none;padding:0;margin:var(--s-5) 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.mood{padding:20px;display:flex;flex-direction:column;gap:16px}
+.mock{border-radius:14px;overflow:hidden;background:var(--mbg);aspect-ratio:16/11;display:flex;flex-direction:column;
+      box-shadow:0 0 0 1px rgba(255,255,255,.12)}
+.mock .mh{height:16%;background:var(--mmain);display:flex;align-items:center;gap:6px;padding:0 9%}
+.mock .mh i{display:block;height:5px;border-radius:3px;background:rgba(255,255,255,.75)}
+.mock .mb{flex:1;display:grid;grid-template-columns:1.1fr 1fr;gap:8%;padding:7% 9%;align-items:center}
+.mock .mt i{display:block;height:9px;border-radius:3px;background:var(--mmain);margin-bottom:7px}
+.mock .mt i:nth-child(2){width:70%}
+.mock .mt i.s{height:5px;width:85%;opacity:.35;margin-bottom:5px}
+.mock .mt u{display:inline-block;margin-top:8px;width:56%;height:16px;border-radius:var(--mrad);background:var(--mpoint)}
+.mock .mp{height:100%;min-height:60px;border-radius:var(--mrad);background:repeating-linear-gradient(135deg,rgba(0,0,0,.06) 0 6px,rgba(0,0,0,.02) 6px 12px),color-mix(in srgb,var(--mmain) 14%,var(--mbg))}
+.mood h4{margin:0;color:#fff;font-size:var(--t-lg);font-weight:800;letter-spacing:-.02em}
+.mood p{color:var(--txt-2);font-size:var(--t-base);line-height:1.6}
+.mood .fit{color:var(--txt-3);font-size:var(--t-sm);margin-top:4px}
+.sw{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:12px}
+.sw li{display:flex;align-items:center;gap:6px;font-size:var(--t-xs);color:var(--txt-3)}
+.sw li i{width:18px;height:18px;border-radius:5px;background:var(--c);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.sw li code{font-family:inherit;color:var(--txt-2)}
+
+/* ══════════ 6. 왜 인투마케팅인가 ══════════ */
+.reason{padding-top:0;border-radius:48px 48px 0 0;
+  /* ref-02 처럼 하늘색 띠에서 시작 — 흰 제목 뒤는 4.5:1 이 되도록 파랑으로 */
+  background:linear-gradient(180deg,#72AEE1 0,#3B81D5 80px,#1C69CF 150px,#134A93 300px,#0B2B56 420px,#000 620px,#000 100%)}
+.reason .sec-head{padding-top:clamp(96px,10vw,140px)}
+.reason .ttl{font-size:clamp(40px,6.4vw,88px)}
+.rcards{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
+.rcards li{grid-column:span 2;padding:28px 28px 32px}
+.rcards li:nth-child(4),.rcards li:nth-child(5){grid-column:span 3}
+.rcards .no{display:block;font-size:var(--t-sm);font-weight:800;color:#9CCBFF;letter-spacing:.06em}
+.rcards h3{margin-top:14px;font-size:clamp(20px,1.9vw,24px);letter-spacing:-.025em;line-height:1.35}
+.rcards p{margin-top:12px;font-size:var(--t-base);line-height:1.75;color:var(--txt-2)}
+.cmp-wrap{margin-top:clamp(48px,6vw,72px);overflow-x:auto;border-radius:24px}
+.cmp{width:100%;min-width:640px;border-collapse:separate;border-spacing:0;font-size:var(--t-base);line-height:1.5}
+.cmp th,.cmp td{padding:18px 20px;text-align:left;vertical-align:top;border-bottom:1px solid rgba(255,255,255,.09)}
+.cmp thead th{color:var(--txt-3);font-weight:700;font-size:var(--t-sm)}
+.cmp tbody th{color:#fff;font-weight:700;white-space:nowrap}
+.cmp td{color:var(--txt-2)}
+.cmp .me{background:rgba(0,110,239,.16);color:#fff;font-weight:700;box-shadow:inset 1px 0 0 rgba(120,180,255,.5),inset -1px 0 0 rgba(120,180,255,.5)}
+.cmp thead .me{color:#fff;font-size:var(--t-base);border-top-left-radius:16px;border-top-right-radius:16px;box-shadow:inset 1px 0 0 rgba(120,180,255,.5),inset -1px 0 0 rgba(120,180,255,.5),inset 0 1px 0 rgba(120,180,255,.5)}
+.cmp tbody tr:last-child .me{box-shadow:inset 1px 0 0 rgba(120,180,255,.5),inset -1px 0 0 rgba(120,180,255,.5),inset 0 -1px 0 rgba(120,180,255,.5)}
+.cmp tbody tr:last-child th,.cmp tbody tr:last-child td{border-bottom:0}
+
+/* ══════════ 7. 신청부터 쉽게 ══════════ */
+.easy{background:#000}
+.ecards{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
+.ecards li{grid-column:span 2;padding:28px;position:relative}
+.ecards li:nth-child(4),.ecards li:nth-child(5){grid-column:span 3}
+.ecards .ico{width:56px;height:56px;border-radius:18px;color:#fff;
+             background:linear-gradient(160deg,#006EEF,#1C69CF 60%,#0B2B56);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 10px 30px -12px rgba(0,110,239,.9)}
+.ecards h3{margin-top:20px;font-size:clamp(19px,1.8vw,22px);letter-spacing:-.025em;line-height:1.35}
+.ecards p{margin-top:10px;font-size:var(--t-base);color:var(--txt-2);line-height:1.75}
+.shots{margin-top:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.shot{margin:0;padding:16px 16px 18px}
+.shot .slot{aspect-ratio:16/10;border-radius:16px;overflow:hidden}
+.shot .slot img{object-fit:cover;object-position:top}
+.shot figcaption{margin-top:12px;font-size:var(--t-sm);color:var(--txt-3);text-align:center}
+.sec-end{margin-top:clamp(32px,4vw,48px)}
+
+/* ══════════ 8. 작업물 ══════════ */
+.works{background:linear-gradient(180deg,#000 0,#000 60%,#030C18 100%)}
+.wcards{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.wcard{display:flex;flex-direction:column;overflow:hidden;padding:0}
+.wthumb{aspect-ratio:1200/630;background:#0B0E13;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.10)}
+.wthumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.wcard:hover .wthumb img{transform:scale(1.03)}
+.wbody{padding:24px;display:flex;flex-direction:column;gap:10px;flex:1}
+.wbody h3{font-size:var(--t-lg);letter-spacing:-.02em}
+.wbody .ind{color:#9CCBFF;font-size:var(--t-sm);font-weight:700}
+.wbody .scr{color:var(--txt-2);font-size:var(--t-base);line-height:1.65}
+.wbody .scr b{color:var(--txt-3);font-weight:600;margin-right:6px}
+.tags{list-style:none;padding:0;margin:4px 0 0;display:flex;flex-wrap:wrap;gap:6px}
+.tags li{font-size:var(--t-xs);font-weight:700;color:#DCEBFF;padding:4px 10px;border-radius:999px;background:rgba(0,110,239,.2);box-shadow:inset 0 0 0 1px rgba(120,180,255,.35)}
+.wbody .more{margin-top:auto}
+
+/* ══════════ 9. 가격 · 계약 조건 — 표가 많아 밝은 바탕 ══════════ */
+.price{background:#F3F6FB;color:#33415A;border-radius:48px}
+.price .ttl,.price h3{color:var(--ink)}
+.ph3{font-size:clamp(20px,2vw,26px);font-weight:300;letter-spacing:-.03em;margin:clamp(48px,6vw,72px) 0 var(--s-4)}
+.ph3 b{font-weight:800}
+.ph3:first-of-type{margin-top:0}
+.ptw{overflow-x:auto;border-radius:20px;background:#fff;box-shadow:0 0 0 1px var(--line),0 20px 50px -30px rgba(14,27,51,.35)}
+.ptab{width:100%;border-collapse:collapse;font-size:var(--t-base);line-height:1.55}
+.ptab th,.ptab td{padding:16px 20px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.ptab thead th,.ptab thead th.r{background:#0E1B33;color:#fff;font-size:var(--t-sm);font-weight:700;white-space:nowrap}
+.ptab tbody tr:last-child th,.ptab tbody tr:last-child td{border-bottom:0}
+.ptab .r{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--ink);font-weight:700}
+.ptab .free{color:#0B7A55}
+.ptab tbody th{color:var(--ink);font-weight:800;white-space:nowrap}
+.ptab .sm{display:block;font-size:var(--t-sm);color:var(--muted);font-weight:500;margin-top:2px;white-space:normal}
+.ptab.feat{min-width:620px}
+.ptab.feat td.desc{color:var(--muted)}
+.ptab.plan{min-width:620px}
+.pnote{margin-top:var(--s-4);font-size:var(--t-base);color:#3E4C66;line-height:1.85;max-width:84ch}
+.pinfo{margin-top:var(--s-4);padding:clamp(24px,3vw,36px);border-radius:24px;background:#fff;box-shadow:0 0 0 1px var(--line);display:grid;gap:16px}
+.pinfo p{font-size:var(--t-base);color:#33415A;line-height:1.9}
+.plinks{margin-top:var(--s-6);display:flex;flex-wrap:wrap;gap:12px}
+.price .btn-g{color:var(--ink);border-color:#B9C4D6;background:#fff}
+.price .btn-g:hover{border-color:var(--ink)}
+
+/* ══════════ 10. 진행 과정 ══════════ */
+.process{background:#000}
+.steps{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:16px;row-gap:56px;counter-reset:st}
+.step{position:relative;padding:36px 20px 0 0}
+.step::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,rgba(0,110,239,.15),#3C8FE0 30%,#8FD3FF 60%,rgba(0,110,239,.15));
+  box-shadow:0 0 18px 2px rgba(60,143,224,.55)}
+.step::after{content:"";position:absolute;left:0;top:-5px;width:12px;height:12px;border-radius:50%;background:#fff;
+  box-shadow:0 0 0 4px rgba(0,110,239,.45),0 0 16px 4px rgba(143,211,255,.7)}
+.step .no{font-size:var(--t-sm);font-weight:800;color:#9CCBFF;letter-spacing:.06em}
+.step h3{margin-top:8px;font-size:clamp(20px,1.9vw,24px);letter-spacing:-.025em}
+.step p{margin-top:10px;font-size:var(--t-base);line-height:1.75;color:var(--txt-2)}
+
+/* ══════════ 11. 자주 묻는 질문 ══════════ */
+.faq{background:linear-gradient(180deg,#000 0,#030C18 40%,#0B2B56 100%)}
+.faq-in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:clamp(32px,5vw,72px);align-items:start}
+.faq .ttl{font-size:clamp(40px,5.4vw,76px)}
+.qa{display:grid;gap:10px}
+.qa details{border-radius:20px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);transition:background-color .2s}
+.qa details[open]{background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(143,194,255,.35)}
+.qa summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:16px;min-height:64px;padding:16px 24px;
+            color:#fff;font-size:clamp(var(--t-md),1.5vw,19px);font-weight:700;letter-spacing:-.015em;line-height:1.45}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary .q{flex:0 0 auto;color:#9CCBFF;font-weight:800;font-size:var(--t-base)}
+.qa summary .pm{margin-left:auto;flex:0 0 auto;width:28px;height:28px;border-radius:50%;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
+.qa summary .pm::before,.qa summary .pm::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:2px;margin:-1px 0 0 -6px;background:#fff;border-radius:1px;transition:transform .25s var(--ease)}
+.qa summary .pm::after{transform:rotate(90deg)}
+.qa details[open] .pm::after{transform:rotate(0)}
+.qa .a{padding:0 24px 22px 60px;color:var(--txt-2);font-size:var(--t-base);line-height:1.85}
+
+/* ══════════ 12. 마지막 신청 유도 ══════════ */
+.cta{background:linear-gradient(180deg,#0B2B56 0,#134A93 30%,#1C69CF 68%,#3B81D5 86%,#72AEE1 100%);padding:clamp(88px,10vw,140px) 0}
+.ctabox{position:relative;border-radius:40px;padding:clamp(36px,6vw,80px);display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:clamp(32px,5vw,64px);align-items:end;
+  background:linear-gradient(160deg,rgba(255,255,255,.12) 0%,rgba(255,255,255,.04) 50%,rgba(0,20,60,.10) 100%);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4),0 30px 80px -40px rgba(0,20,60,.8)}
+.ctabox .ttl{font-size:clamp(32px,3.9vw,56px)}
+.ctabox .lead{color:#E6EEF9;margin-top:var(--s-5)}
+.ctabox .acts{margin-top:var(--s-6)}
+.ctabox .btn-p{min-height:60px;font-size:clamp(18px,1.6vw,20px)}
+.contact{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.contact li{padding:16px 20px;border-radius:18px;background:rgba(3,12,24,.55);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.contact small{display:block;font-size:var(--t-xs);color:#B6C6DE;font-weight:700;letter-spacing:.02em}
+.contact a,.contact span{display:inline-flex;align-items:center;min-height:44px;color:#fff;font-size:var(--t-md);font-weight:700;word-break:break-all}
+.contact a:hover{text-decoration:underline;text-underline-offset:4px}
+
+/* ══════════ 13. 자료 출처 + 하단 ══════════ */
+.src{background:#0A0B0E;padding:48px 0 0}
+.src h2{font-size:var(--t-sm);color:#C2C8D2;font-weight:800;letter-spacing:.02em}
+.src ul{margin:12px 0 0;padding:0 0 0 18px;font-size:var(--t-xs);line-height:1.9;color:#9AA1AC}
+footer{background:#0C1E39;color:#A9C4EA;padding:48px 0 56px;font-size:var(--t-sm);line-height:2}
+footer .fb{color:#fff;font-weight:800;font-size:var(--t-base);letter-spacing:-.01em;margin-bottom:16px}
+footer .biz b{color:#DCE6F8;font-weight:600}
+footer .pol{margin-top:16px;padding-top:16px;border-top:1px solid rgba(147,180,232,.22)}
+footer .pol a{color:#DCE6F8;font-weight:700;cursor:pointer}
+footer .pol a:hover{text-decoration:underline}
+footer .pol span{margin:0 8px;color:#38537E}
+footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
+/* 바닥글도 이 쪽에서는 어둡게 — 메인 영상 화면과 같은 값 */
+footer{background:#0A0B0E;color:#9AA1AC}
+footer .biz b,footer .pol a{color:#E3E6EB}
+footer .pol{border-top-color:rgba(255,255,255,.12)}
+footer .pol span{color:#4A5059}
+footer .cr{color:#7D838C}
+
+/* ══════════ 움직임 — 「동작 줄이기」에서는 모두 끕니다 ══════════ */
+.js .rv{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.js .rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .rv{opacity:1;transform:none}
+}
+
+/* ══════════ 화면 폭별 ══════════ */
+@media(max-width:1180px){
+  .rcards li,.ecards li{grid-column:span 3}
+  .rcards li:nth-child(5),.ecards li:nth-child(5){grid-column:span 6}
+  .nums{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:999px){
+  .hero{background:linear-gradient(180deg,#72AEE1 0,#3B81D5 28px,#1C69CF 56px,#134A93 240px,#0B2B56 420px,#06162D 560px,#000 700px)}
+  .hero-in{grid-template-columns:minmax(0,1fr);row-gap:24px;padding:32px var(--gut) 64px}
+  .hcard{min-height:0;border-radius:44px;padding-top:44px}
+  .hero h1{margin-top:36px;font-size:clamp(48px,10.5vw,88px)}
+  .hsub{font-size:clamp(18px,3vw,26px)}
+  .pbox p{font-size:clamp(16px,2.7vw,24px)}
+  .hsub{margin-top:32px}
+  .hact{padding-top:40px}
+  .hphoto{min-height:0;aspect-ratio:4/3;border-radius:32px}
+  .deco-top{top:-20px;right:-50px}
+  .deco-bottom{top:auto;bottom:24%;left:-110px}
+  .pbox{padding:36px 28px 150px}
+  .deco-problem{right:16px;bottom:-60px;width:200px;height:183px}
+  .flow{grid-template-columns:minmax(0,1fr);justify-items:stretch}
+  .flow .arr svg{transform:rotate(90deg)}
+  .panel{grid-template-columns:minmax(0,1fr)}
+  .moods{grid-template-columns:minmax(0,1fr)}
+  .mood{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);align-items:start}
+  .mood .mock{grid-row:span 3}
+  .wcards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .faq-in{grid-template-columns:minmax(0,1fr)}
+  .ctabox{grid-template-columns:minmax(0,1fr)}
+  .price,.reason{border-radius:32px 32px 0 0}
+  .price{border-radius:32px}
+}
+@media(max-width:640px){
+  body{font-size:var(--t-base)}
+  .hcard{padding:36px 24px 32px;border-radius:36px}
+  .hact{flex-direction:column;align-items:flex-start}
+  .hbtn{width:100%}
+  .hcond{font-size:var(--t-sm)}
+  .problem{padding-top:88px}
+  .pbox{border-radius:26px;padding:28px 22px 130px}
+  .deco-problem{width:160px;height:146px;bottom:-48px}
+  .nums{grid-template-columns:minmax(0,1fr);gap:12px}
+  .num{min-height:0}
+  .tiles{grid-template-columns:minmax(0,1fr)}
+  .tile{min-height:84px;padding:16px 18px}
+  .tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-radius:24px;width:100%}
+  .tab{padding:0 12px;border-radius:18px;font-size:var(--t-sm)}
+  .kv div{grid-template-columns:minmax(0,1fr);gap:2px}
+  .mood{display:flex;align-items:stretch}
+  .rcards li,.ecards li,.rcards li:nth-child(5),.ecards li:nth-child(5){grid-column:span 6}
+  .shots{grid-template-columns:minmax(0,1fr)}
+  .wcards{grid-template-columns:minmax(0,1fr)}
+  .steps{grid-template-columns:minmax(0,1fr);row-gap:0}
+  .step{padding:0 0 32px 32px}
+  .step::before{left:5px;right:auto;top:6px;bottom:0;width:2px;height:auto;background:linear-gradient(180deg,#3C8FE0,rgba(0,110,239,.2))}
+  .step::after{top:0}
+  .qa summary{padding:14px 18px;gap:12px}
+  .qa .a{padding:0 18px 20px 18px}
+  .ptab th,.ptab td{padding:12px 12px;font-size:var(--t-sm)}
+  .ctabox .acts .btn{width:100%}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<!-- ══════════ 머리띠 — 🔴 메인 index.html 의 <header> 복사본. 메인을 고치면 여기도 ══════════
+     메인은 한 장 안에서 화면을 바꾸는 go() 를 쓰지만, 이 쪽에는 go() 가 없어서 같은 곳으로 가는 «주소»로 바꿨습니다.
+     (/#blog · /#sns · /#design · /#video 는 메인이 주소를 보고 그 화면을 엽니다 · /#contact 는 메인 홈의 상담 · 문의) -->
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="/">
+      <span class="mk">IM</span>
+      <span><b>인투마케팅</b><small>INTO MARKETING</small></span>
+    </a>
+    <nav class="links" aria-label="주요 메뉴">
+      <a class="navlink" href="/">홈</a>
+      <div class="navitem">
+        <button class="navlink active" id="nl-svc" type="button">지원 항목 <i class="caret"></i></button>
+        <div class="drop">
+          <a href="/#blog">블로그 · 리뷰<small>실 운영 블로거가 본인 계정에 직접 작성</small></a>
+          <a href="/web/" aria-current="page">홈페이지 제작<small>기획 · 제작 · 배포 · 월 관리</small></a>
+          <a href="/#sns">SNS 채널 제작<small>채널 세팅 · 지도 등록 · 정기 콘텐츠</small></a>
+          <a href="/#design">디자인<small>로고 · 명함 · 인쇄물 · 카드뉴스</small></a>
+          <a href="/#video">영상 제작<small>숏폼 · 롱폼 · 기획 · 촬영 · 편집</small></a>
+        </div>
+      </div>
+      <a class="navlink" href="/hakwon/">학원지원센터</a>
+      <a class="navlink" href="/#contact">문의</a>
+      <!-- 맡기신 일의 진행 상황을 보는 곳. 로그인은 그 화면에서 합니다 -->
+      <a class="navlink" href="/my/">마이페이지</a>
+      <!-- 로그인 상태 · 로그인/로그아웃 단추 (authbar.js 가 채웁니다) -->
+      <span class="imab" id="authbar"></span>
+    </nav>
+    <a class="headcta" href="/#contact">상담 문의</a>
+    <button class="burger" id="burger" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="msheet">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="msheet" id="msheet">
+    <a href="/">홈</a>
+    <a href="/#blog">블로그 · 리뷰</a>
+    <a class="sub" href="/web/" aria-current="page">홈페이지 제작</a>
+    <a class="sub" href="/#sns">SNS 채널 제작</a>
+    <a class="sub" href="/#design">디자인</a>
+    <a class="sub" href="/#video">영상 제작</a>
+    <a href="/hakwon/">학원지원센터</a>
+    <a href="/#contact">상담 문의</a>
+    <a href="/my/">마이페이지</a>
+    <div id="authbar-m"></div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ══════════ 1. 히어로 ══════════ -->
+<section class="hero" id="hero" aria-labelledby="hero-h">
+  <div class="hero-in">
+    <div class="hcard">
+      <svg class="hcard-line" aria-hidden="true" focusable="false">
+        <defs><linearGradient id="hl" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset=".45" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity=".14"/>
+        </linearGradient></defs>
+        <path fill="none" stroke="url(#hl)" stroke-width="3" vector-effect="non-scaling-stroke"/>
+      </svg>
+      <p class="kick">INTO MARKETING</p>
+      <!-- 헤드라인 확정 (2026-10-15) — 1줄 가는 글씨 / 2줄 아주 굵은 글씨, 하나의 h1 -->
+      <h1 id="hero-h"><span class="l">우리 가게의</span> <span class="b">두 번째 간판</span></h1>
+      <p class="hsub">사장님이 놓치는 잠재고객,<br>홈페이지가 잡아줍니다.</p>
+      <div class="hact">
+        <a class="btn btn-p hbtn" href="/apply/">홈페이지 제작 신청</a>
+        <span class="badge">24개월 약정 시 제작비 무료</span>
+      </div>
+      <!-- 조건 한 줄 — design-main.png 에 없어 버튼 아래 작고 흐린 글씨로 (값은 PRICE 에서 채웁니다) -->
+      <p class="hcond"><span>기본 제작비 <span data-man="base.make">10</span>만 원</span> · <span>월 <span data-man="base.mon">5</span>만 원부터</span> · <span>페이지 수 제한 없음</span> · <span>도메인 고객 소유</span> <span>(부가세 포함)</span></p>
+    </div>
+
+    <!-- 🔴 사진 자리 — /web/img/hero-photo.jpg (가로 사진 · 긴 변 2000px 이상). 파일을 넣으면 바로 바뀝니다.
+         alt 는 실제 사진 내용대로 고치십시오 (지금 값은 명세서의 예) -->
+    <div class="hphoto slot solid" data-slot data-tbd="원본 이미지 필요: hero-photo.jpg">
+      <img src="img/hero-photo.jpg" alt="" data-alt="인투마케팅이 만든 홈페이지를 띄운 노트북" width="2000" height="1333" fetchpriority="high">
+    </div>
+
+    <!-- 🔴 3D 장식 자리 — /web/img/deco-hero-top.png · deco-hero-bottom.png (투명 배경 · 긴 변 1200px 이상) -->
+    <div class="deco deco-top slot line" data-slot data-tbd="원본 이미지 필요: deco-hero-top.png" aria-hidden="true">
+      <img src="img/deco-hero-top.png" alt="" width="1200" height="1090">
+    </div>
+    <div class="deco deco-bottom slot line" data-slot data-tbd="원본 이미지 필요: deco-hero-bottom.png" aria-hidden="true">
+      <img src="img/deco-hero-bottom.png" alt="" width="1200" height="1130">
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 2. 문제 제기 ══════════ -->
+<section class="problem" id="problem" aria-labelledby="problem-h">
+  <div class="w">
+    <h2 class="ptitle rv" id="problem-h"><span class="l">"전국 635만 사업장 중, 사장님의 매장은</span> <span class="b">온라인에서 손님을 놓치고 있진 않나요?"</span></h2>
+
+    <div class="pbox rv">
+      <p>통계청 조사 결과, 우리나라 사업체 수는 635만 개를 넘어섰습니다. (2024년 잠정)<br>
+         웹페이지 첫인상이 생기는 데는 단 0.05초면 충분하다는 연구가 있습니다.<br>
+         저희는 단순히 예쁜 사이트를 만들지 않습니다.</p>
+      <p class="em">철저한 UI/UX 설계로 방문자가 문의와 예약까지 이어지는 홈페이지를 만듭니다.</p>
+      <!-- 🔴 그래픽 자리 — /web/img/deco-problem.png (투명 배경 · 긴 변 900px 이상) -->
+      <div class="deco deco-problem slot line" data-slot data-tbd="원본 이미지 필요: deco-problem.png" aria-hidden="true">
+        <img src="img/deco-problem.png" alt="" width="900" height="822">
+      </div>
+    </div>
+
+    <ul class="nums" aria-label="숫자로 보는 근거">
+      <li class="num glass rv"><p class="n"><b data-count>0.05</b><i>초</i></p><p class="d">웹페이지 첫인상이 생기는 시간</p><p class="s">출처: Lindgaard 외, 2006</p></li>
+      <li class="num glass rv"><p class="n"><b data-count>53</b><i>%</i></p><p class="d">모바일 로딩이 3초를 넘으면 떠나는 방문 비율</p><p class="s">출처: Google, 2016</p></li>
+      <li class="num glass rv"><p class="n"><b data-count>3</b><i>배</i></p><p class="d">1초 사이트와 5초 사이트의 전환율 차이</p><p class="s">출처: Portent, B2B 기준</p></li>
+      <li class="num glass rv"><p class="n"><b data-count>27.2</b><i>%</i></p><p class="d">디지털 기술을 활용하는 소상공인 비율</p><p class="s">출처: 중소벤처기업부, 2024</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════ 3. 채널과 홈페이지의 역할 ══════════ -->
+<section class="sec role" id="role" aria-labelledby="role-h">
+  <div class="w">
+    <div class="sec-head rv">
+      <h2 class="ttl" id="role-h"><span class="l">블로그·지도는 손님을 데려오고,</span> <span class="b">홈페이지는 손님을 설득합니다</span></h2>
+      <p class="lead">블로그·리뷰와 지도는 손님이 가게를 알게 되는 길입니다. 홈페이지는 소개·메뉴·가격·위치·연락처를 한곳에 모아 보여 주고, 전화·카카오톡·예약 버튼으로 바로 이어 줍니다.</p>
+    </div>
+    <figure class="glass flow rv" style="margin:0">
+      <figcaption class="sr">블로그·리뷰 / 지도·SNS → 홈페이지 → 전화 · 카카오톡 · 예약</figcaption>
+      <div class="col" aria-hidden="true">
+        <span class="pill">블로그·리뷰</span>
+        <span class="pill">지도·SNS</span>
+      </div>
+      <div class="arr" aria-hidden="true"><svg viewBox="0 0 40 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h34M28 4l8 8-8 8"/></svg></div>
+      <div class="col" aria-hidden="true"><span class="pill home">홈페이지</span></div>
+      <div class="arr" aria-hidden="true"><svg viewBox="0 0 40 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h34M28 4l8 8-8 8"/></svg></div>
+      <div class="col" aria-hidden="true"><span class="pill out">전화 · 카카오톡 · 예약</span></div>
+    </figure>
+    <!-- 앵커는 메인 index.html 의 실제 화면 이름 (VIEWS: blog · sns) -->
+    <p class="role-links rv">
+      <a class="more" href="/#blog">블로그 · 리뷰 자세히 보기 →</a>
+      <a class="more" href="/#sns">SNS 채널 제작 자세히 보기 →</a>
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ 4. 기본 구성 ══════════ -->
+<section class="sec basic" id="basic" aria-labelledby="basic-h">
+  <div class="w">
+    <div class="sec-head rv">
+      <h2 class="ttl" id="basic-h"><span class="l">모든 홈페이지에</span> <span class="b">기본으로 들어갑니다</span></h2>
+    </div>
+    <ul class="tiles">
+      <li class="tile rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></svg></span><b>소개 · 대표 인사말</b></li>
+      <li class="tile rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3.5" width="16" height="17" rx="2.5"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><b>서비스 · 메뉴 안내</b></li>
+      <li class="tile rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.5M12 16.8v.2"/></svg></span><b>자주 묻는 질문</b></li>
+      <li class="tile rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21z"/><circle cx="12" cy="10" r="2.4"/></svg></span><b>오시는 길 (지도)</b></li>
+      <li class="tile rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h2.6l1.4 4-1.9 1.4a11 11 0 0 0 6.5 6.5l1.4-1.9 4 1.4v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2z"/></svg></span><b>전화 · 카카오톡 버튼</b></li>
+      <li class="tile rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M4 17l5-4.5 3.5 3 3-2.5 4.5 4"/></svg></span><b>제공 사진으로 화면 구성</b></li>
+      <li class="tile rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></span><b>휴대폰 화면</b></li>
+      <li class="tile rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg></span><b>네이버 · 구글 검색 등록</b></li>
+      <li class="tile rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4M9.5 14.5l2 2 3.5-3.5"/></svg></span><b>오픈 후 매달 작은 수정 1회</b></li>
+    </ul>
+    <!-- 「작은 수정」 범위는 [확정 전] — 예시 없이 「작은 수정(월 1회)」으로만 표기합니다 -->
+    <ul class="points">
+      <li class="rv"><span>페이지 수 제한 없음 · 추가 요금 없음 <small>(구성은 내용에 맞춰 담당자가 정합니다)</small></span></li>
+      <li class="rv"><span>제작 중 시안 1개 · 수정 5회</span></li>
+      <li class="rv"><span>공지 무료 — 전달받은 공지·소식 글을 월 1건, 월간 수정 시 함께 게시합니다</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════ 5. 업종별 추천 구성 + 분위기 3종 ══════════ -->
+<section class="sec industry" id="industry" aria-labelledby="industry-h">
+  <div class="w">
+    <div class="sec-head rv">
+      <h2 class="ttl" id="industry-h"><span class="l">업종에 맞춰</span> <span class="b">필요한 기능만 더합니다</span></h2>
+    </div>
+
+    <!-- 탭은 스크립트가 켭니다. 스크립트가 없으면 네 업종이 차례로 모두 보입니다.
+         금액은 PRICE 로 계산해 채웁니다 (data-sum = 더할 항목). 🔴 학원 탭에 「레벨테스트」를 쓰지 않습니다 -->
+    <div class="tabs rv" role="tablist" aria-label="업종" hidden>
+      <button class="tab" role="tab" type="button" id="tab-food" aria-controls="pn-food" aria-selected="true">요식업 (카페·음식점)</button>
+      <button class="tab" role="tab" type="button" id="tab-shop" aria-controls="pn-shop" aria-selected="false" tabindex="-1">옷가게·소매</button>
+      <button class="tab" role="tab" type="button" id="tab-estate" aria-controls="pn-estate" aria-selected="false" tabindex="-1">부동산</button>
+      <button class="tab" role="tab" type="button" id="tab-academy" aria-controls="pn-academy" aria-selected="false" tabindex="-1">학원</button>
+    </div>
+    <div class="panels">
+      <div class="panel glass" id="pn-food" role="tabpanel" aria-labelledby="tab-food" data-sum="base form">
+        <div>
+          <h3><small>업종</small>요식업 (카페·음식점)</h3>
+          <dl class="kv">
+            <div><dt>추천 구성</dt><dd>기본 + 신청서</dd></div>
+            <div><dt>이런 화면</dt><dd>메뉴·가격, 오시는 길, 예약·단체 문의 접수</dd></div>
+            <div><dt>법정 표시 안내</dt><dd>—</dd></div>
+          </dl>
+        </div>
+        <dl class="money">
+          <div><dt>제작비 (정가)</dt><dd><b data-sum-make>120,000</b>원</dd></div>
+          <div><dt>월 관리비</dt><dd><b data-sum-mon>60,000</b>원</dd></div>
+        </dl>
+      </div>
+      <div class="panel glass" id="pn-shop" role="tabpanel" aria-labelledby="tab-shop" data-sum="base list">
+        <div>
+          <h3><small>업종</small>옷가게·소매</h3>
+          <dl class="kv">
+            <div><dt>추천 구성</dt><dd>기본 + 목록·검색</dd></div>
+            <div><dt>이런 화면</dt><dd>상품 목록·검색, 매장 안내</dd></div>
+            <div><dt>법정 표시 안내</dt><dd>—</dd></div>
+          </dl>
+        </div>
+        <dl class="money">
+          <div><dt>제작비 (정가)</dt><dd><b data-sum-make>130,000</b>원</dd></div>
+          <div><dt>월 관리비</dt><dd><b data-sum-mon>60,000</b>원</dd></div>
+        </dl>
+      </div>
+      <div class="panel glass" id="pn-estate" role="tabpanel" aria-labelledby="tab-estate" data-sum="base list form">
+        <div>
+          <h3><small>업종</small>부동산</h3>
+          <dl class="kv">
+            <div><dt>추천 구성</dt><dd>기본 + 목록·검색 + 신청서</dd></div>
+            <div><dt>이런 화면</dt><dd>매물 목록·검색, 매물 문의 접수</dd></div>
+            <div><dt>법정 표시 안내</dt><dd>중개사무소 등록번호·대표 공인중개사 입력 칸 기본 포함</dd></div>
+          </dl>
+        </div>
+        <dl class="money">
+          <div><dt>제작비 (정가)</dt><dd><b data-sum-make>150,000</b>원</dd></div>
+          <div><dt>월 관리비</dt><dd><b data-sum-mon>70,000</b>원</dd></div>
+        </dl>
+      </div>
+      <div class="panel glass" id="pn-academy" role="tabpanel" aria-labelledby="tab-academy" data-sum="base form">
+        <div>
+          <h3><small>업종</small>학원</h3>
+          <dl class="kv">
+            <div><dt>추천 구성</dt><dd>기본 + 신청서</dd></div>
+            <div><dt>이런 화면</dt><dd>프로그램 안내, 상담 신청 접수</dd></div>
+            <div><dt>법정 표시 안내</dt><dd>교습비·등록(신고)번호 입력 칸 기본 포함</dd></div>
+          </dl>
+        </div>
+        <dl class="money">
+          <div><dt>제작비 (정가)</dt><dd><b data-sum-make>120,000</b>원</dd></div>
+          <div><dt>월 관리비</dt><dd><b data-sum-mon>60,000</b>원</dd></div>
+        </dl>
+      </div>
+    </div>
+    <p class="note rv">예시 구성이며 정가 기준입니다. 약정 시 제작비가 할인됩니다.<br>
+      뷰티 · 병원 · 공방 · 스포츠 · 숙박 · 전문직 · 제조(B2B) · 비영리 단체 등 그 밖의 업종도 신청할 수 있습니다.</p>
+
+    <!-- 분위기 3종 — 화면 모형은 CSS 로만 그립니다 (사진 없음). 색은 /apply/ 의 THEMES 와 같은 값 -->
+    <h3 class="moods-h rv">분위기 <b>3종</b></h3>
+    <ul class="moods">
+      <li class="mood glass rv" style="--mmain:#1B3A6B;--mpoint:#2E62B8;--mbg:#F7F8FA;--mrad:4px">
+        <div class="mock" aria-hidden="true"><div class="mh"><i style="width:22%"></i><i style="width:10%;margin-left:auto"></i><i style="width:10%"></i></div>
+          <div class="mb"><div class="mt"><i></i><i></i><i class="s"></i><i class="s"></i><u></u></div><div class="mp"></div></div></div>
+        <div><h4>신뢰형</h4><p>남색 · 넓은 여백 · 글자 중심</p><p class="fit">어울리는 업종: 학원 · 병원 · 기업</p></div>
+        <ul class="sw">
+          <li style="--c:#1B3A6B"><i></i>메인 <code>#1B3A6B</code></li>
+          <li style="--c:#2E62B8"><i></i>포인트 <code>#2E62B8</code></li>
+          <li style="--c:#F7F8FA"><i></i>바탕 <code>#F7F8FA</code></li>
+        </ul>
+      </li>
+      <li class="mood glass rv" style="--mmain:#6B4A2E;--mpoint:#C08A4A;--mbg:#FBF7F1;--mrad:12px">
+        <div class="mock" aria-hidden="true"><div class="mh"><i style="width:22%"></i><i style="width:10%;margin-left:auto"></i><i style="width:10%"></i></div>
+          <div class="mb" style="grid-template-columns:.8fr 1.3fr"><div class="mt"><i></i><i></i><i class="s"></i><u></u></div><div class="mp"></div></div></div>
+        <div><h4>따뜻형</h4><p>베이지 · 둥근 모서리 · 사진 크게</p><p class="fit">어울리는 업종: 카페 · 매장 · 공방</p></div>
+        <ul class="sw">
+          <li style="--c:#6B4A2E"><i></i>메인 <code>#6B4A2E</code></li>
+          <li style="--c:#C08A4A"><i></i>포인트 <code>#C08A4A</code></li>
+          <li style="--c:#FBF7F1"><i></i>바탕 <code>#FBF7F1</code></li>
+        </ul>
+      </li>
+      <li class="mood glass rv" style="--mmain:#111418;--mpoint:#E4572E;--mbg:#FFFFFF;--mrad:2px">
+        <div class="mock" aria-hidden="true"><div class="mh"><i style="width:22%"></i><i style="width:10%;margin-left:auto"></i><i style="width:10%"></i></div>
+          <div class="mb"><div class="mt"><i style="height:14px"></i><i style="height:14px"></i><i class="s"></i><u></u></div><div class="mp"></div></div></div>
+        <div><h4>활동형</h4><p>검정 + 포인트 색 · 큰 제목</p><p class="fit">어울리는 업종: 스포츠 · 브랜드</p></div>
+        <ul class="sw">
+          <li style="--c:#111418"><i></i>메인 <code>#111418</code></li>
+          <li style="--c:#E4572E"><i></i>포인트 <code>#E4572E</code></li>
+          <li style="--c:#FFFFFF"><i></i>바탕 <code>#FFFFFF</code></li>
+        </ul>
+      </li>
+    </ul>
+    <p class="note rv">분위기별 가격 차이는 없습니다.</p>
+  </div>
+</section>
+
+<!-- ══════════ 6. 왜 인투마케팅인가 ══════════ -->
+<section class="sec reason" id="reason" aria-labelledby="reason-h">
+  <div class="w">
+    <div class="sec-head rv">
+      <h2 class="ttl" id="reason-h"><span class="l">만드는 방식이</span> <span class="b">다릅니다</span></h2>
+    </div>
+    <ol class="rcards" style="list-style:none">
+      <li class="glass rv"><span class="no">01</span><h3>외주로 넘기지 않습니다</h3><p>기획부터 제작 · 배포까지 직접 수행하고, 오픈 이후에도 매월 관리합니다.</p></li>
+      <li class="glass rv"><span class="no">02</span><h3>가격이 낮은 이유를 밝힙니다</h3><p>AI 기술을 활용해 제작 효율을 높이고, 전문 인력이 기획부터 관리까지 직접 수행합니다.</p></li>
+      <li class="glass rv"><span class="no">03</span><h3>오픈 후에도 매월 관리합니다</h3><p>월 관리비에 작은 수정(월 1회) · 백업 · 장애 대응이 포함됩니다. 당사 원인의 오류는 횟수와 관계없이 무료로 수정합니다.</p></li>
+      <li class="glass rv"><span class="no">04</span><h3>사장님 것은 사장님 명의로</h3><p>유료 도메인은 고객 명의로 등록되어 고객 소유가 됩니다. 환불 기준은 견적서와 계약서에 명시합니다.</p></li>
+      <li class="glass rv"><span class="no">05</span><h3>홍보 다섯 영역을 한 회사에서</h3><p>블로그 · 리뷰, SNS 채널 제작, 디자인, 영상 제작까지 한 회사에서 맡길 수 있습니다. 진행 현황은 마이페이지에서 확인할 수 있습니다.</p></li>
+    </ol>
+
+    <!-- 유형별 비교표 — 경쟁사 실명 없음 · 인투마케팅 열 강조 -->
+    <div class="cmp-wrap glass rv" role="region" aria-label="유형별 비교표" tabindex="0">
+      <table class="cmp">
+        <caption class="sr">유형별 비교</caption>
+        <thead><tr><th scope="col">항목</th><th scope="col">직접 만들기 (빌더)</th><th scope="col">일회성 제작 외주</th><th scope="col" class="me">인투마케팅</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">시작 비용</th><td>요금제마다 다름</td><td>업체마다 다름</td><td class="me">기본 <span data-man="base.make">10</span>만 원 (24개월 약정 시 무료)</td></tr>
+          <tr><th scope="row">제작</th><td>사장님 직접</td><td>업체</td><td class="me">담당자가 직접</td></tr>
+          <tr><th scope="row">페이지 수</th><td>요금제마다 다름</td><td>업체마다 다름</td><td class="me">제한 없음 · 추가 요금 없음</td></tr>
+          <tr><th scope="row">오픈 후 수정</th><td>사장님 직접</td><td>업체마다 다름</td><td class="me">월 1회 포함 · 백업 · 장애 대응</td></tr>
+          <tr><th scope="row">채널 연계</th><td>별도</td><td>별도</td><td class="me">한 회사에서 가능</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 7. 신청부터 쉽게 ══════════ -->
+<section class="sec easy" id="easy" aria-labelledby="easy-h">
+  <div class="w">
+    <div class="sec-head rv">
+      <h2 class="ttl" id="easy-h"><span class="l">신청부터 자료 보내기까지,</span> <span class="b">어렵지 않게</span></h2>
+    </div>
+    <!-- 모두 신청서 · 제작 자료 화면에 실제로 있는 기능 (apply/index.html 2026-10-13 판). 🔴 카드 5에 카카오톡 채널 이름을 쓰지 않습니다 -->
+    <ul class="ecards">
+      <li class="glass rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M8.5 6.5h7v3h-7zM8.5 13h1M12 13h1M15.5 13h0M8.5 17h1M12 17h1M15.5 16v2"/></svg></span>
+        <h3>예상 금액을 바로 확인합니다</h3><p>신청서에서 기능을 고르면 예상 금액이 자동으로 계산되고, 요금 방식별 금액을 비교할 수 있습니다.</p></li>
+      <li class="glass rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
+        <h3>쓰면서 내 홈페이지를 미리 봅니다</h3><p>제작 자료 화면에서 입력한 글이 들어간 홈페이지 화면을 바로 확인할 수 있습니다.</p></li>
+      <li class="glass rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg></span>
+        <h3>글쓰기가 어려워도 괜찮습니다</h3><p>문장별로 나눠 쓰기와 업종별 예시를 제공합니다. 보내 주신 글은 그대로 사용하고 맞춤법만 다듬습니다.</p></li>
+      <li class="glass rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.2-7.5 9.5-4.3-1.3-7.5-4.9-7.5-9.5V6L12 3z"/><path d="M8.8 12l2.2 2.2 4.2-4.4"/></svg></span>
+        <h3>업종 규칙을 함께 확인합니다</h3><p>학원(교습비 · 등록번호)과 부동산(중개사무소 등록번호 · 대표 공인중개사) 입력 칸이 신청서에 들어 있고, 주의가 필요한 표현은 노란색으로 표시합니다.</p></li>
+      <li class="glass rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5c-4.9 0-8.5 3-8.5 6.6 0 2.3 1.5 4.3 3.8 5.5l-.8 3 3.4-2.1c.7.1 1.4.2 2.1.2 4.9 0 8.5-3 8.5-6.6S16.9 4.5 12 4.5z"/></svg></span>
+        <h3>사진은 카카오톡으로도 보낼 수 있습니다</h3><p>제작 자료 화면에서 첨부하거나 카카오톡으로 따로 보낼 수 있습니다. 직접 촬영했거나 사용 권리가 있는 사진만 사용합니다.</p></li>
+    </ul>
+    <!-- 🔴 화면 캡처 자리 2개 — /web/img/apply-quote.png · apply-preview.png 를 넣으면 바로 바뀝니다 -->
+    <div class="shots">
+      <figure class="shot glass rv">
+        <div class="slot solid" data-slot data-tbd="신청서 화면 캡처 필요"><img src="img/apply-quote.png" alt="" data-alt="신청서의 예상 금액 화면" width="1600" height="1000" loading="lazy"></div>
+        <figcaption>신청서 · 예상 금액</figcaption>
+      </figure>
+      <figure class="shot glass rv">
+        <div class="slot solid" data-slot data-tbd="신청서 화면 캡처 필요"><img src="img/apply-preview.png" alt="" data-alt="제작 자료의 홈페이지 미리 보기 화면" width="1600" height="1000" loading="lazy"></div>
+        <figcaption>제작 자료 · 홈페이지 미리 보기</figcaption>
+      </figure>
+    </div>
+    <p class="sec-end rv"><a class="btn btn-g" href="/apply/">신청서 살펴보기</a></p>
+  </div>
+</section>
+
+<!-- ══════════ 8. 작업물 — 카드는 아래 스크립트의 WORKS 배열에서 그립니다 ══════════
+     🔴 처음에는 숨겨 둡니다(hidden). visible:true 인 카드가 하나라도 있을 때만 스크립트가 섹션을 보이게 합니다.
+        (2026-10-15 — 공개 동의 · 사이트 정리 전이라 세 카드 모두 visible:false) -->
+<section class="sec works" id="works" aria-labelledby="works-h" hidden>
+  <div class="w">
+    <div class="sec-head rv">
+      <h2 class="ttl" id="works-h"><span class="l">인투마케팅이 만든</span> <span class="b">홈페이지</span></h2>
+    </div>
+    <ul class="wcards" id="wcards"></ul>
+  </div>
+</section>
+
+<!-- ══════════ 9. 가격 · 계약 조건 ══════════ -->
+<section class="sec price" id="price" aria-labelledby="price-h">
+  <div class="w">
+    <div class="sec-head rv">
+      <h2 class="ttl one" id="price-h"><span class="l">가격 · </span><span class="b">계약 조건</span></h2>
+    </div>
+
+    <h3 class="ph3 rv">① <b>기능별 가격표</b> <small style="font-size:var(--t-sm);font-weight:600;color:var(--muted);letter-spacing:0">모든 금액 부가세 포함, 단위 원</small></h3>
+    <!-- 금액 칸은 PRICE 에서 채웁니다 (data-p="키.make|mon") — 메인 가격표 · /apply/ PRICE 와 같은 값 -->
+    <div class="ptw rv" role="region" aria-label="기능별 가격표" tabindex="0">
+      <table class="ptab feat">
+        <thead><tr><th scope="col">항목</th><th scope="col">설명</th><th scope="col" class="r">제작비</th><th scope="col" class="r">월 관리비</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">기본 홈페이지</th><td class="desc">필수 · 소개, 대표 인사말, 서비스·메뉴 안내, 자주 묻는 질문, 오시는 길(지도), 전화·카카오톡 버튼</td><td class="r" data-p="base.make">100,000</td><td class="r" data-p="base.mon">50,000</td></tr>
+          <tr><th scope="row">+ 회원가입</th><td class="desc">회원가입·로그인, 관리자 화면</td><td class="r" data-p="member.make">100,000</td><td class="r" data-p="member.mon">20,000</td></tr>
+          <tr><th scope="row">+ 게시판</th><td class="desc">회원가입과 함께 선택 · Q&amp;A(비밀글) · 자유게시판 · 갤러리 중 1개. 1개 추가마다 월 <span data-won="board.extraMon">10,000</span>원</td><td class="r" data-p="board.make">50,000</td><td class="r" data-p="board.mon">10,000</td></tr>
+          <tr><th scope="row">+ 공지</th><td class="desc">전달받은 공지·소식 글을 월 1건, 월간 수정 시 함께 게시합니다 (회원가입 불필요)</td><td class="r free" data-p="notice.make">무료</td><td class="r free" data-p="notice.mon">무료</td></tr>
+          <tr><th scope="row">+ 신청서</th><td class="desc">상담·예약·신청을 이메일로 접수합니다</td><td class="r" data-p="form.make">20,000</td><td class="r" data-p="form.mon">10,000</td></tr>
+          <tr><th scope="row">+ 목록 · 검색</th><td class="desc">여러 항목을 목록으로 표시하고 검색 기능을 제공합니다</td><td class="r" data-p="list.make">30,000</td><td class="r" data-p="list.mon">10,000</td></tr>
+          <tr><th scope="row">+ 한 · 영 함께 표기</th><td class="desc">한국어·영어 2개 언어</td><td class="r" data-p="lang.make">20,000</td><td class="r" data-p="lang.mon">5,000</td></tr>
+          <tr><th scope="row">+ 카드 결제</th><td class="desc">온라인 카드 결제. 결제 회사 가입과 심사는 고객이 직접 진행합니다</td><td class="r" data-p="pay.make">300,000</td><td class="r" data-p="pay.mon">50,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="pnote rv">페이지 수에 따른 추가 요금은 없으며, 페이지 구성은 내용에 맞춰 담당자가 정합니다. 표에 없는 기능은 상담 후 별도 견적으로 안내합니다. 신청서에서 기능을 선택하면 예상 금액이 자동 계산됩니다.</p>
+
+    <h3 class="ph3 rv">② <b>약정 시 제작비 할인표</b></h3>
+    <!-- 예시 금액은 PLANS 로 계산합니다 (만원 단위 올림). 예시 2 = 기본 + 회원가입 + 게시판 -->
+    <div class="ptw rv" role="region" aria-label="약정 시 제작비 할인표" tabindex="0">
+      <table class="ptab plan">
+        <thead><tr><th scope="col">요금 방식</th><th scope="col">제작비 할인</th><th scope="col" class="r">예시 1 · 기본 홈페이지</th><th scope="col" class="r">예시 2 · 기본 + 회원가입 + 게시판</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">정가<span class="sm">약정 없음 · 최소 3개월</span></th><td>없음</td><td class="r" data-plan="0" data-ex="base">100,000</td><td class="r" data-plan="0" data-ex="base member board">250,000</td></tr>
+          <tr><th scope="row">6개월</th><td>30%</td><td class="r" data-plan="1" data-ex="base">70,000</td><td class="r" data-plan="1" data-ex="base member board">180,000</td></tr>
+          <tr><th scope="row">12개월</th><td>60%</td><td class="r" data-plan="2" data-ex="base">40,000</td><td class="r" data-plan="2" data-ex="base member board">100,000</td></tr>
+          <tr><th scope="row">24개월</th><td class="free" style="font-weight:700">무료</td><td class="r free" data-plan="3" data-ex="base">무료</td><td class="r free" data-plan="3" data-ex="base member board">무료</td></tr>
+          <tr><th scope="row">월 관리비<span class="sm">전 요금 방식 동일</span></th><td>—</td><td class="r" data-mon-ex="base">50,000</td><td class="r" data-mon-ex="base member board">80,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="pnote rv">월 관리비는 약정과 관계없이 동일합니다. 약정 시 선택 항목의 제작비 합계에서 할인하며, 할인한 금액은 만원 단위로 올림합니다 (예: 175,000원 → 180,000원).</p>
+
+    <h3 class="ph3 rv">③ <b>결제 · 계약 안내</b></h3>
+    <div class="pinfo rv">
+      <p>모든 금액은 부가세 포함입니다. 계약 시에는 제작비만 청구하고, 월 관리비는 오픈일부터 매월 CMS 자동이체로 청구합니다. 약정 기간도 오픈일부터 산정합니다.</p>
+      <!-- TODO: 정가 해지 시 「납부일 7일 전 알림」 — 신청서와 사이트 문구가 달라 통일 전. 지금은 사이트 문구로만 표기 -->
+      <p>약정은 6개월부터이며, 정가는 최소 이용 기간이 3개월입니다. 정가 3개월이나 약정 기간 중에 해지하시면 위약금이 있습니다. 자세한 기준은 제작 · 관리 계약서에 따릅니다. 정가는 3개월이 지나면 언제든 해지하실 수 있습니다.</p>
+      <p>모든 홈페이지에 모바일 화면 대응과 네이버 · 구글 검색 등록이 포함됩니다. 시안 1개와 제작 중 수정 5회를 제공하며, 자료를 모두 받은 날부터 1주 이내 디자인 초안, 2주 이내 완성본을 전달합니다. 환불 기준은 견적서와 계약서에 명시합니다.</p>
+      <p>유료 도메인은 고객 부담이며, 비용은 등록 회사와 주소 종류에 따라 다릅니다(연 1~2만원을 넘을 수 있습니다). 사용 여부는 신청 시 선택하실 수 있으며, 도메인은 고객 소유가 됩니다. 무료 주소는 비용이 없지만 해지하면 주소가 사라집니다.</p>
+      <!-- TODO: 해지 시 홈페이지 처리 기준 확정 후 추가 -->
+    </div>
+    <p class="plinks rv">
+      <a class="btn btn-g" href="/payment/">결제 시점과 환불 기준 보기</a>
+      <a class="btn btn-p" href="/apply/">홈페이지 제작 신청</a>
+    </p>
+  </div>
+</section>
+
+<!-- ══════════ 10. 진행 과정 ══════════ -->
+<section class="sec process" id="process" aria-labelledby="process-h">
+  <div class="w">
+    <div class="sec-head rv">
+      <h2 class="ttl" id="process-h"><span class="l">신청부터</span> <span class="b">오픈까지</span></h2>
+    </div>
+    <ol class="steps">
+      <li class="step rv"><span class="no">01</span><h3>신청서 작성</h3><p>기능 · 디자인 · 도메인을 고르면 예상 금액이 자동으로 계산됩니다.</p></li>
+      <li class="step rv"><span class="no">02</span><h3>연락 · 견적</h3><p>담당자 배정 후 1~2영업일 안에 연락하고 견적서를 보냅니다. 최종 금액은 견적서로 확정합니다.</p></li>
+      <li class="step rv"><span class="no">03</span><h3>계약 · 입금</h3><p>계약서에 서명하고 제작비를 입금합니다.</p></li>
+      <li class="step rv"><span class="no">04</span><h3>제작 자료 제출</h3><p>「제작 자료」 링크로 글 · 연락 정보 · 로고 · 사진을 계약 · 입금 후 1주 안에 보냅니다. 입력한 글이 들어간 화면을 미리 보며 작성할 수 있습니다.</p></li>
+      <li class="step rv"><span class="no">05</span><h3>디자인 초안</h3><p>자료를 모두 받은 날부터 1주 안에 디자인 초안을 전달합니다.</p></li>
+      <li class="step rv"><span class="no">06</span><h3>완성 · 오픈</h3><p>2주 안에 완성본을 전달하고 오픈합니다.</p></li>
+      <li class="step rv"><span class="no">07</span><h3>매월 관리</h3><p>오픈일부터 월 관리비가 CMS 자동이체로 청구되고, 작은 수정 · 백업 · 장애 대응이 이어집니다.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ══════════ 11. 자주 묻는 질문 — 처음에는 모두 닫힘 ══════════ -->
+<section class="sec faq" id="faq" aria-labelledby="faq-h">
+  <div class="w faq-in">
+    <div class="rv">
+      <h2 class="ttl" id="faq-h"><span class="l">자주 묻는</span> <span class="b">질문</span></h2>
+    </div>
+    <div class="qa">
+      <details class="rv"><summary><span class="q">Q1</span>페이지를 늘리면 비용이 올라가나요?<span class="pm" aria-hidden="true"></span></summary>
+        <p class="a">페이지 수 제한이 없고, 페이지에 따른 추가 요금도 없습니다. 페이지 구성은 내용에 맞춰 담당자가 정합니다.</p></details>
+      <details class="rv"><summary><span class="q">Q2</span>상담과 견적에도 비용이 드나요?<span class="pm" aria-hidden="true"></span></summary>
+        <p class="a">상담과 견적은 무료입니다. 최종 금액은 견적서로 확정합니다.</p></details>
+      <details class="rv"><summary><span class="q">Q3</span>언제 받아볼 수 있나요?<span class="pm" aria-hidden="true"></span></summary>
+        <p class="a">자료를 모두 받은 날부터 1주 이내 디자인 초안, 2주 이내 완성본을 전달합니다.</p></details>
+      <details class="rv"><summary><span class="q">Q4</span>글은 직접 써야 하나요?<span class="pm" aria-hidden="true"></span></summary>
+        <p class="a">보내 주신 글을 그대로 사용하고 맞춤법만 다듬습니다. 제작 자료 화면에서 문장별로 나눠 쓰기, 업종별 예시, 미리 보기를 이용할 수 있습니다.</p></details>
+      <!-- 🔴 사진 받는 카카오톡 채널 이름은 쓰지 않습니다 ([확정 전]) -->
+      <details class="rv"><summary><span class="q">Q5</span>사진은 어떻게 보내나요?<span class="pm" aria-hidden="true"></span></summary>
+        <p class="a">제작 자료 화면에서 첨부하거나 카카오톡으로 따로 보낼 수 있습니다. 직접 촬영했거나 사용 권리가 있는 사진만 사용하며, 외부 사진이나 AI 이미지는 사용하지 않습니다.</p></details>
+      <details class="rv"><summary><span class="q">Q6</span>아직 개업 전이어도 신청할 수 있나요?<span class="pm" aria-hidden="true"></span></summary>
+        <p class="a">신청할 수 있습니다. 사업자등록 전이면 대표자 개인으로 계약하고, 등록증이 나오면 번호를 전달해 주십시오. 세금계산서와 홈페이지 하단에 기재합니다. 공간 사진이 없으면 상품 · 메뉴 · 대표 · 작업 사진이나 인테리어 시안으로 구성합니다.</p></details>
+      <details class="rv"><summary><span class="q">Q7</span>오픈 후 수정은 어떻게 하나요?<span class="pm" aria-hidden="true"></span></summary>
+        <p class="a">월 관리비에 작은 수정(월 1회) · 백업 · 장애 대응이 포함됩니다. 당사 원인의 오류는 횟수와 관계없이 무료로 수정합니다.</p></details>
+      <details class="rv"><summary><span class="q">Q8</span>네이버에서 검색되나요?<span class="pm" aria-hidden="true"></span></summary>
+        <p class="a">모든 홈페이지에 네이버 · 구글 검색 등록이 포함됩니다. 노출 순위는 검색 회사가 결정합니다.</p></details>
+      <details class="rv"><summary><span class="q">Q9</span>약정 없이도 이용할 수 있나요?<span class="pm" aria-hidden="true"></span></summary>
+        <p class="a">정가(약정 없음)는 최소 이용 기간이 3개월이며, 3개월이 지나면 언제든 해지할 수 있습니다. 정가 3개월이나 약정 기간 중에 해지하면 위약금이 있으며, 자세한 기준은 제작 · 관리 계약서에 따릅니다.</p></details>
+      <details class="rv"><summary><span class="q">Q10</span>도메인은 누구 명의인가요?<span class="pm" aria-hidden="true"></span></summary>
+        <p class="a">유료 도메인은 고객 명의로 등록되어 고객 소유가 됩니다. 비용은 고객 부담이며 등록 회사와 주소 종류에 따라 다릅니다(연 1~2만원을 넘을 수 있습니다). 무료 주소는 비용이 없지만 해지하면 주소가 사라집니다.</p></details>
+      <details class="rv"><summary><span class="q">Q11</span>카드 결제도 붙일 수 있나요?<span class="pm" aria-hidden="true"></span></summary>
+        <p class="a">추가 기능으로 가능합니다(제작비 <span data-won="pay.make">300,000</span>원 · 월 <span data-won="pay.mon">50,000</span>원). 결제 회사 가입과 심사는 고객이 직접 진행하며, 홈페이지 하단에 통신판매업 신고번호를 표시해야 합니다.</p></details>
+      <!-- TODO: 「해지하면 홈페이지는 어떻게 되나요?」 — 해지 시 홈페이지 처리 기준 확정 후 추가 ([확정 전]) -->
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 12. 마지막 신청 유도 ══════════ -->
+<section class="cta" id="apply" aria-labelledby="apply-h">
+  <div class="w">
+    <div class="ctabox rv">
+      <div>
+        <h2 class="ttl" id="apply-h"><span class="l">기능을 고르면</span> <span class="b">예상 금액이 바로 나옵니다</span></h2>
+        <p class="lead">신청 후 1~2영업일 안에 담당자가 연락합니다. 상담과 견적은 무료입니다.</p>
+        <p class="acts"><a class="btn btn-p" href="/apply/">홈페이지 제작 신청</a></p>
+      </div>
+      <ul class="contact" aria-label="보조 연락처">
+        <li><small>전화</small><a href="tel:01073181790">010-7318-1790</a></li>
+        <li><small>이메일</small><a href="mailto:info@intomarketing.co.kr">info@intomarketing.co.kr</a></li>
+        <li><small>카카오톡 채널</small><span>「인투마케팅」</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══════════ 13. 자료 출처 ══════════ -->
+<aside class="src" aria-labelledby="src-h">
+  <div class="wrap">
+    <h2 id="src-h">자료 출처</h2>
+    <ul>
+      <li>사업체 수 635만 개: 통계청 전국사업체조사(잠정), 2024년 기준</li>
+      <li>0.05초: Lindgaard 외(2006), 웹페이지 시각적 첫인상 연구</li>
+      <li>53%: Google(2016), 모바일 사이트 로딩 속도 조사</li>
+      <li>3배: Portent, 사이트 로딩 속도와 전환율 분석 (B2B 사이트 기준)</li>
+      <li>27.2%: 중소벤처기업부, 소상공인실태조사(2024)</li>
+    </ul>
+  </div>
+</aside>
+
+<!-- ══════════ 하단 — 🔴 메인 index.html 의 <footer> 복사본 (링크만 / 로 시작하게). 메인을 고치면 여기도 ══════════ -->
+<footer>
+  <div class="wrap">
+    <p class="fb">인투마케팅</p>
+    <!-- 🔴 사업자 정보 블록 — 카카오 비즈니스 심사 통과 근거입니다. 지우지 마세요. -->
+    <div class="biz">
+      상호 : <b>인투마케팅</b> &nbsp;|&nbsp; 대표자 : <b>양회광</b><br>
+      사업자등록번호 : 306-24-53380<br>
+      주소 : 대전광역시 유성구 은구비남로33번길 13-8, 3397호<br>
+      전화 : 010-7318-1790 &nbsp;|&nbsp; 이메일 : info@intomarketing.co.kr<br>
+      카카오톡 채널 : 인투마케팅 (고객 문의) · ESC 학원지원 (블로거 문의)<br>
+      <!-- 🔴 ESC 학원지원 줄을 지우지 마세요 — 블로거용 알림톡 17종이 그 채널에 묶여 있습니다 (행정 창 2026-10-14) -->
+      통신판매업 신고번호 : 2026-대전유성-1694<br>
+      <!-- 🔴 인투오피스 줄을 지우지 마세요 — 인투오피스 카카오 비즈 앱 심사에서 「같은 사업자가 운영」을 보여 주는 근거입니다 (2026-10-15) -->
+      운영 서비스 : <a href="https://intoedu.github.io/into-office/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">인투오피스 (INTO OFFICE)</a> — 전자계약 · 전자서명
+    </div>
+    <div class="pol">
+      <a href="/privacy/">개인정보처리방침</a><span>|</span><a href="/terms/">이용약관</a><span>|</span><a href="/payment/">결제 · 환불 안내</a><span>|</span><a href="/hakwon/">학원지원센터</a><span>|</span><a href="https://intoedu.github.io/into-office/" target="_blank" rel="noopener">인투오피스</a>
+    </div>
+    <p class="cr">© 2026 인투마케팅 (INTO MARKETING). All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   💰 가격 · 조건 — 이 페이지의 모든 금액은 여기서 읽습니다 (명세서 5장)
+   🔴 /apply/index.html PRICE · PLANS, 메인 index.html 가격표, hakwon/index.html WEB_ITEMS 와 같은 값이어야 합니다.
+   ══════════════════════════════════════════════════════════════ */
+const PRICE = {
+  base:   { name: '기본 홈페이지',     make: 100000, mon: 50000 },
+  member: { name: '회원가입',          make: 100000, mon: 20000 },
+  board:  { name: '게시판',            make: 50000,  mon: 10000, extraMon: 10000 },
+  notice: { name: '공지',              make: 0,      mon: 0 },
+  form:   { name: '신청서',            make: 20000,  mon: 10000 },
+  list:   { name: '목록 · 검색',        make: 30000,  mon: 10000 },
+  lang:   { name: '한 · 영 함께 표기',   make: 20000,  mon: 5000 },
+  pay:    { name: '카드 결제',          make: 300000, mon: 50000 }
+};
+const PLANS = [
+  { name: '정가', months: 0, off: 0 },     // 약정 없음 · 최소 3개월
+  { name: '6개월', months: 6, off: 30 },
+  { name: '12개월', months: 12, off: 60 },
+  { name: '24개월', months: 24, off: 100 } // 제작비 무료
+];
+// 약정 할인 금액은 만원 단위 올림: Math.ceil(total * (100 - off) / 100 / 10000) * 10000
+
+/* ══════════════════════════════════════════════════════════════
+   🖼 작업물 — visible 로 켜고 끕니다 (명세서 4-8 · 7장)
+   🔴 2026-10-15 전도사님 결정: 세 카드 모두 visible:false 로 시작. 카드별로 확인이 끝나면 하나씩 true 로 켭니다.
+      보이는 카드가 하나도 없으면 #works 섹션 전체가 숨겨집니다.
+   🔴 공개 전 확인
+      · SLT TOUR, 그린파스처 — 고객의 공개 동의를 확인한 뒤 공개
+      · 인투주니어학원 — 사이트 정리(학원법 표시 항목 · 근거 각주 · 검색 차단 설정) 확인 뒤 공개
+   features 는 PRICE 의 키 — 태그 이름이 가격표와 같게 나옵니다.
+   thumb 는 전도사님이 화면 캡처를 주면 그 파일(/web/img/…)로 바꿉니다.
+   ══════════════════════════════════════════════════════════════ */
+const WORKS = [
+  { visible: false, name: 'SLT TOUR', industry: '동남아·중화권 전문 B2B 여행사',
+    screens: '회사소개, 서비스, 연혁, 지역별 조직, 오시는 길',
+    features: ['base'],
+    url: 'https://intoedu.github.io/SLT-Tour-Home-Page/',
+    thumb: 'https://intoedu.github.io/SLT-Tour-Home-Page/og-image.jpg?v=3' },
+  /* 초·중등 대상 학원이라 「레벨테스트 절차」 표기는 그대로 둡니다 (명세서 4-8) */
+  { visible: false, name: '인투주니어학원', industry: '초·중등 영어학원',
+    screens: '프로그램, 레벨테스트 절차, 반별 시간표, 학원 공간, 장소 안내',
+    features: ['base', 'lang'],
+    url: 'https://intoedu.github.io/intojunior-home-page/',
+    thumb: 'https://intoedu.github.io/intojunior-home-page/og.png' },
+  /* 🔴 도메인(www.greenpasture.co.kr) 연결 전이라 GitHub Pages 주소를 씁니다 (2026-10-15 전도사님).
+        연결이 끝나면 url · thumb 를 https://www.greenpasture.co.kr/ 로 바꾸십시오 */
+  { visible: false, name: '그린파스처', industry: '촉매 코팅 제조·시공 B2B',
+    screens: '성능 데이터, 제품 라인업, 견적·샘플·파트너 신청',
+    features: ['base', 'form', 'lang', 'notice'],
+    url: 'https://intoedu.github.io/greenpasture/',
+    thumb: 'https://intoedu.github.io/greenpasture/assets/img/og-image.jpg' }
+  /* 우리 동네 커피 (요식업) — 완성 후 추가합니다
+  ,{ visible: false, name: '우리 동네 커피', industry: '요식업', screens: '', features: ['base', 'form'], url: '', thumb: '' } */
+];
+
+(function(){
+  'use strict';
+  var won = function(n){ return Number(n).toLocaleString('ko-KR'); };
+  var get = function(path){ var p=path.split('.'); return PRICE[p[0]][p[1]]; };
+  var sum = function(keys, f){ return keys.reduce(function(t,k){ return t + PRICE[k][f]; }, 0); };
+  var afterPlan = function(total, off){ return Math.ceil(total * (100 - off) / 100 / 10000) * 10000; };
+  var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+
+  /* ── 금액 채우기 ── */
+  $$('[data-man]').forEach(function(el){ el.textContent = get(el.dataset.man) / 10000; });
+  $$('[data-won]').forEach(function(el){ el.textContent = won(get(el.dataset.won)); });
+  $$('[data-p]').forEach(function(el){ var v=get(el.dataset.p); el.textContent = v ? won(v) : '무료'; });
+  $$('[data-sum]').forEach(function(pn){
+    var keys = pn.dataset.sum.split(' ');
+    pn.querySelector('[data-sum-make]').textContent = won(sum(keys,'make'));
+    pn.querySelector('[data-sum-mon]').textContent = won(sum(keys,'mon'));
+  });
+  $$('[data-plan]').forEach(function(el){
+    var v = afterPlan(sum(el.dataset.ex.split(' '),'make'), PLANS[+el.dataset.plan].off);
+    el.textContent = v ? won(v) : '무료';
+  });
+  $$('[data-mon-ex]').forEach(function(el){ el.textContent = won(sum(el.dataset.monEx.split(' '),'mon')); });
+
+  /* ── 작업물 카드 ── */
+  var box = document.getElementById('wcards');
+  var esc = function(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); };
+  var shown = WORKS.filter(function(w){ return w.visible; });
+  box.innerHTML = shown.map(function(w){
+    return '<li class="wcard glass rv">'
+      + '<div class="wthumb"><img src="'+esc(w.thumb)+'" alt="'+esc(w.name)+' 홈페이지 미리 보기 이미지" loading="lazy" width="1200" height="630"></div>'
+      + '<div class="wbody"><p class="ind">'+esc(w.industry)+'</p><h3>'+esc(w.name)+'</h3>'
+      + '<p class="scr"><b>주요 화면</b>'+esc(w.screens)+'</p>'
+      + '<ul class="tags" aria-label="사용한 기능">'+w.features.map(function(k){ return '<li>'+esc(PRICE[k].name)+'</li>'; }).join('')+'</ul>'
+      + '<a class="more" href="'+esc(w.url)+'" target="_blank" rel="noopener">사이트 보기 ↗<span class="sr"> (새 창)</span></a></div></li>';
+  }).join('');
+  document.getElementById('works').hidden = !shown.length;
+  $$('.wthumb img', box).forEach(function(img){
+    img.addEventListener('error', function(){ img.style.visibility='hidden'; });
+  });
+
+  /* ── 이미지 자리 — 같은 이름의 실제 파일이 들어오면 자리표시(data-tbd)를 걷습니다 ── */
+  $$('[data-slot]').forEach(function(slot){
+    var img = slot.querySelector('img');
+    var check = function(){
+      if(img.naturalWidth > 2 && img.naturalHeight > 2){
+        slot.removeAttribute('data-tbd');
+        if(img.dataset.alt) img.alt = img.dataset.alt;
+      }
+    };
+    if(img.complete) check(); else img.addEventListener('load', check);
+  });
+
+  /* ── 히어로 유리 카드 — 오른쪽 위를 비스듬히 자른 모양 (design-main.png) ── */
+  var card = document.querySelector('.hcard');
+  var line = card && card.querySelector('.hcard-line path');
+  function cardPath(w, h){
+    var narrow = w < 600;
+    var r  = Math.min(narrow ? 36 : 72, w * .14, h * .14);           /* 둥근 모서리 */
+    var cx = narrow ? w * .2 : Math.min(w * .34, 210);               /* 자른 폭 */
+    var cy = narrow ? w * .2 : Math.min(h * .35, 220);               /* 자른 높이 */
+    var len = Math.sqrt(cx*cx + cy*cy), dx = cx/len, dy = cy/len;
+    var k = Math.min(narrow ? 24 : 48, len * .3);                    /* 꺾이는 곳 둥글기 */
+    var ax = w - cx;
+    return 'M'+r+',0 L'+(ax-k)+',0 Q'+ax+',0 '+(ax+dx*k)+','+(dy*k)
+      + ' L'+(w-dx*k)+','+(cy-dy*k)+' Q'+w+','+cy+' '+w+','+(cy+k)
+      + ' L'+w+','+(h-r)+' A'+r+','+r+' 0 0 1 '+(w-r)+','+h
+      + ' L'+r+','+h+' A'+r+','+r+' 0 0 1 0,'+(h-r)
+      + ' L0,'+r+' A'+r+','+r+' 0 0 1 '+r+',0 Z';
+  }
+  function shape(){
+    var w = card.offsetWidth, h = card.offsetHeight;
+    if(!w || !h) return;
+    var d = cardPath(w, h);
+    card.style.clipPath = 'path("'+d+'")';
+    card.querySelector('.hcard-line').setAttribute('viewBox','0 0 '+w+' '+h);
+    line.setAttribute('d', d);
+    card.classList.add('cut');
+  }
+  if(card && window.CSS && CSS.supports && CSS.supports('clip-path','path("M0,0 L1,0 L1,1 Z")')){
+    shape();
+    if(window.ResizeObserver) new ResizeObserver(shape).observe(card); else window.addEventListener('resize', shape);
+  }
+
+  /* ── 업종 탭 ── */
+  var tabs = $$('[role="tab"]'), panels = $$('[role="tabpanel"]');
+  if(tabs.length){
+    document.querySelector('[role="tablist"]').hidden = false;
+    var select = function(t, focus){
+      tabs.forEach(function(x){
+        var on = x === t;
+        x.setAttribute('aria-selected', on ? 'true' : 'false');
+        x.tabIndex = on ? 0 : -1;
+        document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
+      });
+      if(focus) t.focus();
+    };
+    tabs.forEach(function(t, i){
+      t.addEventListener('click', function(){ select(t); });
+      t.addEventListener('keydown', function(e){
+        var n = null;
+        if(e.key === 'ArrowRight') n = tabs[(i+1) % tabs.length];
+        else if(e.key === 'ArrowLeft') n = tabs[(i-1+tabs.length) % tabs.length];
+        else if(e.key === 'Home') n = tabs[0];
+        else if(e.key === 'End') n = tabs[tabs.length-1];
+        if(n){ e.preventDefault(); select(n, true); }
+      });
+    });
+    select(tabs[0]);
+  }
+
+  /* ── 손전화 메뉴 — 메인 index.html 과 같은 동작 ── */
+  var burger = document.getElementById('burger'), sheet = document.getElementById('msheet');
+  if(burger) burger.addEventListener('click', function(){
+    var on = sheet.classList.toggle('on');
+    burger.setAttribute('aria-expanded', on ? 'true' : 'false');
+  });
+
+  /* ── 움직임 — 「동작 줄이기」를 켠 분에게는 처음부터 다 보이고 숫자도 움직이지 않습니다 ── */
+  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var rv = $$('.rv');
+  function countUp(el){
+    var end = el.textContent, to = parseFloat(end), dec = (end.split('.')[1] || '').length, t0 = null;
+    function step(t){
+      if(!t0) t0 = t;
+      var p = Math.min(1, (t - t0) / 1100), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = p < 1 ? (to * e).toFixed(dec) : end;
+      if(p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  if(still || !('IntersectionObserver' in window)){
+    rv.forEach(function(el){ el.classList.add('in'); });
+  }else{
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if(!en.isIntersecting) return;
+        en.target.classList.add('in');
+        $$('[data-count]', en.target).forEach(countUp);
+        io.unobserve(en.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: .08 });
+    rv.forEach(function(el){ io.observe(el); });
+  }
+})();
+</script>
+
+<!-- 실장 전용 링크(?p=코드)로 들어온 것을 기억해 둡니다 — 신청서에서 씁니다 (메인과 같음) -->
+<script src="/ref.js"></script>
+<!-- 머리띠에 로그인 상태를 보여 줍니다 (메인과 같은 순서) -->
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="/apply/account.js"></script>
+<script defer src="/authbar.js"></script>
+</body>
+</html>

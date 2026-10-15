@@ -919,7 +919,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
 <header>
   <div class="wrap">
     <div class="imab-row">
-      <a class="back" data-back href="../#web" style="margin-bottom:0">← 홈페이지 제작</a>
+      <a class="back" data-back href="../web/" style="margin-bottom:0">← 홈페이지 제작</a>
       <span class="imab" id="authbar"></span>
     </div>
     <div>
@@ -1694,7 +1694,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
     <b>긴급 문의</b> 전화 <a href="tel:01073181790">010-7318-1790</a> · 이메일 <a href="mailto:info@intomarketing.co.kr">info@intomarketing.co.kr</a><br>
     <b>영업시간</b> 월~금 09:00~20:00 (주말 · 공휴일 제외)
   </div>
-  <p style="margin-top:20px"><a data-back href="../#web">← 홈페이지 제작으로 돌아가기</a></p>
+  <p style="margin-top:20px"><a data-back href="../web/">← 홈페이지 제작으로 돌아가기</a></p>
 </div>
 <div class="done" id="done_mat" style="display:none">
   <div class="ic">✅</div>
@@ -1712,7 +1712,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
     <b>긴급 문의</b> 전화 <a href="tel:01073181790">010-7318-1790</a> · 이메일 <a href="mailto:info@intomarketing.co.kr">info@intomarketing.co.kr</a><br>
     <b>영업시간</b> 월~금 09:00~20:00 (주말 · 공휴일 제외)
   </div>
-  <p style="margin-top:20px"><a data-back href="../#web">← 홈페이지 제작으로 돌아가기</a></p>
+  <p style="margin-top:20px"><a data-back href="../web/">← 홈페이지 제작으로 돌아가기</a></p>
 </div>
 </main>
 
@@ -1995,7 +1995,8 @@ document.querySelectorAll('a[data-back]').forEach(function(a){
   a.addEventListener('click',function(e){
     try{
       var r=document.referrer?new URL(document.referrer):null;
-      var fromMain=r && r.origin===location.origin && (r.pathname==='/'||r.pathname==='/index.html');
+      /* 2026-10-15 — 홈페이지 제작 세부페이지(/web/)에서 넘어온 경우도 한 칸 물러납니다 */
+      var fromMain=r && r.origin===location.origin && (r.pathname==='/'||r.pathname==='/index.html'||r.pathname==='/web/'||r.pathname==='/web/index.html');
       if(fromMain && history.length>1){ e.preventDefault(); history.back(); }
     }catch(x){}
   });
