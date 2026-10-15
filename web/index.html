@@ -64,6 +64,7 @@
   --sky:#72AEE1;        /* 히어로 맨 위 하늘색 */
   --blue:#1C69CF;
   --navy:#0B2B56;
+  --pbox-blue:#2C5DD3;  /* 2번 섹션 글 상자 카드 (참고 그림 파랑 #2F62D9 근처 · 노란 문장 대비 4.5:1 이상이 되게 조금 진하게) */
   --btn:#006EEF;        /* 신청 버튼 */
   --btn-hi:#1F82FF;
   --yellow:#F8F107;     /* 노란 강조 (가장 진한 곳 #FFF500) */
@@ -240,18 +241,24 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .ptitle{text-align:center;font-size:clamp(28px,4.7vw,66px);line-height:1.08;letter-spacing:-.045em;color:#fff}
 .ptitle .l{display:block;font-weight:300}
 .ptitle .b{display:block;font-weight:800;margin-top:.04em}
-.pbox{position:relative;margin-top:clamp(56px,8vw,112px);border-radius:34px;
-  padding:44px 40px 64px;
-  /* 위 짙은 남색 → 아래 밝은 하늘색. 밝은 하늘색은 마지막 문장 «아래» 여백으로만 내렸습니다 (노란 글씨 대비) */
-  background:linear-gradient(180deg,#040E1C 0,#071931 12%,#0C2D59 28%,#103F7E calc(100% - 150px),
-             #1757AD calc(100% - 96px),#2268C4 calc(100% - 56px),#3C8FE0 calc(100% - 36px),
-             #62BCF3 calc(100% - 14px),var(--sky-lt) 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 0 0 1px rgba(255,255,255,.08)}
+/* 글 상자 카드 — 파란 단색 · 가게 그림은 카드 안 오른쪽 아래에서 바탕으로 녹아듦 (2026-10-15)
+   대비: 흰 글자 / #2C5DD3 5.81:1 · 노란 문장(#F8F107) / #2C5DD3 4.86:1
+   가게 색 두 안 — 카드 class 하나로 전환: shop-tint (B안 · 기본, 카드 파랑으로 다시 칠한 그림) / shop-orig (A안, 원래 색) */
+.pbox{position:relative;margin-top:clamp(56px,8vw,112px);border-radius:34px;overflow:hidden;isolation:isolate;
+  padding:44px 40px 40px;background:var(--pbox-blue);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 0 0 1px rgba(255,255,255,.08)}
+.ptext{position:relative;z-index:2;max-width:min(890px,calc(100% - 250px))}
 .pbox p{font-size:clamp(17px,1.95vw,28px);line-height:1.3;color:#fff;letter-spacing:-.02em;font-weight:400}
 .pbox .em{margin-top:1.3em;color:var(--yellow);font-weight:600;text-shadow:0 1px 2px rgba(0,16,48,.45)}
-.deco-problem{position:absolute;right:28px;bottom:-79px;width:290px;height:265px}   /* design-main.png 지폐·동전 자리 — 상자 밖으로 걸침 */
-.deco-problem img{object-position:right bottom}
-.nums{list-style:none;padding:0;margin:clamp(96px,9vw,128px) 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.pbox .psrc{display:inline-flex;align-items:center;margin-top:28px;min-height:30px;padding:0 14px;border-radius:999px;
+  background:#fff;color:var(--ink);font-size:var(--t-sm);font-weight:600;line-height:1.3;letter-spacing:-.01em}
+.pshop{position:absolute;z-index:1;right:-56px;bottom:-46px;height:calc(100% + 36px);aspect-ratio:600/574;pointer-events:none;
+  -webkit-mask-image:linear-gradient(to top left,#000 34%,rgba(0,0,0,.55) 58%,transparent 84%);
+          mask-image:linear-gradient(to top left,#000 34%,rgba(0,0,0,.55) 58%,transparent 84%);
+  opacity:.92}
+.pshop img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:right bottom}
+.pbox.shop-tint .is-orig,.pbox.shop-orig .is-tint{display:none}
+.nums{list-style:none;padding:0;margin:16px 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
 .num{padding:28px 24px 24px;display:flex;flex-direction:column;min-height:220px}
 .num .n{font-size:clamp(44px,4.4vw,60px);line-height:1;color:var(--num);letter-spacing:-.04em;font-variant-numeric:tabular-nums;white-space:nowrap}
 .num .n b{font-weight:300}
@@ -503,8 +510,9 @@ footer .cr{color:#7D838C}
   .hphoto{min-height:0;aspect-ratio:4/3;border-radius:32px}
   .deco-top{top:-56px;right:-70px;width:clamp(170px,34vw,300px)}
   .deco-bottom{top:auto;bottom:22%;left:-90px;width:clamp(150px,30vw,240px)}
-  .pbox{padding:36px 28px 150px}
-  .deco-problem{right:16px;bottom:-60px;width:200px;height:183px}
+  .pbox{padding:36px 28px 236px}                 /* 아래쪽에 가게 자리 — 글자 밑으로 깔리지 않게 */
+  .ptext{max-width:none}
+  .pshop{height:260px;right:-28px;bottom:-34px}
   .flow{grid-template-columns:minmax(0,1fr);justify-items:stretch}
   .flow .arr svg{transform:rotate(90deg)}
   .moods{grid-template-columns:minmax(0,1fr)}
@@ -522,8 +530,8 @@ footer .cr{color:#7D838C}
   .hbtn{width:100%}
   .hcond{font-size:var(--t-sm)}
   .problem{padding-top:88px}
-  .pbox{border-radius:26px;padding:28px 22px 130px}
-  .deco-problem{width:160px;height:146px;bottom:-48px}
+  .pbox{border-radius:26px;padding:28px 22px 196px}
+  .pshop{height:216px;right:-26px;bottom:-26px}
   .nums{grid-template-columns:minmax(0,1fr);gap:12px}
   .num{min-height:0}
   .tiles{grid-template-columns:minmax(0,1fr)}
@@ -636,14 +644,19 @@ footer .cr{color:#7D838C}
   <div class="w">
     <h2 class="ptitle rv" id="problem-h"><span class="l">"전국 635만 사업장 중, 사장님의 매장은</span> <span class="b">온라인에서 손님을 놓치고 있진 않나요?"</span></h2>
 
-    <div class="pbox rv">
+    <!-- 가게 색 두 안 — class 를 shop-tint(B안 · 기본) 또는 shop-orig(A안) 로 바꾸면 전환 -->
+    <div class="pbox shop-tint rv">
+      <div class="ptext">
       <p>통계청 조사 결과, 우리나라 사업체 수는 635만 개를 넘어섰습니다. (2024년 잠정)<br>
          웹페이지 첫인상이 생기는 데는 단 0.05초면 충분하다는 연구가 있습니다.<br>
          저희는 단순히 예쁜 사이트를 만들지 않습니다.</p>
       <p class="em">철저한 UI/UX 설계로 방문자가 문의와 예약까지 이어지는 홈페이지를 만듭니다.</p>
-      <!-- 그래픽 — /web/img/deco-problem.png (2026-10-15 전도사님이 준 가게 그림을 투명 배경으로 가공 · 간판은 비워 둠) -->
-      <div class="deco deco-problem slot line" data-slot aria-hidden="true">
-        <img src="img/deco-problem.png" alt="" width="600" height="574" loading="lazy" decoding="async">
+      <p class="psrc">출처: 통계청(2024 잠정) · Lindgaard 외(2006)</p>
+      </div>
+      <!-- 가게 그림 (장식) — B안 deco-problem-tint.png(카드 파랑으로 다시 칠함) / A안 deco-problem.png(원래 색). 보이지 않는 쪽은 불러오지 않음 -->
+      <div class="pshop" aria-hidden="true">
+        <img class="is-tint" src="img/deco-problem-tint.png" alt="" width="600" height="574" loading="lazy" decoding="async">
+        <img class="is-orig" src="img/deco-problem.png" alt="" width="600" height="574" loading="lazy" decoding="async">
       </div>
     </div>
 
