@@ -478,11 +478,18 @@ footer .cr{color:#7D838C}
 
 /* ══════════ 화면 폭별 ══════════ */
 @media(max-width:1180px){
-  .rcards li,.ecards li{grid-column:span 3}
-  .rcards li:nth-child(5),.ecards li:nth-child(5){grid-column:span 6}
   .nums{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+/* 태블릿 · 휴대폰 (≤900px) — 카드가 혼자 좁거나 넓게 남지 않게 (2026-10-15)
+   🔴 PC 의 「4 · 5번째 카드 3칸」 규칙(.rcards li:nth-child(4) 등)은 .rcards li 보다 구체적이라
+      «:nth-child(n)» 으로 같은 무게를 맞춰 덮어씁니다. 예전에는 휴대폰에서 4번째 카드만 반 폭으로 남았습니다. */
+@media(max-width:900px){
+  .rcards li:nth-child(n),.ecards li:nth-child(n){grid-column:1/-1}
+  .tile{flex-direction:column;align-items:flex-start;gap:14px}
+  .steps{grid-template-columns:minmax(0,1fr);row-gap:0}
+  .step{padding:0 0 32px 32px}
+  .step::before{left:5px;right:auto;top:6px;bottom:0;width:2px;height:auto;background:linear-gradient(180deg,#3C8FE0,rgba(0,110,239,.2))}
+  .step::after{top:0}
 }
 @media(max-width:999px){
   .hero{background:linear-gradient(180deg,#72AEE1 0,#3B81D5 28px,#1C69CF 56px,#134A93 240px,#0B2B56 420px,#06162D 560px,#000 700px)}
@@ -520,15 +527,10 @@ footer .cr{color:#7D838C}
   .nums{grid-template-columns:minmax(0,1fr);gap:12px}
   .num{min-height:0}
   .tiles{grid-template-columns:minmax(0,1fr)}
-  .tile{min-height:84px;padding:16px 18px}
+  .tile{min-height:84px;padding:16px 18px;flex-direction:row;align-items:center;gap:18px}
   .mood{display:flex;align-items:stretch}
-  .rcards li,.ecards li,.rcards li:nth-child(5),.ecards li:nth-child(5){grid-column:span 6}
   .shots{grid-template-columns:minmax(0,1fr)}
   .wcards{grid-template-columns:minmax(0,1fr)}
-  .steps{grid-template-columns:minmax(0,1fr);row-gap:0}
-  .step{padding:0 0 32px 32px}
-  .step::before{left:5px;right:auto;top:6px;bottom:0;width:2px;height:auto;background:linear-gradient(180deg,#3C8FE0,rgba(0,110,239,.2))}
-  .step::after{top:0}
   .qa summary{padding:14px 18px;gap:12px}
   .qa .a{padding:0 18px 20px 18px}
   .ptab th,.ptab td{padding:12px 12px;font-size:var(--t-sm)}
