@@ -14,7 +14,8 @@
       /apply/index.html 의 PRICE · PLANS, 메인 가격표, hakwon/index.html WEB_ITEMS 와 같은 값이어야 합니다.
 
    🔴 이미지는 /web/img/ 에 «같은 이름»으로 넣으면 바로 바뀝니다 (img/README.md).
-      지금 들어 있는 같은 이름의 파일은 1×1 빈 자리표시 파일입니다.
+      hero-photo.jpg · deco-problem.png · apply-quote/preview.png 는 아직 1×1 빈 자리표시 파일입니다.
+      고리 장식 2개와 섹션 제목 아이콘 6개는 전도사님이 준 그림을 가공해 넣었습니다 (2026-10-15).
       design-main.png · 레퍼런스(Canva 템플릿) 속 그림은 어떤 형태로도 쓰지 않습니다.
 
    글꼴은 Pretendard 하나만 씁니다 (메인과 같은 주소 · 버전을 올리지 마세요).
@@ -156,6 +157,11 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .ttl .l{display:block;font-weight:300}
 .ttl .b{display:block;font-weight:800}
 .ttl.one .l,.ttl.one .b{display:inline}
+/* 섹션 제목 옆 3D 아이콘 (장식 · 섹션당 1개) — 굵은 줄 끝에 붙여 제목 크기를 따라감, 마지막 낱말과 같은 줄에 */
+.ico-end{white-space:nowrap}
+.sec-ico{display:inline-block;width:auto;height:1.3em;vertical-align:-.2em;margin-left:.26em;
+         filter:drop-shadow(0 14px 22px rgba(0,24,72,.45))}
+.price .sec-ico{filter:drop-shadow(0 12px 18px rgba(14,27,51,.18))}
 .lead{font-size:clamp(var(--t-md),1.5vw,20px);color:var(--txt-2);line-height:1.75;max-width:62ch;margin-top:var(--s-5)}
 .sec{padding:clamp(88px,10vw,140px) 0}
 .sec-head{margin-bottom:clamp(40px,5vw,64px)}
@@ -217,8 +223,9 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .hphoto img{position:absolute;inset:0;object-fit:cover}
 .deco{position:absolute;z-index:3;pointer-events:none}
 .deco img{object-fit:contain}
-.deco-top{top:-28px;right:-60px;width:clamp(180px,22vw,320px);height:clamp(170px,20vw,290px)}
-.deco-bottom{left:-150px;top:519px;width:clamp(160px,18vw,250px);height:clamp(160px,17vw,236px)}
+/* 고리 장식 (design-main.png 리본 자리) — 오른쪽 위는 크게, 위 · 오른쪽이 잘림 / 왼쪽 아래는 작게, 왼쪽이 반쯤 잘림 */
+.deco-top{top:clamp(-120px,-7vw,-48px);right:clamp(-150px,-9vw,-60px);width:clamp(220px,28vw,410px);aspect-ratio:900/847}
+.deco-bottom{left:clamp(-170px,-10vw,-90px);top:470px;width:clamp(170px,19vw,280px);aspect-ratio:847/900}
 
 /* ══════════ 2. 문제 제기 ══════════ */
 .problem{background:#000;padding:118px 0 clamp(88px,10vw,140px)}
@@ -261,7 +268,7 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .role-links{margin-top:var(--s-5);display:flex;flex-wrap:wrap;gap:8px 28px}
 
 /* ══════════ 4. 기본 구성 ══════════ */
-.basic{background:radial-gradient(70% 45% at 50% 38%,rgba(28,105,207,.30),rgba(28,105,207,0) 70%),linear-gradient(180deg,#0B2B56 0,#071D3E 40%,#030C18 75%,#000 100%)}
+.basic{background:radial-gradient(70% 34% at 50% 52%,rgba(28,105,207,.30),rgba(28,105,207,0) 100%),linear-gradient(180deg,#0B2B56 0,#071D3E 40%,#030C18 75%,#000 100%)}
 .tiles{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .tile{position:relative;display:flex;align-items:center;gap:18px;min-height:112px;padding:22px 24px;border-radius:26px;
       background:linear-gradient(160deg,rgba(40,110,220,.28) 0%,rgba(10,40,90,.35) 60%,rgba(6,20,45,.5) 100%);
@@ -492,12 +499,12 @@ footer .cr{color:#7D838C}
   .hcard{min-height:0;border-radius:44px;padding-top:44px}
   .hero h1{margin-top:36px;font-size:clamp(48px,10.5vw,88px)}
   .hsub{font-size:clamp(18px,3vw,26px)}
-  .pbox p{font-size:clamp(16px,2.7vw,24px)}
+  .pbox p{font-size:clamp(16px,2.35vw,24px)}
   .hsub{margin-top:32px}
   .hact{padding-top:40px}
   .hphoto{min-height:0;aspect-ratio:4/3;border-radius:32px}
-  .deco-top{top:-20px;right:-50px}
-  .deco-bottom{top:auto;bottom:24%;left:-110px}
+  .deco-top{top:-56px;right:-70px;width:clamp(170px,34vw,300px)}
+  .deco-bottom{top:auto;bottom:22%;left:-90px;width:clamp(150px,30vw,240px)}
   .pbox{padding:36px 28px 150px}
   .deco-problem{right:16px;bottom:-60px;width:200px;height:183px}
   .flow{grid-template-columns:minmax(0,1fr);justify-items:stretch}
@@ -623,12 +630,12 @@ footer .cr{color:#7D838C}
       <img src="img/hero-photo.jpg" alt="" data-alt="인투마케팅이 만든 홈페이지를 띄운 노트북" width="2000" height="1333" fetchpriority="high">
     </div>
 
-    <!-- 🔴 3D 장식 자리 — /web/img/deco-hero-top.png · deco-hero-bottom.png (투명 배경 · 긴 변 1200px 이상) -->
+    <!-- 3D 장식 — /web/img/deco-hero-top.png · deco-hero-bottom.png (2026-10-15 전도사님이 준 고리 그림을 투명 배경 · 리본 색으로 가공) -->
     <div class="deco deco-top slot line" data-slot data-tbd="원본 이미지 필요: deco-hero-top.png" aria-hidden="true">
-      <img src="img/deco-hero-top.png" alt="" width="1200" height="1090">
+      <img src="img/deco-hero-top.png" alt="" width="900" height="847">
     </div>
     <div class="deco deco-bottom slot line" data-slot data-tbd="원본 이미지 필요: deco-hero-bottom.png" aria-hidden="true">
-      <img src="img/deco-hero-bottom.png" alt="" width="1200" height="1130">
+      <img src="img/deco-hero-bottom.png" alt="" width="847" height="900">
     </div>
   </div>
 </section>
@@ -662,7 +669,7 @@ footer .cr{color:#7D838C}
 <section class="sec role" id="role" aria-labelledby="role-h">
   <div class="w">
     <div class="sec-head rv">
-      <h2 class="ttl" id="role-h"><span class="l">블로그·지도는 손님을 데려오고,</span> <span class="b">홈페이지는 손님을 설득합니다</span></h2>
+      <h2 class="ttl" id="role-h"><span class="l">블로그·지도는 손님을 데려오고,</span> <span class="b">홈페이지는 손님을 <span class="ico-end">설득합니다<img class="sec-ico" src="img/icon-pin.png" alt="" width="209" height="320" loading="lazy" decoding="async"></span></span></h2>
       <p class="lead">블로그·리뷰와 지도는 손님이 가게를 알게 되는 길입니다. 홈페이지는 소개·메뉴·가격·위치·연락처를 한곳에 모아 보여 주고, 전화·카카오톡·예약 버튼으로 바로 이어 줍니다.</p>
     </div>
     <figure class="glass flow rv" style="margin:0">
@@ -859,7 +866,7 @@ footer .cr{color:#7D838C}
 <section class="sec easy" id="easy" aria-labelledby="easy-h">
   <div class="w">
     <div class="sec-head rv">
-      <h2 class="ttl" id="easy-h"><span class="l">신청부터 자료 보내기까지,</span> <span class="b">어렵지 않게</span></h2>
+      <h2 class="ttl" id="easy-h"><span class="l">신청부터 자료 보내기까지,</span> <span class="b">어렵지 <span class="ico-end">않게<img class="sec-ico" src="img/icon-note.png" alt="" width="301" height="320" loading="lazy" decoding="async"></span></span></h2>
     </div>
     <!-- 모두 신청서 · 제작 자료 화면에 실제로 있는 기능 (apply/index.html 2026-10-13 판). 🔴 카드 5에 카카오톡 채널 이름을 쓰지 않습니다 -->
     <ul class="ecards">
@@ -905,7 +912,7 @@ footer .cr{color:#7D838C}
 <section class="sec price" id="price" aria-labelledby="price-h">
   <div class="w">
     <div class="sec-head rv">
-      <h2 class="ttl one" id="price-h"><span class="l">가격 · </span><span class="b">계약 조건</span></h2>
+      <h2 class="ttl one" id="price-h"><span class="l">가격 · </span><span class="b">계약 <span class="ico-end">조건<img class="sec-ico" src="img/icon-calendar.png" alt="" width="320" height="320" loading="lazy" decoding="async"></span></span></h2>
     </div>
 
     <h3 class="ph3 rv">① <b>기능별 가격표</b> <small style="font-size:var(--t-sm);font-weight:600;color:var(--muted);letter-spacing:0">모든 금액 부가세 포함, 단위 원</small></h3>
@@ -963,7 +970,7 @@ footer .cr{color:#7D838C}
 <section class="sec process" id="process" aria-labelledby="process-h">
   <div class="w">
     <div class="sec-head rv">
-      <h2 class="ttl" id="process-h"><span class="l">신청부터</span> <span class="b">오픈까지</span></h2>
+      <h2 class="ttl" id="process-h"><span class="l">신청부터</span> <span class="b"><span class="ico-end">오픈까지<img class="sec-ico" src="img/icon-clock.png" alt="" width="320" height="289" loading="lazy" decoding="async"></span></span></h2>
     </div>
     <ol class="steps">
       <li class="step rv"><span class="no">01</span><h3>신청서 작성</h3><p>기능 · 디자인 · 도메인을 고르면 예상 금액이 자동으로 계산됩니다.</p></li>
@@ -981,7 +988,7 @@ footer .cr{color:#7D838C}
 <section class="sec faq" id="faq" aria-labelledby="faq-h">
   <div class="w faq-in">
     <div class="rv">
-      <h2 class="ttl" id="faq-h"><span class="l">자주 묻는</span> <span class="b">질문</span></h2>
+      <h2 class="ttl" id="faq-h"><span class="l">자주 묻는</span> <span class="b"><span class="ico-end">질문<img class="sec-ico" src="img/icon-faq.png" alt="" width="314" height="320" loading="lazy" decoding="async"></span></span></h2>
     </div>
     <div class="qa">
       <details class="rv"><summary><span class="q">Q1</span>페이지를 늘리면 비용이 올라가나요?<span class="pm" aria-hidden="true"></span></summary>
@@ -1017,7 +1024,7 @@ footer .cr{color:#7D838C}
   <div class="w">
     <div class="ctabox rv">
       <div>
-        <h2 class="ttl" id="apply-h"><span class="l">기능을 고르면</span> <span class="b">예상 금액이 바로 나옵니다</span></h2>
+        <h2 class="ttl" id="apply-h"><span class="l">기능을 고르면</span> <span class="b">예상 금액이 바로 <span class="ico-end">나옵니다<img class="sec-ico" src="img/icon-mail.png" alt="" width="306" height="320" loading="lazy" decoding="async"></span></span></h2>
         <p class="lead">신청 후 1~2영업일 안에 담당자가 연락합니다. 상담과 견적은 무료입니다.</p>
         <p class="acts"><a class="btn btn-p" href="/apply/">홈페이지 제작 신청</a></p>
       </div>
