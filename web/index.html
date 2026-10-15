@@ -227,7 +227,7 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .badge{display:inline-flex;align-items:center;min-height:34px;padding:0 13px;border-radius:999px;
        background:var(--yellow);color:#15171A;font-size:var(--t-sm);font-weight:800;letter-spacing:-.01em;white-space:nowrap}
 .hcond{margin-top:16px;font-size:var(--t-base);line-height:1.6;color:rgba(255,255,255,.66);letter-spacing:-.01em}
-.hcond span{white-space:nowrap}
+.hcond span{white-space:nowrap}   /* 항목마다 한 덩어리 · 「·」는 다음 항목 앞에 붙어 줄 끝에 혼자 남지 않음 */
 .hphoto{position:relative;z-index:1;border-radius:50px 0 0 50px;overflow:hidden;min-height:616px}
 .hphoto img{position:absolute;inset:0;object-fit:cover;object-position:62% 50%}
 .deco{position:absolute;z-index:3;pointer-events:none}
@@ -651,7 +651,7 @@ footer .cr{color:#7D838C}
         <span class="badge">24개월 약정 시 제작비 무료</span>
       </div>
       <!-- 조건 한 줄 — design-main.png 에 없어 버튼 아래 작고 흐린 글씨로 (값은 PRICE 에서 채웁니다) -->
-      <p class="hcond"><span>기본 제작비 <span data-man="base.make">10</span>만 원</span> · <span>월 <span data-man="base.mon">5</span>만 원부터</span> · <span>페이지 수 제한 없음</span> · <span>도메인 고객 소유</span> <span>(부가세 포함)</span></p>
+      <p class="hcond"><span>기본 제작비 <span data-man="base.make">10</span>만 원</span> <span>·&nbsp;월 <span data-man="base.mon">5</span>만 원부터</span> <span>·&nbsp;페이지 수 제한 없음</span> <span>·&nbsp;도메인 고객 소유</span> <span>(부가세 포함)</span></p>
     </div>
 
     <!-- 히어로 사진 — /web/img/hero-photo.jpg (2026-10-15 전도사님 사진 · 원본 1030×682 그대로, 키우지 않음).
