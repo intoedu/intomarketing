@@ -286,33 +286,9 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .points li::before{content:"";flex:0 0 auto;width:8px;height:8px;margin-top:.62em;border-radius:50%;background:var(--yellow)}
 .points small{color:var(--txt-2);font-size:inherit}
 
-/* ══════════ 5. 업종별 추천 구성 ══════════ */
-.industry{background:#000}
-.tabs{display:inline-flex;flex-wrap:wrap;gap:6px;padding:6px;border-radius:999px;background:rgba(255,255,255,.06);
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
-.tab{min-height:48px;padding:0 22px;border-radius:999px;border:0;background:transparent;color:#C6CDD8;cursor:pointer;
-     font-size:var(--t-base);font-weight:700;transition:background-color .2s,color .2s}
-.tab:hover{color:#fff}
-.tab[aria-selected="true"]{background:var(--btn);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
-.panels{margin-top:var(--s-5)}
-.panel{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);padding:clamp(28px,4vw,48px)}
-.panel + .panel{margin-top:16px}
-.js .panel + .panel{margin-top:0}
-.panel h3{font-size:clamp(24px,2.6vw,34px);letter-spacing:-.03em;line-height:1.25}
-.panel h3 small{display:block;font-size:var(--t-base);font-weight:600;color:var(--txt-3);letter-spacing:0;margin-bottom:8px}
-.kv{margin:24px 0 0;display:grid;gap:14px}
-.kv div{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:12px}
-.kv dt{color:var(--txt-3);font-size:var(--t-base);font-weight:600}
-.kv dd{margin:0;color:#fff;font-size:var(--t-md);line-height:1.6}
-.money{display:grid;gap:12px;align-content:center}
-.money div{padding:20px 24px;border-radius:20px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
-.money dt{font-size:var(--t-sm);color:var(--txt-3);font-weight:600}
-.money dd{margin:4px 0 0;color:#fff;font-size:clamp(28px,3vw,40px);font-weight:300;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.2}
-.money dd b{font-weight:800}
-.note{margin-top:var(--s-5);color:var(--txt-3);font-size:var(--t-base);line-height:1.8}
-.moods-h{margin-top:clamp(64px,8vw,96px);font-size:clamp(22px,2.4vw,30px);letter-spacing:-.03em;font-weight:300}
-.moods-h b{font-weight:800}
-.moods{list-style:none;padding:0;margin:var(--s-5) 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+/* ══════════ 5. 분위기 3종 ══════════ */
+.moods-sec{background:#000}
+.moods{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .mood{padding:20px;display:flex;flex-direction:column;gap:16px}
 .mock{border-radius:14px;overflow:hidden;background:var(--mbg);aspect-ratio:16/11;display:flex;flex-direction:column;
       box-shadow:0 0 0 1px rgba(255,255,255,.12)}
@@ -324,13 +300,9 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .mock .mt i.s{height:5px;width:85%;opacity:.35;margin-bottom:5px}
 .mock .mt u{display:inline-block;margin-top:8px;width:56%;height:16px;border-radius:var(--mrad);background:var(--mpoint)}
 .mock .mp{height:100%;min-height:60px;border-radius:var(--mrad);background:repeating-linear-gradient(135deg,rgba(0,0,0,.06) 0 6px,rgba(0,0,0,.02) 6px 12px),color-mix(in srgb,var(--mmain) 14%,var(--mbg))}
-.mood h4{margin:0;color:#fff;font-size:var(--t-lg);font-weight:800;letter-spacing:-.02em}
+.mood h3{margin:0;color:#fff;font-size:var(--t-lg);font-weight:800;letter-spacing:-.02em}
 .mood p{color:var(--txt-2);font-size:var(--t-base);line-height:1.6}
 .mood .fit{color:var(--txt-3);font-size:var(--t-sm);margin-top:4px}
-.sw{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:12px}
-.sw li{display:flex;align-items:center;gap:6px;font-size:var(--t-xs);color:var(--txt-3)}
-.sw li i{width:18px;height:18px;border-radius:5px;background:var(--c);box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
-.sw li code{font-family:inherit;color:var(--txt-2)}
 
 /* ══════════ 6. 왜 인투마케팅인가 ══════════ */
 .reason{padding-top:0;border-radius:48px 48px 0 0;
@@ -451,7 +423,15 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .ctabox .ttl{font-size:clamp(32px,3.9vw,56px)}
 .ctabox .lead{color:#E6EEF9;margin-top:var(--s-5)}
 .ctabox .acts{margin-top:var(--s-6)}
-.ctabox .btn-p{min-height:60px;font-size:clamp(18px,1.6vw,20px)}
+/* 마지막 신청 버튼 — 히어로 배지와 같은 노랑 · 어두운 굵은 글씨 · 아래쪽 그림자로 입체감 (2026-10-15)
+   대비: 글자 #15171A / 바탕 #F8F107 ≈ 15:1 · 버튼 / 둘레 파란 상자 ≥ 3:1 (화면에서 잰 값은 보고서에) */
+.btn-cta{min-height:60px;padding:0 32px;border-radius:12px;background:var(--yellow);color:#15171A;
+  font-size:clamp(18px,1.6vw,20px);font-weight:800;letter-spacing:-.01em;
+  box-shadow:0 5px 0 #B3AE00,0 16px 28px -10px rgba(0,16,48,.7);
+  transition:transform .16s var(--ease),box-shadow .16s var(--ease),background-color .15s}
+.btn-cta:hover{background:#FFF83C;transform:translateY(-3px);box-shadow:0 8px 0 #B3AE00,0 22px 34px -12px rgba(0,16,48,.75)}
+.btn-cta:active{transform:translateY(4px);box-shadow:0 1px 0 #B3AE00,0 6px 14px -8px rgba(0,16,48,.6)}
+.btn-cta:focus-visible{outline:3px solid #fff;outline-offset:4px}
 .contact{list-style:none;padding:0;margin:0;display:grid;gap:10px}
 .contact li{padding:16px 20px;border-radius:18px;background:rgba(3,12,24,.55);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
 .contact small{display:block;font-size:var(--t-xs);color:#B6C6DE;font-weight:700;letter-spacing:.02em}
@@ -510,10 +490,8 @@ footer .cr{color:#7D838C}
   .deco-problem{right:16px;bottom:-60px;width:200px;height:183px}
   .flow{grid-template-columns:minmax(0,1fr);justify-items:stretch}
   .flow .arr svg{transform:rotate(90deg)}
-  .panel{grid-template-columns:minmax(0,1fr)}
   .moods{grid-template-columns:minmax(0,1fr)}
   .mood{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);align-items:start}
-  .mood .mock{grid-row:span 3}
   .wcards{grid-template-columns:repeat(2,minmax(0,1fr))}
   .faq-in{grid-template-columns:minmax(0,1fr)}
   .ctabox{grid-template-columns:minmax(0,1fr)}
@@ -533,9 +511,6 @@ footer .cr{color:#7D838C}
   .num{min-height:0}
   .tiles{grid-template-columns:minmax(0,1fr)}
   .tile{min-height:84px;padding:16px 18px}
-  .tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-radius:24px;width:100%}
-  .tab{padding:0 12px;border-radius:18px;font-size:var(--t-sm)}
-  .kv div{grid-template-columns:minmax(0,1fr);gap:2px}
   .mood{display:flex;align-items:stretch}
   .rcards li,.ecards li,.rcards li:nth-child(5),.ecards li:nth-child(5){grid-column:span 6}
   .shots{grid-template-columns:minmax(0,1fr)}
@@ -711,6 +686,7 @@ footer .cr{color:#7D838C}
     </ul>
     <!-- 「작은 수정」 범위는 [확정 전] — 예시 없이 「작은 수정(월 1회)」으로만 표기합니다 -->
     <ul class="points">
+      <li class="rv"><span>업종과 관계없이 신청할 수 있습니다.</span></li>
       <li class="rv"><span>페이지 수 제한 없음 · 추가 요금 없음 <small>(구성은 내용에 맞춰 담당자가 정합니다)</small></span></li>
       <li class="rv"><span>제작 중 시안 1개 · 수정 5회</span></li>
       <li class="rv"><span>공지 무료 — 전달받은 공지·소식 글을 월 1건, 월간 수정 시 함께 게시합니다</span></li>
@@ -718,117 +694,33 @@ footer .cr{color:#7D838C}
   </div>
 </section>
 
-<!-- ══════════ 5. 업종별 추천 구성 + 분위기 3종 ══════════ -->
-<section class="sec industry" id="industry" aria-labelledby="industry-h">
+<!-- ══════════ 5. 분위기 3종 ══════════
+     2026-10-15 전도사님 지시: 「업종에 맞춰 필요한 기능만 더합니다」(#industry · 업종 탭 · 업종별 기능 표 · 법정 표시 안내)를 없애고
+     그 안에 있던 분위기 3종만 독립 섹션으로 옮김. 색 견본 · 색 코드는 표시하지 않음 (화면 모형의 색은 /apply/ THEMES 와 같은 값) -->
+<section class="sec moods-sec" id="mood" aria-labelledby="mood-h">
   <div class="w">
     <div class="sec-head rv">
-      <h2 class="ttl" id="industry-h"><span class="l">업종에 맞춰</span> <span class="b">필요한 기능만 더합니다</span></h2>
+      <h2 class="ttl" id="mood-h"><span class="l">분위기는</span> <span class="b">세 가지 중에서 고릅니다</span></h2>
+      <p class="lead">분위기별 가격 차이는 없습니다. 고르기 어려우면 업종에 맞춰 담당자가 정합니다.</p>
     </div>
-
-    <!-- 탭은 스크립트가 켭니다. 스크립트가 없으면 네 업종이 차례로 모두 보입니다.
-         금액은 PRICE 로 계산해 채웁니다 (data-sum = 더할 항목). 🔴 학원 탭에 「레벨테스트」를 쓰지 않습니다 -->
-    <div class="tabs rv" role="tablist" aria-label="업종" hidden>
-      <button class="tab" role="tab" type="button" id="tab-food" aria-controls="pn-food" aria-selected="true">요식업 (카페·음식점)</button>
-      <button class="tab" role="tab" type="button" id="tab-shop" aria-controls="pn-shop" aria-selected="false" tabindex="-1">옷가게·소매</button>
-      <button class="tab" role="tab" type="button" id="tab-estate" aria-controls="pn-estate" aria-selected="false" tabindex="-1">부동산</button>
-      <button class="tab" role="tab" type="button" id="tab-academy" aria-controls="pn-academy" aria-selected="false" tabindex="-1">학원</button>
-    </div>
-    <div class="panels">
-      <div class="panel glass" id="pn-food" role="tabpanel" aria-labelledby="tab-food" data-sum="base form">
-        <div>
-          <h3><small>업종</small>요식업 (카페·음식점)</h3>
-          <dl class="kv">
-            <div><dt>추천 구성</dt><dd>기본 + 신청서</dd></div>
-            <div><dt>이런 화면</dt><dd>메뉴·가격, 오시는 길, 예약·단체 문의 접수</dd></div>
-            <div><dt>법정 표시 안내</dt><dd>—</dd></div>
-          </dl>
-        </div>
-        <dl class="money">
-          <div><dt>제작비 (정가)</dt><dd><b data-sum-make>120,000</b>원</dd></div>
-          <div><dt>월 관리비</dt><dd><b data-sum-mon>60,000</b>원</dd></div>
-        </dl>
-      </div>
-      <div class="panel glass" id="pn-shop" role="tabpanel" aria-labelledby="tab-shop" data-sum="base list">
-        <div>
-          <h3><small>업종</small>옷가게·소매</h3>
-          <dl class="kv">
-            <div><dt>추천 구성</dt><dd>기본 + 목록·검색</dd></div>
-            <div><dt>이런 화면</dt><dd>상품 목록·검색, 매장 안내</dd></div>
-            <div><dt>법정 표시 안내</dt><dd>—</dd></div>
-          </dl>
-        </div>
-        <dl class="money">
-          <div><dt>제작비 (정가)</dt><dd><b data-sum-make>130,000</b>원</dd></div>
-          <div><dt>월 관리비</dt><dd><b data-sum-mon>60,000</b>원</dd></div>
-        </dl>
-      </div>
-      <div class="panel glass" id="pn-estate" role="tabpanel" aria-labelledby="tab-estate" data-sum="base list form">
-        <div>
-          <h3><small>업종</small>부동산</h3>
-          <dl class="kv">
-            <div><dt>추천 구성</dt><dd>기본 + 목록·검색 + 신청서</dd></div>
-            <div><dt>이런 화면</dt><dd>매물 목록·검색, 매물 문의 접수</dd></div>
-            <div><dt>법정 표시 안내</dt><dd>중개사무소 등록번호·대표 공인중개사 입력 칸 기본 포함</dd></div>
-          </dl>
-        </div>
-        <dl class="money">
-          <div><dt>제작비 (정가)</dt><dd><b data-sum-make>150,000</b>원</dd></div>
-          <div><dt>월 관리비</dt><dd><b data-sum-mon>70,000</b>원</dd></div>
-        </dl>
-      </div>
-      <div class="panel glass" id="pn-academy" role="tabpanel" aria-labelledby="tab-academy" data-sum="base form">
-        <div>
-          <h3><small>업종</small>학원</h3>
-          <dl class="kv">
-            <div><dt>추천 구성</dt><dd>기본 + 신청서</dd></div>
-            <div><dt>이런 화면</dt><dd>프로그램 안내, 상담 신청 접수</dd></div>
-            <div><dt>법정 표시 안내</dt><dd>교습비·등록(신고)번호 입력 칸 기본 포함</dd></div>
-          </dl>
-        </div>
-        <dl class="money">
-          <div><dt>제작비 (정가)</dt><dd><b data-sum-make>120,000</b>원</dd></div>
-          <div><dt>월 관리비</dt><dd><b data-sum-mon>60,000</b>원</dd></div>
-        </dl>
-      </div>
-    </div>
-    <p class="note rv">예시 구성이며 정가 기준입니다. 약정 시 제작비가 할인됩니다.<br>
-      뷰티 · 병원 · 공방 · 스포츠 · 숙박 · 전문직 · 제조(B2B) · 비영리 단체 등 그 밖의 업종도 신청할 수 있습니다.</p>
-
-    <!-- 분위기 3종 — 화면 모형은 CSS 로만 그립니다 (사진 없음). 색은 /apply/ 의 THEMES 와 같은 값 -->
-    <h3 class="moods-h rv">분위기 <b>3종</b></h3>
+    <!-- 화면 모형은 CSS 로만 그립니다 (사진 없음) -->
     <ul class="moods">
       <li class="mood glass rv" style="--mmain:#1B3A6B;--mpoint:#2E62B8;--mbg:#F7F8FA;--mrad:4px">
         <div class="mock" aria-hidden="true"><div class="mh"><i style="width:22%"></i><i style="width:10%;margin-left:auto"></i><i style="width:10%"></i></div>
           <div class="mb"><div class="mt"><i></i><i></i><i class="s"></i><i class="s"></i><u></u></div><div class="mp"></div></div></div>
-        <div><h4>신뢰형</h4><p>남색 · 넓은 여백 · 글자 중심</p><p class="fit">어울리는 업종: 학원 · 병원 · 기업</p></div>
-        <ul class="sw">
-          <li style="--c:#1B3A6B"><i></i>메인 <code>#1B3A6B</code></li>
-          <li style="--c:#2E62B8"><i></i>포인트 <code>#2E62B8</code></li>
-          <li style="--c:#F7F8FA"><i></i>바탕 <code>#F7F8FA</code></li>
-        </ul>
+        <div><h3>신뢰형</h3><p>남색 · 넓은 여백 · 글자 중심</p><p class="fit">어울리는 업종: 학원 · 병원 · 기업</p></div>
       </li>
       <li class="mood glass rv" style="--mmain:#6B4A2E;--mpoint:#C08A4A;--mbg:#FBF7F1;--mrad:12px">
         <div class="mock" aria-hidden="true"><div class="mh"><i style="width:22%"></i><i style="width:10%;margin-left:auto"></i><i style="width:10%"></i></div>
           <div class="mb" style="grid-template-columns:.8fr 1.3fr"><div class="mt"><i></i><i></i><i class="s"></i><u></u></div><div class="mp"></div></div></div>
-        <div><h4>따뜻형</h4><p>베이지 · 둥근 모서리 · 사진 크게</p><p class="fit">어울리는 업종: 카페 · 매장 · 공방</p></div>
-        <ul class="sw">
-          <li style="--c:#6B4A2E"><i></i>메인 <code>#6B4A2E</code></li>
-          <li style="--c:#C08A4A"><i></i>포인트 <code>#C08A4A</code></li>
-          <li style="--c:#FBF7F1"><i></i>바탕 <code>#FBF7F1</code></li>
-        </ul>
+        <div><h3>따뜻형</h3><p>베이지 · 둥근 모서리 · 사진 크게</p><p class="fit">어울리는 업종: 카페 · 매장 · 공방</p></div>
       </li>
       <li class="mood glass rv" style="--mmain:#111418;--mpoint:#E4572E;--mbg:#FFFFFF;--mrad:2px">
         <div class="mock" aria-hidden="true"><div class="mh"><i style="width:22%"></i><i style="width:10%;margin-left:auto"></i><i style="width:10%"></i></div>
           <div class="mb"><div class="mt"><i style="height:14px"></i><i style="height:14px"></i><i class="s"></i><u></u></div><div class="mp"></div></div></div>
-        <div><h4>활동형</h4><p>검정 + 포인트 색 · 큰 제목</p><p class="fit">어울리는 업종: 스포츠 · 브랜드</p></div>
-        <ul class="sw">
-          <li style="--c:#111418"><i></i>메인 <code>#111418</code></li>
-          <li style="--c:#E4572E"><i></i>포인트 <code>#E4572E</code></li>
-          <li style="--c:#FFFFFF"><i></i>바탕 <code>#FFFFFF</code></li>
-        </ul>
+        <div><h3>활동형</h3><p>검정 + 포인트 색 · 큰 제목</p><p class="fit">어울리는 업종: 스포츠 · 브랜드</p></div>
       </li>
     </ul>
-    <p class="note rv">분위기별 가격 차이는 없습니다.</p>
   </div>
 </section>
 
@@ -971,7 +863,7 @@ footer .cr{color:#7D838C}
 <section class="sec process" id="process" aria-labelledby="process-h">
   <div class="w">
     <div class="sec-head rv">
-      <h2 class="ttl" id="process-h"><span class="l">신청부터</span> <span class="b"><span class="ico-end">오픈까지<img class="sec-ico" src="img/icon-clock.png" alt="" width="320" height="289" loading="lazy" decoding="async"></span></span></h2>
+      <h2 class="ttl" id="process-h"><span class="l">신청부터</span> <span class="b"><span class="ico-end">관리까지<img class="sec-ico" src="img/icon-clock.png" alt="" width="320" height="289" loading="lazy" decoding="async"></span></span></h2>
     </div>
     <ol class="steps">
       <li class="step rv"><span class="no">01</span><h3>신청서 작성</h3><p>기능 · 디자인 · 도메인을 고르면 예상 금액이 자동으로 계산됩니다.</p></li>
@@ -1027,7 +919,7 @@ footer .cr{color:#7D838C}
       <div>
         <h2 class="ttl" id="apply-h"><span class="l">기능을 고르면</span> <span class="b">예상 금액이 바로 <span class="ico-end">나옵니다<img class="sec-ico" src="img/icon-mail.png" alt="" width="306" height="320" loading="lazy" decoding="async"></span></span></h2>
         <p class="lead">신청 후 1~2영업일 안에 담당자가 연락합니다. 상담과 견적은 무료입니다.</p>
-        <p class="acts"><a class="btn btn-p" href="/apply/">홈페이지 제작 신청</a></p>
+        <p class="acts"><a class="btn btn-cta" href="/apply/">홈페이지 제작 신청</a></p>
       </div>
       <ul class="contact" aria-label="보조 연락처">
         <li><small>전화</small><a href="tel:01073181790">010-7318-1790</a></li>
@@ -1145,11 +1037,6 @@ const WORKS = [
   $$('[data-man]').forEach(function(el){ el.textContent = get(el.dataset.man) / 10000; });
   $$('[data-won]').forEach(function(el){ el.textContent = won(get(el.dataset.won)); });
   $$('[data-p]').forEach(function(el){ var v=get(el.dataset.p); el.textContent = v ? won(v) : '무료'; });
-  $$('[data-sum]').forEach(function(pn){
-    var keys = pn.dataset.sum.split(' ');
-    pn.querySelector('[data-sum-make]').textContent = won(sum(keys,'make'));
-    pn.querySelector('[data-sum-mon]').textContent = won(sum(keys,'mon'));
-  });
   $$('[data-plan]').forEach(function(el){
     var v = afterPlan(sum(el.dataset.ex.split(' '),'make'), PLANS[+el.dataset.plan].off);
     el.textContent = v ? won(v) : '무료';
@@ -1214,33 +1101,6 @@ const WORKS = [
   if(card && window.CSS && CSS.supports && CSS.supports('clip-path','path("M0,0 L1,0 L1,1 Z")')){
     shape();
     if(window.ResizeObserver) new ResizeObserver(shape).observe(card); else window.addEventListener('resize', shape);
-  }
-
-  /* ── 업종 탭 ── */
-  var tabs = $$('[role="tab"]'), panels = $$('[role="tabpanel"]');
-  if(tabs.length){
-    document.querySelector('[role="tablist"]').hidden = false;
-    var select = function(t, focus){
-      tabs.forEach(function(x){
-        var on = x === t;
-        x.setAttribute('aria-selected', on ? 'true' : 'false');
-        x.tabIndex = on ? 0 : -1;
-        document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
-      });
-      if(focus) t.focus();
-    };
-    tabs.forEach(function(t, i){
-      t.addEventListener('click', function(){ select(t); });
-      t.addEventListener('keydown', function(e){
-        var n = null;
-        if(e.key === 'ArrowRight') n = tabs[(i+1) % tabs.length];
-        else if(e.key === 'ArrowLeft') n = tabs[(i-1+tabs.length) % tabs.length];
-        else if(e.key === 'Home') n = tabs[0];
-        else if(e.key === 'End') n = tabs[tabs.length-1];
-        if(n){ e.preventDefault(); select(n, true); }
-      });
-    });
-    select(tabs[0]);
   }
 
   /* ── 손전화 메뉴 — 메인 index.html 과 같은 동작 ── */
