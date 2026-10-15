@@ -14,7 +14,7 @@
       /apply/index.html 의 PRICE · PLANS, 메인 가격표, hakwon/index.html WEB_ITEMS 와 같은 값이어야 합니다.
 
    🔴 이미지는 /web/img/ 에 «같은 이름»으로 넣으면 바로 바뀝니다 (img/README.md).
-      hero-photo.jpg · apply-quote/preview.png 는 아직 1×1 빈 자리표시 파일입니다.
+      히어로 사진 · 신청서 화면 캡처 2장도 전도사님이 준 파일을 넣었습니다 (2026-10-15). 지금은 빈 자리가 없습니다.
       고리 장식 2개 · 2번 섹션 가게 그림 · 섹션 제목 아이콘 6개는 전도사님이 준 그림을 가공해 넣었습니다 (2026-10-15).
       design-main.png · 레퍼런스(Canva 템플릿) 속 그림은 어떤 형태로도 쓰지 않습니다.
 
@@ -228,7 +228,7 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .hcond{margin-top:16px;font-size:var(--t-base);line-height:1.6;color:rgba(255,255,255,.66);letter-spacing:-.01em}
 .hcond span{white-space:nowrap}
 .hphoto{position:relative;z-index:1;border-radius:50px 0 0 50px;overflow:hidden;min-height:616px}
-.hphoto img{position:absolute;inset:0;object-fit:cover}
+.hphoto img{position:absolute;inset:0;object-fit:cover;object-position:62% 50%}
 .deco{position:absolute;z-index:3;pointer-events:none}
 .deco img{object-fit:contain}
 /* 고리 장식 (design-main.png 리본 자리) — 오른쪽 위는 크게, 위 · 오른쪽이 잘림 / 왼쪽 아래는 작게, 왼쪽이 반쯤 잘림 */
@@ -346,8 +346,8 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .ecards p{margin-top:10px;font-size:var(--t-base);color:var(--txt-2);line-height:1.75}
 .shots{margin-top:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .shot{margin:0;padding:16px 16px 18px}
-.shot .slot{aspect-ratio:16/10;border-radius:16px;overflow:hidden}
-.shot .slot img{object-fit:cover;object-position:top}
+.shot .slot{aspect-ratio:16/10;border-radius:16px;overflow:hidden;background:var(--shot-bg,#EFF3F8)}
+.shot .slot img{object-fit:contain;object-position:var(--shot-pos,center)}
 .shot figcaption{margin-top:12px;font-size:var(--t-sm);color:var(--txt-3);text-align:center}
 .sec-end{margin-top:clamp(32px,4vw,48px)}
 
@@ -530,6 +530,8 @@ footer .cr{color:#7D838C}
   .tile{min-height:84px;padding:16px 18px;flex-direction:row;align-items:center;gap:18px}
   .mood{display:flex;align-items:stretch}
   .shots{grid-template-columns:minmax(0,1fr)}
+  .shot .slot{aspect-ratio:auto}               /* 한 줄에 하나일 때는 캡처 비율 그대로 — 빈 여백 없이 */
+  .shot .slot img{height:auto}
   .wcards{grid-template-columns:minmax(0,1fr)}
   .qa summary{padding:14px 18px;gap:12px}
   .qa .a{padding:0 18px 20px 18px}
@@ -612,17 +614,18 @@ footer .cr{color:#7D838C}
       <p class="hcond"><span>기본 제작비 <span data-man="base.make">10</span>만 원</span> · <span>월 <span data-man="base.mon">5</span>만 원부터</span> · <span>페이지 수 제한 없음</span> · <span>도메인 고객 소유</span> <span>(부가세 포함)</span></p>
     </div>
 
-    <!-- 🔴 사진 자리 — /web/img/hero-photo.jpg (가로 사진 · 긴 변 2000px 이상). 파일을 넣으면 바로 바뀝니다.
+    <!-- 히어로 사진 — /web/img/hero-photo.jpg (2026-10-15 전도사님 사진 · 원본 1030×682 그대로, 키우지 않음).
+         자리 비율과 달라 object-fit:cover 로 자르고, 노트북 키보드와 태블릿 그래프가 함께 보이게 보이는 중심을 오른쪽으로 옮김.
          alt 는 실제 사진 내용대로 고치십시오 (지금 값은 명세서의 예) -->
-    <div class="hphoto slot solid" data-slot data-tbd="원본 이미지 필요: hero-photo.jpg">
-      <img src="img/hero-photo.jpg" alt="" data-alt="인투마케팅이 만든 홈페이지를 띄운 노트북" width="2000" height="1333" fetchpriority="high">
+    <div class="hphoto slot solid" data-slot>
+      <img src="img/hero-photo.jpg" alt="노트북과 그래프가 띄워진 태블릿" width="1030" height="682" fetchpriority="high">
     </div>
 
     <!-- 3D 장식 — /web/img/deco-hero-top.png · deco-hero-bottom.png (2026-10-15 전도사님이 준 고리 그림을 투명 배경 · 리본 색으로 가공) -->
-    <div class="deco deco-top slot line" data-slot data-tbd="원본 이미지 필요: deco-hero-top.png" aria-hidden="true">
+    <div class="deco deco-top slot line" data-slot aria-hidden="true">
       <img src="img/deco-hero-top.png" alt="" width="900" height="847">
     </div>
-    <div class="deco deco-bottom slot line" data-slot data-tbd="원본 이미지 필요: deco-hero-bottom.png" aria-hidden="true">
+    <div class="deco deco-bottom slot line" data-slot aria-hidden="true">
       <img src="img/deco-hero-bottom.png" alt="" width="847" height="900">
     </div>
   </div>
@@ -639,7 +642,7 @@ footer .cr{color:#7D838C}
          저희는 단순히 예쁜 사이트를 만들지 않습니다.</p>
       <p class="em">철저한 UI/UX 설계로 방문자가 문의와 예약까지 이어지는 홈페이지를 만듭니다.</p>
       <!-- 그래픽 — /web/img/deco-problem.png (2026-10-15 전도사님이 준 가게 그림을 투명 배경으로 가공 · 간판은 비워 둠) -->
-      <div class="deco deco-problem slot line" data-slot data-tbd="원본 이미지 필요: deco-problem.png" aria-hidden="true">
+      <div class="deco deco-problem slot line" data-slot aria-hidden="true">
         <img src="img/deco-problem.png" alt="" width="600" height="574" loading="lazy" decoding="async">
       </div>
     </div>
@@ -786,14 +789,14 @@ footer .cr{color:#7D838C}
       <li class="glass rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5c-4.9 0-8.5 3-8.5 6.6 0 2.3 1.5 4.3 3.8 5.5l-.8 3 3.4-2.1c.7.1 1.4.2 2.1.2 4.9 0 8.5-3 8.5-6.6S16.9 4.5 12 4.5z"/></svg></span>
         <h3>사진은 카카오톡으로도 보낼 수 있습니다</h3><p>제작 자료 화면에서 첨부하거나 카카오톡으로 따로 보낼 수 있습니다. 직접 촬영했거나 사용 권리가 있는 사진만 사용합니다.</p></li>
     </ul>
-    <!-- 🔴 화면 캡처 자리 2개 — /web/img/apply-quote.png · apply-preview.png 를 넣으면 바로 바뀝니다 -->
+    <!-- 화면 캡처 2장 (2026-10-15) — 그림 전체가 보이게(object-fit:contain), 남는 곳은 캡처의 바탕색으로 채움 -->
     <div class="shots">
       <figure class="shot glass rv">
-        <div class="slot solid" data-slot data-tbd="신청서 화면 캡처 필요"><img src="img/apply-quote.png" alt="" data-alt="신청서의 예상 금액 화면" width="1600" height="1000" loading="lazy"></div>
+        <div class="slot solid" data-slot style="--shot-bg:#ECF0F6;--shot-pos:center top"><img src="img/apply-quote.png" alt="신청서에서 요금 방식을 고르면 예상 금액이 바로 계산되는 화면" width="1295" height="663" loading="lazy" decoding="async"></div>
         <figcaption>신청서 · 예상 금액</figcaption>
       </figure>
       <figure class="shot glass rv">
-        <div class="slot solid" data-slot data-tbd="신청서 화면 캡처 필요"><img src="img/apply-preview.png" alt="" data-alt="제작 자료의 홈페이지 미리 보기 화면" width="1600" height="1000" loading="lazy"></div>
+        <div class="slot solid" data-slot style="--shot-bg:#EFF3F8"><img src="img/apply-preview.png" alt="신청서에서 고른 분위기로 홈페이지 화면 예시를 미리 보는 화면" width="1049" height="702" loading="lazy" decoding="async"></div>
         <figcaption>제작 자료 · 홈페이지 미리 보기</figcaption>
       </figure>
     </div>
