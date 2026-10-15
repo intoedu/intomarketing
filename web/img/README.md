@@ -11,19 +11,19 @@
 | 파일 이름 | 자리 | 형식 · 권장 크기 | alt |
 |---|---|---|---|
 | `hero-photo.jpg` | 히어로 오른쪽 둥근 사진 | JPG, 가로 사진, 긴 변 2000px 이상 | 사진 내용대로 — `index.html` 의 `data-alt` 를 고치십시오 |
-| `deco-problem.png` | 2번 섹션 상자 오른쪽 아래 그래픽 | 투명 배경 PNG, 긴 변 900px 이상 | 장식 (`alt=""`) |
 | `apply-quote.png` | 신청서 「예상 금액」 화면 캡처 | PNG | 신청서의 예상 금액 화면 |
 | `apply-preview.png` | 제작 자료 「홈페이지 미리 보기」 화면 캡처 | PNG | 제작 자료의 홈페이지 미리 보기 화면 |
 
 ## 넣은 그림 (2026-10-15)
 
 전도사님이 준 AI 그림 2장을 가공했습니다. **원본은 저장소 밖** `intomarketing_web/` 폴더에 있습니다
-(`src-ring.png` · `src-icons.png`). 가공 스크립트도 같은 폴더의 `img-tools/` 에 있습니다.
+(`src-ring.png` · `src-icons.png` · `src-store.png`). 가공 스크립트도 같은 폴더의 `img-tools/` 에 있습니다.
 
 | 파일 이름 | 원본 | 가공 | 쓰는 곳 |
 |---|---|---|---|
 | `deco-hero-top.png` | `src-ring.png` 고리 | 흰 배경 · 가운데 구멍 · 바닥 그림자 · 반짝이 제거, design-main.png 리본 색(#1B54BE~#B4D1EB)으로 다시 칠함, 시계 방향으로 기울임 | 히어로 오른쪽 위 (위 · 오른쪽이 잘림) |
 | `deco-hero-bottom.png` | 같은 고리 | 위와 같음 + 좌우 뒤집고 반대로 돌림 | 히어로 왼쪽 아래 (더 작게, 왼쪽이 반쯤 잘림) |
+| `deco-problem.png` | `src-store.png` 점토 가게 | 흰 배경 · 바닥 그림자 · 반짝이 · 처마 밑 · 꽃 사이 틈 제거, 가게 둘레에 맞춰 자름, 색 그대로, 간판은 비워 둠 | 2번 섹션 상자 오른쪽 아래 (상자 밖으로 걸침) |
 | `icon-pin.png` | `src-icons.png` 위치 핀 | 흰 카드 · 주황 빛 테두리 · 아이콘 아래 주황 그림자 · 반짝이 제거 | 채널과 홈페이지의 역할 (#role) 제목 끝 |
 | `icon-note.png` | 노트 + 손 | 〃 | 신청부터 쉽게 (#easy) 제목 끝 |
 | `icon-calendar.png` | 달력 | 〃 | 가격 · 계약 조건 (#price) 제목 끝 |
