@@ -176,6 +176,8 @@ header .intro b{color:#fff}
 .nextb{border:0;background:var(--band);color:#fff;border-radius:999px;padding:8px 14px;font-weight:800;font-size:13px;cursor:pointer;white-space:nowrap}
 .nextb:hover{filter:brightness(1.15)}
 .saved{font-size:11.5px;color:var(--muted);white-space:nowrap}
+.linkbtn.resetb{font-size:12px;white-space:nowrap;color:var(--muted);font-weight:700}   /* 진행 막대의 「처음부터 다시」 */
+.linkbtn.resetb[data-arm]{color:var(--bad)}
 @media(max-width:600px){.saved{display:none}.bar .wrap{gap:10px}}
 
 /* ── 두 칸 — 왼쪽 신청서, 오른쪽 예상 금액 (좁은 화면에서는 아래 막대) ── */
@@ -948,6 +950,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
   <span class="left" id="left_txt"></span>
   <button type="button" class="nextb" id="next_btn">다음 항목 ↓</button>
   <span class="saved" id="saved_txt"></span>
+  <button type="button" class="linkbtn resetb" data-clear data-armtxt="한 번 더 누르면 모두 지웁니다">처음부터 다시</button>   <!-- 쓰던 내용 전부 초기화 (2026-10-16 이은총 님) -->
 </div></div>
 
 <div class="wrap layout">
@@ -3592,7 +3595,7 @@ function applyDraft(d){
 document.addEventListener('click',function(e){
   var b=e.target.closest('[data-clear]'); if(!b)return;
   if(b.getAttribute('data-arm')){ clearDraft(); DRAFT_ON=false; location.reload(); return; }
-  var t=b.textContent; b.setAttribute('data-arm','1'); b.textContent='한 번 더 누르면 쓰던 내용이 모두 지워집니다';
+  var t=b.textContent; b.setAttribute('data-arm','1'); b.textContent=b.getAttribute('data-armtxt')||'한 번 더 누르면 쓰던 내용이 모두 지워집니다';
   setTimeout(function(){ b.removeAttribute('data-arm'); b.textContent=t; },3500);
 });
 

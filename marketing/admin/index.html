@@ -328,7 +328,7 @@
   <aside class="side">
     <div class="logo"><div class="mark">IM</div><div><b>의뢰 관리</b><span>인투마케팅</span></div></div>
     <button class="navb on" data-nav="web" type="button">홈페이지 제작 <span class="cnt" id="c-web">0</span></button>
-    <button class="navb" data-nav="sns" type="button">SNS 채널 제작 <span class="cnt" id="c-sns">0</span></button>
+    <button class="navb" data-nav="sns" type="button">SNS 채널 <span class="cnt" id="c-sns">0</span></button>
     <button class="navb" data-nav="design" type="button">그래픽 디자인 <span class="cnt" id="c-design">0</span></button>
     <button class="navb" data-nav="video" type="button">영상 제작 <span class="cnt" id="c-video">0</span></button>
     <button class="navb" data-nav="blog" type="button">블로그 · 리뷰 <span class="cnt" id="c-blog">0</span></button>
@@ -830,7 +830,7 @@
   /* 인투마케팅의 지원 항목. requests.kind 를 이 여섯으로 «묶어서» 보여줍니다.
      🔴 모르는 종류는 반드시 '기타' 로 떨어지게 두세요 —
         어느 묶음에도 안 들어가면 의뢰가 화면에서 «사라집니다». */
-  var AREAS={web:'홈페이지 제작',sns:'SNS 채널 제작',design:'그래픽 디자인',
+  var AREAS={web:'홈페이지 제작',sns:'SNS 채널',design:'그래픽 디자인',
              video:'영상 제작',blog:'블로그 · 리뷰',etc:'기타'};
   var KINDS_OF={web:['홈페이지','앱','프로그램'],sns:['SNS'],design:['디자인'],
                 video:['영상'],blog:['블로그·리뷰'],etc:[]};
@@ -1921,7 +1921,7 @@
     ['블로그 · 리뷰','https://intomarketing.co.kr/apply/blog/'],
     ['영상 제작','https://intomarketing.co.kr/apply/video/'],
     ['그래픽 디자인','https://intomarketing.co.kr/apply/design/'],
-    ['SNS 채널 제작','https://intomarketing.co.kr/apply/sns/'],
+    ['SNS 채널','https://intomarketing.co.kr/apply/sns/'],
     ['인투마케팅 홈페이지 (첫 화면)','https://intomarketing.co.kr/'],
     ['학원지원센터 신청서','https://intomarketing.co.kr/hakwon/apply/']
   ];
@@ -2773,7 +2773,7 @@
       +'<div style="margin-top:14px">'+fld('아래 붙일 안내','<input class="inp" id="sf_note" value="'+esc((pr.web||{}).note||'')+'">')+'</div>'
       +'<div class="grid2">'
       +fld('네이버 리뷰','<input class="inp" id="sf_review" value="'+esc((pr.review||{}).note||'')+'">')
-      +fld('SNS 채널 제작','<input class="inp" id="sf_sns" value="'+esc((pr.sns||{}).note||'')+'">')
+      +fld('SNS 채널','<input class="inp" id="sf_sns" value="'+esc((pr.sns||{}).note||'')+'">')
       +'</div><div class="grid2">'
       +fld('그래픽 디자인','<input class="inp" id="sf_design" value="'+esc((pr.design||{}).note||'')+'">')
       +fld('영상 제작','<input class="inp" id="sf_video" value="'+esc((pr.video||{}).note||'')+'">')
