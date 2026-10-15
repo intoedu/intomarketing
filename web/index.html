@@ -216,7 +216,7 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .hsub{margin-top:52px;font-size:clamp(19px,2.05vw,var(--t-xl));line-height:1.3;color:#fff;font-weight:400;letter-spacing:-.02em}
 .hact{margin-top:auto;padding-top:56px;display:flex;flex-wrap:wrap;align-items:center;gap:12px}
 /* 히어로 신청 버튼 — 색(#006EEF · 흰 글자)은 그대로, 모양 · 움직임은 마지막 #apply 버튼(.btn-cta)과 같게 (2026-10-15 6차) */
-.hbtn{min-height:56px;padding:0 32px;gap:10px;border-radius:999px;font-size:18px;font-weight:700;letter-spacing:-.01em;
+.hbtn{min-height:56px;padding:0 32px;gap:10px;border-radius:999px;font-size:18px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;
       box-shadow:0 10px 30px rgba(0,72,170,.35);
       transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
 .hbtn .arr-r{display:inline-block;transition:transform .2s var(--ease)}
@@ -234,7 +234,10 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .deco img{object-fit:contain}
 /* 고리 장식 (design-main.png 리본 자리) — 오른쪽 위는 크게, 위 · 오른쪽이 잘림 / 왼쪽 아래는 작게, 왼쪽이 반쯤 잘림 */
 .deco-top{top:clamp(-120px,-7vw,-48px);right:clamp(-150px,-9vw,-60px);width:clamp(220px,28vw,410px);aspect-ratio:900/847}
-.deco-bottom{left:clamp(-170px,-10vw,-90px);top:470px;width:clamp(170px,19vw,280px);aspect-ratio:847/900}
+/* 아래 고리 — 오른쪽 끝을 «카드 왼쪽 가장자리 + 20px» 에 맞춤 (창 폭이 아니라 카드 위치 기준).
+   예전 값(left:clamp(…vw))은 1000~1100px 창에서 고리가 신청 버튼에 닿았습니다. */
+.deco-bottom{--rw:clamp(170px,19vw,280px);width:var(--rw);aspect-ratio:847/900;top:470px;
+  left:calc(max(var(--gut), (100% - var(--cw)) / 2) + 20px - var(--rw))}
 
 /* ══════════ 2. 문제 제기 ══════════ */
 .problem{background:#000;padding:118px 0 clamp(88px,10vw,140px)}
@@ -243,19 +246,35 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .ptitle .b{display:block;font-weight:800;margin-top:.04em}
 /* 글 상자 카드 — 파란 단색 · 가게 그림은 카드 안 오른쪽 아래에서 바탕으로 녹아듦 (2026-10-15)
    대비: 흰 글자 / #2C5DD3 5.81:1 · 노란 문장(#F8F107) / #2C5DD3 4.86:1
-   가게 색 두 안 — 카드 class 하나로 전환: shop-tint (B안 · 기본, 카드 파랑으로 다시 칠한 그림) / shop-orig (A안, 원래 색) */
-.pbox{position:relative;margin-top:clamp(56px,8vw,112px);border-radius:34px;overflow:hidden;isolation:isolate;
-  padding:44px 40px 40px;background:var(--pbox-blue);
+   가게 색 두 안 — 카드 class 하나로 전환: shop-tint (B안 · 기본, 카드 파랑으로 다시 칠한 그림) / shop-orig (A안, 원래 색)
+   🔴 반응형은 «카드 폭» 기준입니다 (컨테이너 쿼리 · cqi = 카드 폭의 1%). 창 폭(vw)이나 카드 높이에 묶지 마세요.
+      예전에는 가게 높이를 카드 높이(100% + 36px)에 묶어 두어, 창이 좁아져 글이 여러 줄이 되면
+      카드가 높아지고 → 가게가 커지고 → 글 쪽으로 파고드는 일이 생겼습니다.
+   배치: 카드 폭 900px 이상 = 글 왼쪽 + 가게 오른쪽 / 900px 미만 = 글 위 + 가게 아래 (아래쪽 여백이 가게 자리) */
+.pwrap{container:pbox / inline-size;margin-top:clamp(56px,8vw,112px)}
+.pbox{--shop-w:clamp(190px,42cqi,330px);--shop-h:calc(var(--shop-w) / 1.045);
+  position:relative;border-radius:34px;overflow:hidden;isolation:isolate;
+  padding:clamp(26px,4.4cqi,44px) clamp(18px,3.4cqi,40px) calc(var(--shop-h) * .92 + 10px);
+  background:var(--pbox-blue);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 0 0 1px rgba(255,255,255,.08)}
-.ptext{position:relative;z-index:2;max-width:min(890px,calc(100% - 250px))}
-.pbox p{font-size:clamp(17px,1.95vw,28px);line-height:1.3;color:#fff;letter-spacing:-.02em;font-weight:400}
+.ptext{position:relative;z-index:2}
+.pbox p{font-size:clamp(16px,2.25cqi,28px);line-height:1.3;color:#fff;letter-spacing:-.02em;font-weight:400}
 .pbox .em{margin-top:1.3em;color:var(--yellow);font-weight:600;text-shadow:0 1px 2px rgba(0,16,48,.45)}
-.pbox .psrc{display:inline-flex;align-items:center;margin-top:28px;min-height:30px;padding:0 14px;border-radius:999px;
-  background:#fff;color:var(--ink);font-size:var(--t-sm);font-weight:600;line-height:1.3;letter-spacing:-.01em}
-.pshop{position:absolute;z-index:1;right:-56px;bottom:-46px;height:calc(100% + 36px);aspect-ratio:600/574;pointer-events:none;
+/* 출처 라벨 — 한 줄이면 알약, 아주 좁아서 두 줄이 되면 둥근 네모로 (글자가 잘리거나 넘치지 않게) */
+.pbox .psrc{display:inline-flex;align-items:center;max-width:100%;margin-top:clamp(20px,2.4cqi,28px);min-height:30px;padding:5px 14px;border-radius:15px;
+  background:#fff;color:var(--ink);font-size:var(--t-sm);font-weight:600;line-height:1.4;letter-spacing:-.01em;text-wrap:balance}
+.pshop{position:absolute;z-index:1;width:var(--shop-w);aspect-ratio:600/574;
+  right:calc(var(--shop-w) * -.07);bottom:calc(var(--shop-h) * -.08);pointer-events:none;
   -webkit-mask-image:linear-gradient(to top left,#000 34%,rgba(0,0,0,.55) 58%,transparent 84%);
           mask-image:linear-gradient(to top left,#000 34%,rgba(0,0,0,.55) 58%,transparent 84%);
   opacity:.92}
+@container pbox (min-width:900px){
+  .pbox{--shop-w:31cqi;padding:44px 40px 40px;min-height:calc(var(--shop-h) * .9)}
+  .ptext{max-width:calc(100% - var(--shop-w) * .72)}
+  .pshop{right:calc(var(--shop-w) * -.15);bottom:calc(var(--shop-h) * -.13)}
+}
+@container pbox (max-width:600px){ .pbox{border-radius:26px} }
+@container pbox (max-width:300px){ .pbox p{font-size:15px} }   /* 320px 휴대폰 — 한 줄 글자 수 확보 */
 .pshop img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:right bottom}
 .pbox.shop-tint .is-orig,.pbox.shop-orig .is-tint{display:none}
 .nums{list-style:none;padding:0;margin:16px 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
@@ -440,7 +459,7 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .ctabox .acts{margin-top:var(--s-6)}
 /* 마지막 신청 버튼 — 흰 알약 · 짙은 남색 굵은 글씨 + 화살표 · 부드러운 그림자 (2026-10-15 5차)
    대비: 글자 --ink(#0E1B33) / 흰 바탕 ≈ 17:1 · 버튼 / 둘레 파란 상자 ≥ 3:1 (화면에서 잰 값은 보고서에) */
-.btn-cta{min-height:56px;padding:0 32px;gap:10px;border-radius:999px;background:#fff;color:var(--ink);
+.btn-cta{min-height:56px;padding:0 32px;gap:10px;border-radius:999px;background:#fff;color:var(--ink);white-space:nowrap;
   font-size:18px;font-weight:700;letter-spacing:-.01em;border:0;
   box-shadow:0 10px 30px rgba(11,43,86,.25);
   transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
@@ -474,6 +493,9 @@ footer .pol{border-top-color:rgba(255,255,255,.12)}
 footer .pol span{color:#4A5059}
 footer .cr{color:#7D838C}
 
+/* 아주 좁은 휴대폰(≤360px) — 신청 버튼 두 개가 한 줄을 지키게 여백 · 글자만 줄임 */
+@media(max-width:360px){ .hbtn,.btn-cta{padding:0 20px;gap:8px;font-size:16px} }
+
 /* ══════════ 움직임 — 「동작 줄이기」에서는 모두 끕니다 ══════════ */
 .js .rv{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .js .rv.in{opacity:1;transform:none}
@@ -504,15 +526,11 @@ footer .cr{color:#7D838C}
   .hcard{min-height:0;border-radius:44px;padding-top:44px}
   .hero h1{margin-top:36px;font-size:clamp(48px,10.5vw,88px)}
   .hsub{font-size:clamp(18px,3vw,26px)}
-  .pbox p{font-size:clamp(16px,2.35vw,24px)}
   .hsub{margin-top:32px}
   .hact{padding-top:40px}
   .hphoto{min-height:0;aspect-ratio:4/3;border-radius:32px}
   .deco-top{top:-56px;right:-70px;width:clamp(170px,34vw,300px)}
   .deco-bottom{top:auto;bottom:22%;left:-90px;width:clamp(150px,30vw,240px)}
-  .pbox{padding:36px 28px 236px}                 /* 아래쪽에 가게 자리 — 글자 밑으로 깔리지 않게 */
-  .ptext{max-width:none}
-  .pshop{height:260px;right:-28px;bottom:-34px}
   .flow{grid-template-columns:minmax(0,1fr);justify-items:stretch}
   .flow .arr svg{transform:rotate(90deg)}
   .moods{grid-template-columns:minmax(0,1fr)}
@@ -530,8 +548,6 @@ footer .cr{color:#7D838C}
   .hbtn{width:100%}
   .hcond{font-size:var(--t-sm)}
   .problem{padding-top:88px}
-  .pbox{border-radius:26px;padding:28px 22px 196px}
-  .pshop{height:216px;right:-26px;bottom:-26px}
   .nums{grid-template-columns:minmax(0,1fr);gap:12px}
   .num{min-height:0}
   .tiles{grid-template-columns:minmax(0,1fr)}
@@ -645,7 +661,7 @@ footer .cr{color:#7D838C}
     <h2 class="ptitle rv" id="problem-h"><span class="l">"전국 635만 사업장 중, 사장님의 매장은</span> <span class="b">온라인에서 손님을 놓치고 있진 않나요?"</span></h2>
 
     <!-- 가게 색 두 안 — class 를 shop-tint(B안 · 기본) 또는 shop-orig(A안) 로 바꾸면 전환 -->
-    <div class="pbox shop-tint rv">
+    <div class="pwrap rv"><div class="pbox shop-tint">
       <div class="ptext">
       <p>통계청 조사 결과, 우리나라 사업체 수는 635만 개를 넘어섰습니다. (2024년 잠정)<br>
          웹페이지 첫인상이 생기는 데는 단 0.05초면 충분하다는 연구가 있습니다.<br>
@@ -658,7 +674,7 @@ footer .cr{color:#7D838C}
         <img class="is-tint" src="img/deco-problem-tint.png" alt="" width="600" height="574" loading="lazy" decoding="async">
         <img class="is-orig" src="img/deco-problem.png" alt="" width="600" height="574" loading="lazy" decoding="async">
       </div>
-    </div>
+    </div></div>
 
     <ul class="nums" aria-label="숫자로 보는 근거">
       <li class="num glass rv"><p class="n"><b data-count>0.05</b><i>초</i></p><p class="d">웹페이지 첫인상이 생기는 시간</p><p class="s">출처: Lindgaard 외, 2006</p></li>
