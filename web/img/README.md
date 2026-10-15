@@ -16,7 +16,7 @@
 
 ## 넣은 그림 (2026-10-15)
 
-전도사님이 준 AI 그림 2장을 가공했습니다. **원본은 저장소 밖** `intomarketing_web/` 폴더에 있습니다
+전도사님이 준 AI 그림 3장을 가공했습니다. **원본은 저장소 밖** `intomarketing_web/` 폴더에 있습니다
 (`src-ring.png` · `src-icons.png` · `src-store.png`). 가공 스크립트도 같은 폴더의 `img-tools/` 에 있습니다.
 
 | 파일 이름 | 원본 | 가공 | 쓰는 곳 |
