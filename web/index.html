@@ -234,10 +234,26 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .deco img{object-fit:contain}
 /* 고리 장식 (design-main.png 리본 자리) — 오른쪽 위는 크게, 위 · 오른쪽이 잘림 / 왼쪽 아래는 작게, 왼쪽이 반쯤 잘림 */
 .deco-top{top:clamp(-120px,-7vw,-48px);right:clamp(-150px,-9vw,-60px);width:clamp(220px,28vw,410px);aspect-ratio:900/847}
-/* 아래 고리 — 오른쪽 끝을 «카드 왼쪽 가장자리 + 20px» 에 맞춤 (창 폭이 아니라 카드 위치 기준).
-   예전 값(left:clamp(…vw))은 1000~1100px 창에서 고리가 신청 버튼에 닿았습니다. */
+/* 아래 고리 — 디자인처럼 화면 왼쪽 밖으로 반쯤 걸치되(clamp(…vw)), 오른쪽 끝이 «카드 왼쪽 가장자리 + 20px» 를 넘지 않게
+   (둘 중 더 왼쪽). 예전에는 1000~1100px 창에서 신청 버튼에 닿았고, 카드 기준만 쓰면 넓은 화면(1920)에서 고리가 통째로 떠 보였습니다. */
 .deco-bottom{--rw:clamp(170px,19vw,280px);width:var(--rw);aspect-ratio:847/900;top:470px;
-  left:calc(max(var(--gut), (100% - var(--cw)) / 2) + 20px - var(--rw))}
+  left:min(calc(max(var(--gut), (100% - var(--cw)) / 2) + 20px - var(--rw)), clamp(-170px,-10vw,-90px))}
+/* PC 첫 화면 — 화면 «높이» 가 낮아도 제목 · 설명 · 신청 버튼 · 배지가 스크롤 없이 보이게 (2026-10-15)
+   🔴 높이 830px 이상(1440×900 등)에서는 값이 예전과 똑같습니다 — 낮은 화면에서만 위아래 여백 · 글자가 줄어듭니다.
+   기준: 1366×768 · 1536×864 · 1920×1080 (Windows 배율 125 · 150% 포함, 브라우저 보이는 높이 약 560px 까지).
+   svh 를 모르는 브라우저는 앞줄의 vh 를 씁니다. 900px 이하(태블릿 · 휴대폰) 배치는 건드리지 않습니다. */
+@media (min-width:1000px){
+  .hero-in{padding-top:min(80px,9.6vh);padding-top:min(80px,9.6svh)}
+  .hcard{min-height:min(616px,calc(100vh - 62px - 9.6vh - 24px));min-height:min(616px,calc(100svh - 62px - 9.6svh - 24px));
+         padding-top:min(64px,7.7vh);padding-top:min(64px,7.7svh);padding-bottom:min(52px,6.3vh);padding-bottom:min(52px,6.3svh)}
+  .hphoto{min-height:min(616px,calc(100vh - 62px - 9.6vh - 24px));min-height:min(616px,calc(100svh - 62px - 9.6svh - 24px))}
+  .hero h1{margin-top:min(52px,6.3vh);margin-top:min(52px,6.3svh);
+           font-size:clamp(52px,min(7.05vw,12.3vh),102px);font-size:clamp(52px,min(7.05vw,12.3svh),102px)}
+  .hsub{margin-top:min(52px,6.3vh);margin-top:min(52px,6.3svh);
+        font-size:clamp(19px,min(2.05vw,3.6vh),30px);font-size:clamp(19px,min(2.05vw,3.6svh),30px)}
+  .hact{padding-top:min(56px,6.7vh);padding-top:min(56px,6.7svh)}
+  .deco-bottom{top:min(470px,52vh);top:min(470px,52svh)}
+}
 
 /* ══════════ 2. 문제 제기 ══════════ */
 .problem{background:#000;padding:118px 0 clamp(88px,10vw,140px)}
