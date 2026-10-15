@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /marketing/
+Disallow: /my/
+Disallow: /partner/
+Disallow: /quote/
+Disallow: /hakwon/admin.html
+
+Sitemap: https://intomarketing.co.kr/sitemap.xml
