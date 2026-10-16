@@ -637,18 +637,18 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   #v-blog .bx-bsec.bx-alt{background:var(--surface)}
   #v-blog .bx-btag{display:inline-block;padding:5px 14px;border-radius:999px;background:var(--bl-navy);color:#fff;font-size:12px;font-weight:800;letter-spacing:.14em}
   #v-blog .bx-bh{font-size:clamp(28px,4.2vw,42px);font-weight:900;line-height:1.28;letter-spacing:-.03em;margin:14px 0 0;word-break:keep-all}
-  #v-blog .bx-bh mark,#v-blog .bhero h2 mark{background:linear-gradient(transparent 58%,var(--bl-mark) 58%);color:inherit;padding:0 2px}
+  #v-blog .bx-bh mark,#v-blog .bx-bhero h2 mark{color:inherit;padding:0 2px}
   #v-blog .bx-bc{text-align:center}
   #v-blog .bx-bsub{color:var(--muted);font-size:var(--t-md);line-height:1.75;margin-top:14px;word-break:keep-all}
   #v-blog .btn-primary{background:var(--bl-blue);color:#fff}
   #v-blog .btn-primary:hover{background:var(--bl-blue-d)}
   /* 1 첫 화면 */
-  #v-blog .bhero{background:linear-gradient(180deg,#DDEBFF 0%,var(--bl-sky) 45%,var(--paper) 100%);padding:64px 0 0;text-align:center}
+  #v-blog .bx-bhero{background:linear-gradient(180deg,#DDEBFF 0%,var(--bl-sky) 45%,var(--paper) 100%);padding:64px 0 0;text-align:center}
   #v-blog .bx-bpill{display:inline-flex;gap:6px;align-items:center;padding:7px 16px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:var(--t-sm);font-weight:700;color:var(--bl-blue)}
   #v-blog .bx-bpill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--bl-blue)}
-  #v-blog .bhero h2{font-size:clamp(34px,5.6vw,58px);font-weight:900;line-height:1.2;letter-spacing:-.035em;margin:20px 0 0;word-break:keep-all}
-  #v-blog .bhero h2 em{font-style:normal;color:var(--bl-blue)}
-  #v-blog .bhero .bx-bsub b{color:var(--ink)}
+  #v-blog .bx-bhero h2{font-size:clamp(34px,5.6vw,58px);font-weight:900;line-height:1.2;letter-spacing:-.035em;margin:20px 0 0;word-break:keep-all}
+  #v-blog .bx-bhero h2 em{font-style:normal;color:var(--bl-blue)}
+  #v-blog .bx-bhero .bx-bsub b{color:var(--ink)}
   #v-blog .bx-bchips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:26px}
   #v-blog .bx-bchips span{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 16px;font-size:var(--t-sm);color:var(--muted);box-shadow:0 6px 18px -12px rgba(30,60,140,.35)}
   #v-blog .bx-bchips b{color:var(--bl-blue);font-size:var(--t-md);margin-left:6px;font-variant-numeric:tabular-nums}
@@ -709,7 +709,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   #v-blog .bx-bproc{background:linear-gradient(180deg,var(--bl-blue),var(--bl-blue-d));color:#fff}
   #v-blog .bx-bproc .bx-btag{background:#fff;color:var(--bl-blue)}
   #v-blog .bx-bproc .bx-bh{color:#fff}
-  #v-blog .bx-bproc .bx-bh mark{background:linear-gradient(transparent 58%,rgba(255,227,110,.85) 58%);color:#fff}
+  #v-blog .bx-bproc .bx-bh mark{color:#fff}
   #v-blog .bx-bwho{display:inline-block;margin:30px 0 10px;padding:5px 12px;border-radius:999px;background:var(--bl-mark);color:var(--bl-navy);font-size:var(--t-xs);font-weight:900}
   #v-blog .bx-bwho.bx-us{background:rgba(255,255,255,.18);color:#fff}
   #v-blog .bx-bstep{display:flex;gap:16px;align-items:center;background:#fff;color:var(--ink);border-radius:18px;padding:18px 22px;margin-bottom:10px}
@@ -748,18 +748,84 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   /* 어두운 화면 설정 — 바탕만 어둡게, 파란 포인트는 그대로 */
   @media(prefers-color-scheme:dark){
     #v-blog{--paper:#0D1426; --surface:#141D33; --surface-2:#1C2742; --ink:#EEF2FB; --muted:#A3AFC9; --line:#26324F; --bl-sky:#111B33}
-    #v-blog .bhero{background:linear-gradient(180deg,#14234A 0%,#0F1A36 50%,var(--paper) 100%)}
+    #v-blog .bx-bhero{background:linear-gradient(180deg,#14234A 0%,#0F1A36 50%,var(--paper) 100%)}
     #v-blog .bx-bpill,#v-blog .bx-bchips span,#v-blog .bx-bfacts>div,#v-blog .bx-bq.bx-r p,#v-blog .bx-bcheck,#v-blog .bx-bprod>div,#v-blog .bx-bterms>div,#v-blog .bx-bneed>div{background:var(--surface)}
     #v-blog .bx-bprod>div.bx-on{background:linear-gradient(180deg,#18264A,var(--surface));border-color:#33509A}
     #v-blog .bx-bstep{background:var(--surface);color:var(--ink)}
     #v-blog .bx-bres{background:#081022}
     #v-blog .bx-bneed .bx-n{color:#2A3B66}
-    #v-blog .bx-bh mark,#v-blog .bhero h2 mark{background:linear-gradient(transparent 62%,rgba(255,227,110,.45) 62%)}
+    #v-blog .bx-bh mark,#v-blog .bx-bhero h2 mark{background-image:linear-gradient(rgba(255,227,110,.45),rgba(255,227,110,.45))}
   }
+  /* ══ 움직임 (2026-10-16 이은총 님 「애니메이션 많이 · 스크롤 올리고 내릴 때도 하나하나 생성되는 느낌 · 문의/채팅 잘」) ══
+     · 아래 스크립트가 #v-blog 에 .bx-anim 을 붙인 때«만» 숨겼다가 나타냅니다.
+       「동작 줄이기」를 켠 분 · 스크립트가 안 도는 경우에는 처음부터 다 보입니다(투명하게 남는 일 없음).
+     · 화면 밖으로 완전히 나가면 다시 숨겨 두어서, 위로 올렸다 내려도 다시 하나씩 나타납니다. */
+  #v-blog{--bx-e:cubic-bezier(.22,.9,.28,1); --bx-pop:cubic-bezier(.34,1.56,.64,1)}
+  #v-blog.bx-anim .ba{opacity:0;transition:opacity .7s var(--bx-e),transform .7s var(--bx-e);transition-delay:var(--d,0ms);will-change:opacity,transform}
+  #v-blog.bx-anim .ba.up{transform:translateY(34px)}
+  #v-blog.bx-anim .ba.l{transform:translateX(-46px)}
+  #v-blog.bx-anim .ba.r{transform:translateX(46px)}
+  #v-blog.bx-anim .ba.pop{transform:scale(.78);transition-timing-function:var(--bx-pop)}
+  #v-blog.bx-anim .ba.zoom{transform:translateY(24px) scale(.92)}
+  #v-blog.bx-anim .ba.in{opacity:1;transform:none}
+  /* 노란 밑줄이 왼쪽에서 그어집니다 */
+  #v-blog .bx-bh mark,#v-blog .bx-bhero h2 mark{background:linear-gradient(var(--bl-mark),var(--bl-mark)) no-repeat 0 88%/100% 40%}
+  #v-blog.bx-anim .ba mark{background-size:0% 40%;transition:background-size .9s var(--bx-e) .35s}
+  #v-blog.bx-anim .ba.in mark{background-size:100% 40%}
+  #v-blog .bx-bproc .bx-bh mark{background-image:linear-gradient(rgba(255,227,110,.85),rgba(255,227,110,.85))}
+  /* 둥둥 떠 있는 아이콘 */
+  @keyframes bxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  #v-blog.bx-anim .bx-bfacts i,#v-blog.bx-anim .bx-bneed i,#v-blog.bx-anim .bx-bcheck .bx-ic,#v-blog.bx-anim .bx-bstep .bx-ic{display:inline-block;animation:bxFloat 3.2s ease-in-out infinite}
+  #v-blog.bx-anim .bx-bfacts>div:nth-child(2n) i,#v-blog.bx-anim .bx-bneed>div:nth-child(2n) i{animation-delay:-1.6s}
+  #v-blog .bx-bfacts>div,#v-blog .bx-bneed>div,#v-blog .bx-bterms>div,#v-blog .bx-bprod>div,#v-blog .bx-bstep{transition:transform .25s var(--bx-e),box-shadow .25s}
+  #v-blog .bx-bfacts>div.in:hover,#v-blog .bx-bneed>div.in:hover,#v-blog .bx-bterms>div.in:hover,#v-blog .bx-bprod>div.in:hover{transform:translateY(-6px);box-shadow:0 24px 40px -26px rgba(30,60,140,.6);transition-delay:0ms}
+  #v-blog .bx-bstep.in:hover{transform:translateX(6px);transition-delay:0ms}
+  /* 체크 표시가 «톡» 하고 찍힙니다 */
+  #v-blog.bx-anim .bx-bcheck p::before{transform:scale(0);transition:transform .45s var(--bx-pop);transition-delay:calc(var(--d,0ms) + .35s)}
+  #v-blog.bx-anim .bx-bcheck .in p::before{transform:scale(1)}
+  /* 파란 띠 · 해결 상자 위로 빛이 한 번 지나갑니다 */
+  @keyframes bxShine{from{transform:translateX(-120%) skewX(-18deg)}to{transform:translateX(320%) skewX(-18deg)}}
+  #v-blog .bx-bband,#v-blog .bx-bsolve,#v-blog .bx-bgo{position:relative;overflow:hidden}
+  #v-blog .bx-bband::after,#v-blog .bx-bsolve::after,#v-blog .bx-bgo::after{content:"";position:absolute;top:0;bottom:0;left:0;width:30%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:translateX(-120%) skewX(-18deg);pointer-events:none}
+  #v-blog.bx-anim .bx-bband.in::after,#v-blog.bx-anim .bx-bsolve.in::after{animation:bxShine 1.3s var(--bx-e) .5s 1}
+
+  /* ── 채팅 — 「입력 중…」 점 세 개가 먼저 뜨고, 그다음 말풍선이 톡 나옵니다 ── */
+  @keyframes bxDot{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-5px);opacity:1}}
+  @keyframes bxSay{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+  #v-blog .bx-typing{display:none}
+  #v-blog.bx-anim .bx-bq{opacity:0;transform:translateX(-40px);transition:opacity .45s var(--bx-e),transform .45s var(--bx-e)}
+  #v-blog.bx-anim .bx-bq.bx-r{transform:translateX(40px)}
+  #v-blog.bx-anim .bx-bq.in{opacity:1;transform:none}
+  #v-blog.bx-anim .bx-bq .bx-av{transform:scale(0);transition:transform .4s var(--bx-pop)}
+  #v-blog.bx-anim .bx-bq.in .bx-av{transform:scale(1)}
+  #v-blog.bx-anim .bx-bq:not(.said) p:not(.bx-typing){display:none}
+  #v-blog.bx-anim .bx-bq.in:not(.said) .bx-typing{display:flex;gap:5px;align-items:center;padding:16px 18px}
+  #v-blog .bx-typing i{width:8px;height:8px;border-radius:50%;background:var(--bl-blue);animation:bxDot 1s infinite}
+  #v-blog .bx-typing i:nth-child(2){animation-delay:.15s}
+  #v-blog .bx-typing i:nth-child(3){animation-delay:.3s}
+  #v-blog.bx-anim .bx-bq.said p{animation:bxSay .38s var(--bx-pop) both;transform-origin:left bottom}
+  #v-blog.bx-anim .bx-bq.bx-r.said p{transform-origin:right bottom}
+  #v-blog.bx-anim .bx-bsolve{opacity:0;transform:translateY(26px) scale(.9);transition:opacity .6s var(--bx-pop),transform .6s var(--bx-pop)}
+  #v-blog.bx-anim .bx-bsolve.in{opacity:1;transform:none}
+
+  /* ── 문의 — 카드가 차례로 튀어나오고, 신청 단추가 숨 쉬듯 빛납니다 ── */
+  @keyframes bxBreath{0%,100%{box-shadow:0 20px 40px -24px rgba(15,27,61,.8),0 0 0 0 rgba(47,91,234,.45)}50%{box-shadow:0 20px 40px -24px rgba(15,27,61,.8),0 0 0 12px rgba(47,91,234,0)}}
+  @keyframes bxNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+  @keyframes bxSweep{0%{transform:translateX(-120%) skewX(-18deg)}60%,100%{transform:translateX(320%) skewX(-18deg)}}
+  #v-blog.bx-anim .bx-bgo.in{animation:bxBreath 2.2s ease-out 1s infinite}
+  #v-blog.bx-anim .bx-bgo.in::after{animation:bxSweep 3s ease-in-out 1.2s infinite}
+  #v-blog .bx-bgo .bx-arw{display:inline-block}
+  #v-blog.bx-anim .bx-bgo.in .bx-arw{animation:bxNudge 1.2s ease-in-out infinite}
+  #v-blog.bx-anim .bx-bneed .bx-n{opacity:0;transform:translateY(-8px);transition:opacity .5s,transform .5s var(--bx-pop);transition-delay:calc(var(--d,0ms) + .3s)}
+  #v-blog.bx-anim .bx-bneed .in .bx-n{opacity:1;transform:none}
+  #v-blog.bx-anim .bx-bneed p{opacity:0;transform:translateX(-10px);transition:opacity .45s,transform .45s var(--bx-e)}
+  #v-blog.bx-anim .bx-bneed .in p{opacity:1;transform:none;transition-delay:calc(var(--d,0ms) + .45s)}
+  #v-blog.bx-anim .bx-bneed .in p+p{transition-delay:calc(var(--d,0ms) + .65s)}
 </style>
 <section class="view" id="v-blog">
   <!-- 1. 첫 화면 — 숫자를 바꾸면 결제 안내(payment/) · 블로그 신청서도 같이 -->
-  <div class="bhero">
+  <div class="bx-bhero">
     <div class="bx-bw">
       <span class="bx-bpill">Service 01 · 네이버 블로그 · 플레이스 리뷰</span>
       <h2>블로그 마케팅,<br>대표님은 <mark>자료만</mark> 보내세요</h2>
@@ -913,10 +979,96 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         <div><span class="bx-n">04</span><i>🔎</i><h4>검색되고 싶은 상황</h4><p>음식점) <b>맛집, 예약, 주차</b></p><p>학원) <b>학원 추천, 내신, 방학특강</b></p></div>
       </div>
       <p class="bx-bsub" style="font-size:var(--t-base)">항목이 많을수록 키워드 조합이 늘어 검색 노출 범위가 넓어집니다.</p>
-      <a class="bx-bgo" href="apply/blog/">💬 블로그 신청서 쓰기 →</a>
+      <a class="bx-bgo" href="apply/blog/">💬 블로그 신청서 쓰기 <span class="bx-arw">→</span></a>
       <p class="bx-bsmall">📞 결제 전 전화 상담도 가능합니다 · <a onclick="go('home','contact')">연락처 보기</a> · <a onclick="go('home','items')">다른 항목 보기</a></p>
     </div>
   </div>
+  <script>
+  /* 블로그 화면 움직임 (2026-10-16) — 위 <style> 의 「움직임」과 짝입니다.
+     🔴 「동작 줄이기」를 켠 분 · IntersectionObserver 가 없는 브라우저에서는 아무것도 하지 않습니다(그래서 다 보입니다). */
+  (function(){
+    var root=document.getElementById('v-blog'); if(!root)return;
+    var LESS=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(LESS||!('IntersectionObserver' in window))return;
+    root.classList.add('bx-anim');
+    /* [고를 것, 움직임, 하나씩 늦추는 간격(ms)] — 같은 부모 안에서 순서대로 늦춥니다 */
+    var PLAN=[
+      ['.bx-bhero .bx-bpill','pop',0],['.bx-bhero h2','up',0],['.bx-bhero .bx-bsub','up',0],
+      ['.bx-bchips>span','pop',110],['.bx-bhero .bx-bfoot','up',0],['.bx-bfacts>div','up',100],['.bx-bacts','up',0],['.bx-bband','up',0],
+      ['.bx-btag','pop',0],['.bx-bh','up',0],
+      ['.bx-bcheck>div','up',110],['.bx-ball','pop',0],
+      ['.bx-bnums>div','zoom',140],['.bx-bres .bx-bfoot','up',0],
+      ['.bx-bprod>div','alt',140],['.bx-bmore','up',0],
+      ['.bx-bwho','pop',0],['.bx-bstep','l',110],['.bx-btip','up',0],
+      ['.bx-bterms>div','up',100],
+      ['.bx-bneed>div','pop',130],['.bx-bneed~.bx-bsub','up',0],['.bx-bgo','zoom',0],['.bx-bsmall','up',0]
+    ];
+    var all=[];
+    PLAN.forEach(function(p){
+      var seen=new Map();
+      root.querySelectorAll(p[0]).forEach(function(el){
+        if(el.classList.contains('ba'))return;
+        var k=el.parentNode, i=seen.get(k)||0; seen.set(k,i+1);
+        el.classList.add('ba', p[1]==='alt'?(i%2?'r':'l'):p[1]);
+        if(p[2])el.style.setProperty('--d',(i*p[2])+'ms');
+        all.push(el);
+      });
+    });
+    /* 숫자가 0 에서부터 올라갑니다 (60 · 81 · 90.5 · 10,000 · 30 · 12) */
+    function countUp(el){
+      var n=el.firstChild; if(!n||n.nodeType!==3)return;
+      if(el.dataset.orig==null)el.dataset.orig=n.nodeValue;
+      var orig=el.dataset.orig, m=/^([\d,]+(?:\.\d+)?)/.exec(orig); if(!m||/~/.test(orig))return;
+      var raw=m[1], to=parseFloat(raw.replace(/,/g,'')), dec=(raw.split('.')[1]||'').length, comma=/,/.test(raw), rest=orig.slice(raw.length);
+      var t0=null, dur=1100;
+      function f(t){ if(!t0)t0=t; var k=Math.min(1,(t-t0)/dur), v=to*(1-Math.pow(1-k,3));
+        var s=dec?v.toFixed(dec):String(Math.round(v)); if(comma)s=Number(s).toLocaleString('ko-KR');
+        n.nodeValue=s+rest; if(k<1)requestAnimationFrame(f); }
+      requestAnimationFrame(f);
+    }
+    function counters(el){ el.querySelectorAll('.bx-bchips b, .bx-bnums .bx-v, .bx-bfacts b').forEach(countUp);
+      if(el.matches('.bx-bchips>span, .bx-bfacts>div, .bx-bnums>div'))el.querySelectorAll('b, .bx-v').forEach(countUp); }
+    function out(r){var h=window.innerHeight||800; return r.top>h||r.bottom<0;}
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        var el=e.target;
+        if(e.isIntersecting){ if(!el.classList.contains('in')){el.classList.add('in');counters(el);} }
+        else if(out(e.boundingClientRect))el.classList.remove('in');   /* 완전히 나가면 다시 숨겨 둡니다 */
+      });
+    },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+    all.forEach(function(el){io.observe(el);});
+
+    /* 채팅 — 말풍선마다 「입력 중…」을 넣고, 화면에 들어올 때마다 처음부터 대화를 다시 합니다 */
+    var chat=root.querySelector('.bx-bchat'), solve=root.querySelector('.bx-bsolve'), T=[];
+    if(chat){
+      var rows=chat.querySelectorAll('.bx-bq');
+      rows.forEach(function(r){var ty=document.createElement('p');ty.className='bx-typing';ty.setAttribute('aria-hidden','true');ty.innerHTML='<i></i><i></i><i></i>';r.insertBefore(ty,r.querySelector('p'));});
+      var reset=function(){T.forEach(clearTimeout);T=[];rows.forEach(function(r){r.classList.remove('in','said');});if(solve)solve.classList.remove('in');};
+      var play=function(){reset();
+        rows.forEach(function(r,i){
+          T.push(setTimeout(function(){r.classList.add('in');},250+i*1150));
+          T.push(setTimeout(function(){r.classList.add('said');},250+i*1150+700));
+        });
+        if(solve)T.push(setTimeout(function(){solve.classList.add('in');},250+rows.length*1150+250));
+      };
+      var cio=new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          if(e.isIntersecting){ if(!chat.dataset.on){chat.dataset.on='1';play();} }
+          else if(out(e.boundingClientRect)){ chat.dataset.on='';reset(); }
+        });
+      },{threshold:.25});
+      cio.observe(chat);
+    }
+    /* 안전장치 — 스크롤 중 화면 안에 있는데 아직 안 나타난 것은 무조건 켭니다 */
+    var tick=false;
+    window.addEventListener('scroll',function(){
+      if(tick||!root.classList.contains('active'))return; tick=true;
+      setTimeout(function(){tick=false;var h=window.innerHeight||800;
+        root.querySelectorAll('.ba:not(.in)').forEach(function(el){var r=el.getBoundingClientRect();if(r.top<h*.94&&r.bottom>0){el.classList.add('in');counters(el);}});
+      },200);
+    },{passive:true});
+  })();
+  </script>
 </section>
 
 <!-- ══════════════ 홈페이지 제작 ══════════════ -->
