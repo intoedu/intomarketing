@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 구글 · 네이버에 알리는 인투마케팅 공개 페이지 목록 (2026-10-16 · 이은총 님 「인투마케팅만」).
+     학원지원센터(/hakwon/) · 교회지원센터(/church/)는 일부러 넣지 않았습니다.
+     어드민 · 마이페이지 · 영업실장 페이지 · 견적서는 robots.txt 에서 검색 제외. 공개 페이지를 새로 만들면 여기에 한 줄 더하세요. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://intomarketing.co.kr/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://intomarketing.co.kr/apply/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://intomarketing.co.kr/apply/blog/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://intomarketing.co.kr/apply/sns/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://intomarketing.co.kr/apply/design/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://intomarketing.co.kr/apply/video/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://intomarketing.co.kr/payment/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://intomarketing.co.kr/terms/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://intomarketing.co.kr/privacy/</loc><lastmod>2026-10-16</lastmod></url>
+</urlset>

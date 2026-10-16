@@ -7,12 +7,27 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <title>홈페이지 제작 신청 · 인투마케팅</title>
+<!-- 링크 미리보기 그림 = 메인 첫 화면 (2026-10-16) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="인투마케팅">
+<meta property="og:title" content="홈페이지 제작 신청 · 인투마케팅">
+<meta property="og:description" content="인투마케팅 홈페이지 제작 신청과 제작 자료 보내기. 기능을 고르면 예상 금액이 바로 계산됩니다.">
+<meta property="og:url" content="https://intomarketing.co.kr/apply/">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://intomarketing.co.kr/og-main.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://intomarketing.co.kr/og-main.png">
 <meta name="description" content="인투마케팅 홈페이지 제작 신청과 제작 자료 보내기. 기능을 고르면 예상 금액이 바로 계산됩니다.">
 <link rel="canonical" href="https://intomarketing.co.kr/apply/">
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="light dark">
-<link rel="icon" href="../hakwon/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="../hakwon/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico?v=2" sizes="any">   <!-- 인투마케팅 로고 (2026-10-16) · 학원지원센터는 hakwon/ 의 ESC 아이콘 그대로 -->
+<link rel="icon" href="/favicon-32.png?v=2" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-48.png?v=2" sizes="48x48" type="image/png">
+<link rel="icon" href="/favicon-192.png?v=2" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
 <meta name="theme-color" content="#12294D">
 <style>
 /* ══════════════════════════════════════════════════════════════
@@ -176,6 +191,8 @@ header .intro b{color:#fff}
 .nextb{border:0;background:var(--band);color:#fff;border-radius:999px;padding:8px 14px;font-weight:800;font-size:13px;cursor:pointer;white-space:nowrap}
 .nextb:hover{filter:brightness(1.15)}
 .saved{font-size:11.5px;color:var(--muted);white-space:nowrap}
+.linkbtn.resetb{font-size:12px;white-space:nowrap;color:var(--muted);font-weight:700}   /* 진행 막대의 「처음부터 다시」 */
+.linkbtn.resetb[data-arm]{color:var(--bad)}
 @media(max-width:600px){.saved{display:none}.bar .wrap{gap:10px}}
 
 /* ── 두 칸 — 왼쪽 신청서, 오른쪽 예상 금액 (좁은 화면에서는 아래 막대) ── */
@@ -948,6 +965,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
   <span class="left" id="left_txt"></span>
   <button type="button" class="nextb" id="next_btn">다음 항목 ↓</button>
   <span class="saved" id="saved_txt"></span>
+  <button type="button" class="linkbtn resetb" data-clear data-armtxt="한 번 더 누르면 모두 지웁니다">처음부터 다시</button>   <!-- 쓰던 내용 전부 초기화 (2026-10-16 이은총 님) -->
 </div></div>
 
 <div class="wrap layout">
@@ -3593,7 +3611,7 @@ function applyDraft(d){
 document.addEventListener('click',function(e){
   var b=e.target.closest('[data-clear]'); if(!b)return;
   if(b.getAttribute('data-arm')){ clearDraft(); DRAFT_ON=false; location.reload(); return; }
-  var t=b.textContent; b.setAttribute('data-arm','1'); b.textContent='한 번 더 누르면 쓰던 내용이 모두 지워집니다';
+  var t=b.textContent; b.setAttribute('data-arm','1'); b.textContent=b.getAttribute('data-armtxt')||'한 번 더 누르면 쓰던 내용이 모두 지워집니다';
   setTimeout(function(){ b.removeAttribute('data-arm'); b.textContent=t; },3500);
 });
 
