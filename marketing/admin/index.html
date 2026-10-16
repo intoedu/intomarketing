@@ -113,7 +113,31 @@
   .lg-c.o{background:#E7F6EC;color:#1E7B3C;border-color:#A8DDB9}
   .lg-c.x{background:#FDECEC;color:#C0392B;border-color:#F2B8B5}
   .lg-na{color:var(--line)}
-  .lg-ed{border:0;background:none;cursor:pointer;font-size:.85rem;color:var(--muted);padding:2px 4px}
+  .lg-btns{display:flex;gap:6px}
+  .lg-edit,.lg-del{cursor:pointer;font:inherit;font-size:.8rem;font-weight:700;padding:5px 10px;border-radius:8px;background:var(--surface)}
+  .lg-edit{border:1.5px solid #8DB4E8;color:#1F5FAF}
+  .lg-edit:hover{background:#EEF4FC}
+  .lg-del{border:1.5px solid #E5928B;color:#C0392B}
+  .lg-del:hover{background:#FDECEC}
+  .lg-filt{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 18px;border-bottom:1px solid var(--line)}
+  .lg-filt .inp{max-width:200px;padding-top:7px;padding-bottom:7px;font-size:.85rem}
+  .lg-filt #lgQ{max-width:220px}
+  .lg-mon{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted);white-space:nowrap}
+  .lg-mon .inp{max-width:160px}
+  .lg-t th.lg-s{cursor:pointer;user-select:none}
+  .lg-t th.lg-s:hover{color:var(--ink)}
+  .lg-t th.lg-s.on{color:var(--accent)}
+  .lg-t th.bm,.lg-t td.bm{background:rgba(255,214,0,.12)}
+  .lg-w{font-size:.78rem;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+  .lg-w.ing{background:#EEF4FC;color:#1F5FAF}
+  .lg-w.late{background:#FFF1E0;color:#B5651D}
+  .lg-w.done{background:#E7F6EC;color:#1E7B3C}
+  .lg-late{font-size:.72rem;font-weight:800;color:#B5651D}
+  .lg-badge{display:inline-block;min-width:18px;padding:0 6px;margin-left:4px;border-radius:999px;background:#C0392B;color:#fff;font-size:.72rem;font-weight:800;line-height:18px;text-align:center}
+  .lg-tpl{width:100%;min-height:150px;font:inherit;font-size:.86rem;line-height:1.65;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);resize:vertical}
+  .lg-un{margin-top:10px;font-size:.84rem;display:flex;flex-wrap:wrap;gap:6px}
+  .lg-un .h{width:100%;margin-bottom:2px;font-weight:700}
+  .lg-chip{padding:4px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface-2)}
   .lg-msg{padding:14px 18px 18px;border-top:1px solid var(--line)}
   .lg-msg-h{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
   .lg-msg-h b{margin-right:4px}
@@ -411,15 +435,15 @@
         <div class="stat"><b class="tnum" id="s-ing">0</b><span>진행중</span></div>
         <div class="stat"><b class="tnum" id="s-done">0</b><span>완료</span></div>
       </div>
-      <!-- 홈페이지 관리비 대장 (2026-10-16 이은총 님) — 홈페이지 제작 화면에서만.
-           저장 = settings['web_fees'] (직원만 읽음 · is_staff). 의뢰 · 견적서 없이도 바로 추가합니다. -->
+      <!-- 관리비 대장 (2026-10-16 이은총 님) — 홈페이지 제작 · SNS 채널 화면에서만. 화면마다 따로 저장합니다.
+           저장 = settings['web_fees'] · settings['sns_fees'] (직원만 읽음 · is_staff). 의뢰 · 견적서 없이도 바로 추가합니다. -->
       <details class="card fee hide" id="feeBox" open>
-        <summary><b>홈페이지 관리비 대장</b><span id="feeSum"></span></summary>
+        <summary><b id="lgTitle">관리비 대장</b><span id="feeSum"></span></summary>
         <div class="lg-act">
           <button class="btn btn-primary" type="button" onclick="lgNew()">＋ 추가</button>
-          <button class="btn btn-ghost" type="button" onclick="lgImport()">견적서에서 불러오기</button>
-          <span class="lg-nav"><button class="btn btn-ghost" type="button" onclick="lgShift(-1)">‹</button>
-            <span id="lgRange"></span><button class="btn btn-ghost" type="button" onclick="lgShift(1)">›</button></span>
+          <button class="btn btn-ghost" type="button" onclick="lgImport()">견적서에서 불러오기 <span class="lg-badge hide" id="lgImpN"></span></button>
+          <span class="lg-nav"><button class="btn btn-ghost" type="button" title="이전 달들" onclick="lgShift(-1)">‹</button>
+            <span id="lgRange"></span><button class="btn btn-ghost" type="button" title="다음 달들" onclick="lgShift(1)">›</button></span>
         </div>
         <div class="lg-imp hide" id="lgImp"></div>
         <div class="lg-form hide" id="lgForm">
@@ -428,20 +452,39 @@
           <div><label for="lg_fee">월 관리비 (원 · 부가세 포함)</label><input class="inp" id="lg_fee" inputmode="numeric" placeholder="50000"></div>
           <div><label for="lg_start">관리비 시작 달</label><input class="inp" id="lg_start" type="month"></div>
           <div><label for="lg_day">납부일</label><select class="inp" id="lg_day"><option value="1">매달 1일</option><option value="10">매달 10일</option></select></div>
+          <div><label for="lg_status">작업 상태</label><select class="inp" id="lg_status"><option>진행중</option><option>완료</option><option>보류</option></select></div>
+          <div><label for="lg_due">작업 마감일 (예정일 · 끝난 날)</label><input class="inp" id="lg_due" type="date"></div>
           <div><label for="lg_qno">견적번호 (없으면 비움)</label><input class="inp" id="lg_qno"></div>
-          <div><label for="lg_status">상태</label><select class="inp" id="lg_status"><option>진행중</option><option>완료</option><option>보류</option></select></div>
           <div><label for="lg_signed">계약 서명</label><select class="inp" id="lg_signed"><option value="">아직</option><option value="1">받음</option></select></div>
-          <div class="lg-fbtn"><button class="btn btn-primary" type="button" onclick="lgSave()">저장</button>
+          <div class="lg-fbtn" style="grid-column:1/-1"><button class="btn btn-primary" type="button" onclick="lgSave()">저장</button>
             <button class="btn btn-ghost" type="button" onclick="lgCancel()">취소</button></div>
         </div>
+        <!-- 찾기 · 거르기 · 줄 세우기 (Finder 처럼 — 머리글을 눌러도 줄이 바뀝니다) -->
+        <div class="lg-filt">
+          <input class="inp" id="lgQ" placeholder="상호명 · 견적번호 찾기" oninput="renderFee()">
+          <select class="inp" id="lgFWork" onchange="renderFee()" title="작업 마감">
+            <option value="">작업 전체</option><option value="ing">진행중</option><option value="late">마감일 지남 (진행중)</option>
+            <option value="done">마감 (완료)</option><option value="hold">보류</option></select>
+          <select class="inp" id="lgFPay" onchange="renderFee()" title="납부">
+            <option value="">납부 전체</option><option value="unpaid">미납 (✗ + 확인 전)</option><option value="x">✗ 안 받음</option>
+            <option value="blank">확인 전 (빈칸)</option><option value="o">✓ 받음</option></select>
+          <label class="lg-mon">기준 달 <input class="inp" id="lgMonth" type="month" onchange="renderFee()"></label>
+          <select class="inp" id="lgSort" onchange="lgSortPick(this.value)" title="줄 세우기">
+            <option value="created:-1">만든 날 · 최신 먼저</option><option value="created:1">만든 날 · 오래된 먼저</option>
+            <option value="due:1">작업 마감일 · 빠른 먼저</option><option value="due:-1">작업 마감일 · 늦은 먼저</option>
+            <option value="name:1">상호명 · 가나다</option><option value="fee:-1">월 관리비 · 큰 먼저</option>
+            <option value="day:1">납부일 · 1일 먼저</option></select>
+          <button class="btn btn-ghost" type="button" onclick="lgReset()">거르기 지우기</button>
+        </div>
         <div class="lg-wrap"><table class="lg-t"><thead id="lgHead"></thead><tbody id="feeRows"></tbody></table></div>
-        <div class="empty hide" id="lgEmpty" style="padding:22px 18px"><b>아직 대장에 올린 홈페이지가 없습니다</b>「＋ 추가」로 이미 만든 홈페이지를 바로 넣을 수 있습니다.</div>
+        <div class="empty hide" id="lgEmpty" style="padding:22px 18px"></div>
         <div class="lg-msg">
           <div class="lg-msg-h"><b>미납 안내 문구</b>
-            <input class="inp" id="lgMsgMonth" type="month" onchange="lgMsgs()" style="max-width:170px">
-            <button class="btn btn-ghost" type="button" onclick="lgCopyAll()">모두 복사</button></div>
-          <p class="fee-n" style="padding:4px 0 8px">고른 달에 ✓ 가 아닌 곳(빈칸 · ✗)만 나옵니다. 상태가 「보류」인 곳과 시작 달 전인 곳은 빠집니다.</p>
-          <div id="lgMsgs"></div>
+            <button class="btn btn-ghost" type="button" onclick="lgCopyMsg()">문구 복사</button>
+            <button class="btn btn-ghost" type="button" onclick="lgMsgReset()">처음 문구로</button></div>
+          <p class="fee-n" style="padding:4px 0 8px">대표 문구 하나입니다. <b>○○○</b> 자리에 상호 · 달 · 금액을 넣어 보내세요. 고친 문구는 이 컴퓨터에 기억됩니다.</p>
+          <textarea class="lg-tpl" id="lgTpl" oninput="lgTplSave()"></textarea>
+          <div class="lg-un" id="lgUnpaid"></div>
         </div>
       </details>
       <div class="toolbar">
@@ -536,7 +579,7 @@
                 <td>-</td></tr>
             <tr><td><span class="badge b-owner">최고관리자</span></td>
                 <td><b>체크 없이 전부</b> (그래서 체크칸이 잠겨 보입니다)</td>
-                <td>· 의뢰 삭제 · 블로그 주문 삭제<br>
+                <td>· 의뢰 삭제 · 블로그 주문 삭제 (직원도 「의뢰 삭제」 체크를 받으면 가능)<br>
                     · 원고를 <b>낸 뒤</b>의 글 회수(그 글 원고료는 지급)<br>
                     · 최고관리자 지정 · 다른 최고관리자 계정 수정</td></tr>
           </tbody>
@@ -733,7 +776,7 @@
   <div class="sheet-f">
     <button class="btn btn-ghost" type="button" onclick="closeDetail()">닫기</button>
     <button class="btn btn-danger hide" id="d_del" type="button" onclick="deleteRequest()">🗑 의뢰 삭제</button>
-    <span class="muted hide" id="d_delnote" style="font-size:.78rem">최고관리자만 삭제할 수 있습니다</span>
+    <span class="muted hide" id="d_delnote" style="font-size:.78rem">삭제는 최고관리자 또는 「의뢰 삭제」 권한이 있는 직원만 할 수 있습니다</span>
     <span class="saved" id="d_saved" style="margin-left:auto">저장됨 ✓</span>
   </div>
 </div></div>
@@ -936,7 +979,8 @@
   var STATUSES=['접수','진행중','보류','완료'];
   var ROLE_KO={owner:'최고관리자',admin:'관리자',staff:'직원'};
   var PERM_KO={requests:'의뢰 관리 (문의·견적)',site_board:'홈페이지 게시판 관리',manage_staff:'직원 승인·권한 관리',
-               blog_admin:'블로그 센터 운영 (전체)',blog_review:'블로그 원고 검수만'};
+               blog_admin:'블로그 센터 운영 (전체)',blog_review:'블로그 원고 검수만',
+               request_delete:'의뢰 삭제 (블로그 주문 포함)'};
 
   var QALL={};
 
@@ -1186,65 +1230,136 @@
     }).join('');
   };
 
-  /* ══════════ 홈페이지 관리비 대장 (2026-10-16 이은총 님) ══════════
-     · 저장 = settings['web_fees'].value = {items:[{id,name,fee,qno,status,signed,start:'YYYY-MM',day:1|10,req,paid:{'YYYY-MM':'o'|'x'}}]}
+  /* ══════════ 관리비 대장 — 홈페이지 · SNS (2026-10-16 이은총 님) ══════════
+     · 저장 = settings['web_fees'] · settings['sns_fees'] .value = {items:[{id,name,fee,qno,status,due,signed,start:'YYYY-MM',day:1|10,req,created,paid:{'YYYY-MM':'o'|'x'}}]}
        settings 는 직원(is_staff)만 읽습니다 — 고객 화면에서 보이지 않습니다.
      · 저장할 때마다 DB 의 최신 대장을 다시 읽고 바꾼 칸만 반영합니다(두 사람이 동시에 고쳐도 서로 덮지 않게).
-     · 납부 칸 : 빈칸 → ✓(받음) → ✗(안 받음) → 빈칸. 시작 달 전은 「—」. */
-  var LEDGER={items:[]}, LG_ERR='', LG_END=null;
+     · 납부 칸 : 빈칸 → ✓(받음) → ✗(안 받음) → 빈칸. 시작 달 전은 「—」.
+     · 「견적서에서 불러오기」는 «지금 화면»의 의뢰만 봅니다 — 홈페이지 견적은 홈페이지 대장으로, SNS 견적은 SNS 대장으로. */
+  var LG_KEY={web:'web_fees',sns:'sns_fees'}, LG_NAME={web:'홈페이지',sns:'SNS'};
+  var LEDGERS={web:{items:[]},sns:{items:[]}}, LG_ERRS={}, LG_ERR='', LG_END=null;
   function lgYM(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2);}
   function lgAdd(s,n){var d=new Date(+s.slice(0,4),+s.slice(5,7)-1+n,1);return lgYM(d);}
   function lgNow(){return lgYM(new Date());}
-  function lgItems(){return (LEDGER&&Array.isArray(LEDGER.items))?LEDGER.items:[];}
+  function lgToday(){var d=new Date();return lgYM(d)+'-'+('0'+d.getDate()).slice(-2);}
+  function lgArea(){return LG_KEY[CUR]?CUR:null;}
+  function lgItems(){var L=LEDGERS[lgArea()]; return (L&&Array.isArray(L.items))?L.items:[];}
+  /* 만든 날 — 예전 줄에는 created 가 없어서, id('f' + 만든 시각 36진수 + 덧붙인 4글자)에서 거꾸로 읽습니다 */
+  function lgCreated(x){
+    if(x.created)return Date.parse(x.created)||0;
+    var m=/^f([0-9a-z]+)[0-9a-z]{4}$/.exec(x.id||''); var t=m?parseInt(m[1],36):0;
+    return (t>1.6e12&&t<4e12)?t:0;
+  }
+  function lgFmtDay(s){return s?(+s.slice(5,7))+'.'+(+s.slice(8,10)):'';}
   async function loadLedger(){
-    var r=await sb.from('settings').select('value').eq('key','web_fees').maybeSingle();
-    LG_ERR=r.error?r.error.message:'';
-    LEDGER=(r.data&&r.data.value&&Array.isArray(r.data.value.items))?r.data.value:{items:[]};
+    var r=await sb.from('settings').select('key,value').in('key',['web_fees','sns_fees']);
+    LG_ERRS={}; LG_ERR=r.error?r.error.message:'';
+    LEDGERS={web:{items:[]},sns:{items:[]}};
+    (r.data||[]).forEach(function(row){
+      var a=row.key==='sns_fees'?'sns':'web';
+      if(row.value&&Array.isArray(row.value.items))LEDGERS[a]=row.value;
+    });
   }
   async function saveLedger(mutate){
-    var r=await sb.from('settings').select('value').eq('key','web_fees').maybeSingle();
+    var a=lgArea(); if(!a)return false; var key=LG_KEY[a];
+    var r=await sb.from('settings').select('value').eq('key',key).maybeSingle();
     if(r.error){toast('대장을 못 불러왔습니다: '+r.error.message);return false;}
     var cur=(r.data&&r.data.value&&Array.isArray(r.data.value.items))?r.data.value:{items:[]};
     mutate(cur);
-    /* 🔴 settings 쓰기는 대표 · 관리자만 됩니다(RLS). 직원도 대장만 저장하도록 전용 함수 web_fees_save(p_value) 를 씁니다
-          (security definer · is_staff() 확인 · key='web_fees' 한 줄만). 함수가 아직 없으면 예전처럼 upsert — 대표 계정만 됩니다. */
-    var w=await sb.rpc('web_fees_save',{p_value:cur});
-    if(w.error&&/web_fees_save|function|PGRST202/i.test((w.error.message||'')+' '+(w.error.code||''))&&!/권한/.test(w.error.message||'')){
-      w=await sb.from('settings').upsert({key:'web_fees',value:cur,updated_at:new Date().toISOString(),updated_by:ME.id},{onConflict:'key'}).select('key');
+    /* 🔴 settings 쓰기는 대표 · 관리자만 됩니다(RLS). 직원도 대장만 저장하도록 전용 함수(web_fees_save · sns_fees_save)를 씁니다
+          (security definer · is_staff() 확인 · 자기 key 한 줄만). 함수가 아직 없으면 예전처럼 upsert — 대표 계정만 됩니다. */
+    var fn=a==='sns'?'sns_fees_save':'web_fees_save';
+    var w=await sb.rpc(fn,{p_value:cur});
+    if(w.error&&/fees_save|function|PGRST202/i.test((w.error.message||'')+' '+(w.error.code||''))&&!/권한/.test(w.error.message||'')){
+      w=await sb.from('settings').upsert({key:key,value:cur,updated_at:new Date().toISOString(),updated_by:ME.id},{onConflict:'key'}).select('key');
       if(!w.error&&(!w.data||!w.data.length)){toast('권한이 없어 저장되지 않았습니다');await loadLedger();renderFee();return false;}
     }
-    if(w.error){toast('저장 실패: '+(/row-level security/i.test(w.error.message)?'이 계정은 대장을 저장할 권한이 없습니다 (관리자에게 web_fees_save 함수 확인 요청)':w.error.message));await loadLedger();renderFee();return false;}
-    LEDGER=cur; renderFee(); return true;
+    if(w.error){toast('저장 실패: '+(/row-level security/i.test(w.error.message)?'이 계정은 대장을 저장할 권한이 없습니다 (관리자에게 '+fn+' 함수 확인 요청)':w.error.message));await loadLedger();renderFee();return false;}
+    LEDGERS[a]=cur; renderFee(); return true;
+  }
+  /* 줄 세우기 — 머리글을 누르면 그 칸으로, 한 번 더 누르면 거꾸로 (Finder 처럼) */
+  var LG_SORT={k:'created',d:-1};
+  window.lgSortPick=function(v){var p=String(v).split(':');LG_SORT={k:p[0],d:+p[1]||1};renderFee();};
+  window.lgSortBy=function(k){
+    LG_SORT=(LG_SORT.k===k)?{k:k,d:-LG_SORT.d}:{k:k,d:(k==='created'||k==='fee')?-1:1};
+    var s=$('lgSort'), v=LG_SORT.k+':'+LG_SORT.d; s.value=v; if(s.value!==v)s.selectedIndex=-1;
+    renderFee();
+  };
+  window.lgReset=function(){$('lgQ').value='';$('lgFWork').value='';$('lgFPay').value='';$('lgMonth').value=lgNow();renderFee();};
+  function lgSortVal(x,k){
+    if(k==='created')return lgCreated(x);
+    if(k==='due')return x.due||'';
+    if(k==='fee')return Number(x.fee)||0;
+    if(k==='day')return Number(x.day)||1;
+    if(k==='status'){var O={'진행중':0,'완료':1,'보류':2};return O[x.status]==null?9:O[x.status];}
+    return ''+(x.name||'');
+  }
+  function lgCmp(a,b){
+    var k=LG_SORT.k, d=LG_SORT.d, va=lgSortVal(a,k), vb=lgSortVal(b,k);
+    if(k==='due'){ if(!va&&vb)return 1; if(va&&!vb)return -1; }        /* 마감일 없는 줄은 늘 맨 아래 */
+    var c=(typeof va==='number')?(va-vb):String(va).localeCompare(String(vb),'ko');
+    return c*d || (''+a.name).localeCompare(''+b.name,'ko');
+  }
+  function lgPayOf(x,m){ if(!x.start||m<x.start)return 'na'; var v=(x.paid||{})[m]; return v==='o'?'o':(v==='x'?'x':'blank'); }
+  function lgWork(x){
+    if(x.status==='보류')return 'hold';
+    if(x.status==='완료')return 'done';
+    return (x.due&&x.due<lgToday())?'late':'ing';
   }
   function renderFee(){
     var box=$('feeBox'); if(!box)return;
-    if(CUR!=='web'){box.classList.add('hide');return;}
+    var a=lgArea();
+    if(!a){box.classList.add('hide');return;}
     box.classList.remove('hide');
+    $('lgTitle').textContent=LG_NAME[a]+' 관리비 대장';
     if(!LG_END)LG_END=lgNow();
-    var now=lgNow(), items=lgItems().slice().sort(function(a,b){
-      var O={'진행중':0,'완료':1,'보류':2}; return ((O[a.status]==null?9:O[a.status])-(O[b.status]==null?9:O[b.status]))||(''+a.name).localeCompare(''+b.name,'ko');});
-    var on=items.filter(function(x){return x.status!=='보류';});
-    var due=on.filter(function(x){return x.start&&x.start<=now;});
-    var got=due.filter(function(x){return (x.paid||{})[now]==='o';}).length;
+    if(!$('lgMonth').value)$('lgMonth').value=lgNow();
+    var now=lgNow(), bm=$('lgMonth').value||now, all=lgItems();
+    var on=all.filter(function(x){return x.status!=='보류';});
+    var due=on.filter(function(x){return x.start&&x.start<=bm;});
+    var got=due.filter(function(x){return (x.paid||{})[bm]==='o';}).length;
     $('feeSum').textContent=(LG_ERR?'⚠ 불러오기 실패 · ':'')+on.length+'곳 · 월 합계 '+won(on.reduce(function(s,x){return s+(Number(x.fee)||0);},0))
-      +' · 이번 달 받음 '+got+' / '+due.length;
+      +' · '+(+bm.slice(5,7))+'월 받음 '+got+' / '+due.length;
+    /* 거르기 */
+    var q=($('lgQ').value||'').trim().toLowerCase(), fw=$('lgFWork').value, fp=$('lgFPay').value;
+    var items=all.filter(function(x){
+      if(q&&((x.name||'')+' '+(x.qno||'')).toLowerCase().indexOf(q)<0)return false;
+      if(fw&&lgWork(x)!==fw)return false;
+      if(fp){ var p=lgPayOf(x,bm); if(p==='na')return false;
+        if(fp!=='o'&&x.status==='보류')return false;          /* 보류는 미납으로 세지 않습니다 (안내 문구 목록과 같게) */
+        if(fp==='unpaid'?p==='o':p!==fp)return false; }
+      return true;
+    }).sort(lgCmp);
     var months=[]; for(var i=5;i>=0;i--)months.push(lgAdd(LG_END,-i));
     $('lgRange').textContent=months[0].replace('-','.')+' ~ '+months[5].replace('-','.');
-    $('lgHead').innerHTML='<tr><th>상호명</th><th class="r">월 관리비</th><th>납부일</th><th>시작</th><th>견적번호</th><th>상태</th><th>계약 서명</th>'
-      +months.map(function(m){return '<th class="m">'+(+m.slice(5,7))+'월'+(m===now?' ●':'')+'</th>';}).join('')+'<th></th></tr>';
-    $('lgEmpty').classList.toggle('hide',!!items.length);
-    $('feeRows').innerHTML=items.map(function(x){
-      return '<tr class="lg-r"><td><b>'+esc(x.name||'')+'</b></td><td class="r tnum">'+won(x.fee)+'</td><td>'+esc(x.day||1)+'일</td>'
-        +'<td>'+esc((x.start||'').replace('-','.'))+'</td><td>'+esc(x.qno||'—')+'</td><td>'+esc(x.status||'')+'</td>'
-        +'<td>'+(x.signed?'✓ 받음':'<span class="muted">아직</span>')+'</td>'
+    var th=function(k,t,cls){var on=LG_SORT.k===k;
+      return '<th class="lg-s'+(cls?' '+cls:'')+(on?' on':'')+'" onclick="lgSortBy(\''+k+'\')" title="눌러서 줄 세우기">'+t+(on?(LG_SORT.d>0?' ▲':' ▼'):'')+'</th>';};
+    $('lgHead').innerHTML='<tr><th class="r">#</th>'+th('name','상호명')+th('fee','월 관리비','r')+th('day','납부일')+'<th>시작</th>'
+      +th('status','작업')+th('due','작업 마감일')+'<th>견적번호 · 계약</th>'+th('created','만든 날')
+      +months.map(function(m){return '<th class="m'+(m===bm?' bm':'')+'">'+(+m.slice(5,7))+'월'+(m===now?' ●':'')+'</th>';}).join('')+'<th></th></tr>';
+    var em=$('lgEmpty');
+    em.classList.toggle('hide',!!items.length);
+    em.innerHTML=all.length?'<b>거르기에 맞는 곳이 없습니다</b>「거르기 지우기」를 눌러 보세요.'
+      :'<b>아직 대장에 올린 '+LG_NAME[a]+'이 없습니다</b>「＋ 추가」로 바로 넣거나 「견적서에서 불러오기」로 가져오세요.';
+    var WK={ing:'진행중',late:'진행중',done:'✓ 마감',hold:'보류'};
+    $('feeRows').innerHTML=items.map(function(x,n){
+      var w=lgWork(x), cd=lgCreated(x);
+      return '<tr class="lg-r"><td class="r muted tnum">'+(n+1)+'</td><td><b>'+esc(x.name||'')+'</b></td><td class="r tnum">'+won(x.fee)+'</td><td>'+esc(x.day||1)+'일</td>'
+        +'<td>'+esc((x.start||'').replace('-','.'))+'</td>'
+        +'<td><span class="lg-w '+w+'">'+WK[w]+'</span></td>'
+        +'<td class="tnum">'+(x.due?esc(x.due.replace(/-/g,'.'))+(w==='late'?' <span class="lg-late">지남</span>':''):'<span class="muted">—</span>')+'</td>'
+        +'<td>'+esc(x.qno||'—')+' · '+(x.signed?'✓ 서명':'<span class="muted">서명 전</span>')+'</td>'
+        +'<td class="muted tnum">'+(cd?esc(lgYM(new Date(cd)).replace('-','.')+'.'+('0'+new Date(cd).getDate()).slice(-2)):'—')+'</td>'
         +months.map(function(m){
-          if(!x.start||m<x.start)return '<td class="m"><span class="lg-na">—</span></td>';
+          if(!x.start||m<x.start)return '<td class="m'+(m===bm?' bm':'')+'"><span class="lg-na">—</span></td>';
           var v=(x.paid||{})[m]||'';
-          return '<td class="m"><button type="button" class="lg-c '+v+'" title="'+m+' 납부 — 누를 때마다 빈칸 → ✓ → ✗" onclick="lgCycle(\''+x.id+'\',\''+m+'\')">'+(v==='o'?'✓':v==='x'?'✗':'')+'</button></td>';
+          return '<td class="m'+(m===bm?' bm':'')+'"><button type="button" class="lg-c '+v+'" title="'+m+' 납부 — 누를 때마다 빈칸 → ✓ → ✗" onclick="lgCycle(\''+x.id+'\',\''+m+'\')">'+(v==='o'?'✓':v==='x'?'✗':'')+'</button></td>';
         }).join('')
-        +'<td><button class="lg-ed" type="button" onclick="lgEdit(\''+x.id+'\')">✏️</button><button class="lg-ed" type="button" onclick="lgDel(\''+x.id+'\')">삭제</button></td></tr>';
+        +'<td class="lg-btns"><button class="lg-edit" type="button" onclick="lgEdit(\''+x.id+'\')">✏️ 수정</button>'
+        +'<button class="lg-del" type="button" onclick="lgDel(\''+x.id+'\')">🗑 삭제</button></td></tr>';
     }).join('');
-    if(!$('lgMsgMonth').value)$('lgMsgMonth').value=now;
+    /* 불러올 견적이 몇 건 있는지 단추에 숫자로 */
+    var nImp=lgCands().length, b=$('lgImpN'); b.textContent=nImp; b.classList.toggle('hide',!nImp);
     lgMsgs();
   }
   window.lgShift=function(n){LG_END=lgAdd(LG_END||lgNow(),n);renderFee();};
@@ -1260,7 +1375,7 @@
   function lgFill(x){
     $('lg_id').value=x.id||''; $('lg_req').value=x.req||''; $('lg_name').value=x.name||''; $('lg_fee').value=x.fee||'';
     $('lg_start').value=x.start||lgNow(); $('lg_day').value=String(x.day||1); $('lg_qno').value=x.qno||'';
-    $('lg_status').value=x.status||'진행중'; $('lg_signed').value=x.signed?'1':'';
+    $('lg_status').value=x.status||'진행중'; $('lg_due').value=x.due||''; $('lg_signed').value=x.signed?'1':'';
     $('lgForm').classList.remove('hide'); $('lgImp').classList.add('hide'); $('lg_name').focus();
   }
   window.lgNew=function(){lgFill({});};
@@ -1268,30 +1383,35 @@
   window.lgEdit=function(id){var x=lgItems().filter(function(y){return y.id===id;})[0]; if(x)lgFill(x);};
   window.lgDel=async function(id){
     var x=lgItems().filter(function(y){return y.id===id;})[0]; if(!x)return;
-    if(!confirm('「'+(x.name||'')+'」를 관리비 대장에서 지울까요?\n납부 기록도 함께 지워집니다.'))return;
+    if(!confirm('「'+(x.name||'')+'」를 '+LG_NAME[lgArea()]+' 관리비 대장에서 지울까요?\n납부 기록도 함께 지워집니다. 되돌릴 수 없습니다.'))return;
     if(await saveLedger(function(cur){cur.items=cur.items.filter(function(y){return y.id!==id;});}))toast('지웠습니다');
   };
   window.lgSave=async function(){
     var rec={id:$('lg_id').value||('f'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)),
       req:$('lg_req').value||'', name:$('lg_name').value.trim(), fee:Number(String($('lg_fee').value).replace(/[^0-9]/g,''))||0,
       start:$('lg_start').value, day:Number($('lg_day').value)===10?10:1, qno:$('lg_qno').value.trim(),
-      status:$('lg_status').value, signed:$('lg_signed').value==='1'};
+      status:$('lg_status').value, due:$('lg_due').value||'', signed:$('lg_signed').value==='1'};
     if(!rec.name){toast('상호명을 넣어 주세요');return;}
     if(!rec.fee){toast('월 관리비를 넣어 주세요');return;}
     if(!/^\d{4}-\d{2}$/.test(rec.start||'')){toast('관리비 시작 달을 골라 주세요');return;}
     var ok=await saveLedger(function(cur){
       var old=cur.items.filter(function(x){return x.id===rec.id;})[0];
-      if(old){ rec.paid=old.paid||{}; cur.items=cur.items.map(function(x){return x.id===rec.id?rec:x;}); }
-      else { rec.paid={}; cur.items.push(rec); }
+      if(old){ rec.paid=old.paid||{}; rec.created=old.created||''; cur.items=cur.items.map(function(x){return x.id===rec.id?rec:x;}); }
+      else { rec.paid={}; rec.created=new Date().toISOString(); cur.items.push(rec); }
     });
     if(ok){$('lgForm').classList.add('hide');toast('관리비 대장에 저장했습니다');}
   };
+  /* 견적서에서 불러오기 — 지금 화면(홈페이지 / SNS)의 의뢰 중 견적 품목에 «매월»이 있고 아직 대장에 없는 것 */
+  function lgCands(){
+    var have={}; lgItems().forEach(function(x){if(x.req)have[x.req]=1;});
+    var c=[]; (DATA[lgArea()]||[]).forEach(function(r){
+      if(!r.quote||have[r.id])return; var tt=quoteTotals(r.quote); if(tt.month)c.push({r:r,m:tt.month});});
+    return c;
+  }
   window.lgImport=function(){
-    var box=$('lgImp'), have={}; lgItems().forEach(function(x){if(x.req)have[x.req]=1;});
-    var c=[]; Object.keys(DATA).forEach(function(g){(DATA[g]||[]).forEach(function(r){
-      if(!r.quote||have[r.id])return; var tt=quoteTotals(r.quote); if(tt.month)c.push({r:r,m:tt.month});});});
+    var box=$('lgImp'), c=lgCands();
     box.classList.toggle('hide'); $('lgForm').classList.add('hide');
-    if(!c.length){box.innerHTML='<span class="muted">불러올 견적서가 없습니다. 견적서 품목의 결제 주기가 「매월」이어야 여기에 나옵니다 (이미 대장에 올린 건은 빠집니다).</span>';return;}
+    if(!c.length){box.innerHTML='<span class="muted">불러올 견적서가 없습니다. 이 화면('+LG_NAME[lgArea()]+') 의뢰의 견적서 품목 중 결제 주기가 「매월」인 것이 있어야 여기에 나옵니다 (이미 대장에 올린 건은 빠집니다).</span>';return;}
     window.LG_CAND=c;
     box.innerHTML=c.map(function(x,i){var r=x.r;
       return '<div class="it"><b>'+esc(r.academy_name||'')+'</b><span class="muted">월 '+won(x.m)+' · '+esc(r.quote_no||'견적번호 없음')+' · '+esc(normStatus(r.status))+'</span>'
@@ -1299,27 +1419,30 @@
   };
   window.lgPick=function(i){var x=(window.LG_CAND||[])[i]; if(!x)return; var r=x.r;
     lgFill({req:r.id,name:r.academy_name||'',fee:x.m,qno:r.quote_no||'',status:normStatus(r.status)==='보류'?'보류':(normStatus(r.status)==='완료'?'완료':'진행중'),signed:!!r.contract_signed_at});};
-  function lgText(x,m){
-    var y=m.slice(0,4), mm=+m.slice(5,7);
-    return '[인투마케팅] '+(x.name||'')+' 홈페이지 관리비 안내\n\n'
-      +y+'년 '+mm+'월 홈페이지 월 관리비 '+(Number(x.fee)||0).toLocaleString('ko-KR')+'원(납부일 '+mm+'월 '+(x.day||1)+'일)이 아직 확인되지 않았습니다.\n'
+  /* 미납 안내 — 대표 문구 «하나». 숫자 · 상호는 ○○○ 로 비워 두고 사람이 채웁니다 (2026-10-16 이은총 님).
+     고친 문구는 이 컴퓨터(localStorage)에만 기억합니다 — 없거나 막혀 있어도 처음 문구로 보입니다. */
+  function lgTplDefault(){var n=LG_NAME[lgArea()]||'홈페이지';
+    return '[인투마케팅] ○○○ '+n+' 관리비 안내\n\n'
+      +'○○○○년 ○○월 '+n+' 월 관리비 ○○○원(납부일 ○○월 ○○일)이 아직 확인되지 않았습니다.\n'
       +'확인 후 납부해 주십시오. 이미 납부하셨다면 이 안내는 넘겨 주십시오.\n\n'
-      +'문의 010-7318-1790 · 카카오톡 채널 「인투마케팅」';
-  }
-  function lgUnpaid(m){return lgItems().filter(function(x){return x.status!=='보류'&&x.start&&x.start<=m&&(x.paid||{})[m]!=='o';});}
+      +'문의 010-7318-1790 · 카카오톡 채널 「인투마케팅」';}
+  function lgTplKey(){return 'im_lg_tpl_'+(lgArea()||'web');}
+  function lgTplLoad(){var t=''; try{t=localStorage.getItem(lgTplKey())||'';}catch(e){} return t||lgTplDefault();}
+  window.lgTplSave=function(){try{localStorage.setItem(lgTplKey(),$('lgTpl').value);}catch(e){}};
+  window.lgMsgReset=function(){try{localStorage.removeItem(lgTplKey());}catch(e){} $('lgTpl').value=lgTplDefault(); toast('처음 문구로 돌렸습니다');};
+  window.lgCopyMsg=async function(){var t=$('lgTpl');
+    try{await navigator.clipboard.writeText(t.value);toast('복사했습니다');}catch(e){t.select();toast('복사가 막혀 있습니다 — 글을 골라 두었으니 Cmd+C 를 눌러 주세요');}};
+  var LG_TPL_AREA=null;
   window.lgMsgs=function(){
-    var m=$('lgMsgMonth').value||lgNow(), list=lgUnpaid(m);
-    $('lgMsgs').innerHTML=list.length?list.map(function(x,i){var v=(x.paid||{})[m];
-      return '<div class="lg-mi"><div class="h"><b>'+esc(x.name||'')+' <span class="muted" style="font-weight:600">'+(v==='x'?'✗ 안 받음':'확인 전')+'</span></b>'
-        +'<button class="btn btn-ghost" style="padding:5px 12px" type="button" onclick="lgCopy('+i+')">복사</button></div>'
-        +'<textarea id="lgT'+i+'" readonly>'+esc(lgText(x,m))+'</textarea></div>';}).join('')
-      :'<p class="muted" style="font-size:.85rem;margin-top:8px">이 달은 모두 ✓ 입니다.</p>';
-  };
-  window.lgCopy=async function(i){try{await navigator.clipboard.writeText($('lgT'+i).value);toast('복사했습니다');}catch(e){$('lgT'+i).select();toast('복사가 막혀 있습니다 — 글을 골라 두었으니 Cmd+C 를 눌러 주세요');}};
-  window.lgCopyAll=async function(){
-    var m=$('lgMsgMonth').value||lgNow(), txt=lgUnpaid(m).map(function(x){return lgText(x,m);}).join('\n\n────────\n\n');
-    if(!txt){toast('복사할 문구가 없습니다');return;}
-    try{await navigator.clipboard.writeText(txt);toast('모두 복사했습니다');}catch(e){toast('복사가 막혀 있습니다');}
+    var a=lgArea(); if(!a)return;
+    if(LG_TPL_AREA!==a||!$('lgTpl').value){$('lgTpl').value=lgTplLoad();LG_TPL_AREA=a;}
+    var m=$('lgMonth').value||lgNow();
+    var list=lgItems().filter(function(x){return x.status!=='보류'&&x.start&&x.start<=m&&(x.paid||{})[m]!=='o';});
+    $('lgUnpaid').innerHTML='<div class="h">'+(+m.slice(0,4))+'년 '+(+m.slice(5,7))+'월 미납 '+list.length+'곳'
+      +' <span class="muted">(기준 달은 위 「기준 달」 · 보류와 시작 전은 빠짐)</span></div>'
+      +(list.length?list.map(function(x){var v=(x.paid||{})[m];
+        return '<span class="lg-chip"><b>'+esc(x.name||'')+'</b> '+won(x.fee)+' · '+esc(x.day||1)+'일 · '+(v==='x'?'✗ 안 받음':'확인 전')+'</span>';}).join('')
+        :'<span class="muted">모두 ✓ 입니다.</span>');
   };
   window.renderList=function(){
     renderFee();
@@ -1404,9 +1527,9 @@
     renderQuoteBox();
     renderBlogBox();
     renderInfo(r);
-    var isOwner=(ME.role==='owner');
-    $('d_del').classList.toggle('hide',!isOwner);
-    $('d_delnote').classList.toggle('hide',isOwner);
+    var canDel=can('request_delete');   /* 최고관리자 + 「의뢰 삭제」 체크 받은 직원 (2026-10-16) */
+    $('d_del').classList.toggle('hide',!canDel);
+    $('d_delnote').classList.toggle('hide',canDel);
     $('detail').classList.add('open');
   };
   window.closeDetail=function(){$('detail').classList.remove('open');CURROW=null;};
@@ -1677,7 +1800,7 @@
   };
   window.deleteRequest=async function(){
     if(!CURROW)return;
-    if(ME.role!=='owner'){toast('의뢰 삭제는 최고관리자만 할 수 있습니다');return;}
+    if(!can('request_delete')){toast('의뢰 삭제는 최고관리자 또는 「의뢰 삭제」 권한이 있는 직원만 할 수 있습니다');return;}
     /* 블로그 센터에 주문이 걸려 있으면 같이 지웁니다 (안 지우면 주인 없는 주문이 남습니다) */
     var bs=await sb.rpc('request_blog_status',{p_request:CURROW.id});
     var bo=(bs.data&&bs.data.order_id)?bs.data:null;
@@ -1699,7 +1822,7 @@
     }
     var r=await sb.from('requests').delete().eq('id',CURROW.id).select('id');
     if(r.error){toast('삭제 실패: '+r.error.message);return;}
-    if(!r.data||!r.data.length){toast('삭제 권한이 없습니다 (최고관리자만 가능)');return;}
+    if(!r.data||!r.data.length){toast('삭제 권한이 없습니다 (최고관리자 또는 「의뢰 삭제」 권한)');return;}
     closeDetail();toast('삭제했습니다');loadAll();
   };
 
@@ -2818,7 +2941,7 @@
         옛 금액으로 주문이 조용히 만들어집니다. 빈칸이면 사람이 알아챕니다. */
   var BLOG_SALE=null;
   async function loadSettings(){
-    try{ await loadLedger(); }catch(e){ LG_ERR=String(e&&e.message||e); }   /* 홈페이지 관리비 대장 */
+    try{ await loadLedger(); }catch(e){ LG_ERR=String(e&&e.message||e); }   /* 관리비 대장 (홈페이지 · SNS) */
     var br=await sb.from('settings').select('value').eq('key','blog').maybeSingle();
     var bs=(br.data&&br.data.value&&br.data.value.sale)||null;
     BLOG_SALE=(bs&&Number(bs.normal)>0)?{normal:Number(bs.normal),premium:Number(bs.premium)||0}:null;
