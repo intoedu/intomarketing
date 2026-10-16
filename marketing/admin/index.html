@@ -1206,9 +1206,14 @@
     if(r.error){toast('대장을 못 불러왔습니다: '+r.error.message);return false;}
     var cur=(r.data&&r.data.value&&Array.isArray(r.data.value.items))?r.data.value:{items:[]};
     mutate(cur);
-    var w=await sb.from('settings').upsert({key:'web_fees',value:cur,updated_at:new Date().toISOString(),updated_by:ME.id},{onConflict:'key'}).select('key');
-    if(w.error){toast('저장 실패: '+w.error.message);await loadLedger();renderFee();return false;}
-    if(!w.data||!w.data.length){toast('권한이 없어 저장되지 않았습니다');await loadLedger();renderFee();return false;}
+    /* 🔴 settings 쓰기는 대표 · 관리자만 됩니다(RLS). 직원도 대장만 저장하도록 전용 함수 web_fees_save(p_value) 를 씁니다
+          (security definer · is_staff() 확인 · key='web_fees' 한 줄만). 함수가 아직 없으면 예전처럼 upsert — 대표 계정만 됩니다. */
+    var w=await sb.rpc('web_fees_save',{p_value:cur});
+    if(w.error&&/web_fees_save|function|PGRST202/i.test((w.error.message||'')+' '+(w.error.code||''))&&!/권한/.test(w.error.message||'')){
+      w=await sb.from('settings').upsert({key:'web_fees',value:cur,updated_at:new Date().toISOString(),updated_by:ME.id},{onConflict:'key'}).select('key');
+      if(!w.error&&(!w.data||!w.data.length)){toast('권한이 없어 저장되지 않았습니다');await loadLedger();renderFee();return false;}
+    }
+    if(w.error){toast('저장 실패: '+(/row-level security/i.test(w.error.message)?'이 계정은 대장을 저장할 권한이 없습니다 (관리자에게 web_fees_save 함수 확인 요청)':w.error.message));await loadLedger();renderFee();return false;}
     LEDGER=cur; renderFee(); return true;
   }
   function renderFee(){
