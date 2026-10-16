@@ -991,10 +991,11 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
     var LESS=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if(LESS||!('IntersectionObserver' in window))return;
     root.classList.add('bx-anim');
-    /* [고를 것, 움직임, 하나씩 늦추는 간격(ms)] — 같은 부모 안에서 순서대로 늦춥니다 */
+    /* [고를 것, 움직임, 하나씩 늦추는 간격(ms), 처음 늦춤(ms)] — 같은 부모 안에서 순서대로 늦춥니다.
+       첫 화면은 «메인에서 들어올 때» 화면 전체가 흐려졌다 나타나는 0.4초와 겹치지 않게 처음 늦춤을 둡니다 (10/16 「이미 다 나와 있다」) */
     var PLAN=[
-      ['.bx-bhero .bx-bpill','pop',0],['.bx-bhero h2','up',0],['.bx-bhero .bx-bsub','up',0],
-      ['.bx-bchips>span','pop',110],['.bx-bhero .bx-bfoot','up',0],['.bx-bfacts>div','up',100],['.bx-bacts','up',0],['.bx-bband','up',0],
+      ['.bx-bhero .bx-bpill','pop',0,250],['.bx-bhero h2','up',0,450],['.bx-bhero .bx-bsub','up',0,700],
+      ['.bx-bchips>span','pop',150,900],['.bx-bhero .bx-bfoot','up',0,1300],['.bx-bfacts>div','up',150,1250],['.bx-bacts','up',0,1800],['.bx-bband','up',0,2000],
       ['.bx-btag','pop',0],['.bx-bh','up',0],
       ['.bx-bcheck>div','up',110],['.bx-ball','pop',0],
       ['.bx-bnums>div','zoom',140],['.bx-bres .bx-bfoot','up',0],
@@ -1010,7 +1011,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         if(el.classList.contains('ba'))return;
         var k=el.parentNode, i=seen.get(k)||0; seen.set(k,i+1);
         el.classList.add('ba', p[1]==='alt'?(i%2?'r':'l'):p[1]);
-        if(p[2])el.style.setProperty('--d',(i*p[2])+'ms');
+        if(p[2]||p[3])el.style.setProperty('--d',((p[3]||0)+i*(p[2]||0))+'ms');
         all.push(el);
       });
     });
@@ -1020,11 +1021,13 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       if(el.dataset.orig==null)el.dataset.orig=n.nodeValue;
       var orig=el.dataset.orig, m=/^([\d,]+(?:\.\d+)?)/.exec(orig); if(!m||/~/.test(orig))return;
       var raw=m[1], to=parseFloat(raw.replace(/,/g,'')), dec=(raw.split('.')[1]||'').length, comma=/,/.test(raw), rest=orig.slice(raw.length);
-      var t0=null, dur=1100;
+      var top=!!el.closest('.bx-bhero'), t0=null, dur=top?2600:1600;
+      var wait=top?(parseInt(getComputedStyle(el.closest('.ba')||el).getPropertyValue('--d'))||0):0;
       function f(t){ if(!t0)t0=t; var k=Math.min(1,(t-t0)/dur), v=to*(1-Math.pow(1-k,3));
         var s=dec?v.toFixed(dec):String(Math.round(v)); if(comma)s=Number(s).toLocaleString('ko-KR');
         n.nodeValue=s+rest; if(k<1)requestAnimationFrame(f); }
-      requestAnimationFrame(f);
+      n.nodeValue=(comma?'0':(dec?(0).toFixed(dec):'0'))+rest;
+      setTimeout(function(){requestAnimationFrame(f);},wait);
     }
     function counters(el){ el.querySelectorAll('.bx-bchips b, .bx-bnums .bx-v, .bx-bfacts b').forEach(countUp);
       if(el.matches('.bx-bchips>span, .bx-bfacts>div, .bx-bnums>div'))el.querySelectorAll('b, .bx-v').forEach(countUp); }
@@ -1037,6 +1040,13 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       });
     },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
     all.forEach(function(el){io.observe(el);});
+    /* 화면이 바뀌어 블로그가 숨으면 전부 처음 상태로 — 다시 들어올 때 처음부터 하나씩 나타납니다 */
+    new MutationObserver(function(){
+      if(!root.classList.contains('active')){
+        all.forEach(function(el){el.classList.remove('in');});
+        if(chat){chat.dataset.on='';reset();}
+      }
+    }).observe(root,{attributes:true,attributeFilter:['class']});
 
     /* 채팅 — 말풍선마다 「입력 중…」을 넣고, 화면에 들어올 때마다 처음부터 대화를 다시 합니다 */
     var chat=root.querySelector('.bx-bchat'), solve=root.querySelector('.bx-bsolve'), T=[];
@@ -1046,10 +1056,10 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       var reset=function(){T.forEach(clearTimeout);T=[];rows.forEach(function(r){r.classList.remove('in','said');});if(solve)solve.classList.remove('in');};
       var play=function(){reset();
         rows.forEach(function(r,i){
-          T.push(setTimeout(function(){r.classList.add('in');},250+i*1150));
-          T.push(setTimeout(function(){r.classList.add('said');},250+i*1150+700));
+          T.push(setTimeout(function(){r.classList.add('in');},200+i*750));
+          T.push(setTimeout(function(){r.classList.add('said');},200+i*750+450));
         });
-        if(solve)T.push(setTimeout(function(){solve.classList.add('in');},250+rows.length*1150+250));
+        if(solve)T.push(setTimeout(function(){solve.classList.add('in');},200+rows.length*750+150));
       };
       var cio=new IntersectionObserver(function(es){
         es.forEach(function(e){
