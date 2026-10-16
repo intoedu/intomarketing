@@ -799,8 +799,12 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   #v-blog.bx-anim .bx-bq.in{opacity:1;transform:none}
   #v-blog.bx-anim .bx-bq .bx-av{transform:scale(0);transition:transform .4s var(--bx-pop)}
   #v-blog.bx-anim .bx-bq.in .bx-av{transform:scale(1)}
-  #v-blog.bx-anim .bx-bq:not(.said) p:not(.bx-typing){display:none}
-  #v-blog.bx-anim .bx-bq.in:not(.said) .bx-typing{display:flex;gap:5px;align-items:center;padding:16px 18px}
+  /* 🔴 자리는 처음부터 다 차지합니다(말풍선을 투명하게 둘 뿐) — 줄이 생길 때 아래 파란 상자가 밀려 내려가지 않게 (10/16 「정신없다」)
+        「입력 중…」 점은 말풍선 자리 위에 겹쳐 띄웁니다. */
+  #v-blog .bx-bq{position:relative}
+  #v-blog.bx-anim .bx-bq:not(.said) p:not(.bx-typing){opacity:0}
+  #v-blog.bx-anim .bx-bq.in:not(.said) .bx-typing{display:flex;gap:5px;align-items:center;padding:14px 18px;position:absolute;bottom:0;left:60px;margin:0}
+  #v-blog.bx-anim .bx-bq.bx-r.in:not(.said) .bx-typing{left:auto;right:60px}
   #v-blog .bx-typing i{width:8px;height:8px;border-radius:50%;background:var(--bl-blue);animation:bxDot 1s infinite}
   #v-blog .bx-typing i:nth-child(2){animation-delay:.15s}
   #v-blog .bx-typing i:nth-child(3){animation-delay:.3s}
@@ -1056,10 +1060,10 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       var reset=function(){T.forEach(clearTimeout);T=[];rows.forEach(function(r){r.classList.remove('in','said');});if(solve)solve.classList.remove('in');};
       var play=function(){reset();
         rows.forEach(function(r,i){
-          T.push(setTimeout(function(){r.classList.add('in');},200+i*750));
-          T.push(setTimeout(function(){r.classList.add('said');},200+i*750+450));
+          T.push(setTimeout(function(){r.classList.add('in');},150+i*520));
+          T.push(setTimeout(function(){r.classList.add('said');},150+i*520+300));
         });
-        if(solve)T.push(setTimeout(function(){solve.classList.add('in');},200+rows.length*750+150));
+        if(solve)T.push(setTimeout(function(){solve.classList.add('in');},150+rows.length*520+100));
       };
       var cio=new IntersectionObserver(function(es){
         es.forEach(function(e){
