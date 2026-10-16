@@ -35,10 +35,18 @@
 <meta property="og:description" content="기본 제작비 10만 원 · 월 5만 원부터 · 페이지 수 제한 없음 · 도메인 고객 소유 (부가세 포함)">
 <meta property="og:url" content="https://intomarketing.co.kr/web/">
 <meta property="og:locale" content="ko_KR">
-<link rel="icon" href="/hakwon/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="/hakwon/favicon-16.png" sizes="16x16" type="image/png">
-<link rel="icon" href="/hakwon/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/hakwon/apple-touch-icon.png">
+<!-- 링크 미리보기 그림 · 파비콘 — 메인 index.html 과 같은 파일 (2026-10-16 회사 로고) -->
+<meta property="og:image" content="https://intomarketing.co.kr/og-main.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="인투마케팅 — 홍보에 필요한 것을 한 회사에서">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://intomarketing.co.kr/og-main.png">
+<link rel="icon" href="/favicon.ico?v=2" sizes="any">
+<link rel="icon" href="/favicon-32.png?v=2" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-48.png?v=2" sizes="48x48" type="image/png">
+<link rel="icon" href="/favicon-192.png?v=2" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
 <meta name="theme-color" content="#1B1D20">
 <meta name="color-scheme" content="dark">
 <script>document.documentElement.className='js';</script>
@@ -141,7 +149,8 @@ header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
 
 /* ── 머리띠 · 바닥글 색 — design-main.png (메인의 영상 화면처럼 이 쪽에서만 어둡게) ── */
 header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
-.brand .mk{background:var(--hd-cta)}
+.brand .mk{background:#fff;overflow:hidden;border-radius:11px;box-shadow:0 0 0 1px rgba(15,23,42,.08)}   /* 회사 로고 상자 — main 과 같음 */
+.brand .mk img{width:100%;height:100%;display:block;object-fit:contain}
 .brand small{color:#8A9099}
 .navlink{color:#B4BAC4}
 .navlink:hover{color:#fff;background:rgba(255,255,255,.08)}
@@ -399,7 +408,7 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 
 /* ══════════ 8. 작업물 ══════════ */
 .works{background:linear-gradient(180deg,#000 0,#000 60%,#030C18 100%)}
-.wcards{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.wcards{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(var(--wn,3),minmax(0,1fr));gap:16px}   /* --wn = 공개한 카드 수(최대 3) — 두 장이면 두 칸 */
 .wcard{display:flex;flex-direction:column;overflow:hidden;padding:0}
 .wthumb{aspect-ratio:1200/630;background:#0B0E13;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.10)}
 .wthumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
@@ -701,7 +710,7 @@ footer .cr{color:#7D838C}
 <header>
   <div class="wrap nav">
     <a class="brand" href="/">
-      <span class="mk">IM</span>
+      <span class="mk"><img src="/favicon-192.png?v=2" alt="" width="32" height="32"></span>   <!-- 회사 로고 (main 2026-10-16 · 전 「IM」 글자) -->
       <span><b>인투마케팅</b><small>INTO MARKETING</small></span>
     </a>
     <nav class="links" aria-label="주요 메뉴">
@@ -711,12 +720,11 @@ footer .cr{color:#7D838C}
         <div class="drop">
           <a href="/#blog">블로그 · 리뷰<small>실 운영 블로거가 본인 계정에 직접 작성</small></a>
           <a href="/web/" aria-current="page">홈페이지 제작<small>기획 · 제작 · 배포 · 월 관리</small></a>
-          <a href="/#sns">SNS 채널 제작<small>채널 세팅 · 지도 등록 · 정기 콘텐츠</small></a>
+          <a href="/#sns">SNS 채널<small>채널 세팅 · 지도 등록 · 정기 콘텐츠</small></a>
           <a href="/#design">디자인<small>로고 · 명함 · 인쇄물 · 카드뉴스</small></a>
           <a href="/#video">영상 제작<small>숏폼 · 롱폼 · 기획 · 촬영 · 편집</small></a>
         </div>
       </div>
-      <a class="navlink" href="/hakwon/">학원지원센터</a>
       <a class="navlink" href="/#contact">문의</a>
       <!-- 맡기신 일의 진행 상황을 보는 곳. 로그인은 그 화면에서 합니다 -->
       <a class="navlink" href="/my/">마이페이지</a>
@@ -732,10 +740,9 @@ footer .cr{color:#7D838C}
     <a href="/">홈</a>
     <a href="/#blog">블로그 · 리뷰</a>
     <a class="sub" href="/web/" aria-current="page">홈페이지 제작</a>
-    <a class="sub" href="/#sns">SNS 채널 제작</a>
+    <a class="sub" href="/#sns">SNS 채널</a>
     <a class="sub" href="/#design">디자인</a>
     <a class="sub" href="/#video">영상 제작</a>
-    <a href="/hakwon/">학원지원센터</a>
     <a href="/#contact">상담 문의</a>
     <a href="/my/">마이페이지</a>
     <div id="authbar-m"></div>
@@ -834,7 +841,7 @@ footer .cr{color:#7D838C}
     <!-- 앵커는 메인 index.html 의 실제 화면 이름 (VIEWS: blog · sns) -->
     <p class="role-links rv">
       <a class="more" href="/#blog">블로그 · 리뷰 자세히 보기 →</a>
-      <a class="more" href="/#sns">SNS 채널 제작 자세히 보기 →</a>
+      <a class="more" href="/#sns">SNS 채널 자세히 보기 →</a>
     </p>
   </div>
 </section>
@@ -936,7 +943,7 @@ footer .cr{color:#7D838C}
       <li class="glass rv"><span class="no">02</span><h3>가격이 낮은 이유를 밝힙니다</h3><p>AI 기술을 활용해 제작 효율을 높이고, 전문 인력이 기획부터 관리까지 직접 수행합니다.</p></li>
       <li class="glass rv"><span class="no">03</span><h3>오픈 후에도 매월 관리합니다</h3><p>월 관리비에 작은 수정(월 1회) · 백업 · 장애 대응이 포함됩니다. 당사 원인의 오류는 횟수와 관계없이 무료로 수정합니다.</p></li>
       <li class="glass rv"><span class="no">04</span><h3>사장님 것은 사장님 명의로</h3><p>유료 도메인은 고객 명의로 등록되어 고객 소유가 됩니다. 환불 기준은 견적서와 계약서에 명시합니다.</p></li>
-      <li class="glass rv"><span class="no">05</span><h3>홍보 다섯 영역을 한 회사에서</h3><p>블로그 · 리뷰, SNS 채널 제작, 디자인, 영상 제작까지 한 회사에서 맡길 수 있습니다. 진행 현황은 마이페이지에서 확인할 수 있습니다.</p></li>
+      <li class="glass rv"><span class="no">05</span><h3>홍보 다섯 영역을 한 회사에서</h3><p>블로그 · 리뷰, SNS 채널, 디자인, 영상 제작까지 한 회사에서 맡길 수 있습니다. 진행 현황은 마이페이지에서 확인할 수 있습니다.</p></li>
     </ol>
 
     <!-- 유형별 비교표 — 경쟁사 실명 없음 · 인투마케팅 열 강조 -->
@@ -992,7 +999,7 @@ footer .cr{color:#7D838C}
 
 <!-- ══════════ 8. 작업물 — 카드는 아래 스크립트의 WORKS 배열에서 그립니다 ══════════
      🔴 처음에는 숨겨 둡니다(hidden). visible:true 인 카드가 하나라도 있을 때만 스크립트가 섹션을 보이게 합니다.
-        (2026-10-16 — 세 카드 모두 공개) -->
+        (2026-10-16 — SLT TOUR · 그린파스처 공개, 인투주니어학원 숨김) -->
 <section class="sec works" id="works" aria-labelledby="works-h" hidden>
   <div class="w">
     <div class="sec-head rv">
@@ -1222,7 +1229,7 @@ footer .cr{color:#7D838C}
       운영 서비스 : <a href="https://intoedu.github.io/into-office/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">인투오피스 (INTO OFFICE)</a> — 전자계약 · 전자서명
     </div>
     <div class="pol">
-      <a href="/privacy/">개인정보처리방침</a><span>|</span><a href="/terms/">이용약관</a><span>|</span><a href="/payment/">결제 · 환불 안내</a><span>|</span><a href="/hakwon/">학원지원센터</a><span>|</span><a href="https://intoedu.github.io/into-office/" target="_blank" rel="noopener">인투오피스</a>
+      <a href="/privacy/">개인정보처리방침</a><span>|</span><a href="/terms/">이용약관</a><span>|</span><a href="/payment/">결제 · 환불 안내</a><span>|</span><a href="https://intoedu.github.io/into-office/" target="_blank" rel="noopener">인투오피스</a>
     </div>
     <p class="cr">© 2026 인투마케팅 (INTO MARKETING). All rights reserved.</p>
   </div>
@@ -1253,7 +1260,7 @@ const PLANS = [
 
 /* ══════════════════════════════════════════════════════════════
    🖼 작업물 — visible 로 켜고 끕니다 (명세서 4-8 · 7장)
-   2026-10-16 전도사님 결정: 세 카드 모두 공개(visible:true). 카드를 숨기려면 visible:false 로 바꿉니다.
+   2026-10-16 전도사님 결정: SLT TOUR · 그린파스처 공개, 인투주니어학원은 교습비 · 등록번호 표시 후 공개. 카드를 숨기려면 visible:false 로 바꿉니다.
       보이는 카드가 하나도 없으면 #works 섹션 전체가 숨겨집니다.
    🔴 공개 전 확인
       · SLT TOUR, 그린파스처 — 고객의 공개 동의를 확인한 뒤 공개
@@ -1267,8 +1274,9 @@ const WORKS = [
     features: ['base'],
     url: 'https://intoedu.github.io/SLT-Tour-Home-Page/',
     thumb: 'https://intoedu.github.io/SLT-Tour-Home-Page/og-image.jpg?v=3' },
-  /* 초·중등 대상 학원이라 「레벨테스트 절차」 표기는 그대로 둡니다 (명세서 4-8) */
-  { visible: true, name: '인투주니어학원', industry: '초·중등 영어학원',
+  /* 초·중등 대상 학원이라 「레벨테스트 절차」 표기는 그대로 둡니다 (명세서 4-8)
+     🔴 교습비 · 등록번호 표시 후 공개 — 학원 사이트에 교습비 금액 · 학원 등록번호 표시가 없어 숨겨 둠 (2026-10-16 전도사님) */
+  { visible: false, name: '인투주니어학원', industry: '초·중등 영어학원',
     screens: '프로그램, 레벨테스트 절차, 반별 시간표, 학원 공간, 장소 안내',
     features: ['base', 'lang'],
     url: 'https://intoedu.github.io/intojunior-home-page/',
@@ -1314,6 +1322,7 @@ const WORKS = [
       + '<a class="more" href="'+esc(w.url)+'" target="_blank" rel="noopener">사이트 보기 ↗<span class="sr"> (새 창)</span></a></div></li>';
   }).join('');
   document.getElementById('works').hidden = !shown.length;
+  box.style.setProperty('--wn', Math.min(3, Math.max(1, shown.length)));
   $$('.wthumb img', box).forEach(function(img){
     img.addEventListener('error', function(){ img.style.visibility='hidden'; });
   });

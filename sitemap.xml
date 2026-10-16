@@ -4,6 +4,7 @@
      어드민 · 마이페이지 · 영업실장 페이지 · 견적서는 robots.txt 에서 검색 제외. 공개 페이지를 새로 만들면 여기에 한 줄 더하세요. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://intomarketing.co.kr/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://intomarketing.co.kr/web/</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://intomarketing.co.kr/apply/</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://intomarketing.co.kr/apply/blog/</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://intomarketing.co.kr/apply/sns/</loc><lastmod>2026-10-16</lastmod></url>
