@@ -160,6 +160,10 @@ header{background:rgba(27,29,32,.96);border-bottom-color:#2A2D33}
 .ttl.one .l,.ttl.one .b{display:inline}
 /* 섹션 제목 옆 3D 아이콘 (장식 · 섹션당 1개) — 굵은 줄 끝에 붙여 제목 크기를 따라감, 마지막 낱말과 같은 줄에 */
 .ico-end{white-space:nowrap}
+/* 제목 줄바꿈 단위 — .nw 는 늘 한 덩어리, .nw2 는 들어갈 만큼 넓을 때만 한 덩어리
+   #speed: 400px 이상 「기본형은 / 자료 제공 후 3일이면 됩니다」(넓으면 한 줄) · 400px 미만 「기본형은 자료 제공 후 / 3일이면 됩니다」 */
+.nw{white-space:nowrap}
+@media(min-width:400px){ .nw2{white-space:nowrap} }
 .sec-ico{display:inline-block;width:auto;height:1.3em;vertical-align:-.2em;margin-left:.26em;
          filter:drop-shadow(0 14px 22px rgba(0,24,72,.45))}
 .price .sec-ico{filter:drop-shadow(0 12px 18px rgba(14,27,51,.18))}
@@ -1061,7 +1065,7 @@ footer .cr{color:#7D838C}
   <div class="w">
     <div class="sec-head rv">
       <p class="eyebrow">제작 기간</p>
-      <h2 class="ttl" id="speed-h"><span class="l">보통 몇 주 걸리는 홈페이지,</span> <span class="b">기본형은 영업일 3일이면 됩니다</span></h2>
+      <h2 class="ttl" id="speed-h"><span class="l">보통 몇 주 걸리는 홈페이지,</span> <span class="b"><span class="nw">기본형은</span> <span class="nw2"><span class="nw">자료 제공 후</span> <span class="nw">3일이면 됩니다</span></span></span></h2>
       <p class="lead">국내 외주 플랫폼이 공개한 평균 제작 기간과 비교했습니다. 비교 기준과 확인 시점은 아래에 적었습니다.</p>
     </div>
     <div class="scmp rv" role="group" aria-labelledby="speed-h">
