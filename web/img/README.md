@@ -9,13 +9,13 @@
 ## 넣은 그림 (2026-10-15)
 
 전도사님이 준 그림을 가공했습니다(AI 그림 3장 · 사진 1장 · 신청서 화면 캡처 — 미리 보기는 로컬 신청서에서 다시 찍음). **원본은 저장소 밖** `intomarketing_web/` 폴더에 있습니다
-(`src-ring.png` · `src-icons.png` · `src-store.png` · `src-hero-photo.webp` · `src-apply-quote.png` · `src-apply-preview.png` · `src-apply-preview-warm.png`). 가공 스크립트도 같은 폴더의 `img-tools/` 에 있습니다.
+(`src-ring.png` · `src-icons.png` · `src-store.png` · `src-hero-photo.webp` · `src-apply-quote.png` · `src-apply-preview.png` · `src-apply-preview-warm.png` · 새 신청서 판 `src-apply-quote-v2.png` · `src-apply-preview-v2.png`). 가공 스크립트도 같은 폴더의 `img-tools/` 에 있습니다.
 
 | 파일 이름 | 원본 | 가공 | 쓰는 곳 |
 |---|---|---|---|
 | `hero-photo.jpg` | `src-hero-photo.webp` 노트북 · 태블릿 사진 | 원본 크기 그대로(1030×682, 키우지 않음) · JPG 품질 80 · 84KB. 화면에서 `object-fit:cover`, 보이는 중심 62% 50% (키보드와 태블릿 그래프가 함께 보이게) | 히어로 오른쪽 사진 · alt 「노트북과 그래프가 띄워진 태블릿」 |
-| `apply-quote.png` | `src-apply-quote.png` 신청서 예상 금액 화면 | 맨 위 진행 막대 줄(번호 1~7 · 남은 항목 · 다음 항목 · 임시 저장) 잘라 냄 · 1295×663 · 131KB | 신청부터 쉽게 (#easy) 왼쪽 캡처 · 그림 전체가 보이게(contain), 남는 곳은 캡처 바탕색 · 늦게 불러오기 |
-| `apply-preview.png` | `src-apply-preview-warm.png` 신청서 「화면 예시」 패널 (2026-10-16 다시 찍음) | 신청서에서 업종 「카페·음식점」 · 분위기 「따뜻형」 · 휴대폰 보기로 고른 뒤 패널만 2배 해상도로 캡처, 아래 「예상 금액」 막대는 캡처할 때 숨김 · 폭 1050px 로 줄임 · 1050×1041 · 143KB (예전 「신뢰형」 캡처의 원본 `src-apply-preview.png` 는 남겨 둠) | #easy 오른쪽 캡처 · 그림 전체가 보이게(contain) · 늦게 불러오기 |
+| `apply-quote.png` | `src-apply-quote-v2.png` 새 신청서(한 질문씩 넘기는 화면) STEP 3 「기능 · 요금」의 「요금 방식」 쪽 (2026-10-18 다시 찍음) | 신청서 미리보기 파일(서버를 거치지 않는 시연용)에서 「12개월 약정」을 고른 뒤 1440px 화면 · 2배 해상도로 캡처. 맨 위 진행 줄(단계 번호 · 진행 막대 · 임시 저장)은 잘라 냄, 오른쪽 「예상 금액」 상자 · 요금 방식별 표까지 · 폭 1295px 로 줄임 · 1295×728 · 256색(octree, 별표 빨강 그대로) 55KB (예전 판 원본 `src-apply-quote.png` 는 남겨 둠) | 신청부터 쉽게 (#easy) 왼쪽 캡처 · 그림 전체가 보이게(contain), 남는 곳은 캡처 바탕색(#FDFDFE) · 늦게 불러오기 |
+| `apply-preview.png` | `src-apply-preview-v2.png` 「제작 자료」 STEP 3 「디자인」 첫 쪽의 「화면 예시」 패널 (2026-10-18 다시 찍음) | 제작 자료 미리보기 파일의 시연용 신청 건(가상의 카페 「예시 커피 (시연)」 · 실제 고객 정보 없음)에서 분위기 「따뜻형」 · 휴대폰 보기로 고른 뒤 패널만 2배 해상도로 캡처, 아래 고정 막대는 숨김 · 폭 1050px 로 줄임 · 1050×836 · 136KB (예전 원본 `src-apply-preview-warm.png` · `src-apply-preview.png` 는 남겨 둠) | #easy 오른쪽 캡처 · 그림 전체가 보이게(contain) · 늦게 불러오기 |
 | `deco-hero-top.png` | `src-ring.png` 고리 | 흰 배경 · 가운데 구멍 · 바닥 그림자 · 반짝이 제거, design-main.png 리본 색(#1B54BE~#B4D1EB)으로 다시 칠함, 시계 방향으로 기울임 | 히어로 오른쪽 위 (위 · 오른쪽이 잘림) |
 | `deco-hero-bottom.png` | 같은 고리 | 위와 같음 + 좌우 뒤집고 반대로 돌림 | 히어로 왼쪽 아래 (더 작게, 왼쪽이 반쯤 잘림) |
 | `deco-problem.png` | `src-store.png` 점토 가게 | 흰 배경 · 바닥 그림자 · 반짝이 · 처마 밑 · 꽃 사이 틈 제거, 가게 둘레에 맞춰 자름, 색 그대로, 간판은 비워 둠 | 2번 섹션 카드 A안(원래 색) — 카드 class `shop-orig` 일 때 |
