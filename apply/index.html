@@ -45,6 +45,49 @@
            링크에 넣는 방식(#m=<값>)입니다 — 그 방식으로 되돌리지 마십시오. 링크는 기록에 남고
            전달되면 막을 수 없습니다.
    ══════════════════════════════════════════════════════════════ */
+/* 2026-10-18 밤 6 — 원하는 색 ↔ 피하고 싶은 색 겹치지 않게: 영역별로 고른 색도 피하고 싶은 색에서 잠기고, 피하고 싶은 색은 영역별 색에서 잠김(likeList · cAreaBlock)
+   · 영역별 「기타」도 피하고 싶은 색과 같은 방식 — 색 고르기 칸(cpick_c_*) + 이름(선택 · f_c_*_etc). 고른 색은 f_c_*_hex 에 저장 */
+/* 2026-10-18 밤 5 — 영역별 색: 기본색 · 포인트색에 흰색 · 세 영역 모두 「기타」(직접 입력 f_c_*_etc · 필수, 적은 글에 #색상 코드가 있으면 미리 보기에 씀) ·
+   원하는 색 맨 아래 「색상 코드 쓰기」(접고 펴는 칸 · 여러 줄 · 선택 f_color_codes) */
+/* 2026-10-18 밤 4 — 「기타…」 → 「기타」(말줄임표 없앰) · 원하는 색 「고르는 방식」은 한 줄 두 칸 막대(.seg2) · 「영역별로 고르기」도 같은 쪽 아래에 바로 (다음 쪽 없음) */
+/* 2026-10-18 밤 3 — 원하는 색: 「고르는 방식」(color_mode) — 순위로 고르기(1순위 → 기본색 · 2순위 → 포인트색 · 3순위 → 보조 색) / 영역별로 고르기(다음 쪽 fld_color_area:
+   기본색 · 포인트색 · 배경색을 각각 있음 · 없음 + 색 1개). 미리 보기 · 화면 예시는 pvColors() 로 기본색(--pm) · 포인트색(--pp) · 배경색(--pb · 사진 자리)을 바꿈 */
+/* 2026-10-18 밤 2 — 제작 자료 STEP 3 분위기: 「원하시는 분위기」(값 '직접 입력' · f_theme_etc 필수) 추가 — 화면 예시 · 지시서 기본 틀은 업종 추천 테마
+   · 테마 카드의 색 이름(남색 · 베이지 · 검정 + 포인트 색)을 지움 — 그림으로만 보이고 글로 정하지 않음 */
+/* 2026-10-18 밤 — STEP 1 대표자 성함 · 담당자 성함 · 담당자 연락처를 한 쪽 「대표자 · 담당자 정보」로 (B안: 대표자 성함 + 「담당자」 묶음에 성함 · 휴대전화) */
+/* 2026-10-18 저녁 — 「신청서_홈페이지와_맞출_곳_2026-10-17.md」 0 · 1장 반영
+   · 0장(지금 사이트와 맞춤): 카카오톡 채널 「인투마케팅」 + 「채널 바로 가기」(KAKAO_URL · .kurl) · 동의 「올려 주신 사진 · 자료 (…카카오톡 채널로 보내 주신 것을 포함)」 ·
+     「← 홈페이지 제작」 · 접수 화면 「나가기」 → ../web/ · 뒤로 가기 판단(fromMain)에 /web/ 추가
+   · 1장(/web/ 문구와 맞춤): 일정 「영업일 3일 안에 완성본」(기준일 = 자료를 모두 받은 날 · 담당자가 요청한 자료 포함) · 해지 문구 · 수정 5회 · 분위기 안내 · 「업종에 맞춰」는 «제안» */
+/* 2026-10-18 오후 — 줄 칸(서비스 · 강점 · 자주 받는 질문 · 참고 홈페이지)은 «보이는 줄의 모든 칸»을 채워야 완료 — 빈 줄도 미입력(입력하거나 ✕로 삭제)
+   · 자주 받는 질문은 선택이라 빈 줄 없이 시작(start 0) · 줄을 추가하면 그 줄은 필수 · ✕는 마지막 줄도 지움 */
+/* 2026-10-18 — 제작 자료 보내기도 «한 질문씩 넘기는 화면»(body.wiz)으로 — 신청서와 같은 틀 (흰 바탕 · 이전 / 다음 · 한 줄 진행 막대 · 필수 * · 제출 전 확인 쪽)
+   · 쪽 나누기: 글 7 · 연락 · 위치 6 · 디자인 4(색 · 참고 홈페이지는 «선택») · 로고 · 사진 4 · 도메인(주소 → 구매 방법 → 구매할 / 원하는 주소 → 소유자 구분 → 소유자 정보 → 제3자 제공 동의) · 오픈 시기 · 담당자 요청 · 동의
+   · 오른쪽 «홈페이지 미리 보기»는 글 · 연락 · 디자인 · 사진 단계에서만(wz-pv) · 상단 신청 요약 · 준비 자료는 첫 쪽에서만
+   · 쪽 제목 = 그 쪽 첫 질문 이름(.wz-h, 크게) · Enter = 같은 쪽 다음 칸 → 마지막 칸이면 다음 쪽 (여러 줄 칸 · 서비스 줄 · 문장 나눠 쓰기는 원래대로)
+   · 임시 저장 「이어서 할지」 카드에 저장되지 않는 항목 안내 · 접수 화면 「나가기」 */
+/* 2026-10-17 밤 6 — STEP 4 「영업실장 소개」 → 「홈페이지 신청 경로」(필수): 구글 검색 · 지인 소개 · 영업실장 소개 · 인스타그램 · 블로그 · 기타
+   · tg_ref 값이 경로 이름이 됨 (영업실장 소개 → 성함 필수 · ref.js 연결 그대로 / 기타 → f_ref_etc 필수) · details 「신청 경로」 */
+/* 2026-10-17 밤 5 — 진행 막대 손질: 지금 위치 동그라미 · 「빠진 질문 N」 글자 없앰 · 빠진 칸은 옅은 빨강으로 틈 없이 */
+/* 2026-10-17 밤 4 — 이어서 작성할 때 알림은 맨 위 남색 영역 안 한 줄(hero_draft) · 본문 위 알림 줄(draft_note)은 신청서에서 쓰지 않음 (제작 자료는 그대로) */
+/* 2026-10-17 밤 3 — 진행 막대를 다시 «한 줄»로: 채워진 길이 = 지금 위치(동그라미) · 건너뛴 필수 질문은 그 자리에 코랄 레드 칸 ·
+   숫자 옆 「빠진 질문 N」 · 막대 위 어디를 눌러도 그 질문으로 (보이지 않는 칸) */
+/* 2026-10-17 밤 2 — 임시 저장: 신청서 첫 화면에 「작성하던 신청서가 있습니다 · 이어서 작성하기 / 처음부터 새로」(draft_ask) →
+   이어서 작성하면 아직 답하지 않은 첫 질문으로 가고, 위에는 얇은 알림 줄(draft_note) · 알림 줄은 두 화면 공통 새 모양 */
+/* 2026-10-17 밤 — 소제목(추가 기능 · 영업실장 소개 · 개인정보 수집 · 이용 동의) · 진행 막대를 질문 수만큼 나눔(답한 칸 파랑 · 안 한 칸 연한 색 · 누르면 그 질문) ·
+   「미입력 항목 · 제출」을 동의 다음 쪽(제출 전 확인 · STEP 5 안)으로 분리 */
+/* 2026-10-17 저녁 — 한 질문씩 화면 손질: 「다음」은 필수 칸이 비어도 넘어감(빠진 칸은 마지막 쪽 「미입력 항목」) · 위아래 여백 넓힘 ·
+   필수 질문 제목 옆 빨간 * + 「* 표시는 필수 질문입니다」 · 「위 상호와 같음」 → 「(앞에서 쓴 상호)와 같음」 */
+/* 2026-10-17 오후 — 신청서를 «한 질문씩 넘기는 화면»으로 (body.wiz · 제작 자료 화면은 그대로)
+   · 흰 바탕에 질문 하나 · 「이전 / 다음」(다음은 그 쪽 필수 칸 확인) · 위 숫자 = 단계(1 업체 정보 · 2 목적 · 3 기능 · 요금 · 4 영업실장 · 5 동의)
+   · 「선택 기능 설정」은 STEP 3 안의 쪽 · 예상 금액은 STEP 3 에서만 · 「다음 순서」 카드는 없애고 접수 화면에 (나가기 단추) */
+/* 2026-10-17 — 「홈페이지 주소 · 일정」 카드(도메인 · 구매 방법 · 소유자 정보 · 희망 오픈 시기)를 신청서 → 「제작 자료」로 옮김
+   · 신청서 그 자리에 「다음 순서」 안내 카드(step_next · 묻는 칸 없음) · 예상 금액에는 도메인 비용 별도 안내를 늘 보임
+   · 고객이 적던 「기타 요청 사항」(tg_etc · f_etc) 없앰 → 제작 자료 「담당자 요청 사항」(step_req): 담당자가 적은 글(SNAP.req)과 고객 답변(f_req_ans)
+   · 도메인 소유자 정보 · 제3자 제공 동의 · 접수 화면 도메인 안내는 제작 자료 제출 때 · 제작 자료 상단 요약의 「홈페이지 주소」 줄 뺌 */
+/* 2026-10-16 — 「디자인」 카드를 신청서 → 「제작 자료」로 옮김 (분위기 · 색 · 참고 홈페이지는 계약 후 글 · 사진과 함께 받음)
+   · 제작 자료 화면에서도 테마 카드 · 화면 예시를 그림(drawThemePv) · 상단 신청 요약의 「디자인」 줄 뺌 · 신청서 details 의 디자인 칸은 비움
+   · 「방문자 행동」 → 「전환 목표」 · 아이콘 이모티콘 → 선 아이콘 · 「기타」(직접 입력 f_goal_etc) 추가 */
 /* 2026-10-13 홈페이지 팀 — 「더 쓰기 쉽게」 (9번 창 판 위에 얹음 · 위 사이트 규칙 여섯 가지는 그대로)
    A. 도메인 「새로 구매」는 구매 방법(등록 대행 / 직접 구매)을 먼저 묻고, 등록 대행일 때만 등록 회사 · 소유자 정보 · 제3자 제공 동의를 받음
    B. 업종별 예시(영문 상호 · 결제 받을 것 · 도메인 · 소유자 영문 이름) · 「최초 등록 항목」 사진 안내 · 머리 줄 로그인 표시 오른쪽 끝(제작 자료) ·
@@ -67,8 +110,8 @@
        - 접수 화면 「영업일 1~2일 안에 연락」 · 「영업시간」 줄 · 저장 실패 안내도 「바로」 대신 영업시간(월~금 09:00~20:00)으로
        - 고객 연락 채널(카카오 비즈니스 채널)은 승인되면 접수 화면 · 안내의 전화 · 이메일을 채널 주소로 바꿈 (아직 주소 없음)
    · 2026-10-04 5차 — «신청서 / 제작 자료 나누기» (전도사님 결정)
-       - 신청서(입금 전 · 견적 · 계약용): 업체 정보(+주소 · 지금 쓰는 홈페이지) · 목적 · 기능 · 요금 · 고른 기능 설정 · 디자인 · 도메인 · 일정 · 영업실장 · 동의
-       - 제작 자료(계약서 서명 후 링크 /apply/#m=…): 들어갈 글(+검색어) · 연락 · 위치 · 로고 · 사진 → 이때 Claude Code 제작 지시서 완성
+       - 신청서(입금 전 · 견적 · 계약용): 업체 정보(+주소 · 지금 쓰는 홈페이지) · 목적 · 기능 · 요금 · 고른 기능 설정 · 다음 순서 안내 · 영업실장 · 동의 (도메인 · 일정은 10/17 제작 자료로)
+       - 제작 자료(계약서 서명 후 링크 /apply/#m=…): 들어갈 글(+검색어) · 연락 · 위치 · 디자인(10/16 옮김) · 로고 · 사진 · 도메인 · 일정(10/17 옮김) · 담당자 요청 → 이때 Claude Code 제작 지시서 완성
        - 신청서를 내면 details 에 「신청 번호」와 _자료(신청 값 · 링크용)를 넣고, 어드민 「제작 자료 링크 복사」로 보냄
        - 「사진은 나중에 전달」 없앰 (사진도 제작 자료로 함께 받음) · 단계 카드 data-phase="apply|material"
        - 링크(_자료)에는 법인등록번호 · 도메인 소유자 정보 · 동의 · 영업실장 성함을 넣지 않음 · 도메인 「업체 정보로 채우기」의 소유자 전화번호는
@@ -79,7 +122,7 @@
                    디자인 「모두 없음 · 분위기대로」 한 번에 · 설명 글을 한 줄로 (무엇을 · 어디에 먼저)
    · 2026-10-04 — 등록증은 눌러서 여는 목록(묶음 3개) · 도메인 소유자 등록증 종류는 실제 서류 이름(사업자등록증 개인/법인 · 고유번호증 · 그 밖)
                    법인사업자는 법인등록번호(13자리 · 줄표 자동)도 받음 — 계약서 당사자 칸에 사업자등록번호와 함께 적음
-   · 2026-10-04 — 「직접 적기」 → 회색 점선 「기타…」(주요 방문자 · 받을 칸은 「+ 추가」로 여러 개) ·
+   · 2026-10-04 — 「직접 적기」 → 회색 점선 「기타」(주요 방문자 · 받을 칸은 「+ 추가」로 여러 개) ·
                    인사말 서명은 「대표자 성함 / +」(+는 직함과 성함을 한 칸에) · 「사진은 나중에 전달」(원본 · 화질 안내)
    · 2026-10-03 오후 — 약정: 3개월 없앰 · 6개월 30% · 12개월 60% · 24개월 무료 (PLANS · 요금 방식 카드 4개)
    · 2026-10-03 오후 — 정가는 최소 이용 기간 3개월 (정가 카드 · 안내 · 예상 금액 · 한눈에 보기)
@@ -128,6 +171,7 @@
   --accent:#2E5FE8; --accent-ink:#1E47C0; --accent-soft:rgba(46,95,232,.10); --band:#12294D;
   --ok:#0F7552; --okbg:#E6F5EE; --bad:#C2413B; --badbg:#FDEFED; --warnbg:#FFF5E3; --warn:#8A5A00;
   --on-accent:#FFFFFF; --on-ok:#FFFFFF; --ph:#687690;
+  --req:#E5484D; --reqbg:#FFF0F0; --reqline:#F9CFCF; --reqink:#B42A2F;   /* 필수 * · 미입력 항목 — 코랄 레드 (10/17 결정) */
   --shadow:0 1px 2px rgba(16,32,64,.05),0 14px 34px -26px rgba(16,32,64,.42);
   --f:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
 }
@@ -136,6 +180,7 @@
         --line:#22314C;--line-2:#31456A;--accent:#6E93FF;--accent-ink:#9DB5FF;--accent-soft:rgba(110,147,255,.16);--band:#1B3A69;
         --ok:#4FBF95;--okbg:#10291F;--bad:#F08A85;--badbg:#2C1517;--warnbg:#2A2210;--warn:#E7C27A;
         --on-accent:#0A101E;--on-ok:#0A101E;--ph:#8C9AB3;
+        --req:#FF7B7F;--reqbg:#2E1416;--reqline:#5A2428;--reqink:#FFA9AB;
         --shadow:0 1px 2px rgba(0,0,0,.35),0 14px 34px -26px rgba(0,0,0,.8);}
 }
 *{box-sizing:border-box}
@@ -198,8 +243,27 @@ header .intro b{color:#fff}
 /* ── 두 칸 — 왼쪽 신청서, 오른쪽 예상 금액 (좁은 화면에서는 아래 막대) ── */
 .layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start;padding-top:22px;padding-bottom:70px}
 main{min-width:0}
-.draft{display:flex;gap:6px 14px;align-items:center;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);
-       border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:13.5px;color:var(--muted);line-height:1.65}
+/* 임시 저장 알림 줄 (10/17 — 연한 파랑 한 줄) */
+.draft{display:flex;gap:10px 14px;align-items:center;background:var(--accent-soft);border:0;
+       border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:14px;color:var(--accent-ink);line-height:1.6}
+.draft[hidden],.draft-ask[hidden]{display:none}
+.draft .dr-ic{flex:0 0 auto;width:20px;height:20px;color:var(--accent)}
+.draft .dr-t{flex:1;min-width:0}
+.draft .dr-s{display:block;font-size:12.5px;color:var(--muted)}
+.draft .linkbtn{white-space:nowrap;font-weight:700}
+/* 이어서 작성 중 — 맨 위 남색 영역 안 한 줄 (10/17) */
+.hero-draft{display:flex;align-items:center;gap:6px 8px;flex-wrap:wrap;margin-top:14px;font-size:14px;color:#B9CBEA;line-height:1.6}
+.hero-draft svg{flex:0 0 auto;width:17px;height:17px}
+.hd-new{background:none;border:0;padding:0;color:#fff;font:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+/* 이어서 할지 묻기 (10/17 · 신청서 첫 화면) */
+.draft-ask{border:1px solid var(--line);border-radius:18px;padding:30px 28px 26px;margin:28px 0 40px;background:var(--surface)}
+.draft-ask .da-t{display:block;font-size:clamp(22px,3.4vw,26px);font-weight:800;line-height:1.35}
+.draft-ask .da-s{color:var(--muted);font-size:15.5px;margin:8px 0 24px}
+.da-btns{display:flex;gap:12px;flex-wrap:wrap}
+.da-go,.da-new{min-height:60px;border-radius:14px;font-size:18px;font-weight:800;cursor:pointer;padding:0 24px;font-family:inherit}
+.da-go{flex:1;border:0;background:var(--accent);color:var(--on-accent)}
+.da-new{border:1.5px solid var(--line-2);background:var(--surface);color:var(--ink)}
+body.wz-ask #form,body.wz-ask .bar{display:none!important}
 .draft b{color:var(--ink)}
 .linkbtn{border:0;background:none;color:var(--accent-ink);font-weight:800;cursor:pointer;padding:0;font-size:inherit;text-decoration:underline;text-underline-offset:3px}
 
@@ -288,6 +352,10 @@ textarea.inp.tall{min-height:150px}
              font-size:12px;font-weight:900;display:grid;place-items:center;color:var(--on-accent)}
 .goal.on{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
 .goal.on .gi{background:var(--accent-soft)}
+.goal .gi svg{width:21px;height:21px;color:var(--muted)}
+.goal.on .gi svg{color:var(--accent)}
+.goal.etc{grid-column:1/-1;border-style:dashed}
+.goal.etc.on{border-style:solid}
 .goal.on::after{content:"✓";background:var(--accent);border-color:var(--accent)}
 .goal:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
 .goals.grp-bad .goal{border-color:var(--bad)}
@@ -343,6 +411,35 @@ textarea.inp.tall{min-height:150px}
 
 /* 디자인 분위기 — 작은 미리보기 */
 .opts.themes{grid-template-columns:repeat(4,minmax(0,1fr))}
+.opts.themes .theme-etc{grid-column:1/-1;border-style:dashed}   /* 원하시는 분위기 (10/18) — 한 줄 전체 · 점선 (다른 「기타」와 같은 규칙) */
+.opts.themes .theme-etc.on{border-style:solid}
+/* 원하는 색 · 영역별 선택 (10/18) */
+.carea{margin-top:22px}
+/* 고르는 방식 — 한 줄 두 칸 (10/18): 고른 칸 파랑 · 안 고른 칸 회색 */
+.seg2{display:grid;grid-template-columns:1fr 1fr;border-radius:12px;overflow:hidden;background:var(--surface-3);margin-top:8px}
+.seg2 label{position:relative;cursor:pointer;margin:0}
+.seg2 input{position:absolute;opacity:0;pointer-events:none}
+.seg2 span{display:block;text-align:center;padding:14px 10px;font-size:16px;font-weight:800;color:var(--muted);transition:background .2s,color .2s}
+.seg2 label:hover span{color:var(--ink)}
+.seg2 input:checked+span{background:var(--accent);color:var(--on-accent)}
+.seg2 label:has(input:focus-visible) span{outline:2px solid var(--ink);outline-offset:-4px}
+.seg2.grp-bad{box-shadow:0 0 0 2px var(--bad)}
+.carea .chip{position:relative}
+.carea .chip input{position:absolute;opacity:0;pointer-events:none}
+.carea .chips{margin-top:12px}
+.carea .reveal .inp{margin-top:10px}
+.carea .chip.blocked{opacity:.4;cursor:not-allowed}
+.carow{display:flex;gap:8px;margin-top:10px;max-width:460px}
+.carow .inp{flex:1;min-width:0;margin-top:0!important}
+/* 색상 코드 쓰기 — 접고 펴는 칸 */
+.ccode{margin-top:26px;border-top:1px solid var(--line);padding-top:16px}
+.ccode>summary{cursor:pointer;font-weight:800;font-size:15.5px;color:var(--ink);list-style:none;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ccode>summary::-webkit-details-marker{display:none}
+.ccode>summary::before{content:"▸";color:var(--accent);transition:transform .2s}
+.ccode[open]>summary::before{transform:rotate(90deg)}
+.ccode>summary span{font-size:13px;font-weight:500;color:var(--muted)}
+.ccode textarea{margin-top:12px;min-height:110px;font-family:inherit}
+body.wiz .wz-cur #fld_color_area .carea{margin-top:30px;padding-top:22px;border-top:1px solid var(--line)}
 @media(max-width:900px){.opts.themes{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .opt>.mock{display:block;position:relative;height:88px;border-radius:10px;margin-bottom:11px;overflow:hidden;border:1px solid rgba(0,0,0,.08)}
 .mock i{position:absolute;display:block}
@@ -454,7 +551,7 @@ textarea.inp.tall{min-height:150px}
 .chip input{width:16px;height:16px;accent-color:var(--accent);margin:0}
 .chip small{font-weight:500;color:var(--muted);font-size:12px}
 .fld.grp-bad .chip{border-color:var(--bad)}
-/* 「기타…」 · 「+」 — 목록에 없는 것을 적는 칩은 회색 점선으로 덜 진하게 (2026-10-04) */
+/* 「기타」 · 「+」 — 목록에 없는 것을 적는 칩은 회색 점선으로 덜 진하게 (2026-10-04) */
 button.chip{font-family:inherit;color:inherit;line-height:inherit}
 .chip.etc{color:var(--muted);border-style:dashed;border-color:var(--line-2);background:transparent;font-weight:600}
 .chip.etc:hover{color:var(--ink);border-color:var(--muted)}
@@ -567,7 +664,7 @@ button.chip:disabled{opacity:.45;cursor:not-allowed}
 .submit .sum{color:var(--muted);font-size:14px;margin-top:6px}
 .leftlist{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:14px 0 2px}
 .leftlist:empty{display:none}
-.leftlist button{border:1px solid var(--line);background:var(--warnbg);color:var(--warn);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer}
+.leftlist button{border:1px solid var(--reqline);background:var(--reqbg);color:var(--reqink);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;cursor:pointer}
 .leftlist .more{font-size:13px;color:var(--muted);align-self:center}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 36px;border-radius:12px;margin-top:18px;
      font-weight:800;font-size:16px;border:0;cursor:pointer;background:var(--band);color:#fff;transition:.15s}
@@ -665,6 +762,104 @@ aside.side{position:sticky;top:66px}
 #im-ref-card .im-sug .c,#im-ref-card .im-hint{color:var(--muted)}
 #im-ref-msg b{color:var(--accent-ink)!important}
 
+/* ── 한 질문씩 넘기는 신청서 (10/17 · 신청서 화면만 · body.wiz) ──
+   카드 대신 흰 바탕에 질문 하나 · 아래 「이전 / 다음」 · 위 숫자는 단계(1 업체 정보 … 5 동의)로 이동 · 예상 금액은 STEP 3 에서만 */
+.wz-nav{display:none}
+body.wiz{background:var(--surface)}
+body.wiz header{padding:26px 0 24px}
+body.wiz:not(.wz-first) header .intro{display:none}
+body.wiz .nextb{display:none}
+body.wiz .dots{display:flex;gap:7px}
+body.wiz .dots button{width:34px;height:34px;font-size:14px}
+body.wiz .dots button.cur{background:var(--accent);border-color:var(--accent);color:var(--on-accent);box-shadow:0 0 0 4px var(--accent-soft)}
+body.wiz .bar .left{font-size:14.5px;font-weight:800;color:var(--ink)}
+body.wiz:not(.wz-s3) aside.side{display:none!important}
+body.wiz:not(.wz-s3) .layout{grid-template-columns:minmax(0,1fr);max-width:780px}
+body.wiz #form>[data-step]:not(.wz-cur){display:none!important}
+body.wiz #form{position:relative}
+body.wiz #form>.card{background:transparent;border:0;box-shadow:none;border-radius:0;padding:44px 0 0;margin:0}
+body.wiz .card-h{display:block;border:0;padding:0;margin-bottom:44px}
+body.wiz .card-h .no,body.wiz .card-h .sub,body.wiz .card-h .state{display:none}
+body.wiz .card-h .tt{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+body.wiz .card-h .eyebrow{font-size:13px;padding-right:0}
+body.wiz .card-h h2{font-size:13px;font-weight:800;letter-spacing:.04em;color:var(--muted);margin:0;padding-right:0}
+@media(max-width:600px){body.wiz .dots{gap:5px}body.wiz .dots button{width:30px;height:30px;font-size:13px}}
+body.wiz .wz-cur [data-pg]:not(.pg-on){display:none!important}
+body.wiz .row2{display:block}
+body.wiz .fgroup.wz-off{display:none!important}
+body.wiz .wz-cur .fgroup{border:0;padding:0;margin:0;background:transparent;box-shadow:none}
+body.wiz #step_feat .fgroup>.fld>.lab-row .lab{font-size:clamp(23px,3.6vw,28px);font-weight:800;line-height:1.35}
+body.wiz .wz-cur .lab{font-size:17px}
+body.wiz .wz-cur .lab-row{margin-bottom:14px}
+body.wiz .wz-cur .where{display:none}
+body.wiz .wz-cur .desc{font-size:16px;line-height:1.75;margin-bottom:28px}
+body.wiz .wz-cur .inp{font-size:18px;min-height:58px}
+body.wiz .wz-cur .fld{margin-bottom:12px}
+body.wiz .wz-cur .pg-on .fld{margin-top:30px;margin-bottom:0}   /* 같은 쪽의 딸린 칸 (등록번호 · 상호 같음 등) */
+body.wiz .wz-cur .pg-on .lab.sm{font-size:16.5px}
+/* 필수 질문 — 제목 옆 빨간 * (구글 설문처럼) · 안내 줄 */
+body.wiz .lab.rq::after{content:" *";color:var(--req);font-weight:800}
+.wz-reqnote{display:none}
+body.wiz .wz-reqnote{display:block;position:absolute;right:0;top:44px;margin:0;font-size:14px;color:var(--muted);line-height:1.7}
+body.wiz .wz-reqnote b{color:var(--req)}
+@media(max-width:600px){body.wiz #form>.card{padding-top:14px}body.wiz .wz-reqnote{position:static;text-align:right;margin-top:26px}body.wiz .card-h{margin-bottom:34px}}
+body.wiz .wz-cur .gh{font-size:13px;color:var(--muted);margin-bottom:14px}
+body.wiz #finish{display:none}
+body.wiz #finish.wz-cur{display:block;border:0;box-shadow:none;background:transparent;padding:44px 0 0}
+body.wiz #finish h3{font-size:clamp(23px,3.6vw,28px);font-weight:800;line-height:1.35}
+body.wiz #finish .sum{font-size:16px;margin-top:10px}
+body.wiz.wz-fin .wz-reqnote{display:none}
+body:not(.wiz) .wz-only{display:none!important}
+/* 진행 막대 — 질문 수만큼 나눈 칸 */
+.wz-segs{display:none}
+body.wiz .bar .track{position:relative;height:10px;overflow:hidden}
+body.wiz .bar .fill{border-radius:0}
+body.wiz .wz-segs{display:flex;position:absolute;inset:0}   /* 누를 자리 (보이지 않음) · 칸 사이 틈 없음 */
+.wz-segs button{flex:1;min-width:0;height:100%;padding:0;border:0;background:transparent;cursor:pointer}
+.wz-segs i{position:absolute;top:0;bottom:0;pointer-events:none;background:color-mix(in srgb,var(--req) 42%,var(--surface-3))}   /* 건너뛴 필수 질문 — 이어진 칸은 한 덩어리로 (칸 사이 줄 없음) */
+@media(max-width:600px){body.wiz .bar .wrap{flex-wrap:wrap;row-gap:14px}body.wiz .bar .track{order:5;flex:1 1 100%;margin-bottom:4px}}
+body.wiz .wz-nav{display:block;margin-top:60px;margin-bottom:40px}
+.wz-btns{display:flex;gap:12px}
+.wz-prev,.wz-next{min-height:60px;border-radius:14px;font-size:18px;font-weight:800;cursor:pointer;padding:0 24px;font-family:inherit}
+.wz-prev{border:1.5px solid var(--line-2);background:var(--surface);color:var(--ink)}
+.wz-prev:hover{border-color:var(--muted)}
+.wz-next{flex:1;border:0;background:var(--accent);color:var(--on-accent)}
+.wz-next:hover{filter:brightness(1.08)}
+.wz-prev[hidden],.wz-next[hidden]{display:none}
+.wz-msg{color:var(--bad);font-weight:700;font-size:15.5px;margin:0 0 12px}
+.wz-msg:empty{display:none}
+/* 쪽 제목 · 제작 자료 한 질문씩 (10/18) */
+body.wiz #form .wz-cur .lab.wz-h{font-size:clamp(23px,3.6vw,28px);font-weight:800;line-height:1.35}
+body.wiz #design_more{border:0;padding:0;margin:0;background:none;box-shadow:none}
+body.wiz #design_more>summary{display:none}
+body.wiz #fld_color .wz-h::after,body.wiz #fld_avoid .wz-h::after,body.wiz #fld_like .wz-h::after{content:" (선택)";font-size:.6em;font-weight:700;color:var(--muted)}
+/* 카드 맨 위 안내(의료 · 사진 · 주소 공개)는 질문 아래로 — 쪽마다 질문 제목이 먼저 */
+body.wiz #form>.card{display:flex;flex-direction:column}
+body.wiz #form>.card>.card-h{order:-1}
+body.wiz #form>.card>.note{order:1;margin:18px 0 0}
+body.wiz .wz-cur .dom{border:0;padding:0;margin:0;background:none}   /* 도메인 상자 — 한 질문씩 화면은 흰 바탕 그대로 */
+body.wiz .wz-cur .dom .inp{background:var(--surface)}
+body.wiz .wz-cur .pg-on.dom,body.wiz .wz-cur #dom_buy .pg-on{margin-top:0}
+body.wiz #owner_box>.sec>span{display:none}
+body.wiz #owner_box>.sec{justify-content:flex-start;margin-bottom:6px}
+body.wiz.mode-material:not(.wz-pv) .pvside,body.wiz.mode-material:not(.wz-pv) .pv-mini{display:none!important}
+@media(min-width:1180px){body.wiz.mode-material.wz-pv:not(.pv-off) .layout{grid-template-columns:minmax(0,1fr) 380px;max-width:1320px}}
+body.wiz:not(.wz-first) #mat_sum,body.wiz:not(.wz-first) header .prep{display:none!important}
+.draft-ask .da-n{font-size:14px;color:var(--muted);margin:-14px 0 22px}
+.draft-ask .da-n:empty{display:none}
+/* 접수 화면 — 다음 순서 · 나가기 (10/17) */
+.done .ic svg{width:52px;height:52px;color:var(--ok)}
+.done .flow{margin-top:12px}
+.done .flow li{background:var(--surface)}
+.done-exit{display:flex;align-items:center;justify-content:center;min-height:60px;margin-top:24px;border-radius:14px;background:var(--accent);color:var(--on-accent);font-size:18px;font-weight:800;text-decoration:none}
+.done-exit:hover{filter:brightness(1.08)}
+/* 다음 순서 안내 · 담당자 요청 사항 (10/17) */
+.flow{list-style:none;margin:4px 0 0;padding:0;counter-reset:fl;display:grid;gap:10px}
+.flow li{counter-increment:fl;position:relative;padding:12px 14px 12px 52px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2)}
+.flow li::before{content:counter(fl);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--on-accent);font-weight:800;font-size:13px;display:grid;place-items:center}
+.flow b{display:block;font-size:15px;line-height:1.45}
+.flow span{display:block;font-size:13px;color:var(--muted);line-height:1.6;margin-top:2px}
+.req-box{white-space:pre-wrap;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:12px;background:var(--surface-2);padding:14px 16px;font-size:15px;line-height:1.7}
 /* 신청서 / 제작 자료 (10/4 5차) — body.mode-apply · body.mode-material */
 body.mode-apply [data-mode-show="material"],body.mode-material [data-mode-show="apply"],
 body.mode-apply [data-phase="material"],body.mode-material [data-phase="apply"]{display:none!important}
@@ -693,6 +888,15 @@ footer span{margin:0 8px;color:var(--line)}
 .kurl{margin-left:6px;font-size:12.5px;font-weight:800;color:var(--accent-ink);white-space:nowrap}
 .kurl::after{content:" ↗"}
 .kk-only{display:none}
+/* 대표자 · 담당자 정보 (10/18) — 담당자 묶음 · 넓은 화면은 성함 · 휴대전화 가로 두 칸 */
+.ppl-grp{margin-top:28px;padding-top:4px;border-top:1px solid var(--line)}
+.ppl-gh{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;margin-top:20px;font-size:17px;font-weight:800}
+.ppl-gh .mini{margin-left:0}
+.ppl-s{flex-basis:100%;font-size:14px;font-weight:500;color:var(--muted)}
+.ppl-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 14px}
+@media(max-width:600px){.ppl-row{grid-template-columns:minmax(0,1fr)}}
+body.wiz .wz-cur #fld_people .fld{margin-top:18px}
+body.wiz .wz-cur #fld_people .fld .desc{margin-bottom:12px}
 #step7.via-none #fld_logo,#step7.via-none #fld_main,#step7.via-none #fld_photo{display:none}
 #step7.via-kk #drop_logo,#step7.via-kk #th_logo,#step7.via-kk #note_logo,#step7.via-kk .att-only,#step7.via-kk #fld_main,#step7.via-kk #fld_photo{display:none}
 #step7.via-kk .kk-only{display:block}
@@ -751,9 +955,9 @@ mark.pv-oo{background:#FFE08A;color:#7A4B00;border-radius:3px;padding:0 2px}
 .pvs.mo .pv-burger{display:block}
 .pv-navbtn{padding:10px 18px;border-radius:var(--pr);background:var(--pp);color:var(--ppt);font-weight:800;font-size:14px;white-space:nowrap}
 .pvs.mo .pv-navbtn{display:none}
-.pvs.vA .pv-nav{background:var(--pm);color:#fff;border-bottom:0}
+.pvs.vA .pv-nav{background:var(--pm);color:var(--pmt,#fff);border-bottom:0}
 .pvs.vA .pv-logo{color:#fff}
-.pvs.vC .pv-nav{background:var(--pm);color:#fff;border-bottom:1px solid rgba(255,255,255,.08)}
+.pvs.vC .pv-nav{background:var(--pm);color:var(--pmt,#fff);border-bottom:1px solid rgba(255,255,255,.08)}
 .pvs.vC .pv-logo{color:#fff}
 .pv-hero{position:relative}
 .pv-eb{display:inline-block;font-size:14px;font-weight:800;color:var(--pp);letter-spacing:.02em;margin-bottom:12px}
@@ -778,7 +982,7 @@ mark.pv-oo{background:#FFE08A;color:#7A4B00;border-radius:3px;padding:0 2px}
 .pvs.mo .hB .pv-img{min-height:250px}
 .pvs.mo .pv-hrow{display:block;margin-top:22px}
 .pvs.mo .hB .pv-btns{margin-top:20px}
-.hC{background:var(--pm) center/cover no-repeat;color:#fff;padding:104px 56px 96px}
+.hC{background:var(--pm) center/cover no-repeat;color:var(--pmt,#fff);padding:104px 56px 96px}
 .hC h1{font-size:64px;font-weight:900;letter-spacing:-.04em;max-width:920px}
 .pvs.mo .hC{padding:56px 20px 52px}
 .pvs.mo .hC h1{font-size:34px}
@@ -827,10 +1031,10 @@ mark.pv-oo{background:#FFE08A;color:#7A4B00;border-radius:3px;padding:0 2px}
 .pvs.mo .pv-mapbox{min-height:150px}
 .pv-info p{padding:8px 0;border-bottom:1px dashed rgba(0,0,0,.1);font-size:15.5px}
 .pv-info p>b{display:inline-block;min-width:84px;opacity:.6;font-weight:700}
-.pv-foot{background:var(--pm);color:rgba(255,255,255,.85);padding:40px 56px;font-size:14px}
+.pv-foot{background:var(--pm);color:var(--pmt,rgba(255,255,255,.85));padding:40px 56px;font-size:14px}
 .pvs.vC .pv-foot{background:#0B0D10}
 .pvs.mo .pv-foot{padding:28px 20px}
-.pv-foot b{display:block;color:#fff;font-size:18px;margin-bottom:6px}
+.pv-foot b{display:block;color:var(--pmt,#fff);font-size:18px;margin-bottom:6px}
 .pv-sns{display:flex;gap:8px;margin-top:10px}
 .pv-sns>span{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);display:grid;place-items:center;font-size:12px;font-weight:800}
 .pv-foot small{display:block;margin-top:12px;opacity:.6;font-size:12px}
@@ -919,7 +1123,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
 </style>
 </head>
 <body>
-<script>document.body.className=/^#m=/.test(location.hash)?'mode-material':'mode-apply';</script>
+<script>document.body.className=/^#m=/.test(location.hash)?'mode-material wiz':'mode-apply wiz';</script>
 
 <!-- 아이콘 한 벌 (10/13 밤 · 이모티콘 대신 · 직접 그린 선 아이콘) — <svg class="ic"><use href="#ic-이름"/></svg> 로 씀. 선 굵기 · 색은 CSS svg.ic -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -929,6 +1133,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
   <symbol id="ic-form" viewBox="0 0 24 24"><path d="M9 4.5H7.2A2.2 2.2 0 0 0 5 6.7v12.1A2.2 2.2 0 0 0 7.2 21h9.6a2.2 2.2 0 0 0 2.2-2.2V6.7a2.2 2.2 0 0 0-2.2-2.2H15"/><rect x="9" y="3" width="6" height="3.2" rx="1"/><path d="m9 13.2 2.1 2.1 4-4"/></symbol>
   <symbol id="ic-pen" viewBox="0 0 24 24"><path d="M4 20h4L18.7 9.3a2.6 2.6 0 0 0-3.7-3.7L4.3 16.3z"/><path d="m13.6 7 3.4 3.4"/><path d="M13 20h7"/></symbol>
   <symbol id="ic-doc" viewBox="0 0 24 24"><path d="M14 3H7.2A2.2 2.2 0 0 0 5 5.2v13.6A2.2 2.2 0 0 0 7.2 21h9.6a2.2 2.2 0 0 0 2.2-2.2V8z"/><path d="M14 3v5h5"/><path d="M8.5 12.5h7M8.5 16.5h5"/></symbol>
+  <symbol id="ic-more" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.6" fill="currentColor" stroke="none"/></symbol>
   <symbol id="ic-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
   <symbol id="ic-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
   <symbol id="ic-play" viewBox="0 0 24 24"><path d="M8.5 6.2v11.6L18 12z" fill="currentColor" stroke="none"/></symbol>
@@ -936,15 +1141,17 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
 <header>
   <div class="wrap">
     <div class="imab-row">
-      <a class="back" data-back href="../web/" style="margin-bottom:0">← 홈페이지 제작</a>
+      <a class="back" data-back href="../web/" style="margin-bottom:0">← 홈페이지 제작 안내</a>
       <span class="imab" id="authbar"></span>
     </div>
     <div>
       <h1 data-mode-show="apply">홈페이지 제작 신청</h1>
       <h1 data-mode-show="material">제작 자료 보내기</h1>
-      <p class="intro" data-mode-show="apply">기능 · 디자인 · 도메인을 선택하면 <b>예상 금액이 자동 계산</b>되며, 이 내용으로 견적서와 계약서를 작성합니다.
-        홈페이지에 들어갈 글 · 사진은 <b>계약서 서명 후</b> 발송하는 「제작 자료」 링크로 접수합니다.</p>
-      <p class="intro" data-mode-show="material"><b id="mat_head"></b>홈페이지에 들어갈 <b>글 · 연락 정보 · 로고 · 사진</b>을 제출해 주십시오. 제출 기한은 계약 · 입금 후 1주입니다.
+      <p class="intro" data-mode-show="apply">기능을 선택하면 <b>예상 금액이 자동 계산</b>되며, 이 내용으로 견적서와 계약서를 작성합니다.
+        홈페이지에 들어갈 글 · 디자인 · 사진과 홈페이지 주소 · 오픈 일정은 <b>계약서 서명 후</b> 발송하는 「제작 자료」 링크로 접수합니다.</p>
+      <!-- 이어서 작성 중 (10/17 · 신청서) — 「이어서 작성하기」를 고르면 보임 -->
+      <p class="hero-draft" id="hero_draft" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4.5v4h4"/><path d="M12 8v4.3l2.8 1.8"/></svg><span><span id="hd_when"></span>에 저장한 내용을 이어서 작성 중입니다</span><span aria-hidden="true">·</span><button type="button" class="hd-new" data-clear>처음부터 새로</button></p>
+      <p class="intro" data-mode-show="material"><b id="mat_head"></b>홈페이지에 들어갈 <b>글 · 연락 정보 · 디자인 · 로고 · 사진 · 홈페이지 주소</b>를 제출해 주십시오. 제출 기한은 계약 · 입금 후 1주입니다.
         입력한 글과 사진은 <b>그대로 홈페이지에 반영됩니다.</b></p>
     </div>
     <div class="prep" data-mode-show="material">
@@ -954,6 +1161,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
         <li>사진 3장 이상 (첫 화면에 넣을 가로 사진 1장 포함 · 원본 파일 · 카카오톡 전달 가능)</li>
         <li>메뉴 · 서비스와 가격</li>
         <li>자주 받는 질문 (있는 경우)</li>
+        <li>홈페이지 주소 (이미 있으면 주소와 구매한 곳)</li>
       </ul>
     </div>
   </div>
@@ -961,7 +1169,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
 
 <div class="bar"><div class="wrap">
   <div class="dots" id="dots"></div>
-  <div class="track" aria-hidden="true"><div class="fill" id="fill"></div></div>
+  <div class="track"><div class="fill" id="fill"></div><div class="wz-segs" id="wz_segs" role="group" aria-label="질문별 진행 (누르면 그 질문으로)"></div></div>
   <span class="left" id="left_txt"></span>
   <button type="button" class="nextb" id="next_btn">다음 항목 ↓</button>
   <span class="saved" id="saved_txt"></span>
@@ -971,12 +1179,21 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
 <div class="wrap layout">
 <main>
 <div class="draft" id="draft_note" hidden>
-  <span><b>이전 작성 내용을 불러왔습니다</b> (<span id="draft_when"></span> 저장). 사진 · 로고 · 도메인 소유자 정보 · 동의 · 영업실장 성함은 저장하지 않으므로 다시 입력해 주십시오.</span>
-  <button type="button" class="linkbtn" data-clear>새로 작성</button>
+  <svg class="dr-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4.5v4h4"/><path d="M12 8v4.3l2.8 1.8"/></svg>
+  <span class="dr-t"><b>작성하던 내용을 불러왔습니다</b> · <span id="draft_when"></span> 저장<span class="dr-s">사진 · 로고 · 도메인 소유자 정보 · 동의 · 영업실장 성함은 저장하지 않으므로 다시 입력해 주십시오.</span></span>
+  <button type="button" class="linkbtn" data-clear>처음부터 새로</button>
+</div>
+<!-- 이어서 할지 묻기 (10/17 · 신청서 · 임시 저장이 있을 때 첫 화면) -->
+<div class="draft-ask" id="draft_ask" hidden>
+  <b class="da-t" id="da_t">작성하던 신청서가 있습니다</b>
+  <p class="da-s"><span id="da_when"></span>에 저장 · <span id="da_cnt"></span></p>
+  <p class="da-n" id="da_note"></p>
+  <div class="da-btns"><button type="button" class="da-go" id="da_go">이어서 작성하기</button><button type="button" class="da-new" data-clear>처음부터 새로</button></div>
 </div>
 <div class="matsum" id="mat_sum" data-mode-show="material"></div>
 <div class="matbad" id="mat_bad" hidden><b>링크가 올바르지 않습니다.</b> 담당자에게 「제작 자료」 링크 재발송을 요청해 주십시오. 전화 <a href="tel:01073181790">010-7318-1790</a></div>
 <form id="form" novalidate>
+  <p class="wz-reqnote"><b>*</b> 표시는 필수 질문입니다.</p>
 
   <!-- 1. 업체 정보 -->
   <section class="card" id="step1" data-step data-phase="apply">
@@ -1026,7 +1243,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
             <p class="ex" id="reg_no_ex">숫자만 입력하면 줄표(-)는 자동 입력됩니다.</p>
             <p class="codehint" id="reg_code"></p></div>
           <div class="fld" id="fld_regname"><span class="lab sm">등록증에 기재된 상호 · 단체명</span>
-            <div class="seg" id="seg_regname" role="radiogroup" aria-label="등록증에 기재된 상호"><label><input type="radio" name="tg_regname" value="같음"><span>위 상호와 같음</span></label><label><input type="radio" name="tg_regname" value="다름"><span>다름</span></label></div>
+            <div class="seg" id="seg_regname" role="radiogroup" aria-label="등록증에 기재된 상호"><label><input type="radio" name="tg_regname" value="같음"><span id="regname_same">위 상호와 같음</span></label><label><input type="radio" name="tg_regname" value="다름"><span>다름</span></label></div>
             <div class="reveal" data-show="tg_regname=다름"><input class="inp" id="f_reg_name" placeholder="등록증에 기재된 그대로" aria-label="등록증에 기재된 상호 · 단체명"></div></div>
         </div>
         <div class="fld stage" id="corp_no_box"><label class="lab sm" for="f_corp_no">법인등록번호</label>
@@ -1035,18 +1252,23 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
       </div>
       <p class="note info stage" id="reg_note"></p></div>
 
-    <div class="row2">
-      <div class="fld"><div class="lab-row"><label class="lab" for="f_boss">대표자 성함</label><span class="where">계약서 · 하단</span></div>
+    <!-- 대표자 · 담당자 정보 (10/18) — 대표자 성함 · 담당자 성함 · 담당자 연락처를 한 쪽에. 담당자 둘은 묶어서(넓은 화면 가로 두 칸) -->
+    <div class="fld" id="fld_people"><div class="lab-row"><span class="lab">대표자 · 담당자 정보</span></div>
+      <p class="desc">계약서에는 대표자 성함을 적고, 견적 · 진행 안내는 담당자에게 연락드립니다.</p>
+      <div class="fld"><label class="lab sm" for="f_boss">대표자 성함</label>
         <p class="desc" id="boss_desc">등록증에 기재된 대표자입니다.</p>
         <input class="inp" id="f_boss" autocomplete="name"></div>
-      <div class="fld"><div class="lab-row"><label class="lab" for="f_mgr">담당자 성함</label><span class="where priv">담당자만 봄</span></div>
-        <p class="desc">신청 담당자입니다.<button type="button" class="mini" id="same_boss">대표자와 같음</button></p>
-        <input class="inp" id="f_mgr"></div>
+      <div class="ppl-grp">
+        <div class="ppl-gh"><span>담당자</span><button type="button" class="mini" id="same_boss">대표자와 같음</button><span class="ppl-s">신청을 맡으신 분 · 이 번호로 연락드립니다</span></div>
+        <div class="ppl-row">
+          <div class="fld"><label class="lab sm" for="f_mgr">성함</label>
+            <input class="inp" id="f_mgr" autocomplete="name"></div>
+          <div class="fld"><label class="lab sm" for="f_phone">휴대전화</label>
+            <input class="inp" id="f_phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="010-0000-0000"></div>
+        </div>
+      </div>
     </div>
     <div class="row2">
-      <div class="fld"><div class="lab-row"><label class="lab" for="f_phone">담당자 연락처(휴대전화)</label><span class="where priv">담당자만 봄</span></div>
-        <p class="desc">견적 · 진행 상황 안내에 사용하는 번호입니다.</p>
-        <input class="inp" id="f_phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="010-0000-0000"></div>
       <div class="fld"><div class="lab-row"><label class="lab" for="f_email">이메일</label><span class="where priv">담당자만 봄</span></div>
         <p class="desc">견적서와 계약서를 이 주소로 발송합니다.</p>
         <input class="inp" id="f_email" type="email" autocomplete="email" placeholder="hello@example.com"></div>
@@ -1102,7 +1324,9 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
         <label class="goal"><input type="checkbox" name="goal" value="카카오톡 상담"><i class="gi"><svg class="ic" aria-hidden="true" focusable="false"><use href="#ic-chat"/></svg></i><span><b>카카오톡 상담</b><span class="gd">카카오톡 채널 채팅으로 연결됩니다</span></span></label>
         <label class="goal"><input type="checkbox" name="goal" value="방문"><i class="gi"><svg class="ic" aria-hidden="true" focusable="false"><use href="#ic-pin"/></svg></i><span><b>방문</b><span class="gd">지도 · 길 찾기 · 주차 안내를 강조해 표시합니다</span></span></label>
         <label class="goal"><input type="checkbox" name="goal" value="신청 · 예약"><i class="gi"><svg class="ic" aria-hidden="true" focusable="false"><use href="#ic-form"/></svg></i><span><b>신청 · 예약</b><span class="gd">신청 · 예약 접수 화면으로 연결됩니다</span></span></label>
-      </div></div>
+        <label class="goal etc"><input type="checkbox" name="goal" value="기타"><i class="gi"><svg class="ic" aria-hidden="true" focusable="false"><use href="#ic-more"/></svg></i><span><b>기타</b><span class="gd">위에 없는 목표를 직접 입력합니다</span></span></label>
+      </div>
+      <div class="reveal stage" id="goal_etc_box"><input class="inp" id="f_goal_etc" placeholder="예: 견적 요청, 자료 내려받기, 회원 가입" aria-label="전환 목표 (기타)" maxlength="30"></div></div>
 
     <div class="fld stage" id="main_box"><div class="lab-row"><span class="lab">첫 화면 큰 버튼</span><span class="where">첫 화면 가운데</span></div>
       <p class="desc">선택 항목 중 <b>최우선 1개</b>입니다. 첫 화면에 가장 크게 배치합니다.</p>
@@ -1130,7 +1354,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
         <label class="chip"><input type="checkbox" value="여행객 · 외국인">여행객 · 외국인</label>
         <label class="chip"><input type="checkbox" value="기업 · 기관 담당자">기업 · 기관 담당자</label>
         <label class="chip"><input type="checkbox" value="처음 오시는 분">처음 오시는 분</label>
-        <button type="button" class="chip etc" data-add="who" aria-expanded="false" aria-controls="who_add">기타…</button>
+        <button type="button" class="chip etc" data-add="who" aria-expanded="false" aria-controls="who_add">기타</button>
       </div>
       <div class="addrow stage" id="who_add"><input class="inp" id="f_who_add" maxlength="20" aria-label="목록에 없는 방문자"><button type="button" class="sbtn ghost" data-addbtn="who">+ 추가</button></div></div>
   </section>
@@ -1140,6 +1364,9 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
     <div class="card-h"><span class="no">3</span><div class="tt"><p class="eyebrow">STEP 3</p><h2>기능 · 요금</h2>
       <p class="sub"><b>기본 홈페이지</b>에 필요한 기능만 <b>추가합니다</b>. 페이지 수에 따른 요금은 없으며, 구성은 담당자가 내용에 맞춰 정합니다.</p></div><span class="state"></span></div>
 
+    <!-- 10/17 — 「+ 추가 기능」 줄을 이 쪽의 소제목으로 올림 (한 질문씩 화면) -->
+    <div class="lab-row"><span class="lab">추가 기능</span></div>
+    <p class="desc">필요한 기능만 선택해 주십시오. 선택하지 않으면 아래 기본 홈페이지로 제작합니다.</p>
     <div class="basecard">
       <div class="bc-h"><div><b>기본 홈페이지</b><span class="tag">모든 홈페이지 공통</span></div><div class="won tnum" data-won="base"></div></div>
       <ul class="incl" aria-label="기본 홈페이지에 들어가는 것">
@@ -1148,7 +1375,6 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
       </ul>
     </div>
 
-    <p class="addh"><span><span class="plus">+</span> 추가 기능</span><span class="hint">필요한 기능만 선택해 주십시오. 미선택 시 기본 홈페이지로 제작합니다.</span></p>
     <div class="feats" id="feats">
       <label class="feat"><input type="checkbox" data-feat="member">
         <div><b>회원가입<span class="wm" data-wm="member"></span></b><span class="d">회원가입 · 로그인과 관리자 화면</span>
@@ -1226,7 +1452,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
         <label class="plan"><input type="radio" name="plan" value="약정 12개월"><b>12개월 약정</b><span class="off">제작비 60% 할인</span><span class="due">계약할 때<em data-due="약정 12개월"></em></span></label>
         <label class="plan"><input type="radio" name="plan" value="약정 24개월"><b>24개월 약정</b><span class="off">제작비 무료</span><span class="due">계약할 때<em data-due="약정 24개월"></em></span></label>
       </div>
-      <p class="ex">정가는 최소 3개월, 그 뒤에는 언제든 해지하실 수 있습니다(납부일 7일 전 알림). 정가 3개월이나 약정 기간 중에 해지하시면 위약금이 있습니다. 자세한 기준은 제작 · 관리 계약서에 따릅니다.</p></div>
+      <p class="ex">정가는 최소 이용 기간이 3개월이며, 3개월이 지나면 언제든 해지하실 수 있습니다. 해지를 원하시면 다음 납부일 7일 전까지 알려 주십시오. 정가 3개월이나 약정 기간 중에 해지하시면 위약금이 있습니다. 자세한 기준은 제작 · 관리 계약서에 따릅니다. 해지하면 홈페이지를 닫습니다.</p></div>
   </section>
 
   <!-- 고른 기능 설정 — 신청서 · 목록 · 한·영 · 카드 결제 중 하나라도 고르면 나옵니다 (2026-10-03) -->
@@ -1243,7 +1469,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
           <label class="chip"><input type="radio" name="formtitle" value="문의하기">문의하기</label>
           <label class="chip"><input type="radio" name="formtitle" value="견적 문의">견적 문의</label>
           <label class="chip"><input type="radio" name="formtitle" value="수강 신청">수강 신청</label>
-          <label class="chip etc"><input type="radio" name="formtitle" value="기타">기타…</label>
+          <label class="chip etc"><input type="radio" name="formtitle" value="기타">기타</label>
         </div>
         <div class="reveal" data-show="formtitle=기타"><input class="inp" id="f_form_title" placeholder="예: 체험 수업 신청" aria-label="신청서 이름 (기타)" maxlength="30"></div></div>
       <div class="fld"><div class="lab-row"><label class="lab sm" for="f_form_mail" style="margin:0">신청 내용을 받을 이메일</label><span class="where">발송자에게 표시</span></div>
@@ -1261,7 +1487,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
           <label class="chip"><input type="checkbox" value="인원">인원</label>
           <label class="chip"><input type="checkbox" value="원하는 상품 · 서비스">원하는 상품 · 서비스</label>
           <label class="chip"><input type="checkbox" value="요청 사항">요청 사항</label>
-          <button type="button" class="chip etc" data-add="formfields" aria-expanded="false" aria-controls="formfields_add">기타…</button>
+          <button type="button" class="chip etc" data-add="formfields" aria-expanded="false" aria-controls="formfields_add">기타</button>
         </div>
         <div class="addrow stage" id="formfields_add"><input class="inp" id="f_form_add" maxlength="20" placeholder="예: 차량 번호" aria-label="더 받을 칸"><button type="button" class="sbtn ghost" data-addbtn="formfields">+ 추가</button></div></div>
     </div>
@@ -1368,7 +1594,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
           <label class="chip"><input type="radio" name="sign" value="원장">원장</label>
           <label class="chip"><input type="radio" name="sign" value="대표이사">대표이사</label>
           <label class="chip"><input type="radio" name="sign" value="이사장">이사장</label>
-          <label class="chip etc"><input type="radio" name="sign" value="기타">기타…</label>
+          <label class="chip etc"><input type="radio" name="sign" value="기타">기타</label>
         </div>
         <div class="reveal" data-show="sign=기타"><input class="inp" id="f_sign_title" style="max-width:340px" placeholder="예: 센터장, 실장" aria-label="서명 직함 (기타)" maxlength="20"></div></div>
       <div class="reveal" data-show="tg_signname=직접"><input class="inp" id="f_sign_name" style="max-width:340px" placeholder="직함과 성함 (예: 부원장 김영희)" aria-label="서명 (직함과 성함)" maxlength="30"></div>
@@ -1384,7 +1610,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
       <div class="rep" id="rep_why"></div></div>
 
     <div class="fld" id="fld_faq"><div class="lab-row"><span class="lab">자주 받는 질문</span><span class="where">자주 묻는 질문</span></div>
-      <p class="desc">자주 받는 질문과 답변을 입력해 주십시오. 아래 예시를 누르면 질문이 자동 입력됩니다. 미입력 시 해당 화면은 제작하지 않습니다.</p>
+      <p class="desc">자주 받는 질문과 답변을 입력해 주십시오. 아래 예시를 누르면 질문이 자동 입력됩니다. 없으면 비워 두셔도 되며(그 화면은 만들지 않습니다), 추가한 줄은 질문과 답을 모두 입력해 주십시오.</p>
       <div class="sugs" id="faq_sugs"></div>
       <div class="rep" id="rep_faq"></div></div>
 
@@ -1433,27 +1659,30 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
   </section>
 
   <!-- 6. 디자인 -->
-  <section class="card" id="step6" data-step data-phase="apply">
+  <section class="card" id="step6" data-step data-phase="material">
     <div class="card-h"><span class="no">6</span><div class="tt"><p class="eyebrow">STEP 6</p><h2>디자인</h2>
-      <p class="sub">분위기별 가격 차이는 없습니다. 선택한 분위기로 시안 1개를 제작합니다.</p></div><span class="state"></span></div>
+      <p class="sub">분위기별 가격 차이는 없습니다. 선택한 분위기로 시안 1개를 제작하며, 제작 중 수정은 5회까지 할 수 있습니다.</p></div><span class="state"></span></div>
 
     <div class="fld" id="fld_theme"><div class="lab-row"><span class="lab">분위기</span><span class="where">홈페이지 전체</span></div>
-      <p class="desc">1개를 선택해 주십시오. 카드를 누르면 아래에 상호를 넣은 화면 예시가 크게 표시됩니다. 선택이 어려우면 「업종에 맞춰」를 선택해 주십시오.</p>
+      <p class="desc">원하시는 느낌에 가장 가까운 분위기를 1개 선택해 주십시오. 카드를 누르면 아래에 상호를 넣은 화면 예시가 크게 표시됩니다. 원하시는 느낌이 따로 있으면 「원하시는 분위기」를 선택해 직접 적어 주시고, 정하기 어려우면 「업종에 맞춰」를 선택해 주십시오. 원하는 색 · 참고할 홈페이지는 다음 쪽에서 알려 주실 수 있습니다.</p>
       <div class="opts themes" id="theme" role="radiogroup" aria-label="디자인 분위기">
         <label class="opt"><input type="radio" name="theme" value="A 신뢰형"><span class="mock mA"><i class="k-nav"></i><i class="k-t1"></i><i class="k-t2"></i><i class="k-btn"></i><i class="k-img"></i></span>
-          <b>신뢰형</b><span>남색 · 넓은 여백 · 글자 중심</span><span class="fit">학원 · 병원 · 기업</span></label>
+          <b>신뢰형</b><span>넓은 여백 · 글자 중심</span><span class="fit">학원 · 병원 · 기업</span></label>
         <label class="opt"><input type="radio" name="theme" value="B 따뜻형"><span class="mock mB"><i class="k-img"></i><i class="k-t1"></i><i class="k-t2"></i><i class="k-btn"></i></span>
-          <b>따뜻형</b><span>베이지 · 둥근 모서리 · 사진 크게</span><span class="fit">카페 · 매장 · 공방</span></label>
+          <b>따뜻형</b><span>둥근 모서리 · 사진 크게</span><span class="fit">카페 · 매장 · 공방</span></label>
         <label class="opt"><input type="radio" name="theme" value="C 활동형"><span class="mock mC"><i class="k-hero"></i><i class="k-t1"></i><i class="k-t2"></i><i class="k-btn"></i><i class="k-row"></i></span>
-          <b>활동형</b><span>검정 + 포인트 색 · 큰 제목</span><span class="fit">스포츠 · 브랜드</span></label>
+          <b>활동형</b><span>큰 제목 · 힘 있는 화면</span><span class="fit">스포츠 · 브랜드</span></label>
         <label class="opt"><input type="radio" name="theme" value="추천에 맡김"><span class="mock mR"><i class="k-s1"></i><i class="k-s2"></i><i class="k-s3"></i></span>
-          <b>업종에 맞춰</b><span id="rec_txt">업종에 맞는 분위기를 담당자가 선정합니다</span></label>
-      </div></div>
+          <b>업종에 맞춰</b><span id="rec_txt">업종에 어울리는 분위기를 담당자가 제안합니다</span></label>
+        <!-- 10/18 — 위 셋에 없는 느낌은 직접 적음 (값 '직접 입력') -->
+        <label class="opt theme-etc"><input type="radio" name="theme" value="직접 입력"><b>원하시는 분위기</b><span>원하시는 느낌을 직접 적어 주십시오. 담당자가 그 느낌에 맞춰 만듭니다.</span></label>
+      </div>
+      <div class="reveal" data-show="theme=직접 입력"><input class="inp" id="f_theme_etc" maxlength="80" placeholder="예: 고급스럽고 차분하게 · 밝고 아기자기하게 · ○○ 홈페이지 같은 느낌" aria-label="원하시는 분위기"></div></div>
     <!-- 화면 예시 (10/13) — 상호 · 업종 예시 글 · 고른 버튼으로 그린 첫 화면. 실제 글 · 사진은 계약 후 「제작 자료」로 받음 -->
     <div class="tpv" id="tpv">
       <div class="tpv-h"><b id="tpv_t">화면 예시</b>
         <div class="devsw" role="group" aria-label="화면 크기"><button type="button" data-tdev="pc" aria-pressed="true">PC</button><button type="button" data-tdev="mo" aria-pressed="false">휴대폰</button></div></div>
-      <p class="tpv-s">상호와 업종 예시 글로 만든 화면 예시입니다. 실제 글 · 사진은 계약 후 「제작 자료」로 받으며, 시안은 담당자가 제작합니다.</p>
+      <p class="tpv-s">상호와 업종 예시 글로 만든 화면 예시입니다. 입력한 글 · 사진이 들어간 모습은 「홈페이지 미리 보기」에서 확인할 수 있으며, 시안은 담당자가 제작합니다.</p>
       <div class="tpv-stage"><div class="pvf" id="tpv_frame" aria-hidden="true"></div></div>
     </div>
 
@@ -1461,13 +1690,36 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
          「있음」을 고른 칸만 검사합니다(색 1개 이상 · 주소와 참고할 점). 「모두 없음」 줄은 없앴습니다. -->
     <details class="more" id="design_more">
       <summary><b>원하는 색 · 피하고 싶은 색 · 참고할 홈페이지</b><span>선택 사항 · 지정하지 않으면 테마 색으로 제작합니다</span></summary>
-    <div class="fld" id="fld_color"><div class="lab-row"><span class="lab">원하는 색</span><span class="where">포인트 색 · 보조 색</span></div>
-      <p class="desc">선호 색상을 누른 순서대로 1 · 2 · 3순위로 지정합니다. 1개만 선택해도 됩니다.</p>
+    <div class="fld" id="fld_color"><div class="lab-row"><span class="lab">원하는 색</span><span class="where">기본색 · 포인트색 · 배경색</span></div>
+      <p class="desc">원하는 색이 있으면 「있음」을 선택한 뒤, 고르는 방식을 정해 주십시오.</p>
       <div class="seg" id="seg_color" role="radiogroup" aria-label="원하는 색"><label><input type="radio" name="tg_color" value="있음"><span>있음</span></label><label><input type="radio" name="tg_color" value="없음"><span>없음</span></label></div>
       <div class="reveal" data-show="tg_color=있음">
+        <div class="fld" id="fld_cmode"><span class="lab sm">고르는 방식</span>
+          <div class="seg2" id="cmode" role="radiogroup" aria-label="원하는 색 고르는 방식"><label><input type="radio" name="color_mode" value="순위"><span>순위로 고르기</span></label><label><input type="radio" name="color_mode" value="영역"><span>영역별로 고르기</span></label></div></div>
+        <div class="reveal" data-show="color_mode=순위">
+        <p class="desc" style="margin-top:14px">누른 순서대로 1 · 2 · 3순위가 됩니다. <b>1순위는 기본색</b>(메뉴 막대 · 제목 · 하단), <b>2순위는 포인트색</b>(버튼 · 강조), 3순위는 보조 색으로 씁니다. 1개만 선택해도 됩니다.</p>
         <div class="chips cpal" id="cpal_like" role="group" aria-label="원하는 색 고르기"></div>
         <div class="addrow stage" id="cadd_like"><input type="color" class="cpick" id="cpick_like" value="#2E5FE8" aria-label="색 고르기"><input class="inp" id="cname_like" maxlength="20" placeholder="예: 로고의 초록색" aria-label="색 이름"><button type="button" class="sbtn ghost" data-cadd="like">+ 추가</button></div>
-        <p class="prev" id="csum_like" hidden></p>
+        <p class="prev" id="csum_like" hidden></p></div>
+        <div class="reveal" data-show="color_mode=영역">
+    <!-- 원하는 색 · 영역별 선택 (10/18) — 「고르는 방식」에서 「영역별로 고르기」를 고르면 같은 쪽 아래에 나옴. 「없음」인 영역은 고른 분위기의 색 그대로 -->
+    <div class="fld" id="fld_color_area">
+      <p class="desc" style="margin-top:14px">바꾸고 싶은 영역만 「있음」을 선택하고 색을 1개씩 골라 주십시오. 「없음 · 그대로」는 고른 분위기의 색을 그대로 씁니다. 고른 색은 「홈페이지 미리 보기」에 바로 보입니다.</p>
+      <div class="fld carea" id="fld_c_main"><span class="lab sm">기본색</span><p class="desc">메뉴 막대 · 제목 · 하단 정보 영역처럼 홈페이지 전체의 대표 색입니다.</p>
+        <div class="seg" id="seg_c_main" role="radiogroup" aria-label="기본색 바꾸기"><label><input type="radio" name="tg_c_main" value="있음"><span>있음</span></label><label><input type="radio" name="tg_c_main" value="없음"><span>없음 · 그대로</span></label></div>
+        <div class="reveal" data-show="tg_c_main=있음"><div class="chips cpal" id="cp_main" role="radiogroup" aria-label="기본색"><label class="chip cc"><input type="radio" name="c_main" value="빨강"><i class="sw" style="background:#E53935"></i>빨강</label><label class="chip cc"><input type="radio" name="c_main" value="주황"><i class="sw" style="background:#FB8C00"></i>주황</label><label class="chip cc"><input type="radio" name="c_main" value="노랑"><i class="sw" style="background:#FDD835"></i>노랑</label><label class="chip cc"><input type="radio" name="c_main" value="연두"><i class="sw" style="background:#9CCC65"></i>연두</label><label class="chip cc"><input type="radio" name="c_main" value="초록"><i class="sw" style="background:#2E7D32"></i>초록</label><label class="chip cc"><input type="radio" name="c_main" value="하늘"><i class="sw" style="background:#4FC3F7"></i>하늘</label><label class="chip cc"><input type="radio" name="c_main" value="파랑"><i class="sw" style="background:#1E88E5"></i>파랑</label><label class="chip cc"><input type="radio" name="c_main" value="남색"><i class="sw" style="background:#1A237E"></i>남색</label><label class="chip cc"><input type="radio" name="c_main" value="보라"><i class="sw" style="background:#7E57C2"></i>보라</label><label class="chip cc"><input type="radio" name="c_main" value="분홍"><i class="sw" style="background:#F06292"></i>분홍</label><label class="chip cc"><input type="radio" name="c_main" value="갈색"><i class="sw" style="background:#795548"></i>갈색</label><label class="chip cc"><input type="radio" name="c_main" value="베이지"><i class="sw" style="background:#D7C4A3"></i>베이지</label><label class="chip cc"><input type="radio" name="c_main" value="회색"><i class="sw" style="background:#9E9E9E"></i>회색</label><label class="chip cc"><input type="radio" name="c_main" value="검정"><i class="sw" style="background:#212121"></i>검정</label><label class="chip cc"><input type="radio" name="c_main" value="흰색"><i class="sw" style="background:#FFFFFF"></i>흰색</label><label class="chip etc"><input type="radio" name="c_main" value="기타">기타</label></div><div class="reveal" data-show="c_main=기타"><div class="carow"><input type="color" class="cpick" id="cpick_c_main" value="#2E5FE8" aria-label="기본색 고르기"><input class="inp" id="f_c_main_etc" maxlength="20" placeholder="색 이름 (선택) · 예: 로고의 초록색" aria-label="기본색 이름"></div><input type="hidden" id="f_c_main_hex"><p class="ex">왼쪽 색 칸을 눌러 원하는 색을 고르고, 이름은 알아보기 쉽게 적어 주십시오(선택).</p></div></div></div>
+      <div class="fld carea" id="fld_c_point"><span class="lab sm">포인트색</span><p class="desc">신청 · 전화 같은 버튼과 강조할 곳에 쓰는 색입니다.</p>
+        <div class="seg" id="seg_c_point" role="radiogroup" aria-label="포인트색 바꾸기"><label><input type="radio" name="tg_c_point" value="있음"><span>있음</span></label><label><input type="radio" name="tg_c_point" value="없음"><span>없음 · 그대로</span></label></div>
+        <div class="reveal" data-show="tg_c_point=있음"><div class="chips cpal" id="cp_point" role="radiogroup" aria-label="포인트색"><label class="chip cc"><input type="radio" name="c_point" value="빨강"><i class="sw" style="background:#E53935"></i>빨강</label><label class="chip cc"><input type="radio" name="c_point" value="주황"><i class="sw" style="background:#FB8C00"></i>주황</label><label class="chip cc"><input type="radio" name="c_point" value="노랑"><i class="sw" style="background:#FDD835"></i>노랑</label><label class="chip cc"><input type="radio" name="c_point" value="연두"><i class="sw" style="background:#9CCC65"></i>연두</label><label class="chip cc"><input type="radio" name="c_point" value="초록"><i class="sw" style="background:#2E7D32"></i>초록</label><label class="chip cc"><input type="radio" name="c_point" value="하늘"><i class="sw" style="background:#4FC3F7"></i>하늘</label><label class="chip cc"><input type="radio" name="c_point" value="파랑"><i class="sw" style="background:#1E88E5"></i>파랑</label><label class="chip cc"><input type="radio" name="c_point" value="남색"><i class="sw" style="background:#1A237E"></i>남색</label><label class="chip cc"><input type="radio" name="c_point" value="보라"><i class="sw" style="background:#7E57C2"></i>보라</label><label class="chip cc"><input type="radio" name="c_point" value="분홍"><i class="sw" style="background:#F06292"></i>분홍</label><label class="chip cc"><input type="radio" name="c_point" value="갈색"><i class="sw" style="background:#795548"></i>갈색</label><label class="chip cc"><input type="radio" name="c_point" value="베이지"><i class="sw" style="background:#D7C4A3"></i>베이지</label><label class="chip cc"><input type="radio" name="c_point" value="회색"><i class="sw" style="background:#9E9E9E"></i>회색</label><label class="chip cc"><input type="radio" name="c_point" value="검정"><i class="sw" style="background:#212121"></i>검정</label><label class="chip cc"><input type="radio" name="c_point" value="흰색"><i class="sw" style="background:#FFFFFF"></i>흰색</label><label class="chip etc"><input type="radio" name="c_point" value="기타">기타</label></div><div class="reveal" data-show="c_point=기타"><div class="carow"><input type="color" class="cpick" id="cpick_c_point" value="#FB8C00" aria-label="포인트색 고르기"><input class="inp" id="f_c_point_etc" maxlength="20" placeholder="색 이름 (선택) · 예: 로고의 초록색" aria-label="포인트색 이름"></div><input type="hidden" id="f_c_point_hex"><p class="ex">왼쪽 색 칸을 눌러 원하는 색을 고르고, 이름은 알아보기 쉽게 적어 주십시오(선택).</p></div></div></div>
+      <div class="fld carea" id="fld_c_bg"><span class="lab sm">배경색</span><p class="desc">화면 바탕과 사진 자리의 색입니다. 밝은 색을 권장합니다.</p>
+        <div class="seg" id="seg_c_bg" role="radiogroup" aria-label="배경색 바꾸기"><label><input type="radio" name="tg_c_bg" value="있음"><span>있음</span></label><label><input type="radio" name="tg_c_bg" value="없음"><span>없음 · 그대로</span></label></div>
+        <div class="reveal" data-show="tg_c_bg=있음"><div class="chips cpal" id="cp_bg" role="radiogroup" aria-label="배경색"><label class="chip cc"><input type="radio" name="c_bg" value="흰색"><i class="sw" style="background:#FFFFFF"></i>흰색</label><label class="chip cc"><input type="radio" name="c_bg" value="아이보리"><i class="sw" style="background:#FBF7EE"></i>아이보리</label><label class="chip cc"><input type="radio" name="c_bg" value="연회색"><i class="sw" style="background:#F3F4F6"></i>연회색</label><label class="chip cc"><input type="radio" name="c_bg" value="연베이지"><i class="sw" style="background:#F5ECDD"></i>연베이지</label><label class="chip cc"><input type="radio" name="c_bg" value="연하늘"><i class="sw" style="background:#EAF4FB"></i>연하늘</label><label class="chip cc"><input type="radio" name="c_bg" value="연민트"><i class="sw" style="background:#E8F6F0"></i>연민트</label><label class="chip cc"><input type="radio" name="c_bg" value="연분홍"><i class="sw" style="background:#FCEEF2"></i>연분홍</label><label class="chip cc"><input type="radio" name="c_bg" value="검정"><i class="sw" style="background:#16181D"></i>검정</label><label class="chip etc"><input type="radio" name="c_bg" value="기타">기타</label></div><div class="reveal" data-show="c_bg=기타"><div class="carow"><input type="color" class="cpick" id="cpick_c_bg" value="#FFF8EC" aria-label="배경색 고르기"><input class="inp" id="f_c_bg_etc" maxlength="20" placeholder="색 이름 (선택) · 예: 로고의 초록색" aria-label="배경색 이름"></div><input type="hidden" id="f_c_bg_hex"><p class="ex">왼쪽 색 칸을 눌러 원하는 색을 고르고, 이름은 알아보기 쉽게 적어 주십시오(선택).</p></div></div></div>
+    </div>
+        </div>
+        <!-- 색상 코드 쓰기 (10/18 · 선택) — 원하는 색이 「있음」이면 방식과 상관없이 맨 아래. 접었다 펴고, 한 줄에 하나씩 -->
+        <details class="ccode" id="ccode_box"><summary>색상 코드 쓰기 <span>선택 · 색상 코드를 아시면 적어 주십시오</span></summary>
+          <textarea class="inp" id="f_color_codes" rows="4" aria-label="색상 코드" placeholder="한 줄에 하나씩 적어 주십시오.&#10;예: #1E47C0 메뉴 막대&#10;#FB8C00 버튼"></textarea>
+          <p class="ex">로고 파일 · 간판 · 인쇄물에 쓰는 색상 코드가 있으면 그대로 적어 주십시오. 담당자가 확인해 맞춥니다.</p></details>
         <input type="hidden" id="f_colors"></div></div>
     <div class="fld" id="fld_avoid"><div class="lab-row"><span class="lab">피하고 싶은 색</span><span class="where">디자인</span></div>
       <p class="desc">제외할 색상을 3개까지 선택해 주십시오. 1개만 선택해도 됩니다.</p>
@@ -1540,8 +1792,8 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
       <p class="pcount" id="photo_cnt"></p></div>
   </section>
 
-  <!-- 8. 도메인 · 일정 (신청서) -->
-  <section class="card" id="step8" data-step data-phase="apply">
+  <!-- 8. 도메인 · 일정 (10/17부터 제작 자료) -->
+  <section class="card" id="step8" data-step data-phase="material">
     <div class="card-h"><span class="no">8</span><div class="tt"><p class="eyebrow">STEP 8</p><h2>홈페이지 주소 · 일정</h2>
       <p class="sub">홈페이지 주소(도메인)와 오픈 희망 시기입니다.</p></div><span class="state"></span></div>
 
@@ -1582,6 +1834,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
 
         <!-- 등록 대행 — 원하는 주소 · 등록 회사 · 소유자 정보 (도메인 등록 회사의 「소유자 정보」 화면과 같은 항목) -->
         <div class="stage" id="dom_agent">
+        <div class="lab-row wz-only"><span class="lab">원하는 주소 · 등록 회사</span></div>
         <div class="row2">
           <div class="fld"><label class="lab sm" for="f_dom_want1">원하는 주소 (1순위)</label><input class="inp" id="f_dom_want1" placeholder="예: example.co.kr"></div>
           <div class="fld"><label class="lab sm" for="f_dom_want2">원하는 주소 (2순위)</label><input class="inp" id="f_dom_want2" placeholder="1순위가 이미 등록된 경우">
@@ -1589,7 +1842,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
         </div>
         <div class="fld"><label class="lab sm" for="f_dom_reg">도메인 등록 회사</label>
           <div class="inline"><select class="inp" id="f_dom_reg">
-              <option value="">선택</option><option>가비아</option><option>후이즈</option><option>카페24</option><option value="기타">기타…</option>
+              <option value="">선택</option><option>가비아</option><option>후이즈</option><option>카페24</option><option value="기타">기타</option>
             </select>
             <input class="inp stage" id="f_dom_reg_etc" placeholder="등록 회사 이름" aria-label="등록 회사 이름"></div>
           <p class="ex">도메인을 등록할 회사입니다. 아래 소유자 정보는 이 회사에 전달됩니다. 비용은 회사 · 주소(.com · .co.kr 등)마다 다르며 연 1~2만원을 넘을 수 있습니다.</p></div>
@@ -1599,6 +1852,8 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
           <p class="ex">도메인은 이 소유자 명의로 등록됩니다. 해지 후에도 유료 도메인은 소유자에게 유지됩니다.</p></div>
 
         <div class="stage" id="owner_box">
+          <div class="lab-row wz-only"><span class="lab">도메인 소유자 정보</span></div>
+          <p class="desc wz-only">도메인 등록 회사에만 전달하는 정보입니다. 「업체 정보로 자동 입력」을 누르면 신청서에 입력한 내용으로 채워집니다.</p>
           <div class="sec"><span>소유자 정보 <span class="where priv">도메인 등록 회사에만 전달</span></span><button type="button" class="sbtn ghost" id="own_fill" style="min-height:36px;padding:0 12px;font-size:13px">업체 정보로 자동 입력</button></div>
           <div class="row2">
             <div class="fld"><label class="lab sm" for="f_own_name" id="lab_own_name">소유자명</label><input class="inp" id="f_own_name"></div>
@@ -1631,6 +1886,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
           <div class="fld"><label class="lab sm" for="f_own_addr_en">주소 (영문)</label><input class="inp" id="f_own_addr_en" placeholder="예: 3F, 12, ○○-ro, Yuseong-gu, Daejeon">
             <p class="ex">우편번호 검색 시 함께 입력됩니다. 층 · 호수는 맨 앞에 붙여 주십시오 (예: 3F, 301).</p></div>
 
+          <div class="lab-row wz-only" id="own_consent_h"><span class="lab">도메인 등록 정보 제3자 제공 동의</span></div>
           <div class="consent-box">
             <b style="color:var(--ink)">도메인 등록을 위한 개인정보 제3자 제공</b>
             <table>
@@ -1651,19 +1907,28 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
     </div>
 
     <div class="fld" id="fld_when"><div class="lab-row"><span class="lab">희망 오픈 시기</span><span class="where">일정</span></div>
-      <p class="desc">자료 전체 접수일부터 1주 안에 디자인 초안, 2주 안에 완성본을 제공합니다.</p>
+      <p class="desc">기본 홈페이지는 자료를 모두 받은 날(담당자가 요청한 자료 포함)부터 영업일 3일 안에 완성본을 전달합니다. 추가 기능이 있으면 견적서에 일정을 적어 드립니다.</p>
       <div class="seg" id="seg_when" role="radiogroup" aria-label="희망 오픈 시기"><label><input type="radio" name="when" value="되도록 빨리"><span>되도록 빨리</span></label><label><input type="radio" name="when" value="날짜 정함"><span>날짜를 정해 둠</span></label><label><input type="radio" name="when" value="급하지 않음"><span>급하지 않음</span></label></div>
       <div class="reveal" data-show="when=날짜 정함"><input class="inp" id="f_when_date" type="date" style="max-width:240px" aria-label="희망 오픈 날짜"></div></div>
 
-    <div class="fld"><div class="lab-row"><span class="lab">기타 요청 사항</span><span class="where">담당자 확인</span></div>
-      <p class="desc">위 항목 외 담당자 전달 사항 유무를 선택해 주십시오.</p>
-      <div class="seg" id="seg_etc" role="radiogroup" aria-label="기타 요청 사항"><label><input type="radio" name="tg_etc" value="있음"><span>있음</span></label><label><input type="radio" name="tg_etc" value="없음"><span>없음</span></label></div>
-      <div class="reveal" data-show="tg_etc=있음"><textarea class="inp" id="f_etc" aria-label="기타 요청 사항"></textarea></div></div>
   </section>
 
-  <!-- 동의 (ref.js 가 이 카드 앞에 「담당 영업실장」 칸을 끼웁니다 → 아래 스크립트가 「소개받음 / 직접 신청」을 붙임) -->
+  <!-- 담당자 요청 사항 (10/17) — 담당자가 신청 건에 적어 둔 부탁(SNAP.req)이 있을 때만 보임 · 고객은 답변을 적음.
+       🔴 실제 사이트: 어드민에 «담당자 요청»을 적는 칸이 있어야 하고, my_apply_snapshot() 이 그 글을 req 로 함께 돌려줘야 합니다. -->
+  <section class="card" id="step_req" data-step data-phase="material" hidden>
+    <div class="card-h"><span class="no"></span><div class="tt"><p class="eyebrow"></p><h2>담당자 요청 사항</h2>
+      <p class="sub">인투마케팅 담당자가 제작에 필요한 내용을 추가로 요청드립니다. 확인 후 답변을 입력해 주십시오.</p></div><span class="state"></span></div>
+    <div class="lab-row wz-only" style="margin-bottom:18px"><span class="lab">담당자 요청 사항</span></div>
+    <div class="req-box" id="req_text"></div>
+    <div class="fld" id="fld_req_ans" style="margin-top:18px"><div class="lab-row"><label class="lab" for="f_req_ans">답변</label><span class="where">담당자 확인</span></div>
+      <p class="desc">사진 · 파일은 「로고 · 사진」 단계에서 첨부하거나 카카오톡 채널로 보내 주시고, 여기에는 보낸 방법을 적어 주십시오.</p>
+      <textarea class="inp" id="f_req_ans" aria-label="담당자 요청 답변"></textarea></div>
+  </section>
+
+  <!-- 동의 (ref.js 가 이 카드 앞에 「담당 영업실장」 칸을 끼웁니다 → 아래 스크립트가 «홈페이지 신청 경로» 질문으로 바꿈) -->
   <section class="card" id="step_ok" data-step>
     <div class="card-h"><span class="no">10</span><div class="tt"><p class="eyebrow">STEP 10</p><h2>개인정보 수집 · 이용 동의</h2></div><span class="state"></span></div>
+    <div class="lab-row wz-only" style="margin-bottom:22px"><span class="lab">개인정보 수집 · 이용 동의</span></div>
     <div class="consent-box">
       <!-- 🔴 개인정보 수집 · 이용 고지 (개인정보 보호법 제15조 제2항).
            목적 · 「필수 / 신청서에 따라」 · 보관 기간 · 거부할 권리는 «신청서 7쪽 공통 문구»입니다(행정 창 2026-10-13). 고쳐 쓰지 마십시오.
@@ -1695,29 +1960,42 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
     <p class="keep">작성 중인 내용은 이 브라우저에만 7일간 임시 저장되며, 제출 시 삭제됩니다.
       공용 컴퓨터에서는 <button type="button" class="linkbtn" data-clear>임시 저장 지우기</button>를 눌러 주십시오.</p>
   </div>
+  <!-- 한 질문씩 (10/17 · 신청서 화면만) — 이전 / 다음 -->
+  <div class="wz-nav" id="wz_nav">
+    <p class="wz-msg" id="wz_msg" role="alert"></p>
+    <div class="wz-btns"><button type="button" class="wz-prev" id="wz_prev">← 이전</button><button type="button" class="wz-next" id="wz_next">다음 →</button></div>
+  </div>
 </form>
 
 <div class="done" id="done" style="display:none">
-  <div class="ic">✅</div>
+  <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M7.8 12.3l2.8 2.8 5.6-5.8"/></svg></div>
   <h2>신청이 접수되었습니다</h2>
-  <p>담당자 배정 후 <b>1~2영업일 안에</b> 연락합니다.</p>
   <p class="doneno">신청 번호 <b id="done_no"></b></p>
   <div class="box">
-    <b>다음 순서</b><br>
-    ① 담당자가 신청 내용을 확인한 뒤 견적서를 발송합니다 (최종 금액은 견적서로 확정)<br>
-    ② 계약서 서명 · 제작비 입금 (월 관리비는 오픈일부터 매달)<br>
-    ③ 계약서 서명 후 <b>「제작 자료」 링크</b>를 발송합니다. 글 · 연락 정보 · 로고 · 사진을 계약 · 입금 후 1주 안에 제출하면, 전체 접수일부터 1주 안에 디자인 초안, 2주 안에 완성본을 제공합니다<br>
-    <span id="done_dom" style="display:none">④ 새 도메인은 계약 후 소유자 이름으로 등록합니다. 등록 회사에서 <b>소유자 확인 메일 · 문자</b>가 발송되면 확인해 주십시오<br></span>
-    <span id="done_dom_self" style="display:none">④ 도메인은 직접 구매해 주십시오. 구매 후 담당자에게 주소를 알려 주시면 홈페이지 연결 값(DNS)을 안내합니다. <b>도메인 관리 비밀번호는 보내지 마십시오</b><br></span><br>
+    <b>다음 순서</b>
+    <ol class="flow">
+      <li><b>견적서 발송</b><span>담당자가 신청 내용을 확인한 뒤 1~2영업일 안에 연락하고 견적서를 보냅니다. 최종 금액은 견적서로 확정합니다.</span></li>
+      <li><b>계약서 서명 · 제작비 입금</b><span>월 관리비는 오픈일부터 매달 납부합니다.</span></li>
+      <li><b>「제작 자료」 링크로 자료 제출</b><span>들어갈 글 · 연락 정보 · 디자인 · 로고 · 사진 · 홈페이지 주소(도메인) · 희망 오픈 시기를 계약 · 입금 후 1주 안에 제출합니다.</span></li>
+      <li><b>담당자 요청 확인</b><span>제작에 더 필요한 내용이 있으면 담당자가 「제작 자료」 화면에 요청 사항을 남깁니다. 확인 후 답변해 주십시오.</span></li>
+      <li><b>완성본 · 오픈</b><span>기본 홈페이지는 자료를 모두 받은 날(담당자가 요청한 자료 포함)부터 영업일 3일 안에 완성본을 전달하고, 수정 5회 안에서 다듬은 뒤 오픈합니다.</span></li>
+    </ol>
+  </div>
+  <div class="box">
     <b>긴급 문의</b> 전화 <a href="tel:01073181790">010-7318-1790</a> · 이메일 <a href="mailto:info@intomarketing.co.kr">info@intomarketing.co.kr</a><br>
     <b>영업시간</b> 월~금 09:00~20:00 (주말 · 공휴일 제외)
   </div>
-  <p style="margin-top:20px"><a data-back href="../web/">← 홈페이지 제작으로 돌아가기</a></p>
+  <a class="done-exit" data-back href="../web/">나가기</a>
 </div>
 <div class="done" id="done_mat" style="display:none">
-  <div class="ic">✅</div>
+  <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M7.8 12.3l2.8 2.8 5.6-5.8"/></svg></div>
   <h2>제작 자료를 받았습니다</h2>
-  <p>담당자가 자료를 확인한 뒤 <b>작업 시작일</b>을 안내합니다. 그날부터 1주 안에 디자인 초안, 2주 안에 완성본을 제공합니다.</p>
+  <p>담당자가 자료를 확인합니다. 기본 홈페이지는 자료를 모두 받은 날(담당자가 요청한 자료 포함)부터 <b>영업일 3일 안에 완성본</b>을 전달하며, 추가 기능이 있으면 견적서의 일정을 따릅니다.</p>
+  <div class="box" id="done_mat_dom" style="display:none">
+    <b>홈페이지 주소(도메인)</b><br>
+    <span id="done_dom" style="display:none">새 도메인은 소유자 이름으로 등록합니다. 등록 회사에서 <b>소유자 확인 메일 · 문자</b>가 발송되면 확인해 주십시오</span>
+    <span id="done_dom_self" style="display:none">도메인은 직접 구매해 주십시오. 구매 후 담당자에게 주소를 알려 주시면 홈페이지 연결 값(DNS)을 안내합니다. <b>도메인 관리 비밀번호는 보내지 마십시오</b></span>
+  </div>
   <div class="box kk" id="done_kk" style="display:none">
     <b>사진을 카카오톡으로 보내 주십시오</b><br>
     ① 카카오톡에서 「<b class="kch">인투마케팅</b>」 채널을 검색해 추가합니다<a class="kurl" href="https://pf.kakao.com/_qlkxiX" target="_blank" rel="noopener">채널 바로 가기</a><br>
@@ -1730,7 +2008,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
     <b>긴급 문의</b> 전화 <a href="tel:01073181790">010-7318-1790</a> · 이메일 <a href="mailto:info@intomarketing.co.kr">info@intomarketing.co.kr</a><br>
     <b>영업시간</b> 월~금 09:00~20:00 (주말 · 공휴일 제외)
   </div>
-  <p style="margin-top:20px"><a data-back href="../web/">← 홈페이지 제작으로 돌아가기</a></p>
+  <a class="done-exit" data-back href="../web/">나가기</a>
 </div>
 </main>
 
@@ -1754,7 +2032,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
       <thead><tr><th>요금 방식</th><th>계약할 때 (제작비)</th><th>약정 총액</th></tr></thead>
       <tbody id="q_tab"></tbody>
     </table>
-    <p class="q-note" id="q_dom" hidden>새로 사는 도메인 비용은 이 금액에 들어 있지 않습니다. 고객 명의로 등록하고 비용은 고객이 부담하며, 등록 회사 · 주소에 따라 연 1~2만원을 넘을 수 있습니다.</p>
+    <p class="q-note" id="q_dom" hidden>도메인(홈페이지 주소) 비용은 이 금액에 들어 있지 않습니다. 주소는 계약 후 「제작 자료」에서 정하며, 새로 사면 고객 명의로 등록하고 비용은 고객이 부담합니다(등록 회사 · 주소에 따라 연 1~2만원을 넘을 수 있음).</p>
     <p class="q-note" id="q_dom_self" hidden>직접 구매하는 도메인 비용은 이 금액에 들어 있지 않습니다. 등록 회사에 직접 결제하며, 등록 회사 · 주소에 따라 연 1~2만원을 넘을 수 있습니다.</p>
     <p class="q-note">줄을 누르면 해당 요금 방식으로 변경됩니다. 약정 할인은 제작비 합계에 적용하며, 할인한 금액은 만원 단위로 올림합니다.
       <b>신청서 기준 예상 금액이며, 최종 금액은 견적서로 확정합니다.</b></p>
@@ -1906,7 +2184,7 @@ var EX_TXT={
       why:[['열린 모임','처음 오셔도 함께합니다'],['나눔 활동','이웃을 돕는 정기 봉사'],['지역 행사','주민과 함께하는 행사']]}
 };
 /* 손님이 할 일 (「홈페이지의 목적」) — 화면 카드의 value 와 같아야 합니다. 첫 화면 큰 버튼을 뺀 나머지 버튼은 이 순서 */
-var GOALS=['전화 문의','카카오톡 상담','방문','신청 · 예약'];
+var GOALS=['전화 문의','카카오톡 상담','방문','신청 · 예약','기타'];
 /* 등록증 (2026-10-03 · 7가지) — 화면 카드(name="reg")의 value 와 같아야 합니다.
    no = 번호 칸 이름(없으면 번호를 받지 않음) · digits10 = 10자리 숫자 · sum = 검증번호를 반드시 맞춤(사업자등록번호)
    biz = 사업자 고객 · cust = 고객 구분(매뉴얼 1, 10/1 결정) · own = 도메인 「등록증 종류」 자동 채움 · rec = 도메인 소유자 추천 */
@@ -1976,7 +2254,7 @@ var WHO_MAX=3, OPEN_SOON_DAYS=21, MAIN_MIN_PX=1200, PHOTO_MIN_PX=800;
 var REP={
   rep_svc: {a:'이름',b:'설명 (가격 · 시간 · 대상)',start:1,min:1,max:12,add:'+ 서비스 추가',what:'서비스 · 메뉴'},
   rep_why: {a:'짧은 제목',b:'설명',start:1,min:1,max:6,add:'+ 강점 추가',what:'강점'},
-  rep_faq: {a:'질문',b:'답',start:1,min:0,max:15,add:'+ 질문 추가',what:'질문'},
+  rep_faq: {a:'질문',b:'답',start:0,min:0,max:15,add:'+ 질문 추가',what:'질문'},   /* 10/18 — 빈 줄 없이 시작 (선택) */
   rep_like:{a:'주소 (https://…)',b:'좋은 점',start:1,min:1,max:3,add:'+ 홈페이지 추가',what:'참고 홈페이지'}
 };
 /* 우편번호 검색 (카카오 우편번호 서비스) — 버튼을 누를 때만 불러옵니다. 안 열리면 칸에 직접 적으면 됩니다. */
@@ -1991,7 +2269,8 @@ var MODE=MAT_ID?'material':'apply', SNAP=SNAP_IN||null;   /* 신청 값은 링�
 /* 구매 방법(등록 대행 / 직접 구매)이 생기기 전에 낸 신청 — 그때 「새로 구매」는 «등록 대행»뿐이었으므로 구매 방법이 없으면 등록 대행으로 읽음 (10/13)
    제작 자료 화면에서는 도메인 단계를 고칠 수 없어, 없으면 요약 · 지시서의 주소 · 등록 회사 · 소유자가 빈칸이 됩니다 */
 if(SNAP&&SNAP.d&&SNAP.d.r&&SNAP.d.f&&SNAP.d.r.domain==='유료 도메인 새로'&&!SNAP.d.r.dombuy&&SNAP.d.f.f_dom_want1)SNAP.d.r.dombuy='대행';
-document.body.classList.remove('mode-apply','mode-material'); document.body.classList.add('mode-'+MODE);
+document.body.classList.remove('mode-apply','mode-material','wiz'); document.body.classList.add('mode-'+MODE);
+var WIZ=MODE==='apply'||!!SNAP; if(WIZ)document.body.classList.add('wiz');   /* 한 질문씩 (신청서 10/17 · 제작 자료 10/18 — 신청 값을 못 받은 화면은 제외) */
 window.addEventListener('hashchange',function(){ if(MODE==='material'||/^#m=/.test(location.hash))location.reload(); });
 var BTN_TXT=MODE==='material'?'제작 자료 보내기 ↗':'신청서 제출 ↗';
 if(MODE==='material')document.title='제작 자료 보내기 · 인투마케팅';
@@ -2007,8 +2286,11 @@ var DRAFT_KEY=MODE==='material'?'im_apply_material_v1_'+(SNAP?SNAP.no:'x'):'im_a
 
 var sb=window.IMSB||((window.supabase&&window.supabase.createClient)?(window.IMSB=window.supabase.createClient(SB_URL,SB_KEY)):null);  /* 쪽에 한 벌만 — 머리띠(authbar.js)와 같은 것을 씁니다 */
 if(window.IMAccount) IMAccount.init(sb);
-/* ── 「← 홈페이지 제작」 링크 — 방금 그 화면에서 넘어왔으면 «새로 가지 않고» 한 칸 물러납니다.
+/* ── 「← 홈페이지 제작 안내」 링크 (10/18 문구 — 가는 곳이 /web/ 안내 페이지라는 것을 보이게) — 방금 그 화면에서 넘어왔으면 «새로 가지 않고» 한 칸 물러납니다.
    🔴 새로 가면 기록이 [홈페이지 제작 → 신청서 → 홈페이지 제작] 으로 쌓여, 거기서 「이전」을 누르면 신청서로 되돌아옵니다. */
+/* 미리보기(내 컴퓨터 파일 · localhost)에는 ../web/ 이 없어 «파일을 찾을 수 없음»이 뜨므로, 이때만 실제 사이트의 /web/ 으로 보냅니다 (10/18 · 사이트에서는 아무것도 안 함) */
+if(location.protocol==='file:'||/^(localhost|127\.0\.0\.1)$/.test(location.hostname))
+  document.querySelectorAll('a[data-back][href="../web/"]').forEach(function(a){ a.href='https://intomarketing.co.kr/web/'; });
 document.querySelectorAll('a[data-back]').forEach(function(a){
   a.addEventListener('click',function(e){
     try{
@@ -2166,14 +2448,14 @@ function drawQuote(){
   $('q_month').textContent=won(c.mon)+'원';
   $('q_total').textContent=show.total!=null
     ? show.m+'개월 약정 총액 '+won(show.total)+'원 (제작비 포함)'
-    : '정가는 최소 3개월 · 그 뒤에는 납부일 7일 전까지 알리면 해지';   /* 10/3 오후 결정 (10/4 3차에 남아 있던 옛 문구를 고침) */
+    : '정가는 최소 3개월 · 그 뒤에는 다음 납부일 7일 전까지 알리면 해지';   /* 10/3 오후 결정 (10/4 3차에 남아 있던 옛 문구를 고침) */
   $('q_tab').innerHTML=c.plans.map(function(x){
     return '<tr data-plan="'+x.v+'"'+(show.v===x.v?' class="on"':'')+'><td>'+x.v.replace('약정 ','')+(x.off?' 약정':'')+'</td>'
       +'<td class="tnum">'+(x.off===100?'<span class="free">무료</span>':won(x.make))+'</td>'
       +'<td class="tnum">'+(x.total!=null?won(x.total):'—')+'</td></tr>';
   }).join('');
   $('mini_plan').textContent=p?p.v:'정가 기준';
-  $('q_dom').hidden=one('domain')!=='유료 도메인 새로'||one('dombuy')==='직접';
+  $('q_dom').hidden=false;   /* 도메인은 10/17부터 제작 자료에서 고름 — 신청서 예상 금액에는 늘 안내 */
   $('q_dom_self').hidden=!selfBuy();
   $('mini_txt').innerHTML='<span style="white-space:nowrap">계약 시 '+won(show.due)+'원</span> · <span style="white-space:nowrap">매달 '+won(c.mon)+'원</span>';
   $('board_cnt').textContent='지금 게시판 '+c.nBoard+'개 → 게시판 제작비 +'+won(PRICE.board.make)+'원 · 월 관리비 +'+won(PRICE.board.mon+(c.nBoard-1)*PRICE.board.extraMon)+'원';
@@ -2195,7 +2477,7 @@ function repRow(id){
     +'<button type="button" class="x" aria-label="이 줄 지우기">✕</button>';
   var x=d.querySelector('.x');
   x.onclick=function(){
-    if($(id).children.length>1){ d.remove(); }
+    if($(id).children.length>1||!REP[id].min){ d.remove(); }   /* 선택 칸(자주 받는 질문)은 마지막 줄도 지움 */
     else { d.querySelectorAll('input').forEach(function(i){i.value='';}); }
     touched(); refresh();
   };
@@ -2215,11 +2497,12 @@ function repRows(id){
   });
 }
 function repRead(id){ return repRows(id).filter(function(x){return x.a||x.b;}); }
-/* 빈 줄은 빼고 봅니다. 적은 줄은 두 칸 모두 채워야 하고, 다 채운 줄이 min 개 이상이어야 합니다 */
-function repOK(id,testA){ var rows=repRead(id); return rows.length>=REP[id].min && rows.every(function(x){ return x.a&&x.b&&(!testA||testA(x.a)); }); }
+/* 10/18 — 보이는 줄은 빈 줄까지 모두 두 칸을 채워야 합니다(빈 줄은 ✕로 삭제). 다 채운 줄이 min 개 이상이어야 합니다 */
+function repOK(id,testA){ return repRead(id).length>=REP[id].min && repRows(id).every(function(x){ return x.a&&x.b&&(!testA||testA(x.a)); }); }
 function repMsg(id,one){
-  var c=REP[id], rows=repRead(id), half=rows.filter(function(x){ return !(x.a&&x.b); }).length;
+  var c=REP[id], rows=repRead(id), half=rows.filter(function(x){ return !(x.a&&x.b); }).length, blank=repRows(id).length-rows.length;
   if(half) return '한 칸만 입력한 줄이 '+half+'개 있습니다. 두 칸을 모두 입력하거나 ✕로 삭제해 주십시오.';
+  if(blank&&rows.length>=c.min) return '비어 있는 줄이 '+blank+'개 있습니다. 내용을 입력하거나 ✕로 삭제해 주십시오.';
   return one;
 }
 /* Enter — 왼쪽 칸이면 오른쪽 칸으로, 오른쪽 칸이면 다음 줄로 (마지막 줄이면 한 줄 더) */
@@ -2287,10 +2570,27 @@ function cRead(g){ var id=CIDS[g]||g, a=[]; try{ a=JSON.parse(val(id)||'[]'); }c
 function cWrite(g,list){ $(CIDS[g]).value=list.length?JSON.stringify(list):''; }
 function cFind(list,k){ for(var i=0;i<list.length;i++) if(list[i].k===k) return i; return -1; }
 function cText(list,ranked){ return list.map(function(x,i){ return (ranked?(i+1)+'순위 ':'')+x.k+(x.c&&x.h?' ('+x.h+')':''); }).join(ranked?' · ':', '); }
+/* 원하는 색으로 지금 고른 것 — 순위면 순위 칩, 영역별이면 기본색 · 포인트색 · 배경색 (피하고 싶은 색에서 잠글 색) */
+function likeList(){
+  if(one('tg_color')!=='있음')return [];
+  if(one('color_mode')==='영역') return ['main','point','bg'].filter(function(a){ var k=one('c_'+a); return one('tg_c_'+a)==='있음'&&k&&k!=='기타'; }).map(function(a){ return {k:one('c_'+a)}; });
+  return cRead('like');
+}
+/* 영역별 색 — 피하고 싶은 색으로 고른 색은 잠금 · 「기타」 색 고르기 칸 값 맞추기 */
+function cAreaBlock(){
+  var av=cRead('avoid').map(function(x){ return x.k; });
+  [].forEach.call(document.querySelectorAll('#fld_color_area input[type=radio][name^="c_"]'),function(i){
+    var b=i.value!=='기타'&&av.indexOf(i.value)>=0&&!i.checked; i.disabled=b;
+    var l=i.closest('label'); if(l){ l.classList.toggle('blocked',b); l.title=b?'피하고 싶은 색에서 선택한 색입니다':''; }
+  });
+  ['main','point','bg'].forEach(function(a){ var p=$('cpick_c_'+a), h=$('f_c_'+a+'_hex'); if(!p||!h)return;
+    if(h.value&&p.value.toUpperCase()!==h.value.toUpperCase())p.value=h.value; else if(!h.value&&one('c_'+a)==='기타')h.value=p.value.toUpperCase(); });
+}
+document.addEventListener('input',function(e){ var t=e.target; if(t&&/^cpick_c_(main|point|bg)$/.test(t.id)){ $('f_c_'+t.id.slice(8)+'_hex').value=t.value.toUpperCase(); touched(); refresh(); } });
 function drawColors(){
   ['like','avoid'].forEach(function(g){
     var box=$('cpal_'+g); if(!box)return;
-    var mine=cRead(g), other=cRead(g==='like'?'avoid':'like'), full=mine.length>=C_MAX;
+    var mine=cRead(g), other=g==='avoid'?likeList():cRead('avoid'), full=mine.length>=C_MAX;   /* 영역별로 고른 원하는 색도 잠금 (10/18) */
     var sig=JSON.stringify([mine,other,COPEN[g]]); if(box.getAttribute('data-sig')===sig)return;   /* 바뀐 것이 없으면 그대로 (누르는 중인 단추를 지우지 않게) */
     box.setAttribute('data-sig',sig); box.classList.toggle('avoid',g==='avoid');
     var rk=function(i){ return g==='like'&&i>=0?'<b class="rk">'+(i+1)+'순위</b>':''; };
@@ -2302,15 +2602,15 @@ function drawColors(){
     mine.forEach(function(x,i){ if(!x.c)return;
       h+='<span class="chip cc custom on"><i class="sw'+(x.h?'':' none')+'"'+(x.h?' style="background:'+esc(x.h)+'"':'')+'></i>'+esc(x.k)+rk(i)
         +'<button type="button" class="x" data-cdel="'+g+'" data-k="'+esc(x.k)+'" aria-label="'+esc(x.k)+' 빼기">×</button></span>'; });
-    h+='<button type="button" class="chip etc" data-cetc="'+g+'" aria-expanded="'+COPEN[g]+'" aria-controls="cadd_'+g+'"'+(full?' disabled':'')+'>기타…</button>';
+    h+='<button type="button" class="chip etc" data-cetc="'+g+'" aria-expanded="'+COPEN[g]+'" aria-controls="cadd_'+g+'"'+(full?' disabled':'')+'>기타</button>';
     box.innerHTML=h;
     $('cadd_'+g).classList.toggle('show',COPEN[g]&&!full);
-    if(g==='like'){ var sm=$('csum_like'); sm.hidden=!mine.length; sm.innerHTML=mine.length?'선택한 색: <b>'+esc(cText(mine,true))+'</b>':''; }
+    if(g==='like'){ var sm=$('csum_like'); sm.hidden=!mine.length; sm.innerHTML=mine.length?'선택한 색: <b>'+esc(mine.map(function(x,i){ return (i+1)+'순위 '+x.k+' — '+['기본색','포인트색','보조 색'][i]; }).join(' · '))+'</b>':''; }
   });
 }
 function cAdd(g){
   var nm=$('cname_'+g), hx=String($('cpick_'+g).value||'').toUpperCase(), list=cRead(g), k=String(nm.value||'').trim()||hx;
-  if(!k||list.length>=C_MAX||cFind(list,k)>=0||cFind(cRead(g==='like'?'avoid':'like'),k)>=0)return;
+  if(!k||list.length>=C_MAX||cFind(list,k)>=0||cFind(g==='avoid'?likeList():cRead('avoid'),k)>=0)return;
   list.push({k:k,h:hx,c:1}); cWrite(g,list); nm.value=''; COPEN[g]=false; touched(); refresh();
 }
 document.addEventListener('click',function(e){
@@ -2340,6 +2640,8 @@ $('faq_sugs').addEventListener('click',function(e){
   touched(); refresh();
   var ans=row.querySelector('[data-b]'); if(ans)ans.focus();
 });
+/* 「와 / 과」 — 받침 있으면 「과」 (한글이 아니면 「와(과)」) */
+function josaWa(s){ var c=String(s).charCodeAt(String(s).length-1); return (c>=0xAC00&&c<=0xD7A3)?(((c-0xAC00)%28)?'과':'와'):'와(과)'; }
 function registrar(){ var r=val('f_dom_reg'); return r==='기타'?val('f_dom_reg_etc'):r; }
 
 /* ── 손님이 할 일 (여러 개) + 첫 화면 큰 버튼 (하나) ──
@@ -2347,16 +2649,18 @@ function registrar(){ var r=val('f_dom_reg'); return r==='기타'?val('f_dom_reg
 var MAIN_GOAL='', CTA_WARN=false, AUTO_FORM=false;   /* AUTO_FORM = 신청서 기능을 「홈페이지 신청서」 때문에 자동으로 켰음 */
 function chosenGoals(){ return GOALS.filter(function(g){ var b=document.querySelector('input[name="goal"][value="'+g+'"]'); return b&&b.checked; }); }
 function hasGoal(g){ return chosenGoals().indexOf(g)>=0; }
+/* 「기타」는 고객이 적은 글로 보여 줌 (2026-10-16) */
+function goalName(g){ return g==='기타'?(val('f_goal_etc')||'기타'):g; }
 function mainGoal(){ var gs=chosenGoals(); return gs.length===1?gs[0]:(gs.indexOf(MAIN_GOAL)>=0?MAIN_GOAL:''); }
 function orderedGoals(){ var gs=chosenGoals(), m=mainGoal(); return m?[m].concat(gs.filter(function(g){return g!==m;})):gs; }
 function syncGoals(){
   var gs=chosenGoals();
   if(gs.indexOf(MAIN_GOAL)<0)MAIN_GOAL='';
   /* 「첫 화면 큰 버튼」 — 고른 것들로 고르는 칸을 다시 만듦 (고른 것이 바뀔 때만) */
-  var seg=$('seg_main'), key=gs.join('|');
+  var seg=$('seg_main'), key=gs.map(goalName).join('|');
   if(seg.getAttribute('data-key')!==key){
     seg.setAttribute('data-key',key);
-    seg.innerHTML=gs.map(function(g){ return '<label><input type="radio" name="main" value="'+esc(g)+'"><span>'+esc(g)+'</span></label>'; }).join('');
+    seg.innerHTML=gs.map(function(g){ return '<label><input type="radio" name="main" value="'+esc(g)+'"><span>'+esc(goalName(g))+'</span></label>'; }).join('');
   }
   [].forEach.call(seg.querySelectorAll('input'),function(r){ r.checked=(r.value===MAIN_GOAL); });
   $('main_box').classList.toggle('show',gs.length>=2);
@@ -2368,8 +2672,9 @@ function syncGoals(){
   });
   $('goal_order').classList.toggle('show',gs.length>0);
   $('goal_order').innerHTML=!gs.length?'':(m
-    ? '<b>첫 화면 큰 버튼:</b> '+esc(m)+(og.length>1?'<br><b>그 옆 · 휴대폰 아래 막대:</b> '+og.slice(1).map(esc).join(', '):'')
-    : '선택 항목: '+gs.map(esc).join(', ')+'<br>위에서 <b>첫 화면 큰 버튼</b>을 하나 선택해 주십시오.');
+    ? '<b>첫 화면 큰 버튼:</b> '+esc(goalName(m))+(og.length>1?'<br><b>그 옆 · 휴대폰 아래 막대:</b> '+og.slice(1).map(function(g){return esc(goalName(g));}).join(', '):'')
+    : '선택 항목: '+gs.map(function(g){return esc(goalName(g));}).join(', ')+'<br>위에서 <b>첫 화면 큰 버튼</b>을 하나 선택해 주십시오.');
+  $('goal_etc_box').classList.toggle('show',gs.indexOf('기타')>=0);
   var book=gs.indexOf('신청 · 예약')>=0;
   $('via_box').classList.toggle('show',book);
   if(!book){ [].forEach.call(document.querySelectorAll('input[name="via"]'),function(r){r.checked=false;}); CTA_WARN=false; }
@@ -2398,13 +2703,13 @@ function syncFeatures(){
   var vis=MODE==='apply'&&SET_FEATS.some(function(f){ return k.indexOf(f)>=0; });   /* 고른 기능 설정은 신청서에서만 */
   if($('step_feat').hidden===vis){ $('step_feat').hidden=!vis; setupSteps(); }
 }
-/* 주요 방문자 — 3개까지 (다 고르면 나머지와 「기타…」는 잠김) */
+/* 주요 방문자 — 3개까지 (다 고르면 나머지와 「기타」는 잠김) */
 function syncWho(){
   var on=multi('who').length, full=on>=WHO_MAX;
   [].forEach.call(document.querySelectorAll('[data-multi="who"] input'),function(i){ i.disabled=!i.checked&&full; i.closest('.chip').style.opacity=i.disabled?.45:''; });
   var b=document.querySelector('[data-add="who"]'); if(b){ b.disabled=full; if(full)openAdd('who',false); }
 }
-/* 「기타…」 → 목록에 없는 것을 적고 「+ 추가」 (주요 방문자 · 신청서에 받을 칸 · 2026-10-04)
+/* 「기타」 → 목록에 없는 것을 적고 「+ 추가」 (주요 방문자 · 신청서에 받을 칸 · 2026-10-04)
    더한 것은 같은 묶음의 체크 칩이 되어 multi() · 임시 저장 · 제출에 그대로 들어갑니다. 칩을 다시 누르거나 ×를 누르면 빠집니다 */
 var ADD_GROUPS=['who','formfields'];
 function addInput(g){ var r=$(g+'_add'); return r?r.querySelector('input'):null; }
@@ -2561,7 +2866,7 @@ function drawCounts(){
   $('photo_cnt').textContent='지금 '+pc+'장'+(pc<PHOTO_MIN?' · '+PHOTO_MIN+'장 이상 첨부해 주십시오':' ✓');
   $('photo_cnt').classList.toggle('ok',pc>=PHOTO_MIN);
   var cat=val('f_bizcat');
-  $('rec_txt').textContent=cat?'지금 업종이면 '+recTheme(cat).slice(2)+'으로 만듭니다':'업종에 맞는 분위기를 담당자가 선정합니다';
+  $('rec_txt').textContent=cat?'지금 업종에는 '+recTheme(cat).slice(2)+'을 제안합니다':'업종에 어울리는 분위기를 담당자가 제안합니다';
   $('med_note').classList.toggle('show',cat==='병원·의원·약국');
   $('photo_med').classList.toggle('show',cat==='병원·의원·약국');
   $('list_realty').classList.toggle('show',cat==='부동산 중개');
@@ -2574,6 +2879,7 @@ function drawCounts(){
 function C(card,id,lab,ok,msg,when){ return {card:card,id:id,lab:lab,ok:ok,msg:msg,when:when}; }
 function has(id){ return function(){ return !!val(id); }; }
 function is(name,v){ return function(){ return one(name)===v; }; }
+function cArea(){ return one('tg_color')==='있음'&&one('color_mode')==='영역'; }   /* 원하는 색 · 영역별 (10/18) */
 function picked1(name){ return function(){ return !!one(name); }; }
 function feat(k){ return function(){ return hasFeat(k); }; }
 var buying=is('domain','유료 도메인 새로');
@@ -2615,7 +2921,7 @@ var CHECKS=[
   C('step1','reg','등록증',picked1('reg'),'보유한 등록증을 선택해 주십시오. 미보유 시 「개업 준비 중」 또는 「등록증 없음 · 개인」을 선택해 주십시오.'),
   C('step1','f_reg_doc','등록증 이름',has('f_reg_doc'),'등록증 이름을 입력해 주십시오.',function(){var r=regInfo();return !!(r&&r.other);}),
   C('step1','f_reg_no','등록번호',regNoOK,regNoMsg,regNeedsNo),
-  C('step1','seg_regname','등록증에 기재된 상호',picked1('tg_regname'),'등록증에 기재된 상호가 위 상호와 같은지 선택해 주십시오.',regNeedsNo),
+  C('step1','seg_regname','등록증에 기재된 상호',picked1('tg_regname'),'등록증에 기재된 상호가 앞에서 입력한 상호와 같은지 선택해 주십시오.',regNeedsNo),
   C('step1','f_reg_name','등록증에 기재된 상호',has('f_reg_name'),'등록증에 기재된 상호를 그대로 입력해 주십시오.',function(){return regNeedsNo()&&one('tg_regname')==='다름';}),
   /* 법인등록번호 — 법인사업자만 · 13자리 (계약서 당사자 칸 · 검증번호 방식은 공식 자료로 확인하지 못해 자릿수만 봄) */
   C('step1','f_corp_no','법인등록번호',function(){ return digits(val('f_corp_no')).length===13; },
@@ -2634,6 +2940,7 @@ var CHECKS=[
   C('step1','f_realty_name','대표 공인중개사 성함',has('f_realty_name'),'대표 공인중개사(개업공인중개사) 성함을 입력해 주십시오.',isRealty),
 
   C('step2','goals','전환 목표',function(){return chosenGoals().length>0;},'전환 목표를 1개 이상 선택해 주십시오.'),
+  C('step2','f_goal_etc','전환 목표 (기타)',has('f_goal_etc'),'기타 전환 목표를 입력해 주십시오. (예: 견적 요청)',function(){return hasGoal('기타');}),
   C('step2','seg_main','첫 화면 큰 버튼',function(){return !!mainGoal();},'선택 항목 중 첫 화면에 가장 크게 배치할 버튼 1개를 선택해 주십시오.',function(){return chosenGoals().length>=2;}),
   C('step2','via','신청 · 예약 받는 방법',picked1('via'),'신청 · 예약 접수 방법을 선택해 주십시오.',bookOn),
   C('step2','f_book_url','예약 페이지 주소',function(){return RE_WEB.test(val('f_book_url'));},'사용 중인 예약 페이지 주소를 입력해 주십시오.',function(){return bookOn()&&one('via')==='쓰고 있는 예약 페이지';}),
@@ -2665,7 +2972,7 @@ var CHECKS=[
   C('step4','f_sign_name','서명 (직함과 성함)',has('f_sign_name'),'인사말 끝에 넣을 직함과 성함을 입력해 주십시오. (예: 부원장 김영희)',function(){return greetOn()&&signOther();}),
   C('step4','rep_svc','서비스 · 메뉴',function(){return repOK('rep_svc');},function(){ return repMsg('rep_svc','소개할 서비스 · 메뉴를 1개 이상 입력해 주십시오. (이름과 설명)'); }),
   C('step4','rep_why','우리의 강점',function(){return repOK('rep_why');},function(){ return repMsg('rep_why','강점을 1개 이상 입력해 주십시오. (3가지 권장)'); }),
-  C('step4','rep_faq','자주 받는 질문',function(){return repOK('rep_faq');},function(){ return repMsg('rep_faq',''); }),
+  C('step4','rep_faq','자주 받는 질문',function(){return repOK('rep_faq');},function(){ return repMsg('rep_faq',''); },function(){ return !!$('rep_faq').children.length; }),   /* 줄을 추가했을 때만 */
   C('step4','f_kw','키워드',has('f_kw'),'키워드를 입력해 주십시오. (예: 지역명 + 업종)'),
 
   C('step5','seg_addrpub','홈페이지에 주소 공개',picked1('tg_addrpub'),'홈페이지 주소 공개 여부를 선택해 주십시오.',function(){return !addrForced();}),
@@ -2678,7 +2985,20 @@ var CHECKS=[
   C('step5','f_sns','SNS · 블로그 주소',function(){return RE_WEB.test(val('f_sns'));},'SNS · 블로그 주소를 한 줄에 하나씩 입력해 주십시오.',is('tg_sns','있음')),
 
   C('step6','theme','분위기',picked1('theme'),'디자인 분위기를 하나 선택해 주십시오.'),
-  C('step6','cpal_like','원하는 색',function(){return cRead('like').length>=1;},'원하는 색을 1개 이상 눌러 주십시오. (누른 순서대로 1 · 2 · 3순위)',is('tg_color','있음')),
+  C('step6','f_theme_etc','원하시는 분위기',has('f_theme_etc'),'원하시는 분위기를 입력해 주십시오. (예: 고급스럽고 차분하게)',function(){return one('theme')==='직접 입력';}),
+  C('step6','cmode','원하는 색 고르는 방식',picked1('color_mode'),'원하는 색을 고르는 방식(순위로 / 영역별로)을 선택해 주십시오.',is('tg_color','있음')),
+  C('step6','cpal_like','원하는 색',function(){return cRead('like').length>=1;},'원하는 색을 1개 이상 눌러 주십시오. (누른 순서대로 1 · 2 · 3순위)',function(){return one('tg_color')==='있음'&&one('color_mode')==='순위';}),
+  C('step6','seg_c_main','기본색 바꾸기',picked1('tg_c_main'),'기본색을 바꿀지 「있음 / 없음」을 선택해 주십시오.',cArea),
+  C('step6','cp_main','기본색',picked1('c_main'),'기본색을 1개 선택해 주십시오.',function(){return cArea()&&one('tg_c_main')==='있음';}),
+  C('step6','seg_c_point','포인트색 바꾸기',picked1('tg_c_point'),'포인트색을 바꿀지 「있음 / 없음」을 선택해 주십시오.',cArea),
+  C('step6','cp_point','포인트색',picked1('c_point'),'포인트색을 1개 선택해 주십시오.',function(){return cArea()&&one('tg_c_point')==='있음';}),
+  C('step6','seg_c_bg','배경색 바꾸기',picked1('tg_c_bg'),'배경색을 바꿀지 「있음 / 없음」을 선택해 주십시오.',cArea),
+  C('step6','cp_bg','배경색',picked1('c_bg'),'배경색을 1개 선택해 주십시오.',function(){return cArea()&&one('tg_c_bg')==='있음';}),
+  /* 10/18 밤 6 — 영역별 「기타」 이름은 선택 (색은 고르기 칸으로) */
+  //C('step6','f_c_main_etc','기본색 (기타)',has('f_c_main_etc'),'원하는 기본색을 적어 주십시오. (예: 로고의 초록색)',function(){return cArea()&&one('tg_c_main')==='있음'&&one('c_main')==='기타';}),
+  //C('step6','f_c_point_etc','포인트색 (기타)',has('f_c_point_etc'),'원하는 포인트색을 적어 주십시오. (예: 진한 와인색)',function(){return cArea()&&one('tg_c_point')==='있음'&&one('c_point')==='기타';}),
+  //C('step6','f_c_bg_etc','배경색 (기타)',has('f_c_bg_etc'),'원하는 배경색을 적어 주십시오. (예: 아주 연한 노랑)',function(){return cArea()&&one('tg_c_bg')==='있음'&&one('c_bg')==='기타';}),
+  C('step6','fld_color_area','영역별 색',function(){return ['main','point','bg'].some(function(a){return one('tg_c_'+a)==='있음';});},'바꿀 영역을 1곳 이상 「있음」으로 선택해 주십시오. 바꿀 곳이 없으면 앞 쪽에서 「순위로 고르기」나 「없음」을 선택해 주십시오.',function(){return cArea()&&['main','point','bg'].every(function(a){return !!one('tg_c_'+a);});}),
   C('step6','cpal_avoid','피하고 싶은 색',function(){return cRead('avoid').length>=1;},'피하고 싶은 색을 1개 이상 눌러 주십시오. (3개까지)',is('tg_avoid','있음')),
   C('step6','rep_like','참고할 홈페이지 주소',function(){return repOK('rep_like',function(a){return RE_WEB.test(a);});},function(){ return repMsg('rep_like','참고할 홈페이지의 주소(https://…)와 참고할 점을 입력해 주십시오.'); },is('tg_like','있음')),
 
@@ -2713,11 +3033,11 @@ var CHECKS=[
   /* 도메인 제3자 제공 동의는 «검사하지 않습니다» — 거부해도 신청은 되어야 합니다(행정 창 2026-10-13). 아래 WARNS 에서 주의만 띄웁니다. */
   C('step8','seg_when','희망 오픈 시기',picked1('when'),'희망 오픈 시기를 선택해 주십시오.'),
   C('step8','f_when_date','희망 오픈 날짜',function(){var v=val('f_when_date');return !!v&&v>=todayStr();},'희망 오픈 날짜를 선택해 주십시오. (오늘 이후)',is('when','날짜 정함')),
-  C('step8','seg_etc','기타 요청 사항',picked1('tg_etc'),'기타 요청 사항 유무를 선택해 주십시오.'),
-  C('step8','f_etc','기타 요청 사항',has('f_etc'),'요청 사항을 입력해 주십시오.',is('tg_etc','있음')),
+  C('step_req','f_req_ans','담당자 요청 답변',has('f_req_ans'),'담당자 요청 사항을 확인하고 답변을 입력해 주십시오.',function(){return !!reqText();}),
 
-  C('im-ref-card','fld_ref','영업실장 소개',picked1('tg_ref'),'영업실장 소개 여부를 선택해 주십시오.',function(){return !!$('fld_ref');}),
-  C('im-ref-card','im-ref-name','영업실장 성함',has('im-ref-name'),'소개한 영업실장 성함을 입력해 주십시오.',function(){return !!$('fld_ref')&&one('tg_ref')==='있음';}),
+  C('im-ref-card','fld_ref','홈페이지 신청 경로',picked1('tg_ref'),'홈페이지 신청 경로를 1개 선택해 주십시오.',function(){return !!$('fld_ref');}),
+  C('im-ref-card','im-ref-name','영업실장 성함',has('im-ref-name'),'소개한 영업실장 성함을 입력해 주십시오.',function(){return !!$('fld_ref')&&one('tg_ref')==='영업실장 소개';}),
+  C('im-ref-card','f_ref_etc','신청 경로 (기타)',has('f_ref_etc'),'신청 경로를 입력해 주십시오. (예: 네이버 지도)',function(){return !!$('fld_ref')&&one('tg_ref')==='기타';}),
 
   C('step_ok','f_consent','개인정보 동의',function(){return $('f_consent').checked;},'개인정보 수집 · 이용 동의 후 접수됩니다.')
 ];
@@ -2912,7 +3232,7 @@ function drawErrors(fail){
   [].forEach.call(document.querySelectorAll('.fld.is-bad'),function(f){ f.classList.remove('is-bad'); });
   [].forEach.call(document.querySelectorAll('.grp-bad'),function(g){ g.classList.remove('grp-bad'); });
   [].forEach.call(document.querySelectorAll('.inp.bad'),function(i){ i.classList.remove('bad'); i.removeAttribute('aria-invalid'); i.removeAttribute('aria-describedby'); });
-  if(!SHOW_ERR)return;
+  if(!SHOW_ERR){ if(!WIZ)return; fail=fail.filter(function(c){ return WZ_FLAG[wzPageOf(c)]; }); if(!fail.length)return; }
   var seen=[];
   fail.forEach(function(c){
     var el=$(c.id); if(!el)return;
@@ -2921,7 +3241,7 @@ function drawErrors(fail){
     if(el.classList.contains('rep')){
       var its=[].slice.call(el.querySelectorAll('.it')), any=its.some(function(r){ return [].some.call(r.querySelectorAll('.inp'),function(i){ return i.value.trim(); }); });
       its.forEach(function(r,k){ var ins=[].slice.call(r.querySelectorAll('.inp')), filled=ins.some(function(i){ return i.value.trim(); });
-        if(filled||(!any&&k===0)) ins.forEach(function(i){ if(!i.value.trim()){ i.classList.add('bad'); i.setAttribute('aria-invalid','true'); } }); });
+        ins.forEach(function(i){   /* 10/18 — 빈 줄의 칸도 빨갛게 */ if(!i.value.trim()){ i.classList.add('bad'); i.setAttribute('aria-invalid','true'); } }); });
     }
     var f=fldOf(el); if(!f||seen.indexOf(f)>=0)return; seen.push(f);
     f.classList.add('is-bad');
@@ -2932,21 +3252,218 @@ function drawErrors(fail){
   });
 }
 
+/* ═════════ 한 질문씩 넘기는 신청서 (10/17 · 신청서 화면만) ═════════
+   카드 · 칸은 그대로 두고, 보이는 «쪽»만 바꿉니다 (저장 · 검사 · 제출은 그대로).
+   쪽 = 질문 하나(.fld) — 그 답에 딸린 칸(등록번호 · 기타 입력 등)은 같은 쪽에 나옵니다.
+   STEP 3 의 「선택 기능 설정」(step_feat) 쪽도 STEP 3 으로 셉니다. 영업실장 · 동의는 카드 한 장이 한 쪽.
+   「다음」은 바로 넘어갑니다 — 필수 칸 확인은 제출할 때 (필수 질문 제목에는 빨간 *). */
+var WZ=[], WZ_I=0, WZ_FLAG={};
+function wzFld(id){ var e=$(id); return e?e.closest('.fld'):null; }
+function wzBuild(){
+  if(!WIZ)return;
+  var key=WZ[WZ_I]?WZ[WZ_I].key:'', P=[];
+  var add=function(card,roots,when){   /* when = 그 쪽이 나올 조건 (칸이 .stage 가 아니라 CSS 로 숨는 경우) */
+    if(!$(card))return;
+    roots=roots.filter(Boolean);
+    P.push({card:card,roots:roots,when:when,key:card+':'+P.filter(function(p){return p.card===card;}).length});
+  };
+  add('step1',[wzFld('f_name')]); add('step1',[wzFld('f_bizcat')]); add('step1',[$('fld_reg')]);
+  add('step1',[$('fld_people')]); add('step1',[wzFld('f_email')]);   /* 대표자 · 담당자 정보는 한 쪽 (10/18) */
+  add('step1',[$('fld_addr')]); add('step1',[$('fld_old')]); add('step1',[$('academy_box')]); add('step1',[$('realty_box')]);
+  add('step2',[$('fld_goals')]); add('step2',[$('main_box'),$('goal_order')]); add('step2',[$('via_box')]); add('step2',[$('fld_who')]);
+  var s3=[].slice.call($('step3').children).filter(function(e){ return !e.classList.contains('card-h'); });
+  var f3=s3.filter(function(e){ return e.classList.contains('fld'); });
+  add('step3',s3.slice(0,s3.indexOf(f3[0])));                          /* 기본 홈페이지 + 추가 기능 */
+  f3.forEach(function(f){ add('step3',[f]); });                         /* 표에 없는 기능 · 요금 방식 */
+  [].forEach.call(document.querySelectorAll('#step_feat .fgroup > .fld'),function(f){ add('step_feat',[f]); });
+  add('im-ref-card',[]);
+  /* ── 제작 자료 (10/17 밤) ── */
+  add('step4',[wzFld('f_head'),$('med_note')]); add('step4',[$('fld_about')]); add('step4',[$('fld_greet'),$('fld_sign')]);
+  add('step4',[$('fld_svc')]); add('step4',[$('fld_why')]); add('step4',[$('fld_faq')]); add('step4',[wzFld('f_kw')]);
+  add('step5',[$('addr_pub_box')]); add('step5',[wzFld('f_tel')]); add('step5',[wzFld('f_hours')]); add('step5',[wzFld('seg_kakao')]);
+  add('step5',[$('park_box'),$('addr_forced')]); add('step5',[wzFld('seg_sns')]);
+  add('step6',[$('fld_theme'),$('tpv')]); add('step6',[$('fld_color')]); add('step6',[$('fld_avoid')]); add('step6',[$('fld_like')]);
+  add('step7',[$('fld_pvia'),document.querySelector('#step7 > ul.note'),$('photo_newbiz'),$('photo_med')]);
+  add('step7',[$('fld_logo')],function(){ return !!one('tg_pvia'); });            /* 사진 전달 방법을 고른 뒤 */
+  add('step7',[$('fld_main')],function(){ return photoAtt(); });                  /* 이 화면에서 첨부할 때만 */
+  add('step7',[$('fld_photo')],function(){ return photoAtt(); });
+  if($('fld_domain')){
+    add('step8',[].slice.call($('fld_domain').children).filter(function(e){ return e.id!=='dom_buy'; }));   /* 주소 고르기 (+ 이미 있음 · 무료) */
+    add('step8',[$('fld_dombuy')]); add('step8',[$('dom_self')]);
+    var ag=[].slice.call($('dom_agent').children), ob=[].slice.call($('owner_box').children), oc=ob.indexOf($('own_consent_h'));
+    add('step8',ag.filter(function(e){ return e.id!=='owner_box'&&!e.querySelector('#seg_owner'); }));   /* 원하는 주소 · 등록 회사 */
+    add('step8',[wzFld('seg_owner')]);                                            /* 소유자 구분 */
+    add('step8',ob.slice(0,oc)); add('step8',ob.slice(oc));                       /* 소유자 정보 · 제3자 제공 동의 */
+  }
+  add('step8',[$('fld_when')]);
+  add('step_req',[]);
+  add('step_ok',[]);                             /* 카드 한 장이 한 쪽 */
+  add('finish',[]);                                                     /* 제출 전 확인 (미입력 항목 · 제출) — STEP 5 안 */
+  [].forEach.call(document.querySelectorAll('[data-pg]'),function(e){ e.removeAttribute('data-pg'); e.classList.remove('pg-on'); });
+  P.forEach(function(p,i){ p.roots.forEach(function(r){ r.setAttribute('data-pg',String(i)); }); });
+  /* 쪽 제목 — 그 쪽의 첫 질문 이름을 크게 (.wz-h) */
+  [].forEach.call(document.querySelectorAll('.lab.wz-h'),function(l){ l.classList.remove('wz-h'); });
+  P.forEach(function(p){
+    var h=null;
+    p.roots.some(function(r){ h=r.matches('.lab')?r:r.querySelector('.lab'); return !!h; });
+    if(!h&&!p.roots.length&&$(p.card)) h=[].filter.call($(p.card).querySelectorAll('.lab'),function(l){ return !l.closest('.card-h'); })[0]||null;
+    if(h)h.classList.add('wz-h');
+  });
+  if($('design_more'))$('design_more').open=true;   /* 원하는 색 · 피하고 싶은 색 · 참고 홈페이지도 한 쪽씩 (접지 않음) */
+  WZ=P; var k=P.map(function(p){ return p.key; }).indexOf(key); WZ_I=k>=0?k:0;
+}
+/* 쪽이 지금 보일 차례인가 — 카드가 숨었거나, 첫 칸(또는 그 위)이 아직 안 열린 .stage 면 건너뜀 */
+function wzActive(p){
+  var c=$(p.card); if(!c||c.hidden)return false;
+  if(p.when&&!p.when())return false;
+  for(var n=p.roots[0];n&&n!==c;n=n.parentNode){
+    if(n.hidden)return false;
+    if(n.classList&&n.classList.contains('stage')&&!n.classList.contains('show'))return false;
+  }
+  return true;
+}
+function wzList(){ var a=[]; WZ.forEach(function(p,i){ if(wzActive(p))a.push(i); }); return a; }
+function wzPageOf(c){
+  var el=c&&$(c.id); if(!el)return -1;
+  var card=el.closest('[data-step]'); if(!card)return -1;
+  for(var i=0;i<WZ.length;i++){
+    var p=WZ[i]; if(p.card!==card.id)continue;
+    if(!p.roots.length||p.roots.some(function(r){ return r===el||r.contains(el); }))return i;
+  }
+  return -1;
+}
+function wzStepOf(card){ return card==='step_feat'?'step3':(card==='finish'?'step_ok':card); }
+function wzShow(){
+  var p=WZ[WZ_I]; if(!p)return;
+  [].forEach.call(document.querySelectorAll('#form > .wz-cur'),function(e){ e.classList.remove('wz-cur'); });
+  [].forEach.call(document.querySelectorAll('[data-pg].pg-on'),function(e){ e.classList.remove('pg-on'); });
+  $(p.card).classList.add('wz-cur');
+  p.roots.forEach(function(r){ r.classList.add('pg-on'); });
+  [].forEach.call(document.querySelectorAll('#step_feat .fgroup'),function(g){ g.classList.toggle('wz-off',!g.querySelector('.pg-on')); });   /* 그 쪽 기능 묶음만 (제목 · 안내) */
+  document.body.classList.toggle('wz-s3',wzStepOf(p.card)==='step3');   /* 예상 금액은 STEP 3 에서만 */
+  document.body.classList.toggle('wz-pv',['step4','step5','step6','step7'].indexOf(p.card)>=0);   /* 홈페이지 미리 보기는 글 · 연락 · 디자인 · 사진에서만 */
+  setTimeout(function(){ if(typeof pvFitAll==='function')pvFitAll(); },0);   /* 숨어 있던 미리 보기 · 테마 화면 예시를 다시 맞춤 */
+  wzBar();
+}
+function wzMarkReq(){
+  [].forEach.call(document.querySelectorAll('.lab.rq'),function(l){ l.classList.remove('rq'); });
+  active().forEach(function(c){
+    var el=$(c.id), f=el&&fldOf(el), l=null; if(!f)return;
+    [].forEach.call(f.children,function(ch){ if(l)return; if(ch.classList.contains('lab'))l=ch; else if(ch.classList.contains('lab-row'))l=ch.querySelector('.lab'); });
+    if(!l){ var cd=f.closest('[data-step]'), h=cd&&cd.querySelector(':scope > .lab-row .lab'); if(h)l=h; }
+    if(l)l.classList.add('rq');
+  });
+}
+/* 쪽마다 답했는가 — 필수 칸이 있으면 다 채웠을 때, 없으면 한 번 지나갔을 때 (진행 막대 칸 색) */
+var WZ_SEEN={};
+function wzDoneMap(){
+  var need={}, bad={};
+  active().forEach(function(c){ var i=wzPageOf(c); if(i<0)return; need[i]=true; if(!c.ok())bad[i]=true; });
+  var f=function(i){ return need[i]?!bad[i]:!!WZ_SEEN[i]; };
+  f.need=function(i){ return !!need[i]; };
+  return f;
+}
+function wzBar(){
+  if(!WIZ||!WZ.length)return;
+  wzMarkReq();
+  var act=wzList(); if(!act.length)return;
+  if(act.indexOf(WZ_I)<0){   /* 지금 쪽이 사라짐 (예: 기능을 빼서 설정 쪽이 없어짐) → 다음 쪽으로 */
+    var nx=act.filter(function(i){ return i>WZ_I; })[0];
+    WZ_I=nx!=null?nx:act[act.length-1]; wzShow(); return;
+  }
+  var qs=act.filter(function(i){ return WZ[i].card!=='finish'; }), fin=WZ[WZ_I].card==='finish';
+  var k=act.indexOf(WZ_I), q=qs.indexOf(WZ_I), cur=wzStepOf(WZ[WZ_I].card), done=wzDoneMap();
+  /* 진행 막대 — 질문 수만큼 칸을 나눔: 답한 칸 파랑 · 안 한 칸 연한 색 · 지금 칸 굵게. 칸을 누르면 그 질문으로 */
+  /* 한 줄 막대 — 채운 길이 = 지금 위치 · 지나왔거나 들렀는데 안 채운 필수 질문 = 코랄 레드 칸 */
+  var miss=function(i){ return i!==WZ_I&&done.need(i)&&!done(i)&&(i<WZ_I||fin||WZ_SEEN[i]); };
+  $('fill').style.width=(fin?100:Math.round((q+1)/qs.length*1000)/10)+'%';
+  $('wz_segs').innerHTML=qs.map(function(i,n){
+    var p=WZ[i], l=p.roots[0]&&p.roots[0].querySelector('.lab'), t=l?l.textContent:($(p.card).querySelector('.lab')||{}).textContent||'';
+    return '<button type="button" data-wz="'+i+'" class="'+(miss(i)?'miss':'')+(i===WZ_I?' cur':'')+'" title="'+esc((n+1)+'. '+String(t).trim()+(miss(i)?' (필수 · 아직 답하지 않음)':(done(i)?' (답함)':'')))+'"></button>';
+  }).join('');
+  var runs=[], st=-1;   /* 이어진 빠진 칸 → 한 덩어리 */
+  qs.forEach(function(i,n){ if(miss(i)){ if(st<0)st=n; } else if(st>=0){ runs.push([st,n]); st=-1; } }); if(st>=0)runs.push([st,qs.length]);
+  $('wz_segs').insertAdjacentHTML('afterbegin',runs.map(function(r){ return '<i style="left:'+(r[0]/qs.length*100)+'%;width:'+((r[1]-r[0])/qs.length*100)+'%"></i>'; }).join(''));
+  $('left_txt').textContent=fin?'제출 전 확인':(q+1)+' / '+qs.length;
+  $('left_txt').classList.remove('zero');
+  $('wz_prev').hidden=k<=0; $('wz_next').hidden=k>=act.length-1;
+  $('wz_next').textContent=act[k+1]!=null&&WZ[act[k+1]].card==='finish'?'제출 전 확인 →':'다음 →';
+  document.body.classList.toggle('wz-first',k===0);
+  document.body.classList.toggle('wz-fin',fin);
+  [].forEach.call($('dots').children,function(b){ b.classList.toggle('cur',b.getAttribute('data-goto')===cur); });
+}
+/* 임시 저장 — 이어서 할지 묻기. 이어서 하면 알림 줄만 남기고 아직 답하지 않은 첫 질문으로 */
+function wzQs(){ return wzList().filter(function(i){ return WZ[i].card!=='finish'; }); }
+function wzAskDraft(){
+  var qs=wzQs(), done=wzDoneMap(), last=-1;
+  qs.forEach(function(i){ if(done(i))last=i; });
+  qs.forEach(function(i){ if(i<last)WZ_SEEN[i]=true; });   /* 마지막으로 답한 곳 앞의 선택 질문은 지나간 것으로 */
+  done=wzDoneMap();
+  $('da_when').textContent=$('draft_when').textContent;
+  $('da_t').textContent=MODE==='material'?'작성하던 제작 자료가 있습니다':'작성하던 신청서가 있습니다';
+  $('da_note').textContent=MODE==='material'?'사진 · 로고 · 도메인 소유자 정보 · 동의는 저장되지 않아 다시 입력해 주십시오.':'동의 · 영업실장 성함은 저장되지 않아 다시 입력해 주십시오.';
+  $('da_cnt').textContent='질문 '+qs.length+'개 중 '+qs.filter(done).length+'개 답변';
+  $('draft_note').hidden=true; $('draft_ask').hidden=false; document.body.classList.add('wz-ask');
+}
+$('da_go').addEventListener('click',function(){
+  $('draft_ask').hidden=true; document.body.classList.remove('wz-ask');
+  $('hd_when').textContent=$('draft_when').textContent; $('hero_draft').hidden=false;   /* 알림은 맨 위 남색 영역 안 한 줄로만 */
+  var done=wzDoneMap(), first=wzQs().filter(function(i){ return !done(i); })[0];
+  if(first==null){ var all=wzList(); first=all[all.length-1]; }   /* 다 답했으면 제출 전 확인 */
+  wzGo(first);
+});
+/* 「바로 가기」(data-wzgo) — 한 질문씩 화면이면 그 단계 첫 쪽으로 */
+document.addEventListener('click',function(e){ var b=e.target.closest&&e.target.closest('[data-wzgo]'); if(!b)return; var id=b.getAttribute('data-wzgo');
+  if(WIZ)wzGoCard(id); else { var c=$(id); if(c)c.scrollIntoView({behavior:'smooth',block:'start'}); } });
+$('wz_segs').addEventListener('click',function(e){ var b=e.target.closest('[data-wz]'); if(b)wzGo(Number(b.getAttribute('data-wz'))); });
+function wzGo(i,noFocus){
+  if(i==null||!WZ[i])return;
+  WZ_SEEN[WZ_I]=true; WZ_I=i; $('wz_msg').textContent=''; wzShow();
+  var t=$('form').getBoundingClientRect().top+window.scrollY-90;
+  window.scrollTo({top:Math.max(0,t),behavior:'instant'});
+  if(noFocus||!(window.matchMedia&&window.matchMedia('(pointer:fine)').matches))return;
+  var p=WZ[WZ_I], box=p.roots[0]||$(p.card);
+  var f=box&&box.querySelector('input.inp:not([type=hidden]):not(:disabled),textarea.inp');
+  if(f&&f.getClientRects().length){ try{ f.focus({preventScroll:true}); }catch(x){} }
+}
+function wzGoCard(id){
+  var act=wzList();
+  for(var j=0;j<act.length;j++){ if(wzStepOf(WZ[act[j]].card)===id||WZ[act[j]].card===id){ wzGo(act[j]); return; } }
+}
+function wzNext(){
+  settleNow(); refresh();   /* 필수 칸이 비어도 넘어감 (10/17 저녁) — 빠진 칸은 마지막 쪽 「미입력 항목」에 모임 */
+  var act=wzList(), nx=act.filter(function(i){ return i>WZ_I; })[0];
+  if(nx!=null)wzGo(nx);
+}
+function wzPrev(){ var act=wzList(), pv=act.filter(function(i){ return i<WZ_I; }).pop(); if(pv!=null)wzGo(pv); }
+$('wz_next').addEventListener('click',wzNext);
+$('wz_prev').addEventListener('click',wzPrev);
+/* 글 칸에서 Enter = 「다음」 (한글 조합 중 · 여러 줄 칸 · 「+ 추가」 칸 · 영업실장 이름 찾기는 제외) */
+document.addEventListener('keydown',function(e){
+  if(!WIZ||e.key!=='Enter'||e.isComposing||e.keyCode===229)return;   /* (form 의 Enter 막기가 먼저 돌아 defaultPrevented 는 늘 참 — 보지 않음) */
+  var t=e.target; if(!t||!t.closest||!t.closest('#form')||t.tagName!=='INPUT')return;
+  if(/^(checkbox|radio|button|submit|file|color)$/.test(t.type)||t.closest('.addrow,.rep,.hpbox')||t.hasAttribute('data-hq')||/^(im-ref-name|cname_)/.test(t.id))return;
+  e.preventDefault();
+  var box=document.querySelector('#form > .wz-cur'), ins=box?[].filter.call(box.querySelectorAll('input.inp,textarea.inp,select.inp'),function(x){ return !x.disabled&&x.type!=='hidden'&&x.getClientRects().length; }):[];
+  var nx=ins[ins.indexOf(t)+1];
+  if(nx){ try{ nx.focus(); }catch(x){} } else wzNext();   /* 같은 쪽에 칸이 더 있으면 그 칸으로 (소유자 정보처럼 칸이 많은 쪽) */
+});
+
 /* 진행 막대 · 단계 카드 · 제출 상자 */
 var CARDS=[];
 function drawProgress(){
   var act=active(), fail=act.filter(function(c){return !c.ok();});
   var pct=act.length?Math.round((act.length-fail.length)/act.length*100):0;
-  $('fill').style.width=pct+'%';
-  $('left_txt').textContent=fail.length?'남은 항목 '+fail.length+'개':'입력 완료 ✓';
+  if(!WIZ){ $('fill').style.width=pct+'%';
+  $('left_txt').textContent=fail.length?'남은 항목 '+fail.length+'개':'입력 완료 ✓'; }
   $('left_txt').classList.toggle('zero',!fail.length);
   $('next_btn').textContent=fail.length?'다음 항목 ↓':'제출 단계로 이동 ↓';
   CARDS.forEach(function(cid,i){
     var card=$(cid); if(!card)return;
-    var n=fail.filter(function(c){return c.card===cid;}).length;
+    var n=fail.filter(function(c){return c.card===cid||(WIZ&&cid==='step3'&&c.card==='step_feat');}).length;
     card.classList.toggle('ok',n===0);
     var st=card.querySelector('.state'); if(st)st.textContent=n?'남은 항목 '+n:'완료 ✓';
-    var dot=$('dots').children[i]; if(dot){ dot.classList.toggle('done',n===0); }
+    var dot=document.querySelector('#dots [data-goto="'+cid+'"]'); if(dot){ dot.classList.toggle('done',n===0); }
   });
   $('fin_t').textContent=fail.length?'미입력 항목이 '+fail.length+'개 있습니다':'모든 항목을 입력했습니다';
   $('fin_s').textContent=fail.length?'아래 이름을 누르면 해당 항목으로 이동합니다.':(MODE==='material'?'제출 후 담당자가 확인하여 작업 시작일을 안내합니다.':'제출 후 담당자가 1~2영업일 안에 연락합니다.');
@@ -2959,10 +3476,12 @@ function drawProgress(){
   drawErrors(fail);
   drawWarns();
   drawReview();
+  if(WIZ)wzBar();
   return fail;
 }
 function jumpTo(c){
   var el=$(c.id); if(!el)return;
+  if(WIZ){ var pi=wzPageOf(c); if(pi>=0&&pi!==WZ_I){ WZ_I=pi; WZ_FLAG[pi]=true; wzShow(); } }
   if(c.id==='reg'){ regOpen(true); REG_HOLD=true; setTimeout(function(){ REG_HOLD=false; },0); }
   openSheet(false);
   var dt=el.closest&&el.closest('details'); if(dt&&!dt.open)dt.open=true;   /* 접어 둔 선택 사항 안의 칸 (10/13) */
@@ -2981,12 +3500,13 @@ $('leftlist').addEventListener('click',function(e){
   var b=e.target.closest('[data-jump]'); if(b)jumpTo(CHECKS[Number(b.getAttribute('data-jump'))]);
 });
 $('dots').addEventListener('click',function(e){
-  var b=e.target.closest('[data-goto]'); if(b){ var c=$(b.getAttribute('data-goto')); if(c)c.scrollIntoView({block:'start',behavior:'smooth'}); }
+  var b=e.target.closest('[data-goto]'); if(b&&WIZ){ wzGoCard(b.getAttribute('data-goto')); return; }
+  if(b){ var c=$(b.getAttribute('data-goto')); if(c)c.scrollIntoView({block:'start',behavior:'smooth'}); }
 });
 
 /* ═════════ 홈페이지 미리 보기 · 글쓰기 도움 (10/13 홈페이지 팀) ═════════
    고객 말 「소개 글은 어디에 들어가는지 아예 모르겠다 · 쓰기 어렵다」 → 입력한 글 · 고른 디자인으로 작은 홈페이지를 그려 보여 줍니다.
-   · 신청서 디자인 단계: 테마 카드마다 상호를 넣은 첫 화면 + 카드 아래 큰 화면 예시(PC · 휴대폰) — drawThemePv()
+   · 디자인 단계(제작 자료): 테마 카드마다 상호를 넣은 첫 화면 + 카드 아래 큰 화면 예시(PC · 휴대폰) — drawThemePv()
    · 제작 자료: 오른쪽(좁은 화면은 하단 막대 → 펼침)에 입력한 글이 바로 들어간 홈페이지 · 지금 입력하는 칸의 자리를 주황 테두리로 — drawPv()
    그림(.pvs)은 실제 크기(PC 1200px · 휴대폰 390px)로 그린 뒤 transform 으로 줄여 보여 줍니다(pvFit).
    🔴 이해를 돕는 그림입니다. 지시서 · 시안은 이 그림을 따르지 않습니다. 고객 글은 esc() 로만 넣습니다(글이 HTML 로 실행되지 않게).
@@ -2994,7 +3514,7 @@ $('dots').addEventListener('click',function(e){
 var PV_GOAL={'전화 문의':'전화 문의','카카오톡 상담':'카카오톡 상담','방문':'오시는 길','신청 · 예약':'신청 · 예약'};
 var PV_GICON={'전화 문의':'tel','카카오톡 상담':'chat','방문':'pin','신청 · 예약':'form'};   /* 버튼 아이콘 (10/13 밤 · 이모티콘 대신) */
 function pvIc(n){ return n?'<svg class="ic" aria-hidden="true" focusable="false"><use href="#ic-'+n+'"/></svg>':''; }
-function pvGoalHtml(g){ return pvIc(PV_GICON[g])+esc(PV_GOAL[g]||g); }
+function pvGoalHtml(g){ return pvIc(PV_GICON[g])+esc(PV_GOAL[g]||goalName(g)); }   /* 「기타」는 고객이 적은 글 (10/17) */
 var PV_GKEY={'전화 문의':'tel','카카오톡 상담':'kakao','방문':'map','신청 · 예약':'book'};
 var PV_IMG={A:'linear-gradient(135deg,#C9D6EA,#E8EEF6)',B:'linear-gradient(135deg,#D7B68A,#F1E3CF)',C:'linear-gradient(135deg,#E3E5E8,#CDD1D6)'};
 var PV_LAB={head:'한 줄 소개',about:'소개 글',greet:'대표 인사말',svc:'서비스 · 메뉴',why:'우리의 강점',faq:'자주 받는 질문',search:'키워드 · 검색 결과',
@@ -3007,8 +3527,26 @@ var PV_URLS=(window.Map?new Map():null);
 function pvUrl(f){ if(!f||!PV_URLS)return ''; var u=PV_URLS.get(f); if(!u){ try{ u=URL.createObjectURL(f); }catch(x){ return ''; } PV_URLS.set(f,u); } return u; }
 function pvPrune(){ if(!PV_URLS)return; var live=FILES.logo.concat(FILES.main,FILES.photo); PV_URLS.forEach(function(u,f){ if(live.indexOf(f)<0){ URL.revokeObjectURL(u); PV_URLS.delete(f); } }); }
 function pvEsc(s){ return esc(s).replace(/○+/g,function(m){ return '<mark class="pv-oo">'+m+'</mark>'; }); }   /* 예시를 넣고 아직 안 바꾼 ○○ 는 노랗게 */
-function pvThemeKey(t){ t=(t==null)?one('theme'):t; return (!t||t==='추천에 맡김')?recTheme(val('f_bizcat')):(THEMES[t]?t:'A 신뢰형'); }
-function pvPoint(){ if(one('tg_color')!=='있음')return ''; var l=cRead('like'), h=l.length?l[0].h:''; return (h&&/^#[0-9a-f]{6}$/i.test(h)&&h.toUpperCase()!=='#FFFFFF')?h:''; }   /* 원하는 색 1순위 → 포인트 색 */
+function pvThemeKey(t){ t=(t==null)?one('theme'):t; return (!t||t==='추천에 맡김'||t==='직접 입력')?recTheme(val('f_bizcat')):(THEMES[t]?t:'A 신뢰형'); }   /* 직접 입력은 업종 추천 테마로 예시 */
+/* 원하는 색 → 미리 보기 색 (10/18) — 순위: 1순위 기본색 · 2순위 포인트색 / 영역별: 기본색 · 포인트색 · 배경색 (「없음」 · 안 고른 곳은 테마 색) */
+var CBG=[['흰색', '#FFFFFF'], ['아이보리', '#FBF7EE'], ['연회색', '#F3F4F6'], ['연베이지', '#F5ECDD'], ['연하늘', '#EAF4FB'], ['연민트', '#E8F6F0'], ['연분홍', '#FCEEF2'], ['검정', '#16181D']];
+function cHex(h,okWhite){ return (h&&/^#[0-9a-f]{6}$/i.test(h)&&(okWhite||h.toUpperCase()!=='#FFFFFF'))?h:''; }
+function cPick(name,pal){ var v=one(name); for(var i=0;i<pal.length;i++){ if(pal[i][0]===v)return pal[i][1]; } return ''; }
+function pvColors(){
+  if(one('tg_color')!=='있음')return {main:'',point:'',bg:''};
+  if(one('color_mode')==='영역'){
+    var ar=function(a,pal){ if(one('tg_c_'+a)!=='있음')return ''; if(one('c_'+a)==='기타'){ var p=$('cpick_c_'+a); return cHex(val('f_c_'+a+'_hex')||(p?p.value:''),true).toUpperCase(); } return cHex(cPick('c_'+a,pal),true); };   /* 기타는 적은 글에 #색상 코드가 있을 때만 */
+    return {main:ar('main',CPAL), point:ar('point',CPAL), bg:ar('bg',CBG)};
+  }
+  var l=cRead('like'); return {main:cHex(l[0]&&l[0].h), point:cHex(l[1]&&l[1].h), bg:''};
+}
+function pvPoint(){ return pvColors().point; }
+/* 지시서 · 요약용 글 */
+function cColorText(){
+  if(one('tg_color')!=='있음')return '';
+  if(one('color_mode')==='영역') return [['main','기본색',CPAL],['point','포인트색',CPAL],['bg','배경색',CBG]].map(function(a){ var t=one('tg_c_'+a[0]), k=one('c_'+a[0]); return a[1]+' '+(t==='있음'?(k==='기타'?'기타 '+(val('f_c_'+a[0]+'_etc')?val('f_c_'+a[0]+'_etc')+' ':'')+'('+(val('f_c_'+a[0]+'_hex')||($('cpick_c_'+a[0])||{}).value||'').toUpperCase()+')':(k?k+' ('+cPick('c_'+a[0],a[2])+')':'(빈칸)')):'그대로'); }).join(' · ');
+  var R=['기본색','포인트색','보조 색']; return cRead('like').map(function(x,i){ return (i+1)+'순위 '+x.k+(x.c&&x.h?' ('+x.h+')':'')+' → '+R[i]; }).join(' · ');
+}   /* 원하는 색 1순위 → 포인트 색 */
 function pvInk(h){ var r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16); return (0.299*r+0.587*g+0.114*b)>170?'#16181D':'#FFFFFF'; }
 function pvMenu(){ var k=calc().keys, m=['소개','서비스'];
   if(k.indexOf('list')>=0)m.push('목록'); if(k.indexOf('notice')>=0)m.push('공지'); if(k.indexOf('board')>=0)m.push('게시판'); if(k.indexOf('form')>=0)m.push('신청');
@@ -3021,11 +3559,12 @@ function pvSnsIcon(u){ var t=/instagram/i.test(u)?'IG':(/blog\.naver|naver\.me/i
 
 /* 그림 한 장 — d: 넣을 글 · 사진 · 테마, o: {dev:'pc'|'mo', part:'hero'|'top'|'full'} */
 function pvSite(d,o){
-  var v=d.th.charAt(0), th=THEMES[d.th]||THEMES['A 신뢰형'], part=o.part||'full', pp=d.point||th.point;
+  var v=d.th.charAt(0), th=THEMES[d.th]||THEMES['A 신뢰형'], part=o.part||'full', pp=d.point||th.point, pm=d.cmain||th.main, pb=d.cbg||th.bg, dark=!!d.cbg&&pvInk(d.cbg)==='#FFFFFF';   /* cmain · cbg = 원하는 색 (main 은 대표 사진이라 이름을 달리 씀) */
   var X=function(s){ return d.ex?esc(s):pvEsc(s); };
   var P=function(s){ return '<span class="pv-ph">'+esc(s)+'</span>'; };
   var T=function(s,eg){ return s?X(s):P(eg||''); };
-  var st='--pm:'+th.main+';--pp:'+pp+';--ppt:'+(d.point?pvInk(pp):'#FFFFFF')+';--pb:'+th.bg+';--pt:'+th.text+';--pr:'+th.radius+';--pimg:'+PV_IMG[v];
+  var st='--pm:'+pm+';--pmt:'+(d.cmain?pvInk(pm):'#FFFFFF')+';--pp:'+pp+';--ppt:'+(d.point?pvInk(pp):'#FFFFFF')+';--pb:'+pb+';--pt:'+(dark?'#EEF1F5':th.text)+';--pr:'+th.radius
+    +';--pimg:'+(d.cbg?'linear-gradient(135deg,color-mix(in srgb,'+pb+' 86%,#000),color-mix(in srgb,'+pb+' 96%,#fff))':PV_IMG[v]);   /* 배경색을 고르면 사진 자리도 그 계열로 */
   var gl=(d.goals&&d.goals.length)?d.goals:['전화 문의'];
   var btn=function(g,i){ return '<span class="pv-btn'+(i?' o':'')+'" data-pv="'+(PV_GKEY[g]||'')+'">'+pvGoalHtml(g)+'</span>'; };
   var btns='<div class="pv-btns">'+gl.slice(0,2).map(btn).join('')+'</div>';
@@ -3099,26 +3638,26 @@ function pvFit(fr){
 }
 function pvFitAll(){ [].forEach.call(document.querySelectorAll('[data-pvw]'),pvFit); }
 
-/* ── 신청서 디자인 단계 — 테마 카드 첫 화면 + 큰 화면 예시 ── */
+/* ── 디자인 단계(10/16부터 제작 자료) — 테마 카드 첫 화면 + 큰 화면 예시 ── */
 var TPV_DEV=(window.innerWidth<640)?'mo':'pc', TPV_HOVER='', TPV_SIG='', TPV_TSIG='';
 function pvExData(k){
   var cat=val('f_bizcat'), e=EX[cat]||EX[''], t=EX_TXT[cat]||EX_TXT[''];
-  return {th:k, ex:true, point:pvPoint(), name:val('f_name')||String(e.name).replace(/^예:\s*/,'').split(' · ')[0],
+  return {th:k, ex:true, point:pvPoint(), cmain:pvColors().main, cbg:pvColors().bg, name:val('f_name')||String(e.name).replace(/^예:\s*/,'').split(' · ')[0],
           head:e.head, why:t.why.map(function(x){ return {a:x[0],b:x[1]}; }), goals:orderedGoals(), menu:pvMenu(), addrPub:true, main:'', photos:[], logo:'', dom:pvDom(e)};
 }
 function drawThemePv(){
-  if(MODE!=='apply'||!$('tpv_frame'))return;
-  var sel=TPV_HOVER||one('theme'), key=pvThemeKey(sel), d=pvExData(key), base=JSON.stringify([d.name,val('f_bizcat'),d.goals,d.menu,d.point,d.dom]);
+  if(!$('tpv_frame'))return;
+  var sel=TPV_HOVER||one('theme'), key=pvThemeKey(sel), d=pvExData(key), base=JSON.stringify([d.name,val('f_bizcat'),d.goals,d.menu,d.point,d.cmain,d.cbg,d.dom]);
   if(base!==TPV_TSIG){ TPV_TSIG=base;          /* 카드 그림은 상호 · 업종 · 버튼 · 색이 바뀔 때만 다시 그림 */
     ['A 신뢰형','B 따뜻형','C 활동형'].forEach(function(k){
       var inp=document.querySelector('#theme input[value="'+k+'"]'), m=inp&&inp.closest('.opt').querySelector('.mock'); if(!m)return;
       m.classList.add('real'); m.setAttribute('aria-hidden','true');
-      pvMount(m,pvSite(pvExData(k),{dev:'pc',part:'hero',thumb:true}),1200,700,'',true);
+      pvMount(m,pvSite(Object.assign(pvExData(k),{cmain:'',cbg:''}),{dev:'pc',part:'hero',thumb:true}),1200,700,'',true);   /* 카드 그림은 분위기 차이가 보이게 기본색 · 배경색은 테마 그대로 */
     });
   }
   var cur=one('theme'), sig=base+'|'+sel+'|'+cur+'|'+key+'|'+TPV_DEV; if(sig===TPV_SIG)return; TPV_SIG=sig;
   var nm=key.slice(2);
-  $('tpv_t').textContent='화면 예시 · '+(sel==='추천에 맡김'?'업종에 맞춰 ('+nm+')':(sel?nm:nm+' (업종 추천 · 아직 선택하지 않음)'))+(TPV_HOVER&&TPV_HOVER!==cur?' — 미리 보는 중':'');
+  $('tpv_t').textContent='화면 예시 · '+(sel==='추천에 맡김'?'업종에 맞춰 ('+nm+')':(sel==='직접 입력'?'원하시는 분위기 (예시는 업종 추천 '+nm+')':(sel?nm:nm+' (업종 추천 · 아직 선택하지 않음)')))+(TPV_HOVER&&TPV_HOVER!==cur?' — 미리 보는 중':'');
   pvMount($('tpv_frame'),pvSite(d,{dev:TPV_DEV,part:'top'}),TPV_DEV==='pc'?1200:390,TPV_DEV==='pc'?820:760,d.dom);
   [].forEach.call(document.querySelectorAll('[data-tdev]'),function(b){ b.setAttribute('aria-pressed',b.getAttribute('data-tdev')===TPV_DEV?'true':'false'); });
 }
@@ -3135,7 +3674,7 @@ function pvWide(){ return !!(window.matchMedia&&window.matchMedia('(min-width:11
 function pvMatData(){
   var cat=val('f_bizcat'), e=EX[cat]||EX[''], t=EX_TXT[cat]||EX_TXT[''], kv=photoKakao(), gv=one('tg_greet');
   var first=function(a){ return a.map(function(x){ return x[0]; }); };
-  return {th:pvThemeKey(), ex:false, point:pvPoint(), name:val('f_name')||'상호',
+  return {th:pvThemeKey(), ex:false, point:pvPoint(), cmain:pvColors().main, cbg:pvColors().bg, name:val('f_name')||'상호',
     head:val('f_head'), headEx:'예: '+e.head,
     about:val('f_about'), aboutEx:'예: '+first(t.about).join(' '),
     greetOn:gv==='넣음'?true:(gv==='넣지 않음'?false:null), greet:gv==='넣음'?val('f_greet'):'', greetEx:'예: '+first(t.greet).join('\n'), sign:gv==='넣음'?signText():'',
@@ -3287,8 +3826,10 @@ function refresh(){
   $('academy_box').classList.toggle('show',isAcad());
   $('realty_box').classList.toggle('show',isRealty());
   $('bizcat_etc_box').classList.toggle('show',val('f_bizcat')==='기타');
+  /* 「위 상호와 같음」 → 앞 쪽에서 쓴 상호 그대로 (10/17 · 한 질문씩 화면에는 «위»가 없음) */
+  var nm=val('f_name'); $('regname_same').textContent=nm?'「'+(nm.length>20?nm.slice(0,20)+'…':nm)+'」'+josaWa(nm)+' 같음':'앞에서 입력한 상호와 같음';
   applyExamples(); syncReg(); syncLocks(); syncGoals(); syncFeatures(); syncWho(); syncAddr(); syncSign(); syncDomain(); syncShows(); syncVisuals();
-  drawQuote(); drawCounts(); drawFaqSugs(); syncRepBtns(); drawColors(); syncPhotoVia(); syncHelp(); drawThemePv(); drawPv();
+  drawQuote(); drawCounts(); drawFaqSugs(); syncRepBtns(); cAreaBlock(); drawColors(); syncPhotoVia(); syncHelp(); drawThemePv(); drawPv();
   $('cta_note').hidden=!(CTA_WARN&&bookOn()&&!one('via'));
   var fail=drawProgress();
   saveDraftSoon();
@@ -3533,15 +4074,17 @@ function snapApply(){
   d.rep={};
   return d;
 }
+/* 담당자 요청 사항 (10/17) — 담당자가 신청 건에 적어 둔 글 (서버 my_apply_snapshot 의 req) */
+function reqText(){ return SNAP&&SNAP.req?String(SNAP.req).trim():''; }
 /* 제작 자료 화면 상단 — 신청 내용 요약 */
 function drawMatSum(){
-  var o=collect(), c=o.calc, th=o.theme==='추천에 맡김'?'업종에 맞춰 ('+recTheme(o.bizcat).slice(2)+')':(o.theme?o.theme.slice(2):'');
+  var o=collect(), c=o.calc;
+  if($('req_text'))$('req_text').textContent=reqText();
   $('mat_sum').innerHTML='<b>신청 내용</b><span class="no">신청 번호 '+esc(SNAP.no)+'</span><dl>'
     +'<dt>상호</dt><dd>'+esc(o.name)+'</dd>'
     +'<dt>기능</dt><dd>'+esc(c.lines.map(function(l){return l.n;}).join(', '))+'</dd>'
-    +'<dt>디자인</dt><dd>'+esc(th)+'</dd>'
-    +'<dt>홈페이지 주소</dt><dd>'+esc(domainShort(o))+'</dd></dl>'
-    +(o.domain==='유료 도메인 새로'&&o.domBuy==='직접'?'<p class="matdom">도메인을 아직 구매하지 않았으면 완성본 제공 전까지 구매해 주십시오. 구매 후 담당자에게 주소를 알려 주시면 홈페이지 연결 값(DNS)을 안내합니다. <b>도메인 관리 비밀번호는 보내지 마십시오.</b></p>':'')
+    +'</dl>'
+    +(reqText()?'<p class="matdom"><b>담당자 요청 사항이 있습니다.</b> 「담당자 요청 사항」 단계에서 확인 후 답변해 주십시오. <button type="button" class="linkbtn" data-wzgo="step_req">바로 가기</button></p>':'')
     +'<p>신청 내용 변경은 담당자에게 요청해 주십시오.</p>';
 }
 function saveDraft(){
@@ -3567,7 +4110,7 @@ function applyDraft(d){
     d.f.f_colors=JSON.stringify([{k:(String(d.f.f_color).replace(/#[0-9a-f]{6}/ig,'').trim()||hx).slice(0,20),h:hx,c:1}]); }
   if(d.f&&String(d.f.f_avoid||'').trim()&&!d.f.f_avoid_colors) d.f.f_avoid_colors=JSON.stringify([{k:String(d.f.f_avoid).trim().slice(0,20),h:'',c:1}]);
   if(d.f){ delete d.f.f_color; delete d.f.f_avoid; }
-  /* 10/4 — 「직접 적기」 → 「기타…」, 서명 「다른 분」 → 「+」(직함과 성함을 한 칸에) */
+  /* 10/4 — 「직접 적기」 → 「기타」, 서명 「다른 분」 → 「+」(직함과 성함을 한 칸에) */
   if(d.r){
     if(d.r.formtitle==='직접 적기')d.r.formtitle='기타';
     if(d.r.tg_signname==='다른 분'){
@@ -3576,7 +4119,7 @@ function applyDraft(d){
     }
     if(d.r.sign==='직접 적기')d.r.sign='기타';
   }
-  /* 「기타…」로 더한 칩 다시 만들기 (예전 판의 「기타」 + 적은 칸도 칩으로) */
+  /* 「기타」로 더한 칩 다시 만들기 (예전 판의 「기타」 + 적은 칸도 칩으로) */
   Object.keys(d.m||{}).forEach(function(g){
     if(ADD_GROUPS.indexOf(g)<0||!Array.isArray(d.m[g]))return;
     var list=d.m[g].filter(function(x){return x!=='기타';}), old=String((d.f||{})[g==='who'?'f_who_etc':'f_form_etc']||'');
@@ -3601,7 +4144,7 @@ function applyDraft(d){
   /* 「홈페이지 신청서」 때문에 자동으로 켠 신청서 기능 — 다시 열어도 받는 방법을 바꾸면 함께 빠지게 */
   AUTO_FORM=!!d.autoForm&&one('via')==='홈페이지 신청서'&&!!(document.querySelector('[data-feat="form"]')||{}).checked;
   Object.keys(d.rep||{}).forEach(function(id){
-    var cfg=REP[id]; if(!cfg)return; var rows=(Array.isArray(d.rep[id])?d.rep[id]:[]).filter(function(x){ return x&&(String(x[0]||'').trim()||String(x[1]||'').trim()); }), box=$(id), n=Math.max(1,cfg.min,Math.min(cfg.max,rows.length));
+    var cfg=REP[id]; if(!cfg)return; var rows=(Array.isArray(d.rep[id])?d.rep[id]:[]).filter(function(x){ return x&&(String(x[0]||'').trim()||String(x[1]||'').trim()); }), box=$(id), n=Math.max(cfg.start,cfg.min,Math.min(cfg.max,rows.length));
     while(box.children.length<n)repRow(id);
     while(box.children.length>n)box.lastElementChild.remove();
     [].forEach.call(box.querySelectorAll('.it'),function(r,i){ var x=rows[i]||['','']; r.querySelector('[data-a]').value=x[0]||''; r.querySelector('[data-b]').value=x[1]||''; });
@@ -3617,7 +4160,7 @@ document.addEventListener('click',function(e){
 
 /* ═════════ /ref.js 칸 맞추기 (ref.js 파일은 고치지 않습니다) ═════════
    ① 「사업자 정보」 카드는 1단계에서 받으므로 이 화면에서만 숨김
-   ② 「담당 영업실장」 카드에 «소개받음 / 직접 신청»을 붙여 빈칸 없이 답하게 함 */
+   ② 「담당 영업실장」 카드를 «홈페이지 신청 경로»(필수)로 — 「영업실장 소개」를 고르면 성함 칸(ref.js), 「기타」면 직접 입력 (10/17) */
 function enhanceRef(){
   var biz=$('im-biz-card'); if(biz)biz.hidden=true;
   var card=$('im-ref-card'); if(!card||$('fld_ref'))return;
@@ -3625,18 +4168,22 @@ function enhanceRef(){
   var h=card.querySelector('h2'); if(h)h.remove();
   var hint=card.querySelector('.im-hint:not(#im-ref-msg)'); if(hint)hint.remove();
   card.insertAdjacentHTML('afterbegin',
-     '<div class="card-h"><span class="no"></span><div class="tt"><p class="eyebrow"></p><h2>영업실장 소개</h2>'
-    +'<p class="sub">인투마케팅 영업실장 소개 여부를 선택해 주십시오.</p></div><span class="state"></span></div>'
-    +'<div class="fld" id="fld_ref"><div class="seg" role="radiogroup" aria-label="영업실장 소개"><label><input type="radio" name="tg_ref" value="있음"><span>소개받음</span></label>'
-    +'<label><input type="radio" name="tg_ref" value="없음"><span>직접 신청</span></label></div>'
-    +'<div class="reveal" data-show="tg_ref=있음" id="ref_box"><label class="lab sm" for="im-ref-name">영업실장 성함</label>'
-    +'<p class="desc">두 글자 이상 입력하면 이름 목록이 표시됩니다.</p></div></div>');
+     '<div class="card-h"><span class="no"></span><div class="tt"><p class="eyebrow"></p><h2>홈페이지 신청 경로</h2>'
+    +'<p class="sub">인투마케팅을 어떻게 알고 신청하셨는지 선택해 주십시오.</p></div><span class="state"></span></div>'
+    +'<div class="fld" id="fld_ref"><div class="lab-row"><span class="lab">홈페이지 신청 경로</span></div>'
+    +'<p class="desc">인투마케팅을 어떻게 알고 신청하셨는지 1개를 선택해 주십시오.</p>'
+    +'<div class="chips" id="refvia" role="radiogroup" aria-label="홈페이지 신청 경로">'
+    +['구글 검색','지인 소개','영업실장 소개','인스타그램','블로그'].map(function(v){ return '<label class="chip"><input type="radio" name="tg_ref" value="'+v+'">'+v+'</label>'; }).join('')
+    +'<label class="chip etc"><input type="radio" name="tg_ref" value="기타">기타</label></div>'
+    +'<div class="reveal" data-show="tg_ref=영업실장 소개" id="ref_box"><label class="lab sm" for="im-ref-name">영업실장 성함</label>'
+    +'<p class="desc">두 글자 이상 입력하면 이름 목록이 표시됩니다.</p></div>'
+    +'<div class="reveal" data-show="tg_ref=기타"><input class="inp" id="f_ref_etc" maxlength="40" placeholder="예: 네이버 지도, 전단지, 유튜브" aria-label="홈페이지 신청 경로 (기타)"></div></div>');
   var x=card.querySelector('.im-x'), msg=$('im-ref-msg'), box=$('ref_box');
   if(x){ x.style.maxWidth='340px'; box.appendChild(x); }
   if(msg)box.appendChild(msg);
   var rin=$('im-ref-name'); if(rin)rin.placeholder='영업실장 성함';
   if(PENDING_REF){ [].forEach.call(card.querySelectorAll('input[name="tg_ref"]'),function(r){ if(r.value===PENDING_REF)r.checked=true; }); }
-  /* 실장 전용 링크(?p=코드)로 들어와 이름이 미리 채워지면 「소개받음」으로 */
+  /* 실장 전용 링크(?p=코드)로 들어와 이름이 미리 채워지면 「영업실장 소개」로 */
   if(msg&&window.MutationObserver){
     new MutationObserver(function(){
       /* ref.js 가 쓰는 「~주세요」를 이 화면 말투로 (바꾼 뒤에는 「주세요」가 없어 다시 바꾸지 않음) */
@@ -3646,7 +4193,7 @@ function enhanceRef(){
         if(/주세요/.test(n.nodeValue))n.nodeValue=n.nodeValue.replace(/적어 주세요/g,'입력해 주십시오').replace(/주세요/g,'주십시오');
         if(/그대로 보내셔도 되고/.test(n.nodeValue))n.nodeValue='명단에 없는 이름입니다. 입력한 성함으로 접수하며, 담당자가 확인 후 연결합니다.';
       });
-      if(val('im-ref-name')&&!one('tg_ref')){ var r=card.querySelector('input[name="tg_ref"][value="있음"]'); if(r)r.checked=true; }
+      if(val('im-ref-name')&&!one('tg_ref')){ var r=card.querySelector('input[name="tg_ref"][value="영업실장 소개"]'); if(r)r.checked=true; }
       refresh();
     }).observe(msg,{childList:true,subtree:true,characterData:true});
   }
@@ -3656,15 +4203,18 @@ function setupSteps(){
   enhanceRef();
   [].forEach.call(document.querySelectorAll('#form [data-phase]'),function(c){ if(c.getAttribute('data-phase')!==MODE)c.hidden=true; });
   var rc=$('im-ref-card'); if(rc&&MODE!=='apply')rc.hidden=true;   /* 영업실장 소개는 신청서에서만 */
+  var rq=$('step_req'); if(rq)rq.hidden=!(MODE==='material'&&reqText());   /* 담당자 요청이 있을 때만 (10/17) */
   CARDS=[].slice.call(document.querySelectorAll('#form [data-step]')).filter(function(c){return !c.hidden;}).map(function(c){return c.id;});
-  CARDS.forEach(function(id,i){
-    var c=$(id), no=c.querySelector('.card-h .no'), eb=c.querySelector('.card-h .eyebrow');
+  var NUM=WIZ?CARDS.filter(function(id){ return id!=='step_feat'; }):CARDS;
+  CARDS.forEach(function(id){
+    var c=$(id), no=c.querySelector('.card-h .no'), eb=c.querySelector('.card-h .eyebrow'), i=NUM.indexOf(WIZ&&id==='step_feat'?'step3':id);
     if(no)no.textContent=String(i+1); if(eb)eb.textContent='STEP '+(i+1);
   });
-  $('dots').innerHTML=CARDS.map(function(id,i){
+  $('dots').innerHTML=NUM.map(function(id,i){
     var t=$(id).querySelector('.card-h h2');
     return '<button type="button" data-goto="'+id+'" title="'+esc(t?t.textContent:'')+'">'+(i+1)+'</button>';
   }).join('');
+  if(WIZ){ wzBuild(); wzShow(); }
 }
 
 /* ═════════ Claude Code 제작 지시서 ═════════
@@ -3702,13 +4252,14 @@ function goalHow(g,o){
   if(g==='전화 문의') return '`tel:` 대표 전화 '+o.tel;
   if(g==='카카오톡 상담') return '카카오톡 채널 '+o.kakao+' (채팅이 바로 열리는 주소인지 확인)';
   if(g==='방문') return '오시는 길(지도 · 길 찾기 · 주차) — '+o.addr;
+  if(g==='기타') return '고객이 직접 적은 목표 — 연결 방법은 **담당자 확인 후** 정함';
   if(g==='신청 · 예약') return o.via==='쓰고 있는 예약 페이지'?'고객이 쓰는 예약 페이지 '+o.bookUrl+' (새 창)':'홈페이지 신청서 (1장 「신청서」)';
   return '';
 }
 function brief(o){
   var L=[], add=function(s){L.push(s);}, line=function(k,v){ if(v) add('- '+k+': '+v); };
   var c=o.calc, has=function(k){return c.keys.indexOf(k)>=0;};
-  var thKey=o.theme==='추천에 맡김'?recTheme(o.bizcat):o.theme, th=THEMES[thKey]||THEMES['A 신뢰형'];
+  var thKey=(o.theme==='추천에 맡김'||o.theme==='직접 입력')?recTheme(o.bizcat):o.theme, th=THEMES[thKey]||THEMES['A 신뢰형'];
   var needPolicy=has('member')||has('board')||has('form')||has('pay');
   var fmt=function(x){ return '- **'+x.a+'** — '+x.b; };
   var lines=function(t){ return String(t||'').split(/\n+/).map(function(x){return x.trim();}).filter(Boolean); };
@@ -3770,7 +4321,7 @@ function brief(o){
   add('- 표에 없는 기능: '+(o.more?o.more+' (견적 전 · **담당자 확인 전에는 만들지 않음**)':'없음 (고객 확인)'));
   add('');
   add('## 2. 손님 행동 버튼 (고객이 고른 것)');
-  o.goals.forEach(function(g,i){ add((i+1)+'. **'+g+'** → '+goalHow(g,o)+(i===0?' — **첫 화면 가장 큰 버튼**'+(o.goals.length>1?' (고객이 고름)':''):'')); });
+  o.goals.forEach(function(g,i){ add((i+1)+'. **'+(g==='기타'?'기타: '+goalName(g):g)+'** → '+goalHow(g,o)+(i===0?' — **첫 화면 가장 큰 버튼**'+(o.goals.length>1?' (고객이 고름)':''):'')); });
   add('- 2번부터는 큰 버튼 옆의 작은 버튼으로 두고, 휴대폰에서는 화면 아래 고정 막대에 고른 버튼을 모두(최대 4개) 둡니다.');
   add('- 고르지 않은 행동은 버튼으로 크게 넣지 않습니다. 다만 대표 전화는 맨 아래에 늘 넣습니다'+(o.addrPub?' (주소도 맨 아래와 오시는 길에 넣음).':' (주소는 넣지 않음).'));
   line('주 방문자 (글 어조 · 첫 화면 사진을 고르는 기준)', o.who);
@@ -3826,9 +4377,12 @@ function brief(o){
   add('## 6. 디자인');
   line('테마', o.theme==='추천에 맡김'
       ?('업종에 맞춰 (고객이 맡김) → 업종 「'+o.bizcatFull+'」 기준 **'+thKey+'** ('+th.feel+')')
-      :(o.theme+' ('+th.feel+')'));
-  line('색 (`:root`)', '메인 '+th.main+' · 포인트 '+th.point+' · 바탕 '+th.bg+' · 글자 '+th.text); line('모서리', th.radius);
-  add('- 원하는 색 (고객이 고른 순위): '+(o.color?o.color+' — 1순위를 포인트 색, 2 · 3순위를 보조 색으로 쓰고 테마 바탕과 톤을 맞춤. 글자 · 바탕 대비(4.5:1 이상)를 확인':(o.colorAns==='없음'?'없음 (고객 확인) — 테마 색 그대로':'지정 안 함 — 테마 색 그대로')));
+      :(o.theme==='직접 입력'
+        ?('고객이 원하는 분위기를 직접 적음 — 「'+o.themeEtc+'」. 이 느낌에 맞춰 만들고, 기본 틀은 업종 기준 **'+thKey+'** ('+th.feel+') — 색 · 모서리는 고객 글에 맞게 바꿈')
+        :(o.theme+' ('+th.feel+')')));
+  line('색 (`:root`)', '메인 '+(o.cmain?o.cmain+' (고객 지정)':th.main)+' · 포인트 '+(o.cpoint?o.cpoint+' (고객 지정)':th.point)+' · 바탕 '+(o.cbg?o.cbg+' (고객 지정)':th.bg)+' · 글자 '+th.text); line('모서리', th.radius);
+  add('- 원하는 색 ('+(o.cmode==='영역'?'고객이 영역별로 정함':'고객이 고른 순위')+'): '+(o.color?o.color+(o.cmode==='영역'?' — 「그대로」인 영역은 테마 색. 사진 자리는 배경색 계열로. 글자 · 바탕 대비(4.5:1 이상)를 확인':' — 1순위를 기본색(메뉴 막대 · 제목 · 하단), 2순위를 포인트색(버튼 · 강조), 3순위를 보조 색으로 쓰고 테마 바탕과 톤을 맞춤. 글자 · 바탕 대비(4.5:1 이상)를 확인'):(o.colorAns==='없음'?'없음 (고객 확인) — 테마 색 그대로':'지정 안 함 — 테마 색 그대로')));
+  if(o.colorCodes){ add('- 색상 코드 (고객이 적음 · 그대로 확인해 맞춤):'); add(quote(o.colorCodes)); }
   add('- 피할 색: '+(o.avoid?o.avoid+' — 쓰지 않음':(o.avoidAns==='없음'?'없음 (고객 확인)':'지정 안 함')));
   if(o.like.length){
     add('- 참고 홈페이지 (고객이 좋다고 한 점만 참고 · 디자인 · 글을 베끼지 않음):');
@@ -3856,8 +4410,8 @@ function brief(o){
   line('도메인', domainLine(o));
   line('희망 오픈', whenText(o)); line('요금 방식(희망)', o.plan);
   line('예상 금액 (신청서 계산 · 견적 전)', o.quote);
-  add('- 기타 요청 사항: '+(o.etc?'아래 (담당자 확인 후 반영)':'없음 (고객 확인)'));
-  if(o.etc){ add(''); add('### 기타 요청 사항 (담당자 확인 후 반영)'); add(quote(o.etc)); }
+  if(o.req){ add('- 담당자 요청: 아래 (고객 답변 포함 · 담당자 확인 후 반영)'); add(''); add('### 담당자 요청과 고객 답변');
+    add('- 담당자 요청:'); add(quote(o.req)); add('- 고객 답변:'); add(quote(o.reqAns||'(답변 없음)')); }
   add('');
   add('## 10. 인투마케팅 제작 규칙 (매뉴얼 2 — 반드시 지킴)');
   var rules=['폰트는 **Pretendard** 하나만 씁니다. 파일을 저장소 안에 두고 씁니다(외부 글꼴 주소 금지).',
@@ -3938,7 +4492,7 @@ function collect(){
   var c=calc(), buy=one('domain')==='유료 도메인 새로', ag=buy&&one('dombuy')==='대행', sf=buy&&one('dombuy')==='직접', k=regKind(), r=REG[k]||{}, needNo=!!r.no;
   var hasK=function(x){return c.keys.indexOf(x)>=0;};
   var book=hasGoal('신청 · 예약'), via=book?one('via'):'';
-  var ff=multi('formfields'), who=multi('who');          /* 「기타… + 추가」로 더한 것도 그대로 들어 있음 */
+  var ff=multi('formfields'), who=multi('who');          /* 「기타 + 추가」로 더한 것도 그대로 들어 있음 */
   var ft=one('formtitle')==='기타'?val('f_form_title'):one('formtitle');
   var cat=val('f_bizcat'), pub=addrPublic();
   return {
@@ -3962,16 +4516,17 @@ function collect(){
     addr:val('f_addr'), addrPub:pub, addrForced:addrForced(), tel:val('f_tel'), kakao:one('tg_kakao')==='있음'?val('f_kakao'):'',
     hours:val('f_hours'), park:pub?val('f_park'):'',
     sns:one('tg_sns')==='있음'?val('f_sns'):'',
-    theme:one('theme'), color:one('tg_color')==='있음'?cText(cRead('like'),true):'', avoid:one('tg_avoid')==='있음'?cText(cRead('avoid'),false):'',
-    like:one('tg_like')==='있음'?repRead('rep_like'):[], likeAns:one('tg_like'), colorAns:one('tg_color'), avoidAns:one('tg_avoid'),
+    theme:one('theme'), themeEtc:one('theme')==='직접 입력'?val('f_theme_etc'):'', color:cColorText(), cmode:one('tg_color')==='있음'?(one('color_mode')||'순위'):'',
+    cmain:pvColors().main, cpoint:pvColors().point, cbg:pvColors().bg, avoid:one('tg_avoid')==='있음'?cText(cRead('avoid'),false):'',
+    like:one('tg_like')==='있음'?repRead('rep_like'):[], likeAns:one('tg_like'), colorAns:one('tg_color'), colorCodes:one('tg_color')==='있음'?val('f_color_codes'):'', avoidAns:one('tg_avoid'),
     hasLogo:one('tg_logo')==='있음', nLogo:(one('tg_logo')==='있음'&&photoAtt())?FILES.logo.length:0, nMain:photoAtt()?FILES.main.length:0, nPhoto:photoAtt()?FILES.photo.length:0,
     kw:val('f_kw'), domain:one('domain'),
     domHave:one('domain')==='이미 있음'?domainOf(val('f_dom_have')):'', domWhere:one('domain')==='이미 있음'?val('f_dom_where'):'',
     domBuy:buy?one('dombuy'):'',   /* 대행 / 직접 (10/10) */
     domWant1:ag?wantDomain(val('f_dom_want1')):(sf?wantDomain(val('f_dom_self')):''), domWant2:ag?wantDomain(val('f_dom_want2')):'', owner:ag?one('owner'):'', domReg:ag?registrar():'',
     when:one('when'), whenDate:one('when')==='날짜 정함'?val('f_when_date'):'',
-    etc:one('tg_etc')==='있음'?val('f_etc'):'',
-    ref:one('tg_ref'), refName:one('tg_ref')==='있음'?val('im-ref-name'):'',
+    req:reqText(), reqAns:reqText()?val('f_req_ans'):'',
+    ref:one('tg_ref'), refName:one('tg_ref')==='영업실장 소개'?val('im-ref-name'):'', refEtc:one('tg_ref')==='기타'?val('f_ref_etc'):'',
     med:cat==='병원·의원·약국',
     warns:activeWarns().map(function(w){ return w.lab+' — '+wText(w); })
   };
@@ -3998,7 +4553,7 @@ function drawReview(){
       o.acad?['학원 표시',[o.acadNo,o.acadFee].filter(Boolean).join('\n')]:null,
       o.realty?['중개사무소 표시',[o.realty.no,o.realty.name].filter(Boolean).join(' · ')]:null]],
     ['step2','홈페이지의 목적',[
-      ['전환 목표',o.goals.map(function(g,i){ return g+(i===0&&o.goals.length>1&&mainGoal()?' (첫 화면 큰 버튼)':''); }).join('\n')],
+      ['전환 목표',o.goals.map(function(g,i){ return (g==='기타'?'기타: '+goalName(g):g)+(i===0&&o.goals.length>1&&mainGoal()?' (첫 화면 큰 버튼)':''); }).join('\n')],
       hasGoal('신청 · 예약')?['신청 · 예약',o.via?o.via+(o.bookUrl?' ('+o.bookUrl+')':''):'']:null,
       ['주요 방문자',o.who]]],
     ['step3','기능 · 요금',[
@@ -4019,7 +4574,7 @@ function drawReview(){
       ['주소 공개',o.addrPub?'공개 (지도 · 오시는 길)':(one('tg_addrpub')?'공개 안 함 (계약서에만)':'')],['대표 전화',o.tel],['운영 시간',o.hours],
       ['카카오톡',said('tg_kakao',o.kakao)],o.addrPub?['주차 · 오는 길',o.park]:null,['SNS',said('tg_sns',o.sns.replace(/\n+/g,' · '))]]]);
   S.push(['step6','디자인',[
-      ['분위기',o.theme==='추천에 맡김'?'업종에 맞춰 ('+recTheme(o.bizcat).slice(2)+')':(o.theme?o.theme.slice(2):'')],
+      ['분위기',o.theme==='추천에 맡김'?'업종에 맞춰 ('+recTheme(o.bizcat).slice(2)+')':(o.theme==='직접 입력'?'원하시는 분위기: '+o.themeEtc:(o.theme?o.theme.slice(2):''))],
       ['원하는 색',one('tg_color')?said('tg_color',o.color):'지정 안 함 (테마 색)'],['피하고 싶은 색',one('tg_avoid')?said('tg_avoid',o.avoid):'지정 안 함'],
       ['참고 홈페이지',one('tg_like')?said('tg_like',o.like.map(function(x){return x.a;}).join('\n')):'지정 안 함 (테마대로)']]]);
   S.push(['step7','로고 · 사진',o.photoVia==='카카오톡'?[
@@ -4028,7 +4583,8 @@ function drawReview(){
       ['전달 방법',o.photoVia?'이 화면에서 첨부':''],
       ['로고',one('tg_logo')?(o.hasLogo?(o.nLogo?'1장':''):'없음 (상호를 글자로)'):''],['대표 사진',o.nMain?'1장':''],['그 밖의 사진',o.nPhoto?o.nPhoto+'장':'']]]);
   S.push(['step8','홈페이지 주소 · 일정',[
-      ['도메인',domainShort(o)],['희망 오픈',o.when?whenText(o):''],['기타 요청 사항',said('tg_etc',cut(o.etc,80))]]]);
+      ['도메인',domainShort(o)],['희망 오픈',o.when?whenText(o):'']]]);
+  S.push(['step_req','담당자 요청 사항',[['요청',o.req],['답변',cut(o.reqAns,80)]]]);
   var html=S.filter(function(sec){ var cd=$(sec[0]); return cd&&!cd.hidden; }).map(function(sec){
     var card=$(sec[0]), no=card?card.querySelector('.card-h .no'):null;
     return '<div class="rv"><h4><span>'+(no&&no.textContent?esc(no.textContent)+'. ':'')+esc(sec[1])+'</span><button type="button" data-goto="'+sec[0]+'">고치기</button></h4><dl>'+rows(sec[2])+'</dl></div>';
@@ -4038,9 +4594,11 @@ function drawReview(){
 $('review').addEventListener('toggle',function(){ drawReview(); });
 $('review_body').addEventListener('click',function(e){
   var b=e.target.closest('[data-goto]'); if(!b)return;
+  if(WIZ){ wzGoCard(b.getAttribute('data-goto')); return; }
   var c=$(b.getAttribute('data-goto')); if(c)c.scrollIntoView({block:'start',behavior:'smooth'});
 });
 function failMsg(msg){ $('err').textContent=msg; }
+$('form').addEventListener('submit',function(e){ if(WIZ&&e.submitter!==$('btn')){ e.preventDefault(); e.stopImmediatePropagation(); } });
 $('form').addEventListener('submit',async function(e){
   e.preventDefault(); $('err').textContent='';
   settleNow();
@@ -4079,10 +4637,10 @@ $('form').addEventListener('submit',async function(e){
   var b=mat?brief(o):null;   /* Claude Code 제작 지시서는 제작 자료를 받을 때 완성 */
   var fmt=function(list){return list.map(function(x){return x.a+(x.b?' — '+x.b:'');}).join('\n');};
   var featTxt=c.lines.map(function(l){return l.n;}).join(', ');
-  var thKey=o.theme==='추천에 맡김'?recTheme(o.bizcat):o.theme;
+  var thKey=(o.theme==='추천에 맡김'||o.theme==='직접 입력')?recTheme(o.bizcat):o.theme;
   /* 도메인 소유자 정보 — 담당자가 등록 회사 「소유자 정보」 화면에 그대로 옮겨 적는 순서 */
   var owner='';
-  if(buy&&!mat){
+  if(buy&&mat){   /* 도메인은 10/17부터 제작 자료에서 받음 */
     var org=o.owner==='기관';
     owner=['소유자 구분: '+o.owner,
            '소유자명: '+val('f_own_name'), '소유자명(영문): '+val('f_own_en'),
@@ -4100,7 +4658,7 @@ $('form').addEventListener('submit',async function(e){
     '학원 등록(교습소 신고)번호':o.acadNo, '교습비 · 기타경비':o.acadFee,
     '중개사무소 등록번호':o.realty?o.realty.no:'', '대표 공인중개사':o.realty?o.realty.name:'',
     '고객 구분(신청서 기준)':custType(o.regKind),
-    '손님 행동(중요한 순서)':o.goals.map(function(g,i){return (i+1)+'. '+g+(i===0&&o.goals.length>1?' (첫 화면 큰 버튼)':'');}).join(' · '),
+    '손님 행동(중요한 순서)':o.goals.map(function(g,i){return (i+1)+'. '+(g==='기타'?'기타: '+goalName(g):g)+(i===0&&o.goals.length>1?' (첫 화면 큰 버튼)':'');}).join(' · '),
     '신청·예약 받는 방법':o.via?(o.via+(o.bookUrl?' ('+o.bookUrl+')':'')):'',
     '주 방문자':o.who,
     '고른 기능':featTxt, '게시판 종류':c.keys.indexOf('board')>=0?c.boards.join(', '):'',
@@ -4114,14 +4672,15 @@ $('form').addEventListener('submit',async function(e){
     '지금 홈페이지':o.old||'없음 (처음 만듦)', '한 줄 소개':o.head, '소개 글':o.about, '대표 인사말':o.greet?o.greet+'\n— '+o.sign:(o.greetAns==='넣지 않음'?'넣지 않음 (소개 글만)':''),
     '서비스·프로그램':fmt(o.svc), '우리의 강점':fmt(o.why), '자주 묻는 질문':o.faq.length?fmt(o.faq):'없음 (고객이 적지 않음 · 홈페이지에 넣지 않음)',
     '대표 전화':o.tel, '카카오톡 채널':o.kakao||'없음', '운영 시간':o.hours, '주차·찾아오는 길':o.addrPub?o.park:'주소 비공개 (받지 않음)', 'SNS':o.sns||'없음',
-    '테마':o.theme==='추천에 맡김'?'업종에 맞춰 → '+thKey:o.theme, '원하는 색':o.color||(o.colorAns==='없음'?'없음 (테마 색 그대로)':'지정 안 함 (테마 색 그대로)'), '피할 색':o.avoid||(o.avoidAns==='없음'?'없음':'지정 안 함'),
-    '참고 사이트':o.like.length?fmt(o.like):(o.likeAns==='없음'?'없음':'지정 안 함'),
+    /* 디자인은 10/16부터 제작 자료에서 받음 — 신청서에는 비워 둠 */
+    '테마':!mat?'':(o.theme==='추천에 맡김'?'업종에 맞춰 → '+thKey:(o.theme==='직접 입력'?'원하시는 분위기 (직접 입력): '+o.themeEtc+' — 기본 틀 '+thKey:o.theme)), '원하는 색':!mat?'':(o.color||(o.colorAns==='없음'?'없음 (테마 색 그대로)':'지정 안 함 (테마 색 그대로)')), '색상 코드':!mat?'':o.colorCodes, '피할 색':!mat?'':(o.avoid||(o.avoidAns==='없음'?'없음':'지정 안 함')),
+    '참고 사이트':!mat?'':(o.like.length?fmt(o.like):(o.likeAns==='없음'?'없음':'지정 안 함')),
     '올린 자료':o.photoVia==='카카오톡'?'로고 · 사진은 카카오톡으로 따로 전달 (로고 '+(o.hasLogo?'있음':'없음 · 상호를 글자로')+')':'로고 '+(o.hasLogo?o.nLogo+'장':'없음 (상호를 글자로)')+' · 대표 사진 '+o.nMain+'장 · 그 밖의 사진 '+o.nPhoto+'장',
     '사진 전달':o.photoVia==='카카오톡'?'카카오톡으로 따로 (채널 「'+KAKAO_CH+'」 · 신청 번호와 함께 · 원본 화질 요청) — 받은 뒤 작업 시작일 안내':'',
     '검색어':o.kw, '도메인':domainLine(o), '도메인 등록 회사':o.domReg,
-    '도메인 소유자 정보':owner, '도메인 제3자 제공 동의':(buy&&!mat)?($('f_dom_consent').checked?'동의함 (받는 곳: '+o.domReg+')':'동의하지 않음 — 등록 대행 불가 · 담당자가 직접 구매 방법 안내'):'',
+    '도메인 소유자 정보':owner, '도메인 제3자 제공 동의':(buy&&mat)?($('f_dom_consent').checked?'동의함 (받는 곳: '+o.domReg+')':'동의하지 않음 — 등록 대행 불가 · 담당자가 직접 구매 방법 안내'):'',
     '희망 오픈':whenText(o),
-    '영업실장 소개':o.ref==='있음'?'소개받음 ('+o.refName+')':(o.ref==='없음'?'직접 신청':''),
+    '신청 경로':o.ref==='영업실장 소개'?'영업실장 소개 ('+o.refName+')':(o.ref==='기타'?'기타 ('+o.refEtc+')':(o.ref||'')),
     '받아야 할 것':mat?(b.missing.length?b.missing.join(', '):'없음'):'',
     '확인할 것 (담당자)':o.warns.length?o.warns.join('\n'):'',
     'Claude Code 제작 지시서':mat?b.text:''
@@ -4133,6 +4692,7 @@ $('form').addEventListener('submit',async function(e){
   if(mat&&o.photoVia!=='카카오톡') details['사진 원래 이름']=photoNames(o.hasLogo).join('\n');
   if(mat){
     details['신청 번호']=SNAP.no; details['접수 구분']='제작 자료';
+    if(o.req){ details['담당자 요청']=o.req; details['담당자 요청 답변']=o.reqAns; }
   } else {
     /* 신청서에는 글 · 연락 · 사진이 없습니다 — 계약서 서명 후 「제작 자료」 링크로 받음 */
     ['한 줄 소개','소개 글','대표 인사말','서비스·프로그램','우리의 강점','자주 묻는 질문','대표 전화','카카오톡 채널','운영 시간',
@@ -4149,9 +4709,9 @@ $('form').addEventListener('submit',async function(e){
     method:o.old?'기존 홈페이지 있음':'새로 제작',
     work_type:mat?'제작 자료 (신청 번호 '+SNAP.no+')':featTxt.replace(/^기본 홈페이지/,'기본').replace(/, /g,' + ')+' (신청서 기준)',
     academy_name:o.name, manager_name:o.mgr||null, phone:o.phone, email:o.email||null,
-    message:mat?null:(o.etc||null), details:details, consent:true
+    message:mat?(o.reqAns||null):null, details:details, consent:true
   };
-  if(!mat&&window.IMRef&&o.ref==='있음') Object.assign(row, IMRef.values());   /* 담당 영업실장 («직접 신청»이면 보내지 않음) */
+  if(!mat&&window.IMRef&&o.ref==='영업실장 소개') Object.assign(row, IMRef.values());   /* 담당 영업실장 (다른 경로면 보내지 않음) */
   if(me) row.user_id=me.id;        /* DB 규칙이 «본인 것»만 받습니다 */
 
   var res=await sb.from('requests').insert(row);
@@ -4163,7 +4723,8 @@ $('form').addEventListener('submit',async function(e){
   /* 다음 신청서에서 자동으로 채워지도록 기본 정보를 남깁니다 (마이페이지 「내 정보」) */
   if(window.IMAccount){ try{ IMAccount.remember(row, details); }catch(x){} }
   clearDraft(); DRAFT_ON=false;
-  $('done_dom').style.display=buy?'':'none'; $('done_dom_self').style.display=(selfB&&!mat)?'':'none';
+  $('done_dom').style.display=(buy&&mat)?'':'none'; $('done_dom_self').style.display=(selfB&&mat)?'':'none';
+  $('done_mat_dom').style.display=(mat&&(buy||selfB))?'':'none';
   $('form').style.display='none'; document.querySelector('.bar').style.display='none'; $('side').style.display='none';
   $('draft_note').hidden=true; $('mat_sum').style.display='none';
   if($('pvside').classList.contains('open'))pvOpen(false); document.body.classList.add('pv-off');   /* 미리 보기 닫음 (10/13) */
@@ -4200,16 +4761,19 @@ $('f_when_date').min=todayStr();
 setupSteps();
 refresh();
 if(MODE==='material'&&SNAP)drawMatSum();
+if(WIZ&&!$('draft_note').hidden)wzAskDraft();   /* 10/17 — 이어서 할지 먼저 묻기 */
 /* 10/13 — 카카오톡 채널 이름 · 신청 번호 칸 채우기 · 미리 보기 시작 · 디자인 선택 사항을 이미 고른 경우 펼침 */
 [].forEach.call(document.querySelectorAll('.kch'),function(b){ b.textContent=KAKAO_CH; });
 [].forEach.call(document.querySelectorAll('.kurl'),function(a){ if(KAKAO_URL)a.href=KAKAO_URL; else a.hidden=true; });
 if(MODE==='material'){
   if(SNAP){ [].forEach.call(document.querySelectorAll('.kno'),function(b){ b.textContent=SNAP.no; }); pvInit(); PV_SIG=''; drawPv(); }
   else document.body.classList.add('pv-off');
-} else if($('design_more')&&(one('tg_color')==='있음'||one('tg_avoid')==='있음'||one('tg_like')==='있음')) $('design_more').open=true;
+}
+if($('design_more')&&(one('tg_color')==='있음'||one('tg_avoid')==='있음'||one('tg_like')==='있음')) $('design_more').open=true;
+if($('ccode_box')&&val('f_color_codes')) $('ccode_box').open=true;   /* 색상 코드를 적어 두었으면 펴 둠 */
 DRAFT_ON=true;
 /* /ref.js 칸은 DOMContentLoaded 에 붙습니다 → 붙은 뒤 한 번 더 맞춤 */
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ setupSteps(); refresh(); });
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){ setupSteps(); refresh(); if(WIZ&&!$('draft_ask').hidden)wzAskDraft(); });
 /* 시험용 — 화면 확인 스크립트가 계산 · 제작 자료 링크 값을 직접 부를 수 있게 (저장 · 전송 없음) */
 window.__applyCalc=calc;
 window.__applySnap=function(){ return snapApply(); };
@@ -4239,7 +4803,7 @@ window.__applySnap=function(){ return snapApply(); };
         else{
           var r=await sb.rpc('my_apply_snapshot',{p_id:m[1]});
           if(r.error) why='conn';
-          else if(r.data && r.data.no && r.data.snap && r.data.snap.f) snap={v:1,no:r.data.no,at:r.data.at,d:r.data.snap};
+          else if(r.data && r.data.no && r.data.snap && r.data.snap.f) snap={v:1,no:r.data.no,at:r.data.at,d:r.data.snap,req:r.data.req||''};
           else why='notmine';
         }
       }
