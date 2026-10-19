@@ -73,6 +73,9 @@
   .navb.on .cnt{background:rgba(255,255,255,.16);color:#fff}
   .navb .cnt.alert{background:var(--bad);color:#fff}
   .side-sep{height:1px;background:var(--line);margin:12px 4px}
+  .mn-sub{border:0;background:none;cursor:pointer;font-size:.74rem;font-weight:700;color:var(--muted);padding:0 12px 6px 40px;text-align:left;width:100%}
+  .mn-sub:hover{color:var(--accent);text-decoration:underline}
+  .mn-f{display:flex;flex-direction:column;gap:6px;font-size:.84rem;font-weight:700;border:1px dashed var(--line);border-radius:10px;padding:12px 14px}
   .side-foot{margin-top:auto;border-top:1px solid var(--line);padding-top:14px}
   .whoami{padding:8px 10px;border-radius:10px;background:var(--surface-2);margin-bottom:10px}
   .whoami b{display:block;font-size:.88rem}
@@ -321,6 +324,7 @@
     .side .logo{padding:0 10px 0 0}
     .navb{width:auto}
     .side-sep{display:none}
+    .mn-sub{width:auto;padding:10px 8px}
     .side-foot{margin:0 0 0 auto;border:0;padding:0;display:flex;gap:6px;align-items:center}
     .whoami{margin:0}
     .main{padding:18px 16px 50px}
@@ -416,6 +420,11 @@
     <button class="navb hide" data-nav="partner" id="navPartner" type="button">영업실장 <span class="cnt" id="c-partner">0</span></button>
     <button class="navb hide" data-nav="set" id="navSet" type="button">견적서 설정</button>
     <button class="navb" data-nav="links" type="button">🔗 주소 모음</button>
+    <!-- 업무 매뉴얼 (2026-10-19 매뉴얼 창 요청 · 이은총 님) — 직원 전원. 누르면 바로 새 탭.
+         파일 = Supabase 비공개 저장 칸 'manuals' 의 manual.html · manual.pdf (저장소에 넣지 않음 — 원고료 · 커미션 · 대표님 성함이 들어 있음) -->
+    <div class="side-sep"></div>
+    <button class="navb" id="navManual" type="button" onclick="mnOpen()">📘 업무 매뉴얼 ↗</button>
+    <button class="mn-sub" type="button" onclick="mnBox()">PDF · <span id="mnDate">…</span></button>
     <div class="side-foot">
       <div class="whoami"><b id="meName">-</b><span id="meRole">-</span></div>
       <button class="navb" type="button" onclick="loadAll(true)">↻ 새로고침</button>
@@ -841,6 +850,31 @@
   <div class="sheet-f"><button class="btn btn-ghost" type="button" onclick="closeModal('linkModal')">닫기</button></div>
 </div></div>
 
+<!-- 업무 매뉴얼 — PDF 내려받기 · 최고관리자만 새 파일 올리기 -->
+<div class="modal" id="mnModal"><div class="sheet">
+  <div class="sheet-h">
+    <div><h3>📘 업무 매뉴얼</h3><div class="meta" id="mnMeta">마지막 수정 : …</div></div>
+    <button class="x" type="button" onclick="closeModal('mnModal')">✕</button>
+  </div>
+  <div class="sheet-b">
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary" type="button" onclick="mnOpen()">보기 (새 탭)</button>
+      <button class="btn btn-ghost" type="button" onclick="mnPdf()">PDF 내려받기</button>
+    </div>
+    <div class="hide" id="mnUp" style="margin-top:22px;border-top:1px solid var(--line);padding-top:18px">
+      <p class="sec-t">새 파일 올리기 — 최고관리자만</p>
+      <p class="muted" style="font-size:.82rem;line-height:1.7;margin-bottom:12px">매뉴얼 창이 새로 합친 파일을 고르면 지금 것을 <b>덮어씁니다</b>. 파일 이름은 상관없습니다(올리면 manual.html · manual.pdf 로 저장).<br>
+        보기용 = <b>인투마케팅 매뉴얼 / 통합 / 인투마케팅_통합매뉴얼 ….html</b> · 내려받기용 = 같은 폴더의 <b>….pdf</b></p>
+      <div style="display:grid;gap:10px">
+        <label class="mn-f">보기용 HTML <input type="file" accept=".html,.htm,text/html" onchange="mnUpload(this,'html')"></label>
+        <label class="mn-f">내려받기용 PDF <input type="file" accept=".pdf,application/pdf" onchange="mnUpload(this,'pdf')"></label>
+      </div>
+      <p class="muted" id="mnUpMsg" style="font-size:.82rem;margin-top:10px"></p>
+    </div>
+  </div>
+  <div class="sheet-f"><button class="btn btn-ghost" type="button" onclick="closeModal('mnModal')">닫기</button></div>
+</div></div>
+
 <!-- 견적서 편집 -->
 <div class="modal" id="quoteModal"><div class="sheet wide">
   <div class="sheet-h">
@@ -1089,6 +1123,7 @@
     $('meName').textContent=(me.name||me.email||'-');
     $('meRole').textContent=ROLE_KO[me.role]||'직원';
     if(me.role==='owner'||can('manage_staff')){$('navStaff').classList.remove('hide');$('navSet').classList.remove('hide');$('navSite').classList.remove('hide');$('navPartner').classList.remove('hide');}
+    mnLoad();   /* 업무 매뉴얼 날짜 — 직원 전원 */
     if(can('blog_admin')||can('blog_review'))$('navBlog').classList.remove('hide');
     /* 의뢰 관리 권한이 없으면 문의·견적을 아예 안 보여 줍니다 (2026-09-29).
        서버(RLS)도 같은 규칙이라 화면을 억지로 열어도 내용이 안 옵니다. */
@@ -1165,6 +1200,58 @@
       renderList();
     });
   });
+
+  /* ---------- 📘 업무 매뉴얼 (2026-10-19) ----------
+     · 저장 칸 'manuals'(비공개) : 읽기 = 승인된 직원 · 올리기 = 최고관리자 (DB 정책 manuals_*)
+     · 「보기」는 파일을 받아 새 탭에 «직접» 띄웁니다. Supabase 는 저장 칸의 HTML 을 화면이 아닌 글자로 내보낼 수 있어서,
+       서명 주소를 그대로 열지 않고 받아서(blob, text/html) 엽니다 — 안의 검색 · 복사 · 왼쪽 목록이 그대로 동작합니다.
+     · 🔴 새 탭은 «누른 순간» 먼저 열어 둡니다. 받은 뒤에 열면 브라우저가 팝업으로 막습니다. */
+  var MN={bucket:'manuals',html:'manual.html',pdf:'manual.pdf'};
+  function mnDay(s){if(!s)return '';var d=new Date(s);return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
+  async function mnLoad(){
+    var r=await sb.storage.from(MN.bucket).list('',{limit:20});
+    var f={}; (r.data||[]).forEach(function(o){f[o.name]=o;});
+    var h=f[MN.html], p=f[MN.pdf];
+    $('mnDate').textContent=r.error?'불러오기 실패':(h?mnDay(h.updated_at||h.created_at)+' 수정':'아직 안 올림');
+    $('mnMeta').textContent=r.error?('불러오기 실패: '+r.error.message)
+      :('마지막 수정 : '+(h?mnDay(h.updated_at||h.created_at):'—')+(p?' · PDF '+mnDay(p.updated_at||p.created_at)+' ('+(Math.round((p.metadata&&p.metadata.size||0)/1048576*10)/10)+'MB)':' · PDF 아직 안 올림'));
+    return f;
+  }
+  window.mnOpen=async function(){
+    var w=window.open('','_blank');
+    if(w){w.document.title='업무 매뉴얼';w.document.body.innerHTML='<p style="font:16px sans-serif;padding:40px;color:#555">매뉴얼을 불러오는 중입니다…</p>';}
+    var r=await sb.storage.from(MN.bucket).download(MN.html);
+    if(r.error||!r.data){
+      var msg=/not.?found|404|Object not found/i.test(r.error&&r.error.message||'')?'아직 올린 매뉴얼이 없습니다. 최고관리자가 「PDF · …」를 눌러 파일을 올려 주세요.':'매뉴얼을 열 수 없습니다: '+(r.error?r.error.message:'');
+      if(w)w.document.body.innerHTML='<p style="font:16px sans-serif;padding:40px;color:#b33">'+esc(msg)+'</p>'; else toast(msg);
+      return;
+    }
+    var url=URL.createObjectURL(new Blob([await r.data.text()],{type:'text/html;charset=utf-8'}));
+    if(w)w.location.href=url; else window.open(url,'_blank');
+    setTimeout(function(){URL.revokeObjectURL(url);},120000);
+  };
+  window.mnPdf=async function(){
+    var r=await sb.storage.from(MN.bucket).createSignedUrl(MN.pdf,300,{download:'인투마케팅 통합매뉴얼.pdf'});
+    if(r.error){toast(/not.?found/i.test(r.error.message)?'아직 올린 PDF 가 없습니다':'PDF 를 열 수 없습니다: '+r.error.message);return;}
+    location.href=r.data.signedUrl;
+  };
+  window.mnBox=function(){
+    $('mnUp').classList.toggle('hide',ME.role!=='owner'); $('mnUpMsg').textContent='';
+    $('mnModal').classList.add('open'); mnLoad();
+  };
+  window.mnUpload=async function(inp,kind){
+    var f=inp.files&&inp.files[0]; if(!f)return;
+    if(ME.role!=='owner'){toast('새 파일은 최고관리자만 올릴 수 있습니다');inp.value='';return;}
+    var ok=kind==='pdf'?/\.pdf$/i.test(f.name):/\.html?$/i.test(f.name);
+    if(!ok){toast(kind==='pdf'?'PDF 파일을 골라 주세요':'HTML 파일을 골라 주세요');inp.value='';return;}
+    if(!confirm('지금 매뉴얼('+(kind==='pdf'?'PDF':'보기용 HTML')+')을 「'+f.name+'」로 바꿀까요?\n직원 모두에게 바로 새 파일이 보입니다.')){inp.value='';return;}
+    $('mnUpMsg').textContent='올리는 중… ('+(Math.round(f.size/1048576*10)/10)+'MB)';
+    var r=await sb.storage.from(MN.bucket).upload(kind==='pdf'?MN.pdf:MN.html,f,
+      {upsert:true,cacheControl:'60',contentType:kind==='pdf'?'application/pdf':'text/html'});
+    inp.value='';
+    if(r.error){$('mnUpMsg').textContent='올리기 실패: '+r.error.message;return;}
+    $('mnUpMsg').textContent='올렸습니다 — '+f.name; toast('매뉴얼을 바꿨습니다'); mnLoad();
+  };
 
   /* ---------- 🔗 주소 모음 ----------
      흩어져 있던 주소를 한곳에. 값을 여기 직접 적습니다 —
