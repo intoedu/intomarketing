@@ -411,6 +411,8 @@ textarea.inp.tall{min-height:150px}
 
 /* 디자인 분위기 — 작은 미리보기 */
 .opts.themes{grid-template-columns:repeat(4,minmax(0,1fr))}
+.opts .via-etc{grid-column:1/-1;border-style:dashed}
+.opts .via-etc.on{border-style:solid}
 .opts.themes .theme-etc{grid-column:1/-1;border-style:dashed}   /* 원하시는 분위기 (10/18) — 한 줄 전체 · 점선 (다른 「기타」와 같은 규칙) */
 .opts.themes .theme-etc.on{border-style:solid}
 /* 원하는 색 · 영역별 선택 (10/18) */
@@ -816,7 +818,10 @@ body.wiz .bar .track{position:relative;height:10px;overflow:hidden}
 body.wiz .bar .fill{border-radius:0}
 body.wiz .wz-segs{display:flex;position:absolute;inset:0}   /* 누를 자리 (보이지 않음) · 칸 사이 틈 없음 */
 .wz-segs button{flex:1;min-width:0;height:100%;padding:0;border:0;background:transparent;cursor:pointer}
-.wz-segs i{position:absolute;top:0;bottom:0;pointer-events:none;background:color-mix(in srgb,var(--req) 42%,var(--surface-3))}   /* 건너뛴 필수 질문 — 이어진 칸은 한 덩어리로 (칸 사이 줄 없음) */
+.wz-segs i{position:absolute;top:0;bottom:0;pointer-events:none}
+.wz-segs i.ok{background:var(--accent)}
+.wz-segs i.cur{background:color-mix(in srgb,var(--accent) 45%,var(--surface-3))}
+.wz-segs i.miss{background:color-mix(in srgb,var(--req) 42%,var(--surface-3))}   /* 건너뛴 필수 질문 — 이어진 칸은 한 덩어리로 (칸 사이 줄 없음) */
 @media(max-width:600px){body.wiz .bar .wrap{flex-wrap:wrap;row-gap:14px}body.wiz .bar .track{order:5;flex:1 1 100%;margin-bottom:4px}}
 body.wiz .wz-nav{display:block;margin-top:60px;margin-bottom:40px}
 .wz-btns{display:flex;gap:12px}
@@ -853,6 +858,15 @@ body.wiz:not(.wz-first) #mat_sum,body.wiz:not(.wz-first) header .prep{display:no
 .done .flow li{background:var(--surface)}
 .done-exit{display:flex;align-items:center;justify-content:center;min-height:60px;margin-top:24px;border-radius:14px;background:var(--accent);color:var(--on-accent);font-size:18px;font-weight:800;text-decoration:none}
 .done-exit:hover{filter:brightness(1.08)}
+/* 확인 창 (10/19) — 큰 글씨 · 큰 단추 */
+.ask-back{position:fixed;inset:0;z-index:80;background:rgba(10,20,40,.5);display:grid;place-items:center;padding:20px}
+.ask-box{width:100%;max-width:440px;background:var(--surface);color:var(--ink);border-radius:18px;padding:28px 24px 22px;box-shadow:0 30px 70px -30px rgba(10,20,40,.6)}
+.ask-box h3{font-size:21px;line-height:1.4;margin:0 0 10px}
+.ask-box p{font-size:15.5px;color:var(--muted);line-height:1.75;margin:0 0 22px}
+.ask-btns{display:flex;gap:10px}
+.ask-btns button{flex:1;min-height:54px;border-radius:12px;font:inherit;font-size:17px;font-weight:800;cursor:pointer}
+.ask-no{border:1.5px solid var(--line-2);background:var(--surface);color:var(--ink)}
+.ask-ok{border:0;background:var(--req);color:#fff}
 /* 다음 순서 안내 · 담당자 요청 사항 (10/17) */
 .flow{list-style:none;margin:4px 0 0;padding:0;counter-reset:fl;display:grid;gap:10px}
 .flow li{counter-increment:fl;position:relative;padding:12px 14px 12px 52px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2)}
@@ -1275,9 +1289,10 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
     </div>
 
     <div class="fld" id="fld_addr"><div class="lab-row"><label class="lab" for="f_addr">주소</label><span class="where">계약서 · 오시는 길 · 하단</span></div>
-      <p class="desc">사업장 주소입니다. 「주소 검색」으로 선택한 뒤 층 · 호수를 이어서 입력해 주십시오.</p>
-      <div class="inline"><input class="inp" id="f_addr" autocomplete="street-address" placeholder="예: 대전 유성구 ○○로 12, 3층">
+      <p class="desc">사업장 주소입니다. 「주소 검색」으로 도로명 주소를 고른 뒤, 아래 칸에 층 · 호수를 입력해 주십시오.</p>
+      <div class="inline"><input class="inp" id="f_addr" autocomplete="street-address" placeholder="예: 대전 유성구 ○○로 12">
         <button type="button" class="sbtn ghost" data-zip="biz">주소 검색</button></div>
+      <input class="inp" id="f_addr2" style="margin-top:10px" autocomplete="address-line2" placeholder="상세 주소 (선택) · 예: 3층 301호" aria-label="상세 주소 (선택)">
       <p class="ex" data-zip-err hidden>주소 검색을 불러오지 못했습니다. 칸에 직접 입력해 주십시오.</p>
       <p class="note info stage" id="addr_newbiz">개업 준비 중으로 사업장 주소가 미정이면, 계약서용 대표자 주소를 입력하고 「홈페이지의 목적」에서 「방문」을 제외해 주십시오.</p></div>
 
@@ -1338,7 +1353,9 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
       <div class="opts two" id="via" role="radiogroup" aria-label="신청 · 예약 받는 방법">
         <label class="opt"><input type="radio" name="via" value="홈페이지 신청서"><b>홈페이지 신청서</b><span>방문자가 홈페이지에서 신청 내용을 작성해 본인 메일로 발송합니다. 「기능 · 요금」에서 <strong>신청서</strong> 기능(<span data-price="form"></span>)이 함께 추가됩니다.</span></label>
         <label class="opt"><input type="radio" name="via" value="쓰고 있는 예약 페이지"><b>쓰고 있는 예약 페이지</b><span>네이버 예약 등 사용 중인 예약 페이지로 연결합니다. 추가 비용은 없습니다.</span></label>
+        <label class="opt via-etc"><input type="radio" name="via" value="기타"><b>기타</b><span>다른 방법으로 받으면 직접 적어 주십시오. 추가 비용은 없습니다.</span></label>
       </div>
+      <div class="reveal" data-show="via=기타"><input class="inp" id="f_via_etc" maxlength="60" placeholder="예: 전화로만 예약 · 카카오톡 채널로 받음 · 방문 접수" aria-label="신청 · 예약 받는 방법 (기타)"></div>
       <div class="reveal" data-show="via=쓰고 있는 예약 페이지"><div class="fld"><label class="lab sm" for="f_book_url">예약 페이지 주소</label>
         <input class="inp" id="f_book_url" inputmode="url" placeholder="https://"></div></div></div>
 
@@ -1406,10 +1423,11 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
           <span class="next">오픈 시 「홈페이지를 열었습니다」 공지를 담당자가 게시합니다. 별도 입력 항목은 없습니다.</span></div>
         <div class="won tnum" data-won="notice"></div></label>
 
-      <label class="feat"><input type="checkbox" data-feat="form">
+      <label class="feat" id="feat_form"><input type="checkbox" data-feat="form">
         <div><b>신청서<span class="wm" data-wm="form"></span></b><span class="d">방문자가 항목을 입력한 뒤 본인 메일(Gmail · 휴대폰 메일 앱)로 발송하는 신청서입니다. 신청 내용은 이메일로 수신합니다(저장 · 관리자 화면 없음).</span>
           <span class="fit"><em class="y">적합</em><span>홈페이지에서 신청 내용을 접수할 때</span>
             <em class="n">불필요</em><span>전화 · 카카오톡 버튼(기본)으로 충분하거나, 네이버 예약 등 예약 페이지를 사용할 때</span></span>
+          <span class="lockmsg">「신청 · 예약 받는 방법」을 「쓰고 있는 예약 페이지」로 선택하여 고를 수 없습니다</span>
           <span class="next">→ 다음 「선택 기능 설정」에서 신청서 이름 · 수신 이메일 · 입력 항목을 설정합니다.</span></div>
         <div class="won tnum" data-won="form"></div></label>
 
@@ -2687,12 +2705,42 @@ function syncGoals(){
 
 /* ── 화면 맞추기 ── */
 /* 게시판은 회원가입을 골라야 고를 수 있습니다 (2026-10-01 밤 결정 — 게시판 글은 관리자 화면에서 씀) */
+/* 확인 창 (10/19) — askConfirm(제목, 설명, 예, 아니오) → Promise<boolean> */
+function askConfirm(t,msg,yes,no){
+  return new Promise(function(res){
+    var b=document.createElement('div'); b.className='ask-back'; b.setAttribute('role','dialog'); b.setAttribute('aria-modal','true');
+    b.innerHTML='<div class="ask-box"><h3>'+esc(t)+'</h3><p>'+esc(msg)+'</p><div class="ask-btns"><button type="button" class="ask-no">'+esc(no)+'</button><button type="button" class="ask-ok">'+esc(yes)+'</button></div></div>';
+    var done=function(v){ document.removeEventListener('keydown',key); b.remove(); res(v); };
+    var key=function(e){ if(e.key==='Escape')done(false); };
+    b.querySelector('.ask-no').onclick=function(){ done(false); }; b.querySelector('.ask-ok').onclick=function(){ done(true); };
+    b.addEventListener('click',function(e){ if(e.target===b)done(false); }); document.addEventListener('keydown',key);
+    document.body.appendChild(b); b.querySelector('.ask-no').focus();
+  });
+}
+/* 10/19 — 「홈페이지 신청서」로 받는데 신청서 기능을 빼려 하면 한 번 더 묻기 (누르는 순간 막고 확인 창) */
+document.addEventListener('click',function(e){
+  var i=e.target; if(!i||!i.matches||!i.matches('[data-feat="form"]')||i.checked||!bookOn()||one('via')!=='홈페이지 신청서')return;
+  e.preventDefault();
+  askConfirm('신청서 기능을 빼시겠습니까?',
+    '「신청 · 예약 받는 방법」을 「홈페이지 신청서」로 선택하셨습니다. 신청서 기능을 빼면 홈페이지에서 신청 · 예약을 받을 수 없어, 다른 받는 방법(쓰고 있는 예약 페이지 등)을 다시 선택하셔야 합니다.',
+    '빼기','그대로 두기').then(function(ok){
+      if(!ok)return;
+      document.querySelector('input[name="via"][value="홈페이지 신청서"]').checked=false; i.checked=false; AUTO_FORM=false; CTA_WARN=true; touched(); refresh();
+    });
+},true);
+/* 사업장 주소 = 주소 + 상세 주소 (10/19) */
+function bizAddr(){ return [val('f_addr'),val('f_addr2')].filter(Boolean).join(' '); }
 function syncLocks(){
   var mem=document.querySelector('[data-feat="member"]'), brd=document.querySelector('[data-feat="board"]');
   var lock=!mem.checked;
   if(lock&&brd.checked){ brd.checked=false; }
   brd.disabled=lock;
   $('feat_board').classList.toggle('lock',lock);
+  /* 10/19 — 신청 · 예약을 「쓰고 있는 예약 페이지」로 받으면 신청서 기능은 고를 수 없음 · 「홈페이지 신청서」면 늘 켜 둠 */
+  var fm=document.querySelector('[data-feat="form"]'), ext=bookOn()&&one('via')==='쓰고 있는 예약 페이지';
+  if(ext&&fm.checked){ fm.checked=false; AUTO_FORM=false; }
+  if(bookOn()&&one('via')==='홈페이지 신청서'&&!fm.checked){ fm.checked=true; AUTO_FORM=true; }
+  fm.disabled=ext; $('feat_form').classList.toggle('lock',ext);
 }
 /* 기능에 딸린 칸 — 게시판 종류는 「기능 · 요금」 안(금액이 바뀜), 나머지는 「선택 기능 설정」 단계 (고른 것이 없으면 단계째 숨김) */
 var SET_FEATS=['form','list','lang','pay'];
@@ -2943,6 +2991,7 @@ var CHECKS=[
   C('step2','f_goal_etc','전환 목표 (기타)',has('f_goal_etc'),'기타 전환 목표를 입력해 주십시오. (예: 견적 요청)',function(){return hasGoal('기타');}),
   C('step2','seg_main','첫 화면 큰 버튼',function(){return !!mainGoal();},'선택 항목 중 첫 화면에 가장 크게 배치할 버튼 1개를 선택해 주십시오.',function(){return chosenGoals().length>=2;}),
   C('step2','via','신청 · 예약 받는 방법',picked1('via'),'신청 · 예약 접수 방법을 선택해 주십시오.',bookOn),
+  C('step2','f_via_etc','신청 · 예약 받는 방법 (기타)',has('f_via_etc'),'신청 · 예약을 받는 방법을 입력해 주십시오.',function(){return bookOn()&&one('via')==='기타';}),
   C('step2','f_book_url','예약 페이지 주소',function(){return RE_WEB.test(val('f_book_url'));},'사용 중인 예약 페이지 주소를 입력해 주십시오.',function(){return bookOn()&&one('via')==='쓰고 있는 예약 페이지';}),
   C('step2','fld_who','주요 방문자',function(){return multi('who').length>0;},'주요 방문자를 1~3개 선택해 주십시오.'),
 
@@ -3376,14 +3425,14 @@ function wzBar(){
   /* 진행 막대 — 질문 수만큼 칸을 나눔: 답한 칸 파랑 · 안 한 칸 연한 색 · 지금 칸 굵게. 칸을 누르면 그 질문으로 */
   /* 한 줄 막대 — 채운 길이 = 지금 위치 · 지나왔거나 들렀는데 안 채운 필수 질문 = 코랄 레드 칸 */
   var miss=function(i){ return i!==WZ_I&&done.need(i)&&!done(i)&&(i<WZ_I||fin||WZ_SEEN[i]); };
-  $('fill').style.width=(fin?100:Math.round((q+1)/qs.length*1000)/10)+'%';
+  $('fill').style.width='0';   /* 10/19 — 채운 길이 대신 칸마다 색: 답함 파랑 · 지금 칸 옅은 파랑 · 빠짐 옅은 빨강 · 아직 회색 */
   $('wz_segs').innerHTML=qs.map(function(i,n){
     var p=WZ[i], l=p.roots[0]&&p.roots[0].querySelector('.lab'), t=l?l.textContent:($(p.card).querySelector('.lab')||{}).textContent||'';
     return '<button type="button" data-wz="'+i+'" class="'+(miss(i)?'miss':'')+(i===WZ_I?' cur':'')+'" title="'+esc((n+1)+'. '+String(t).trim()+(miss(i)?' (필수 · 아직 답하지 않음)':(done(i)?' (답함)':'')))+'"></button>';
   }).join('');
-  var runs=[], st=-1;   /* 이어진 빠진 칸 → 한 덩어리 */
-  qs.forEach(function(i,n){ if(miss(i)){ if(st<0)st=n; } else if(st>=0){ runs.push([st,n]); st=-1; } }); if(st>=0)runs.push([st,qs.length]);
-  $('wz_segs').insertAdjacentHTML('afterbegin',runs.map(function(r){ return '<i style="left:'+(r[0]/qs.length*100)+'%;width:'+((r[1]-r[0])/qs.length*100)+'%"></i>'; }).join(''));
+  var kind=function(i){ return done(i)?'ok':(miss(i)?'miss':(i===WZ_I?'cur':'')); }, runs=[], st=0;   /* 같은 색이 이어지면 한 덩어리 (칸 사이 줄 없음) */
+  qs.forEach(function(i,n){ if(n>0&&kind(i)!==kind(qs[n-1])){ runs.push([st,n,kind(qs[n-1])]); st=n; } }); if(qs.length)runs.push([st,qs.length,kind(qs[qs.length-1])]);
+  $('wz_segs').insertAdjacentHTML('afterbegin',runs.filter(function(r){ return r[2]; }).map(function(r){ return '<i class="'+r[2]+'" style="left:'+(r[0]/qs.length*100)+'%;width:'+((r[1]-r[0])/qs.length*100)+'%"></i>'; }).join(''));
   $('left_txt').textContent=fin?'제출 전 확인':(q+1)+' / '+qs.length;
   $('left_txt').classList.remove('zero');
   $('wz_prev').hidden=k<=0; $('wz_next').hidden=k>=act.length-1;
@@ -3682,7 +3731,7 @@ function pvMatData(){
     why:repRead('rep_why'), whyEx:[{a:'예: '+e.why[0],b:e.why[1]}],
     faq:repRead('rep_faq'), faqEx:[{a:'예: '+e.faq[0],b:e.faq[1]}],
     goals:orderedGoals(), menu:pvMenu(), tel:val('f_tel'), hours:val('f_hours'), hoursEx:'예: '+e.hours,
-    addrPub:addrForced()?true:one('tg_addrpub')!=='공개 안 함', addr:val('f_addr'), park:val('f_park'), parkEx:'예: '+e.park,
+    addrPub:addrForced()?true:one('tg_addrpub')!=='공개 안 함', addr:bizAddr(), park:val('f_park'), parkEx:'예: '+e.park,
     kakao:one('tg_kakao')==='있음'?val('f_kakao'):'', snsAns:one('tg_sns'),
     sns:one('tg_sns')==='있음'?val('f_sns').split(/\n+/).map(function(s){ return s.trim(); }).filter(Boolean):[],
     logo:(!kv&&one('tg_logo')==='있음'&&FILES.logo[0])?pvUrl(FILES.logo[0]):'',
@@ -3907,7 +3956,7 @@ function searchZip(btn){
       if(d.buildingName&&d.apartment==='Y')ko+=' ('+d.buildingName+')';
       if(target==='biz'){
         BIZ_ADDR={zip:d.zonecode||'',ko:ko,en:en};
-        $('f_addr').value=ko+' '; $('f_addr').focus();
+        $('f_addr').value=ko; $('f_addr2').focus();   /* 10/19 — 층 · 호수는 상세 주소 칸에 */
       }else{
         $('f_own_zip').value=d.zonecode||''; $('f_own_addr').value=ko;
         if(en)$('f_own_addr_en').value=en;
@@ -3930,8 +3979,8 @@ $('own_fill').addEventListener('click',function(){
   put('f_own_tel', val('f_tel')||val('f_phone'));   /* 대표 전화는 「제작 자료」에서 받으므로 신청서에서는 담당자 연락처로 (유선 전화가 없으면 휴대전화를 적으라는 안내와 같음) */
   if(BIZ_ADDR&&val('f_addr').indexOf(BIZ_ADDR.ko)!==0)BIZ_ADDR=null;      /* 검색한 뒤 주소를 손으로 바꿨으면 검색 값은 버림 */
   if(BIZ_ADDR){ put('f_own_zip',BIZ_ADDR.zip); put('f_own_addr',BIZ_ADDR.ko);
-    var rest=val('f_addr').replace(BIZ_ADDR.ko,'').replace(/^[,\s]+/,'').trim(); put('f_own_addr2',rest); put('f_own_addr_en',BIZ_ADDR.en); }
-  else put('f_own_addr', val('f_addr'));
+    var rest=val('f_addr').replace(BIZ_ADDR.ko,'').replace(/^[,\s]+/,'').trim(); put('f_own_addr2',[rest,val('f_addr2')].filter(Boolean).join(' ')); put('f_own_addr_en',BIZ_ADDR.en); }
+  else { put('f_own_addr', val('f_addr')); put('f_own_addr2', val('f_addr2')); }
   var r=regInfo();
   if(org&&r&&r.no){
     if(!val('f_own_kind')&&r.own)$('f_own_kind').value=r.own;
@@ -4253,6 +4302,7 @@ function goalHow(g,o){
   if(g==='카카오톡 상담') return '카카오톡 채널 '+o.kakao+' (채팅이 바로 열리는 주소인지 확인)';
   if(g==='방문') return '오시는 길(지도 · 길 찾기 · 주차) — '+o.addr;
   if(g==='기타') return '고객이 직접 적은 목표 — 연결 방법은 **담당자 확인 후** 정함';
+  if(g==='신청 · 예약'&&o.via==='기타') return '고객이 적은 받는 방법 — 「'+o.viaEtc+'」 (연결 방법은 담당자 확인 후 정함)';
   if(g==='신청 · 예약') return o.via==='쓰고 있는 예약 페이지'?'고객이 쓰는 예약 페이지 '+o.bookUrl+' (새 창)':'홈페이지 신청서 (1장 「신청서」)';
   return '';
 }
@@ -4502,7 +4552,7 @@ function collect(){
     corpNo:k==='법인사업자'?val('f_corp_no'):'',
     acad:isAcad(), acadNo:isAcad()?val('f_acad_no'):'', acadFee:isAcad()?val('f_acad_fee'):'',
     realty:isRealty()?{no:val('f_realty_no'),name:val('f_realty_name')}:null,
-    goals:orderedGoals(), via:via, bookUrl:via==='쓰고 있는 예약 페이지'?val('f_book_url'):'',
+    goals:orderedGoals(), via:via, viaEtc:via==='기타'?val('f_via_etc'):'', bookUrl:via==='쓰고 있는 예약 페이지'?val('f_book_url'):'',
     who:who.join(', '), calc:c, plan:one('plan'), quote:quoteText(c),
     form:hasK('form')?{title:ft,mail:val('f_form_mail'),fields:ff}:null,
     list:hasK('list')?{what:val('f_list_what'),items:val('f_list_items')}:null,
@@ -4513,7 +4563,7 @@ function collect(){
     greetAns:one('tg_greet'), greet:greetOn()?val('f_greet'):'', sign:greetOn()?signText():'',
     photoVia:one('tg_pvia'), photoNames:photoAtt()?photoNames(one('tg_logo')==='있음'):[],
     svc:repRead('rep_svc'), why:repRead('rep_why'), faq:repRead('rep_faq'),
-    addr:val('f_addr'), addrPub:pub, addrForced:addrForced(), tel:val('f_tel'), kakao:one('tg_kakao')==='있음'?val('f_kakao'):'',
+    addr:bizAddr(), addrPub:pub, addrForced:addrForced(), tel:val('f_tel'), kakao:one('tg_kakao')==='있음'?val('f_kakao'):'',
     hours:val('f_hours'), park:pub?val('f_park'):'',
     sns:one('tg_sns')==='있음'?val('f_sns'):'',
     theme:one('theme'), themeEtc:one('theme')==='직접 입력'?val('f_theme_etc'):'', color:cColorText(), cmode:one('tg_color')==='있음'?(one('color_mode')||'순위'):'',
@@ -4554,7 +4604,7 @@ function drawReview(){
       o.realty?['중개사무소 표시',[o.realty.no,o.realty.name].filter(Boolean).join(' · ')]:null]],
     ['step2','홈페이지의 목적',[
       ['전환 목표',o.goals.map(function(g,i){ return (g==='기타'?'기타: '+goalName(g):g)+(i===0&&o.goals.length>1&&mainGoal()?' (첫 화면 큰 버튼)':''); }).join('\n')],
-      hasGoal('신청 · 예약')?['신청 · 예약',o.via?o.via+(o.bookUrl?' ('+o.bookUrl+')':''):'']:null,
+      hasGoal('신청 · 예약')?['신청 · 예약',o.via?(o.via==='기타'?'기타: '+o.viaEtc:o.via+(o.bookUrl?' ('+o.bookUrl+')':'')):'']:null,
       ['주요 방문자',o.who]]],
     ['step3','기능 · 요금',[
       ['기능',c.lines.map(function(l,i){ return (i?'+ ':'')+l.n; }).join('  ')],
@@ -4659,7 +4709,7 @@ $('form').addEventListener('submit',async function(e){
     '중개사무소 등록번호':o.realty?o.realty.no:'', '대표 공인중개사':o.realty?o.realty.name:'',
     '고객 구분(신청서 기준)':custType(o.regKind),
     '손님 행동(중요한 순서)':o.goals.map(function(g,i){return (i+1)+'. '+(g==='기타'?'기타: '+goalName(g):g)+(i===0&&o.goals.length>1?' (첫 화면 큰 버튼)':'');}).join(' · '),
-    '신청·예약 받는 방법':o.via?(o.via+(o.bookUrl?' ('+o.bookUrl+')':'')):'',
+    '신청·예약 받는 방법':o.via?(o.via==='기타'?'기타: '+o.viaEtc:o.via+(o.bookUrl?' ('+o.bookUrl+')':'')):'',
     '주 방문자':o.who,
     '고른 기능':featTxt, '게시판 종류':c.keys.indexOf('board')>=0?c.boards.join(', '):'',
     '공지':c.keys.indexOf('notice')>=0?'오픈 때 「홈페이지를 열었습니다」 1건 (그 뒤 월 1건)':'',
