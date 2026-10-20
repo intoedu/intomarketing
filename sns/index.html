@@ -303,6 +303,35 @@ header{position:sticky;top:0;z-index:60;background:rgba(27,29,32,.96);
 .pathnote{margin-top:var(--s-5);text-align:center;color:var(--txt-2);font-size:clamp(var(--t-base),1.4vw,18px)}
 .pathnote b{color:var(--yellow);font-weight:700}
 
+/* ══════════ 2-1. 작업 사례 — 누르면 실제 채널이 새 창으로 열립니다 (2026-10-20 이은총 님) ══════════ */
+.works{background:linear-gradient(180deg,#000 0,#0B0418 50%,#000 100%)}
+.wks{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.wk{display:flex;flex-direction:column;height:100%;border-radius:28px;overflow:hidden;color:#fff;
+    background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);
+    transition:box-shadow .3s var(--ease),transform .3s var(--ease)}
+.wk:hover{box-shadow:inset 0 0 0 1px rgba(255,255,255,.4),0 24px 60px -24px var(--wc,rgba(214,51,127,.8))}
+.wk:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+.wk .wtop{position:relative;aspect-ratio:16/10;background:var(--wg);display:grid;place-items:center;overflow:hidden}
+.wk .wtop::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(60% 50% at 80% 10%,rgba(255,255,255,.35),transparent 70%),
+             repeating-linear-gradient(135deg,rgba(255,255,255,.06) 0 10px,transparent 10px 20px)}
+.wk .wico{position:relative;width:76px;height:76px;border-radius:24px;display:grid;place-items:center;
+  background:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 16px 36px -14px rgba(0,0,0,.5);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:transform .35s var(--pop)}
+.wk:hover .wico{transform:scale(1.1) rotate(-6deg)}
+.wk .wico svg{width:40px;height:40px}
+.wk .wbody{flex:1;display:flex;flex-direction:column;gap:6px;padding:20px 22px 22px}
+.wk .wp{font-size:var(--t-sm);font-weight:800;color:var(--wt,#D8C2FF);letter-spacing:.02em}
+.wk .wn{display:block;color:#fff;font-size:clamp(19px,1.7vw,22px);font-weight:800;letter-spacing:-.02em;line-height:1.3;overflow-wrap:anywhere}
+.wk .wd{color:var(--txt-2);font-size:var(--t-base);line-height:1.6}
+.wk .go{margin-top:auto;padding-top:14px;display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:var(--t-base);color:#fff}
+.wk .go i{font-style:normal;display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);
+  transition:transform .25s var(--ease),background-color .25s}
+.wk:hover .go i{transform:translate(3px,-3px);background:var(--yellow);color:#15171A}
+.wknote{margin-top:var(--s-5);color:var(--txt-3);font-size:var(--t-sm)}
+@media(max-width:1180px){ .wks{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media(max-width:520px){ .wks{grid-template-columns:minmax(0,1fr)} .wk .wtop{aspect-ratio:16/7} .wk .wico{width:60px;height:60px;border-radius:18px} .wk .wico svg{width:32px;height:32px} }
+
 /* ══════════ 3. 대상 채널 ══════════ */
 .chs{background:radial-gradient(70% 40% at 50% 55%,rgba(108,43,217,.30),rgba(108,43,217,0) 100%),
      linear-gradient(180deg,#000 0,#120624 30%,#1E0A3C 60%,#0B0416 85%,#000 100%)}
@@ -704,6 +733,7 @@ main{overflow-x:clip}
         <a class="btn btn-p hbtn" href="/apply/sns/">SNS 채널 신청<span class="arr-r" aria-hidden="true">→</span></a>
         <span class="badge">블로그 + 인스타 묶음 495,000원</span>
       </div>
+      <p style="margin-top:14px"><a class="more" href="#works" style="color:#fff">작업 사례 보기 ↓</a></p>
       <p class="hcond"><span>계정은 고객 소유</span> <span>·&nbsp;모든 작업 원격 진행</span> <span>·&nbsp;지도 4곳 등록</span> <span>·&nbsp;필요한 채널만 선택</span> <span>(부가세 포함)</span></p>
     </div>
 
@@ -756,6 +786,34 @@ main{overflow-x:clip}
       <div class="col" aria-hidden="true"><p class="lbl">오기</p><span class="pill out">방문 · 문의</span></div>
     </figure>
     <p class="pathnote rv"><b>지도 등록은 검색 유입 시 가장 먼저 노출되는 영역</b>이라 채널 세팅과 함께 진행합니다.</p>
+  </div>
+</section>
+
+<!-- ══════════ 2-1. 작업 사례 — 🔴 누르면 실제 채널로 바로 갑니다(새 창). 이름은 각 채널에 실제로 적힌 이름 (2026-10-20 확인)
+     · 인스타그램은 바깥에서 조회가 막혀 이름을 확인하지 못해 계정 아이디로 적었습니다.
+     · 카카오톡 채널 소개글의 「점수상승 1위」 같은 문구는 이 쪽에 옮기지 마세요(근거 자료 없음). ══════════ -->
+<section class="sec works" id="works" aria-labelledby="works-h">
+  <div class="w">
+    <div class="sec-head rv">
+      <p class="eyebrow">작업 사례</p>
+      <h2 class="ttl" id="works-h"><span class="l">인투마케팅이 작업한 채널,</span> <span class="b"><span class="grad">직접 눌러 보세요</span></span></h2>
+      <p class="lead">실제로 운영 중인 채널입니다. 누르면 해당 채널이 새 창으로 열립니다.</p>
+    </div>
+    <ul class="wks">
+      <li class="rv"><a class="wk" href="https://www.instagram.com/into_toeic/" target="_blank" rel="noopener" style="--wg:linear-gradient(135deg,#FFB347 0%,#F2545B 40%,#C1358F 70%,#7B3CF0 100%);--wc:rgba(193,53,143,.8);--wt:#FFB8D6">
+        <span class="wtop"><span class="wico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r=".7" fill="currentColor"/></svg></span></span>
+        <span class="wbody"><span class="wp">인스타그램</span><b class="wn">@into_toeic</b><span class="wd">프로필 · 하이라이트 · 게시물</span><span class="go">인스타그램 보기 <i aria-hidden="true">↗</i><span class="sr"> (새 창)</span></span></span></a></li>
+      <li class="rv"><a class="wk" href="https://blog.naver.com/pogru9670" target="_blank" rel="noopener" style="--wg:linear-gradient(135deg,#5BE08F 0%,#1FB860 50%,#0E8A45 100%);--wc:rgba(31,184,96,.75);--wt:#9BF0BC">
+        <span class="wtop"><span class="wico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2.5H7a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7.5z"/><path d="M14 2.5v5h5M9 13h6M9 17h6"/></svg></span></span>
+        <span class="wbody"><span class="wp">네이버 블로그</span><b class="wn">POGURU</b><span class="wd">블로그 홈 · 글 목록</span><span class="go">블로그 보기 <i aria-hidden="true">↗</i><span class="sr"> (새 창)</span></span></span></a></li>
+      <li class="rv"><a class="wk" href="https://naver.me/Gct10plt" target="_blank" rel="noopener" style="--wg:linear-gradient(135deg,#4FCB7A 0%,#16A85A 45%,#0B6E8C 100%);--wc:rgba(22,168,90,.75);--wt:#9BF0BC">
+        <span class="wtop"><span class="wico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21z"/><circle cx="12" cy="10" r="2.4"/></svg></span></span>
+        <span class="wbody"><span class="wp">네이버 플레이스</span><b class="wn">인투어학원</b><span class="wd">지도 · 사진 · 정보</span><span class="go">플레이스 보기 <i aria-hidden="true">↗</i><span class="sr"> (새 창)</span></span></span></a></li>
+      <li class="rv"><a class="wk" href="https://pf.kakao.com/_xotEQG" target="_blank" rel="noopener" style="--wg:linear-gradient(135deg,#FFF07A 0%,#FFD633 45%,#F2A900 100%);--wc:rgba(242,169,0,.7);--wt:#FFE58A">
+        <span class="wtop" style="color:#3B1E1E"><span class="wico" aria-hidden="true" style="background:rgba(59,30,30,.12)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5c-4.9 0-8.5 3-8.5 6.6 0 2.3 1.5 4.3 3.8 5.5l-.8 3 3.4-2.1c.7.1 1.4.2 2.1.2 4.9 0 8.5-3 8.5-6.6S16.9 4.5 12 4.5z"/></svg></span></span>
+        <span class="wbody"><span class="wp">카카오톡 채널</span><b class="wn">인투어학원</b><span class="wd">채널 홈 · 상담</span><span class="go">카카오톡 채널 보기 <i aria-hidden="true">↗</i><span class="sr"> (새 창)</span></span></span></a></li>
+    </ul>
+    <p class="wknote rv">휴대폰에서는 앱이 설치되어 있으면 해당 앱으로 열립니다.</p>
   </div>
 </section>
 
@@ -1168,14 +1226,14 @@ const SNS = {
   var PLAN = [
     ['.sec-head', 'head', 0, 1],
     ['.ptitle', 'up', 0, 1], ['.flow', 'zoom', 0, 1],
-    ['.tile', 'pop', 110, 4], ['.mapl', 'up', 0, 1],
+    ['.wks > li', 'pop', 120, 4], ['.tile', 'pop', 110, 4], ['.mapl', 'up', 0, 1],
     ['.plan', 'alt', 160, 2],
     ['.svc', 'pop', 140, 3], ['.longterm', 'zoom', 0, 1],
     ['.step', 'l', 110, 6], ['.mcards li', 'up', 130, 3],
     ['.ph3', 'l', 0, 1], ['.ptw', 'zoom', 0, 1], ['.calc', 'zoom', 0, 1],
     ['.kcards li', 'alt', 120, 4], ['details', 'up', 60, 4], ['.ctabox', 'zoom', 0, 1]
   ];
-  var LIFT = '.tile, .plan, .svc, .mcards li, .kcards li, .step';
+  var LIFT = '.wks > li, .tile, .plan, .svc, .mcards li, .kcards li, .step';
   rv.forEach(function(el){
     var p = null;
     for(var i = 0; i < PLAN.length; i++){ if(el.matches(PLAN[i][0])){ p = PLAN[i]; break; } }
