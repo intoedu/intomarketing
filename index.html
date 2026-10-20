@@ -656,7 +656,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   #v-blog .bx-bfacts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:34px auto 0;max-width:780px}
   #v-blog .bx-bfacts>div{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 14px;box-shadow:0 14px 30px -24px rgba(30,60,140,.5)}
   #v-blog .bx-bfacts i{display:block;font-style:normal;font-size:28px;line-height:1}
-  #v-blog .bx-bfacts b{display:block;font-size:24px;font-weight:900;letter-spacing:-.02em;margin-top:10px;font-variant-numeric:tabular-nums}
+  #v-blog .bx-bfacts b{display:block;font-size:24px;font-weight:900;letter-spacing:-.02em;margin-top:0;font-variant-numeric:tabular-nums}
   #v-blog .bx-bfacts span{display:block;font-size:var(--t-sm);color:var(--muted);margin-top:2px}
   #v-blog .bx-bacts{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:30px}
   #v-blog .bx-bband{margin-top:46px;background:var(--bl-blue);color:#fff;font-weight:800;font-size:var(--t-md);padding:16px 20px;text-align:center;word-break:keep-all}
@@ -664,7 +664,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   #v-blog .bx-bchat{display:flex;flex-direction:column;gap:18px;margin:38px auto 0;max-width:640px}
   #v-blog .bx-bq{display:flex;gap:12px;align-items:flex-end}
   #v-blog .bx-bq.bx-r{flex-direction:row-reverse}
-  #v-blog .bx-bq .bx-av{flex:none;width:48px;height:48px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font-size:26px}
+  #v-blog .bx-bq .bx-av{flex:none;width:48px;height:48px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font-size:26px;line-height:1;text-align:center}
   #v-blog .bx-bq p{background:var(--surface-2);border-radius:18px;padding:14px 18px;font-size:var(--t-md);line-height:1.6;max-width:420px;word-break:keep-all}
   #v-blog .bx-bq.bx-r p{background:#fff;border:1px solid var(--line)}
   #v-blog .bx-bq p b{color:var(--bl-blue)}
@@ -674,7 +674,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   #v-blog .bx-bcheck{margin:36px auto 0;max-width:720px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:8px 26px;box-shadow:0 20px 40px -32px rgba(30,60,140,.5)}
   #v-blog .bx-bcheck>div{display:flex;gap:16px;align-items:center;padding:20px 0;border-bottom:1px solid var(--line)}
   #v-blog .bx-bcheck>div:last-child{border-bottom:0}
-  #v-blog .bx-bcheck .bx-ic{flex:none;width:52px;height:52px;border-radius:14px;background:var(--surface-2);display:grid;place-items:center;font-size:26px}
+  #v-blog .bx-bcheck .bx-ic{flex:none;width:52px;height:52px;border-radius:14px;background:var(--surface-2);display:grid;place-items:center;font-size:26px;line-height:1;text-align:center}
   #v-blog .bx-bcheck h4{font-size:var(--t-md);font-weight:800}
   #v-blog .bx-bcheck p{font-size:var(--t-sm);color:var(--muted);margin-top:4px;line-height:1.6}
   #v-blog .bx-bcheck p::before{content:"✓";display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:var(--bl-blue);color:#fff;font-size:11px;font-weight:900;margin-right:6px;vertical-align:1px}
@@ -691,6 +691,12 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   #v-blog .bx-bnums .bx-v u{text-decoration:none;font-size:.45em;margin-left:2px;color:#AFC2EE}
   #v-blog .bx-bnums .bx-d{font-size:var(--t-sm);color:#C9D6F5;margin-top:6px}
   #v-blog .bx-bres .bx-bfoot{color:#9FB0D8;margin-top:18px;text-align:center;line-height:1.7}
+  /* 4-1 실제 검색 화면 */
+  #v-blog .bx-bproof{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:34px;align-items:start}
+  #v-blog .bx-bproof figure{margin:0;background:#fff;border-radius:20px;padding:10px 10px 14px;box-shadow:0 24px 50px -30px rgba(0,0,0,.7)}
+  #v-blog .bx-bproof img{display:block;width:100%;height:auto;border-radius:12px}
+  #v-blog .bx-bproof figcaption{margin-top:10px;font-size:var(--t-sm);color:#41506E;text-align:center}
+  #v-blog .bx-bproof figcaption b{color:var(--bl-blue)}
   /* 5 상품 두 갈래 */
   #v-blog .bx-bprod{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:36px}
   #v-blog .bx-bprod>div{border-radius:24px;padding:28px 26px;border:1px solid var(--line);background:#fff}
@@ -740,7 +746,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   #v-blog .bx-bsmall a{color:var(--bl-blue);font-weight:700;cursor:pointer}
   @media(max-width:760px){
     #v-blog .bx-bfacts{grid-template-columns:repeat(2,minmax(0,1fr))}
-    #v-blog .bx-bnums,#v-blog .bx-bprod,#v-blog .bx-bterms,#v-blog .bx-bneed{grid-template-columns:1fr}
+    #v-blog .bx-bnums,#v-blog .bx-bprod,#v-blog .bx-bterms,#v-blog .bx-bneed,#v-blog .bx-bproof{grid-template-columns:1fr}
     #v-blog .bx-bsec{padding:56px 0}
     #v-blog .bx-bstep{padding:14px 16px}
     #v-blog .bx-bstep .bx-ic{display:none}
@@ -775,8 +781,10 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   #v-blog .bx-bproc .bx-bh mark{background-image:linear-gradient(rgba(255,227,110,.85),rgba(255,227,110,.85))}
   /* 둥둥 떠 있는 아이콘 */
   @keyframes bxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-  #v-blog.bx-anim .bx-bfacts i,#v-blog.bx-anim .bx-bneed i,#v-blog.bx-anim .bx-bcheck .bx-ic,#v-blog.bx-anim .bx-bstep .bx-ic{display:inline-block;animation:bxFloat 3.2s ease-in-out infinite}
-  #v-blog.bx-anim .bx-bfacts>div:nth-child(2n) i,#v-blog.bx-anim .bx-bneed>div:nth-child(2n) i{animation-delay:-1.6s}
+  /* 🔴 .bx-ic 는 display 를 건드리지 않습니다 — grid 가운데 정렬이 풀려 이모지가 왼쪽으로 치우쳤음(10/20) */
+  #v-blog.bx-anim .bx-bneed i{display:inline-block;animation:bxFloat 3.2s ease-in-out infinite}
+  #v-blog.bx-anim .bx-bcheck .bx-ic{animation:bxFloat 3.2s ease-in-out infinite}
+  #v-blog.bx-anim .bx-bneed>div:nth-child(2n) i,#v-blog.bx-anim .bx-bcheck>div:nth-child(2n) .bx-ic{animation-delay:-1.6s}
   #v-blog .bx-bfacts>div,#v-blog .bx-bneed>div,#v-blog .bx-bterms>div,#v-blog .bx-bprod>div,#v-blog .bx-bstep{transition:transform .25s var(--bx-e),box-shadow .25s}
   #v-blog .bx-bfacts>div.in:hover,#v-blog .bx-bneed>div.in:hover,#v-blog .bx-bterms>div.in:hover,#v-blog .bx-bprod>div.in:hover{transform:translateY(-6px);box-shadow:0 24px 40px -26px rgba(30,60,140,.6);transition-delay:0ms}
   #v-blog .bx-bstep.in:hover{transform:translateX(6px);transition-delay:0ms}
@@ -842,15 +850,15 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       </div>
       <p class="bx-bfoot">2026년 9월 기준 · 검색 순위를 확인한 게시물 21편 집계</p>
       <div class="bx-bfacts">
-        <div><i>💳</i><b>10,000원</b><span>편당 · 부가세 포함</span></div>
-        <div><i>📝</i><b>10~100편</b><span>1회 주문</span></div>
-        <div><i>⏰</i><b>30일</b><span>안에 전량 발행</span></div>
-        <div><i>📌</i><b>12개월</b><span>게시 유지</span></div>
+        <div><b>10,000원</b><span>편당 · 부가세 포함</span></div>
+        <div><b>10~100편</b><span>1회 주문</span></div>
+        <div><b>30일</b><span>안에 전량 발행</span></div>
+        <div><b>12개월</b><span>게시 유지</span></div>
       </div>
       <div class="bx-bacts"><a class="btn btn-primary" href="apply/blog/">블로그 신청서 쓰기 →</a>
         <a class="btn btn-ghost" onclick="go('home','contact')">전화 · 메일로 문의</a></div>
     </div>
-    <div class="bx-bband">📅 30일 안에 다 올리지 못하면, 못 올린 편수만큼 환불하고 남은 글도 그대로 발행합니다</div>
+    <div class="bx-bband">30일 안에 다 올리지 못하면, 못 올린 편수만큼 환불하고 남은 글도 그대로 발행합니다</div>
   </div>
 
   <!-- 2. 자주 듣는 고민 — 실제 후기가 아니라 «자주 듣는 고민»을 묶은 것입니다 (이름 · 업종을 붙이지 않습니다) -->
@@ -860,9 +868,9 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       <h2 class="bx-bh">블로그 마케팅,<br><mark>혹시 이런 고민</mark> 있으셨나요?</h2>
       <div class="bx-bchat">
         <div class="bx-bq"><span class="bx-av">🤔</span><p>글은 올라갔다는데<br><b>검색해도 안 보여요</b></p></div>
-        <div class="bx-bq bx-r"><span class="bx-av">📱</span><p>몇 편 올라갔는지, 지금 몇 위인지<br><b>알 수가 없어요</b></p></div>
+        <div class="bx-bq bx-r"><span class="bx-av">😟</span><p>몇 편 올라갔는지, 지금 몇 위인지<br><b>알 수가 없어요</b></p></div>
         <div class="bx-bq"><span class="bx-av">😥</span><p>올라간 글이<br><b>얼마 안 가서 사라졌어요</b></p></div>
-        <div class="bx-bq bx-r"><span class="bx-av">⚠️</span><p>광고 표기가 빠져서<br><b>문제 될까 걱정돼요</b></p></div>
+        <div class="bx-bq bx-r"><span class="bx-av">😰</span><p>광고 표기가 빠져서<br><b>문제 될까 걱정돼요</b></p></div>
       </div>
       <div class="bx-bsolve">그 걱정, 이제<br><b>인투마케팅</b>이 덜어 드릴게요</div>
     </div>
@@ -885,7 +893,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         <div><span class="bx-ic">📊</span><div><h4>진행 상황을 볼 수 있나요?</h4>
           <p>게시물별 발행일과 현재 검색 노출 순위를 전용 대시보드에서 상시 확인할 수 있습니다.</p></div></div>
       </div>
-      <p class="bx-ball">✅ 인투마케팅은 <b>5가지 모두</b> 됩니다</p>
+      <p class="bx-ball">인투마케팅은 <b>5가지 모두</b> 됩니다</p>
     </div>
   </div>
 
@@ -901,6 +909,15 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       </div>
       <p class="bx-bfoot">2026년 9월 기준 · 검색 순위를 확인한 게시물 21편을 대상으로 집계했습니다.<br>
         순위는 검색 시점과 지역에 따라 달라질 수 있습니다.</p>
+      <!-- 실제 검색 화면 (2026-10-20 이은총 님 캡처) — 인투마케팅이 진행한 두 곳만 보이고, 다른 업체는 그림 자체를 흐리게 만들어 넣었습니다(원본 복원 불가) -->
+      <div class="bx-bproof">
+        <figure><img src="img/proof/search-cheongju.jpg" alt="네이버에서 「청주토익학원」을 검색한 플레이스 결과. 인투어학원이 표시되어 있고 다른 업체는 흐리게 가려져 있음" width="1000" height="888" loading="lazy" decoding="async">
+          <figcaption><b>「청주토익학원」</b> 검색 · 인투어학원</figcaption></figure>
+        <figure><img src="img/proof/search-bundang.jpg" alt="네이버에서 「분당 학습코칭」을 검색한 플레이스 결과. 혼공기적학원이 표시되어 있고 다른 업체는 흐리게 가려져 있음" width="950" height="813" loading="lazy" decoding="async">
+          <figcaption><b>「분당 학습코칭」</b> 검색 · 혼공기적학원</figcaption></figure>
+      </div>
+      <p class="bx-bfoot">인투마케팅이 블로그를 진행한 학원의 네이버 검색 화면입니다 (2026년 10월 캡처 · 다른 업체는 가렸습니다).<br>
+        검색 결과는 시점과 위치에 따라 달라집니다.</p>
     </div>
   </div>
 
@@ -934,18 +951,18 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       <div class="bx-bc"><span class="bx-btag">PROCESS</span>
         <h2 class="bx-bh">대표님이 하실 일은<br><mark>딱 두 가지</mark>뿐입니다</h2></div>
       <span class="bx-bwho">대표님이 하실 일</span>
-      <div class="bx-bstep"><span class="bx-no">01</span><span class="bx-ic">📝</span><div><h4>신청서 작성 · 견적 확인</h4>
+      <div class="bx-bstep"><span class="bx-no">01</span><div><h4>신청서 작성 · 견적 확인</h4>
         <p>신청서를 받으면 담당자가 배정되어 연락합니다. 환불 기준과 키워드 변경 요금이 담긴 <b>견적서를 결제 전에</b> 보내 드립니다.</p></div></div>
-      <div class="bx-bstep"><span class="bx-no">02</span><span class="bx-ic">📷</span><div><h4>자료 전달</h4>
+      <div class="bx-bstep"><span class="bx-no">02</span><div><h4>자료 전달</h4>
         <p>간판 · 내외부 · 상품 · 안내문 사진과 업체 소개를 보내 주십시오. 포스팅마다 다른 사진이 필요해 <b>30장 이상</b>을 권장합니다. 인물 얼굴이 나오지 않는 사진으로 보내 주십시오.</p></div></div>
       <span class="bx-bwho bx-us">인투마케팅이 진행</span>
-      <div class="bx-bstep"><span class="bx-no">03</span><span class="bx-ic">📅</span><div><h4>의뢰 시작 · 30일</h4>
+      <div class="bx-bstep"><span class="bx-no">03</span><div><h4>의뢰 시작 · 30일</h4>
         <p>자료 확인을 마치면 시작일과 마감일을 날짜로 안내합니다. 30일은 <b>입금일이 아니라 시작을 안내한 날</b>부터 셉니다.</p></div></div>
-      <div class="bx-bstep"><span class="bx-no">04</span><span class="bx-ic">🔍</span><div><h4>키워드 배정 · 검수 · 발행</h4>
+      <div class="bx-bstep"><span class="bx-no">04</span><div><h4>키워드 배정 · 검수 · 발행</h4>
         <p>포스팅마다 키워드를 배정하고, 블로거의 원고를 <b>발행 전에 검수</b>합니다.</p></div></div>
-      <div class="bx-bstep"><span class="bx-no">05</span><span class="bx-ic">🏁</span><div><h4>종료 안내</h4>
+      <div class="bx-bstep"><span class="bx-no">05</span><div><h4>종료 안내</h4>
         <p>주문 편수를 모두 발행하면 안내합니다. <b>자동 연장은 없으며</b>, 연장 여부는 종료할 때 확인합니다.</p></div></div>
-      <div class="bx-btip">💡 발행 현황과 검색 순위는 진행 내내 전용 대시보드에서 확인하실 수 있습니다.</div>
+      <div class="bx-btip">발행 현황과 검색 순위는 진행 내내 전용 대시보드에서 확인하실 수 있습니다.</div>
     </div>
   </div>
 
@@ -955,15 +972,15 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       <span class="bx-btag">NOTICE</span>
       <h2 class="bx-bh">미리 알려 드립니다</h2>
       <div class="bx-bterms" style="text-align:left">
-        <div><h4><i>🔁</i>키워드 변경</h4>
+        <div><h4>키워드 변경</h4>
           <p>발행 전 포스팅은 <b>1편당 3,000원</b>으로 키워드를 바꿉니다. 금액을 먼저 안내하고 확인을 받은 뒤 바꿉니다.
              <b>발행된 포스팅은 바꿀 수 없으며</b>, 다른 키워드는 새 주문으로 진행합니다.</p></div>
-        <div><h4><i>⏳</i>마감 안에 발행하지 못한 포스팅</h4>
+        <div><h4>마감 안에 발행하지 못한 포스팅</h4>
           <p>발행하지 못한 편수만큼 <b>환불합니다.</b> 남은 포스팅도 <b>그대로 만들어 발행합니다.</b>
              환불일은 전용 대시보드에 기록됩니다.</p></div>
-        <div><h4><i>✋</i>중도 해지</h4>
+        <div><h4>중도 해지</h4>
           <p><b>원고를 제출하기 전 포스팅</b>은 환불합니다. 원고가 제출된 포스팅은 작업이 끝난 것으로 보아 환불하지 않습니다.</p></div>
-        <div><h4><i>📏</i>작성 원칙</h4>
+        <div><h4>작성 원칙</h4>
           <p>방문하지 않은 곳을 방문한 것처럼 쓰지 않으며, 받은 사진과 정보를 바탕으로 작성합니다.
              병원 · 의원은 블로거 블로그 홍보와 네이버 리뷰를 진행하지 않습니다.
              빼고 싶은 내용은 미리 알려 주십시오.</p></div>
@@ -983,8 +1000,8 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         <div><span class="bx-n">04</span><i>🔎</i><h4>검색되고 싶은 상황</h4><p>음식점) <b>맛집, 예약, 주차</b></p><p>학원) <b>학원 추천, 내신, 방학특강</b></p></div>
       </div>
       <p class="bx-bsub" style="font-size:var(--t-base)">항목이 많을수록 키워드 조합이 늘어 검색 노출 범위가 넓어집니다.</p>
-      <a class="bx-bgo" href="apply/blog/">💬 블로그 신청서 쓰기 <span class="bx-arw">→</span></a>
-      <p class="bx-bsmall">📞 결제 전 전화 상담도 가능합니다 · <a onclick="go('home','contact')">연락처 보기</a> · <a onclick="go('home','items')">다른 항목 보기</a></p>
+      <a class="bx-bgo" href="apply/blog/">블로그 신청서 쓰기 <span class="bx-arw">→</span></a>
+      <p class="bx-bsmall">결제 전 전화 상담도 가능합니다 · <a onclick="go('home','contact')">연락처 보기</a> · <a onclick="go('home','items')">다른 항목 보기</a></p>
     </div>
   </div>
   <script>
@@ -1002,7 +1019,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       ['.bx-bchips>span','pop',150,900],['.bx-bhero .bx-bfoot','up',0,1300],['.bx-bfacts>div','up',150,1250],['.bx-bacts','up',0,1800],['.bx-bband','up',0,2000],
       ['.bx-btag','pop',0],['.bx-bh','up',0],
       ['.bx-bcheck>div','up',110],['.bx-ball','pop',0],
-      ['.bx-bnums>div','zoom',140],['.bx-bres .bx-bfoot','up',0],
+      ['.bx-bnums>div','zoom',140],['.bx-bres .bx-bfoot','up',0],['.bx-bproof>figure','alt',160],
       ['.bx-bprod>div','alt',140],['.bx-bmore','up',0],
       ['.bx-bwho','pop',0],['.bx-bstep','l',110],['.bx-btip','up',0],
       ['.bx-bterms>div','up',100],
