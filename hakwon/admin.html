@@ -1595,7 +1595,7 @@
     sel.innerHTML='<option value="">선택 안 함 (직접 들어온 의뢰)</option>'
       +on.map(function(p){
         return '<option value="'+esc(p.id)+'"'+(r.partner_id===p.id?' selected':'')+'>'
-          +esc(p.name)+' ('+esc(p.code)+')'+(p.status!=='active'?' — 중지':'')+'</option>';
+          +esc(p.name)+(p.phone?' ('+esc(p.phone)+')':'')+(p.status!=='active'?' — 중지':'')+'</option>';
       }).join('');
     var how=$('d_ref_how');
     if(r.ref_source==='link')how.textContent='— 전용 링크로 들어옴'+(r.ref_code?' ('+r.ref_code+')':'');

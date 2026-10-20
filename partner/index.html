@@ -187,7 +187,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
   <div id="previewBar" class="hide"
        style="background:#12294D;color:#fff;padding:12px 16px;text-align:center;font-size:.88rem">
     <b>관리자 미리보기</b> — 실장님이 보시는 화면 그대로입니다.
-    소개 건과 전용 링크는 실제 실장 계정에서만 나옵니다.</div>
+    소개 건은 실제 실장 계정에서만 나옵니다.</div>
   <div class="top">
     <b id="p_name">-</b><span id="p_code">-</span>
     <span style="margin-left:auto"><button class="btn btn-g btn-s" type="button" onclick="doLogout()">로그아웃</button></span>
@@ -203,7 +203,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
 
     <div class="card">
       <h2>내가 소개한 의뢰</h2>
-      <p class="sub">전용 링크로 들어오셨거나, 저희가 확인해 연결한 건입니다.</p>
+      <p class="sub">고객이 신청서에 실장님 성함을 적었거나, 저희가 확인해 연결한 건입니다.</p>
       <div style="overflow-x:auto">
         <table>
           <thead><tr>
@@ -213,7 +213,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
           <tbody id="rows"></tbody>
         </table>
       </div>
-      <div class="empty hide" id="noRows">아직 연결된 의뢰가 없습니다.<br>아래 전용 링크로 고객을 안내해 주십시오.</div>
+      <div class="empty hide" id="noRows">아직 연결된 의뢰가 없습니다.<br>고객에게 신청서 맨 끝 「담당 영업실장」 칸에 실장님 성함을 적도록 안내해 주십시오.</div>
       <!-- 🔴 2026-10-04 — 커미션 산정 기준은 「판매가의 10%」로 확정되었습니다.
            예전 문장은 「부가세를 뺀 금액(공급가액) 기준」이었는데 이는 사실과 다릅니다.
            산정은 부가세 포함 판매가로 하고, 나온 «금액»을 공급가액으로 봅니다(제7조 세무 처리).
@@ -230,11 +230,11 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
       <p class="sub" style="margin:12px 0 0" id="p_pay"></p>
     </div>
 
+    <!-- 2026-10-20 「내 전용 링크」 카드 삭제 — 실장 연결은 신청서에 적은 «이름»으로만 (코드 · 링크 없음) -->
     <div class="card" id="linkCard">
-      <h2>내 전용 링크</h2>
-      <p class="sub">이 링크로 들어온 고객은 <b>자동으로</b> 실장님 소개 건으로 기록됩니다.
-        명함·카톡·SNS에 쓰시면 됩니다.</p>
-      <div id="links"></div>
+      <h2>고객 안내 방법</h2>
+      <p class="sub">고객이 신청서를 쓸 때 맨 끝 <b>「담당 영업실장」</b> 칸에 실장님 성함을 적으면
+        <b>자동으로</b> 실장님 소개 건으로 기록됩니다. 성함은 계약서와 같게 적도록 안내해 주십시오.</p>
     </div>
 
     <div class="card">
@@ -323,10 +323,9 @@ async function boot(){
     $('mailBtn').href='mailto:info@intomarketing.co.kr';
   }else{
     $('p_name').textContent=ME.name+' 실장님';
-    $('p_code').textContent='코드 '+ME.code+(ME.status==='active'?'':' · 활동 중지');
+    $('p_code').textContent=(ME.status==='active'?'활동 중':'활동 중지');
     $('mailBtn').href='mailto:info@intomarketing.co.kr?subject='
       +encodeURIComponent('['+ME.name+' 실장] 현황 문의');
-    renderLinks();
   }
   await Promise.all([loadRules(), loadOrders()]);
 }

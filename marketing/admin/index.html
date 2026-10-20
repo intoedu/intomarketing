@@ -841,9 +841,6 @@
 </div></div>
 
 <!-- 영업실장 링크 -->
-<div class="modal" id="linkModal"><div class="sheet">
-  <div class="sheet-h">
-    <div><h3 id="lk_title">전용 신청 링크</h3><div class="meta">실장님께 보내 주세요. 이 링크로 들어온 고객은 자동으로 기록됩니다.</div></div>
     <button class="x" type="button" onclick="closeModal('linkModal')">✕</button>
   </div>
   <div class="sheet-b" id="lk_body"></div>
@@ -2218,10 +2215,10 @@
 
 
   /* ---------- 영업실장 (유입 기록) ----------
-     · 손님이 실장 전용 링크(...?p=코드)로 들어오면 신청서에 코드가 함께 저장되고,
-       서버가 코드로 실장을 찾아 붙입니다 (DB 트리거 t_request_fill_partner).
-     · 링크 없이 들어온 건은 여기서 사람이 고릅니다.
-     🔴 정산은 «여기서 확정된 값»만 봅니다. 손님이 적은 코드는 참고용입니다. */
+     · 2026-10-20 «이름으로만» — 손님이 신청서에 적은 실장 이름(ref_code 칸)이 명단의 활동 중 실장 «한 명»과 정확히 같으면
+       서버가 붙입니다 (DB 트리거 t_request_fill_partner). 코드 · 전용 링크는 쓰지 않습니다.
+     · 못 붙은 건(명단에 없는 이름 · 같은 이름 둘)은 여기서 사람이 고릅니다.
+     🔴 정산은 «여기서 확정된 값»만 봅니다. 손님이 적은 이름은 참고용입니다. */
   var PARTNERS=[];
   async function loadPartners(){
     var r=await sb.from('partners').select('*').order('name');
@@ -2237,15 +2234,15 @@
     sel.innerHTML='<option value="">선택 안 함 (직접 들어온 의뢰)</option>'
       +on.map(function(p){
         return '<option value="'+esc(p.id)+'"'+(r.partner_id===p.id?' selected':'')+'>'
-          +esc(p.name)+' ('+esc(p.code)+')'+(p.status!=='active'?' — 중지':'')+'</option>';
+          +esc(p.name)+(p.phone?' ('+esc(p.phone)+')':'')+(p.status!=='active'?' — 중지':'')+'</option>';
       }).join('');
     var how=$('d_ref_how');
-    if(r.ref_source==='link')how.textContent='— 전용 링크로 들어옴'+(r.ref_code?' ('+r.ref_code+')':'');
-    else if(r.ref_source==='form')how.textContent='— 신청서에 직접 적음'+(r.ref_code?' ('+r.ref_code+')':'');
+    if(r.ref_source==='link')how.textContent='— 전용 링크로 들어옴(예전 방식)'+(r.ref_code?' ('+r.ref_code+')':'');
+    else if(r.ref_source==='form')how.textContent='— 신청서에 적은 이름'+(r.ref_code?' 「'+r.ref_code+'」':'');
     else if(r.partner_id)how.textContent='— 관리자가 지정함';
     else how.textContent='';
-    /* 손님이 적었는데 붙지 못한 코드는 눈에 띄게 알려 줍니다 */
-    if(r.ref_code&&!r.partner_id)how.innerHTML='— <b style="color:#C0392B">적어 주신 코드 「'+esc(r.ref_code)+'」를 찾지 못했습니다</b> · 직접 골라 주세요';
+    /* 손님이 적었는데 붙지 못한 이름은 눈에 띄게 알려 줍니다 */
+    if(r.ref_code&&!r.partner_id)how.innerHTML='— <b style="color:#C0392B">적어 주신 이름 「'+esc(r.ref_code)+'」을 명단에서 찾지 못했습니다</b>(없는 이름이거나 같은 이름이 둘) · 직접 골라 주세요';
   }
   window.setPartner=async function(id){
     if(!CURROW)return;
@@ -2297,10 +2294,9 @@
     var cnt={};
     Object.keys(DATA).forEach(function(g){(DATA[g]||[]).forEach(function(r){
       if(r.partner_id)cnt[r.partner_id]=(cnt[r.partner_id]||0)+1;});});
-    var h='<table><thead><tr><th>이름</th><th>코드</th><th>연락처 · 이메일</th><th class="num">들어온 의뢰</th><th>현황 페이지</th><th>상태</th><th></th></tr></thead><tbody>';
+    var h='<table><thead><tr><th>이름</th><th>연락처 · 이메일</th><th class="num">들어온 의뢰</th><th>현황 페이지</th><th>상태</th><th></th></tr></thead><tbody>';
     PARTNERS.forEach(function(p){
       h+='<tr><td><b>'+esc(p.name)+'</b>'+(p.memo?'<div class="muted" style="font-size:.8rem">'+esc(p.memo)+'</div>':'')+'</td>'
-       +'<td><code style="background:var(--surface-2);padding:2px 7px;border-radius:5px">'+esc(p.code)+'</code></td>'
        +'<td class="muted" style="font-size:.82rem">'+esc(p.phone||'-')
          +(p.email?'<br>'+esc(p.email):'<br><span style="color:#C0392B">이메일 없음</span>')+'</td>'
        +'<td class="num tnum">'+(cnt[p.id]||0)+'</td>'
@@ -2309,7 +2305,6 @@
        +'<td>'+(p.status==='active'?'<span style="color:var(--ok);font-weight:700">활동</span>'
                                    :'<span class="muted">중지</span>')+'</td>'
        +'<td style="text-align:right;white-space:nowrap">'
-       +'<button class="btn btn-ghost" style="padding:5px 11px;font-size:.8rem" type="button" onclick="showLinks(\''+p.id+'\')">🔗 링크</button> '
        +'<button class="btn btn-ghost" style="padding:5px 11px;font-size:.8rem" type="button" onclick="editPartner(\''+p.id+'\')">✏️ 수정</button>'
        +'</td></tr>';
     });
@@ -2320,18 +2315,17 @@
   window.newPartner=async function(){
     var name=prompt('영업실장 성함을 적어 주세요');
     if(!name||!name.trim())return;
-    var code=prompt('전용 코드를 정해 주세요 (영문·숫자, 링크에 들어갑니다)\n예: park, hong2, im01');
-    if(!code||!code.trim())return;
-    code=code.trim();
-    if(!/^[A-Za-z0-9_-]{2,20}$/.test(code)){toast('코드는 영문·숫자 2~20자로 적어 주세요');return;}
+    /* 코드는 이제 쓰지 않습니다(이름으로만 연결 · 10/20) — DB 칸이 비면 안 되어서 안 보이는 값만 저절로 넣습니다 */
+    var code='p'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+    var same=PARTNERS.filter(function(x){return (x.name||'').trim()===name.trim()&&x.status==='active';});
+    if(same.length&&!confirm('「'+name.trim()+'」 님이 이미 명단에 있습니다.\n같은 이름이 둘이면 신청서에 이름을 적어도 자동으로 연결되지 않고, 어드민에서 직접 골라야 합니다.\n그래도 넣을까요?'))return;
     /* 🔴 이메일이 있어야 실장님이 현황 페이지에 로그인할 수 있습니다.
           (그 이메일로 가입한 사람만 이 실장과 연결됩니다 — partner_claim) */
     var mail=prompt('이메일을 적어 주세요 — 실장님이 현황 페이지에 로그인할 때 쓰는 주소입니다.\n계약서에 적힌 이메일로 넣어 주세요. (나중에 넣으셔도 됩니다)');
     var r=await sb.from('partners').insert({name:name.trim(),code:code,email:(mail||'').trim()||null}).select().maybeSingle();
-    if(r.error){toast(/duplicate|unique/i.test(r.error.message)?'이미 쓰고 있는 코드입니다':('실패: '+r.error.message));return;}
+    if(r.error){toast('실패: '+r.error.message);return;}
     await loadPartners(); renderPartners();
-    toast(name.trim()+' 님을 넣었습니다');
-    showLinks(r.data&&r.data.id);
+    toast(name.trim()+' 님을 넣었습니다 — 고객이 신청서에 이 이름을 적으면 연결됩니다');
   };
   window.editPartner=async function(id){
     var p=pOf(id); if(!p)return;
@@ -2339,7 +2333,7 @@
     var phone=prompt('연락처',p.phone||''); if(phone===null)return;
     var mail=prompt('이메일 (현황 페이지 로그인에 쓰는 주소)',p.email||''); if(mail===null)return;
     var memo=prompt('메모 (어느 플랫폼 담당인지 등)',p.memo||''); if(memo===null)return;
-    var st=confirm('지금 «활동 중»으로 둘까요?\n[확인] 활동 중 · [취소] 중지\n\n중지하면 전용 링크로 들어와도 연결되지 않습니다.');
+    var st=confirm('지금 «활동 중»으로 둘까요?\n[확인] 활동 중 · [취소] 중지\n\n중지하면 신청서에 이 이름을 적어도 연결되지 않습니다.');
     var r=await sb.from('partners').update({name:name.trim()||p.name,phone:phone.trim()||null,
               email:mail.trim()||null,memo:memo.trim()||null,
               status:st?'active':'paused',updated_at:new Date().toISOString()})
@@ -2348,37 +2342,8 @@
     if(!r.data){toast('권한이 없어 바뀌지 않았습니다');return;}
     await loadPartners(); renderPartners(); toast('고쳤습니다');
   };
-  /* 신청서마다 주소가 달라서 한 번에 보여 줍니다 */
-  var APPLY_LINKS=[
-    ['홈페이지 제작','https://intomarketing.co.kr/apply/'],
-    ['블로그 · 리뷰','https://intomarketing.co.kr/apply/blog/'],
-    ['영상 제작','https://intomarketing.co.kr/apply/video/'],
-    ['그래픽 디자인','https://intomarketing.co.kr/apply/design/'],
-    ['SNS 채널','https://intomarketing.co.kr/apply/sns/'],
-    ['인투마케팅 홈페이지 (첫 화면)','https://intomarketing.co.kr/'],
-    ['학원지원센터 신청서','https://intomarketing.co.kr/hakwon/apply/']
-  ];
-  window.showLinks=function(id){
-    var p=pOf(id); if(!p)return;
-    $('lk_title').textContent=p.name+' 님 전용 링크';
-    $('lk_body').innerHTML='<div class="qbox" style="display:block;margin-bottom:14px;line-height:1.7">'
-      +'코드 <b>'+esc(p.code)+'</b> · 아래 주소로 들어온 고객은 <b>'+esc(p.name)+'</b> 님을 통해 온 것으로 기록됩니다.<br>'
-      +'<span class="muted" style="font-size:.82rem">고객이 링크를 눌렀다가 나중에 다시 와서 신청해도 (같은 기기라면) 90일간 기억합니다.</span></div>'
-      +APPLY_LINKS.map(function(x,i){
-        var url=x[1]+'?p='+encodeURIComponent(p.code);
-        return '<div class="fld"><label>'+esc(x[0])+'</label>'
-          +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
-          +'<input class="inp" readonly id="lk'+i+'" value="'+esc(url)+'" onclick="this.select()" style="flex:1;min-width:240px;font-size:.82rem">'
-          +'<button class="btn btn-primary" style="padding:8px 14px" type="button" onclick="copyLink(this,\''+esc(url)+'\')">복사</button>'
-          +'</div></div>';
-      }).join('');
-    $('linkModal').classList.add('open');
-  };
-  window.copyLink=async function(btn,url){
-    try{await navigator.clipboard.writeText(url);btn.textContent='복사됨 ✓';
-        setTimeout(function(){btn.textContent='복사';},1400);}
-    catch(e){window.prompt('아래 주소를 복사해 주세요',url);}
-  };
+  /* 2026-10-20 — 실장 전용 링크(?p=코드)와 그 창은 없앴습니다(이름으로만 연결).
+     🔴 여기 있던 두 번째 copyLink(btn,url) 가 「🔗 주소 모음」의 copyLink(url) 을 덮어써서, 주소 모음 [복사]가 고장 나 있었습니다. */
 
   window.openQuote=function(){
     var r=CURROW;QD=r.quote?JSON.parse(JSON.stringify(r.quote)):defaultQuote(r);

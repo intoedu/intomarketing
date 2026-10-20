@@ -6,9 +6,10 @@
      ① 기관 등록증   — 등록증 종류 + 등록증 번호
      ② 담당 영업실장 — 이름을 직접 적고, 두 글자부터 «추천 목록»이 뜹니다
 
-   · 실장 전용 링크(...?p=코드)로 들어오면 칸에 이름을 미리 채워 둡니다 (지우고 고칠 수 있습니다).
-   🔴 화면에서 보내는 값은 «글자»뿐입니다. 실제로 어느 실장에게 붙일지는 서버가 코드로 찾습니다
-      (DB 트리거 t_request_fill_partner). 남의 코드를 적어 보내도 소용없습니다.
+   · 2026-10-20 이은총 님 「코드는 없이, 이름으로만」 — 실장 전용 링크(?p=코드)는 쓰지 않습니다.
+   🔴 화면에서 보내는 값은 «적은 이름» 글자뿐입니다(ref_code 칸 — 이름은 예전 그대로). 실제로 어느 실장에게 붙일지는
+      서버가 «이름이 정확히 같고 그 이름이 한 명뿐인» 활동 중 실장으로 찾습니다(DB 트리거 t_request_fill_partner).
+      같은 이름이 둘이면 비워 두고 어드민에서 사람이 고릅니다.
 
    쓰는 법
      <script src="/ref.js"></script>            ← supabase-js 다음, 신청서 코드보다 먼저
@@ -16,29 +17,14 @@
                   Object.assign(row.details, IMRef.extraDetails());
 */
 (function(){
-  var KEY='im_ref', DAYS=90;
+  var KEY='im_ref';
   var SB_URL="https://qkvebwxewttqtcryfycy.supabase.co";
   var SB_KEY="sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa";
 
-  /* ---------- 실장 코드 기억 ---------- */
-  function save(code){ try{ localStorage.setItem(KEY, JSON.stringify({code:code, at:Date.now()})); }catch(e){} }
-  function load(){
-    try{
-      var v=JSON.parse(localStorage.getItem(KEY)||'null');
-      if(!v||!v.code)return null;
-      if(Date.now()-(v.at||0) > DAYS*24*60*60*1000){localStorage.removeItem(KEY);return null;}
-      return v.code;
-    }catch(e){ return null; }
-  }
-  var urlCode=null;
-  try{
-    var q=new URLSearchParams(location.search);
-    urlCode=(q.get('p')||q.get('ref')||'').trim() || null;
-  }catch(e){}
-  if(urlCode) save(urlCode);
-  var LINK_CODE = urlCode || load();      /* 링크로 들어온 코드 (있을 때만) */
+  /* 예전 전용 링크 코드 기억(im_ref)은 지웁니다 — 10/20 부터 쓰지 않음 */
+  try{ localStorage.removeItem(KEY); }catch(e){}
 
-  var PICKED=null;   /* 추천 목록에서 고른 것 {name, code} */
+  var PICKED=null;   /* 추천 목록에서 고른 것 {name} */
   var TYPED='';      /* 손님이 친 글자 */
 
   /* ---------- 서버 ----------
@@ -122,7 +108,7 @@
     items=list||[];
     if(!items.length){ closeSug(); return; }
     sug.innerHTML=items.map(function(x,i){
-      return '<button type="button" data-i="'+i+'">'+esc(x.name)+'<span class="c">'+esc(x.code)+'</span></button>';
+      return '<button type="button" data-i="'+i+'">'+esc(x.name)+'</button>';
     }).join('');
     sug.classList.add('on'); cur=-1;
     sug.querySelectorAll('button').forEach(function(b){
@@ -132,7 +118,7 @@
   }
   function pick(x){
     if(!x)return;
-    PICKED={name:x.name, code:x.code};
+    PICKED={name:x.name};
     TYPED=x.name; inp.value=x.name;
     msg.innerHTML='<b style="color:#1E47C0">'+esc(x.name)+'</b> 님으로 접수됩니다.';
     closeSug();
@@ -154,16 +140,6 @@
     msg=document.getElementById('im-ref-msg');
     kind=document.getElementById('im-biz-kind');
     bizno=document.getElementById('im-biz-no');
-
-    /* 링크로 들어왔으면 이름을 미리 채워 둡니다 (지우고 고칠 수 있습니다) */
-    if(LINK_CODE){
-      nameOf(LINK_CODE).then(function(n){
-        if(!n)return;
-        if(inp.value.trim())return;                 /* 손님이 벌써 적고 있으면 건드리지 않습니다 */
-        PICKED={name:n, code:LINK_CODE}; TYPED=n; inp.value=n;
-        msg.innerHTML='<b style="color:#1E47C0">'+esc(n)+'</b> 님을 통해 오셨습니다. 다르면 지우고 다시 적어 주세요.';
-      });
-    }
 
     inp.addEventListener('input',function(){
       TYPED=inp.value.trim();
@@ -199,10 +175,8 @@
   window.IMRef={
     /* 저장할 때 :  Object.assign(row, IMRef.values()) */
     values:function(){
-      if(PICKED&&PICKED.code)                       /* 목록에서 고른 경우 — 코드로 정확히 붙습니다 */
-        return { ref_code: PICKED.code, ref_source: (LINK_CODE===PICKED.code)?'link':'form' };
-      if(TYPED)                                     /* 직접 적은 이름 — 관리자가 보고 연결합니다 */
-        return { ref_code: TYPED, ref_source:'form' };
+      var nm=(PICKED&&PICKED.name)||TYPED;          /* 목록에서 고른 이름 또는 직접 적은 이름 — 서버가 이름으로 찾습니다 */
+      if(nm) return { ref_code: nm, ref_source:'form' };
       return {};
     },
     /* 저장할 때 :  Object.assign(row.details, IMRef.extraDetails()) */
@@ -212,7 +186,7 @@
       if(bizno&&bizno.value.trim())d['기관 등록증 번호']=bizno.value.trim();
       return d;
     },
-    code:function(){ return (PICKED&&PICKED.code)||TYPED||null; },
+    code:function(){ return (PICKED&&PICKED.name)||TYPED||null; },
     nameOf:nameOf
   };
 })();
