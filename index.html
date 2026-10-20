@@ -2351,8 +2351,11 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
   /* 🔴 홈페이지 제작은 별도 쪽(/web/)으로 — 메뉴 · 카드 · 둘러보기가 모두 go('web') 를 거칩니다 (2026-10-16 이은총 님).
         누르면 /web/ 으로 이동(뒤로 가기 → 메인), /#web 주소나 예전 기록으로 들어오면 그 칸을 /web/ 으로 바꿔 둡니다. */
   var WEB_PAGE='/web/';
+  /* 🔴 SNS 채널도 별도 쪽(/sns/)으로 — /web/ 과 같은 방식 (2026-10-20 이은총 님). 아래 <section id="v-sns"> 는 남겨 두었습니다(되돌릴 때 이 두 줄만 지우면 됩니다). */
+  var SNS_PAGE='/sns/';
   function show(view,anchor,keepScroll){
     if(view==='web'){ location.replace(WEB_PAGE); return; }
+    if(view==='sns'){ location.replace(SNS_PAGE); return; }
     if(VIEWS.indexOf(view)<0)view='home';
     cur=view;
     VIEWS.forEach(function(v){
@@ -2378,6 +2381,7 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
 
   window.go=function(view,anchor){
     if(view==='web'){ closeMenu(); SY[cur]=window.scrollY||0; location.href=WEB_PAGE; return; }
+    if(view==='sns'){ closeMenu(); SY[cur]=window.scrollY||0; location.href=SNS_PAGE; return; }
     if(VIEWS.indexOf(view)<0)view='home';
     var s=mine();
     if(!(history&&history.pushState)){ show(view,anchor); return; }
