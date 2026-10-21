@@ -324,6 +324,11 @@
   .ffopt:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface));color:var(--accent-ink);box-shadow:inset 0 0 0 1px var(--accent)}
   /* 편수 고르기 */
   .qtyopts{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .qstep{display:flex;align-items:center;gap:8px;width:max-content}
+  .qstep .qb{width:42px;height:42px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:1.2rem;font-weight:800;cursor:pointer;color:var(--ink)}
+  .qstep .qb:hover{border-color:var(--accent);color:var(--accent)}
+  .qstep input{width:84px;text-align:center;font-weight:800;font-size:var(--t-md)}
+  .qstep .qu{font-weight:700;color:var(--muted)}
   .qopt{flex-direction:column;align-items:stretch;justify-content:center;border-radius:12px;padding:12px 8px;text-align:center;line-height:1.35}
   .qopt .qn{font-size:var(--t-md);font-weight:800;letter-spacing:-.01em}
   .qopt .qw{font-size:var(--t-xs);font-weight:700;color:var(--muted);margin-top:1px}
@@ -1508,7 +1513,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
           <div class="fcard"><b>학원 기본 정보</b><p>정식 명칭·주소·전화·수업 시간. 모든 포스팅에 동일하게 기재됩니다.</p></div>
         </div>
         <div class="cnote">📣 관련 법(공정거래위원회 추천·보증 심사지침)에 따라 <b>모든 글 하단에는 광고임을 알리는 문구가 표기</b>됩니다.</div>
-        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">비용</div><h2>편수 선택 시 기간 · 비용 확정</h2><p>필요한 편수만큼 주문할 수 있습니다. 약정 기간과 기본료는 없습니다.</p></div></div>
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">비용</div><h2>편수만큼 비용 확정 · 기간 30일</h2><p>필요한 편수만큼 주문할 수 있습니다. 약정 기간과 기본료는 없습니다.</p></div></div>
         <div class="bprice reveal" id="blogPrice"></div>
         <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('mkt')">블로그 홍보 신청하기 →</a><a class="btn btn-ghost" onclick="document.querySelector('#v-mkt .sp[data-t=flow]').click()">진행 절차 보기</a></div>
       </div>
@@ -1543,7 +1548,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
           <div class="fstep"><div class="n">STEP 06</div><h4>관리</h4><p>발행 이후 성과를 관리.</p></div>
         </div>
         <div class="cnote">💡 <b>운영 기준:</b> 유명 블로그 의존이 아닌, 검색 <b>알고리즘에 맞는 꾸준한 발행</b>으로 노출을 확보합니다. (실제 사례는 <b>성공 사례</b> 탭에서 확인하실 수 있습니다.)</div>
-        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">비용</div><h2>편수 선택 시 기간 · 비용 확정</h2><p>주문하신 편수만큼 결제합니다. 회원 종류에 따라 편당 비용이 다릅니다. 모든 금액은 <b>부가세 포함</b>입니다.</p></div></div>
+        <div class="panel-intro reveal" style="margin-top:48px"><div><div class="kicker">비용</div><h2>편수만큼 비용 확정 · 기간 30일</h2><p>주문하신 편수만큼 결제합니다. 회원 종류에 따라 편당 비용이 다릅니다. 모든 금액은 <b>부가세 포함</b>입니다.</p></div></div>
         <div class="bprice reveal" id="blogPrice2"></div>
         <div class="area-cta"><a class="btn btn-primary" onclick="applyWith('mkt')">블로그 홍보 신청하기 →</a></div>
       </div>
@@ -1877,7 +1882,12 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
       {t:'text',k:'시작 희망일'}
     ],
     mkt:[
-      {t:'qty',k:'원하시는 편수',req:1,hint:'편수를 선택하면 작성 기간과 금액이 함께 정해집니다. 편수가 많을수록 검색 노출 범위가 넓어집니다.'},
+      /* 2026-10-21 8번 창 — 편수 · 날짜 질문을 인투마케팅 블로그 신청서(apply/blog)와 같은 모양으로.
+         🔴 마감일 · 「언제까지 필요하신가요」 같은 날짜 질문을 다시 넣지 마십시오. 블로그 센터 order_create 가
+            「작성 마감일 · 언제까지 필요하신가요 · 마감일 · 희망 마감일」을 마감일로 끌어갑니다.
+            실제 마감일은 센터에서 「의뢰 시작」을 누른 날부터 30일입니다(약관 제2조 6호). 「희망 시작 시기」는 참고용 글이라 괜찮습니다. */
+      {t:'qty',k:'원하시는 편수',req:1,hint:'주문 편수를 선택합니다. 10편 ~ 100편 범위이며, 기간은 30일입니다. 기산일은 자료 확인 후 작업 시작을 안내한 날입니다. 편수가 많을수록 검색 노출 범위가 넓어집니다.'},
+      {t:'text',k:'희망 시작 시기',ph:'예: 다음 주부터 / 이번 달 안에'},
       {t:'note',note:'blogkeyword'},
       {t:'text',k:'지역',req:1,ph:'예: 성수동, 성수역, 뚝섬, 서울숲',hint:'학부모가 검색할 지역명을 모두 입력해 주십시오. 학원 인근 지하철역 · 주요 건물도 포함할 수 있습니다.'},
       {t:'text',k:'과목',req:1,ph:'예: 영어, 영어회화, 영어독해',hint:'지도 과목만 구분해 입력해 주십시오. (학원명 · 상황은 아래 항목에서 받습니다)'},
@@ -1947,35 +1957,31 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
     });
     return s;
   }
-  /* 고른 편수에 맞춰 마감일·금액을 보여줍니다 */
+  /* 고른 편수와 예상 금액을 보여줍니다 — 날짜는 보여 주지 않습니다(마감일은 「의뢰 시작」 날부터 30일 · 10/21) */
+  function qtyVal(){
+    var el=document.getElementById('qtyIn'); if(!el)return 0;
+    var q=parseInt(el.value,10); if(!(q>0))return 0;
+    q=Math.round(q/5)*5; return Math.min(100,Math.max(10,q));
+  }
   function qtySummary(){
     var box=document.getElementById('qtySum');if(!box)return;
-    var sel=document.querySelector('#qtyOpts .qopt:has(input:checked)');
-    if(!sel){box.innerHTML='';return;}
-    var q=parseInt(sel.getAttribute('data-v'),10),pl=qtyPlan(q);
-    if(!pl){box.innerHTML='';return;}
+    var q=qtyVal(); if(!q){box.innerHTML='';return;}
     var u=blogUnit(CUR_PREMIUM);
-    box.innerHTML='<div class="qsum">'+q+'편 · '+pl.weeks+'주 안에 모두 올라갑니다 (약 '+planDue(pl.weeks)+'까지) · '
-      +'예상 금액 <b>'+wonf(q*u)+'원</b>'
+    box.innerHTML='<div class="qsum">'+q+'편 · 예상 금액 <b>'+wonf(q*u)+'원</b>'
       +'<span class="qsm">'+(CUR_PREMIUM?'프리미엄(파트너) 회원가':'일반 회원가')+' 편당 '+wonf(u)+'원 · '
       +(CUR_PREMIUM?'':'프리미엄(파트너) 회원은 편당 '+wonf(BLOG_UNIT.premium)+'원입니다. ')
-      +'입금이 확인된 날부터 기간을 셉니다.</span></div>';
+      +'기간은 자료 확인 후 작업 시작을 안내한 날부터 30일입니다.</span></div>';
   }
-  /* 로그인 상태가 바뀌면 고른 것은 그대로 두고 가격만 다시 그립니다 */
-  function refreshQtyCards(){
-    var box=document.getElementById('qtyOpts');if(!box)return;
-    var sel=document.querySelector('#qtyOpts .qopt:has(input:checked)');
-    var keep=sel?sel.getAttribute('data-v'):null;
-    box.innerHTML=qtyCards(CUR_PREMIUM,'원하시는 편수');
-    if(keep){
-      var again=box.querySelector('.qopt[data-v="'+keep+'"] input');
-      if(again)again.checked=true;
-    }
-    qtySummary();
-  }
-  document.addEventListener('change',function(e){
-    if(e.target&&e.target.closest&&e.target.closest('#qtyOpts'))qtySummary();
+  /* 로그인 상태가 바뀌면 가격만 다시 그립니다 */
+  function refreshQtyCards(){ qtySummary(); }
+  document.addEventListener('click',function(e){
+    var b=e.target&&e.target.closest&&e.target.closest('.qstep .qb'); if(!b)return;
+    var el=document.getElementById('qtyIn'); if(!el)return;
+    var q=qtyVal()||10; q+=(b.getAttribute('data-d')==='+'?5:-5);
+    el.value=Math.min(100,Math.max(10,q)); qtySummary();
   });
+  document.addEventListener('input',function(e){ if(e.target&&e.target.id==='qtyIn')qtySummary(); });
+  document.addEventListener('change',function(e){ if(e.target&&e.target.id==='qtyIn'){ var q=qtyVal(); if(q)e.target.value=q; qtySummary(); } });
 
   function renderFields(k){
     var schema=FORM_SCHEMA[k]||[],h='';
@@ -2025,7 +2031,9 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
         h+='<input type="file" class="inp ffinput ffiles" data-k="'+esc(f.k)+'" accept="image/*" multiple onchange="onPhotoPick(this)">'
           +'<div class="fnote" id="photoInfo">선택한 사진이 없습니다.</div>';
       }else if(f.t==='qty'){
-        h+='<div class="qtyopts" id="qtyOpts">'+qtyCards(CUR_PREMIUM,f.k)+'</div><div id="qtySum"></div>';
+        h+='<div class="qstep"><button type="button" class="qb" data-d="-" aria-label="5편 줄이기">−</button>'
+          +'<input class="inp" type="number" id="qtyIn" value="10" min="10" max="100" step="5" inputmode="numeric" aria-label="주문 편수">'
+          +'<button type="button" class="qb" data-d="+" aria-label="5편 늘리기">+</button><span class="qu">편</span></div><div id="qtySum"></div>';
       }else if(f.t==='number'){
         h+='<input class="inp ffinput" type="number" min="1" inputmode="numeric" data-k="'+esc(f.k)+'"'+(f.ph?' placeholder="'+esc(f.ph)+'"':'')+'>';
       }else if(f.t==='date'){
@@ -2074,7 +2082,8 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
     schema.forEach(function(f){
       if(f.t==='note'||f.t==='foldstart'||f.t==='foldend')return;
       if(f.t==='files')return; /* 사진은 업로드 후 별도로 넣음 */
-      if(f.t==='check'||f.t==='radio'||f.t==='qty'){
+      if(f.t==='qty'){ var q=qtyVal(); if(q)d[f.k]=q+'편'; return; }
+      if(f.t==='check'||f.t==='radio'){
         var vals=[];
         document.querySelectorAll('#fields .ffopt[data-k="'+f.k+'"]').forEach(function(lab){
           if(lab.querySelector('input').checked)vals.push(lab.getAttribute('data-v')||lab.textContent.trim());
@@ -2085,15 +2094,10 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
         if(el&&el.value.trim())d[f.k]=el.value.trim();
       }
     });
-    /* 편수를 고르면 작성 기간·마감일·예상 금액이 함께 넘어갑니다 */
+    /* 편수와 예상 금액만 넘깁니다. 🔴 「작성 기간 · 작성 마감일」은 넘기지 않습니다(10/21 8번 창 — 센터가 마감일로 끌어감) */
     if(d['원하시는 편수']){
-      var q=parseInt(d['원하시는 편수'],10),pl=qtyPlan(q);
-      if(pl){
-        var u=blogUnit(CUR_PREMIUM);
-        d['작성 기간']=pl.weeks+'주 안에';
-        d['작성 마감일']=planDue(pl.weeks);
-        d['예상 금액']=wonf(q*u)+'원 ('+(CUR_PREMIUM?'프리미엄':'일반')+' 회원가 편당 '+wonf(u)+'원)';
-      }
+      var q=parseInt(d['원하시는 편수'],10), u=blogUnit(CUR_PREMIUM);
+      if(q>0)d['예상 금액']=wonf(q*u)+'원 ('+(CUR_PREMIUM?'프리미엄':'일반')+' 회원가 편당 '+wonf(u)+'원)';
     }
     return d;
   }
@@ -2235,8 +2239,8 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
     if(!pick)return setErr('지원 영역을 먼저 선택해 주십시오.');
     var area=pick.getAttribute('data-k');
     if(area==='doc')return goAim();
-    if(area==='mkt'&&!document.querySelector('#qtyOpts .qopt:has(input:checked)'))
-      return setErr('편수를 선택해 주십시오.');
+    if(area==='mkt'&&!qtyVal())
+      return setErr('편수를 선택해 주십시오 (10편 ~ 100편).');
     var miss=firstMissing(area);
     if(miss){focusField(miss);return setErr('「'+miss.k+'」 항목을 입력해 주십시오.');}
     var academy=document.getElementById('f_academy').value.trim();
@@ -2774,12 +2778,12 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
       +'<div class="bd">파트너 코드로 전환하신 회원에게 적용됩니다.</div></div>';
     /* 편수별 작성 기간·금액 */
     var tbl='<div class="qtbl"><table><thead><tr>'
-      +'<th>편수</th><th>작성 기간</th>'
+      +'<th>편수</th>'
       +'<th'+(premium?'':' class="hl"')+'>일반 회원</th>'
       +'<th'+(premium?' class="hl"':'')+'>프리미엄 회원</th>'
       +'</tr></thead><tbody>'
       +QTY_PLANS.map(function(p){
-        return '<tr><td>'+p.qty+'편</td><td class="wk">'+p.weeks+'주 안에</td>'
+        return '<tr><td>'+p.qty+'편</td>'
           +'<td'+(premium?'':' class="hl"')+'>'+wonf(p.qty*BLOG_UNIT.general)+'원</td>'
           +'<td'+(premium?' class="hl"':'')+'>'+wonf(p.qty*BLOG_UNIT.premium)+'원</td></tr>';
       }).join('')
@@ -2788,7 +2792,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
       +(premium
         ? '✓ <b>프리미엄 회원가</b>로 표시 중입니다. 주문하신 편수 × 편당 '+BLOG_PRICE.premium+'원으로 정산합니다.'
         : '💡 <b>로그인하면</b> 회원 종류에 맞는 가격이 표시됩니다. 프리미엄(파트너) 회원은 <b>편당 '+BLOG_PRICE.premium+'원</b>으로 절반 저렴합니다.')
-      +' <b>작성 기간은 입금이 확인된 날부터</b> 셉니다. 약정 기간이나 기본료는 없습니다.</div>';
+      +' 주문은 <b>10편 ~ 100편</b>, <b>기간은 30일</b>이며 자료 확인 후 작업 시작을 안내한 날부터 셉니다. 약정 기간이나 기본료는 없습니다.</div>';
     ['blogPrice','blogPrice2'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=h+tbl+note;});
   }
   renderPricing(false);
