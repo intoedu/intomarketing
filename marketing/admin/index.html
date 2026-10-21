@@ -274,6 +274,7 @@
   .p-sec .box{border:1px solid #dce3ee;border-radius:8px;padding:14px 16px;font-size:.85rem;white-space:pre-wrap;line-height:1.75;color:#333}
   /* 서명란 — 견적서를 계약서처럼 쓸 때 */
   .p-sign{margin-top:30px;border:1px solid #dce3ee;border-radius:8px;padding:18px 16px;background:#fbfcfe}
+  .p-agree{margin-top:22px;padding:12px 14px;border:1px solid #dce3ee;border-radius:8px;background:#fbfcfe;font-size:.8rem;line-height:1.8;color:#333}
   .p-sign .sg-t{font-size:.86rem;font-weight:700;color:#12294D;margin-bottom:16px}
   .p-sign .sg-row{display:flex;gap:28px;flex-wrap:wrap}
   .p-sign .sg{flex:1;min-width:190px;display:flex;align-items:flex-end;gap:10px}
@@ -2734,14 +2735,12 @@
      +termSec('포함되는 것 / INCLUDED',(q.terms||{}).include)
      +termSec('포함되지 않는 것 / NOT INCLUDED',(q.terms||{}).exclude)
      +termSec('환불 규정 / REFUND',(q.terms||{}).refund)
-     +(hasTerms(q)&&!needContract(t)?('<div class="p-sign">'
-         +'<div class="sg-t">위 견적 내용과 조항에 동의하며 작업을 의뢰합니다.</div>'
-         +'<div class="sg-row">'
-           +'<div class="sg"><span>의뢰인</span><i></i></div>'
-           +'<div class="sg"><span>날짜</span><i></i></div>'
-         +'</div>'
-         +'<div class="sg-n">서명 또는 회신(메일·메신저)으로 동의하시면 같은 효력을 가집니다.</div>'
-       +'</div>'):'')
+     /* 2026-10-21 이은총 님 「인투마케팅도 같이 맞춰 줘」 — 1회성 견적서의 서명란(의뢰인 · 날짜)을 없애고, 동의는 «입금»으로 받습니다.
+        근거 = 약관 제4조(견적 발송 뒤 대금 전액 입금 때 계약 성립) · 행정 창 10/21 : 서명을 받으면 약관과 어긋남.
+        문장 = 견적서-안내문구-0914.md 「모든 견적서 맨 아래 (공통)」 그대로 (ESC 견적서와 같음). 고칠 때는 행정 창에 먼저.
+        🔴 매월 · 매년 금액이 있는 견적은 다음 쪽 계약서에 서명을 받으므로 이 두 줄을 넣지 않습니다. */
+     +(!needContract(t)?('<div class="p-agree">· 이 견적서의 기준은 인투마케팅 이용약관(intomarketing.co.kr/terms)과 함께 계약 내용이 됩니다.<br>'
+       +'· 입금하시면 위 내용을 확인하신 것으로 봅니다.</div>'):'')
      +'<div class="p-f">'+esc(SET.foot_note||'')+'<br>'+esc(SET.company||'')
        +(SET.owner?' · 대표 '+esc(SET.owner):'')
        +(SET.biz_no?' · '+esc(SET.biz_no):'')
@@ -2752,7 +2751,7 @@
 
   /* ══════════ 계약서 쪽 (2026-10-16 이은총 님) ══════════
      · 견적 품목에 «매월» 또는 «매년» 결제가 하나라도 있으면 견적서 다음 쪽에 계약서를 붙이고, 견적서 맨 밑 서명란은 뺍니다.
-       (돈을 여러 번 내는 건만 계약서로 받음 — 1회성 견적은 지금처럼 견적서 서명란)
+       (돈을 여러 번 내는 건만 계약서로 받음 — 1회성 견적은 10/21 부터 서명란 없이 «입금 = 동의» 두 줄)
      · 홈페이지 갈래 = 6차 정본 「홈페이지 제작 · 관리 계약서」 18개 조문 그대로 (contract-web.js · WEB_CONTRACT_TPL).
        견적서에 있는 값(상호 · 견적번호 · 제작비 · 월 관리비 · 고른 기능 · 고객 연락처)만 채우고, 나머지 빈칸은 서명할 때 채웁니다.
      · 그 밖의 갈래(SNS 정기 콘텐츠 등) = 견적서의 작업 순서 · 포함 · 불포함 · 환불 규정을 조문으로 옮긴 계약서 (genContractHTML).
