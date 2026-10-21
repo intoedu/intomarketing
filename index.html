@@ -691,12 +691,17 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   #v-blog .bx-bnums .bx-v u{text-decoration:none;font-size:.45em;margin-left:2px;color:#AFC2EE}
   #v-blog .bx-bnums .bx-d{font-size:var(--t-sm);color:#C9D6F5;margin-top:6px}
   #v-blog .bx-bres .bx-bfoot{color:#9FB0D8;margin-top:18px;text-align:center;line-height:1.7}
-  /* 4-1 실제 검색 화면 */
-  #v-blog .bx-bproof{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:34px;align-items:start}
-  #v-blog .bx-bproof figure{margin:0;background:#fff;border-radius:20px;padding:10px 10px 14px;box-shadow:0 24px 50px -30px rgba(0,0,0,.7)}
-  #v-blog .bx-bproof img{display:block;width:100%;height:auto;border-radius:12px}
-  #v-blog .bx-bproof figcaption{margin-top:10px;font-size:var(--t-sm);color:#41506E;text-align:center}
-  #v-blog .bx-bproof figcaption b{color:var(--bl-blue)}
+  /* 4-1 실제 네이버 화면 — 학원마다 [검색 순위 | 블로그 리뷰 수] 두 장 */
+  #v-blog .bx-bproof{display:grid;grid-template-columns:1fr;gap:20px;margin-top:34px;max-width:860px;margin-left:auto;margin-right:auto}
+  #v-blog .bx-pfr a{display:block;cursor:zoom-in}
+  #v-blog .bx-pf{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:18px}
+  #v-blog .bx-pf h3{font-size:var(--t-lg);font-weight:900;color:#fff;text-align:left;margin:0 0 14px}
+  #v-blog .bx-pf h3 span{font-size:var(--t-sm);font-weight:700;color:#AFC2EE;margin-left:6px}
+  #v-blog .bx-pfr{display:grid;grid-template-columns:1.63fr 1fr;gap:10px;align-items:start}
+  #v-blog .bx-pfr figure{margin:0;background:#fff;border-radius:14px;padding:6px 6px 10px;box-shadow:0 20px 40px -26px rgba(0,0,0,.8)}
+  #v-blog .bx-pfr img{display:block;width:100%;height:auto;border-radius:9px}
+  #v-blog .bx-pfr figcaption{margin-top:8px;font-size:var(--t-xs);color:#41506E;text-align:center;line-height:1.5;word-break:keep-all}
+  #v-blog .bx-pfr figcaption b{color:var(--bl-blue)}
   /* 5 상품 두 갈래 */
   #v-blog .bx-bprod{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:36px}
   #v-blog .bx-bprod>div{border-radius:24px;padding:28px 26px;border:1px solid var(--line);background:#fff}
@@ -747,7 +752,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   #v-blog .bx-bsmall a{color:var(--bl-blue);font-weight:700;cursor:pointer}
   @media(max-width:760px){
     #v-blog .bx-bfacts{grid-template-columns:repeat(2,minmax(0,1fr))}
-    #v-blog .bx-bnums,#v-blog .bx-bprod,#v-blog .bx-bterms,#v-blog .bx-bneed,#v-blog .bx-bproof{grid-template-columns:1fr}
+    #v-blog .bx-bnums,#v-blog .bx-bprod,#v-blog .bx-bterms,#v-blog .bx-bneed{grid-template-columns:1fr}
     #v-blog .bx-bsec{padding:56px 0}
     #v-blog .bx-bstep{padding:14px 16px}
     #v-blog .bx-bstep .bx-ic{display:none}
@@ -910,15 +915,32 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       </div>
       <p class="bx-bfoot">2026년 9월 기준 · 검색 순위를 확인한 게시물 21편을 대상으로 집계했습니다.<br>
         순위는 검색 시점과 지역에 따라 달라질 수 있습니다.</p>
-      <!-- 실제 검색 화면 (2026-10-20 이은총 님 캡처) — 인투마케팅이 진행한 두 곳만 보이고, 다른 업체는 그림 자체를 흐리게 만들어 넣었습니다(원본 복원 불가) -->
+      <!-- 실제 네이버 화면 (2026-10-21 이은총 님 캡처 · 다시 만듦)
+           학원마다 두 장 : ① 통합검색 — 검색창 · 지도 · 플레이스 목록을 그대로 두어 «첫 화면에 나온다»가 보이게
+                            ② 플레이스 리뷰 탭 — 블로그 리뷰 수
+           다른 업체 · 지도 위 이름표 · 광고 · 블로거 이름은 그림 자체를 흐리게 만들어 넣었습니다(원본 복원 불가) -->
       <div class="bx-bproof">
-        <figure><img src="img/proof/search-cheongju.jpg" alt="네이버에서 「청주토익학원」을 검색한 플레이스 결과. 인투어학원이 표시되어 있고 다른 업체는 흐리게 가려져 있음" width="1000" height="888" loading="lazy" decoding="async">
-          <figcaption><b>「청주토익학원」</b> 검색 · 인투어학원</figcaption></figure>
-        <figure><img src="img/proof/search-bundang.jpg" alt="네이버에서 「분당 학습코칭」을 검색한 플레이스 결과. 혼공기적학원이 표시되어 있고 다른 업체는 흐리게 가려져 있음" width="950" height="813" loading="lazy" decoding="async">
-          <figcaption><b>「분당 학습코칭」</b> 검색 · 혼공기적학원</figcaption></figure>
+        <div class="bx-pf">
+          <h3>인투어학원 <span>청주</span></h3>
+          <div class="bx-pfr">
+            <figure><a href="img/proof/rank-cheongju.jpg" target="_blank" rel="noopener" aria-label="크게 보기"><img src="img/proof/rank-cheongju.jpg" alt="네이버에서 「청주토익학원」을 검색한 화면. 플레이스 첫 화면 목록에 인투어학원이 나오고 다른 업체는 흐리게 가려져 있음" width="1060" height="1510" loading="lazy" decoding="async"></a>
+              <figcaption><b>「청주토익학원」</b> 검색 — 플레이스 첫 화면</figcaption></figure>
+            <figure><a href="img/proof/review-intoeo.jpg" target="_blank" rel="noopener" aria-label="크게 보기"><img src="img/proof/review-intoeo.jpg" alt="인투어학원 네이버 플레이스의 블로그 리뷰 탭. 리뷰 175" width="660" height="1546" loading="lazy" decoding="async"></a>
+              <figcaption>블로그 리뷰 <b>175</b>건</figcaption></figure>
+          </div>
+        </div>
+        <div class="bx-pf">
+          <h3>혼공기적학원 <span>분당</span></h3>
+          <div class="bx-pfr">
+            <figure><a href="img/proof/rank-bundang.jpg" target="_blank" rel="noopener" aria-label="크게 보기"><img src="img/proof/rank-bundang.jpg" alt="네이버에서 「분당 학습코칭」을 검색한 화면. 플레이스 첫 화면 목록에 혼공기적학원이 나오고 다른 업체는 흐리게 가려져 있음" width="1010" height="1480" loading="lazy" decoding="async"></a>
+              <figcaption><b>「분당 학습코칭」</b> 검색 — 플레이스 첫 화면</figcaption></figure>
+            <figure><a href="img/proof/review-hongong.jpg" target="_blank" rel="noopener" aria-label="크게 보기"><img src="img/proof/review-hongong.jpg" alt="혼공기적학원 네이버 플레이스의 블로그 리뷰 탭. 리뷰 237" width="660" height="1550" loading="lazy" decoding="async"></a>
+              <figcaption>블로그 리뷰 <b>237</b>건</figcaption></figure>
+          </div>
+        </div>
       </div>
-      <p class="bx-bfoot">인투마케팅이 블로그를 진행한 학원의 네이버 검색 화면입니다 (2026년 10월 캡처 · 다른 업체는 가렸습니다).<br>
-        검색 결과는 시점과 위치에 따라 달라집니다.</p>
+      <p class="bx-bfoot">인투마케팅이 블로그를 진행한 학원의 네이버 화면입니다 (2026년 10월 캡처 · 다른 업체 · 광고 · 블로거 이름은 가렸습니다).<br>
+        리뷰 수는 그 학원에 달린 전체 블로그 리뷰 수입니다. 검색 결과는 시점과 위치에 따라 달라집니다. 그림을 누르면 크게 볼 수 있습니다.</p>
     </div>
   </div>
 
@@ -1020,7 +1042,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       ['.bx-bchips>span','pop',150,900],['.bx-bhero .bx-bfoot','up',0,1300],['.bx-bfacts>div','up',150,1250],['.bx-bacts','up',0,1800],['.bx-bband','up',0,2000],
       ['.bx-btag','pop',0],['.bx-bh','up',0],
       ['.bx-bcheck>div','up',110],['.bx-ball','pop',0],
-      ['.bx-bnums>div','zoom',140],['.bx-bres .bx-bfoot','up',0],['.bx-bproof>figure','alt',160],
+      ['.bx-bnums>div','zoom',140],['.bx-bres .bx-bfoot','up',0],['.bx-bproof>.bx-pf','alt',160],
       ['.bx-bprod>div','alt',140],['.bx-bmore','up',0],
       ['.bx-bwho','pop',0],['.bx-bstep','l',110],['.bx-btip','up',0],
       ['.bx-bterms>div','up',100],
