@@ -1991,14 +1991,7 @@
      +termSec('포함되는 것 / INCLUDED',(q.terms||{}).include)
      +termSec('포함되지 않는 것 / NOT INCLUDED',(q.terms||{}).exclude)
      +termSec('환불 규정 / REFUND',(q.terms||{}).refund)
-     +(hasTerms(q)?('<div class="p-sign">'
-         +'<div class="sg-t">위 견적 내용과 조항에 동의하며 작업을 의뢰합니다.</div>'
-         +'<div class="sg-row">'
-           +'<div class="sg"><span>의뢰인</span><i></i></div>'
-           +'<div class="sg"><span>날짜</span><i></i></div>'
-         +'</div>'
-         +'<div class="sg-n">서명 또는 회신(메일·메신저)으로 동의하시면 같은 효력을 가집니다.</div>'
-       +'</div>'):'')
+     /* 2026-10-21 이은총 님 「ESC 도 견적서 마지막 서명란 없애 줘」 — 서명란(의뢰인 · 날짜)을 그리지 않습니다. (.p-sign 모양 규칙은 남겨 둠) */
      +'<div class="p-f">'+esc(SET.foot_note||'')+'<br>'+esc(SET.company||'')
        +(SET.owner?' · 대표 '+esc(SET.owner):'')
        +(SET.biz_no?' · '+esc(SET.biz_no):'')
