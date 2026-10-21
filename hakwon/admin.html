@@ -201,6 +201,7 @@
   .p-sum .r.tot{border-bottom:0;border-top:2px solid #12294D;font-weight:800;font-size:1.05rem;padding-top:12px;margin-top:4px}
   .p-sum .dis{color:#c0392b}
   .p-note{font-size:.78rem;color:#777;text-align:right;margin-top:8px}
+  .p-agree{margin-top:22px;padding:12px 14px;border:1px solid #dce3ee;border-radius:8px;background:#fbfcfe;font-size:.8rem;line-height:1.8;color:#333}
   .p-sec{margin-top:30px}
   .p-sec h4{font-size:.82rem;font-weight:800;letter-spacing:.06em;color:#12294D;margin-bottom:9px}
   .p-sec .box{border:1px solid #dce3ee;border-radius:8px;padding:14px 16px;font-size:.85rem;white-space:pre-wrap;line-height:1.75;color:#333}
@@ -1991,7 +1992,11 @@
      +termSec('포함되는 것 / INCLUDED',(q.terms||{}).include)
      +termSec('포함되지 않는 것 / NOT INCLUDED',(q.terms||{}).exclude)
      +termSec('환불 규정 / REFUND',(q.terms||{}).refund)
-     /* 2026-10-21 이은총 님 「ESC 도 견적서 마지막 서명란 없애 줘」 — 서명란(의뢰인 · 날짜)을 그리지 않습니다. (.p-sign 모양 규칙은 남겨 둠) */
+     /* 2026-10-21 이은총 님 「ESC 도 견적서 마지막 서명란 없애 줘」 — 서명란(의뢰인 · 날짜)을 그리지 않습니다. (.p-sign 모양 규칙은 남겨 둠)
+        대신 동의는 «입금»으로 받습니다 — 약관 제4조(견적 발송 뒤 대금 전액 입금 때 계약 성립) · 행정 창 10/21.
+        문장 = 견적서-안내문구-0914.md 「모든 견적서 맨 아래 (공통)」 그대로. 고칠 때는 행정 창에 먼저. */
+     +'<div class="p-agree">· 이 견적서의 기준은 인투마케팅 이용약관(intomarketing.co.kr/terms)과 함께 계약 내용이 됩니다.<br>'
+       +'· 입금하시면 위 내용을 확인하신 것으로 봅니다.</div>'
      +'<div class="p-f">'+esc(SET.foot_note||'')+'<br>'+esc(SET.company||'')
        +(SET.owner?' · 대표 '+esc(SET.owner):'')
        +(SET.biz_no?' · '+esc(SET.biz_no):'')
