@@ -1,22 +1,28 @@
 <!doctype html>
 <html lang="ko" class="no-js">
 <!-- ══════════════════════════════════════════════════════════════
-   SNS 채널 세부페이지 ( intomarketing.co.kr/sns/ )   2026-10-20 판
-   홈페이지 제작 세부페이지(/web/)와 같은 뼈대 · 움직임으로 만들었습니다 (이은총 님 10/20 「홈페이지 제작 소개처럼 눈에 확 끌리게」).
-   색만 SNS 쪽(보라 → 자홍)으로 바꿨습니다.
+   SNS 채널 세부페이지 ( intomarketing.co.kr/sns/ )   2026-10-21 판 (D안 · 첫 화면 영상형)
+   이은총 님 10/21 — 「홈페이지 제작 쪽과 너무 똑같으면 안 됨」 「처음은 SNS · 상담 · 지도를 홍보하는 영상으로」
+   「SNS · 상담 · 지도를 융합적으로 3가지를 다 넣어야」 「지도 세팅 · 상담(네이버 톡톡 · 카카오)을 더 강조」.
+   시안 캔버스에서 D안으로 결정. 예전 판(보라 · 어두운 유리 카드)은 git 기록에 있습니다(2026-10-20).
 
-   🔴 내용 · 금액은 메인 index.html 의 <section id="v-sns"> 를 «그대로» 옮겼습니다 (SNS 채널팀 최종 매뉴얼 · 2026-10-12).
-      금액을 바꾸면 메인 #v-sns · /apply/sns/ · /apply/content-sub.js · 아래 <script> 의 SNS 계산기 값도 같이 바꾸십시오.
+   🔴 첫 화면 「영상」은 동영상 파일이 아니라 CSS 움직임입니다 (16초 반복 · 4장면 : SNS → 지도 → 상담 → 하나로).
+      장면 길이를 바꾸려면 animation 의 16s 와 @keyframes 의 % 를 «같이» 바꾸십시오.
+      「동작 줄이기」를 켠 분에게는 마지막 장면(하나로)만 멈춘 채로 보입니다.
+   🔴 영상 · 휴대폰 · 지도 · 대화 모형은 CSS 로 그린 예시 그림입니다. 실제 계정 · 숫자(팔로워 · 조회수)를 넣지 마세요.
+      성과 숫자(○배 · ○%)는 근거 자료 없이 쓰지 않습니다.
+
+   🔴 내용 · 금액은 메인 index.html 의 <section id="v-sns"> 와 같은 값 (SNS 채널팀 최종 매뉴얼 · 2026-10-12).
+      금액을 바꾸면 메인 #v-sns · /apply/sns/ · /apply/content-sub.js · 이 파일(표 + 맨 아래 SNS · PICK 값)도 같이 바꾸십시오.
       금액은 매뉴얼의 부가세 포함 값 그대로입니다. 1.1 을 곱하지 마세요.
    🔴 다시 넣지 마세요 — 「계정을 만들어 드립니다」 「댓글에 답해 드립니다」 「방문해서 도와드립니다」.
       「계정 개설은 제공하지 않습니다 · 포함하지 않습니다」라고도 적지 마세요 — 이용약관이 아직 「채널 개설」입니다.
-      3차 개정 시행 전까지는 「계정이 없는 채널은 고객이 먼저 개설한 뒤 작업 시작」으로만 적습니다 (매뉴얼 창 2026-10-13).
-   🔴 휴대폰 · 지도 화면 모형은 CSS 로 그린 «예시 그림»입니다. 실제 고객 계정 · 숫자(팔로워 · 조회수)를 넣지 마세요.
-      성과 숫자(○배 · ○%)는 근거 자료 없이 쓰지 않습니다.
+   🔴 「골라 보세요」 합계는 묶음 할인가가 아니라 «개별 금액을 더한 값»입니다. 할인처럼 보이게 바꾸지 마세요.
+   🔴 로고 — 인스타그램 = 공식 글리프 모양(단색) · 카카오톡 = 앱 아이콘 그대로 (simple-icons 13.21.0 경로).
+      네이버(블로그 · 플레이스)는 네이버 브랜드 가이드의 「자기 상품 · 서비스 광고 목적 사용 금지」 때문에 로고를 쓰지 않습니다.
 
-   🔴 머리말(header) · 손전화 메뉴(msheet) · 하단(footer)은 메인 index.html 에서 «복사해 온» 것입니다 (/web/ 과 같음).
+   🔴 머리말(header) · 손전화 메뉴(msheet) · 하단(footer)은 메인 index.html 에서 «복사해 온» 것입니다.
       메인의 메뉴 항목 · 사업자 정보 · 하단 링크를 바꾸면 이 파일의 같은 자리도 바꾸십시오.
-   그림은 /web/img/ 의 고리 · 3D 아이콘을 «같이» 씁니다 (고리는 CSS 로 보라색으로 돌려 씀 · 파일은 그대로).
    글꼴은 Pretendard 하나만 씁니다 (메인과 같은 주소 · 버전을 올리지 마세요).
    ══════════════════════════════════════════════════════════════ -->
 <head>
@@ -24,13 +30,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<title>SNS 채널 · 인투마케팅</title>
-<meta name="description" content="인투마케팅 SNS 채널 — 네이버 블로그 · 인스타그램 · 유튜브 · 상담 채널 세팅, 네이버 · 구글 · 카카오 · 티맵 지도 등록, 매월 정기 콘텐츠 업로드까지. 계정은 고객 소유 · 모든 작업 원격 진행 (부가세 포함 가격 공개).">
+<title>SNS 채널 · 지도 · 상담 · 인투마케팅</title>
+<meta name="description" content="인투마케팅 SNS 채널 — 네이버 · 구글 · 카카오맵 · 티맵 지도 등록과 디자인 세팅, 네이버 톡톡 · 카카오톡 채널 상담 연결과 자동응답, 블로그 · 인스타그램 · 유튜브 세팅과 매월 업로드까지 한 회사에서. 계정은 고객 소유 · 모든 작업 원격 진행 (부가세 포함 가격 공개).">
 <link rel="canonical" href="https://intomarketing.co.kr/sns/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="인투마케팅">
-<meta property="og:title" content="SNS 채널 · 인투마케팅">
-<meta property="og:description" content="채널 세팅 · 지도 등록 · 정기 콘텐츠 — 블로그 + 인스타그램 묶음 495,000원 · 정기 콘텐츠 월 132,000원 + 건당 금액 (부가세 포함)">
+<meta property="og:title" content="SNS 채널 · 지도 · 상담 · 인투마케팅">
+<meta property="og:description" content="SNS로 알리고, 지도에서 찾고, 상담으로 이어지게 — 지도 4곳 385,000원 · 상담 채널 110,000원 · 블로그 + 인스타 495,000원 (부가세 포함)">
 <meta property="og:url" content="https://intomarketing.co.kr/sns/">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:image" content="https://intomarketing.co.kr/og-main.png">
@@ -44,640 +50,390 @@
 <link rel="icon" href="/favicon-48.png?v=2" sizes="48x48" type="image/png">
 <link rel="icon" href="/favicon-192.png?v=2" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
-<meta name="theme-color" content="#1B1D20">
-<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#12294D">
 <script>document.documentElement.className='js';</script>
 <style>
 :root{
-  /* ═══ 뼈대 토큰 — 메인 index.html · /web/ 과 같은 값 ═══ */
-  --t-xs:12px; --t-sm:13px; --t-base:15px; --t-md:17px;
-  --t-lg:22px; --t-xl:30px; --t-2xl:44px;
-  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px;
-  --s-5:24px; --s-6:32px; --s-7:48px; --s-8:72px;
-  --r-sm:6px; --r-md:12px; --r-pill:999px;
-  --paper:#FBFCFE; --surface:#FFFFFF; --surface-2:#F5F2FD;
-  --ink:#170E33; --muted:#5E5779; --line:#E7E2F4;
+  /* ═══ 뼈대 토큰 — 메인 index.html 과 같은 값 ═══ */
+  --t-xs:12px; --t-sm:13px; --t-base:15px; --t-md:17px; --t-lg:22px; --t-xl:30px;
+  --surface:#FFFFFF; --surface-2:#F3F6FB;
+  --band-bg:#12294D; --band-line:#2A436E;
   --f:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
   --ease:cubic-bezier(.22,.9,.28,1);
+  --pop:cubic-bezier(.34,1.56,.64,1);
 
-  /* ═══ 이 쪽 색 — 보라 → 자홍 (SNS) ═══
-     대비: 흰 글자 / --btn #6C2BD9 7.03:1 · 흰 글자 / --btn-hi #7B3CF0 5.6:1 · --yellow 위 #15171A 13.8:1
-     🔴 자홍(--mag)은 면 · 빛 · 장식에만. 작은 글자 바탕으로 쓰지 마세요(흰 글자 4.53:1 로 아슬아슬). */
-  --hd-bg:#1B1D20; --hd-pill:#2E3239; --hd-cta:#333333;
-  --violet:#6C2BD9; --violet-2:#8452E8; --lav:#C9B2FF;
-  --mag:#D6337F; --peach:#FF9A6B;
-  --btn:#6C2BD9; --btn-hi:#7B3CF0;
-  --yellow:#FFE14D;
-  --num:#E3C8FF;
-  --txt:#FFFFFF; --txt-2:#DDD6EE; --txt-3:#A79EBE;
-  --glass:rgba(255,255,255,.055); --glass-line:rgba(255,255,255,.14);
-  --cw:1210px; --gut:clamp(20px,4vw,40px);
+  /* ═══ 이 쪽 색 — 세 갈래가 각자 색을 가집니다 ═══
+     SNS = 보라 · 지도 = 초록 · 상담 = 노랑. 바탕은 밝게, 첫 화면 영상만 어둡게.
+     🔴 --sns · --map 은 면 · 큰 글자에만, --chat(노랑) 위 글자는 --ink. 작은 글자에는 *-ink 를 쓰세요. */
+  --paper:#FAFAF7; --ink:#15131C; --muted:#4E4A5C; --line:#E6E3EC;
+  --sns:#8B3DFF; --sns-ink:#5B1FC4; --sns-pale:#EFE5FF;
+  --map:#0E9F6E; --map-ink:#06603F; --map-pale:#DDF3EA; --map-deep:#0E3B2C;
+  --chat:#FFC93C; --chat-ink:#6B4D00; --chat-pale:#FFF1C7;
+  --cw:1216px; --gut:clamp(20px,4vw,32px);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{margin:0;background:#000;color:var(--txt-2);font-family:var(--f);line-height:1.7;font-size:var(--t-md);overflow-x:clip;
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);line-height:1.7;font-size:var(--t-md);overflow-x:clip;
      word-break:keep-all;overflow-wrap:break-word}
 [hidden]{display:none!important}
 button,input,select,textarea{font:inherit}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 h1,h2,h3,p{margin:0}
-h1,h2,h3{text-wrap:balance;color:var(--txt)}
+h1,h2,h3{text-wrap:balance}
 p{text-wrap:pretty}
 .skip{position:absolute;left:-9999px}
-.skip:focus{left:12px;top:12px;z-index:99;background:var(--btn);color:#fff;padding:8px 16px;border-radius:8px}
+.skip:focus{left:12px;top:12px;z-index:99;background:var(--ink);color:#fff;padding:8px 16px;border-radius:8px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-:focus-visible{outline:2px solid #CDB6FF;outline-offset:3px}
+:focus-visible{outline:3px solid var(--sns);outline-offset:3px}
 .wrap{max-width:1480px;margin:0 auto;padding:0 clamp(20px,2.6vw,40px)}
 .w{max-width:calc(var(--cw) + var(--gut)*2);margin:0 auto;padding:0 var(--gut)}
 section[id]{scroll-margin-top:72px}
 
-/* ══════════ 머리띠 — 메인 index.html 에서 복사 (/web/ 과 같은 어두운 색) ══════════ */
-header{position:sticky;top:0;z-index:60;background:rgba(27,29,32,.96);
-       backdrop-filter:saturate(150%) blur(10px);border-bottom:1px solid #2A2D33}
+/* ══════════ 머리띠 — 메인 index.html 에서 복사 (메인과 같은 남색 띠) ══════════ */
+header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
+       backdrop-filter:saturate(150%) blur(10px);border-bottom:1px solid var(--band-line)}
 .nav{display:flex;align-items:center;gap:8px;height:62px}
-.brand{min-height:44px;display:flex;align-items:center;gap:8px;background:none;border:0;cursor:pointer;padding:0;color:#fff;line-height:1.75}
+.brand{min-height:44px;display:flex;align-items:center;gap:8px;color:#fff;line-height:1.75}
 .brand .mk{width:32px;height:32px;display:grid;place-items:center;background:#fff;overflow:hidden;border-radius:11px;box-shadow:0 0 0 1px rgba(15,23,42,.08)}
-.brand .mk img{width:100%;height:100%;display:block;object-fit:contain}
+.brand .mk img{width:100%;height:100%;object-fit:contain}
 .brand b{font-size:var(--t-base);font-weight:800;letter-spacing:-.01em}
-.brand small{display:block;font-size:var(--t-xs);font-weight:600;color:#8A9099;letter-spacing:.04em;line-height:1.2}
+.brand small{display:block;font-size:var(--t-xs);font-weight:600;color:#93B0DE;letter-spacing:.04em;line-height:1.2}
 .links{margin-left:auto;display:flex;align-items:center;gap:2px}
-.navlink{min-height:44px;display:inline-flex;align-items:center;background:none;border:0;cursor:pointer;color:#B4BAC4;font-size:var(--t-base);font-weight:600;
-         padding:8px 12px;border-radius:9px;transition-property:background-color,color,transform;transition-duration:.15s;transition-timing-function:ease-out}
-.navlink:hover{color:#fff;background:rgba(255,255,255,.08)}
-.navlink.active{color:#fff;background:var(--hd-pill)}
+.navlink{min-height:44px;display:inline-flex;align-items:center;background:none;border:0;cursor:pointer;color:#C6D8F4;font-size:var(--t-base);font-weight:600;
+         padding:8px 12px;border-radius:9px;transition:background-color .15s,color .15s}
+.navlink:hover{color:#fff;background:rgba(255,255,255,.09)}
+.navlink.active{color:#fff;background:rgba(255,255,255,.13)}
 .navitem{position:relative}
-.caret{display:inline-block;width:0;height:0;margin-left:4px;vertical-align:2px;
-       border:4px solid transparent;border-top-color:currentColor}
-.drop{position:absolute;top:calc(100% + 6px);right:0;min-width:286px;background:var(--surface);color:var(--ink);
-      border:1px solid var(--line);border-radius:12px;padding:8px;line-height:1.75;
+.caret{display:inline-block;width:0;height:0;margin-left:4px;vertical-align:2px;border:4px solid transparent;border-top-color:currentColor}
+.drop{position:absolute;top:calc(100% + 6px);right:0;min-width:286px;background:var(--surface);color:#0E1B33;
+      border:1px solid #E2E8F2;border-radius:12px;padding:8px;line-height:1.75;
       box-shadow:0 18px 44px -18px rgba(14,27,51,.42);opacity:0;visibility:hidden;transform:translateY(-6px);
-      transition-property:opacity,transform,visibility;transition-duration:.16s;transition-timing-function:ease-out}
+      transition:opacity .16s,transform .16s,visibility .16s}
 .navitem:hover .drop,.navitem:focus-within .drop{opacity:1;visibility:visible;transform:none}
-.drop a{display:block;padding:8px 12px;border-radius:9px;font-size:var(--t-base);font-weight:700;cursor:pointer}
+.drop a{display:block;padding:8px 12px;border-radius:9px;font-size:var(--t-base);font-weight:700}
 .drop a:hover{background:var(--surface-2)}
-.drop a small{display:block;font-size:var(--t-xs);font-weight:500;color:var(--muted);margin-top:1px}
-.headcta{background:var(--hd-cta);color:#fff;font-weight:700;font-size:var(--t-base);line-height:1.75;
-         padding:8px 16px;border-radius:9px;margin-left:8px;cursor:pointer}
-.headcta:hover{background:#444851}
-.imab{color:#C9CED6;margin-left:6px}
+.drop a small{display:block;font-size:var(--t-xs);font-weight:500;color:#56657F;margin-top:1px}
+.headcta{background:#2E5FE8;color:#fff;font-weight:700;font-size:var(--t-base);line-height:1.75;padding:8px 16px;border-radius:9px;margin-left:8px}
+.headcta:hover{background:#3D6BF0}
+.imab{color:#C6D8F4;margin-left:6px}
 .msheet #authbar-m a,.msheet .imab-m{color:#DCE6F8}
-.burger{display:none;background:none;border:0;color:#C9CED6;cursor:pointer;padding:8px;margin-left:8px;
-        min-height:44px;min-width:44px;align-items:center;justify-content:center}
+.burger{display:none;background:none;border:0;color:#DCE6F8;cursor:pointer;padding:8px;margin-left:8px;min-height:44px;min-width:44px}
 .burger svg{width:24px;height:24px}
-.msheet{display:none;background:var(--hd-bg);border-top:1px solid #2A2D33;padding:8px 24px 16px}
-.msheet a{display:block;padding:12px 4px;color:#E3E6EB;font-weight:700;font-size:var(--t-base);cursor:pointer;
-          border-bottom:1px solid rgba(255,255,255,.07)}
-.msheet a.sub{padding-left:16px;font-weight:600;color:#A9AFB8;font-size:var(--t-sm)}
-.msheet.on{display:block;animation:sheetIn .26s var(--ease) both}
-@keyframes sheetIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.msheet{display:none;background:var(--band-bg);border-top:1px solid var(--band-line);padding:8px 24px 16px}
+.msheet a{display:block;padding:12px 4px;color:#DCE6F8;font-weight:700;font-size:var(--t-base);border-bottom:1px solid rgba(255,255,255,.07)}
+.msheet a.sub{padding-left:16px;font-weight:600;color:#A8C0E6;font-size:var(--t-sm)}
+.msheet.on{display:block}
 @media(max-width:900px){.links,.headcta{display:none}.burger{display:block;margin-left:auto}}
-.brand:active{transform:scale(.97)} .navlink:active{transform:scale(.94)} .headcta:active{transform:scale(.965)}
 
-/* ══════════ 공통 — 제목의 가는 줄 / 굵은 줄 (/web/ 과 같음) ══════════ */
-.ttl{font-size:clamp(32px,4.2vw,58px);line-height:1.12;letter-spacing:-.035em;font-weight:300}
-.ttl .l{display:block;font-weight:300}
-.ttl .b{display:block;font-weight:800}
-.ttl.one .l,.ttl.one .b{display:inline}
-.ttl .grad{background:linear-gradient(90deg,#E3C8FF 0%,#FF9AC8 55%,#FFC59A 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.ico-end{white-space:nowrap}
-.nw{white-space:nowrap}
-.sec-ico{display:inline-block;width:auto;height:1.3em;vertical-align:-.2em;margin-left:.26em;
-         filter:drop-shadow(0 14px 22px rgba(40,0,72,.45))}
-.price .sec-ico{filter:drop-shadow(0 12px 18px rgba(23,14,51,.18))}
-.lead{font-size:clamp(var(--t-md),1.5vw,20px);color:var(--txt-2);line-height:1.75;max-width:62ch;margin-top:var(--s-5)}
-.lead b{color:#fff}
-.sec{padding:clamp(88px,10vw,140px) 0}
-.sec-head{margin-bottom:clamp(40px,5vw,64px)}
-.sec-head.c{text-align:center}
-.sec-head.c .lead{margin-left:auto;margin-right:auto}
-.eyebrow{margin:0 0 14px;font-size:var(--t-base);font-weight:800;letter-spacing:.04em;color:#D2B8FF}
-.glass{background:var(--glass);border:1px solid var(--glass-line);border-radius:28px;
-       box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 28px;border-radius:10px;
-     font-weight:600;font-size:var(--t-md);cursor:pointer;border:1px solid transparent;
-     transition:background-color .15s,border-color .15s,transform .13s var(--ease)}
-.btn:active{transform:scale(.97)}
-.btn-p{background:var(--btn);color:#fff}
-.btn-p:hover{background:var(--btn-hi)}
-.btn-g{background:rgba(255,255,255,.04);color:#fff;border-color:rgba(255,255,255,.32)}
-.btn-g:hover{border-color:#fff;background:rgba(255,255,255,.08)}
-.more{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:#D8C2FF;font-weight:700;font-size:var(--t-base)}
-.more:hover{color:#fff;text-decoration:underline;text-underline-offset:4px}
+/* ══════════ 공통 ══════════ */
+.sec{padding:clamp(80px,9vw,128px) 0 0}
+.h2{font-size:clamp(30px,4vw,50px);line-height:1.2;letter-spacing:-.04em;font-weight:300}
+.h2 b{font-weight:800}
+.lead{margin-top:20px;font-size:clamp(var(--t-md),1.4vw,19px);color:var(--muted);line-height:1.75;max-width:46em}
+.lead b{color:var(--ink)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px}
+.chip{display:inline-flex;align-items:center;font-size:var(--t-sm);font-weight:800;padding:5px 12px;border-radius:999px;white-space:nowrap}
+.c-sns{background:var(--sns-pale);color:var(--sns-ink)} .c-map{background:var(--map-pale);color:var(--map-ink)} .c-chat{background:var(--chat-pale);color:var(--chat-ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 30px;border-radius:999px;
+     font-weight:800;font-size:var(--t-md);cursor:pointer;border:0;white-space:nowrap;transition:transform .2s var(--ease),box-shadow .2s var(--ease),background-color .15s}
+.btn .arr{display:inline-block;transition:transform .2s var(--ease)}
+.btn:hover{transform:translateY(-2px)} .btn:hover .arr{transform:translateX(4px)} .btn:active{transform:none}
+.btn-ink{background:var(--ink);color:#fff;box-shadow:0 12px 30px -12px rgba(21,19,28,.55)}
+.btn-ink:hover{background:#2A2636}
+.btn-line{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px #CFCBDA}
+.btn-line:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.card{background:#fff;border-radius:28px;box-shadow:0 0 0 1px var(--line)}
 
-/* ══════════ 1. 히어로 ══════════ */
-.hero{position:relative;overflow:hidden;
-  background:
-    radial-gradient(38% 42% at 82% 34%,rgba(214,51,127,.42),rgba(214,51,127,0) 100%),
-    linear-gradient(180deg,#C7A8FF 0,#A57CF5 52px,#8452E8 104px,#6C2BD9 150px,#5A22B8 182px,
-             #43198C 262px,#26104F 352px,#140829 412px,#08030F 442px,#000 500px)}
-.hero-in{position:relative;display:grid;grid-template-columns:minmax(0,clamp(480px,43vw,610px)) minmax(0,1fr);
-  column-gap:clamp(32px,4.1vw,64px);
-  padding:80px max(var(--gut),calc((100% - var(--cw))/2)) 84px}
-.hcard{position:relative;z-index:2;min-height:616px;border-radius:72px;
-  padding:64px clamp(28px,4.4vw,60px) 52px;display:flex;flex-direction:column;
-  background:
-    radial-gradient(60% 9% at 0 0,rgba(255,255,255,.26),rgba(255,255,255,0)),
-    linear-gradient(165deg,rgba(255,255,255,.06) 0%,rgba(255,255,255,.045) 45%,rgba(255,255,255,.035) 100%);
-  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
-  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45)}
-.hcard.cut{border-radius:0;box-shadow:none}
-.hcard-line{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:none}
-.hcard.cut .hcard-line{display:block}
-.kick{font-size:var(--t-md);font-weight:600;letter-spacing:.04em;color:#fff;line-height:1.2;text-shadow:0 1px 2px rgba(40,0,80,.35)}
-.hero h1{margin-top:52px;font-size:clamp(52px,7.05vw,102px);line-height:1.06;letter-spacing:-.045em;color:#fff}
-.hero h1 .l{display:block;font-weight:300}
-.hero h1 .b{display:block;font-weight:800;margin-top:.06em}
-.hsub{margin-top:44px;font-size:clamp(19px,2.05vw,var(--t-xl));line-height:1.35;color:#fff;font-weight:400;letter-spacing:-.02em}
-.hact{margin-top:auto;padding-top:52px;display:flex;flex-wrap:wrap;align-items:center;gap:12px}
-.hbtn{min-height:56px;padding:0 32px;gap:10px;border-radius:999px;font-size:18px;font-weight:700;letter-spacing:-.01em;white-space:nowrap;
-      box-shadow:0 10px 30px rgba(90,20,190,.45);
-      transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
-.hbtn .arr-r{display:inline-block;transition:transform .2s var(--ease)}
-.hbtn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(90,20,190,.6)}
-.hbtn:hover .arr-r{transform:translateX(4px)}
-.hbtn:active{transform:none}
-.hbtn:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
-.badge{display:inline-flex;align-items:center;min-height:34px;padding:0 13px;border-radius:999px;
-       background:var(--yellow);color:#15171A;font-size:var(--t-sm);font-weight:800;letter-spacing:-.01em;white-space:nowrap}
-.hcond{margin-top:16px;font-size:var(--t-base);line-height:1.6;color:rgba(255,255,255,.7);letter-spacing:-.01em}
-.hcond span{white-space:nowrap}
+/* ══════════ 1. 첫 화면 영상 (16초 반복 · 4장면) ══════════ */
+.hero{padding:20px 0 0}
+.stage{position:relative;overflow:hidden;height:min(640px,calc(100svh - 190px));min-height:540px;border-radius:36px;background:#15131C;color:#fff;
+       box-shadow:0 40px 90px -40px rgba(21,19,28,.6)}
+.stage::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(40% 50% at 85% 20%,rgba(139,61,255,.28),transparent 70%),radial-gradient(40% 50% at 10% 90%,rgba(14,159,110,.22),transparent 70%)}
+.bars{position:absolute;left:clamp(24px,4.4vw,64px);right:clamp(24px,4.4vw,64px);top:26px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;z-index:5}
+.bars span{position:relative;height:4px;border-radius:999px;background:rgba(255,255,255,.2);overflow:hidden}
+.bars i{position:absolute;left:0;top:0;bottom:0;width:0;background:#fff;border-radius:999px;animation:16s linear infinite}
+.bars span:nth-child(1) i{animation-name:dB1} .bars span:nth-child(2) i{animation-name:dB2}
+.bars span:nth-child(3) i{animation-name:dB3} .bars span:nth-child(4) i{animation-name:dB4}
+@keyframes dB1{0%{width:0}25%,100%{width:100%}}
+@keyframes dB2{0%,25%{width:0}50%,100%{width:100%}}
+@keyframes dB3{0%,50%{width:0}75%,100%{width:100%}}
+@keyframes dB4{0%,75%{width:0}100%{width:100%}}
+.scene{position:absolute;inset:0;opacity:0;animation:16s ease infinite;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center;
+       padding:76px clamp(24px,4.4vw,64px) 72px}
+.s1{animation-name:dS1}.s2{animation-name:dS2}.s3{animation-name:dS3}.s4{animation-name:dS4}
+@keyframes dS1{0%{opacity:0;transform:translateY(18px)}3%,22%{opacity:1;transform:none}25%,100%{opacity:0;transform:translateY(-18px)}}
+@keyframes dS2{0%,25%{opacity:0;transform:translateY(18px)}28%,47%{opacity:1;transform:none}50%,100%{opacity:0;transform:translateY(-18px)}}
+@keyframes dS3{0%,50%{opacity:0;transform:translateY(18px)}53%,72%{opacity:1;transform:none}75%,100%{opacity:0;transform:translateY(-18px)}}
+@keyframes dS4{0%,75%{opacity:0;transform:scale(.97)}78%,97%{opacity:1;transform:none}100%{opacity:0}}
+.scene .tag{display:inline-block;font-size:var(--t-base);font-weight:800;padding:6px 14px;border-radius:999px}
+.cap{margin-top:20px;font-size:clamp(44px,5.4vw,76px);line-height:1.08;letter-spacing:-.045em;font-weight:800;color:#fff}
+.cap .l{font-weight:300}
+.sub{margin-top:18px;font-size:clamp(var(--t-md),1.6vw,21px);color:#CFCBE0;line-height:1.6}
+.vis{position:relative;display:flex;justify-content:center;align-items:center;gap:20px;height:100%}
+/* 장면 1 — SNS */
+.p-phone{width:250px;border-radius:32px;background:#fff;color:var(--ink);padding:18px;box-shadow:0 30px 60px -20px rgba(139,61,255,.6)}
+.p-top{display:flex;align-items:center;gap:10px}
+.p-ring{width:46px;height:46px;border-radius:50%;padding:3px;background:conic-gradient(#FFB347,#E0458B,#8B3DFF,#FFB347)}
+.p-ring i{display:block;width:100%;height:100%;border-radius:50%;background:var(--sns-pale);border:3px solid #fff}
+.p-grid{margin-top:14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.p-grid i{aspect-ratio:1;border-radius:6px;background:#F1EEF6}
+.pop{animation:16s infinite}
+.p-grid i.q1{background:linear-gradient(135deg,#FFC9A8,#FF8A5C);animation-name:dP1}
+.p-grid i.q2{background:linear-gradient(135deg,#D9C2FF,#8B3DFF);animation-name:dP2}
+.p-grid i.q3{background:linear-gradient(135deg,#FFB8D6,#E0458B);animation-name:dP3}
+.q4{animation-name:dP4}
+@keyframes dP1{0%,4%{opacity:0;transform:scale(.6)}7%,100%{opacity:1;transform:none}}
+@keyframes dP2{0%,7%{opacity:0;transform:scale(.6)}10%,100%{opacity:1;transform:none}}
+@keyframes dP3{0%,10%{opacity:0;transform:scale(.6)}13%,100%{opacity:1;transform:none}}
+@keyframes dP4{0%,13%{opacity:0;transform:translateY(24px)}17%,100%{opacity:1;transform:none}}
+.p-blog{width:200px;border-radius:22px;background:#fff;color:var(--ink);padding:16px;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+.p-blog .im{margin-top:10px;height:80px;border-radius:12px;background:linear-gradient(135deg,#BFE9D6,#3DBB86)}
+.ln{display:block;height:9px;border-radius:4px;background:#2B2838;margin-top:10px;width:85%}
+.ln.s{height:7px;background:#C9C5D6;width:60%;margin-top:6px}
+/* 장면 2 — 지도 */
+.m-map{position:relative;width:100%;max-width:520px;height:min(420px,100%);border-radius:28px;overflow:hidden;background:#E3F1E7;
+  background-image:linear-gradient(90deg,transparent 46%,#fff 46%,#fff 53%,transparent 53%),linear-gradient(0deg,transparent 40%,#fff 40%,#fff 47%,transparent 47%),
+                   linear-gradient(28deg,transparent 66%,#F2E6C2 66%,#F2E6C2 71%,transparent 71%)}
+.m-pin{position:absolute;left:50%;top:42%;display:flex;flex-direction:column;align-items:center;animation:dPin 16s infinite}
+.m-pin b{background:var(--map);color:#fff;font-weight:800;font-size:var(--t-base);padding:9px 16px;border-radius:12px;white-space:nowrap;box-shadow:0 12px 24px -8px rgba(14,159,110,.7)}
+.m-pin i{width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-top:11px solid var(--map)}
+@keyframes dPin{0%,29%{opacity:0;transform:translate(-50%,-160%)}33%{opacity:1;transform:translate(-50%,-100%)}35%{transform:translate(-50%,-112%)}37%,100%{opacity:1;transform:translate(-50%,-100%)}}
+.m-place{position:absolute;left:20px;right:20px;bottom:20px;background:#fff;color:var(--ink);border-radius:20px;padding:16px;display:flex;gap:14px;
+         box-shadow:0 20px 40px -20px rgba(0,0,0,.5);animation:dPlace 16s infinite}
+@keyframes dPlace{0%,36%{opacity:0;transform:translateY(40px)}40%,100%{opacity:1;transform:none}}
+.m-place .ph{flex:0 0 auto;width:76px;height:76px;border-radius:12px;background:linear-gradient(135deg,#BFE9D6,#3DBB86)}
+.m-place b{font-size:var(--t-md)}
+.m-place small{display:block;margin-top:2px;font-size:var(--t-sm);color:#5D5A6A}
+.acts{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+.acts span{font-size:var(--t-xs);font-weight:700;padding:5px 10px;border-radius:999px;box-shadow:inset 0 0 0 1px #D6D2E0}
+.acts span.hot{background:var(--chat);box-shadow:none}
+/* 장면 3 — 상담 */
+.chat{display:flex;flex-direction:column;gap:12px;width:100%;max-width:420px}
+.b-me{align-self:flex-end;max-width:80%;background:var(--sns);padding:14px 18px;border-radius:20px 20px 4px 20px;font-size:var(--t-md);animation:dM1 16s infinite}
+.b-bot{align-self:flex-start;max-width:88%;background:#fff;color:var(--ink);padding:14px 18px;border-radius:20px 20px 20px 4px;font-size:var(--t-md);line-height:1.55;animation:dM2 16s infinite}
+.b-quick{display:flex;gap:8px;flex-wrap:wrap;animation:dM3 16s infinite}
+.b-quick span{font-size:var(--t-base);font-weight:700;padding:8px 14px;border-radius:999px;background:var(--chat);color:var(--ink)}
+.b-quick span.o{background:rgba(255,255,255,.14);color:#fff}
+.b-note{align-self:center;font-size:var(--t-sm);color:#9A96AC;animation:dM3 16s infinite}
+@keyframes dM1{0%,54%{opacity:0;transform:translateY(16px)}57%,100%{opacity:1;transform:none}}
+@keyframes dM2{0%,59%{opacity:0;transform:translateY(16px)}62%,100%{opacity:1;transform:none}}
+@keyframes dM3{0%,64%{opacity:0;transform:translateY(16px)}67%,100%{opacity:1;transform:none}}
+/* 장면 4 — 하나로 */
+.venn{position:relative;width:440px;height:440px;max-width:100%}
+.venn .c{position:absolute;width:260px;height:260px;border-radius:50%;display:flex;box-sizing:border-box;font-weight:800;font-size:var(--t-lg)}
+.venn .cs{left:90px;top:10px;background:rgba(139,61,255,.75);align-items:flex-start;justify-content:center;padding-top:58px;animation:dC3 16s infinite}
+.venn .cm{left:5px;top:160px;background:rgba(14,159,110,.72);align-items:center;justify-content:flex-start;padding-left:50px;animation:dC1 16s infinite}
+.venn .cc{left:175px;top:160px;background:rgba(255,201,60,.8);color:var(--ink);align-items:center;justify-content:flex-end;padding-right:50px;animation:dC2 16s infinite}
+.venn .core{position:absolute;left:220px;top:252px;background:#fff;color:var(--ink);font-weight:800;font-size:var(--t-md);padding:12px 18px;border-radius:999px;white-space:nowrap;
+            box-shadow:0 14px 30px -10px rgba(0,0,0,.6);transform:translate(-50%,-50%);animation:dCore 16s infinite}
+@keyframes dC1{0%,76%{transform:translate(-90px,40px)}84%,100%{transform:none}}
+@keyframes dC2{0%,76%{transform:translate(90px,40px)}84%,100%{transform:none}}
+@keyframes dC3{0%,76%{transform:translateY(-80px)}84%,100%{transform:none}}
+@keyframes dCore{0%,83%{opacity:0;transform:translate(-50%,-50%) scale(.6)}87%,100%{opacity:1;transform:translate(-50%,-50%)}}
+.sfoot{position:absolute;left:clamp(24px,4.4vw,64px);right:clamp(24px,4.4vw,64px);bottom:18px;display:flex;align-items:center;gap:12px;z-index:5}
+.sfoot small{font-size:var(--t-xs);color:#9A96AC}
+.pause{margin-left:auto;min-height:44px;min-width:44px;padding:0 16px;border-radius:999px;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:var(--t-sm);font-weight:700;cursor:pointer}
+.pause:hover{background:rgba(255,255,255,.22)}
+.stage.paused *{animation-play-state:paused!important}
+.hero-under{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;padding:24px 4px 0}
+.hero-under .chips{display:flex;gap:8px;flex-wrap:wrap}
+.hero-under small{font-size:var(--t-sm);color:var(--muted)}
+.hero-under .btns{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap}
 
-/* 오른쪽 무대 — 휴대폰 화면 모형 + 떠 있는 알림 카드 (모두 CSS 예시 그림 · 실제 계정 아님) */
-.hstage{position:relative;z-index:1;min-height:616px;display:grid;place-items:center}
-.hstage::before{content:"";position:absolute;width:min(520px,92%);aspect-ratio:1;border-radius:50%;
-  background:conic-gradient(from 200deg,#8452E8,#D6337F,#FF9A6B,#FFE14D,#8452E8);filter:blur(60px);opacity:.38}
-.phone{position:relative;width:clamp(250px,22vw,300px);aspect-ratio:9/18.6;border-radius:44px;padding:12px;
-  background:linear-gradient(160deg,#2B2440,#0F0B1A);
-  box-shadow:0 0 0 1.5px rgba(255,255,255,.22),0 40px 90px -30px rgba(120,40,220,.85),inset 0 1px 0 rgba(255,255,255,.25);
-  transform:rotate(-4deg)}
-.screen{position:relative;height:100%;border-radius:34px;overflow:hidden;background:#fff;color:#1A1630;display:flex;flex-direction:column}
-.screen .notch{position:absolute;top:8px;left:50%;width:34%;height:20px;margin-left:-17%;border-radius:999px;background:#0F0B1A;z-index:2}
-.sc-top{padding:40px 16px 10px;display:flex;align-items:center;gap:12px}
-.ring{flex:0 0 auto;width:62px;height:62px;border-radius:50%;padding:3px;background:conic-gradient(#FFB347,#D6337F,#8452E8,#FFB347)}
-.ring i{display:block;width:100%;height:100%;border-radius:50%;border:3px solid #fff;
-  background:radial-gradient(circle at 50% 38%,#FFD9A8 0 22%,transparent 23%),linear-gradient(160deg,#B8A2F5,#7E57E0)}
-.sc-stat{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center}
-.sc-stat span{display:block;height:9px;border-radius:3px;background:#1A1630;opacity:.85;margin:0 auto 5px;width:60%}
-.sc-stat em{display:block;height:6px;border-radius:3px;background:#1A1630;opacity:.25;width:80%;margin:0 auto}
-.sc-name{padding:0 16px}
-.sc-name b{display:block;font-size:13px;font-weight:800;letter-spacing:-.01em}
-.sc-name i{display:block;height:6px;border-radius:3px;background:#1A1630;opacity:.2;margin-top:6px}
-.sc-name i+i{width:70%}
-.sc-btns{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px 16px}
-.sc-btns span{height:24px;border-radius:7px;background:#EFEAFB;display:grid;place-items:center;font-size:10px;font-weight:700;color:#4B3C7A}
-.sc-btns span:first-child{background:var(--violet);color:#fff}
-.sc-hl{display:flex;gap:10px;padding:4px 16px 10px}
-.sc-hl i{width:36px;height:36px;border-radius:50%;box-shadow:0 0 0 2px #fff,0 0 0 3px #DCD3F2;background:var(--c)}
-.sc-grid{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#fff;align-content:start}
-.sc-grid i{position:relative;aspect-ratio:1;background:var(--c)}
-/* 칸마다 작은 무늬 (사진 자리 느낌) — 바탕색을 덮지 않게 ::after 로 */
-.sc-grid i:nth-child(2n)::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,rgba(255,255,255,.55) 0 14%,transparent 15%)}
-.sc-grid i:nth-child(3n)::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 60%,rgba(255,255,255,.45) 60% 68%,transparent 68%)}
-/* 떠 있는 카드 */
-.float{position:absolute;z-index:3;display:flex;align-items:center;gap:10px;padding:12px 16px 12px 12px;border-radius:18px;
-  background:rgba(255,255,255,.94);color:var(--ink);box-shadow:0 18px 40px -16px rgba(30,0,60,.6);white-space:nowrap}
-.float .fi{flex:0 0 auto;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;color:#fff;background:var(--fc,var(--violet))}
-.float .fi svg{width:20px;height:20px}
-.float b{display:block;font-size:14px;font-weight:800;letter-spacing:-.01em;line-height:1.3}
-.float small{display:block;font-size:12px;color:var(--muted);font-weight:600;line-height:1.3}
-.f1{top:12%;left:max(-4%,-20px)}
-.f2{top:46%;right:-2%}
-.f3{bottom:12%;left:2%}
-.mapcard{position:absolute;z-index:2;right:4%;top:6%;width:150px;border-radius:20px;overflow:hidden;
-  background:#fff;box-shadow:0 18px 40px -16px rgba(30,0,60,.6);transform:rotate(5deg)}
-.mapcard .mp{height:88px;position:relative;
-  background:
-    linear-gradient(90deg,transparent 46%,#FFFFFF 46% 54%,transparent 54%),
-    linear-gradient(0deg,transparent 40%,#FFFFFF 40% 47%,transparent 47%),
-    linear-gradient(35deg,transparent 62%,#F3E9C9 62% 68%,transparent 68%),
-    #E4F1DE}
-.mapcard .pin{position:absolute;left:50%;top:42%;width:26px;height:26px;margin:-22px 0 0 -13px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);
-  background:linear-gradient(135deg,#FF5A7A,#D6337F);box-shadow:0 6px 12px rgba(214,51,127,.45)}
-.mapcard .pin::after{content:"";position:absolute;inset:8px;border-radius:50%;background:#fff}
-.mapcard .mt{padding:10px 12px 12px}
-.mapcard .mt b{display:block;font-size:12px;font-weight:800;color:var(--ink)}
-.mapcard .mt i{display:block;height:5px;border-radius:3px;background:#1A1630;opacity:.18;margin-top:5px}
-.mapcard .mt i+i{width:60%}
-.mapcard .stars{display:flex;gap:2px;margin-top:6px}
-.mapcard .stars span{width:9px;height:9px;background:#FFC531;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
-.hnote{position:absolute;bottom:0;right:0;font-size:var(--t-xs);color:rgba(255,255,255,.45)}
-/* 고리 장식 — /web/img/ 의 파란 고리를 보라로 돌려 씁니다 (파일은 그대로) */
-.deco{position:absolute;z-index:3;pointer-events:none}
-.deco img{width:100%;height:100%;object-fit:contain;filter:hue-rotate(48deg) saturate(1.15)}
-.deco-top{top:clamp(-120px,-7vw,-48px);right:clamp(-150px,-9vw,-60px);width:clamp(200px,24vw,360px);aspect-ratio:900/847}
-.deco-bottom{--rw:clamp(160px,17vw,250px);width:var(--rw);aspect-ratio:847/900;top:480px;
-  left:min(calc(max(var(--gut), (100% - var(--cw)) / 2) + 20px - var(--rw)), clamp(-160px,-10vw,-90px))}
-@media (min-width:1000px){
-  .hero-in{padding-top:min(80px,9.6vh);padding-top:min(80px,9.6svh)}
-  .hcard{min-height:min(616px,calc(100vh - 62px - 9.6vh - 24px));min-height:min(616px,calc(100svh - 62px - 9.6svh - 24px));
-         padding-top:min(64px,7.7vh);padding-top:min(64px,7.7svh);padding-bottom:min(52px,6.3vh);padding-bottom:min(52px,6.3svh)}
-  .hstage{min-height:min(616px,calc(100vh - 62px - 9.6vh - 24px));min-height:min(616px,calc(100svh - 62px - 9.6svh - 24px))}
-  .hero h1{margin-top:min(52px,6.3vh);margin-top:min(52px,6.3svh);
-           font-size:clamp(52px,min(7.05vw,12.3vh),102px);font-size:clamp(52px,min(7.05vw,12.3svh),102px)}
-  .hsub{margin-top:min(44px,5.4vh);margin-top:min(44px,5.4svh);
-        font-size:clamp(19px,min(2.05vw,3.6vh),30px);font-size:clamp(19px,min(2.05vw,3.6svh),30px)}
-  .hact{padding-top:min(52px,6.3vh);padding-top:min(52px,6.3svh)}
-  .phone{width:clamp(230px,min(22vw,33vh),300px);width:clamp(230px,min(22vw,33svh),300px)}
-}
+/* ══════════ 2. 세 곳이 이어지는 구조 ══════════ */
+.link{margin-top:48px;display:grid;grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr) 64px minmax(0,1fr);align-items:stretch}
+.lk{padding:28px;border-top:6px solid var(--bc)}
+.lk .k{font-size:var(--t-sm);font-weight:800}
+.lk h3{margin-top:10px;font-size:clamp(22px,2.2vw,28px);font-weight:800;letter-spacing:-.03em}
+.lk p{margin-top:10px;font-size:var(--t-base);color:var(--muted);line-height:1.75}
+.lk.hl{box-shadow:0 0 0 2px var(--bc),0 24px 50px -28px var(--bs)}
+.conn{display:grid;place-items:center;color:#9A96AC}
+.conn svg{width:48px;height:24px}
 
-/* ══════════ 2. 손님이 찾아오는 길 ══════════ */
-.path{background:#000;padding:118px 0 clamp(88px,10vw,140px)}
-.ptitle{text-align:center;font-size:clamp(28px,4.7vw,66px);line-height:1.08;letter-spacing:-.045em;color:#fff}
-.ptitle .l{display:block;font-weight:300}
-.ptitle .b{display:block;font-weight:800;margin-top:.04em}
-.flow{margin-top:clamp(56px,8vw,96px);display:grid;grid-template-columns:minmax(0,1fr) 48px minmax(0,1.25fr) 48px minmax(0,1fr) 48px minmax(0,1fr);
-      align-items:center;gap:8px;padding:clamp(28px,4vw,48px)}
-.flow .col{display:flex;flex-direction:column;gap:12px}
-.flow .lbl{text-align:center;font-size:var(--t-sm);font-weight:800;color:var(--txt-3);letter-spacing:.04em;margin-bottom:2px}
-.pill{display:flex;align-items:center;justify-content:center;text-align:center;min-height:58px;padding:10px 18px;border-radius:999px;
-      color:#fff;font-size:clamp(var(--t-base),1.4vw,18px);font-weight:600;letter-spacing:-.01em;
-      background:linear-gradient(180deg,rgba(108,43,217,.92) 0%,rgba(165,124,245,.75) 100%);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 0 0 1px rgba(255,255,255,.26)}
-.pill.hot{min-height:72px;font-size:clamp(var(--t-md),1.7vw,22px);font-weight:800;
-      background:linear-gradient(120deg,#6C2BD9 0%,#B32F9A 55%,#D6337F 100%);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 0 0 6px rgba(214,51,127,.16),0 18px 50px -20px rgba(214,51,127,.85)}
-.pill.out{background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
-.arr{display:grid;place-items:center;color:#E3C8FF}
-.arr svg{width:36px;height:22px}
-.pathnote{margin-top:var(--s-5);text-align:center;color:var(--txt-2);font-size:clamp(var(--t-base),1.4vw,18px)}
-.pathnote b{color:var(--yellow);font-weight:700}
+/* ══════════ 3. 세 갈래 자세히 (지도 · 상담 먼저) ══════════ */
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.pc{border-radius:28px;padding:30px;display:flex;flex-direction:column;gap:14px}
+.pc .k{font-size:var(--t-sm);font-weight:800}
+.pc h3{font-size:clamp(22px,2.2vw,28px);font-weight:800;letter-spacing:-.03em;line-height:1.3}
+.pc .rows{display:grid;font-size:var(--t-base)}
+.pc .rows div{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--rl)}
+.pc .rows b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.pc .tot{margin-top:auto;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.pc .tot b{font-size:clamp(34px,3.4vw,42px);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.pc .tot s{font-variant-numeric:tabular-nums}
+.pc .nt{font-size:var(--t-sm)}
+.pc-map{background:var(--map-deep);color:#fff;--rl:rgba(255,255,255,.15)}
+.pc-map .k,.pc-map .tot b{color:#7FE0B8}
+.pc-map .nt,.pc-map .tot span{color:#B5D9CA} .pc-map s{color:#8FB3A4}
+.pc-chat{background:var(--chat-pale);box-shadow:inset 0 0 0 2px var(--chat)}
+.pc-chat .k,.pc-chat .nt{color:var(--chat-ink)}
+.pc-chat .st{display:grid;gap:10px;font-size:var(--t-base)}
+.pc-chat .st div{background:#fff;border-radius:14px;padding:12px 14px}
+.pc-sns{background:#fff;box-shadow:0 0 0 1px var(--line);--rl:#EEEBF3}
+.pc-sns .k{color:var(--sns-ink)}
+.allnote{margin-top:16px;font-size:var(--t-sm);color:var(--muted)}
 
-/* ══════════ 2-1. 작업 사례 — 누르면 실제 채널이 새 창으로 열립니다 (2026-10-20 이은총 님) ══════════ */
-.works{background:linear-gradient(180deg,#000 0,#0B0418 50%,#000 100%)}
-.wks{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-.wk{display:flex;flex-direction:column;height:100%;border-radius:28px;overflow:hidden;color:#fff;
-    background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);
-    transition:box-shadow .3s var(--ease),transform .3s var(--ease)}
-.wk:hover{box-shadow:inset 0 0 0 1px rgba(255,255,255,.4),0 24px 60px -24px var(--wc,rgba(214,51,127,.8))}
-.wk:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
-.wk .wtop{position:relative;aspect-ratio:16/10;background:var(--wg);display:grid;place-items:center;overflow:hidden}
-.wk .wtop::before{content:"";position:absolute;inset:0;
-  background:radial-gradient(60% 50% at 80% 10%,rgba(255,255,255,.35),transparent 70%),
-             repeating-linear-gradient(135deg,rgba(255,255,255,.06) 0 10px,transparent 10px 20px)}
-.wk .wico{position:relative;width:76px;height:76px;border-radius:24px;display:grid;place-items:center;
-  background:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 16px 36px -14px rgba(0,0,0,.5);
-  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:transform .35s var(--pop)}
-.wk:hover .wico{transform:scale(1.1) rotate(-6deg)}
-.wk .wico svg{width:40px;height:40px}
-/* 카카오톡 — 앱 아이콘 그대로(노란 네모 + 말풍선 TALK). 모양 · 색 · 비율을 바꾸지 마세요 (카카오 디자인 가이드) */
-.wk .wico.app{background:none;padding:0;overflow:hidden;border-radius:22%;-webkit-backdrop-filter:none;backdrop-filter:none;
-  box-shadow:0 0 0 3px rgba(255,255,255,.85),0 16px 36px -14px rgba(90,50,0,.55)}
-.wk .wico.app svg{width:100%;height:100%;display:block}
-.wk .wbody{flex:1;display:flex;flex-direction:column;gap:6px;padding:20px 22px 22px}
-.wk .wp{font-size:var(--t-sm);font-weight:800;color:var(--wt,#D8C2FF);letter-spacing:.02em}
-.wk .wn{display:block;color:#fff;font-size:clamp(19px,1.7vw,22px);font-weight:800;letter-spacing:-.02em;line-height:1.3;overflow-wrap:anywhere}
-.wk .wd{color:var(--txt-2);font-size:var(--t-base);line-height:1.6}
-.wk .go{margin-top:auto;padding-top:14px;display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:var(--t-base);color:#fff}
-.wk .go i{font-style:normal;display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);
-  transition:transform .25s var(--ease),background-color .25s}
-.wk:hover .go i{transform:translate(3px,-3px);background:var(--yellow);color:#15171A}
-.wknote{margin-top:var(--s-5);color:var(--txt-3);font-size:var(--t-sm)}
-@media(max-width:1180px){ .wks{grid-template-columns:repeat(2,minmax(0,1fr))} }
-@media(max-width:520px){ .wks{grid-template-columns:minmax(0,1fr)} .wk .wtop{aspect-ratio:16/7} .wk .wico{width:60px;height:60px;border-radius:18px} .wk .wico svg{width:32px;height:32px} }
+/* ══════════ 4. 골라서 합계 ══════════ */
+.pick{background:var(--ink);color:#fff;border-radius:32px;padding:clamp(28px,4vw,44px);display:flex;flex-wrap:wrap;gap:28px 48px;align-items:center}
+.pick .l{flex:1 1 420px}
+.pick h2{font-size:clamp(26px,3vw,36px);line-height:1.25;letter-spacing:-.035em;font-weight:800;color:#fff}
+.opts{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+.opt{min-height:48px;padding:0 18px;border-radius:999px;font-size:var(--t-base);font-weight:700;cursor:pointer;border:1.5px solid rgba(255,255,255,.35);background:transparent;color:#fff;
+     transition:background-color .15s,color .15s,transform .2s var(--pop)}
+.opt:active{transform:scale(.96)}
+.opt[aria-pressed="true"]{border-color:transparent;background:var(--oc);color:var(--ot)}
+.opt .ck{display:inline-block;width:1.2em}
+.pick .r{flex:0 1 340px}
+.pick .r small{display:block;font-size:var(--t-sm);color:#B9B5C9}
+.pick .sum{display:flex;align-items:baseline;gap:8px}
+.pick .sum b{font-size:clamp(44px,5vw,60px);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.pick .what{margin-top:16px;font-size:var(--t-sm);color:#B9B5C9}
 
-/* ══════════ 3. 대상 채널 ══════════ */
-.chs{background:radial-gradient(70% 40% at 50% 55%,rgba(108,43,217,.30),rgba(108,43,217,0) 100%),
-     linear-gradient(180deg,#000 0,#120624 30%,#1E0A3C 60%,#0B0416 85%,#000 100%)}
-.tiles{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-.tile{position:relative;display:flex;flex-direction:column;gap:14px;min-height:190px;padding:24px;border-radius:26px;
-      background:linear-gradient(160deg,rgba(132,82,232,.28) 0%,rgba(50,18,100,.35) 60%,rgba(20,8,40,.5) 100%);
-      box-shadow:inset 0 0 0 1px rgba(200,170,255,.22),inset 0 1px 0 rgba(255,255,255,.18);
-      transition:box-shadow .3s var(--ease),transform .3s var(--ease)}
-.tile:hover{box-shadow:inset 0 0 0 1px rgba(220,190,255,.55),inset 0 1px 0 rgba(255,255,255,.3),0 0 40px -6px rgba(214,51,127,.55)}
-.tile.main{grid-column:span 2;background:linear-gradient(135deg,rgba(108,43,217,.55) 0%,rgba(179,47,154,.45) 60%,rgba(214,51,127,.35) 100%)}
-.tile .tag{align-self:flex-start;font-size:var(--t-xs);font-weight:800;color:#15171A;background:var(--yellow);padding:3px 10px;border-radius:999px}
-.ico{flex:0 0 auto;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;color:#fff;
-     background:var(--ic,linear-gradient(160deg,#8452E8,#6C2BD9));box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 26px -12px rgba(108,43,217,.9)}
-.ico svg{width:26px;height:26px}
-.tile h3{font-size:clamp(var(--t-md),1.6vw,21px);font-weight:800;letter-spacing:-.02em;line-height:1.35}
-.tile p{font-size:var(--t-base);line-height:1.65;color:var(--txt-2)}
-.tile .icos{display:flex;gap:10px}
-.mapsrow{margin-top:16px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,2fr);gap:16px;align-items:stretch}
-.mapsrow .tile{min-height:0}
-.mapl{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.mapl li{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px 10px;border-radius:22px;text-align:center;
-         background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);color:#fff;font-weight:700;font-size:var(--t-base)}
-.mapl li .pinico{width:34px;height:34px;color:var(--pc)}
-.chnote{margin-top:var(--s-5);color:var(--txt-2);font-size:var(--t-base)}
+/* ══════════ 5. 작업 사례 ══════════ */
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.wk{display:flex;flex-direction:column;gap:4px;padding:24px;border-radius:24px;background:var(--wb);transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.wk:hover{transform:translateY(-4px);box-shadow:0 20px 40px -24px rgba(21,19,28,.5)}
+.wk .wi{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;margin-bottom:12px;background:#fff;color:var(--wc)}
+.wk .wi svg{width:26px;height:26px}
+.wk .wi.app{background:none;overflow:hidden;border-radius:22%}
+.wk .wi.app svg{width:100%;height:100%}
+.wk .wp{font-size:var(--t-sm);font-weight:800;color:var(--wc)}
+.wk .wn{font-size:clamp(19px,1.7vw,22px);font-weight:800;letter-spacing:-.02em;overflow-wrap:anywhere}
+.wk .go{margin-top:12px;font-weight:800;font-size:var(--t-base)}
+.wknote{margin-top:14px;font-size:var(--t-sm);color:var(--muted)}
 
-/* ══════════ 4. 두 가지 방식 ══════════ */
-.plans-sec{background:#000}
-.plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:stretch}
-.plan{position:relative;padding:clamp(28px,3.4vw,44px);border-radius:32px;display:flex;flex-direction:column}
-.plan .pk{font-size:var(--t-sm);font-weight:800;letter-spacing:.06em;color:#D2B8FF}
-.plan h3{margin-top:10px;font-size:clamp(26px,2.8vw,38px);font-weight:800;letter-spacing:-.035em;line-height:1.2}
-.plan .pd{margin-top:14px;color:var(--txt-2);font-size:var(--t-md);line-height:1.7}
-.plan .pp{margin-top:24px;padding:18px 20px;border-radius:18px;background:rgba(0,0,0,.28);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
-.plan .pp small{display:block;color:var(--txt-3);font-size:var(--t-sm);font-weight:700}
-.plan .pp b{display:block;margin-top:4px;color:#fff;font-size:clamp(22px,2.2vw,28px);font-weight:800;letter-spacing:-.02em;line-height:1.3}
-.plan .pp b em{font-style:normal;font-weight:600;font-size:.6em;color:var(--txt-2)}
-.plan ul{list-style:none;padding:0;margin:24px 0 0;display:grid;gap:10px}
-.plan li{display:flex;gap:12px;align-items:flex-start;color:#fff;font-size:var(--t-base);line-height:1.6}
-.plan li::before{content:"";flex:0 0 auto;width:20px;height:20px;margin-top:.15em;border-radius:50%;
-  background:var(--yellow) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5.5 10.5l3 3 6-6.5' fill='none' stroke='%2315171A' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat}
-.plan .pa{margin-top:auto;padding-top:28px}
-.plan.hot{background:linear-gradient(150deg,#5A22B8 0%,#7B2BB8 45%,#B32F86 100%);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 0 0 1px rgba(255,255,255,.18),0 30px 80px -40px rgba(214,51,127,.9)}
-.plan.hot .pk{color:var(--yellow)}
-.plan.hot .pd{color:#F1E9FF}
-.plan.hot .pp{background:rgba(20,0,40,.32)}
-.plan .ribbon{position:absolute;top:22px;right:22px;font-size:var(--t-xs);font-weight:800;color:#15171A;background:var(--yellow);padding:5px 12px;border-radius:999px}
-
-/* ══════════ 5. 함께 하면 저렴합니다 ══════════ */
-.save{background:linear-gradient(180deg,#000 0,#000 40%,#160830 80%,#26104F 100%)}
-.saves{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.svc{padding:28px;display:flex;flex-direction:column;min-height:250px}
-.svc .k{color:#fff;font-size:clamp(var(--t-md),1.6vw,20px);font-weight:800;letter-spacing:-.02em;line-height:1.4}
-.svc .was{margin-top:18px;color:var(--txt-3);font-size:var(--t-md);font-weight:600;text-decoration:line-through;text-decoration-color:rgba(255,154,200,.8);text-decoration-thickness:2px;font-variant-numeric:tabular-nums}
-.svc .now{margin-top:2px;color:var(--num);font-size:clamp(36px,3.8vw,52px);font-weight:800;letter-spacing:-.04em;line-height:1.1;font-variant-numeric:tabular-nums;white-space:nowrap}
-.svc .now i{font-style:normal;font-size:.42em;font-weight:700;margin-left:3px;color:#fff}
-.svc .off{align-self:flex-start;margin-top:14px;font-size:var(--t-sm);font-weight:800;color:#15171A;background:var(--yellow);padding:4px 12px;border-radius:999px}
-.svc .s{margin-top:auto;padding-top:16px;color:var(--txt-3);font-size:var(--t-sm);line-height:1.6}
-.longterm{margin-top:16px;padding:clamp(24px,3vw,36px);border-radius:28px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:center;
-  background:linear-gradient(120deg,rgba(108,43,217,.5),rgba(214,51,127,.35));box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
-.longterm h3{font-size:clamp(20px,2vw,26px);font-weight:800;letter-spacing:-.025em;line-height:1.35}
-.longterm p{margin-top:6px;color:#F1E9FF;font-size:var(--t-base)}
-.ltn{text-align:center;padding:18px;border-radius:20px;background:rgba(10,0,25,.35)}
-.ltn small{display:block;color:#E8DCFF;font-size:var(--t-sm);font-weight:700}
-.ltn b{display:block;color:var(--yellow);font-size:clamp(34px,3.6vw,48px);font-weight:800;letter-spacing:-.03em;line-height:1.15}
-
-/* ══════════ 6. 정기 콘텐츠 — 매월 같은 절차 ══════════ */
-.monthly{background:linear-gradient(180deg,#26104F 0,#0E0520 30%,#000 60%)}
-.steps{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));column-gap:14px;row-gap:48px}
-.step{position:relative;padding:36px 12px 0 0}
-.step::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;border-radius:2px;
-  background:linear-gradient(90deg,rgba(108,43,217,.15),#A57CF5 30%,#FF9AC8 60%,rgba(214,51,127,.15));
-  box-shadow:0 0 18px 2px rgba(165,124,245,.55)}
-.step::after{content:"";position:absolute;left:0;top:-5px;width:12px;height:12px;border-radius:50%;background:#fff;
-  box-shadow:0 0 0 4px rgba(108,43,217,.5),0 0 16px 4px rgba(255,154,200,.7)}
-.step .no{font-size:var(--t-sm);font-weight:800;color:#D8C2FF;letter-spacing:.06em}
-.step .when{display:inline-block;margin-top:10px;font-size:var(--t-xs);font-weight:800;color:#15171A;background:var(--yellow);padding:2px 9px;border-radius:999px}
-.step h3{margin-top:8px;font-size:clamp(19px,1.7vw,22px);letter-spacing:-.025em}
-.step p{margin-top:8px;font-size:var(--t-base);line-height:1.7;color:var(--txt-2)}
-.mcards{list-style:none;padding:0;margin:clamp(48px,6vw,72px) 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.mcards li{padding:28px}
-.mcards .ico{width:56px;height:56px;border-radius:18px}
-.mcards h3{margin-top:20px;font-size:clamp(19px,1.8vw,22px);letter-spacing:-.025em;line-height:1.35}
-.mcards p{margin-top:10px;font-size:var(--t-base);color:var(--txt-2);line-height:1.75}
-.mcards p b{color:#fff}
-
-/* ══════════ 7. 비용 — 표가 많아 밝은 바탕 (/web/ 가격 섹션과 같은 모양) ══════════ */
-.price{background:#F6F3FD;color:#3A3355;border-radius:48px}
-.price .ttl,.price h3{color:var(--ink)}
-.price .lead{color:#4A4266}
-.price .lead b{color:var(--ink)}
-.ph3{font-size:clamp(20px,2vw,26px);font-weight:300;letter-spacing:-.03em;margin:clamp(48px,6vw,72px) 0 var(--s-4)}
+/* ══════════ 6. 정기 콘텐츠 · 비용 표 ══════════ */
+.steps{list-style:none;padding:0;margin:40px 0 0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
+.steps li{position:relative;padding:22px 18px 20px;border-radius:22px;background:#fff;box-shadow:0 0 0 1px var(--line)}
+.steps .no{font-size:var(--t-sm);font-weight:800;color:var(--sns-ink)}
+.steps .when{display:inline-block;margin-top:8px;font-size:var(--t-xs);font-weight:800;padding:2px 9px;border-radius:999px;background:var(--chat-pale);color:var(--chat-ink)}
+.steps h3{margin-top:8px;font-size:var(--t-md);font-weight:800;letter-spacing:-.02em}
+.steps p{margin-top:6px;font-size:var(--t-sm);color:var(--muted);line-height:1.65}
+.ph3{font-size:clamp(19px,1.9vw,24px);font-weight:300;letter-spacing:-.03em;margin:56px 0 14px}
 .ph3 b{font-weight:800}
 .ph3 small{font-size:var(--t-sm);font-weight:600;color:var(--muted);letter-spacing:0}
-.ptw{overflow-x:auto;border-radius:20px;background:#fff;box-shadow:0 0 0 1px var(--line),0 20px 50px -30px rgba(40,14,80,.35)}
+.ptw{overflow-x:auto;border-radius:20px;background:#fff;box-shadow:0 0 0 1px var(--line)}
 .ptab{width:100%;border-collapse:collapse;font-size:var(--t-base);line-height:1.55}
-.ptab th,.ptab td{padding:16px 20px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-.ptab thead th,.ptab thead th.r{background:#24124A;color:#fff;font-size:var(--t-sm);font-weight:700;white-space:nowrap}
+.ptab th,.ptab td{padding:15px 20px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.ptab thead th{background:var(--ink);color:#fff;font-size:var(--t-sm);font-weight:700}
 .ptab tbody tr:last-child th,.ptab tbody tr:last-child td{border-bottom:0}
-.ptab .r{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--ink);font-weight:700}
-.ptab tbody th{color:var(--ink);font-weight:800}
-.ptab .sm{display:block;font-size:var(--t-sm);color:var(--muted);font-weight:500;margin-top:2px;white-space:normal}
-.ptab tr.best th,.ptab tr.best td{background:#F3ECFF}
+.ptab .r{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:700}
+.ptab tbody th{font-weight:800}
+.ptab .sm{display:block;font-size:var(--t-sm);color:var(--muted);font-weight:500;margin-top:2px}
+.ptab tr.best th,.ptab tr.best td{background:var(--sns-pale)}
 .ptab .tier{display:block;white-space:nowrap}
 .ptab .tier small{color:var(--muted);font-weight:500;margin-left:6px}
-.pnote{margin-top:var(--s-4);font-size:var(--t-base);color:#433B5E;line-height:1.85;max-width:84ch}
+.pnote{margin-top:14px;font-size:var(--t-base);color:var(--muted);line-height:1.85;max-width:84ch}
 .pnote b{color:var(--ink)}
-.pnote a{color:#5A22B8;font-weight:700;text-decoration:underline;text-underline-offset:3px}
-.plinks{margin-top:var(--s-6);display:flex;flex-wrap:wrap;gap:12px}
-.price .btn-g{color:var(--ink);border-color:#C6BCE0;background:#fff}
-.price .btn-g:hover{border-color:var(--ink)}
-/* 정기 콘텐츠 계산기 — 인스타그램 1채널 기준 (금액은 아래 <script> SNS 값에서 계산) */
-.calc{margin-top:var(--s-5);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:0;border-radius:28px;overflow:hidden;
-      background:#fff;box-shadow:0 0 0 1px var(--line),0 30px 70px -40px rgba(40,14,80,.45)}
+.pnote a{color:var(--sns-ink);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+/* 정기 콘텐츠 계산기 — 인스타그램 1채널 기준 */
+.calc{margin-top:20px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);border-radius:28px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px var(--line)}
 .calc-in{padding:clamp(24px,3vw,40px)}
-.calc-in h4{margin:0;color:var(--ink);font-size:clamp(18px,1.8vw,22px);font-weight:800;letter-spacing:-.02em}
+.calc-in h3{font-size:clamp(18px,1.8vw,22px);font-weight:800;letter-spacing:-.02em}
 .calc-in .cs{margin-top:4px;color:var(--muted);font-size:var(--t-sm)}
 .field{margin-top:26px}
-.field label{display:flex;justify-content:space-between;align-items:baseline;color:var(--ink);font-weight:700;font-size:var(--t-base)}
-.field label output{color:#5A22B8;font-size:clamp(22px,2.2vw,28px);font-weight:800;font-variant-numeric:tabular-nums}
-.field input[type=range]{width:100%;margin-top:10px;accent-color:#6C2BD9;height:28px;cursor:pointer}
-.field .ticks{display:flex;justify-content:space-between;font-size:var(--t-xs);color:var(--muted);font-weight:600}
+.field label,.field .lb{display:flex;justify-content:space-between;align-items:baseline;font-weight:700;font-size:var(--t-base)}
+.field output{color:var(--sns-ink);font-size:clamp(22px,2.2vw,28px);font-weight:800;font-variant-numeric:tabular-nums}
+.field input[type=range]{width:100%;margin-top:10px;accent-color:var(--sns);height:28px;cursor:pointer}
+.ticks{display:flex;justify-content:space-between;font-size:var(--t-xs);color:var(--muted);font-weight:600}
 .seg{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
-.seg button{min-width:48px;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #D7CEEB;background:#fff;color:var(--ink);font-weight:700;cursor:pointer;
-            transition:background-color .15s,border-color .15s,color .15s}
-.seg button[aria-pressed="true"]{background:#6C2BD9;border-color:#6C2BD9;color:#fff}
-.seg button:hover{border-color:#6C2BD9}
-.calc-out{padding:clamp(24px,3vw,40px);background:linear-gradient(150deg,#3B1580 0%,#6C2BD9 55%,#A42D8F 100%);color:#fff;display:flex;flex-direction:column}
-.calc-out small{color:#E8DCFF;font-size:var(--t-sm);font-weight:700}
-.calc-out .tot{margin-top:6px;font-size:clamp(40px,4.4vw,60px);font-weight:800;letter-spacing:-.04em;line-height:1.1;font-variant-numeric:tabular-nums}
+.seg button{min-width:48px;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #D7D2E3;background:#fff;color:var(--ink);font-weight:700;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--sns-ink);border-color:var(--sns-ink);color:#fff}
+.calc-out{padding:clamp(24px,3vw,40px);background:var(--ink);color:#fff;display:flex;flex-direction:column}
+.calc-out small{color:#CFCBE0;font-size:var(--t-sm);font-weight:700}
+.calc-out .tot{margin-top:6px;font-size:clamp(40px,4.4vw,58px);font-weight:800;letter-spacing:-.04em;line-height:1.1;font-variant-numeric:tabular-nums}
 .calc-out .tot i{font-style:normal;font-size:.4em;font-weight:700;margin-left:4px}
 .calc-out dl{margin:22px 0 0;display:grid;gap:8px;font-size:var(--t-base)}
-.calc-out dl div{display:flex;justify-content:space-between;gap:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.18)}
-.calc-out dt{color:#EADFFF}
+.calc-out dl div{display:flex;justify-content:space-between;gap:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.16)}
+.calc-out dt{color:#DCD8EA}
 .calc-out dd{margin:0;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
-.calc-out .cn{margin-top:auto;padding-top:18px;color:#E8DCFF;font-size:var(--t-sm);line-height:1.6}
+.calc-out .cn{margin-top:auto;padding-top:18px;color:#CFCBE0;font-size:var(--t-sm);line-height:1.6}
 
-/* ══════════ 8. 미리 알려드립니다 ══════════ */
-.know{background:#000}
-.kcards{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.kcards li{padding:28px 28px 30px}
-.kcards .no{display:block;font-size:var(--t-sm);font-weight:800;color:#D8C2FF;letter-spacing:.06em}
-.kcards h3{margin-top:12px;font-size:clamp(20px,1.9vw,24px);letter-spacing:-.025em;line-height:1.35}
-.kcards p{margin-top:10px;font-size:var(--t-base);line-height:1.8;color:var(--txt-2)}
-.kcards p b{color:#fff}
-
-/* ══════════ 9. 환불 · 해지 (자주 묻는 질문 모양) ══════════ */
-.faq{background:linear-gradient(180deg,#000 0,#0E0520 40%,#26104F 100%)}
-.faq-in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:clamp(32px,5vw,72px);align-items:start}
-.faq .ttl{font-size:clamp(40px,5.4vw,76px)}
-.faq .lead{font-size:var(--t-base)}
-.qa{display:grid;gap:10px}
-.qa details{border-radius:20px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);transition:background-color .2s}
-.qa details[open]{background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(205,182,255,.4)}
-.qa summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:16px;min-height:64px;padding:16px 24px;
-            color:#fff;font-size:clamp(var(--t-md),1.5vw,19px);font-weight:700;letter-spacing:-.015em;line-height:1.45}
+/* ══════════ 7. 안내 · 환불 ══════════ */
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.kc{padding:26px 28px}
+.kc h3{font-size:clamp(18px,1.7vw,21px);font-weight:800;letter-spacing:-.02em}
+.kc p{margin-top:8px;font-size:var(--t-base);color:var(--muted);line-height:1.8}
+.kc p b{color:var(--ink)}
+.qa{margin-top:16px;display:grid;gap:10px}
+.qa details{border-radius:20px;background:#fff;box-shadow:0 0 0 1px var(--line)}
+.qa details[open]{box-shadow:0 0 0 2px var(--sns-ink)}
+.qa summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:16px;min-height:64px;padding:16px 24px;font-size:var(--t-md);font-weight:700;letter-spacing:-.015em}
 .qa summary::-webkit-details-marker{display:none}
-.qa summary .q{flex:0 0 auto;color:#D8C2FF;font-weight:800;font-size:var(--t-base)}
-.qa summary .pm{margin-left:auto;flex:0 0 auto;width:28px;height:28px;border-radius:50%;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
-.qa summary .pm::before,.qa summary .pm::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:2px;margin:-1px 0 0 -6px;background:#fff;border-radius:1px;transition:transform .25s var(--ease)}
+.qa summary .q{flex:0 0 auto;color:var(--sns-ink);font-weight:800;font-size:var(--t-base)}
+.qa summary .pm{margin-left:auto;flex:0 0 auto;width:28px;height:28px;border-radius:50%;position:relative;box-shadow:inset 0 0 0 1.5px #CFCBDA}
+.qa summary .pm::before,.qa summary .pm::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:2px;margin:-1px 0 0 -6px;background:var(--ink);border-radius:1px;transition:transform .25s var(--ease)}
 .qa summary .pm::after{transform:rotate(90deg)}
 .qa details[open] .pm::after{transform:rotate(0)}
-.qa .a{padding:0 24px 22px 60px;color:var(--txt-2);font-size:var(--t-base);line-height:1.85}
-.qa .a b{color:#fff}
+.qa .a{padding:0 24px 22px 60px;color:var(--muted);font-size:var(--t-base);line-height:1.85}
+.qa .a b{color:var(--ink)}
 
-/* ══════════ 10. 마지막 신청 유도 ══════════ */
-.cta{background:linear-gradient(180deg,#26104F 0,#43198C 30%,#6C2BD9 62%,#A04FD8 84%,#D99BEF 100%);padding:clamp(88px,10vw,140px) 0}
-.ctabox{position:relative;border-radius:40px;padding:clamp(36px,6vw,80px);display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:clamp(32px,5vw,64px);align-items:end;
-  background:linear-gradient(160deg,rgba(255,255,255,.12) 0%,rgba(255,255,255,.04) 50%,rgba(30,0,60,.12) 100%);
-  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
-  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4),0 30px 80px -40px rgba(30,0,60,.8)}
-.ctabox .ttl{font-size:clamp(32px,3.9vw,56px)}
-.ctabox .lead{color:#F1EAFF;margin-top:var(--s-5)}
-.ctabox .acts{margin-top:var(--s-6);display:flex;flex-wrap:wrap;gap:12px}
-.btn-cta{min-height:56px;padding:0 32px;gap:10px;border-radius:999px;background:#fff;color:var(--ink);white-space:nowrap;
-  font-size:18px;font-weight:700;letter-spacing:-.01em;border:0;box-shadow:0 10px 30px rgba(40,10,86,.3);
-  transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
-.btn-cta .arr-r{display:inline-block;transition:transform .2s var(--ease)}
-.btn-cta:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(40,10,86,.42)}
-.btn-cta:hover .arr-r{transform:translateX(4px)}
-.btn-cta:active{transform:none}
-.btn-cta:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+/* ══════════ 8. 신청 ══════════ */
+.cta{padding:clamp(80px,9vw,128px) 0 clamp(80px,9vw,120px)}
+.ctabox{position:relative;overflow:hidden;border-radius:36px;padding:clamp(32px,5vw,60px);background:#fff;box-shadow:0 0 0 1px var(--line);
+        display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:32px 56px;align-items:end}
+.ctabox .bub{position:absolute;width:220px;height:220px;border-radius:50%;pointer-events:none}
+.ctabox>div,.ctabox>ul{position:relative}
 .contact{list-style:none;padding:0;margin:0;display:grid;gap:10px}
-.contact li{padding:16px 20px;border-radius:18px;background:rgba(20,6,40,.55);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
-.contact small{display:block;font-size:var(--t-xs);color:#D2C4EE;font-weight:700;letter-spacing:.02em}
-.contact a,.contact span{display:inline-flex;align-items:center;min-height:44px;color:#fff;font-size:var(--t-md);font-weight:700;word-break:break-all}
+.contact li{padding:14px 20px;border-radius:18px;background:var(--paper);box-shadow:inset 0 0 0 1px var(--line)}
+.contact small{display:block;font-size:var(--t-xs);color:var(--muted);font-weight:700}
+.contact a,.contact span{display:inline-flex;align-items:center;min-height:40px;font-size:var(--t-md);font-weight:700;word-break:break-all}
 .contact a:hover{text-decoration:underline;text-underline-offset:4px}
 
-/* ══════════ 하단 — 메인 footer 복사 (/web/ 과 같은 어두운 색) ══════════ */
-footer{background:#0A0B0E;color:#9AA1AC;padding:48px 0 56px;font-size:var(--t-sm);line-height:2}
-footer .fb{color:#fff;font-weight:800;font-size:var(--t-base);letter-spacing:-.01em;margin-bottom:16px}
-footer .biz b{color:#E3E6EB;font-weight:600}
-footer .pol{margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12)}
-footer .pol a{color:#E3E6EB;font-weight:700;cursor:pointer}
+/* ══════════ 하단 — 메인 footer 복사 (메인과 같은 남색) ══════════ */
+footer{background:#0C1E39;color:#A9C4EA;padding:48px 0 56px;font-size:var(--t-sm);line-height:2}
+footer .fb{color:#fff;font-weight:800;font-size:var(--t-base);margin-bottom:16px}
+footer .biz b{color:#DCE6F8;font-weight:600}
+footer .pol{margin-top:16px;padding-top:16px;border-top:1px solid rgba(147,180,232,.22)}
+footer .pol a{color:#DCE6F8;font-weight:700}
 footer .pol a:hover{text-decoration:underline}
-footer .pol span{margin:0 8px;color:#4A5059}
-footer .cr{margin-top:12px;color:#7D838C;font-size:var(--t-xs)}
+footer .pol span{margin:0 8px;color:#38537E}
+footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
 
-@media(max-width:360px){ .hbtn,.btn-cta{padding:0 20px;gap:8px;font-size:16px} }
-
-/* ══════════ 움직임 — /web/ 과 같은 방식 (하나씩, 눈에 보이게) ══════════ */
-:root{--e2:cubic-bezier(.22,.9,.28,1);--pop:cubic-bezier(.34,1.56,.64,1)}
-main{overflow-x:clip}
-.js .rv{opacity:0;transform:translateY(36px);transition:opacity .8s var(--e2),transform .8s var(--e2);transition-delay:var(--d,0ms)}
-.js .rv.m-l{transform:translateX(-48px)}
-.js .rv.m-r{transform:translateX(48px)}
-.js .rv.m-pop{transform:scale(.82);transition-timing-function:var(--e2),var(--pop)}
-.js .rv.m-zoom{transform:translateY(28px) scale(.94)}
+/* ══════════ 스크롤하면 하나씩 ══════════ */
+.js .rv{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0ms)}
 .js .rv.in{opacity:1;transform:none}
-.js .rv.m-head{opacity:1;transform:none}
-.js .m-head .ttl .l,.js .m-head .ttl .b,.js .m-head .lead,.js .m-head .eyebrow{opacity:0;transform:translateY(30px);
-  transition:opacity .8s var(--e2),transform .8s var(--e2);transition-delay:var(--d,0ms)}
-.js .m-head .ttl .b{transition-delay:calc(var(--d,0ms) + 160ms)}
-.js .m-head .lead{transition-delay:calc(var(--d,0ms) + 340ms)}
-.js .m-head.in .ttl .l,.js .m-head.in .ttl .b,.js .m-head.in .lead,.js .m-head.in .eyebrow{opacity:1;transform:none}
-.js .rv.in.lift:hover{transform:translateY(-6px);transition-delay:0ms;transition-duration:.25s}
-@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-.js .rv.in .ico,.js .in .sec-ico{animation:fl 3.4s ease-in-out infinite}
-.js .rv.in:nth-child(2n) .ico{animation-delay:-1.7s}
-/* 첫 화면 */
-@keyframes hUp{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
-@keyframes hPop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
-@keyframes hCard{from{opacity:0;transform:translateY(26px) scale(.97)}to{opacity:1;transform:none}}
-@keyframes hPhone{from{opacity:0;transform:translateY(60px) rotate(4deg)}to{opacity:1;transform:rotate(-4deg)}}
-@keyframes hRing{from{opacity:0;transform:scale(.55) rotate(-16deg)}to{opacity:1;transform:none}}
-@keyframes hFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(3deg)}}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-@keyframes bobm{0%,100%{transform:rotate(5deg) translateY(0)}50%{transform:rotate(5deg) translateY(-8px)}}
-.js .hcard{animation:hCard .9s var(--e2) .1s backwards}
-.js .hero .kick{animation:hPop .6s var(--pop) .35s backwards}
-.js .hero h1 .l{animation:hUp .85s var(--e2) .5s backwards}
-.js .hero h1 .b{animation:hUp .85s var(--e2) .68s backwards}
-.js .hsub{animation:hUp .85s var(--e2) .9s backwards}
-.js .hbtn{animation:hPop .7s var(--pop) 1.1s backwards}
-.js .hact .badge{animation:hPop .6s var(--pop) 1.3s backwards}
-.js .hcond{animation:hUp .8s var(--e2) 1.45s backwards}
-.js .phone{animation:hPhone 1.1s var(--e2) .3s backwards}
-.js .float{animation:hPop .7s var(--pop) backwards,bob 5s ease-in-out infinite}
-.js .f1{animation-delay:1.2s,2s}
-.js .f2{animation-delay:1.45s,2.6s}
-.js .f3{animation-delay:1.7s,3.2s}
-.js .mapcard{animation:hPop .7s var(--pop) 1s backwards,bobm 6s ease-in-out 2s infinite}
-.js .deco img{animation:hRing 1.2s var(--pop) .6s backwards,hFloat 7s ease-in-out 1.8s infinite}
-.js .deco-bottom img{animation-delay:.9s,2.1s;animation-direction:normal,reverse}
-/* 사진 칸이 하나씩 채워지듯 반짝입니다 */
-@keyframes tileIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
-.js .sc-grid i{animation:tileIn .5s var(--pop) backwards}
-.js .sc-grid i:nth-child(1){animation-delay:1.3s}.js .sc-grid i:nth-child(2){animation-delay:1.38s}.js .sc-grid i:nth-child(3){animation-delay:1.46s}
-.js .sc-grid i:nth-child(4){animation-delay:1.54s}.js .sc-grid i:nth-child(5){animation-delay:1.62s}.js .sc-grid i:nth-child(6){animation-delay:1.7s}
-.js .sc-grid i:nth-child(7){animation-delay:1.78s}.js .sc-grid i:nth-child(8){animation-delay:1.86s}.js .sc-grid i:nth-child(9){animation-delay:1.94s}
-/* 신청 버튼 — 숨 쉬듯 빛이 번지고, 화살표가 앞으로 움직입니다 */
-@keyframes ring{0%{box-shadow:0 0 0 0 var(--rc)}100%{box-shadow:0 0 0 14px transparent}}
-@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
-.hbtn,.btn-cta{position:relative}
-.hbtn{--rc:rgba(165,124,245,.7)}
-.btn-cta{--rc:rgba(255,255,255,.55)}
-.js .hbtn::after,.js .rv.in .btn-cta::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;animation:ring 2.4s ease-out 2.4s infinite}
-.js .rv.in .btn-cta::after{animation-delay:1s}
-.js .hbtn .arr-r{animation:nudge 1.3s ease-in-out 2.4s infinite}
-.js .rv.in .btn-cta .arr-r{animation:nudge 1.3s ease-in-out 1s infinite}
+
+/* 「동작 줄이기」 — 영상은 마지막 장면만, 나머지는 처음부터 다 보이게 */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition:none!important}
-  .js .rv,.js .m-head .ttl .l,.js .m-head .ttl .b,.js .m-head .lead,.js .m-head .eyebrow{opacity:1;transform:none}
-  .phone{transform:rotate(-4deg)}
+  .s4{opacity:1}.bars i{width:100%}
+  .js .rv{opacity:1;transform:none}
+  .pause{display:none}
 }
 
 /* ══════════ 화면 폭별 ══════════ */
-@media(max-width:1180px){
-  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .steps{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
+@media(max-width:1180px){ .steps{grid-template-columns:repeat(3,minmax(0,1fr))} .g4{grid-template-columns:repeat(2,minmax(0,1fr))} }
 @media(max-width:999px){
-  .hero{background:
-    radial-gradient(60% 30% at 70% 62%,rgba(214,51,127,.38),rgba(214,51,127,0) 100%),
-    linear-gradient(180deg,#C7A8FF 0,#8452E8 28px,#6C2BD9 56px,#43198C 240px,#26104F 420px,#140829 560px,#000 760px)}
-  .hero-in{grid-template-columns:minmax(0,1fr);row-gap:24px;padding:32px var(--gut) 64px}
-  .hcard{min-height:0;border-radius:44px;padding-top:44px}
-  .hero h1{margin-top:36px;font-size:clamp(46px,10vw,84px)}
-  .hsub{font-size:clamp(18px,3vw,26px);margin-top:28px}
-  .hact{padding-top:40px}
-  .hstage{min-height:560px}
-  .deco-top{top:-56px;right:-70px;width:clamp(160px,32vw,280px)}
-  .deco-bottom{top:auto;bottom:30%;left:-90px;width:clamp(140px,28vw,220px)}
-  .flow{grid-template-columns:minmax(0,1fr);justify-items:stretch}
-  .flow .arr svg{transform:rotate(90deg)}
-  .mapsrow{grid-template-columns:minmax(0,1fr)}
-  .plans{grid-template-columns:minmax(0,1fr)}
-  .saves{grid-template-columns:minmax(0,1fr)}
-  .svc{min-height:0}
-  .longterm{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-  .longterm>div:first-child{grid-column:1/-1}
-  .calc{grid-template-columns:minmax(0,1fr)}
-  .faq-in{grid-template-columns:minmax(0,1fr)}
-  .ctabox{grid-template-columns:minmax(0,1fr)}
-  .price{border-radius:32px}
-}
-@media(max-width:900px){
-  .steps{grid-template-columns:minmax(0,1fr);row-gap:0}
-  .step{padding:0 0 32px 32px}
-  .step::before{left:5px;right:auto;top:6px;bottom:0;width:2px;height:auto;background:linear-gradient(180deg,#A57CF5,rgba(108,43,217,.2))}
-  .step::after{top:0}
-  .mcards{grid-template-columns:minmax(0,1fr)}
-  .kcards{grid-template-columns:minmax(0,1fr)}
+  .stage{height:520px;min-height:0}
+  .scene{grid-template-columns:minmax(0,1fr);padding:72px 28px 72px;gap:24px;align-content:center}
+  .vis{display:none}
+  .link{grid-template-columns:minmax(0,1fr)}
+  .conn{height:44px}.conn svg{transform:rotate(90deg)}
+  .g3,.g2{grid-template-columns:minmax(0,1fr)}
+  .calc,.ctabox{grid-template-columns:minmax(0,1fr)}
+  .hero-under .btns{margin-left:0}
 }
 @media(max-width:640px){
   body{font-size:var(--t-base)}
-  .hcard{padding:36px 24px 32px;border-radius:36px}
-  .hact{flex-direction:column;align-items:flex-start}
-  .hbtn{width:100%}
-  .hcond{font-size:var(--t-sm)}
-  .hstage{min-height:520px}
-  .phone{width:min(240px,64vw)}
-  .float{padding:9px 12px 9px 9px;gap:8px;border-radius:14px}
-  .float .fi{width:30px;height:30px;border-radius:9px}
-  .float b{font-size:13px}
-  .float small{font-size:11px}
-  .f1{left:0;top:6%}
-  .f2{right:0;top:50%}
-  .f3{left:0;bottom:6%}
-  .mapcard{width:120px;right:0;top:20%}
-  .mapcard .mp{height:68px}
-  .path{padding-top:88px}
-  .tiles{grid-template-columns:minmax(0,1fr)}
-  .tile.main{grid-column:auto}
-  .tile{min-height:0}
-  .mapl{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .longterm{grid-template-columns:minmax(0,1fr)}
-  .qa summary{padding:14px 18px;gap:12px}
-  .qa .a{padding:0 18px 20px 18px}
-  .ptab th,.ptab td{padding:12px 12px;font-size:var(--t-sm)}
+  .stage{border-radius:28px;height:480px}
+  .steps,.g4{grid-template-columns:minmax(0,1fr)}
+  .hero-under .btns,.hero-under .btns .btn{width:100%}
+  .ptab th,.ptab td{padding:12px 10px;font-size:var(--t-sm)}
   .ptab .tier small{display:block;margin:0}
-  .ptab thead th,.ptab thead th.r{white-space:normal}
-  .ptab th,.ptab td{padding:12px 10px}
-  .ctabox .acts .btn{width:100%}
+  .qa summary{padding:14px 18px;gap:12px}
+  .qa .a{padding:0 18px 20px}
 }
+@media(max-width:360px){ .btn{padding:0 20px;font-size:16px} }
 </style>
 </head>
 <body>
 <a class="skip" href="#main">본문으로 건너뛰기</a>
 
-<!-- ══════════ 머리띠 — 🔴 메인 index.html 의 <header> 복사본 (/web/ 과 같음). 메인을 고치면 여기도 ══════════ -->
+<!-- ══════════ 머리띠 — 🔴 메인 index.html 의 <header> 복사본. 메인을 고치면 여기도 ══════════ -->
 <header>
   <div class="wrap nav">
     <a class="brand" href="/">
@@ -720,282 +476,208 @@ main{overflow-x:clip}
 
 <main id="main">
 
-<!-- ══════════ 1. 히어로 ══════════ -->
+<!-- ══════════ 1. 첫 화면 영상 — CSS 움직임 · 16초 반복 ══════════ -->
 <section class="hero" id="hero" aria-labelledby="hero-h">
-  <div class="hero-in">
-    <div class="hcard">
-      <svg class="hcard-line" aria-hidden="true" focusable="false">
-        <defs><linearGradient id="hl" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset=".45" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity=".14"/>
-        </linearGradient></defs>
-        <path fill="none" stroke="url(#hl)" stroke-width="3" vector-effect="non-scaling-stroke"/>
-      </svg>
-      <p class="kick">INTO MARKETING · SNS</p>
-      <h1 id="hero-h"><span class="l">우리 가게의</span> <span class="b">SNS 얼굴</span></h1>
-      <p class="hsub">블로그 · 인스타그램 · 유튜브 · 지도,<br>세팅부터 매달 업로드까지 맡기세요.</p>
-      <div class="hact">
-        <a class="btn btn-p hbtn" href="/apply/sns/">SNS 채널 신청<span class="arr-r" aria-hidden="true">→</span></a>
-        <span class="badge">블로그 + 인스타 묶음 495,000원</span>
-      </div>
-      <p style="margin-top:14px"><a class="more" href="#works" style="color:#fff">작업 사례 보기 ↓</a></p>
-      <p class="hcond"><span>계정은 고객 소유</span> <span>·&nbsp;모든 작업 원격 진행</span> <span>·&nbsp;지도 4곳 등록</span> <span>·&nbsp;필요한 채널만 선택</span> <span>(부가세 포함)</span></p>
-    </div>
+  <div class="w">
+    <h1 class="sr" id="hero-h">SNS 채널 · 지도 · 상담 — SNS로 알리고, 지도에서 찾고, 상담으로 이어지게 하나로 세팅합니다</h1>
+    <div class="stage" id="stage" role="img" aria-label="홍보 영상: SNS로 알리고, 지도에서 찾고, 상담으로 이어지고, 세 가지가 하나로 연결되는 장면이 차례로 반복됩니다">
+      <div class="bars" aria-hidden="true"><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span></div>
 
-    <!-- 휴대폰 · 지도 화면 모형 — CSS 로 그린 예시 그림 (실제 계정 아님 · 숫자 없음) -->
-    <div class="hstage" aria-hidden="true">
-      <div class="mapcard">
-        <div class="mp"><span class="pin"></span></div>
-        <div class="mt"><b>우리 가게</b><div class="stars"><span></span><span></span><span></span><span></span><span></span></div><i></i><i></i></div>
-      </div>
-      <div class="phone">
-        <div class="screen">
-          <span class="notch"></span>
-          <div class="sc-top">
-            <span class="ring"><i></i></span>
-            <div class="sc-stat"><div><span></span><em></em></div><div><span></span><em></em></div><div><span></span><em></em></div></div>
+      <!-- 장면 1 : SNS -->
+      <div class="scene s1" aria-hidden="true">
+        <div>
+          <span class="tag" style="background:var(--sns)">01 · SNS</span>
+          <p class="cap">SNS로<br>알리고</p>
+          <p class="sub">네이버 블로그 · 인스타그램 · 유튜브 세팅,<br>매달 업로드까지</p>
+        </div>
+        <div class="vis">
+          <div class="p-phone">
+            <div class="p-top"><span class="p-ring"><i></i></span><b style="font-size:14px">우리 가게</b></div>
+            <div class="p-grid"><i class="pop q1"></i><i class="pop q2"></i><i class="pop q3"></i><i></i><i></i><i></i></div>
           </div>
-          <div class="sc-name"><b>우리 가게</b><i></i><i></i></div>
-          <div class="sc-btns"><span>상담하기</span><span>오시는 길</span></div>
-          <div class="sc-hl"><i style="--c:linear-gradient(135deg,#FFB347,#FF7A59)"></i><i style="--c:linear-gradient(135deg,#B8A2F5,#7E57E0)"></i><i style="--c:linear-gradient(135deg,#FF9AC8,#D6337F)"></i><i style="--c:linear-gradient(135deg,#9BE3C4,#38A889)"></i></div>
-          <div class="sc-grid">
-            <i style="--c:linear-gradient(135deg,#FFD3A5,#FF9A6B)"></i><i style="--c:linear-gradient(135deg,#C9B2FF,#8452E8)"></i><i style="--c:linear-gradient(135deg,#FFB8D6,#D6337F)"></i>
-            <i style="--c:linear-gradient(135deg,#A8E6CF,#4FB38F)"></i><i style="--c:linear-gradient(135deg,#FFE7A1,#F2B33D)"></i><i style="--c:linear-gradient(135deg,#B4D4FF,#5A8DEE)"></i>
-            <i style="--c:linear-gradient(135deg,#E3C8FF,#A57CF5)"></i><i style="--c:linear-gradient(135deg,#FFC9B0,#F07A5A)"></i><i style="--c:linear-gradient(135deg,#D8F0A8,#8CC152)"></i>
+          <div class="p-blog pop q4"><b style="font-size:12px;color:var(--map-ink)">블로그 새 글</b><div class="im"></div><span class="ln"></span><span class="ln s"></span></div>
+        </div>
+      </div>
+
+      <!-- 장면 2 : 지도 -->
+      <div class="scene s2" aria-hidden="true">
+        <div>
+          <span class="tag" style="background:var(--map)">02 · 지도</span>
+          <p class="cap">지도에서<br>찾고</p>
+          <p class="sub">네이버 · 구글 · 카카오맵 · 티맵<br>등록하고 사진 · 정보까지 정리</p>
+        </div>
+        <div class="vis">
+          <div class="m-map">
+            <div class="m-pin"><b>우리 가게</b><i></i></div>
+            <div class="m-place"><span class="ph"></span><div style="flex:1;min-width:0"><b>우리 가게</b><small>영업 중 · 사진 · 소개 · 영업시간</small>
+              <div class="acts"><span>전화</span><span>길찾기</span><span class="hot">상담하기</span></div></div></div>
           </div>
         </div>
       </div>
-      <div class="float f1"><span class="fi" style="--fc:linear-gradient(135deg,#8452E8,#6C2BD9)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4M9.5 14.5l2 2 3.5-3.5"/></svg></span><span><b>이번 달 계획표 확정</b><small>업로드 일정 · 내용 사전 공유</small></span></div>
-      <div class="float f2"><span class="fi" style="--fc:linear-gradient(135deg,#FF7A9C,#D6337F)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21z"/><circle cx="12" cy="10" r="2.4"/></svg></span><span><b>지도 4곳 등록</b><small>네이버 · 구글 · 카카오 · 티맵</small></span></div>
-      <div class="float f3"><span class="fi" style="--fc:linear-gradient(135deg,#FFB347,#F07A5A)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span><b>월간 리포트</b><small>성과 정리 · 다음 달 계획 제안</small></span></div>
+
+      <!-- 장면 3 : 상담 -->
+      <div class="scene s3" aria-hidden="true">
+        <div>
+          <span class="tag" style="background:var(--chat);color:var(--ink)">03 · 상담</span>
+          <p class="cap">상담으로<br>이어집니다</p>
+          <p class="sub">네이버 톡톡 · 카카오톡 채널 연결,<br>자동응답 설정</p>
+        </div>
+        <div class="vis">
+          <div class="chat">
+            <div class="b-me">토요일에도 상담 되나요?</div>
+            <div class="b-bot">안녕하세요, 우리 가게입니다. 원하시는 안내를 골라 주세요.</div>
+            <div class="b-quick"><span>영업시간</span><span>오시는 길</span><span class="o">상담 연결</span></div>
+            <div class="b-note">자동응답 · 이후 상담은 사장님이 직접</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 장면 4 : 하나로 -->
+      <div class="scene s4" aria-hidden="true">
+        <div>
+          <span class="tag" style="background:#fff;color:var(--ink)">SNS · 지도 · 상담</span>
+          <p class="cap"><span class="l">따로가 아니라</span><br>하나로 연결합니다</p>
+          <p class="sub">한 회사에서 함께 세팅합니다</p>
+        </div>
+        <div class="vis">
+          <div class="venn"><span class="c cs">SNS</span><span class="c cm">지도</span><span class="c cc">상담</span><span class="core">우리 가게</span></div>
+        </div>
+      </div>
+
+      <div class="sfoot">
+        <small>화면은 이해를 돕는 예시입니다</small>
+        <button class="pause" id="pause" type="button" aria-pressed="false">일시정지</button>
+      </div>
     </div>
 
-    <!-- 고리 장식 — /web/img/ 그림을 CSS 로 보라색으로 돌려 씀 -->
-    <div class="deco deco-top" aria-hidden="true"><img src="/web/img/deco-hero-top.png" alt="" width="900" height="847"></div>
-    <div class="deco deco-bottom" aria-hidden="true"><img src="/web/img/deco-hero-bottom.png" alt="" width="847" height="900"></div>
+    <div class="hero-under">
+      <div class="chips"><span class="chip c-map">지도 4곳 385,000원</span><span class="chip c-chat">상담 채널 110,000원</span><span class="chip c-sns">블로그 + 인스타 495,000원</span></div>
+      <small>부가세 포함 · 계정은 고객 소유 · 모든 작업 원격</small>
+      <div class="btns"><a class="btn btn-ink" href="/apply/sns/">SNS 채널 신청<span class="arr" aria-hidden="true">→</span></a><a class="btn btn-line" href="#works">작업 사례 보기</a></div>
+    </div>
   </div>
 </section>
 
-<!-- ══════════ 2. 손님이 찾아오는 길 ══════════ -->
-<section class="path" id="path" aria-labelledby="path-h">
+<!-- ══════════ 2. 세 곳이 이어지는 구조 ══════════ -->
+<section class="sec" id="link" aria-labelledby="link-h">
   <div class="w">
-    <h2 class="ptitle rv" id="path-h"><span class="l">"손님이 우리 가게를 검색했을 때,</span> <span class="b">무엇이 먼저 보이나요?"</span></h2>
-    <figure class="glass flow rv" style="margin-left:0;margin-right:0">
-      <figcaption class="sr">검색 → 지도 · 블로그 · 인스타그램 · 유튜브 → 상담 채널(네이버 톡톡 · 카카오톡 채널) → 방문 · 문의</figcaption>
-      <div class="col" aria-hidden="true"><p class="lbl">찾기</p><span class="pill out">가게 이름 · 지역 검색</span></div>
-      <div class="arr" aria-hidden="true"><svg viewBox="0 0 40 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h34M28 4l8 8-8 8"/></svg></div>
-      <div class="col" aria-hidden="true"><p class="lbl">보기</p><span class="pill hot">지도</span><span class="pill">블로그 · 인스타그램 · 유튜브</span></div>
-      <div class="arr" aria-hidden="true"><svg viewBox="0 0 40 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h34M28 4l8 8-8 8"/></svg></div>
-      <div class="col" aria-hidden="true"><p class="lbl">묻기</p><span class="pill">네이버 톡톡 · 카카오톡 채널</span></div>
-      <div class="arr" aria-hidden="true"><svg viewBox="0 0 40 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h34M28 4l8 8-8 8"/></svg></div>
-      <div class="col" aria-hidden="true"><p class="lbl">오기</p><span class="pill out">방문 · 문의</span></div>
-    </figure>
-    <p class="pathnote rv"><b>지도 등록은 검색 유입 시 가장 먼저 노출되는 영역</b>이라 채널 세팅과 함께 진행합니다.</p>
+    <h2 class="h2 rv" id="link-h">손님은 한 곳만 보지 않습니다.<br><b>세 곳을 함께 갖춥니다</b></h2>
+    <div class="link">
+      <div class="card lk rv" style="--bc:var(--sns)"><span class="k" style="color:var(--sns-ink)">SNS</span><h3>알리는 곳</h3><p>네이버 블로그(홈페이지형) · 인스타그램 · 유튜브의 프로필 · 소개 · 연락처와 디자인을 세팅합니다.</p></div>
+      <div class="conn" aria-hidden="true"><svg viewBox="0 0 48 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12h40M12 4l-8 8 8 8M36 4l8 8-8 8"/></svg></div>
+      <div class="card lk hl rv" style="--bc:var(--map);--bs:rgba(14,159,110,.6)"><span class="k" style="color:var(--map-ink)">지도</span><h3>찾아오는 곳</h3><p>지도 등록은 검색 유입 시 가장 먼저 노출되는 영역입니다. 4곳에 등록하고 사진 · 정보를 정리합니다.</p></div>
+      <div class="conn" aria-hidden="true"><svg viewBox="0 0 48 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12h40M12 4l-8 8 8 8M36 4l8 8-8 8"/></svg></div>
+      <div class="card lk hl rv" style="--bc:var(--chat);--bs:rgba(224,168,0,.6)"><span class="k" style="color:var(--chat-ink)">상담</span><h3>물어보는 곳</h3><p>네이버 톡톡 · 카카오톡 채널을 연결하고 자동응답을 설정한 뒤, 사용 교육을 1시간 제공합니다.</p></div>
+    </div>
   </div>
 </section>
 
-<!-- 🔴 로고 (2026-10-20) — 인스타그램 = 공식 글리프 모양(흰색 한 가지 색 · Meta 규정상 단색 허용) · 카카오톡 = 앱 아이콘 그대로.
-     SVG 모양은 simple-icons 13.21.0 의 instagram · kakaotalk 경로. 모양 · 비율을 바꾸지 마세요.
-     네이버(블로그 · 플레이스)는 네이버 브랜드 가이드의 「자기 상품 · 서비스 광고 목적 사용 금지」 때문에 로고를 쓰지 않고 일반 그림으로 둡니다. -->
-<!-- ══════════ 2-1. 작업 사례 — 🔴 누르면 실제 채널로 바로 갑니다(새 창). 이름은 각 채널에 실제로 적힌 이름 (2026-10-20 확인)
-     · 인스타그램은 바깥에서 조회가 막혀 이름을 확인하지 못해 계정 아이디로 적었습니다.
-     · 카카오톡 채널 소개글의 「점수상승 1위」 같은 문구는 이 쪽에 옮기지 마세요(근거 자료 없음). ══════════ -->
-<section class="sec works" id="works" aria-labelledby="works-h">
+<!-- ══════════ 3. 세 갈래 자세히 — 지도 · 상담 먼저, 진하게 ══════════ -->
+<section class="sec" id="detail" aria-labelledby="detail-h">
   <div class="w">
-    <div class="sec-head rv">
-      <p class="eyebrow">작업 사례</p>
-      <h2 class="ttl" id="works-h"><span class="l">인투마케팅이 작업한 채널,</span> <span class="b"><span class="grad">직접 눌러 보세요</span></span></h2>
-      <p class="lead">실제로 운영 중인 채널입니다. 누르면 해당 채널이 새 창으로 열립니다.</p>
+    <h2 class="sr" id="detail-h">지도 세팅 · 상담 채널 · SNS 채널 금액</h2>
+    <div class="g3">
+      <div class="pc pc-map rv">
+        <span class="k">지도 세팅</span>
+        <h3>등록 + 디자인 세팅<br>따로 고를 수 있습니다</h3>
+        <div class="rows">
+          <div><span>네이버 지도</span><b>66,000 / 88,000</b></div>
+          <div><span>구글 지도</span><b>66,000 / 66,000</b></div>
+          <div><span>카카오맵</span><b>55,000 / 55,000</b></div>
+          <div><span>티맵</span><b>33,000 / 22,000</b></div>
+        </div>
+        <div class="tot"><span>4곳 전체</span><s>451,000</s><b>385,000</b></div>
+        <span class="nt">금액: 등록 / 디자인 세팅 · 이미 등록된 지도는 디자인 세팅만</span>
+      </div>
+      <div class="pc pc-chat rv">
+        <span class="k">상담 채널</span>
+        <h3>톡톡 · 카카오 상담을<br>바로 쓸 수 있게</h3>
+        <div class="st">
+          <div><b>연결</b> · 네이버 톡톡 · 카카오톡 채널</div>
+          <div><b>자동응답</b> · 자주 받는 질문에 먼저 답하게</div>
+          <div><b>교육</b> · 사용 방법 1시간 (원격)</div>
+        </div>
+        <div class="tot"><b>110,000</b><span style="font-weight:700">원 · 1회</span></div>
+        <span class="nt">실제 고객 응대는 현장에서 직접 하십니다</span>
+      </div>
+      <div class="pc pc-sns rv">
+        <span class="k">SNS 채널</span>
+        <h3>세팅부터<br>매달 업로드까지</h3>
+        <div class="rows">
+          <div><span>네이버 블로그 <small style="color:var(--muted)">홈페이지형</small></span><b>330,000</b></div>
+          <div><span>인스타그램</span><b>220,000</b></div>
+          <div><span>블로그 + 인스타 묶음</span><b style="color:var(--sns-ink)">495,000</b></div>
+          <div><span>유튜브</span><b>231,000</b></div>
+        </div>
+        <div style="margin-top:auto;font-size:var(--t-base);color:var(--muted)">정기 콘텐츠 <b style="color:var(--ink)">월 132,000원 + 건당 금액</b> · <a href="#monthly" style="color:var(--sns-ink);font-weight:700;text-decoration:underline;text-underline-offset:3px">자세히</a></div>
+      </div>
     </div>
-    <ul class="wks">
-      <li class="rv"><a class="wk" href="https://www.instagram.com/into_toeic/" target="_blank" rel="noopener" style="--wg:linear-gradient(135deg,#FFB347 0%,#F2545B 40%,#C1358F 70%,#7B3CF0 100%);--wc:rgba(193,53,143,.8);--wt:#FFB8D6">
-        <span class="wtop"><span class="wico" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#fff" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></span></span>
-        <span class="wbody"><span class="wp">인스타그램</span><b class="wn">@into_toeic</b><span class="wd">프로필 · 하이라이트 · 게시물</span><span class="go">인스타그램 보기 <i aria-hidden="true">↗</i><span class="sr"> (새 창)</span></span></span></a></li>
-      <li class="rv"><a class="wk" href="https://blog.naver.com/pogru9670" target="_blank" rel="noopener" style="--wg:linear-gradient(135deg,#5BE08F 0%,#1FB860 50%,#0E8A45 100%);--wc:rgba(31,184,96,.75);--wt:#9BF0BC">
-        <span class="wtop"><span class="wico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2.5H7a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7.5z"/><path d="M14 2.5v5h5M9 13h6M9 17h6"/></svg></span></span>
-        <span class="wbody"><span class="wp">네이버 블로그</span><b class="wn">POGURU</b><span class="wd">블로그 홈 · 글 목록</span><span class="go">블로그 보기 <i aria-hidden="true">↗</i><span class="sr"> (새 창)</span></span></span></a></li>
-      <li class="rv"><a class="wk" href="https://naver.me/Gct10plt" target="_blank" rel="noopener" style="--wg:linear-gradient(135deg,#4FCB7A 0%,#16A85A 45%,#0B6E8C 100%);--wc:rgba(22,168,90,.75);--wt:#9BF0BC">
-        <span class="wtop"><span class="wico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21z"/><circle cx="12" cy="10" r="2.4"/></svg></span></span>
-        <span class="wbody"><span class="wp">네이버 플레이스</span><b class="wn">인투어학원</b><span class="wd">지도 · 사진 · 정보</span><span class="go">플레이스 보기 <i aria-hidden="true">↗</i><span class="sr"> (새 창)</span></span></span></a></li>
-      <li class="rv"><a class="wk" href="https://pf.kakao.com/_xotEQG" target="_blank" rel="noopener" style="--wg:linear-gradient(135deg,#FFF07A 0%,#FFD633 45%,#F2A900 100%);--wc:rgba(242,169,0,.7);--wt:#FFE58A">
-        <span class="wtop"><span class="wico app" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="17" fill="#3A1D1D"/><path fill="#FEE500" d="M22.125 0H1.875C.8394 0 0 .8394 0 1.875v20.25C0 23.1606.8394 24 1.875 24h20.25C23.1606 24 24 23.1606 24 22.125V1.875C24 .8394 23.1606 0 22.125 0zM12 18.75c-.591 0-1.1697-.0413-1.7317-.1209-.5626.3965-3.813 2.6797-4.1198 2.7225 0 0-.1258.0489-.2328-.0141s-.0876-.2282-.0876-.2282c.0322-.2198.8426-3.0183.992-3.5333-2.7452-1.36-4.5701-3.7686-4.5701-6.5135C2.25 6.8168 6.6152 3.375 12 3.375s9.75 3.4418 9.75 7.6875c0 4.2457-4.3652 7.6875-9.75 7.6875zM8.0496 9.8672h-.8777v3.3417c0 .2963-.2523.5372-.5625.5372s-.5625-.2409-.5625-.5372V9.8672h-.8777c-.3044 0-.552-.2471-.552-.5508s.2477-.5508.552-.5508h2.8804c.3044 0 .552.2471.552.5508s-.2477.5508-.552.5508zm10.9879 2.9566a.558.558 0 0 1 .108.4167.5588.5588 0 0 1-.2183.371.5572.5572 0 0 1-.3383.1135.558.558 0 0 1-.4493-.2236l-1.3192-1.7479-.1952.1952v1.2273a.5635.5635 0 0 1-.5627.5628.563.563 0 0 1-.5625-.5625V9.3281c0-.3102.2523-.5625.5625-.5625s.5625.2523.5625.5625v1.209l1.5694-1.5694c.0807-.0807.1916-.1252.312-.1252.1404 0 .2814.0606.3871.1661.0985.0984.1573.2251.1654.3566.0082.1327-.036.2542-.1241.3425l-1.2818 1.2817 1.3845 1.8344zm-8.3502-3.5023c-.095-.2699-.3829-.5475-.7503-.5557-.3663.0083-.6542.2858-.749.5551l-1.3455 3.5415c-.1708.5305-.0217.7272.1333.7988a.8568.8568 0 0 0 .3576.0776c.2346 0 .4139-.0952.4678-.2481l.2787-.7297 1.7152.0001.2785.7292c.0541.1532.2335.2484.4681.2484a.8601.8601 0 0 0 .3576-.0775c.1551-.0713.3041-.2681.1329-.7999l-1.3449-3.5398zm-1.3116 2.4433l.5618-1.5961.5618 1.5961H9.3757zm5.9056 1.3836c0 .2843-.2418.5156-.5391.5156h-1.8047c-.2973 0-.5391-.2314-.5391-.5156V9.3281c0-.3102.2576-.5625.5742-.5625s.5742.2523.5742.5625v3.3047h1.1953c.2974 0 .5392.2314.5392.5156z"/></svg></span></span>
-        <span class="wbody"><span class="wp">카카오톡 채널</span><b class="wn">인투어학원</b><span class="wd">채널 홈 · 상담</span><span class="go">카카오톡 채널 보기 <i aria-hidden="true">↗</i><span class="sr"> (새 창)</span></span></span></a></li>
-    </ul>
+    <p class="allnote rv">모든 금액 부가세 포함 · 단위 원 · 모든 작업 원격 진행 · 계정은 고객 소유 · 플랫폼 심사 기간은 작업 기한에서 제외 · 최종 금액은 견적서로 안내</p>
+  </div>
+</section>
+
+<!-- ══════════ 4. 골라서 합계 — 🔴 묶음 할인가가 아니라 개별 금액의 합 ══════════ -->
+<section class="sec" id="pick" aria-labelledby="pick-h">
+  <div class="w">
+    <div class="pick rv">
+      <div class="l">
+        <h2 id="pick-h">필요한 것을 골라 보세요</h2>
+        <div class="opts" id="opts">
+          <button class="opt" type="button" data-k="map" aria-pressed="true" style="--oc:var(--map);--ot:#fff"><span class="ck" aria-hidden="true">✓</span>지도 4곳 385,000</button>
+          <button class="opt" type="button" data-k="chat" aria-pressed="true" style="--oc:var(--chat);--ot:var(--ink)"><span class="ck" aria-hidden="true">✓</span>상담 채널 110,000</button>
+          <button class="opt" type="button" data-k="sns" aria-pressed="false" style="--oc:var(--sns);--ot:#fff"><span class="ck" aria-hidden="true">+</span>블로그 + 인스타 495,000</button>
+        </div>
+        <p class="what">지도 = 4곳 등록 + 디자인 세팅 · 상담 = 네이버 톡톡 · 카카오톡 채널 연결 · SNS = 블로그 + 인스타 세팅 묶음</p>
+      </div>
+      <div class="r" aria-live="polite">
+        <small>개별 금액 합계</small>
+        <p class="sum"><b id="pick-sum">495,000</b><span>원</span></p>
+        <small>묶음 할인가가 아닌 단순 합계입니다 · 최종 금액은 견적서로 안내</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 5. 작업 사례 — 누르면 새 창 (이름은 각 채널에 적힌 그대로 · 2026-10-20 확인) ══════════
+     🔴 카카오톡 채널 소개글의 「점수상승 1위」 같은 문구는 옮기지 마세요(근거 자료 없음). -->
+<section class="sec" id="works" aria-labelledby="works-h">
+  <div class="w">
+    <h2 class="h2 rv" id="works-h">실제로 이어진 채널, <b>눌러서 확인하세요</b></h2>
+    <div class="g4" style="margin-top:32px">
+      <a class="wk rv" href="https://naver.me/Gct10plt" target="_blank" rel="noopener" style="--wb:var(--map-pale);--wc:var(--map-ink)">
+        <span class="wi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 22s-7-6-7-12a7 7 0 0 1 14 0c0 6-7 12-7 12zm0-9.2a2.8 2.8 0 1 0 0-5.6 2.8 2.8 0 0 0 0 5.6z"/></svg></span>
+        <span class="wp">지도 · 네이버 플레이스</span><span class="wn">인투어학원</span><span class="go">보기 ↗<span class="sr"> (새 창)</span></span></a>
+      <a class="wk rv" href="https://pf.kakao.com/_xotEQG" target="_blank" rel="noopener" style="--wb:var(--chat-pale);--wc:var(--chat-ink)">
+        <span class="wi app" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="17" fill="#3A1D1D"/><path fill="#FEE500" d="M22.125 0H1.875C.8394 0 0 .8394 0 1.875v20.25C0 23.1606.8394 24 1.875 24h20.25C23.1606 24 24 23.1606 24 22.125V1.875C24 .8394 23.1606 0 22.125 0zM12 18.75c-.591 0-1.1697-.0413-1.7317-.1209-.5626.3965-3.813 2.6797-4.1198 2.7225 0 0-.1258.0489-.2328-.0141s-.0876-.2282-.0876-.2282c.0322-.2198.8426-3.0183.992-3.5333-2.7452-1.36-4.5701-3.7686-4.5701-6.5135C2.25 6.8168 6.6152 3.375 12 3.375s9.75 3.4418 9.75 7.6875c0 4.2457-4.3652 7.6875-9.75 7.6875zM8.0496 9.8672h-.8777v3.3417c0 .2963-.2523.5372-.5625.5372s-.5625-.2409-.5625-.5372V9.8672h-.8777c-.3044 0-.552-.2471-.552-.5508s.2477-.5508.552-.5508h2.8804c.3044 0 .552.2471.552.5508s-.2477.5508-.552.5508zm10.9879 2.9566a.558.558 0 0 1 .108.4167.5588.5588 0 0 1-.2183.371.5572.5572 0 0 1-.3383.1135.558.558 0 0 1-.4493-.2236l-1.3192-1.7479-.1952.1952v1.2273a.5635.5635 0 0 1-.5627.5628.563.563 0 0 1-.5625-.5625V9.3281c0-.3102.2523-.5625.5625-.5625s.5625.2523.5625.5625v1.209l1.5694-1.5694c.0807-.0807.1916-.1252.312-.1252.1404 0 .2814.0606.3871.1661.0985.0984.1573.2251.1654.3566.0082.1327-.036.2542-.1241.3425l-1.2818 1.2817 1.3845 1.8344zm-8.3502-3.5023c-.095-.2699-.3829-.5475-.7503-.5557-.3663.0083-.6542.2858-.749.5551l-1.3455 3.5415c-.1708.5305-.0217.7272.1333.7988a.8568.8568 0 0 0 .3576.0776c.2346 0 .4139-.0952.4678-.2481l.2787-.7297 1.7152.0001.2785.7292c.0541.1532.2335.2484.4681.2484a.8601.8601 0 0 0 .3576-.0775c.1551-.0713.3041-.2681.1329-.7999l-1.3449-3.5398zm-1.3116 2.4433l.5618-1.5961.5618 1.5961H9.3757zm5.9056 1.3836c0 .2843-.2418.5156-.5391.5156h-1.8047c-.2973 0-.5391-.2314-.5391-.5156V9.3281c0-.3102.2576-.5625.5742-.5625s.5742.2523.5742.5625v3.3047h1.1953c.2974 0 .5392.2314.5392.5156z"/></svg></span>
+        <span class="wp">상담 · 카카오톡 채널</span><span class="wn">인투어학원</span><span class="go">보기 ↗<span class="sr"> (새 창)</span></span></a>
+      <a class="wk rv" href="https://blog.naver.com/pogru9670" target="_blank" rel="noopener" style="--wb:var(--sns-pale);--wc:var(--sns-ink)">
+        <span class="wi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2.5H7a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7.5z"/><path d="M14 2.5v5h5M9 13h6M9 17h6"/></svg></span>
+        <span class="wp">SNS · 네이버 블로그</span><span class="wn">POGURU</span><span class="go">보기 ↗<span class="sr"> (새 창)</span></span></a>
+      <a class="wk rv" href="https://www.instagram.com/into_toeic/" target="_blank" rel="noopener" style="--wb:var(--sns-pale);--wc:var(--sns-ink)">
+        <span class="wi" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></span>
+        <span class="wp">SNS · 인스타그램</span><span class="wn">@into_toeic</span><span class="go">보기 ↗<span class="sr"> (새 창)</span></span></a>
+    </div>
     <p class="wknote rv">휴대폰에서는 앱이 설치되어 있으면 해당 앱으로 열립니다.</p>
   </div>
 </section>
 
-<!-- ══════════ 3. 대상 채널 ══════════ -->
-<section class="sec chs" id="channels" aria-labelledby="ch-h">
+<!-- ══════════ 6. 정기 콘텐츠 + 비용 표 — 🔴 금액은 메인 #v-sns 와 같은 값 ══════════ -->
+<section class="sec" id="monthly" aria-labelledby="monthly-h">
   <div class="w">
-    <div class="sec-head rv">
-      <p class="eyebrow">대상 채널</p>
-      <h2 class="ttl" id="ch-h"><span class="l">필요한 채널만 골라</span> <span class="b"><span class="grad">한 회사에서</span> 맡기세요</span></h2>
-      <p class="lead">기본 구성은 <b>네이버 블로그 + 인스타그램</b>이며, 필요한 채널만 선택하실 수 있습니다. 모든 작업과 교육은 원격으로 진행합니다.</p>
-    </div>
-    <ul class="tiles">
-      <li class="tile main rv">
-        <span class="tag">기본 구성 · 묶음이 더 저렴</span>
-        <div class="icos">
-          <span class="ico" style="--ic:linear-gradient(160deg,#4FCB7A,#1E9E57)" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2.5H7a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7.5z"/><path d="M14 2.5v5h5M9 13h6M9 17h6"/></svg></span>
-          <span class="ico" style="--ic:linear-gradient(160deg,#FFB347,#D6337F 60%,#8452E8)" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r=".6" fill="currentColor"/></svg></span>
-        </div>
-        <h3>네이버 블로그(홈페이지형) + 인스타그램</h3>
-        <p>메인 구성입니다. 묶음으로 진행하면 개별 진행보다 저렴하며, 한 채널만 진행할 수도 있습니다.</p>
-      </li>
-      <li class="tile rv">
-        <span class="ico" style="--ic:linear-gradient(160deg,#FF6B6B,#D9363E)" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.5v5l4.5-2.5z" fill="currentColor"/></svg></span>
-        <h3>유튜브</h3>
-        <p>채널을 세팅합니다. 정기 콘텐츠로 영상 업로드 관리까지 함께 의뢰할 수 있습니다.</p>
-      </li>
-      <li class="tile rv">
-        <span class="ico" style="--ic:linear-gradient(160deg,#FFD84D,#E5A800)" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5c-4.9 0-8.5 3-8.5 6.6 0 2.3 1.5 4.3 3.8 5.5l-.8 3 3.4-2.1c.7.1 1.4.2 2.1.2 4.9 0 8.5-3 8.5-6.6S16.9 4.5 12 4.5z"/></svg></span>
-        <h3>상담 채널</h3>
-        <p>네이버 톡톡 · 카카오톡 채널을 연결하고 자동응답을 설정한 뒤 <b style="color:#fff">사용 교육을 제공합니다.</b> 실제 고객 응대는 현장에서 직접 수행합니다.</p>
-      </li>
-    </ul>
-    <div class="mapsrow">
-      <div class="tile rv">
-        <span class="ico" style="--ic:linear-gradient(160deg,#FF7A9C,#D6337F)" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21z"/><circle cx="12" cy="10" r="2.4"/></svg></span>
-        <h3>지도 — 등록 · 디자인 세팅 따로 선택</h3>
-        <p><b style="color:#fff">신규 등록</b>과 <b style="color:#fff">디자인 세팅</b>(사진 · 정보 정리)을 개별 선택할 수 있어, 이미 등록된 지도는 디자인 세팅만 진행할 수 있습니다.</p>
-      </div>
-      <ul class="mapl rv" aria-label="지도 등록 대상">
-        <li style="--pc:#3DDC84"><svg class="pinico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 22s-7-6-7-12a7 7 0 0 1 14 0c0 6-7 12-7 12zm0-9.2a2.8 2.8 0 1 0 0-5.6 2.8 2.8 0 0 0 0 5.6z"/></svg>네이버 지도</li>
-        <li style="--pc:#7FB2FF"><svg class="pinico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 22s-7-6-7-12a7 7 0 0 1 14 0c0 6-7 12-7 12zm0-9.2a2.8 2.8 0 1 0 0-5.6 2.8 2.8 0 0 0 0 5.6z"/></svg>구글 지도</li>
-        <li style="--pc:#FFD84D"><svg class="pinico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 22s-7-6-7-12a7 7 0 0 1 14 0c0 6-7 12-7 12zm0-9.2a2.8 2.8 0 1 0 0-5.6 2.8 2.8 0 0 0 0 5.6z"/></svg>카카오맵</li>
-        <li style="--pc:#FF9AC8"><svg class="pinico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 22s-7-6-7-12a7 7 0 0 1 14 0c0 6-7 12-7 12zm0-9.2a2.8 2.8 0 1 0 0-5.6 2.8 2.8 0 0 0 0 5.6z"/></svg>티맵</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ 4. 두 가지 방식 ══════════ -->
-<section class="sec plans-sec" id="plans" aria-labelledby="plans-h">
-  <div class="w">
-    <div class="sec-head rv">
-      <p class="eyebrow">진행 방식</p>
-      <h2 class="ttl" id="plans-h"><span class="l">세팅만 할지,</span> <span class="b">매달 채워 갈지 <span class="ico-end">고르세요<img class="sec-ico" src="/web/img/icon-note.png" alt="" width="301" height="320" loading="lazy" decoding="async"></span></span></h2>
-      <p class="lead">채널 세팅만 의뢰하거나, 매월 콘텐츠 업로드(정기 콘텐츠)까지 함께 의뢰할 수 있습니다.</p>
-    </div>
-    <div class="plans">
-      <article class="plan glass rv">
-        <p class="pk">A · 1회</p>
-        <h3>채널 세팅</h3>
-        <p class="pd">보유하신 계정에 <b style="color:#fff">관리자 권한</b>을 받아 프로필 · 소개 · 연락처 · 영업시간과 채널 디자인을 세팅합니다. 세팅 완료 후 운영 방법을 원격으로 안내합니다.</p>
-        <div class="pp"><small>채널별 1회 결제</small><b>110,000 ~ 330,000<em>원</em></b></div>
-        <ul>
-          <li>프로필 · 소개 · 연락처 · 영업시간 정리</li>
-          <li>채널 디자인 세팅 · 채널 점검</li>
-          <li>운영 방법 원격 교육 (30분 ~ 1시간)</li>
-          <li>계정은 전 과정에서 고객 소유</li>
-        </ul>
-        <p class="pa"><a class="more" href="#price">세팅 금액 보기 →</a></p>
-      </article>
-      <article class="plan hot rv">
-        <span class="ribbon">매달 알아서</span>
-        <p class="pk">B · 매월</p>
-        <h3>세팅 + 정기 콘텐츠</h3>
-        <p class="pd">세팅에 더해 매월 게시물 디자인과 업로드를 수행합니다. 업로드 일정과 내용은 <b style="color:#fff">계획표</b>로 사전 공유하고, 확정된 내용대로 진행합니다.</p>
-        <div class="pp"><small>월 결제</small><b>월 132,000<em>원 + 건당 금액</em></b></div>
-        <ul>
-          <li>인스타 게시물 · 카드뉴스, 쇼츠 · 릴스, 유튜브 영상, 고객 공식 블로그 포스팅</li>
-          <li>계획표 공유 → 확정 → 제작 → 사전 공유 → 업로드</li>
-          <li>매월 월간 리포트와 다음 달 계획 제안</li>
-          <li>3개월 이상 계약 시 메인 세팅비 165,000원 할인</li>
-        </ul>
-        <p class="pa"><a class="more" href="#calc" style="color:#fff">월 금액 계산해 보기 →</a></p>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ 5. 함께 하면 저렴합니다 ══════════ -->
-<section class="sec save" id="save" aria-labelledby="save-h">
-  <div class="w">
-    <div class="sec-head rv">
-      <p class="eyebrow">묶음 · 장기 계약</p>
-      <h2 class="ttl" id="save-h"><span class="l">함께 맡기면</span> <span class="b"><span class="grad">더 저렴합니다</span></span></h2>
-    </div>
-    <ul class="saves">
-      <li class="svc glass rv"><p class="k">블로그 + 인스타그램<br>세팅 묶음</p><p class="was">550,000원</p><p class="now">495,000<i>원</i></p><span class="off">55,000원 절약</span><p class="s">네이버 블로그 330,000 + 인스타그램 220,000 → 묶음 · 통합 안내 1시간</p></li>
-      <li class="svc glass rv"><p class="k">지도 4개<br>등록 + 디자인 세팅</p><p class="was">451,000원</p><p class="now">385,000<i>원</i></p><span class="off">66,000원 절약</span><p class="s">등록만 220,000 → 187,000 · 디자인 세팅만 231,000 → 198,000</p></li>
-      <li class="svc glass rv"><p class="k">정기 콘텐츠 3개월 이상<br>메인 세팅비</p><p class="was" style="text-decoration:none">메인 세팅비에서</p><p class="now">−165,000<i>원</i></p><span class="off">세팅비 할인</span><p class="s">정기 콘텐츠 3개월 이상 계약 시 · 중도 해지 시 할인분 공제</p></li>
-    </ul>
-    <div class="longterm rv">
-      <div><h3>정기 콘텐츠 장기 계약 할인</h3><p>일시불 선결제 시 적용됩니다. 중도 해지하면 이용한 달을 할인 전 금액으로 재산정합니다.</p></div>
-      <div class="ltn"><small>3개월</small><b>10%</b></div>
-      <div class="ltn"><small>6개월</small><b>20%</b></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════ 6. 정기 콘텐츠 — 매월 같은 절차 ══════════ -->
-<section class="sec monthly" id="monthly" aria-labelledby="monthly-h">
-  <div class="w">
-    <div class="sec-head rv">
-      <p class="eyebrow">정기 콘텐츠 — 업로드 포함</p>
-      <h2 class="ttl" id="monthly-h"><span class="l">확정된 계획표대로,</span> <span class="b">매월 같은 <span class="ico-end">절차로<img class="sec-ico" src="/web/img/icon-calendar.png" alt="" width="320" height="320" loading="lazy" decoding="async"></span></span></h2>
-      <p class="lead">업로드 일정과 내용을 사전 공유하고, <b>확정된 계획표대로</b> 제작합니다.</p>
-    </div>
+    <p class="eyebrow rv"><span class="chip c-sns">SNS · 정기 콘텐츠</span></p>
+    <h2 class="h2 rv" id="monthly-h">확정된 계획표대로,<br><b>매월 같은 절차로 올립니다</b></h2>
+    <p class="lead rv">업로드 일정과 내용을 사전 공유하고, <b>확정된 계획표대로</b> 제작합니다. 의료 · 금융 등 광고 규정 업종, 가격 · 할인 · 이벤트, 고객 후기 · 전후 사진이 들어간 게시물은 <b>확정 전 업로드하지 않습니다.</b></p>
     <ol class="steps">
-      <li class="step rv"><span class="no">01</span><br><span class="when">시작 5영업일 전</span><h3>계획표 공유</h3><p>이번 달 업로드 일정과 내용을 미리 보내 드립니다.</p></li>
-      <li class="step rv"><span class="no">02</span><br><span class="when">시작 3영업일 전</span><h3>확정</h3><p>확인하신 계획표로 이번 달 작업을 확정합니다.</p></li>
-      <li class="step rv"><span class="no">03</span><br><span class="when">확정 후</span><h3>제작</h3><p>확정된 내용대로 게시물을 디자인하고 만듭니다.</p></li>
-      <li class="step rv"><span class="no">04</span><br><span class="when">업로드 2영업일 전</span><h3>사전 공유</h3><p>올리기 전에 완성본을 먼저 보여 드립니다.</p></li>
-      <li class="step rv"><span class="no">05</span><br><span class="when">계획한 날</span><h3>업로드</h3><p>계획표의 일정대로 채널에 올립니다.</p></li>
-      <li class="step rv"><span class="no">06</span><br><span class="when">다음 달 5영업일 안</span><h3>월간 리포트</h3><p>성과를 정리해 제공하고 다음 달 계획을 제안합니다.</p></li>
+      <li class="rv"><span class="no">01</span><br><span class="when">시작 5영업일 전</span><h3>계획표 공유</h3><p>이번 달 업로드 일정과 내용을 미리 보내 드립니다.</p></li>
+      <li class="rv"><span class="no">02</span><br><span class="when">시작 3영업일 전</span><h3>확정</h3><p>확인하신 계획표로 작업을 확정합니다.</p></li>
+      <li class="rv"><span class="no">03</span><br><span class="when">확정 후</span><h3>제작</h3><p>확정된 내용대로 게시물을 만듭니다.</p></li>
+      <li class="rv"><span class="no">04</span><br><span class="when">업로드 2영업일 전</span><h3>사전 공유</h3><p>올리기 전에 완성본을 먼저 보여 드립니다.</p></li>
+      <li class="rv"><span class="no">05</span><br><span class="when">계획한 날</span><h3>업로드</h3><p>계획표의 일정대로 올립니다.</p></li>
+      <li class="rv"><span class="no">06</span><br><span class="when">다음 달 5영업일 안</span><h3>월간 리포트</h3><p>성과를 정리하고 다음 달 계획을 제안합니다.</p></li>
     </ol>
-    <ul class="mcards">
-      <li class="glass rv"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M4 17l5-4.5 3.5 3 3-2.5 4.5 4"/></svg></span>
-        <h3>제작 항목</h3><p>인스타 게시물 · 카드뉴스, 쇼츠 · 릴스, 유튜브 영상, 고객 공식 블로그 포스팅. 사진 · 영상 소스는 전달받거나 별도 촬영으로 진행합니다.</p></li>
-      <li class="glass rv"><span class="ico" style="--ic:linear-gradient(160deg,#FF7A9C,#D6337F)" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.2-7.5 9.5-4.3-1.3-7.5-4.9-7.5-9.5V6L12 3z"/><path d="M8.8 12l2.2 2.2 4.2-4.4"/></svg></span>
-        <h3>사전 공유 기준</h3><p>의견이 없으면 계획대로 업로드합니다. 다만 <b>의료 · 금융 등 광고 규정 업종</b>, 가격 · 할인 · 이벤트, 고객 후기 · 전후 사진이 포함된 게시물은 <b>확정 전 업로드하지 않습니다.</b></p></li>
-      <li class="glass rv"><span class="ico" style="--ic:linear-gradient(160deg,#FFB347,#F07A5A)" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span>
-        <h3>월간 리포트</h3><p>다음 달 5영업일 안에 성과를 정리해 제공하고 다음 달 계획을 제안합니다.</p></li>
-    </ul>
-  </div>
-</section>
 
-<!-- ══════════ 7. 비용 — 🔴 금액은 메인 #v-sns 와 같은 값 (매뉴얼 부가세 포함 값 그대로) ══════════ -->
-<section class="sec price" id="price" aria-labelledby="price-h">
-  <div class="w">
-    <div class="sec-head rv">
-      <h2 class="ttl one" id="price-h"><span class="l">비용 · </span><span class="b">한눈에 <span class="ico-end">보기<img class="sec-ico" src="/web/img/icon-clock.png" alt="" width="320" height="289" loading="lazy" decoding="async"></span></span></h2>
-      <p class="lead">아래는 <b>기본 금액</b>이고 <b>부가세 포함</b>입니다. 필요한 채널만 선택하실 수 있으며, 선택 항목만 금액에 포함됩니다. <b>최종 금액은 견적서</b>로 안내합니다.</p>
-    </div>
-
-    <h3 class="ph3 rv">① <b>채널 세팅</b> — 1회 결제 금액 <small>단위 원</small></h3>
-    <div class="ptw rv" role="region" aria-label="채널 세팅 금액표" tabindex="0">
-      <table class="ptab">
-        <thead><tr><th scope="col">상품</th><th scope="col" class="r">금액</th><th scope="col">포함</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">네이버 블로그 <span class="sm">홈페이지형</span></th><td class="r">330,000</td><td>세팅 · 디자인 · 글쓰기와 위젯 안내 30분</td></tr>
-          <tr><th scope="row">인스타그램</th><td class="r">220,000</td><td>세팅 · 디자인 · 게시와 하이라이트 안내 30분</td></tr>
-          <tr class="best"><th scope="row">블로그 + 인스타그램 묶음</th><td class="r">495,000</td><td>세팅 · 디자인 · 통합 안내 1시간</td></tr>
-          <tr><th scope="row">유튜브 채널</th><td class="r">231,000</td><td>세팅 · 디자인 · 업로드와 설정 안내 30분</td></tr>
-          <tr><th scope="row">상담 채널 <span class="sm">네이버 톡톡 · 카카오톡 채널</span></th><td class="r">110,000</td><td>연결 · 자동응답 설정 · 사용 교육 1시간</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="pnote rv">채널 점검과 원격 교육이 포함된 금액입니다. <b>계정이 없는 채널</b>은 고객이 먼저 계정을 개설한 뒤 작업을 시작합니다.</p>
-
-    <h3 class="ph3 rv">② <b>지도</b> — 등록과 디자인 세팅 개별 선택 <small>단위 원</small></h3>
-    <div class="ptw rv" role="region" aria-label="지도 금액표" tabindex="0">
-      <table class="ptab">
-        <thead><tr><th scope="col">지도</th><th scope="col" class="r">① 등록 (신규)</th><th scope="col" class="r">② 디자인 세팅</th><th scope="col" class="r">① + ②</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">네이버 지도</th><td class="r">66,000</td><td class="r">88,000</td><td class="r">154,000</td></tr>
-          <tr><th scope="row">구글 지도</th><td class="r">66,000</td><td class="r">66,000</td><td class="r">132,000</td></tr>
-          <tr><th scope="row">카카오맵</th><td class="r">55,000</td><td class="r">55,000</td><td class="r">110,000</td></tr>
-          <tr><th scope="row">티맵</th><td class="r">33,000</td><td class="r">22,000</td><td class="r">55,000</td></tr>
-          <tr class="best"><th scope="row">4개 전체</th><td class="r">187,000</td><td class="r">198,000</td><td class="r">385,000</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="pnote rv">4개를 함께 진행하면 개별 진행보다 저렴합니다 (등록 220,000 → <b>187,000</b> · 디자인 세팅 231,000 → <b>198,000</b> · 둘 다 451,000 → <b>385,000</b>). 이미 등록된 지도는 ② 디자인 세팅만 진행합니다.</p>
-
-    <h3 class="ph3 rv">③ <b>정기 콘텐츠</b> — 월 결제 금액 <small>단위 원</small></h3>
-    <p class="pnote rv" style="margin-top:0;margin-bottom:var(--s-4)"><b>월 금액 = 기본 운영비 + (건당 금액 × 건수) + 영상 제작비</b>입니다. 묶음 상품이 아니며, 업로드 건수에 따라 합산하는 방식입니다.</p>
+    <h3 class="ph3 rv"><b>정기 콘텐츠</b> — 월 결제 금액 <small>단위 원</small></h3>
+    <p class="pnote rv" style="margin-top:0;margin-bottom:14px"><b>월 금액 = 기본 운영비 + (건당 금액 × 건수) + 영상 제작비</b>입니다. 묶음 상품이 아니며, 업로드 건수에 따라 합산합니다.</p>
     <div class="ptw rv" role="region" aria-label="정기 콘텐츠 금액표" tabindex="0">
       <table class="ptab">
         <thead><tr><th scope="col">항목</th><th scope="col" class="r">금액</th></tr></thead>
@@ -1012,13 +694,12 @@ main{overflow-x:clip}
         </tbody>
       </table>
     </div>
-    <p class="pnote rv">예) 인스타 게시물 1건당 3장 기준 — 월 4건 <b>340,000</b> · 월 8건 <b>504,000</b> · 월 12건 <b>624,000</b> (기본 운영비 132,000 + (디자인 30,000 + 업로드 건당 금액) × 건수).<br>
-      영상 포함 시 영상 제작비는 <a href="/#video">영상 가격표</a>를 따릅니다.</p>
+    <p class="pnote rv">예) 인스타 게시물 1건당 3장 기준 — 월 4건 <b>340,000</b> · 월 8건 <b>504,000</b> · 월 12건 <b>624,000</b> (기본 운영비 132,000 + (디자인 30,000 + 업로드 건당 금액) × 건수). 영상 포함 시 영상 제작비는 <a href="/#video">영상 가격표</a>를 따릅니다.</p>
 
     <!-- 계산기 — 인스타그램 1채널 · 정기 콘텐츠만. 값은 아래 <script> 의 SNS 에서 읽습니다 -->
     <div class="calc rv" id="calc" role="group" aria-labelledby="calc-h">
       <div class="calc-in">
-        <h4 id="calc-h">인스타그램 정기 콘텐츠 — 월 금액 계산</h4>
+        <h3 id="calc-h">인스타그램 정기 콘텐츠 — 월 금액 계산</h3>
         <p class="cs">채널 1개 · 장기 계약 할인 전 · 부가세 포함</p>
         <div class="field">
           <label for="c-n">한 달 게시물 수 <output id="o-n" for="c-n">4건</output></label>
@@ -1026,7 +707,7 @@ main{overflow-x:clip}
           <div class="ticks" aria-hidden="true"><span>1건</span><span>8건</span><span>12건</span><span>20건</span></div>
         </div>
         <div class="field">
-          <label id="l-p">게시물 1건당 장수 <output id="o-p">3장</output></label>
+          <span class="lb" id="l-p">게시물 1건당 장수 <output id="o-p">3장</output></span>
           <div class="seg" role="group" aria-labelledby="l-p" id="c-p">
             <button type="button" data-v="1" aria-pressed="false">1장</button><button type="button" data-v="2" aria-pressed="false">2장</button><button type="button" data-v="3" aria-pressed="true">3장</button><button type="button" data-v="5" aria-pressed="false">5장</button><button type="button" data-v="10" aria-pressed="false">10장</button>
           </div>
@@ -1044,7 +725,7 @@ main{overflow-x:clip}
       </div>
     </div>
 
-    <h3 class="ph3 rv">④ <b>추가 금액 · 할인</b></h3>
+    <h3 class="ph3 rv"><b>추가 금액 · 할인</b></h3>
     <div class="ptw rv" role="region" aria-label="추가 금액과 할인" tabindex="0">
       <table class="ptab">
         <thead><tr><th scope="col">항목</th><th scope="col">기준</th></tr></thead>
@@ -1057,59 +738,44 @@ main{overflow-x:clip}
         </tbody>
       </table>
     </div>
-    <p class="pnote rv">모든 금액은 <b>부가세 포함</b>입니다. 세팅은 작업 전 전액, 정기 콘텐츠는 매월 결제일에 선결제합니다.</p>
-    <p class="plinks rv">
-      <a class="btn btn-g" href="/payment/">결제 시점과 환불 기준 보기</a>
-      <a class="btn btn-p" href="/apply/sns/">SNS 채널 신청</a>
-    </p>
+    <p class="pnote rv">모든 금액은 <b>부가세 포함</b>입니다. 세팅은 작업 전 전액, 정기 콘텐츠는 매월 결제일에 선결제합니다. 채널 세팅에는 채널 점검과 원격 교육(30분 ~ 1시간)이 포함됩니다. <a href="/payment/">결제 시점과 환불 기준 보기 →</a></p>
   </div>
 </section>
 
-<!-- ══════════ 8. 미리 알려드립니다 ══════════
-     🔴 「계정 개설은 제공하지 않습니다」라고 적지 마세요 (맨 위 주석 참고) -->
-<section class="sec know" id="know" aria-labelledby="know-h">
+<!-- ══════════ 7. 안내 · 환불 — 🔴 「계정 개설은 제공하지 않습니다」라고 적지 마세요 ══════════ -->
+<section class="sec" id="know" aria-labelledby="know-h">
   <div class="w">
-    <div class="sec-head rv">
-      <p class="eyebrow">안내 사항</p>
-      <h2 class="ttl" id="know-h"><span class="l">시작 전에</span> <span class="b">미리 알려드립니다</span></h2>
-    </div>
-    <ol class="kcards" style="list-style:none">
-      <li class="glass rv"><span class="no">01</span><h3>계정은 고객 소유</h3><p>계정은 고객이 직접 개설하며 전 과정에서 <b>고객 소유</b>입니다. 당사는 관리자 권한을 받아 작업하며, 해지 시 권한을 반환합니다.</p></li>
-      <li class="glass rv"><span class="no">02</span><h3>모든 작업은 원격으로</h3><p><b>방문(출장) 작업 · 댓글과 DM 응대</b>는 제공하지 않습니다. 계정이 없는 채널은 고객이 먼저 개설한 뒤 작업을 시작합니다. 페이스북 · 스레드 · 샤오홍슈도 대상이 아닙니다. 모든 작업과 교육은 원격으로 진행합니다.</p></li>
-      <li class="glass rv"><span class="no">03</span><h3>별도 비용</h3><p>광고비, 사진 촬영, 모델 · 장소 섭외, 로고 제작은 세팅과 정기 콘텐츠 금액에 포함되지 않습니다.</p></li>
-      <li class="glass rv"><span class="no">04</span><h3>심사 기간 제외</h3><p>지도 등록 승인, 구글 인증 등 <b>플랫폼 심사 기간</b>은 단축이 불가해 작업 기한에서 제외하고 날짜로 다시 안내합니다.</p></li>
-    </ol>
-  </div>
-</section>
-
-<!-- ══════════ 9. 환불 · 해지 — 처음에는 모두 닫힘 ══════════ -->
-<section class="sec faq" id="refund" aria-labelledby="refund-h">
-  <div class="w faq-in">
-    <div class="rv">
-      <h2 class="ttl one" id="refund-h"><span class="l">환불 · </span><span class="b"><span class="ico-end">해지<img class="sec-ico" src="/web/img/icon-faq.png" alt="" width="314" height="320" loading="lazy" decoding="async"></span></span></h2>
-      <p class="lead">자세한 기준은 <a class="more" href="/payment/" style="display:inline;min-height:0">결제 · 환불 안내</a>에 따릅니다.</p>
+    <h2 class="h2 rv" id="know-h">시작 전에 <b>미리 알려드립니다</b></h2>
+    <div class="g2" style="margin-top:32px">
+      <div class="card kc rv"><h3>계정은 고객 소유</h3><p>계정은 고객이 직접 개설하며 전 과정에서 <b>고객 소유</b>입니다. 당사는 관리자 권한을 받아 작업하며, 해지 시 권한을 반환합니다.</p></div>
+      <div class="card kc rv"><h3>모든 작업은 원격으로</h3><p><b>방문(출장) 작업 · 댓글과 DM 응대</b>는 제공하지 않습니다. 계정이 없는 채널은 고객이 먼저 개설한 뒤 작업을 시작합니다. 페이스북 · 스레드 · 샤오홍슈도 대상이 아닙니다.</p></div>
+      <div class="card kc rv"><h3>별도 비용</h3><p>광고비, 사진 촬영, 모델 · 장소 섭외, 로고 제작은 세팅과 정기 콘텐츠 금액에 포함되지 않습니다.</p></div>
+      <div class="card kc rv"><h3>심사 기간 제외</h3><p>지도 등록 승인, 구글 인증 등 <b>플랫폼 심사 기간</b>은 단축이 불가해 작업 기한에서 제외하고 날짜로 다시 안내합니다.</p></div>
     </div>
     <div class="qa">
-      <details class="rv"><summary><span class="q">01</span>세팅을 맡겼다가 취소하면요?<span class="pm" aria-hidden="true"></span></summary>
+      <details class="rv"><summary><span class="q">환불</span>세팅을 맡겼다가 취소하면요?<span class="pm" aria-hidden="true"></span></summary>
         <p class="a"><b>의뢰 시작 전</b>에는 전액 환불합니다. 의뢰 시작 후에는 <b>시작한 작업 금액만</b> 공제하고 환불합니다(채널 점검은 공제하지 않습니다). 세팅은 세팅안 1차 공유일, 디자인은 세팅안 확정일부터 시작한 것으로 봅니다. 당사 사유로 진행할 수 없으면 전액 환불합니다.</p></details>
-      <details class="rv"><summary><span class="q">02</span>정기 콘텐츠는 언제든 끊을 수 있나요?<span class="pm" aria-hidden="true"></span></summary>
+      <details class="rv"><summary><span class="q">해지</span>정기 콘텐츠는 언제든 끊을 수 있나요?<span class="pm" aria-hidden="true"></span></summary>
         <p class="a">다음 달 해지는 <b>결제일 7영업일 전까지</b> 서면으로 통보해 주시면 되며, 위약금은 없습니다. 월 중 해지는 계획표 확정 전이면 전액, 확정 후에는 기본 운영비와 사전 공유한 건수만큼 공제하고 환불합니다.</p></details>
-      <details class="rv"><summary><span class="q">03</span>장기 계약 할인을 받고 중간에 해지하면요?<span class="pm" aria-hidden="true"></span></summary>
+      <details class="rv"><summary><span class="q">해지</span>장기 계약 할인을 받고 중간에 해지하면요?<span class="pm" aria-hidden="true"></span></summary>
         <p class="a">할인 적용 계약을 중도 해지하면 이용한 달을 <b>할인 전 금액</b>으로 재산정하고, 할인받은 세팅비도 함께 공제합니다.</p></details>
-      <details class="rv"><summary><span class="q">04</span>환불은 언제 들어오나요?<span class="pm" aria-hidden="true"></span></summary>
+      <details class="rv"><summary><span class="q">환불</span>환불은 언제 들어오나요?<span class="pm" aria-hidden="true"></span></summary>
         <p class="a">금액 산정 내역을 먼저 안내하고, 계좌 확인 후 <b>5영업일 안에</b> 환불합니다. 광고비는 고객 계정에 직접 충전하므로 환불 대상이 아닙니다.</p></details>
     </div>
   </div>
 </section>
 
-<!-- ══════════ 10. 마지막 신청 유도 ══════════ -->
+<!-- ══════════ 8. 신청 ══════════ -->
 <section class="cta" id="apply" aria-labelledby="apply-h">
   <div class="w">
     <div class="ctabox rv">
+      <span class="bub" style="right:-70px;top:-70px;background:rgba(139,61,255,.18)" aria-hidden="true"></span>
+      <span class="bub" style="right:60px;top:-30px;background:rgba(14,159,110,.16)" aria-hidden="true"></span>
+      <span class="bub" style="right:-20px;top:70px;background:rgba(255,201,60,.3)" aria-hidden="true"></span>
       <div>
-        <h2 class="ttl" id="apply-h"><span class="l">필요한 채널만 고르면</span> <span class="b">담당자가 <span class="ico-end">연락합니다<img class="sec-ico" src="/web/img/icon-mail.png" alt="" width="306" height="320" loading="lazy" decoding="async"></span></span></h2>
-        <p class="lead">신청서에서 채널과 지도, 정기 콘텐츠 여부를 고르시면 됩니다. 최종 금액은 견적서로 안내합니다.</p>
-        <p class="acts"><a class="btn btn-cta" href="/apply/sns/">SNS 채널 신청<span class="arr-r" aria-hidden="true">→</span></a></p>
+        <h2 class="h2" id="apply-h">SNS · 지도 · 상담,<br><b>한 회사에서 한 번에</b></h2>
+        <p class="lead">신청서에서 채널과 지도, 상담 채널, 정기 콘텐츠 여부를 고르시면 담당자가 연락드립니다. 최종 금액은 견적서로 안내합니다.</p>
+        <p style="margin-top:28px"><a class="btn btn-ink" href="/apply/sns/">SNS 채널 신청<span class="arr" aria-hidden="true">→</span></a></p>
       </div>
       <ul class="contact" aria-label="보조 연락처">
         <li><small>전화</small><a href="tel:01073181790">010-7318-1790</a></li>
@@ -1122,7 +788,7 @@ main{overflow-x:clip}
 
 </main>
 
-<!-- ══════════ 하단 — 🔴 메인 index.html 의 <footer> 복사본 (/web/ 과 같음). 메인을 고치면 여기도 ══════════ -->
+<!-- ══════════ 하단 — 🔴 메인 index.html 의 <footer> 복사본. 메인을 고치면 여기도 ══════════ -->
 <footer>
   <div class="wrap">
     <p class="fb">인투마케팅</p>
@@ -1133,7 +799,9 @@ main{overflow-x:clip}
       주소 : 대전광역시 유성구 은구비남로33번길 13-8, 3397호<br>
       전화 : 010-7318-1790 &nbsp;|&nbsp; 이메일 : info@intomarketing.co.kr<br>
       카카오톡 채널 : 인투마케팅 (고객 문의) · ESC 학원지원 (블로거 문의)<br>
+      <!-- 🔴 ESC 학원지원 줄을 지우지 마세요 — 블로거용 알림톡 17종이 그 채널에 묶여 있습니다 (행정 창 2026-10-14) -->
       통신판매업 신고번호 : 2026-대전유성-1694<br>
+      <!-- 🔴 인투오피스 줄을 지우지 마세요 — 인투오피스 카카오 비즈 앱 심사에서 「같은 사업자가 운영」을 보여 주는 근거입니다 (2026-10-15) -->
       운영 서비스 : <a href="https://intoedu.github.io/into-office/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">인투오피스 (INTO OFFICE)</a> — 전자계약 · 전자서명
     </div>
     <div class="pol">
@@ -1145,10 +813,10 @@ main{overflow-x:clip}
 
 <script>
 /* ══════════════════════════════════════════════════════════════
-   💰 정기 콘텐츠 계산기 값 — 🔴 메인 #v-sns 표 · /apply/sns/ · /apply/content-sub.js 와 같은 값 (부가세 포함 · 1.1 곱하지 않음)
+   💰 금액 — 🔴 메인 #v-sns 표 · /apply/sns/ · /apply/content-sub.js 와 같은 값 (부가세 포함 · 1.1 곱하지 않음)
    ══════════════════════════════════════════════════════════════ */
 const SNS = {
-  base: 132000,                 // 기본 운영비 (채널 1개, 월)
+  base: 132000,                 // 정기 콘텐츠 기본 운영비 (채널 1개, 월)
   design: 10000,                // 인스타 디자인 제작 (장당)
   upload: [                     // 인스타 업로드 · 기획 (건당) — 월 건수 구간
     { min: 12, won: 11000 },
@@ -1156,13 +824,42 @@ const SNS = {
     { min: 1,  won: 22000 }
   ]
 };
+const PICK = {                  // 「골라 보세요」 — 개별 금액 (합계는 단순 덧셈 · 묶음 할인 아님)
+  map: 385000,                  // 지도 4곳 등록 + 디자인 세팅 (4곳 전체가)
+  chat: 110000,                 // 상담 채널 (네이버 톡톡 · 카카오톡 채널)
+  sns: 495000                   // 블로그 + 인스타그램 세팅 묶음
+};
 
 (function(){
   'use strict';
   var won = function(n){ return Number(n).toLocaleString('ko-KR'); };
   var $$ = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
 
-  /* ── 계산기 ── */
+  /* ── 첫 화면 영상 일시정지 ── */
+  var stage = document.getElementById('stage'), pause = document.getElementById('pause');
+  if(pause) pause.addEventListener('click', function(){
+    var on = stage.classList.toggle('paused');
+    pause.textContent = on ? '재생' : '일시정지';
+    pause.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+
+  /* ── 골라서 합계 ── */
+  var opts = $$('#opts .opt');
+  var pickSum = function(){
+    var t = 0;
+    opts.forEach(function(b){
+      var on = b.getAttribute('aria-pressed') === 'true';
+      b.querySelector('.ck').textContent = on ? '✓' : '+';
+      if(on) t += PICK[b.dataset.k];
+    });
+    document.getElementById('pick-sum').textContent = won(t);
+  };
+  opts.forEach(function(b){ b.addEventListener('click', function(){
+    b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); pickSum();
+  }); });
+  pickSum();
+
+  /* ── 정기 콘텐츠 계산기 ── */
   var nIn = document.getElementById('c-n'), pBox = document.getElementById('c-p');
   if(nIn && pBox){
     var pages = 3;
@@ -1189,37 +886,6 @@ const SNS = {
     calc();
   }
 
-  /* ── 히어로 유리 카드 — 오른쪽 위를 비스듬히 자른 모양 (/web/ 과 같은 식) ── */
-  var card = document.querySelector('.hcard');
-  var line = card && card.querySelector('.hcard-line path');
-  function cardPath(w, h){
-    var narrow = w < 600;
-    var r  = Math.min(narrow ? 36 : 72, w * .14, h * .14);
-    var cx = narrow ? w * .2 : Math.min(w * .34, 210);
-    var cy = narrow ? w * .2 : Math.min(h * .35, 220);
-    var len = Math.sqrt(cx*cx + cy*cy), dx = cx/len, dy = cy/len;
-    var k = Math.min(narrow ? 24 : 48, len * .3);
-    var ax = w - cx;
-    return 'M'+r+',0 L'+(ax-k)+',0 Q'+ax+',0 '+(ax+dx*k)+','+(dy*k)
-      + ' L'+(w-dx*k)+','+(cy-dy*k)+' Q'+w+','+cy+' '+w+','+(cy+k)
-      + ' L'+w+','+(h-r)+' A'+r+','+r+' 0 0 1 '+(w-r)+','+h
-      + ' L'+r+','+h+' A'+r+','+r+' 0 0 1 0,'+(h-r)
-      + ' L0,'+r+' A'+r+','+r+' 0 0 1 '+r+',0 Z';
-  }
-  function shape(){
-    var w = card.offsetWidth, h = card.offsetHeight;
-    if(!w || !h) return;
-    var d = cardPath(w, h);
-    card.style.clipPath = 'path("'+d+'")';
-    card.querySelector('.hcard-line').setAttribute('viewBox','0 0 '+w+' '+h);
-    line.setAttribute('d', d);
-    card.classList.add('cut');
-  }
-  if(card && window.CSS && CSS.supports && CSS.supports('clip-path','path("M0,0 L1,0 L1,1 Z")')){
-    shape();
-    if(window.ResizeObserver) new ResizeObserver(shape).observe(card); else window.addEventListener('resize', shape);
-  }
-
   /* ── 손전화 메뉴 ── */
   var burger = document.getElementById('burger'), sheet = document.getElementById('msheet');
   if(burger) burger.addEventListener('click', function(){
@@ -1227,54 +893,21 @@ const SNS = {
     burger.setAttribute('aria-expanded', on ? 'true' : 'false');
   });
 
-  /* ── 움직임 — /web/ 과 같은 방식. 「동작 줄이기」를 켠 분에게는 처음부터 다 보입니다 ── */
-  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* ── 스크롤하면 하나씩 — 같은 묶음은 조금씩 늦게 ── */
   var rv = $$('.rv');
-  var PLAN = [
-    ['.sec-head', 'head', 0, 1],
-    ['.ptitle', 'up', 0, 1], ['.flow', 'zoom', 0, 1],
-    ['.wks > li', 'pop', 120, 4], ['.tile', 'pop', 110, 4], ['.mapl', 'up', 0, 1],
-    ['.plan', 'alt', 160, 2],
-    ['.svc', 'pop', 140, 3], ['.longterm', 'zoom', 0, 1],
-    ['.step', 'l', 110, 6], ['.mcards li', 'up', 130, 3],
-    ['.ph3', 'l', 0, 1], ['.ptw', 'zoom', 0, 1], ['.calc', 'zoom', 0, 1],
-    ['.kcards li', 'alt', 120, 4], ['details', 'up', 60, 4], ['.ctabox', 'zoom', 0, 1]
-  ];
-  var LIFT = '.wks > li, .tile, .plan, .svc, .mcards li, .kcards li, .step';
   rv.forEach(function(el){
-    var p = null;
-    for(var i = 0; i < PLAN.length; i++){ if(el.matches(PLAN[i][0])){ p = PLAN[i]; break; } }
-    p = p || ['*', 'up', 0, 1];
-    var sibs = [].filter.call(el.parentNode.children, function(c){ return c.classList.contains('rv') && c.matches(p[0]); });
-    var n = Math.max(0, Math.min(sibs.indexOf(el), p[3] - 1));
-    el.classList.add('m-' + (p[1] === 'alt' ? (n % 2 ? 'r' : 'l') : p[1]));
-    if(p[2]) el.style.setProperty('--d', (n * p[2]) + 'ms');
-    if(el.matches(LIFT)) el.classList.add('lift');
+    var sibs = [].filter.call(el.parentNode.children, function(c){ return c.classList.contains('rv'); });
+    var n = Math.min(sibs.indexOf(el), 5);
+    if(n > 0) el.style.setProperty('--d', (n * 90) + 'ms');
   });
-  function show(el){ el.classList.add('in'); }
+  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(still || !('IntersectionObserver' in window)){
-    rv.forEach(show);
+    rv.forEach(function(el){ el.classList.add('in'); });
   }else{
-    var gone = function(r){ var h = window.innerHeight || 800; return r.top > h || r.bottom < 0; };
     var io = new IntersectionObserver(function(es){
-      es.forEach(function(en){
-        if(en.isIntersecting) show(en.target);
-        else if(gone(en.boundingClientRect)) en.target.classList.remove('in');
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: .12 });
+      es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: .1 });
     rv.forEach(function(el){ io.observe(el); });
-    var tick = false;
-    window.addEventListener('scroll', function(){
-      if(tick) return; tick = true;
-      setTimeout(function(){
-        tick = false; var h = window.innerHeight || 800;
-        rv.forEach(function(el){
-          var r = el.getBoundingClientRect();
-          if(!el.classList.contains('in')){ if(r.top < h * .92 && r.bottom > 0) show(el); }
-          else if(gone(r)) el.classList.remove('in');
-        });
-      }, 200);
-    }, { passive: true });
   }
 })();
 </script>
