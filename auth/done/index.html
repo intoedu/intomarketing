@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>로그인 중 · 인투마케팅</title>
+<!-- 구글 로그인 «팝업» 이 돌아오는 곳 (2026-10-23)
+     · 신청서를 쓰다 로그인할 때 원래 화면을 떠나면 적은 내용이 다 날아갑니다(apply/account.js 머리말).
+       그래서 구글 로그인은 작은 창(팝업)에서 하고, 끝나면 이 쪽이 원래 화면에 알린 뒤 스스로 닫힙니다.
+     · 로그인 정보는 같은 주소(intomarketing.co.kr)의 저장 공간에 남으므로 원래 화면이 그대로 이어받습니다.
+     · 🔴 Supabase → Authentication → URL Configuration 의 Redirect URLs 에 https://intomarketing.co.kr/** 가 있어야 여기로 돌아옵니다. -->
+<style>
+  body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:#F5F7FC;color:#0E1B33}
+  p{font-size:15px;line-height:1.7;text-align:center;padding:24px}
+  a{color:#2E5FE8}
+</style>
+</head>
+<body>
+<p id="m">로그인을 마무리하는 중입니다…</p>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(async function(){
+  var M=document.getElementById('m');
+  var sb=window.supabase.createClient("https://qkvebwxewttqtcryfycy.supabase.co","sb_publishable_Me_R6M540Fg60nmEVqByTg_p-zD8pxa");
+  var ok=false, err='';
+  try{
+    var p=new URLSearchParams(location.search), h=new URLSearchParams(location.hash.slice(1));
+    err=p.get('error_description')||h.get('error_description')||'';
+    for(var i=0;i<24 && !err;i++){
+      var s=await sb.auth.getSession();
+      if(s && s.data && s.data.session){ ok=true; break; }
+      await new Promise(function(r){setTimeout(r,250);});
+    }
+  }catch(e){ err=String(e&&e.message||e); }
+  /* 원래 화면에 알리고 닫습니다 */
+  try{
+    if(window.opener && !window.opener.closed){
+      window.opener.postMessage({type:'im-google',ok:ok,err:err}, location.origin);
+      setTimeout(function(){ window.close(); }, 150);
+      M.textContent = ok ? '로그인되었습니다. 이 창은 닫으셔도 됩니다.' : '로그인하지 못했습니다. 이 창을 닫고 다시 시도해 주십시오.';
+      return;
+    }
+  }catch(e){}
+  /* 팝업이 아닌 경우(새 탭으로 열림 등) — 첫 화면으로 */
+  M.innerHTML = ok ? '로그인되었습니다. <a href="/">첫 화면으로 가기</a>' : '로그인하지 못했습니다. <a href="/">첫 화면으로 가기</a>';
+})();
+</script>
+</body>
+</html>

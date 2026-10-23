@@ -1656,16 +1656,16 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
     </div>
     <div class="modal-body">
       <div id="paneLogin">
-        <button class="gbtn" type="button" onclick="doGoogle()" hidden><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.6 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.3 13.1 17.6 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.6-.15-3.15-.42-4.64H24v9.02h12.94c-.56 2.9-2.2 5.36-4.68 7.02l7.6 5.9c4.44-4.1 7.12-10.14 7.12-17.3z"/><path fill="#FBBC05" d="M10.4 28.7A14.5 14.5 0 0 1 9.6 24c0-1.64.3-3.22.8-4.7l-7.8-6.1A24 24 0 0 0 0 24c0 3.88.94 7.54 2.6 10.8l7.8-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.94-2.14 15.92-5.82l-7.6-5.9c-2.1 1.42-4.82 2.26-8.32 2.26-6.4 0-11.7-3.6-13.6-8.84l-7.8 6.1C6.5 42.6 14.6 48 24 48z"/></svg>구글로 계속하기</button>
-        <div class="orline" hidden>또는 이메일로</div>
+        <button class="gbtn" type="button" onclick="doGoogle()"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.6 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.3 13.1 17.6 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.6-.15-3.15-.42-4.64H24v9.02h12.94c-.56 2.9-2.2 5.36-4.68 7.02l7.6 5.9c4.44-4.1 7.12-10.14 7.12-17.3z"/><path fill="#FBBC05" d="M10.4 28.7A14.5 14.5 0 0 1 9.6 24c0-1.64.3-3.22.8-4.7l-7.8-6.1A24 24 0 0 0 0 24c0 3.88.94 7.54 2.6 10.8l7.8-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.94-2.14 15.92-5.82l-7.6-5.9c-2.1 1.42-4.82 2.26-8.32 2.26-6.4 0-11.7-3.6-13.6-8.84l-7.8 6.1C6.5 42.6 14.6 48 24 48z"/></svg>구글로 계속하기</button>
+        <div class="orline">또는 이메일로</div>
         <div class="fld"><label>이메일</label><input class="inp" id="li_email" type="email" inputmode="email" autocomplete="email" placeholder="이메일"></div>
         <div class="fld"><label>비밀번호</label><div class="pwrap"><input class="inp" id="li_pw" type="password" autocomplete="current-password" placeholder="비밀번호"><button class="pwtoggle" type="button" onclick="togglePw('li_pw',this)">표시</button></div></div>
         <div class="modal-msg" id="li_msg"></div>
         <button class="btn btn-primary" type="button" onclick="doLogin()">로그인</button>
       </div>
       <div id="paneSignup" style="display:none">
-        <button class="gbtn" type="button" onclick="doGoogle()" hidden><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.6 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.3 13.1 17.6 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.6-.15-3.15-.42-4.64H24v9.02h12.94c-.56 2.9-2.2 5.36-4.68 7.02l7.6 5.9c4.44-4.1 7.12-10.14 7.12-17.3z"/><path fill="#FBBC05" d="M10.4 28.7A14.5 14.5 0 0 1 9.6 24c0-1.64.3-3.22.8-4.7l-7.8-6.1A24 24 0 0 0 0 24c0 3.88.94 7.54 2.6 10.8l7.8-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.94-2.14 15.92-5.82l-7.6-5.9c-2.1 1.42-4.82 2.26-8.32 2.26-6.4 0-11.7-3.6-13.6-8.84l-7.8 6.1C6.5 42.6 14.6 48 24 48z"/></svg>구글로 계속하기</button>
-        <div class="orline" hidden>또는 이메일로</div>
+        <button class="gbtn" type="button" onclick="doGoogle()"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.6 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.3 13.1 17.6 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.6-.15-3.15-.42-4.64H24v9.02h12.94c-.56 2.9-2.2 5.36-4.68 7.02l7.6 5.9c4.44-4.1 7.12-10.14 7.12-17.3z"/><path fill="#FBBC05" d="M10.4 28.7A14.5 14.5 0 0 1 9.6 24c0-1.64.3-3.22.8-4.7l-7.8-6.1A24 24 0 0 0 0 24c0 3.88.94 7.54 2.6 10.8l7.8-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.94-2.14 15.92-5.82l-7.6-5.9c-2.1 1.42-4.82 2.26-8.32 2.26-6.4 0-11.7-3.6-13.6-8.84l-7.8 6.1C6.5 42.6 14.6 48 24 48z"/></svg>구글로 계속하기</button>
+        <div class="orline">또는 이메일로</div>
         <div class="fld"><label>학원명 *</label><input class="inp" id="su_academy" autocomplete="organization" placeholder="학원명"></div>
         <div class="fld"><label>담당자명</label><input class="inp" id="su_manager" autocomplete="name" placeholder="담당자명"></div>
         <div class="fld"><label>연락처</label><input class="inp" id="su_phone" inputmode="tel" autocomplete="tel" placeholder="연락처"></div>
@@ -2318,9 +2318,8 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
     if(res.error){m.className='modal-msg err';m.textContent='로그인 실패: 이메일 또는 비밀번호를 확인해 주십시오.';return;}
     closeAuth();updateAuthUI();
   }
-  /* 🔴 2026-10-16 구글 단추는 숨김(hidden) — 인투마케팅 DB 에 구글 로그인을 켜는 것은 «교회지원센터» 회원용입니다.
-        이 DB 의 가입 장치(public.handle_new_user)는 구글 가입을 고객 명단(profiles)에 넣지 않습니다(이은총 님 결정 (나)).
-        그래서 이 화면에서 구글로 가입하면 학원 계정이 만들어지지 않습니다 — 단추를 다시 보이게 하려면 그 장치부터 바꾸십시오. */
+  /* 2026-10-23 구글 단추 다시 보이게 — 교회 DB 는 ESC 와 합치지 않기로 했고, 가입 장치(handle_new_user)도 구글 가입을 고객 명단에 넣도록 되돌렸습니다.
+     구글 로그인은 공용 로그인(apply/account.js)의 «팝업» 방식을 씁니다 — 이 화면을 떠나지 않아 쓰던 신청서가 남습니다. */
   /* ⚠️ 구글 로그인은 코드만으로 켜지지 않습니다.
      Google Cloud Console 에서 OAuth 클라이언트를 만들고
      Supabase → Authentication → Providers → Google 에 넣어야 켜집니다.
@@ -2329,6 +2328,12 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
     var m=document.getElementById('li_msg')||document.getElementById('su_msg');
     if(m){m.className='modal-msg';m.textContent='구글 로그인 창을 여는 중...';}
     if(!sb){if(m){m.className='modal-msg err';m.textContent='연결 오류입니다.';}return;}
+    if(window.IMAccount&&IMAccount.google){
+      var g=await IMAccount.google();
+      if(g&&g.ok){closeAuth();updateAuthUI();return;}
+      if(m){m.className='modal-msg err';m.textContent=(g&&g.err)||'구글 로그인을 마치지 못했습니다.';}
+      return;
+    }
     var r=await sb.auth.signInWithOAuth({
       provider:'google',
       options:{redirectTo:location.origin+location.pathname}

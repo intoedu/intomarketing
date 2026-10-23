@@ -45,6 +45,10 @@ var CSS = [
 '.ima-sub{margin:0 0 20px;font-size:13.5px;color:#56657F;line-height:1.7}',
 '@media (prefers-color-scheme:dark){.ima-sub{color:#9BAAC3}}',
 '.ima-tabs{display:flex;gap:4px;background:#EFF3F9;padding:4px;border-radius:999px;margin:0 0 18px}',
+'.ima-g{width:100%;min-height:48px;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #DADCE0;border-radius:10px;background:#fff;color:#1F1F1F;font:inherit;font-weight:700;cursor:pointer}',
+'.ima-g:hover{background:#F7F8F8}.ima-g:disabled{opacity:.6;cursor:wait}.ima-g svg{width:18px;height:18px;flex:none}',
+'.ima-or{display:flex;align-items:center;gap:8px;margin:14px 0;color:#6B778C;font-size:13px}',
+'.ima-or:before,.ima-or:after{content:"";flex:1;height:1px;background:#E2E8F2}',
 '@media (prefers-color-scheme:dark){.ima-tabs{background:#16233C}}',
 '.ima-tab{flex:1;min-height:44px;border:0;background:none;border-radius:999px;cursor:pointer;',
 '  font:inherit;font-size:14px;font-weight:700;color:#56657F}',
@@ -93,6 +97,9 @@ function sheet(o){
       '<div class="ima-box" role="dialog" aria-modal="true" aria-labelledby="ima-t">'
      +  '<h3 id="ima-t">'+T+'</h3>'
      +  '<p class="ima-sub">'+S+'</p>'
+     /* 구글로 계속하기 (2026-10-23) — 작은 창(팝업)에서 로그인하므로 이 화면 · 쓰던 신청서는 그대로 남습니다 */
+     +  '<button class="ima-g" type="button" id="ima-g"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.6 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.3l7.8 6C12.3 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.6 5.9c4.4-4.1 7-10.1 7-17.6z"/><path fill="#FBBC05" d="M10.4 28.7c-.5-1.4-.8-2.9-.8-4.7s.3-3.3.8-4.7l-7.8-6C.9 16.6 0 20.2 0 24s.9 7.4 2.6 10.7l7.8-6z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.7-4.1-13.6-9.9l-7.8 6C6.5 42.6 14.6 48 24 48z"/></svg>구글로 계속하기</button>'
+     +  '<div class="ima-or">또는 이메일로</div>'
      +  '<div class="ima-tabs" role="tablist">'
      +    '<button class="ima-tab" role="tab" aria-selected="true"  data-m="in">로그인</button>'
      +    '<button class="ima-tab" role="tab" aria-selected="false" data-m="up">계정 만들기</button>'
@@ -161,6 +168,13 @@ function sheet(o){
       }
     };
     P.addEventListener('keydown',function(e){ if(e.key==='Enter') GO.click(); });
+    back.querySelector('#ima-g').onclick=async function(){
+      var b=this; b.disabled=true; msg('구글 로그인 창이 열립니다. 그 창에서 계정을 골라 주십시오.');
+      var r=await window.IMAccount.google();
+      b.disabled=false;
+      if(r && r.ok) return close(r.user);
+      msg((r && r.err) || '구글 로그인을 마치지 못했습니다.','err');
+    };
     back.querySelector('#ima-x').onclick=function(){ close(null); };
     back.addEventListener('mousedown',function(e){ if(e.target===back) close(null); });
     document.addEventListener('keydown',function esc(e){
@@ -175,6 +189,46 @@ window.IMAccount = {
         «Multiple GoTrueClient» 경고를 내고, 한쪽에서 로그인한 것을
         다른 쪽(머리띠 표시)이 못 알아봅니다. */
   init:function(client){ if(client){ sb=client; window.IMSB=client; } return sb; },
+
+  /* 구글 로그인 — «팝업»으로 합니다 (2026-10-23).
+     🔴 구글 화면으로 이동(redirect)시키면 쓰던 신청서가 다 날아갑니다. 작은 창에서 로그인하고,
+        그 창이 /auth/done/ 으로 돌아와 로그인을 마친 뒤 알려 주면 여기서 이어받습니다(같은 주소라 저장 공간을 같이 씀).
+     · 창은 «누른 순간» 먼저 엽니다 — 주소를 받은 뒤에 열면 브라우저가 팝업으로 막습니다.
+     · 돌려주는 값 : {ok:true, user} 또는 {ok:false, err:'안내 문장'} */
+  google:async function(){
+    if(!sb) return {ok:false, err:'연결 오류입니다. 잠시 후 다시 시도해 주십시오.'};
+    var w=null;
+    try{ w=window.open('about:blank','im-google','width=480,height=660'); }catch(e){}
+    if(!w) return {ok:false, err:'팝업이 막혀 있습니다. 브라우저에서 이 사이트의 팝업을 허용한 뒤 다시 눌러 주십시오.'};
+    try{ w.document.write('<p style="font:15px sans-serif;padding:24px;color:#333">구글 로그인 창을 여는 중입니다…</p>'); }catch(e){}
+    var r;
+    try{
+      r=await sb.auth.signInWithOAuth({provider:'google',
+        options:{redirectTo:location.origin+'/auth/done/', skipBrowserRedirect:true, queryParams:{prompt:'select_account'}}});
+    }catch(e){ r={error:e}; }
+    if(!r || r.error || !r.data || !r.data.url){
+      try{ w.close(); }catch(e){}
+      return {ok:false, err:'구글 로그인이 아직 준비되지 않았습니다. 이메일로 로그인해 주십시오.'};
+    }
+    w.location.href=r.data.url;
+    return await new Promise(function(done){
+      var fin=false, t=null;
+      function onMsg(e){ if(e.origin===location.origin && e.data && e.data.type==='im-google') finish(); }
+      async function finish(){
+        if(fin) return; fin=true;
+        window.removeEventListener('message',onMsg); clearInterval(t);
+        var s=null; try{ s=await sb.auth.getSession(); }catch(e){}
+        var ses=s && s.data && s.data.session;
+        if(!ses) return done({ok:false, err:'구글 로그인을 마치지 못했습니다. 다시 시도해 주십시오.'});
+        /* 이 화면의 머리띠 등이 알아채도록 한 번 더 알립니다 */
+        try{ await sb.auth.setSession({access_token:ses.access_token, refresh_token:ses.refresh_token}); }catch(e){}
+        cached=null;
+        done({ok:true, user:ses.user||null});
+      }
+      window.addEventListener('message',onMsg);
+      t=setInterval(function(){ try{ if(w.closed) finish(); }catch(e){} },700);
+    });
+  },
 
   /* 지금 로그인된 사람 (없으면 null) */
   user:async function(){
