@@ -678,29 +678,34 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   #v-blog .bx-bcheck h4{font-size:var(--t-md);font-weight:800}
   #v-blog .bx-bcheck p{font-size:var(--t-sm);color:var(--muted);margin-top:4px;line-height:1.6}
   #v-blog .bx-bcheck p::before{content:"✓";display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:var(--bl-blue);color:#fff;font-size:11px;font-weight:900;margin-right:6px;vertical-align:1px}
-  /* 질문 → 화살표 → 「네!」 답 (10/26) */
-  #v-blog .bx-qa{display:grid;gap:18px;margin:36px auto 0;max-width:900px;text-align:left}
-  #v-blog .bx-qr{display:grid;grid-template-columns:minmax(0,1fr) 70px minmax(0,1.45fr);align-items:center}
-  #v-blog .bx-q{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px 20px;display:flex;gap:14px;align-items:center;box-shadow:0 16px 34px -28px rgba(30,60,140,.5)}
-  #v-blog .bx-q .bx-ic{flex:none;width:52px;height:52px;border-radius:14px;background:var(--surface-2);display:grid;place-items:center;font-size:26px;line-height:1;text-align:center}
+  /* 질문 · 답 묶음 (10/26 2차) — 왼쪽 위 질문 → 아래 오른쪽 「네!」 답 → 밑에 사진 + 설명 */
+  #v-blog .bx-qa{display:grid;gap:34px;margin:36px auto 0;max-width:900px;text-align:left}
+  #v-blog .bx-qr{display:grid;gap:10px}
+  #v-blog .bx-q{justify-self:start;max-width:min(560px,92%);background:#fff;border:1px solid var(--line);border-radius:20px 20px 20px 6px;padding:18px 20px;display:flex;gap:14px;align-items:center;box-shadow:0 16px 34px -28px rgba(30,60,140,.5)}
+  #v-blog .bx-q .bx-ic{flex:none;width:50px;height:50px;border-radius:14px;background:var(--surface-2);display:grid;place-items:center;font-size:25px;line-height:1;text-align:center}
   #v-blog .bx-q h4{font-size:var(--t-md);font-weight:800;line-height:1.45;word-break:keep-all}
-  #v-blog .bx-arr{display:grid;place-items:center}
-  #v-blog .bx-arr svg{width:58px;height:24px;fill:none;stroke:var(--bl-blue);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-  #v-blog .bx-a{background:linear-gradient(180deg,#F2F7FF,#fff);border:1px solid #BFD2FB;border-radius:20px;padding:20px 22px}
-  #v-blog .bx-yes{display:inline-block;font-size:22px;font-weight:900;color:var(--bl-blue);margin-bottom:6px}
+  #v-blog .bx-ar{display:flex;align-items:flex-start;gap:8px;justify-content:flex-end;padding-left:40px}
+  #v-blog .bx-arr{flex:none;padding-top:2px}
+  #v-blog .bx-arr svg{width:42px;height:42px;fill:none;stroke:var(--bl-blue);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+  #v-blog .bx-a{width:min(600px,100%);background:linear-gradient(180deg,#F2F7FF,#fff);border:1px solid #BFD2FB;border-radius:20px 20px 6px 20px;padding:18px 22px}
+  #v-blog .bx-yes{display:block;font-size:22px;font-weight:900;color:var(--bl-blue);margin-bottom:4px}
   #v-blog .bx-a p{font-size:var(--t-base);line-height:1.75;color:var(--ink);word-break:keep-all}
-  #v-blog .bx-a figure{margin:14px 0 0}
-  #v-blog .bx-a figure img{display:block;width:100%;height:auto;border-radius:12px;border:1px solid var(--line);background:#fff}
-  #v-blog .bx-a figure a{display:block;cursor:zoom-in}
-  #v-blog .bx-a figcaption{margin-top:6px;font-size:var(--t-xs);color:var(--muted)}
-  #v-blog .bx-qr:nth-child(1) .bx-a figure img{max-width:300px}
+  #v-blog .bx-fig{margin:6px 0 0;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px}
+  #v-blog .bx-fig a{display:block;cursor:zoom-in}
+  #v-blog .bx-fig img{display:block;width:100%;height:auto;border-radius:12px;border:1px solid var(--line)}
+  #v-blog .bx-qr:first-child .bx-fig{grid-template-columns:minmax(0,300px) minmax(0,1fr)}
+  #v-blog .bx-fig figcaption{font-size:var(--t-base);line-height:1.75;color:var(--muted);word-break:keep-all}
+  #v-blog .bx-fig figcaption b{display:block;color:var(--ink);font-size:var(--t-md);margin-bottom:6px}
+  #v-blog .bx-shorts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+  #v-blog .bx-short .bx-q{max-width:100%}
+  #v-blog .bx-short .bx-ar{padding-left:16px}
   @media(max-width:760px){
-    #v-blog .bx-qr{grid-template-columns:1fr}
-    #v-blog .bx-arr{height:44px}
-    #v-blog .bx-arr svg{transform:rotate(90deg);width:40px}
+    #v-blog .bx-shorts,#v-blog .bx-fig,#v-blog .bx-qr:first-child .bx-fig{grid-template-columns:1fr}
+    #v-blog .bx-ar{padding-left:8px}
+    #v-blog .bx-arr svg{width:32px;height:32px}
   }
   @media(prefers-color-scheme:dark){
-    #v-blog .bx-q{background:var(--surface)}
+    #v-blog .bx-q,#v-blog .bx-fig{background:var(--surface)}
     #v-blog .bx-a{background:linear-gradient(180deg,#18264A,var(--surface));border-color:#33509A}
   }
   #v-blog .bx-ball{margin-top:22px;font-weight:800;font-size:var(--t-md)}
@@ -815,7 +820,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
   /* 🔴 .bx-ic 는 display 를 건드리지 않습니다 — grid 가운데 정렬이 풀려 이모지가 왼쪽으로 치우쳤음(10/20) */
   #v-blog.bx-anim .bx-bneed i{display:inline-block;animation:bxFloat 3.2s ease-in-out infinite}
   #v-blog.bx-anim .bx-q .bx-ic{animation:bxFloat 3.2s ease-in-out infinite}
-  #v-blog.bx-anim .bx-arr .ln{stroke-dasharray:60;stroke-dashoffset:60;transition:stroke-dashoffset .6s var(--bx-e) .35s}
+  #v-blog.bx-anim .bx-arr .ln{stroke-dasharray:50;stroke-dashoffset:50;transition:stroke-dashoffset .6s var(--bx-e) .35s}
   #v-blog.bx-anim .bx-arr.in .ln{stroke-dashoffset:0}
   #v-blog.bx-anim .bx-arr .hd{opacity:0;transition:opacity .3s .85s}
   #v-blog.bx-anim .bx-arr.in .hd{opacity:1}
@@ -918,31 +923,33 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       <h2 class="bx-bh">블로그 맡기기 전,<br><mark>이 5가지는 꼭</mark> 확인하세요</h2>
       <!-- 질문 → 화살표 → 「네!」 답 (2026-10-26 이은총 님) — 그림은 실제 화면만 씁니다.
            혼공기적학원 진행 현황 · 글별 순위 = 리플렛 때 받은 게재 동의 범위(이름 · 진행률 · 검색어 · 발행일 · 순위, 금액 없음) · 인투어학원 블로그 글 = 10/21 홈페이지 게재 동의 -->
+      <!-- 질문 · 답 묶음 (10/26 2차) — 한 묶음 = 왼쪽 위 질문 → 그 아래 오른쪽 「네!」 답 → 밑에 사진 + 설명.
+           사진 있는 셋을 위에, 짧은 둘(사진 없음)은 맨 아래 나란히. 그림 동의 범위는 바로 위 주석 그대로 -->
       <div class="bx-qa">
         <div class="bx-qr">
           <div class="bx-q"><span class="bx-ic">✍️</span><h4>실제로 운영하는 블로거가 쓰나요?</h4></div>
-          <div class="bx-arr" aria-hidden="true"><svg viewBox="0 0 64 24"><path class="ln" d="M2 12h54"/><path class="hd" d="M46 3l10 9-10 9"/></svg></div>
-          <div class="bx-a"><b class="bx-yes">네!</b><p>실 운영 블로거 60여 명이 본인 계정에 작성합니다. 새로 만든 계정이나 대행 운영 계정은 쓰지 않습니다.</p><figure><a href="img/proof/blog-post.jpg" target="_blank" rel="noopener" aria-label="크게 보기"><img src="img/proof/blog-post.jpg" alt="블로거가 본인 블로그에 올린 글 (인투어학원)" width="660" height="760" loading="lazy" decoding="async"></a><figcaption>블로거가 본인 블로그에 올린 글 (인투어학원)</figcaption></figure></div>
+          <div class="bx-ar"><div class="bx-arr" aria-hidden="true"><svg viewBox="0 0 48 48"><path class="ln" d="M8 4v18a14 14 0 0 0 14 14h18"/><path class="hd" d="M32 28l8 8-8 8"/></svg></div><div class="bx-a"><b class="bx-yes">네!</b><p>실 운영 블로거 60여 명이 본인 계정에 작성합니다. 새로 만든 계정이나 대행 운영 계정은 쓰지 않습니다.</p></div></div>
+          <figure class="bx-fig"><a href="img/proof/blog-post.jpg" target="_blank" rel="noopener" aria-label="크게 보기"><img src="img/proof/blog-post.jpg" alt="블로거가 본인 블로그에 올린 글" width="660" height="760" loading="lazy" decoding="async"></a><figcaption><b>블로거가 본인 블로그에 올린 글</b>인투어학원(청주) 블로그 리뷰 중 한 편입니다. 블로거가 자기 블로그에 자기 이름으로 올립니다. 블로거 닉네임은 가렸습니다.</figcaption></figure>
         </div>
         <div class="bx-qr">
           <div class="bx-q"><span class="bx-ic">🔑</span><h4>포스팅마다 키워드가 다른가요?</h4></div>
-          <div class="bx-arr" aria-hidden="true"><svg viewBox="0 0 64 24"><path class="ln" d="M2 12h54"/><path class="hd" d="M46 3l10 9-10 9"/></svg></div>
-          <div class="bx-a"><b class="bx-yes">네!</b><p>같은 키워드로 겹치면 네이버가 뒤에 올린 글을 걸러냅니다. 지역 · 대상 · 주제 · 홍보 포인트를 조합해 포스팅마다 따로 정합니다.</p><figure><a href="img/proof/dash-ranks.jpg" target="_blank" rel="noopener" aria-label="크게 보기"><img src="img/proof/dash-ranks.jpg" alt="포스팅마다 다른 검색어와 검색 순위 (혼공기적학원)" width="1200" height="480" loading="lazy" decoding="async"></a><figcaption>포스팅마다 다른 검색어와 검색 순위 (혼공기적학원)</figcaption></figure></div>
-        </div>
-        <div class="bx-qr">
-          <div class="bx-q"><span class="bx-ic">🔍</span><h4>올리기 전에 원고를 검수하나요?</h4></div>
-          <div class="bx-arr" aria-hidden="true"><svg viewBox="0 0 64 24"><path class="ln" d="M2 12h54"/><path class="hd" d="M46 3l10 9-10 9"/></svg></div>
-          <div class="bx-a"><b class="bx-yes">네!</b><p>광고 표기, 인물 사진의 얼굴 처리, 분량과 키워드 반영을 확인하고 기준에 못 미치면 반려합니다.</p></div>
-        </div>
-        <div class="bx-qr">
-          <div class="bx-q"><span class="bx-ic">📌</span><h4>글이 계속 남아 있나요?</h4></div>
-          <div class="bx-arr" aria-hidden="true"><svg viewBox="0 0 64 24"><path class="ln" d="M2 12h54"/><path class="hd" d="M46 3l10 9-10 9"/></svg></div>
-          <div class="bx-a"><b class="bx-yes">네!</b><p>발행 후 12개월 게시를 유지합니다. 기간 중 삭제되면 다시 발행합니다.</p></div>
+          <div class="bx-ar"><div class="bx-arr" aria-hidden="true"><svg viewBox="0 0 48 48"><path class="ln" d="M8 4v18a14 14 0 0 0 14 14h18"/><path class="hd" d="M32 28l8 8-8 8"/></svg></div><div class="bx-a"><b class="bx-yes">네!</b><p>같은 키워드로 겹치면 네이버가 뒤에 올린 글을 걸러냅니다. 지역 · 대상 · 주제 · 홍보 포인트를 조합해 포스팅마다 따로 정합니다.</p></div></div>
+          <figure class="bx-fig"><a href="img/proof/dash-ranks.jpg" target="_blank" rel="noopener" aria-label="크게 보기"><img src="img/proof/dash-ranks.jpg" alt="포스팅마다 다른 검색어 · 검색 순위" width="1200" height="480" loading="lazy" decoding="async"></a><figcaption><b>포스팅마다 다른 검색어 · 검색 순위</b>혼공기적학원(분당) 진행 현황 화면의 글 목록입니다. 글마다 검색어가 다르고, 발행일과 지금 순위가 함께 보입니다.</figcaption></figure>
         </div>
         <div class="bx-qr">
           <div class="bx-q"><span class="bx-ic">📊</span><h4>진행 상황을 볼 수 있나요?</h4></div>
-          <div class="bx-arr" aria-hidden="true"><svg viewBox="0 0 64 24"><path class="ln" d="M2 12h54"/><path class="hd" d="M46 3l10 9-10 9"/></svg></div>
-          <div class="bx-a"><b class="bx-yes">네!</b><p>게시물별 발행일과 현재 검색 노출 순위를 전용 대시보드에서 상시 확인할 수 있습니다.</p><figure><a href="img/proof/dash-progress.jpg" target="_blank" rel="noopener" aria-label="크게 보기"><img src="img/proof/dash-progress.jpg" alt="학원 전용 진행 현황 화면 (혼공기적학원)" width="1200" height="688" loading="lazy" decoding="async"></a><figcaption>학원 전용 진행 현황 화면 (혼공기적학원)</figcaption></figure></div>
+          <div class="bx-ar"><div class="bx-arr" aria-hidden="true"><svg viewBox="0 0 48 48"><path class="ln" d="M8 4v18a14 14 0 0 0 14 14h18"/><path class="hd" d="M32 28l8 8-8 8"/></svg></div><div class="bx-a"><b class="bx-yes">네!</b><p>게시물별 발행일과 현재 검색 노출 순위를 전용 대시보드에서 상시 확인할 수 있습니다.</p></div></div>
+          <figure class="bx-fig"><a href="img/proof/dash-progress.jpg" target="_blank" rel="noopener" aria-label="크게 보기"><img src="img/proof/dash-progress.jpg" alt="학원 전용 진행 현황 화면" width="1200" height="688" loading="lazy" decoding="async"></a><figcaption><b>학원 전용 진행 현황 화면</b>혼공기적학원(분당)이 실제로 보는 화면입니다. 주문한 편수 중 몇 편이 올라갔는지, 시작일 · 마감일이 한눈에 보입니다.</figcaption></figure>
+        </div>
+        <div class="bx-shorts">
+        <div class="bx-qr bx-short">
+          <div class="bx-q"><span class="bx-ic">🔍</span><h4>올리기 전에 원고를 검수하나요?</h4></div>
+          <div class="bx-ar"><div class="bx-arr" aria-hidden="true"><svg viewBox="0 0 48 48"><path class="ln" d="M8 4v18a14 14 0 0 0 14 14h18"/><path class="hd" d="M32 28l8 8-8 8"/></svg></div><div class="bx-a"><b class="bx-yes">네!</b><p>광고 표기, 인물 사진의 얼굴 처리, 분량과 키워드 반영을 확인하고 기준에 못 미치면 반려합니다.</p></div></div>
+        </div>
+        <div class="bx-qr bx-short">
+          <div class="bx-q"><span class="bx-ic">📌</span><h4>글이 계속 남아 있나요?</h4></div>
+          <div class="bx-ar"><div class="bx-arr" aria-hidden="true"><svg viewBox="0 0 48 48"><path class="ln" d="M8 4v18a14 14 0 0 0 14 14h18"/><path class="hd" d="M32 28l8 8-8 8"/></svg></div><div class="bx-a"><b class="bx-yes">네!</b><p>발행 후 12개월 게시를 유지합니다. 기간 중 삭제되면 다시 발행합니다.</p></div></div>
+        </div>
         </div>
       </div>
       <p class="bx-ball">인투마케팅은 <b>5가지 모두</b> 됩니다</p>
@@ -1087,7 +1094,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       ['.bx-bhero .bx-bpill','pop',0,250],['.bx-bhero h2','up',0,450],['.bx-bhero .bx-bsub','up',0,700],
       ['.bx-bchips>span','pop',150,900],['.bx-bhero .bx-bfoot','up',0,1300],['.bx-bfacts>div','up',150,1250],['.bx-bacts','up',0,1800],['.bx-bband','up',0,2000],
       ['.bx-btag','pop',0],['.bx-bh','up',0],
-      ['.bx-qr .bx-q','l',0],['.bx-qr .bx-arr','pop',0,250],['.bx-qr .bx-a','r',0,420],['.bx-ball','pop',0],
+      ['.bx-qr .bx-q','l',0],['.bx-qr .bx-arr','pop',0,250],['.bx-qr .bx-a','r',0,420],['.bx-qr .bx-fig','up',0,600],['.bx-ball','pop',0],
       ['.bx-bnums>div','zoom',140],['.bx-bres .bx-bfoot','up',0],['.bx-bproof>.bx-pf','alt',160],
       ['.bx-bprod>div','alt',140],['.bx-bmore','up',0],
       ['.bx-bwho','pop',0],['.bx-bstep','l',110],['.bx-btip','up',0],
