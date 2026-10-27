@@ -1289,7 +1289,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
     </div>
 
     <div class="fld" id="fld_addr"><div class="lab-row"><label class="lab" for="f_addr">주소</label><span class="where">계약서 · 오시는 길 · 하단</span></div>
-      <p class="desc">사업장 주소입니다. 「주소 검색」으로 도로명 주소를 고른 뒤, 아래 칸에 층 · 호수를 입력해 주십시오.</p>
+      <p class="desc">사업장 주소입니다. 「주소 검색」으로 도로명 주소를 고른 뒤, 아래 칸에 층 · 호수를 입력해 주십시오. <b>외국 주소</b>는 「주소 검색」 없이 칸에 직접 입력해 주십시오.</p>
       <div class="inline"><input class="inp" id="f_addr" autocomplete="street-address" placeholder="예: 대전 유성구 ○○로 12">
         <button type="button" class="sbtn ghost" data-zip="biz">주소 검색</button></div>
       <input class="inp" id="f_addr2" style="margin-top:10px" autocomplete="address-line2" placeholder="상세 주소 (선택) · 예: 3층 301호" aria-label="상세 주소 (선택)">
@@ -1892,6 +1892,9 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
           </div>
           <div class="fld"><label class="lab sm" for="f_own_tel">전화번호</label><input class="inp" id="f_own_tel" type="tel" inputmode="tel" style="max-width:340px">
             <p class="ex">유선 전화가 없으면 휴대전화 번호를 입력해 주십시오.</p></div>
+          <!-- 외국 주소 (2026-10-27 이은총 님 「외국에 있는 분도 신청할 수 있게」) — 고르면 우편번호 · 한글 주소 · 상세 주소는 선택, 휴대전화는 국제 번호, 영문 주소 칸 하나에 전체 주소 -->
+          <div class="fld" style="margin-bottom:8px"><label class="consent"><input type="checkbox" id="own_abroad"> 외국 주소입니다 (해외 거주)</label>
+            <p class="note info" id="own_abroad_note" hidden>외국 주소는 아래 <b>「주소 (영문)」</b> 칸에 전체 주소를 한 줄로 입력해 주십시오(나라 · 도시 · 우편번호 포함). 휴대전화는 국가 번호를 붙여 입력해 주십시오(예: +1 555 123 4567). 외국 주소로는 <b>.kr 도메인 등록이 제한될 수 있어</b>, 담당자가 확인한 뒤 등록할 도메인을 안내합니다.</p></div>
           <div class="fld"><label class="lab sm" for="f_own_zip">우편번호</label>
             <div class="inline" style="max-width:340px"><input class="inp zip" id="f_own_zip" inputmode="numeric" placeholder="00000">
               <button type="button" class="sbtn" data-zip="own">우편번호 검색</button></div>
@@ -2332,11 +2335,12 @@ var RE_MAIL=/^[^@\s]+@[^@\s]+\.[^@\s]+$/, RE_WEB=/[a-z0-9가-힣-]+\.[a-z가-힣
 function phoneOK(v){
   v=String(v||'').trim(); if(!/^[0-9\-+() ]+$/.test(v))return false;
   var d=digits(v), n=d.length;
+  if(/^\+/.test(v)) return n>=8&&n<=15;           /* + 로 시작하는 국제 번호 — 국가 번호 포함 최대 15자리. 한국 번호 규칙보다 먼저 (10/27 · +1 이 1588 규칙에 걸렸음) */
   if(/^02/.test(d)) return n>=9&&n<=10;          /* 서울 02-000-0000 · 02-0000-0000 */
   if(/^050/.test(d)) return n>=11&&n<=12;        /* 0505-000-0000 · 0503-0000-0000 */
   if(/^0/.test(d)) return n>=10&&n<=11;          /* 휴대폰 · 지역 번호 · 070 · 080 */
   if(/^1[5-9]/.test(d)) return n===8;            /* 1588-0000 같은 대표번호 */
-  return n>=8&&n<=12;                            /* 그 밖(국제 번호 등) */
+  return n>=8&&n<=12;                            /* 그 밖 */
 }
 function domainOf(s){ return String(s||'').trim().replace(/^https?:\/\//i,'').replace(/\/.*$/,''); }
 function wantDomain(s){ return domainOf(s).replace(/^www\./i,'').toLowerCase(); }
@@ -2936,6 +2940,7 @@ function photoKakao(){ return one('tg_pvia')==='카카오톡'; }  /* 로고 · �
 function agent(){ return buying()&&one('dombuy')==='대행'; }     /* 새 도메인 · 인투마케팅이 고객 명의로 등록 대행 → 소유자 정보 · 동의를 받음 (10/10) */
 function selfBuy(){ return buying()&&one('dombuy')==='직접'; }   /* 새 도메인 · 고객이 직접 구매 → 소유자 정보를 받지 않음 */
 function owning(){ return agent()&&!!one('owner'); }
+function abroad(){ var c=$('own_abroad'); return !!(c&&c.checked); }   /* 도메인 소유자가 외국 주소 (10/27) */
 function isAcad(){ return val('f_bizcat')==='학원·교습소'&&regKind()!=='학교 · 공공기관'; }   /* 학교는 학원 등록번호가 없음 */
 function isRealty(){ return val('f_bizcat')==='부동산 중개'; }
 function bookOn(){ return hasGoal('신청 · 예약'); }
@@ -3073,11 +3078,12 @@ var CHECKS=[
   C('step8','f_own_kind','등록증 종류',has('f_own_kind'),'등록증 종류를 선택해 주십시오.',function(){return owning()&&one('owner')==='기관';}),
   C('step8','f_own_no','기관 등록증 번호',function(){return /\d{3,}/.test(val('f_own_no'));},'기관 등록증 번호를 입력해 주십시오.',function(){return owning()&&one('owner')==='기관';}),
   C('step8','f_own_mail','소유자 이메일',function(){return RE_MAIL.test(val('f_own_mail'));},'소유자 이메일을 확인해 주십시오. 소유자 확인에 사용합니다.',owning),
-  C('step8','f_own_mobile','소유자 휴대전화',function(){return /^01[016789]-?\d{3,4}-?\d{4}$/.test(val('f_own_mobile').replace(/\s/g,''));},'소유자 휴대전화를 확인해 주십시오. (예: 010-0000-0000)',owning),
+  C('step8','f_own_mobile','소유자 휴대전화',function(){return abroad()?phoneOK(val('f_own_mobile')):/^01[016789]-?\d{3,4}-?\d{4}$/.test(val('f_own_mobile').replace(/\s/g,''));},'소유자 휴대전화를 확인해 주십시오. (예: 010-0000-0000 · 외국은 +1 555 123 4567)',owning),
   C('step8','f_own_tel','소유자 전화번호',function(){return phoneOK(val('f_own_tel'));},'전화번호를 입력해 주십시오. 유선 전화가 없으면 휴대전화 번호를 입력해 주십시오.',owning),
-  C('step8','f_own_zip','우편번호',function(){return /^\d{5}$/.test(val('f_own_zip'));},'우편번호(5자리)를 입력해 주십시오. 「우편번호 검색」을 누르면 자동 입력됩니다.',owning),
-  C('step8','f_own_addr','주소 (한글)',has('f_own_addr'),'주소(한글)를 입력해 주십시오.',owning),
-  C('step8','f_own_addr2','상세 주소',has('f_own_addr2'),'상세 주소를 입력해 주십시오. 건물 전체를 사용하면 「건물 전체」라고 입력해 주십시오.',owning),
+  /* 외국 주소면 우편번호 · 한글 주소 · 상세 주소는 묻지 않습니다(영문 주소 한 칸에 전체) — 10/27 */
+  C('step8','f_own_zip','우편번호',function(){return /^\d{5}$/.test(val('f_own_zip'));},'우편번호(5자리)를 입력해 주십시오. 「우편번호 검색」을 누르면 자동 입력됩니다.',function(){return owning()&&!abroad();}),
+  C('step8','f_own_addr','주소 (한글)',has('f_own_addr'),'주소(한글)를 입력해 주십시오.',function(){return owning()&&!abroad();}),
+  C('step8','f_own_addr2','상세 주소',has('f_own_addr2'),'상세 주소를 입력해 주십시오. 건물 전체를 사용하면 「건물 전체」라고 입력해 주십시오.',function(){return owning()&&!abroad();}),
   C('step8','f_own_addr_en','주소 (영문)',function(){return /[A-Za-z]/.test(val('f_own_addr_en'));},'주소(영문)를 입력해 주십시오. 「우편번호 검색」을 누르면 자동 입력됩니다.',owning),
   /* 도메인 제3자 제공 동의는 «검사하지 않습니다» — 거부해도 신청은 되어야 합니다(행정 창 2026-10-13). 아래 WARNS 에서 주의만 띄웁니다. */
   C('step8','seg_when','희망 오픈 시기',picked1('when'),'희망 오픈 시기를 선택해 주십시오.'),
@@ -3969,6 +3975,17 @@ function searchZip(btn){
 document.addEventListener('click',function(e){
   var b=e.target.closest('[data-zip]'); if(b){ e.preventDefault(); searchZip(b); }
 });
+/* 외국 주소 (10/27) — 고르면 우편번호 · 한글 주소 칸을 접고, 영문 주소 칸에 전체 주소를 받습니다 */
+function abroadShow(){
+  var on=abroad();
+  $('own_abroad_note').hidden=!on;
+  var z=$('f_own_zip').closest('.fld'), a=$('f_own_addr').closest('.row2');
+  if(z)z.hidden=on; if(a)a.hidden=on;
+  $('f_own_addr_en').placeholder=on?'예: 123 Main St, Apt 4B, Los Angeles, CA 90012, USA':'예: 3F, 12, ○○-ro, Yuseong-gu, Daejeon';
+  $('f_own_mobile').placeholder=on?'+1 555 123 4567':'010-0000-0000';
+}
+$('own_abroad').addEventListener('change',function(){ abroadShow(); touched(); refresh(); });
+abroadShow();
 /* 「업체 정보로 자동 입력」 — 빈 칸만 채웁니다 (이미 적은 것은 그대로) */
 $('own_fill').addEventListener('click',function(){
   var org=one('owner')==='기관';
@@ -4696,6 +4713,7 @@ $('form').addEventListener('submit',async function(e){
            '소유자명: '+val('f_own_name'), '소유자명(영문): '+val('f_own_en'),
            org?'등록증 종류: '+val('f_own_kind'):'', org?'기관 등록증 번호: '+val('f_own_no'):'',
            '이메일: '+val('f_own_mail'), '휴대전화: '+val('f_own_mobile'), '전화번호: '+val('f_own_tel'),
+           abroad()?'주소 구분: 외국 주소 (해외 거주 · .kr 도메인 가능 여부 확인 필요)':'',
            '우편번호: '+val('f_own_zip'), '주소(한글): '+[val('f_own_addr'),val('f_own_addr2')].filter(Boolean).join(' '),
            '주소(영문): '+val('f_own_addr_en')].filter(Boolean).join('\n');
   }
