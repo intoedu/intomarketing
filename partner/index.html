@@ -223,6 +223,26 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
         <b>원천징수 전 총액(공급가액)</b>으로 보며, 세금은 사업자 등록 여부에 따라 처리합니다.</p>
     </div>
 
+    <!-- 🔴 커미션 정산 (2026-10-27 · 계산은 블로그 센터 8번 창 — partner_payouts_me / partner_pay_detail_me)
+         계약서 제7조 「건별 주문 · 금액 · 산출 근거」 게시 자리입니다. 지우지 마십시오.
+         지금 함수는 «블로그 · 리뷰» 주문만 계산합니다. 다른 서비스가 붙으면 제목을 바꾸십시오.
+         🔴 블로그 건의 커미션 달은 센터 입금일(earned_at = blog_orders.paid_at)로 잡힙니다.
+            위 표의 「입금일」(requests.paid_at)과 다를 수 있으니, 내역에는 반드시 earned_at 을 쓰십시오. -->
+    <div class="card">
+      <h2>커미션 정산 <span style="font-size:var(--t-sm);color:var(--muted);font-weight:600">블로그 · 리뷰</span></h2>
+      <p class="sub">고객이 입금한 달에 잡히고, <b>다음 달 10일</b>에 지급합니다.
+        「내역」을 누르면 건별 금액과 산출 근거가 보입니다.</p>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr>
+            <th>정산 달</th><th class="r">건수</th><th class="r">커미션</th><th>상태</th><th>지급일</th><th></th>
+          </tr></thead>
+          <tbody id="payRows"></tbody>
+        </table>
+      </div>
+      <div class="empty hide" id="noPay">아직 정산할 커미션이 없습니다.</div>
+    </div>
+
     <div class="card">
       <h2>커미션 기준</h2>
       <p class="sub">계약서 제7조에 따라 이곳에 게시된 내용이 계약의 일부가 됩니다.</p>
@@ -327,7 +347,7 @@ async function boot(){
     $('mailBtn').href='mailto:info@intomarketing.co.kr?subject='
       +encodeURIComponent('['+ME.name+' 실장] 현황 문의');
   }
-  await Promise.all([loadRules(), loadOrders()]);
+  await Promise.all([loadRules(), loadOrders(), loadPayouts()]);
 }
 function show(id){
   ['gAuth','gNoMatch'].forEach(function(x){ $(x).style.display=(x===id?'':'none'); });
@@ -349,6 +369,16 @@ function statusPill(s){
   var cls=(t==='완료')?'ok':((t==='진행중')?'ing':'');
   return '<span class="pill '+cls+'">'+esc(t)+'</span>';
 }
+/* 재계약 · 추가 계약 딱지 (2026-10-27 · 계약서 261027 판 제7조 「정산 내역에 반영」)
+   repeat_kind = 비어 있음(첫 건) · '추가 계약' · '기간 지남'(첫 신청 12개월 뒤) — 8번 창이 내려 줌.
+   🔴 「재계약」과 「추가 계약」을 가르는 자료는 없습니다. 기준이 정해지기 전에는 나누지 마십시오. */
+function repeatTag(x){
+  if(!x.repeat_kind)return '';
+  var t=(x.repeat_kind==='기간 지남')?'첫 신청 12개월 지남':x.repeat_kind;
+  return '<div style="font-size:var(--t-xs);color:var(--muted)">'+esc(t)
+    +(x.seq?' · '+esc(x.seq)+'번째 신청':'')
+    +(x.first_at?' (첫 신청 '+fdate(x.first_at)+')':'')+'</div>';
+}
 async function loadOrders(){
   var r=await sb.rpc('partner_orders');
   var rows=(r&&!r.error&&r.data)?r.data:[];
@@ -358,6 +388,7 @@ async function loadOrders(){
     if(x.paid_at){ paid++; if(String(x.paid_at).slice(0,7)===ym){ mcnt++; mamt+=Number(x.amount)||0; } }
     h+='<tr><td><b>'+esc(x.customer||'-')+'</b>'
       +(x.how==='link'?'<div class="sub" style="font-size:var(--t-xs);color:var(--muted)">전용 링크</div>':'')
+      +repeatTag(x)
       +'</td>'
       +'<td>'+esc(PLAT[x.center]||x.center||'-')+'</td>'
       +'<td>'+esc(x.kind||'-')+(x.work_type?'<div style="font-size:var(--t-xs);color:var(--muted)">'+esc(x.work_type)+'</div>':'')+'</td>'
@@ -373,6 +404,45 @@ async function loadOrders(){
   $('s-month').textContent=mcnt;
   $('s-amt').textContent=won(mamt);
 }
+
+/* ---------- 커미션 정산 ---------- */
+function ymLabel(d){ var s=String(d||''); return s.slice(0,4)+'년 '+Number(s.slice(5,7))+'월'; }
+async function loadPayouts(){
+  var r=await sb.rpc('partner_payouts_me');
+  var rows=(r&&!r.error&&r.data)?r.data:[];
+  $('payRows').innerHTML=rows.map(function(x){
+    var sent=(x.status==='sent');
+    return '<tr><td><b>'+ymLabel(x.month)+'</b></td>'
+      +'<td class="r tnum">'+(Number(x.order_count)||0)+'</td>'
+      +'<td class="r tnum"><b>'+won(x.amount)+'</b></td>'
+      +'<td><span class="pill '+(sent?'ok':'ing')+'">'+(sent?'지급 완료':'정산 예정')+'</span></td>'
+      +'<td class="tnum">'+(sent&&x.sent_at?fdate(x.sent_at):fdate(x.pay_on)+' <span style="color:var(--muted)">예정</span>')+'</td>'
+      +'<td><button class="btn btn-g btn-s" type="button" onclick="payDetail(this,\''+esc(String(x.month).slice(0,10))+'\')">내역</button></td></tr>'
+      +'<tr class="hide"><td colspan="6" style="background:var(--surface-2)"></td></tr>';
+  }).join('');
+  $('noPay').classList.toggle('hide',rows.length>0);
+}
+window.payDetail=async function(btn,month){
+  var box=btn.closest('tr').nextElementSibling, cell=box.firstElementChild;
+  if(!box.classList.contains('hide')){ box.classList.add('hide'); return; }
+  box.classList.remove('hide'); cell.textContent='불러오는 중…';
+  var r=await sb.rpc('partner_pay_detail_me',{p_month:month});
+  if(r.error){ cell.textContent='내역을 불러오지 못했습니다. 담당자에게 문의해 주십시오.'; return; }
+  var rows=r.data||[];
+  if(!rows.length){ cell.textContent='내역이 없습니다.'; return; }
+  cell.innerHTML='<table><thead><tr><th>구분</th><th>업체명</th><th class="r">편수</th>'
+    +'<th class="r">기준 금액</th><th class="r">커미션</th><th>입금 · 환불일</th></tr></thead><tbody>'
+    +rows.map(function(d){
+      var ref=(d.kind==='refund');
+      return '<tr><td>'+(ref?'<span class="pill" style="color:var(--bad)">환불 차감</span>':'<span class="pill">주문</span>')+'</td>'
+        +'<td>'+esc(d.academy||'-')+(d.premium?'<div style="font-size:var(--t-xs);color:var(--muted)">프리미엄</div>':'')+'</td>'
+        +'<td class="r tnum">'+(Number(d.qty)||0)+'편</td>'
+        +'<td class="r tnum">'+won(d.base)+'</td>'
+        +'<td class="r tnum"'+(ref?' style="color:var(--bad)"':'')+'>'+won(d.amount)+'</td>'
+        +'<td class="tnum">'+fdate(d.earned_at)+'</td></tr>';
+    }).join('')+'</tbody></table>'
+    +'<p class="sub" style="margin:8px 0 0;font-size:var(--t-xs)">커미션 = 기준 금액의 10% · 고객 취소로 환불된 편만 차감합니다.</p>';
+};
 
 /* ---------- 전용 링크 ---------- */
 var APPLY=[
