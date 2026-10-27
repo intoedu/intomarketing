@@ -1871,8 +1871,9 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
 
         <div class="stage" id="owner_box">
           <div class="lab-row wz-only"><span class="lab">도메인 소유자 정보</span></div>
-          <p class="desc wz-only">도메인 등록 회사에만 전달하는 정보입니다. 「업체 정보로 자동 입력」을 누르면 신청서에 입력한 내용으로 채워집니다.</p>
-          <div class="sec"><span>소유자 정보 <span class="where priv">도메인 등록 회사에만 전달</span></span><button type="button" class="sbtn ghost" id="own_fill" style="min-height:36px;padding:0 12px;font-size:13px">업체 정보로 자동 입력</button></div>
+          <!-- 🔴 「등록 회사에만 전달」처럼 범위를 좁혀 약속하는 말은 쓰지 마십시오 — .kr 은 whois 에 이름 · 주소가 공개됩니다. 「쓰는 용도」로만 설명합니다 (행정 창 2026-10-27) -->
+          <p class="desc wz-only">도메인 등록에만 쓰는 정보입니다. 홈페이지 제작에는 쓰지 않습니다. 「업체 정보로 자동 입력」을 누르면 신청서에 입력한 내용으로 채워집니다.</p>
+          <div class="sec"><span>소유자 정보 <span class="where priv">도메인 등록용</span></span><button type="button" class="sbtn ghost" id="own_fill" style="min-height:36px;padding:0 12px;font-size:13px">업체 정보로 자동 입력</button></div>
           <!-- 🔴 소유자 본인 동의 안내 (행정 창 2026-10-27) — 소유자가 신청자 본인이 아닐 수 있어 넣은 줄입니다. 지우지 마십시오. -->
           <p class="note info" style="margin:0 0 12px">소유자가 신청하신 분 본인이 아닌 경우(대표님 개인 명의 · 가족 명의 등), 그분께 미리 알리고 동의를 받은 뒤 입력해 주십시오.</p>
           <div class="row2">
