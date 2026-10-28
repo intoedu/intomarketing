@@ -2,7 +2,7 @@
 <html lang="ko">
 <!-- ══════════════════════════════════════════════════════════════
    홈페이지 제작 세부페이지 ( intomarketing.co.kr/web/ )   2026-10-28 새 테마
-   본문 · 디자인 = 「홈페이지 테마.html」(이은총 님 10/28 전달)
+   본문 · 디자인 = 디자이너 원본 「index (1).html」(이은총 님 10/28 전달 · 앞서 받은 「홈페이지 테마.html」 대신)
    그 위에 사이트 공통 것을 붙였습니다 — 머리 정보(og · 파비콘 · canonical) · 머리띠 · 자료 출처 · 바닥(사업자 정보) · 로그인 표시 스크립트
 
    🔴 메인을 고치면 /web/ 도 같이 고쳐야 합니다
@@ -11,7 +11,8 @@
    🔴 가격은 아래 본문 가격표(.opt)와 스크립트에 숫자로 들어가 있습니다.
       /apply/index.html PRICE · PLANS, 메인 가격표, hakwon/index.html WEB_ITEMS 와 같은 값이어야 합니다.
    🔴 조사 수치는 「자료 출처」와 짝입니다. 출처 · 조건을 줄이거나 빼지 마십시오.
-   🔴 사례 그림은 /web/img/work-*.webp 입니다.
+   🔴 사례 그림은 /web/img/work-*-pc.jpg 입니다.
+   🔴 「영업일 3일 안에 완성본」 약속은 하지 않습니다(10/28 이은총 님). 다시 넣지 마십시오.
    ══════════════════════════════════════════════════════════════ -->
 <head>
 <meta charset="utf-8">
@@ -172,7 +173,6 @@ img{display:block;max-width:100%}
 .sel b{position:absolute;right:6px;top:6px;white-space:nowrap;font-size:12px;font-weight:700;background:var(--cobalt);color:#fff;padding:3px 9px;border-radius:5px}
 .sel.out b{right:auto;left:-1.5px;top:auto;bottom:100%;margin-bottom:6px}
 .sel.bottom b{top:auto;bottom:6px}
-@media(max-width:700px){.sel b{font-size:10px;padding:2px 6px;right:3px;top:3px}.sel i{width:6px;height:6px}}
 
 .facts-bar{position:relative;z-index:1;max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);background:var(--white);border-radius:0 0 24px 24px;border:1px solid var(--line);border-top:0;box-shadow:0 30px 60px -40px rgba(18,20,28,.4)}
 @media(min-width:800px){.facts-bar{grid-template-columns:repeat(4,1fr)}}
@@ -797,7 +797,7 @@ tr:last-child th,tr:last-child td{border-bottom:0}
 .home-in .mp{height:62px;margin:0 10px 10px;border-radius:10px;background:repeating-linear-gradient(0deg,transparent 0 16px,#E1E5D6 16px 17px),repeating-linear-gradient(90deg,transparent 0 20px,#E1E5D6 20px 21px),#EEF0E6}
 .screen:not(.path .screen) .home-in .mn,.screen:not(.path .screen) .home-in .mp{display:none}
 .path .cap{width:max-content}.path .cap,.path .cap *{white-space:nowrap}
-@media(min-width:1180px){.f1{left:-46px;top:230px}.f2{right:-46px;top:330px}.f3{right:-36px;top:560px}}
+@media(min-width:1180px){.f1{left:-46px}.f2{right:-46px}.f3{right:-36px}}
 .path .j-call .cap{top:-16px;bottom:auto;transform:translate(-22%,-100%)}
 .path .s-map .cap{transform:translate(-78%,100%)}
 @media(max-width:999px){
@@ -938,111 +938,7 @@ tr:last-child th,tr:last-child td{border-bottom:0}
 @media(max-width:899px){.work:nth-child(n) .monitor{--ry:0deg}}
 @media(max-width:520px){.work{text-align:left}.work .chips{justify-content:flex-start}}
 
-/* ===================== 사례 보강: 모니터 안에서 사이트가 넘어가고, 휴대폰 화면을 함께 ===================== */
-.m-view{position:relative;aspect-ratio:16/9;overflow:hidden;border-radius:7px;background:#0B0C10}
-.m-view .m-shot{position:absolute;left:0;top:0;width:100%;height:auto;aspect-ratio:auto;object-fit:fill;border-radius:0;transition:none;transform:translateY(0)}
-.work:hover .m-scr img{transform:none}
-@keyframes shotScroll{0%,10%{transform:translateY(0)}46%,56%{transform:translateY(var(--end,0px))}92%,100%{transform:translateY(0)}}
-.works.playing .m-shot{animation:shotScroll 16s cubic-bezier(.45,0,.55,1) infinite}
-.works.playing .work:nth-child(2) .m-shot{animation-delay:-8s}
-.work:hover .m-shot{animation-play-state:paused}
-.monitor{position:relative;width:100%}
-.m-scr{width:100%;box-sizing:border-box}
-.monitor::after{content:"";position:absolute;left:12%;right:12%;bottom:-18px;height:30px;background:radial-gradient(closest-side,rgba(18,20,28,.28),transparent);filter:blur(6px);z-index:-1}
-.m-phone{position:absolute;bottom:58px;width:21%;z-index:3;padding:5px;border-radius:20px;background:linear-gradient(145deg,#353849,#0E0F15);
-  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.14),0 24px 40px -16px rgba(18,20,28,.6);transition:transform .7s cubic-bezier(.2,.8,.2,1)}
-.m-phone::before{content:"";position:absolute;top:10px;left:50%;width:32%;height:7px;margin-left:-16%;border-radius:999px;background:#0B0C10;z-index:2}
-.m-phone img{display:block;width:100%;height:auto;aspect-ratio:9/19;object-fit:cover;object-position:top;border-radius:15px}
-.work:nth-child(1) .m-phone{left:-5%;transform:rotate(-5deg)}
-.work:nth-child(2) .m-phone{right:-5%;transform:rotate(5deg)}
-.work:hover .m-phone{transform:rotate(0) translateY(-10px)}
-@media(max-width:899px){.work:nth-child(1) .m-phone{left:-2%}.work:nth-child(2) .m-phone{right:-2%}.m-phone{width:22%;bottom:52px}}
-
-/* 휴대폰: 아래에 고정되는 신청 버튼 */
-.mcta{display:none}
-@media(max-width:759px){
-  .mcta{display:grid;grid-template-columns:1fr 1.15fr;gap:8px;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:60;
-    padding:8px;border-radius:22px;background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.9);
-    box-shadow:0 18px 40px -14px rgba(18,20,28,.45);transform:translateY(140%);opacity:0;transition:transform .5s var(--ease),opacity .4s}
-  .mcta.show{transform:none;opacity:1}
-  .mcta .btn{height:48px;padding:0 10px;font-size:14.5px}
-  footer{padding-bottom:96px}
-}
-
-/* ===================== 모니터 화면 비율 고정 (16:9) ===================== */
-.laptop .canvas{aspect-ratio:16/9;display:flex;flex-direction:column}
-.laptop .browser{flex:1;display:flex;flex-direction:column;min-height:0}
-.laptop .viewport{flex:1;height:auto!important;min-height:0}
-.laptop.phone .canvas{aspect-ratio:9/19.5}
-.laptop .site{position:absolute;left:0;top:0;width:1280px;transform-origin:0 0}
-.laptop .viewport{position:relative;overflow:hidden}
-.laptop,.laptop .lid,.laptop .canvas,.laptop .browser{min-width:0}
-.editor>.laptop{width:100%}
-.path .screen .ph-in,.path .screen.main .ph-in{height:auto!important;aspect-ratio:16/9}
-.m-view{aspect-ratio:16/9}
-
-/* ===================== 예시 홈페이지: 1280px PC 화면 기준으로 화면을 꽉 채우게 ===================== */
-.laptop #site{display:flex;flex-direction:column;font-size:16px;line-height:1.55}
-#site .s-nav{flex:none;padding:24px 64px;border-bottom:1px solid rgba(127,127,140,.14)}
-#site .s-name{font-size:21px}
-#site .s-menu{gap:36px;font-size:15px}
-#site .s-call{font-size:14px;padding:11px 20px}
-#site .s-hero{flex:1;min-height:0;margin:0 64px;padding:36px 0 32px;gap:56px;grid-template-columns:1fr 1.15fr;align-items:stretch}
-#site .s-hero>div:first-child{align-self:center}
-#site .s-hero h4{font-size:58px;line-height:1.12;letter-spacing:-.04em}
-#site .s-hero .sk{height:12px;border-radius:6px;margin-top:16px}
-#site .s-btns{gap:12px;margin-top:30px}
-#site .s-btns span{font-size:16px;padding:15px 26px}
-#site .s-art{height:auto!important;min-height:0;align-self:stretch}
-#site .s-tiles{flex:none;padding:0 64px;gap:20px}
-#site .s-tiles div{padding:20px 22px}
-#site .s-tiles .sk{height:10px;margin-top:12px}
-#site .sk-ic{width:30px;height:30px;border-radius:9px;margin-bottom:6px}
-#site .s-foot{flex:none;margin:22px 64px 0;padding:18px 0 24px;font-size:13px}
-#site .s-foot .sk{height:10px}
-/* 화면 스타일별 */
-#site.text .s-hero{grid-template-columns:1.25fr .75fr;padding:56px 0 44px}
-#site.text .s-hero h4{font-size:52px}
-#site.text .s-art{align-self:center;height:72%!important}
-#site.photo .s-hero{grid-template-columns:.85fr 1.25fr}
-#site.photo .s-hero h4{font-size:58px}
-#site.bold .s-hero h4{font-size:84px;line-height:1}
-#site.bold .s-hero{grid-template-columns:1.1fr .9fr}
-/* 휴대폰 보기 (390px 기준) */
-.browser.phone #site .s-nav{padding:16px 20px}
-.browser.phone #site .s-name{font-size:17px}
-.browser.phone #site .s-call{font-size:12px;padding:8px 13px}
-.browser.phone #site .s-hero{flex:none;display:flex;flex-direction:column;margin:0 20px;padding:18px 0 22px;gap:18px}
-.browser.phone #site .s-hero>div:first-child{align-self:stretch}
-.browser.phone #site .s-art{order:-1;height:230px!important;flex:none}
-.browser.phone #site.text .s-art{height:170px!important}
-.browser.phone #site .s-hero h4{font-size:32px}
-.browser.phone #site.bold .s-hero h4{font-size:40px}
-.browser.phone #site .s-hero .sk{height:9px;margin-top:10px}
-.browser.phone #site .s-btns{margin-top:18px}
-.browser.phone #site .s-btns span{font-size:14px;padding:12px 18px}
-.browser.phone #site .s-tiles{padding:0 20px;gap:10px;grid-template-columns:1fr}
-.browser.phone #site .s-tiles div{padding:14px 16px}
-.browser.phone #site .s-foot{margin:14px 20px 0}
-
-/* ===================== 첫인상 정리: 복잡도는 낮게, 익숙한 배치로 ===================== */
-.hero{background:linear-gradient(180deg,#FFFFFF 0%,var(--paper) 100%)!important}
-.hero::before,.floor,.glow{display:none!important}
-.hero h1{text-shadow:none}
-/* 편집 도구줄: 어두운 막대 → 밝고 가벼운 버튼 묶음 */
-.toolbar{background:#fff!important;border:1px solid var(--line);box-shadow:0 1px 2px rgba(18,20,28,.04),0 10px 24px -16px rgba(18,20,28,.25)!important;color:var(--ink);padding:8px 10px!important;gap:6px 14px!important}
-.tlabel{color:var(--faint);font-size:12.5px}
-.seg{background:#F2F3F6!important;box-shadow:none!important}
-.seg button{color:var(--sub)}
-.seg button:hover{color:var(--ink)}
-.seg button[aria-pressed="true"]{background:var(--ink)!important;color:#fff!important;box-shadow:0 2px 6px rgba(18,20,28,.25)!important}
-/* 첫 화면 버튼의 반짝임 제거 (끝부분 버튼만 유지) */
-.hero .btn-ink::after,.hero .btn-cobalt::after,.btn-cobalt::after{display:none}
-/* 모니터 그림자 · 반사광 절제 */
-.lid::after{background:linear-gradient(120deg,rgba(255,255,255,.08),transparent 28%)!important}
-.lid{box-shadow:inset 0 0 0 1.5px #343744,0 30px 60px -30px rgba(18,20,28,.45)!important}
-
-@media(prefers-reduced-motion:reduce){.works .m-shot{animation:none!important}.laptop{transform:none!important}.rv{opacity:1!important;transform:none!important}.path .screen{opacity:1!important}.editor{transform:none!important}.float{animation:none}}
+@media(prefers-reduced-motion:reduce){.laptop{transform:none!important}.rv{opacity:1!important;transform:none!important}.path .screen{opacity:1!important}.editor{transform:none!important}.float{animation:none}}
 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}.build *{opacity:1!important;transform:none!important}}
 
@@ -1167,7 +1063,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
 
 <!-- ================= 히어로 ================= -->
 <section class="hero">
-  
+  <div class="floor" aria-hidden="true"></div><div class="glow g1" aria-hidden="true"></div><div class="glow g2" aria-hidden="true"></div>
   <div class="wrap">
     <div class="hero-copy">
       <h1>우리 가게의<br><span class="hl"><span class="tag" aria-hidden="true">홈페이지</span>두 번째 간판</span></h1>
@@ -1179,8 +1075,9 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
     </div>
 
     <div class="studio">
-
-
+      <div class="float f1" aria-hidden="true"><span class="fi"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="7" y="2" width="10" height="20" rx="3"/><path d="M11 18h2"/></svg></span><span><small>기본 포함</small><b>휴대폰 화면</b></span></div>
+      <div class="float f2" aria-hidden="true"><span class="fi g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></span><span><small>기본 포함</small><b>네이버 · 구글 검색 등록</b></span></div>
+      <div class="float f3" aria-hidden="true"><span class="fi y"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M6 3h3l2 5-2 1a11 11 0 0 0 6 6l1-2 5 2v3a2 2 0 0 1-2 2A17 17 0 0 1 4 5a2 2 0 0 1 2-2z"/></svg></span><span><small>기본 포함</small><b>전화 · 카카오톡 버튼</b></span></div>
       <div class="editor">
         <div class="toolbar">
           <div class="tgroup"><span class="tlabel" id="lb-biz">업종</span>
@@ -1242,11 +1139,11 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
     <h2 class="h2">인투마케팅이 만든<br>홈페이지</h2>
     <div class="works">
       <a class="work" href="https://intoedu.github.io/SLT-Tour-Home-Page/" target="_blank" rel="noopener">
-        <div class="monitor"><div class="m-scr"><div class="m-view"><img class="m-shot" loading="lazy" decoding="async" src="img/work-slt-pc.webp" alt="SLT TOUR 홈페이지 PC 화면" width="1100" height="1850"></div></div><div class="m-phone"><img loading="lazy" decoding="async" src="img/work-slt-phone.webp" alt="SLT TOUR 홈페이지 휴대폰 화면" width="484" height="983"></div><i class="m-stand" aria-hidden="true"><b></b></i></div>
+        <div class="monitor"><div class="m-scr"><img src="img/work-slt-pc.jpg" alt="SLT TOUR 홈페이지 PC 화면" width="1411" height="718" loading="lazy"></div><i class="m-stand" aria-hidden="true"><b></b></i></div>
         <div><small>동남아 · 중화권 전문 B2B 여행사</small><h3>SLT TOUR</h3><p>주요 화면: 회사소개, 서비스, 연혁, 지역별 조직, 오시는 길</p><div class="chips"><span>기본 홈페이지</span></div><span class="go">사이트 보기 ↗<span class="sr">(새 창)</span></span></div>
       </a>
       <a class="work" href="https://intoedu.github.io/greenpasture/" target="_blank" rel="noopener">
-        <div class="monitor"><div class="m-scr"><div class="m-view"><img class="m-shot" loading="lazy" decoding="async" src="img/work-greenpasture-pc.webp" alt="그린파스처 홈페이지 PC 화면" width="1100" height="1850"></div></div><div class="m-phone"><img loading="lazy" decoding="async" src="img/work-greenpasture-phone.webp" alt="그린파스처 홈페이지 휴대폰 화면" width="484" height="983"></div><i class="m-stand" aria-hidden="true"><b></b></i></div>
+        <div class="monitor"><div class="m-scr"><img src="img/work-greenpasture-pc.jpg" alt="그린파스처 홈페이지 PC 화면" width="1411" height="718" loading="lazy"></div><i class="m-stand" aria-hidden="true"><b></b></i></div>
         <div><small>촉매 코팅 제조 · 시공 B2B</small><h3>그린파스처</h3><p>주요 화면: 성능 데이터, 제품 라인업, 견적 · 샘플 · 파트너 신청</p><div class="chips"><span>기본 홈페이지</span><span>신청서</span><span>한 · 영 함께 표기</span><span>공지</span></div><span class="go">사이트 보기 ↗<span class="sr">(새 창)</span></span></div>
       </a>
     </div>
@@ -1508,7 +1405,6 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
 </section>
 </main>
 
-<div class="mcta" id="mcta" aria-hidden="true"><a class="btn btn-ghost" href="#quote" tabindex="-1">예상 금액 계산하기</a><a class="btn btn-ink" href="/apply/" tabindex="-1">홈페이지 제작 신청</a></div>
 
 <!-- ══════════ 13. 자료 출처 ══════════ -->
 <aside class="srcs" aria-labelledby="src-h">
@@ -1593,16 +1489,11 @@ if(burger)burger.addEventListener('click',function(){var on=sheet.classList.togg
     $('s-art').innerHTML=ART[st.biz];
     $('s-tiles').innerHTML=[0,1,2].map(()=>'<div><i class="sk-ic"></i><i class="sk" style="width:70%"></i><i class="sk" style="width:45%"></i></div>').join('');
     $('s-foot').innerHTML=b.rule?b.foot:'<i class="sk" style="width:40%;margin:0"></i>';
-    browser.classList.toggle('phone',st.dev==='phone');requestAnimationFrame(fit);$('laptop').classList.toggle('phone',st.dev==='phone');
+    browser.classList.toggle('phone',st.dev==='phone');$('laptop').classList.toggle('phone',st.dev==='phone');
     site.classList.remove('swap');void site.offsetWidth;site.classList.add('swap');
     setTimeout(place,620);
   }
-  function fit(){
-    const base=st.dev==='phone'?390:1280,vw=vp.offsetWidth,vh=vp.offsetHeight;if(!vw)return;
-    const k=vw/base;site.style.width=base+'px';site.style.height=(vh/k)+'px';site.style.transform='scale('+k+')';
-  }
   function place(){
-    fit();
     const b=BIZ[st.biz];let el,label,mode='';
     if(st.focus==='dev'){el=site;label=st.dev==='phone'?'휴대폰 화면':'PC 화면';mode='bottom';}
     else if(st.focus==='biz'&&b.rule){el=$('s-foot');label=b.rule;mode='out';}
@@ -1612,18 +1503,17 @@ if(burger)burger.addEventListener('click',function(){var on=sheet.classList.togg
     const top=Math.max(3,(r.top-v.top)/k-p),left=Math.max(3,(r.left-v.left)/k-p);
     const h=Math.min(vh-top-3,r.height/k+p*2),w=Math.min(vw-left-3,r.width/k+p*2);
     Object.assign(sel.style,{top:top+'px',left:left+'px',width:w+'px',height:h+'px'});
-    sel.className='sel '+(st.touched?'on ':'')+mode;lab.textContent=label;
+    sel.className='sel on '+mode;lab.textContent=label;
   }
   function bind(id,key){
     const btns=[...document.querySelectorAll('#'+id+' button')];
     btns.forEach(btn=>btn.addEventListener('click',()=>{
       btns.forEach(x=>x.setAttribute('aria-pressed',String(x===btn)));
-      st[key]=btn.dataset[key];st.focus=key;st.touched=true;render();
+      st[key]=btn.dataset[key];st.focus=key;render();
     }));
   }
   bind('bizSeg','biz');bind('styleSeg','style');bind('devSeg','dev');
   addEventListener('resize',()=>place());
-  $('laptop').querySelector('.lid').addEventListener('transitionend',()=>place());
   render();
   $('laptop').addEventListener('animationend',e=>{if(e.animationName!=='powerOn')return;$('laptop').classList.remove('opening');place();});
   window.__demo={bizBtns:[...document.querySelectorAll('#bizSeg button')]};
@@ -1716,32 +1606,13 @@ if(burger)burger.addEventListener('click',function(){var on=sheet.classList.togg
   document.querySelector('.toolbar').addEventListener('pointerdown',()=>{user=true;});
   document.querySelector('.toolbar').addEventListener('keydown',()=>{user=true;});
   new IntersectionObserver(es=>{vis=es[0].isIntersecting;},{threshold:.4}).observe(lap);
+  setInterval(()=>{if(user||!vis||document.hidden)return;i=(i+1)%bz.length;bz[i].click();},3600);
 
   /* 기본 구성: 항목이 차례로 표시됩니다 (직접 고르면 멈춤) */
   const pb=[...document.querySelectorAll('#parts button')];let pu=false,pv=false,j=0;
   const pl=document.getElementById('parts');['pointerdown','pointerenter','focusin'].forEach(ev=>pl.addEventListener(ev,()=>{pu=true;}));
   new IntersectionObserver(es=>{pv=es[0].isIntersecting;},{threshold:.35}).observe(document.querySelector('.anatomy'));
   setInterval(()=>{if(pu||!pv||document.hidden)return;j=(j+1)%pb.length;pb[j].click();},1900);
-})();
-
-/* ===== 사례: 화면 높이에 맞춰 스크롤 거리 계산 · 보일 때만 재생 ===== */
-(function(){
-  const works=document.querySelector('.works');if(!works)return;
-  const shots=[...works.querySelectorAll('.m-shot')];
-  function fit(){shots.forEach(img=>{const v=img.parentElement;const end=-(img.getBoundingClientRect().height-v.getBoundingClientRect().height)/(v.getBoundingClientRect().width/v.offsetWidth||1);img.style.setProperty('--end',Math.min(0,end).toFixed(0)+'px');});}
-  shots.forEach(img=>{if(img.complete)fit();else img.addEventListener('load',fit);});
-  addEventListener('resize',fit);fit();
-  if('IntersectionObserver' in window){new IntersectionObserver(es=>{works.classList.toggle('playing',es[0].isIntersecting);if(es[0].isIntersecting)fit();},{threshold:.2}).observe(works);}
-  else works.classList.add('playing');
-})();
-/* ===== 휴대폰: 첫 화면 버튼이 지나가면 아래 고정 버튼 표시 ===== */
-(function(){
-  const bar=document.getElementById('mcta'),acts=document.querySelector('.hero .acts'),end=document.getElementById('contact');
-  if(!bar||!acts||!('IntersectionObserver' in window))return;
-  let pastHero=false,atEnd=false;
-  function upd(){const on=pastHero&&!atEnd;bar.classList.toggle('show',on);bar.setAttribute('aria-hidden',String(!on));bar.querySelectorAll('a').forEach(a=>a.tabIndex=on?0:-1);}
-  new IntersectionObserver(es=>{const e=es[0];pastHero=!e.isIntersecting&&e.boundingClientRect.top<0;upd();}).observe(acts);
-  if(end)new IntersectionObserver(es=>{atEnd=es[0].isIntersecting;upd();},{threshold:.1}).observe(end);
 })();
 </script>
 <!-- 실장 전용 링크(?p=코드)로 들어온 것을 기억해 둡니다 — 신청서에서 씁니다 (메인과 같음) -->
