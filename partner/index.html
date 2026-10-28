@@ -369,15 +369,25 @@ function statusPill(s){
   var cls=(t==='완료')?'ok':((t==='진행중')?'ing':'');
   return '<span class="pill '+cls+'">'+esc(t)+'</span>';
 }
-/* 재계약 · 추가 계약 딱지 (2026-10-27 · 계약서 261027 판 제7조 「정산 내역에 반영」)
-   repeat_kind = 비어 있음(첫 건) · '추가 계약' · '기간 지남'(첫 신청 12개월 뒤) — 8번 창이 내려 줌.
-   🔴 「재계약」과 「추가 계약」을 가르는 자료는 없습니다. 기준이 정해지기 전에는 나누지 마십시오. */
+/* 재계약 · 추가 딱지 (2026-10-27 · 10/28 행정 창 기준으로 고침 · 계약서 261027 판 제7조 「정산 내역에 반영」)
+   두 번째 이후 주문(seq ≥ 2)만 표시합니다.
+     · 첫 신청(first_at)부터 12개월 안  →  「재계약 · 추가 · n번째 주문」 (계약서 조항 제목 [재계약 및 추가 주문]과 같은 말)
+     · 12개월 지남                      →  딱지 없이 「n번째 주문」만
+   🔴 「기간 지남」 같은 글자를 쓰지 마십시오 — 계약서에 커미션이 끊기는 기간이 없습니다(12개월은 «더 얹은 보장»).
+      실장이 「커미션 안 나오는 건」으로 읽으면 제6조(현황 페이지 표시 의무) 위반 소지가 됩니다.
+   🔴 「재계약」과 「추가 계약」을 둘로 나누지 마십시오 (행정 창 — 지급 조건이 같고 다툼거리만 생김).
+   12개월 계산은 8번 창이 주는 값(repeat_kind)이 아니라 first_at 으로 화면에서 합니다. */
 function repeatTag(x){
-  if(!x.repeat_kind)return '';
-  var t=(x.repeat_kind==='기간 지남')?'첫 신청 12개월 지남':x.repeat_kind;
-  return '<div style="font-size:var(--t-xs);color:var(--muted)">'+esc(t)
-    +(x.seq?' · '+esc(x.seq)+'번째 신청':'')
-    +(x.first_at?' (첫 신청 '+fdate(x.first_at)+')':'')+'</div>';
+  var n=Number(x.seq)||0;
+  if(n<2)return '';
+  var in12=false;
+  if(x.first_at&&x.created_at){
+    var lim=new Date(x.first_at); lim.setMonth(lim.getMonth()+12);
+    in12=(new Date(x.created_at)<=lim);
+  }
+  return '<div style="font-size:var(--t-xs);color:var(--muted)">'
+    +(in12?'<b style="color:var(--accent-ink)">재계약 · 추가</b> · ':'')
+    +n+'번째 주문</div>';
 }
 async function loadOrders(){
   var r=await sb.rpc('partner_orders');
