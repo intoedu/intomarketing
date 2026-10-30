@@ -2227,10 +2227,13 @@
        서버가 붙입니다 (DB 트리거 t_request_fill_partner). 코드 · 전용 링크는 쓰지 않습니다.
      · 못 붙은 건(명단에 없는 이름 · 같은 이름 둘)은 여기서 사람이 고릅니다.
      🔴 정산은 «여기서 확정된 값»만 봅니다. 손님이 적은 이름은 참고용입니다. */
-  var PARTNERS=[];
+  var PARTNERS=[], PT_REC={};
   async function loadPartners(){
     var r=await sb.from('partners').select('*').order('name');
     PARTNERS=r.error?[]:(r.data||[]);
+    /* 실장마다 돈 기록 건수 — 0이면 [지우기], 있으면 지울 수 없음 (partner_delete_check · 10/30) */
+    var c=await sb.rpc('partner_delete_check');
+    PT_REC={}; (c.data||[]).forEach(function(x){PT_REC[x.id]=x.records;});
   }
   function partnerName(id){
     for(var i=0;i<PARTNERS.length;i++)if(PARTNERS[i].id===id)return PARTNERS[i].name;
@@ -2314,11 +2317,41 @@
                                    :'<span class="muted">중지</span>')+'</td>'
        +'<td style="text-align:right;white-space:nowrap">'
        +'<button class="btn btn-ghost" style="padding:5px 11px;font-size:.8rem" type="button" onclick="editPartner(\''+p.id+'\')">✏️ 수정</button>'
+       +partnerDelCell(p)
        +'</td></tr>';
     });
     $('partnerWrap').innerHTML=h+'</tbody></table>';
   };
   function pOf(id){for(var i=0;i<PARTNERS.length;i++)if(PARTNERS[i].id===id)return PARTNERS[i];return null;}
+
+  /* ---------- 실장 지우기 (2026-10-30 · 행정 창 부탁) ----------
+     🔴 돈 기록(붙은 신청 · 신청서에 적힌 이름 · 블로그 주문 · 커미션 명세 · 정산)이 하나라도 있으면 지울 수 없습니다.
+        계약서 제4조 — 계약이 끝나도 계약 기간 중 소개 건의 커미션 정산은 끝까지 해야 합니다.
+        그런 분은 「활동 중지」만 됩니다. 검사는 센터(partner_delete)가 한 번 더 합니다 — 화면만 믿지 않습니다.
+     🔴 PT_REC 값이 없으면(불러오기 실패) 지우기를 보이지 않습니다. */
+  function partnerDelCell(p){
+    var n=PT_REC[p.id];
+    if(n===undefined)return '';
+    if(n===0)return ' <button class="btn btn-ghost" style="padding:5px 11px;font-size:.8rem;color:#C0392B" type="button" onclick="deletePartner(\''+p.id+'\')">지우기</button>';
+    return '<div class="muted" style="font-size:.75rem;margin-top:4px;white-space:normal">정산 기록이 있어 지울 수 없습니다'
+      +(p.status==='active'?' · 그만두셨으면 <button class="btn btn-ghost" style="padding:3px 9px;font-size:.75rem" type="button" onclick="pausePartner(\''+p.id+'\')">활동 중지</button>를 눌러 주십시오':'')
+      +'</div>';
+  }
+  window.deletePartner=async function(id){
+    var p=pOf(id); if(!p)return;
+    if(!confirm('「'+p.name+'」 님을 명단에서 지울까요?\n\n지우면 되돌릴 수 없습니다.\n정산 기록이 없는 분이라 지울 수 있습니다.'))return;
+    var r=await sb.rpc('partner_delete',{p_id:id});
+    if(r.error){toast(r.error.message);await loadPartners();renderPartners();return;}
+    await loadPartners(); renderPartners(); toast(p.name+' 님을 명단에서 지웠습니다');
+  };
+  window.pausePartner=async function(id){
+    var p=pOf(id); if(!p)return;
+    if(!confirm('「'+p.name+'」 님을 «활동 중지»로 바꿀까요?\n\n신청서에 이 이름을 적어도 더는 연결되지 않습니다.\n지난 소개 건의 정산 기록은 그대로 남고, 정산도 끝까지 이어집니다.'))return;
+    var r=await sb.from('partners').update({status:'paused',updated_at:new Date().toISOString()}).eq('id',id).select().maybeSingle();
+    if(r.error){toast('실패: '+r.error.message);return;}
+    if(!r.data){toast('권한이 없어 바뀌지 않았습니다');return;}
+    await loadPartners(); renderPartners(); toast(p.name+' 님을 활동 중지로 바꿨습니다');
+  };
 
   window.newPartner=async function(){
     var name=prompt('영업실장 성함을 적어 주세요');
