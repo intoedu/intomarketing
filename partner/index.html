@@ -227,11 +227,15 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
          계약서 제7조 「건별 주문 · 금액 · 산출 근거」 게시 자리입니다. 지우지 마십시오.
          지금 함수는 «블로그 · 리뷰» 주문만 계산합니다. 다른 서비스가 붙으면 제목을 바꾸십시오.
          🔴 블로그 건의 커미션 달은 센터 입금일(earned_at = blog_orders.paid_at)로 잡힙니다.
-            위 표의 「입금일」(requests.paid_at)과 다를 수 있으니, 내역에는 반드시 earned_at 을 쓰십시오. -->
+            위 표의 「입금일」(requests.paid_at)과 다를 수 있으니, 내역에는 반드시 earned_at 을 쓰십시오.
+         🔴 환불 사유가 「그 밖」인 건이 있으면 사람이 사유를 고를 때까지 그 달 마감이 멈추고,
+            그동안 그 달은 partner_payouts_me() 에 줄이 «아예 안 나옵니다»(8번 창 10/28 · 행정 창 지시).
+            빠진 달이 「0원 · 못 받음」으로 읽히지 않게 아래 안내 문장을 지우지 마십시오. -->
     <div class="card">
       <h2>커미션 정산 <span style="font-size:var(--t-sm);color:var(--muted);font-weight:600">블로그 · 리뷰</span></h2>
       <p class="sub">고객이 입금한 달에 잡히고, <b>다음 달 10일</b>에 지급합니다.
-        「내역」을 누르면 건별 금액과 산출 근거가 보입니다.</p>
+        「내역」을 누르면 건별 금액과 산출 근거가 보입니다.<br>
+        환불 사유를 확인하고 있는 달은 <b>확인이 끝난 뒤</b> 이 표에 나옵니다. 표에 없는 달은 <b>아직 정산 전</b>입니다.</p>
       <div style="overflow-x:auto">
         <table>
           <thead><tr>
@@ -240,7 +244,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
           <tbody id="payRows"></tbody>
         </table>
       </div>
-      <div class="empty hide" id="noPay">아직 정산할 커미션이 없습니다.</div>
+      <div class="empty hide" id="noPay">아직 정산이 끝난 달이 없습니다.</div>
     </div>
 
     <div class="card">
