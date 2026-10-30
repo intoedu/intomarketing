@@ -163,19 +163,36 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
           <input class="inp" id="su_pw" type="password" autocomplete="new-password"></div>
         <button class="btn btn-p wfull" type="button" onclick="doSignup()">계정 만들기</button>
         <div class="gnote" style="margin-top:16px;padding-top:0;border:0">
-          🔴 <b>계약서에 적어 주신 이메일</b>로 만들어 주십시오. 그 이메일이어야 현황이 연결됩니다.</div>
+          계정을 만든 뒤 <b>성함 · 휴대전화로 실장 신청</b>을 해 주십시오. 저희가 확인하고 수락하면 바로 현황이 보입니다.</div>
       </div>
       <p class="msg" id="gMsg"></p>
       <div class="gnote">계정이 안 만들어지거나 현황이 안 보이면 <b>010-7318-1790</b> 으로 연락 주십시오.</div>
     </div>
 
-    <div id="gNoMatch" style="display:none">
-      <p class="gsub"><b>아직 명단에 연결되지 않았습니다.</b></p>
-      <div class="note" style="margin:16px 0">로그인하신 이메일이 영업실장 명단에 없습니다.<br>
-        계약서에 적으신 이메일로 로그인하셨는지 확인해 주십시오.<br><br>
-        <b>010-7318-1790</b> 으로 연락 주시면 바로 등록해 드리겠습니다.</div>
+    <!-- 실장 신청 (2026-10-30 · 먼저 신청 → 어드민 [수락]) — partner_apply / partner_apply_me
+         🔴 수락 전에는 소개 내역 · 커미션 · 기준 · 코드 «아무것도» 보여 주지 않습니다. 아무나 가입해 신청할 수 있는 창구입니다.
+         🔴 받는 항목은 성함 · 휴대전화 둘뿐입니다. 늘리면 개인정보처리방침과 맞춰야 합니다(행정 창). -->
+    <div id="gApply" style="display:none">
+      <p class="gsub"><b>영업실장 신청</b></p>
+      <p class="gsub" id="aRejected" style="display:none;color:var(--bad)">지난 신청은 수락되지 않았습니다. 궁금하시면 아래 번호로 연락 주십시오.</p>
+      <div class="fld"><label for="ap_name">성함</label>
+        <input class="inp" id="ap_name" autocomplete="name" maxlength="30"></div>
+      <div class="fld"><label for="ap_phone">휴대전화</label>
+        <input class="inp" id="ap_phone" type="tel" autocomplete="tel" inputmode="numeric" placeholder="010-1234-5678"
+               onkeydown="if(event.key==='Enter')doApply()"></div>
+      <button class="btn btn-p wfull" type="button" onclick="doApply()">신청하기</button>
+      <p class="msg" id="aMsg"></p>
+      <div class="gnote">영업실장 계약을 맺으신 분만 수락됩니다. 수락되면 이 페이지에서 바로 현황이 보입니다.<br>
+        개인정보 처리는 <a href="/privacy/" target="_blank">개인정보처리방침</a>을 따릅니다.<br>
+        <a href="#" onclick="doLogout();return false;">다른 계정으로 로그인</a></div>
+    </div>
+
+    <div id="gPending" style="display:none">
+      <p class="gsub"><b>신청을 받았습니다. 확인 중입니다.</b></p>
+      <div class="note" style="margin:16px 0;white-space:normal">저희가 계약 내용을 확인하고 수락하면 이 페이지에서 바로 현황이 보입니다.<br><span id="pdInfo"></span><br><br>급하시면 <b>010-7318-1790</b> 으로 연락 주십시오.</div>
       <button class="btn btn-g wfull" type="button" onclick="location.reload()">다시 확인</button>
-      <div class="gnote"><a href="#" onclick="doLogout();return false;">다른 계정으로 로그인</a></div>
+      <div class="gnote"><a href="#" onclick="editApply();return false;">성함 · 번호 고치기</a> ·
+        <a href="#" onclick="doLogout();return false;">다른 계정으로 로그인</a></div>
     </div>
   </div>
 </div>
@@ -327,13 +344,14 @@ async function boot(){
   var s=await sb.auth.getSession();
   if(!s.data.session){ show('gAuth'); return; }
 
-  /* 이름표 붙이기 — 명단의 «이메일»과 같아야 연결됩니다 (partner_claim) */
+  /* 이름표 붙이기 — ① 이미 연결됨 ② 어드민이 이메일을 미리 넣어 둔 경우(예전 방식) 자동 연결 (partner_claim)
+     둘 다 아니면 ③ 실장 신청 화면 / 확인 중 화면 (2026-10-30) */
   var c=await sb.rpc('partner_claim');
   if(c.error){ show('gAuth'); return gmsg('확인 실패: '+c.error.message,'err'); }
-  if(!c.data||!c.data.ok){ show('gNoMatch'); return; }
+  if(!c.data||!c.data.ok){ return showApply(); }
 
   var me=await sb.rpc('partner_me');
-  if(me.error||!me.data){ show('gNoMatch'); return; }
+  if(me.error||!me.data){ return showApply(); }
   ME=me.data;
 
   $('gate').classList.add('hide'); $('app').classList.remove('hide');
@@ -354,9 +372,39 @@ async function boot(){
   await Promise.all([loadRules(), loadOrders(), loadPayouts()]);
 }
 function show(id){
-  ['gAuth','gNoMatch'].forEach(function(x){ $(x).style.display=(x===id?'':'none'); });
+  ['gAuth','gApply','gPending'].forEach(function(x){ $(x).style.display=(x===id?'':'none'); });
   $('gate').classList.remove('hide'); $('app').classList.add('hide');
 }
+
+/* ---------- 실장 신청 (2026-10-30) ---------- */
+var APP=null;
+async function showApply(){
+  var a=await sb.rpc('partner_apply_me');
+  APP=(a&&!a.error)?a.data:null;
+  if(APP&&APP.status==='pending'){
+    $('pdInfo').textContent='신청 내용 — '+APP.name+' · '+APP.phone+' · '+fdate(APP.created_at)+' 신청';
+    return show('gPending');
+  }
+  $('aRejected').style.display=(APP&&APP.status==='rejected')?'':'none';
+  show('gApply');
+}
+window.editApply=function(){
+  if(APP){ $('ap_name').value=APP.name||''; $('ap_phone').value=APP.phone||''; }
+  $('aRejected').style.display='none';
+  show('gApply');
+};
+window.doApply=async function(){
+  var n=$('ap_name').value.trim(), p=$('ap_phone').value.trim(), m=$('aMsg');
+  function am(t,c){m.textContent=t;m.className='msg'+(c?' '+c:'');}
+  if(n.length<2)return am('성함을 적어 주십시오.','err');
+  if(p.replace(/[^0-9]/g,'').length<10)return am('휴대전화 번호를 적어 주십시오.','err');
+  am('보내는 중…');
+  var r=await sb.rpc('partner_apply',{p_name:n,p_phone:p});
+  if(r.error)return am(r.error.message,'err');
+  am('');
+  if(r.data&&r.data.status==='accepted')return boot();
+  showApply();
+};
 
 /* ---------- 커미션 기준 (계약의 일부) ---------- */
 async function loadRules(){
