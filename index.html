@@ -2432,6 +2432,9 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
   var WEB_PAGE='/web/';
   /* 🔴 SNS 채널도 별도 쪽(/sns/)으로 — /web/ 과 같은 방식 (2026-10-20 이은총 님). 아래 <section id="v-sns"> 는 남겨 두었습니다(되돌릴 때 이 두 줄만 지우면 됩니다). */
   var SNS_PAGE='/sns/';
+  /* 🔴 디자인은 «누르면» 별도 쪽(/design/)으로 — 메인 카드 · 둘러보기가 go('design') 를 거칩니다 (2026-10-31 이은총 님).
+        /web/ · /sns/ 와 달리 show() 에서는 돌려보내지 않습니다 — /#design 주소(가격 · 제작 사례)는 /design/ 의 「가격 · 제작 사례 보기」가 씁니다. */
+  var DESIGN_PAGE='/design/';
   function show(view,anchor,keepScroll){
     if(view==='web'){ location.replace(WEB_PAGE); return; }
     if(view==='sns'){ location.replace(SNS_PAGE); return; }
@@ -2461,6 +2464,7 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
   window.go=function(view,anchor){
     if(view==='web'){ closeMenu(); SY[cur]=window.scrollY||0; location.href=WEB_PAGE; return; }
     if(view==='sns'){ closeMenu(); SY[cur]=window.scrollY||0; location.href=SNS_PAGE; return; }
+    if(view==='design'){ closeMenu(); SY[cur]=window.scrollY||0; location.href=DESIGN_PAGE; return; }
     if(VIEWS.indexOf(view)<0)view='home';
     var s=mine();
     if(!(history&&history.pushState)){ show(view,anchor); return; }
