@@ -163,7 +163,8 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
           <input class="inp" id="su_pw" type="password" autocomplete="new-password"></div>
         <button class="btn btn-p wfull" type="button" onclick="doSignup()">계정 만들기</button>
         <div class="gnote" style="margin-top:16px;padding-top:0;border:0">
-          계정을 만든 뒤 <b>성함 · 휴대전화로 실장 신청</b>을 해 주십시오. 저희가 확인하고 수락하면 바로 현황이 보입니다.</div>
+          계정을 만든 뒤 <b>성함 · 휴대전화로 실장 신청</b>을 해 주십시오. 저희가 확인하고 수락하면 바로 현황이 보입니다.<br>
+          담당자에게 이메일을 미리 알려 주신 분은 <b>그 이메일로</b> 만드시면 신청 없이 바로 연결됩니다.</div>
       </div>
       <p class="msg" id="gMsg"></p>
       <div class="gnote">계정이 안 만들어지거나 현황이 안 보이면 <b>010-7318-1790</b> 으로 연락 주십시오.</div>
@@ -247,7 +248,10 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
             위 표의 「입금일」(requests.paid_at)과 다를 수 있으니, 내역에는 반드시 earned_at 을 쓰십시오.
          🔴 환불 사유가 「그 밖」인 건이 있으면 사람이 사유를 고를 때까지 그 달 마감이 멈추고,
             그동안 그 달은 partner_payouts_me() 에 줄이 «아예 안 나옵니다»(8번 창 10/28 · 행정 창 지시).
-            빠진 달이 「0원 · 못 받음」으로 읽히지 않게 아래 안내 문장을 지우지 마십시오. -->
+            빠진 달이 「0원 · 못 받음」으로 읽히지 않게 아래 안내 문장을 지우지 마십시오.
+         🔴 내역의 환불 줄은 reason 칸을 읽습니다(10/31 · 이은총 님 「보이게」 결정).
+            「중도 해지」 = 차감(음수) · 「우리 잘못」 · 「마감 넘김」 = 0원 줄 「환불 · 차감 없음」.
+            0원 줄과 reason 은 8번 창 함수가 내 줘야 나옵니다. 그 전에는 예전처럼 차감 줄만 보입니다. -->
     <div class="card">
       <h2>커미션 정산 <span style="font-size:var(--t-sm);color:var(--muted);font-weight:600">블로그 · 리뷰</span></h2>
       <p class="sub">고객이 입금한 달에 잡히고, <b>다음 달 10일</b>에 지급합니다.
@@ -491,15 +495,20 @@ window.payDetail=async function(btn,month){
   cell.innerHTML='<table><thead><tr><th>구분</th><th>업체명</th><th class="r">편수</th>'
     +'<th class="r">기준 금액</th><th class="r">커미션</th><th>입금 · 환불일</th></tr></thead><tbody>'
     +rows.map(function(d){
-      var ref=(d.kind==='refund');
-      return '<tr><td>'+(ref?'<span class="pill" style="color:var(--bad)">환불 차감</span>':'<span class="pill">주문</span>')+'</td>'
-        +'<td>'+esc(d.academy||'-')+(d.premium?'<div style="font-size:var(--t-xs);color:var(--muted)">프리미엄</div>':'')+'</td>'
+      /* 환불 줄 (10/31) — reason 은 8번 창 partner_pay_detail_me 가 줌
+         「중도 해지」 = 고객 취소 → 음수(차감) · 「우리 잘못」 · 「마감 넘김」 = 0원 줄(차감 없음, 실장에게 숨기지 않으려고 보여 줌) */
+      var ref=(d.kind==='refund'), keep=ref&&Number(d.amount)===0;
+      var why=!ref?'':keep?({'우리 잘못':'회사 사정으로 환불','마감 넘김':'마감을 넘겨 환불'}[d.reason]||d.reason||'')
+                         :(d.reason==='중도 해지'?'고객 취소':(d.reason||''));
+      var small=function(t){ return t?'<div style="font-size:var(--t-xs);color:var(--muted)">'+esc(t)+'</div>':''; };
+      return '<tr><td>'+(!ref?'<span class="pill">주문</span>':keep?'<span class="pill">환불 · 차감 없음</span>':'<span class="pill" style="color:var(--bad)">환불 차감</span>')+small(why)+'</td>'
+        +'<td>'+esc(d.academy||'-')+(d.premium?small('프리미엄'):'')+'</td>'
         +'<td class="r tnum">'+(Number(d.qty)||0)+'편</td>'
         +'<td class="r tnum">'+won(d.base)+'</td>'
-        +'<td class="r tnum"'+(ref?' style="color:var(--bad)"':'')+'>'+won(d.amount)+'</td>'
+        +'<td class="r tnum"'+(ref&&!keep?' style="color:var(--bad)"':'')+'>'+won(d.amount)+(keep?small('커미션 그대로'):'')+'</td>'
         +'<td class="tnum">'+fdate(d.earned_at)+'</td></tr>';
     }).join('')+'</tbody></table>'
-    +'<p class="sub" style="margin:8px 0 0;font-size:var(--t-xs)">커미션 = 기준 금액의 10% · 고객 취소로 환불된 편만 차감합니다.</p>';
+    +'<p class="sub" style="margin:8px 0 0;font-size:var(--t-xs)">커미션 = 기준 금액의 10% · 고객 취소로 환불된 편만 차감합니다. 회사 사정이나 마감을 넘겨 환불한 건은 차감하지 않고 「차감 없음」으로 보여 드립니다.</p>';
 };
 
 /* ---------- 전용 링크 ---------- */
