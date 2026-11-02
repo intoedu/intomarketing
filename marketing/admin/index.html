@@ -2129,7 +2129,7 @@
     var r=CURROW,el=$('d_quote');
     if(r.quote_no){
       el.innerHTML='<span class="qno">'+esc(r.quote_no)+'</span>'
-        +'<b class="muted" style="font-weight:600;font-size:.84rem">발행 '+fdate(r.quote_issued_at)+' · 청구 '+won(quoteTotals(r.quote).firstPay)+'</b>'
+        +'<b class="muted" style="font-weight:600;font-size:.84rem">발행 '+fdate(r.quote_issued_at)+' · '+(function(t){return webPay(r,t)?('계약 시 '+won(t.once)+' · 월 '+won(t.month)):('청구 '+won(t.firstPay));})(quoteTotals(r.quote))+'</b>'
         +'<span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">'
         +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="openQuote()">✏️ 편집</button>'
         +'<button class="btn btn-primary" style="padding:7px 13px" type="button" onclick="savePdf(this)">💾 PDF 받기</button>'
@@ -2707,10 +2707,20 @@
     t.firstPay=t.once+t.month+t.year;
     return t;
   }
+  /* 🔴 홈페이지 + 월 관리비가 있는 견적은 «계약할 때 낼 금액 = 제작비» 로 보여 줍니다 (2026-11-02 이은총 님).
+        계약서 제3조 제4 · 5항 : 제작비는 계약할 때, 월 관리비는 오픈일부터 매달 같은 날 자동이체.
+        결제 링크(/quote/)도 1회 항목(once_due)만 받습니다 — 세 곳 금액이 같아야 합니다. 예전 「최종 청구액(제작비 + 첫 달)」은 쓰지 않습니다. */
+  function webPay(r,t){ return groupOf(r)==='web'&&!!(t&&t.month); }
   function renderQuoteSum(){
     var t=quoteTotals(QD),h='';
     h+='<div class="r"><span>기존 비용 합계</span><span>'+won(t.before)+'</span></div>';
     h+='<div class="r"><span>할인 금액</span><span class="dis">- '+won(t.discount)+'</span></div>';
+    if(webPay(CURROW,t)){
+      h+='<div class="r"><span>월 관리비 (오픈일부터 매월)</span><span>'+won(t.month)+' / 월</span></div>';
+      if(t.year)h+='<div class="r"><span>매년 청구</span><span>'+won(t.year)+' / 년</span></div>';
+      h+='<div class="r total"><span>계약할 때 낼 금액 (제작비)</span><span>'+won(t.once)+'</span></div>';
+      $('q_sum').innerHTML=h; return;
+    }
     if(t.once)h+='<div class="r"><span>1회성 비용</span><span>'+won(t.once)+'</span></div>';
     if(t.month)h+='<div class="r"><span>매월 청구</span><span>'+won(t.month)+' / 월</span></div>';
     if(t.year)h+='<div class="r"><span>매년 청구</span><span>'+won(t.year)+' / 년</span></div>';
@@ -2866,10 +2876,14 @@
         +'<td class="r">'+(it&&Number(it.before)?Number(it.before).toLocaleString('ko-KR'):'')+'</td>'
         +'<td class="r"><b>'+(it&&Number(it.price)?Number(it.price).toLocaleString('ko-KR'):'')+'</b></td></tr>';
     }
-    var cyc='';
-    if(t.once)cyc+='<div class="r"><span>1회성 비용</span><span>'+won(t.once)+'</span></div>';
-    if(t.month)cyc+='<div class="r"><span>매월 청구</span><span>'+won(t.month)+' / 월</span></div>';
-    if(t.year)cyc+='<div class="r"><span>매년 청구</span><span>'+won(t.year)+' / 년</span></div>';
+    var cyc='', wp=webPay(r,t);
+    if(wp){
+      cyc='<div class="r"><span>월 관리비 (오픈일부터 매월)</span><span>'+won(t.month)+' / 월</span></div>'
+         +(t.year?'<div class="r"><span>매년 청구</span><span>'+won(t.year)+' / 년</span></div>':'');
+    }
+    else if(t.once)cyc+='<div class="r"><span>1회성 비용</span><span>'+won(t.once)+'</span></div>';
+    if(!wp&&t.month)cyc+='<div class="r"><span>매월 청구</span><span>'+won(t.month)+' / 월</span></div>';
+    if(!wp&&t.year)cyc+='<div class="r"><span>매년 청구</span><span>'+won(t.year)+' / 년</span></div>';
     return '<div class="paper" id="paperBody">'
      +'<div class="p-h"><div><h1>견 적 서</h1><div class="qsub">QUOTATION</div></div>'
      +'<div class="p-from'+(SET.stamp?' has-stamp':'')+'"><div>'
@@ -2904,9 +2918,10 @@
        +'<div class="r"><span>기존 비용 합계</span><span>'+won(t.before)+'</span></div>'
        +'<div class="r"><span>할인 금액</span><span class="dis">- '+won(t.discount)+'</span></div>'
        +cyc
-       +'<div class="r tot"><span>최종 청구액</span><span>'+won(t.firstPay)+'</span></div>'
+       +(wp?'<div class="r tot"><span>계약할 때 낼 금액 (제작비)</span><span>'+won(t.once)+'</span></div>'
+           :'<div class="r tot"><span>최종 청구액</span><span>'+won(t.firstPay)+'</span></div>')
      +'</div>'
-     +'<div class="p-note">※ 표시된 금액은 부가세 포함 금액입니다.'+(t.month||t.year?' 매월·매년 항목은 주기마다 청구되며, 최종 청구액은 최초 결제 기준입니다.':'')+'</div>'
+     +'<div class="p-note">※ 표시된 금액은 부가세 포함 금액입니다.'+(wp?' 월 관리비는 오픈일부터 매달 같은 날 자동이체로 냅니다.':(t.month||t.year?' 매월·매년 항목은 주기마다 청구되며, 최종 청구액은 최초 결제 기준입니다.':''))+'</div>'
      +payHTML(q)
      +(q.note?'<div class="p-sec"><h4>비고 / NOTES</h4><div class="box">'+esc(q.note)+'</div></div>':'')
      /* ── 계약 조항 — 비어 있는 칸은 아예 안 나옵니다 ── */
@@ -3224,10 +3239,16 @@
         +(u&&qn?(won(u)+' × '+qn+' = '):'')+won(it.price)
         +(Number(it.before)>Number(it.price)?(' (기존 '+won(it.before)+')'):''));
     });
+    if(webPay(r,t)){
+      lines.push('· 계약할 때 낼 금액 (제작비): '+won(t.once));
+      lines.push('· 월 관리비: '+won(t.month)+' / 월 (오픈일부터 매달 같은 날 자동이체)');
+      if(t.year)lines.push('· 매년 청구: '+won(t.year)+' / 년');
+    }else{
     if(t.once)lines.push('· 1회성 비용 합계: '+won(t.once));
     if(t.month)lines.push('· 매월 청구: '+won(t.month)+' / 월');
     if(t.year)lines.push('· 매년 청구: '+won(t.year)+' / 년');
     lines.push('· 최초 청구액: '+won(t.firstPay));
+    }
     lines.push('');
     if(SET.pay_note)lines.push(SET.pay_note);
     if(SET.bank)lines.push('[ 입금 계좌 ] '+SET.bank);
@@ -3250,6 +3271,7 @@
     var due='최초 청구액: '+won(t.firstPay);
     if(t.month)due+=' (매월 '+won(t.month)+' 포함)';
     if(t.year)due+=' (매년 '+won(t.year)+' 포함)';
+    if(webPay(r,t))due='계약할 때 낼 금액 (제작비): '+won(t.once)+' · 월 관리비 '+won(t.month)+' (오픈일부터)';
     lines.push('· '+due);
     lines.push('· 유효기간: 발행일로부터 '+(q.valid_days||30)+'일');
     lines.push('');
