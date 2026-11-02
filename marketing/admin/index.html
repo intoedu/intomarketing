@@ -1759,17 +1759,19 @@
   var XCOL={manage:['#B98A00','#FBE7A1'],web:['#1D4ED8','#C6D7FB'],sns:['#15803D','#BDE8CB'],design:['#5B21B6','#D9C9FA'],video:['#C2410C','#FAD3B5'],blog:['#0E7490','#BFE7F0']};
   var XROLE_ORDER={'관리자':0,'팀장':1,'담당자':2};
   async function loadExt(){
-    var a=await sb.from('ext_projects').select('*').order('sort').order('created_at');
-    var m=await sb.from('ext_members').select('*').order('sort').order('created_at');
-    var l=await sb.from('ext_project_requests').select('*');
-    var j=await sb.from('ext_jobs').select('*').order('sort').order('created_at');
-    var d=await sb.from('ext_deadlines').select('*').order('sort').order('created_at');
-    var st=await sb.from('ext_subtasks').select('*').order('sort').order('created_at');
-    var ep=await sb.from('ext_episodes').select('*').order('sort').order('created_at');
-    var rp=await sb.from('ext_reports').select('*').order('at',{ascending:false});
-    var fl=await sb.from('ext_files').select('*').order('created_at');
-    var py=await sb.from('ext_payments').select('*').order('created_at');
-    var dn=await sb.from('ext_job_events').select('job_id,at,to_val').eq('kind','status').in('to_val',['완료','중단']);
+    var R=await Promise.all([   /* 한꺼번에 불러옴 — 저장할 때마다 다시 부르므로 하나씩 기다리지 않게 (11/2 점검) */
+      sb.from('ext_projects').select('*').order('sort').order('created_at'),
+      sb.from('ext_members').select('*').order('sort').order('created_at'),
+      sb.from('ext_project_requests').select('*'),
+      sb.from('ext_jobs').select('*').order('sort').order('created_at'),
+      sb.from('ext_deadlines').select('*').order('sort').order('created_at'),
+      sb.from('ext_subtasks').select('*').order('sort').order('created_at'),
+      sb.from('ext_episodes').select('*').order('sort').order('created_at'),
+      sb.from('ext_reports').select('*').order('at',{ascending:false}),
+      sb.from('ext_files').select('*').order('created_at'),
+      sb.from('ext_payments').select('*').order('created_at'),
+      sb.from('ext_job_events').select('job_id,at,to_val').eq('kind','status').in('to_val',['완료','중단'])]);
+    var a=R[0],m=R[1],l=R[2],j=R[3],d=R[4],st=R[5],ep=R[6],rp=R[7],fl=R[8],py=R[9],dn=R[10];
     DONE_AT={}; END_AT={}; (dn.data||[]).forEach(function(e){var o=e.to_val==='완료'?DONE_AT:END_AT;if(!o[e.job_id]||e.at>o[e.job_id])o[e.job_id]=e.at;});
     Object.keys(DONE_AT).forEach(function(k){if(!END_AT[k]||DONE_AT[k]>END_AT[k])END_AT[k]=DONE_AT[k];});
     EXT.err=(a.error||m.error||l.error||j.error||d.error||st.error||ep.error||rp.error||fl.error||py.error||dn.error||{}).message||'';
