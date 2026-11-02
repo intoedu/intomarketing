@@ -226,6 +226,12 @@
   .rp-files{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;align-items:flex-start}
   .rp-file{display:flex;flex-direction:column;gap:3px;width:118px;font-size:.72rem;cursor:pointer}
   .rp-file .th{width:118px;height:84px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2) center/cover no-repeat;display:flex;align-items:center;justify-content:center;font-size:1.5rem}
+  .rp-file .th{position:relative}
+  .rp-file .del{position:absolute;top:3px;right:3px;width:22px;height:22px;border:0;border-radius:50%;background:rgba(15,23,42,.65);color:#fff;font-size:.72rem;cursor:pointer;line-height:22px;padding:0}
+  .rp-file .del:hover{background:var(--bad)}
+  .rp-top .rdel{border:0;background:none;cursor:pointer;font-size:.85rem;opacity:.55;padding:0 2px;margin-left:auto}
+  .rp-top .rs+.rdel{margin-left:0}
+  .rp-top .rdel:hover{opacity:1}
   .rp-file .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
   .rp-file .ex{color:var(--muted)}
   .rp-file.gone{cursor:default;opacity:.5}
@@ -1241,7 +1247,7 @@
       <div id="rp_list"></div>
       <label class="rp-chk"><input type="checkbox" id="rp_orig"> 사진 원본 그대로 올리기 — 체크 안 하면 사진은 긴 변 2400px 로 줄여서 올립니다(용량 절약)</label></div>
     <div class="fld"><label for="rp_note">메모</label><textarea class="inp" id="rp_note" placeholder="확인할 점 · 바뀐 점"></textarea></div>
-    <p class="muted" style="font-size:.78rem;margin:0">🗑 올린 파일은 <b>90일 뒤 자동으로 지워집니다</b>(링크 · 메모 · 기록은 남습니다). 오래 둘 원본이나 50MB 넘는 영상은 구글 드라이브 · 유튜브(일부 공개) 링크로 올려 주세요.</p>
+    <p class="muted" style="font-size:.78rem;margin:0">🗑 올린 파일은 <b>60일 뒤 자동으로 지워집니다</b>(링크 · 메모 · 기록은 남습니다). 잘못 올린 파일은 올린 본인 · 최고관리자가 바로 지울 수 있습니다. 오래 둘 원본이나 50MB 넘는 영상은 구글 드라이브 · 유튜브(일부 공개) 링크로 올려 주세요.</p>
   </div>
   <div class="sheet-f">
     <span class="muted" style="font-size:.8rem" id="rp_prog"></span>
@@ -2109,7 +2115,8 @@
      「중간 컨펌 올림」 = 보고 창 : 결과물 링크(여러 개) + 파일 · 스크린샷 + 메모 → ext_reports 한 줄 + ext_files.
      관리자 통과 / 수정 요청 / 대표님 컨펌 = 확인 창 : 피드백을 그 보고 줄과 상태 기록(ext_job_events.note)에 남김.
      파일은 저장 칸 ext-files(비공개). 사진은 올리기 전에 긴 변 2400px 로 줄임(원본 체크 가능) · 영상 · PDF · zip 은 그대로.
-     🔴 올린 날부터 90일 뒤 자동 삭제(Edge Function ext-files-cleanup · 매일 04:10) — 줄(이름 · 크기)은 남기고 deleted_at 만 적음.
+     🔴 올린 날부터 60일 뒤 자동 삭제(Edge Function ext-files-cleanup · 매일 04:10) — 줄(이름 · 크기)은 남기고 deleted_at 만 적음.
+     🔴 바로 지우기 = 최고관리자 · 올린 본인만(파일 하나씩 · 보고 통째로). 파일은 줄을 남기고 deleted_by 를 적음 — 비면 자동 삭제 (11/2 이은총 님).
      받을 때는 보고마다 「한번에 받기」 = 블로그 센터와 같은 zip 묶음(압축 없이 담기 — 크기는 그대로). */
   var RP_MAX=50*1024*1024, RP_FILES=[], THUMB={};
   function pjReps(pid){var js={};pjJobs(pid).forEach(function(j){js[j.id]=1;});return EXT.reps.filter(function(r){return js[r.job_id];});}
@@ -2120,6 +2127,7 @@
   function isImg(f){return /^image\/(jpeg|png|webp|gif)$/.test(f.mime||'');}
   function md(iso){var k=kst(iso);return k?k.d.slice(5).replace('-','/')+' '+k.t:'';}
   function mdOnly(iso){var k=kst(iso);return k?k.d.slice(5).replace('-','/'):'';}
+  function canDel(by){return !!ME&&(ME.role==='owner'||by===ME.id);}   /* 최고관리자 · 올린 본인 */
   function repHTML(r){
     var fs=repFiles(r.id), live=fs.filter(function(f){return !f.deleted_at;});
     var ep=r.episode_id?EXT.eps.filter(function(e){return e.id===r.episode_id;})[0]:null;
@@ -2127,15 +2135,17 @@
       :(r.kind==='결과물'?'':'<span class="rs wait">확인 전</span>');
     var h='<div class="rp-item"><div class="rp-top"><span class="rk'+(r.kind==='최종 컨펌'?' k2':r.kind==='결과물'?' k3':'')+'">'+esc(r.kind)+'</span>'
       +(ep?'<span class="muted">'+esc((ep.ymd?ep.ymd+' ':'')+ep.title)+'</span>':'')
-      +'<b>'+esc(staffName(r.by_staff)||'-')+'</b><span class="muted">'+md(r.at)+'</span>'+rs+'</div>';
+      +'<b>'+esc(staffName(r.by_staff)||'-')+'</b><span class="muted">'+md(r.at)+'</span>'+rs
+      +(canDel(r.by_staff)?'<button class="rdel" type="button" title="이 보고 지우기 (올린 본인 · 최고관리자)" onclick="repDel(\''+r.id+'\')">🗑</button>':'')+'</div>';
     if(r.note)h+='<div class="rp-note">'+esc(r.note)+'</div>';
     if((r.links||[]).length)h+='<div class="rp-links">'+r.links.map(function(u){
       return /^https?:\/\//i.test(u)?'<a href="'+esc(u)+'" target="_blank" rel="noopener">🔗 '+esc(u)+'</a>':'<span>🔗 '+esc(u)+'</span>';}).join('')+'</div>';
     if(fs.length){
       h+='<div class="rp-files">'+fs.map(function(f){
-        if(f.deleted_at)return '<div class="rp-file gone" title="90일이 지나 자동으로 지웠습니다"><div class="th">🗑</div><span class="nm">'+esc(f.name)+'</span><span class="ex">'+mdOnly(f.deleted_at)+' 지움</span></div>';
+        if(f.deleted_at)return '<div class="rp-file gone" title="'+(f.deleted_by?esc(staffName(f.deleted_by)||'')+' 님이 지웠습니다':'60일이 지나 자동으로 지웠습니다')+'"><div class="th">🗑</div><span class="nm">'+esc(f.name)+'</span><span class="ex">'+mdOnly(f.deleted_at)+(f.deleted_by?' '+esc(staffName(f.deleted_by)||'')+' 지움':' 자동 삭제')+'</span></div>';
         var m=f.mime||'', ico=isImg(f)?'':/^video\//.test(m)?'🎬':/pdf/.test(m)?'📄':/zip|compressed/.test(m)?'🗜':'📎';
-        return '<div class="rp-file" title="받기 — '+esc(f.name)+'" onclick="fileDl(\''+f.id+'\')"><div class="th"'+(isImg(f)?' data-p="'+esc(f.path)+'"':'')+'>'+ico+'</div>'
+        return '<div class="rp-file" title="받기 — '+esc(f.name)+'" onclick="fileDl(\''+f.id+'\')"><div class="th"'+(isImg(f)?' data-p="'+esc(f.path)+'"':'')+'>'+ico
+          +(canDel(f.created_by)?'<button class="del" type="button" title="이 파일 지우기" onclick="event.stopPropagation();fileDel(\''+f.id+'\')">✕</button>':'')+'</div>'
           +'<span class="nm">'+esc(f.name)+'</span><span class="ex">'+mb(f.size)+' · '+mdOnly(f.expires_at)+' 삭제 예정</span></div>';
       }).join('')+'</div>';
       if(live.length>1)h+='<button class="rp-zip" type="button" onclick="repZip(\''+r.id+'\',this)">⬇ 한번에 받기 ('+live.length+'개 · '+mb(live.reduce(function(a,f){return a+(f.size||0);},0))+')</button>';
@@ -2152,13 +2162,38 @@
       var r=await sb.storage.from('ext-files').createSignedUrls(need,3600);
       (r.data||[]).forEach(function(x){if(x.signedUrl&&x.path)THUMB[x.path]={url:x.signedUrl,exp:now+50*60e3};});
     }
-    els.forEach(function(el){var t=THUMB[el.getAttribute('data-p')];if(t){el.style.backgroundImage='url("'+t.url+'")';el.textContent='';}});
+    els.forEach(function(el){var t=THUMB[el.getAttribute('data-p')];if(t)el.style.backgroundImage='url("'+t.url+'")';});
   }
   window.fileDl=async function(fid){
     var f=EXT.files.filter(function(x){return x.id===fid;})[0]; if(!f||f.deleted_at)return;
     var r=await sb.storage.from('ext-files').createSignedUrl(f.path,300,{download:f.name});
     if(r.error||!r.data){toast('받기 실패: '+(r.error?r.error.message:''));return;}
     var a=document.createElement('a');a.href=r.data.signedUrl;a.rel='noopener';document.body.appendChild(a);a.click();a.remove();
+  };
+  async function afterDel(){
+    await xReload();
+    if($('rvModal').classList.contains('open')){var r=lastRep($('rv_job').value);$('rv_rep').value=r?r.id:'';$('rv_body').innerHTML=r?repHTML(r):'<div class="muted" style="font-size:.84rem">올라온 링크 · 파일이 없습니다.</div>';fillThumbs();}
+  }
+  window.fileDel=async function(fid){
+    var f=EXT.files.filter(function(x){return x.id===fid;})[0]; if(!f||f.deleted_at||!canDel(f.created_by))return;
+    if(!confirm('「'+f.name+'」 파일을 지울까요? 되살릴 수 없습니다. (보고 · 링크 · 메모는 남습니다)'))return;
+    var d=await sb.storage.from('ext-files').remove([f.path]);
+    if(d.error||!(d.data||[]).length){toast('지우기 실패: '+(d.error?d.error.message:'권한을 확인해 주세요'));return;}
+    var u=await sb.from('ext_files').update({deleted_at:new Date().toISOString(),deleted_by:ME.id}).eq('id',fid).select().maybeSingle();
+    if(u.error||!u.data)toast('파일은 지웠지만 기록 실패: '+(u.error?u.error.message:'권한을 확인해 주세요')); else toast('파일을 지웠습니다');
+    await afterDel();
+  };
+  window.repDel=async function(rid){
+    var r=EXT.reps.filter(function(x){return x.id===rid;})[0]; if(!r||!canDel(r.by_staff))return;
+    var live=repFiles(rid).filter(function(f){return !f.deleted_at;});
+    if(!confirm('이 보고를 통째로 지울까요?\n링크 · 메모 · 피드백'+(live.length?' · 파일 '+live.length+'개':'')+'가 모두 지워지고 되살릴 수 없습니다.\n(작업 상태와 상태 기록은 그대로 남습니다)'))return;
+    if(live.length){
+      var d=await sb.storage.from('ext-files').remove(live.map(function(f){return f.path;}));
+      if(d.error||(d.data||[]).length<live.length){toast('파일 지우기 실패: '+(d.error?d.error.message:'권한을 확인해 주세요'));return;}
+    }
+    var x=await sb.from('ext_reports').delete().eq('id',rid).select();
+    if(x.error||!(x.data||[]).length){toast('보고 지우기 실패: '+(x.error?x.error.message:'권한을 확인해 주세요'));return;}
+    toast('보고를 지웠습니다'); await afterDel();
   };
   /* zip 묶기 — hakwon-blog/js/core.js 의 crc32 · zipStore 와 같은 방식(압축 없이 담기 · 한글 이름 UTF-8 표시 0x0800) */
   var CRCT=null;
@@ -2348,7 +2383,7 @@
 
   /* 한 일 탭 */
   function doneTabHTML(pid){
-    var h='<p class="muted" style="font-size:.84rem;margin:-6px 0 14px">작업마다 올린 보고 · 결과물입니다(최근 것이 위). 파일은 올린 날부터 90일 뒤 자동으로 지워지고, 링크 · 메모 · 피드백은 남습니다.</p>';
+    var h='<p class="muted" style="font-size:.84rem;margin:-6px 0 14px">작업마다 올린 보고 · 결과물입니다(최근 것이 위). 파일은 올린 날부터 60일 뒤 자동으로 지워지고, 링크 · 메모 · 피드백은 남습니다. 잘못 올린 것은 올린 본인 · 최고관리자가 🗑 · ✕ 로 바로 지울 수 있습니다.</p>';
     ['web','sns','design','video','blog'].forEach(function(t){
       var js=pjJobs(pid,t); if(!js.length)return;
       var w=js.filter(function(j){return jobReps(j.id).length;}), wo=js.filter(function(j){return !jobReps(j.id).length;});
