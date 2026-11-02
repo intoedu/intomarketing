@@ -111,7 +111,7 @@
   .mem b{font-size:.9rem}
   .mem .k{font-size:.74rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .mem .r{margin-left:auto;font-size:.7rem;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--muted);flex:0 0 auto}
-  .mem .r.lead{background:var(--band-bg);color:#fff}
+  .mem .r.lead{background:#E4EAF4;color:#2C3E5C}
   .mem .na{font-size:.68rem;font-weight:700;color:var(--warn)}
   .org-empty{font-size:.8rem;color:var(--muted);padding:8px 4px}
   .ext-card{margin-top:22px;padding:16px 18px}
@@ -218,8 +218,8 @@
   .rp-chk{display:flex;gap:6px;align-items:center;font-size:.8rem;color:var(--muted);margin-top:8px;font-weight:500}
   .rp-item{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:10px 12px;margin-bottom:8px;font-size:.85rem}
   .rp-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 9px}
-  .rp-top .rk{font-size:.72rem;font-weight:800;color:#fff;background:#7C3AED;border-radius:6px;padding:2px 7px}
-  .rp-top .rk.k2{background:#B98A00}.rp-top .rk.k3{background:#475569}
+  .rp-top .rk{font-size:.72rem;font-weight:700;color:#6A48BF;background:#F2EDFD;border:1px solid #E0D4F8;border-radius:6px;padding:1px 7px}   /* 연하게 (11/2) */
+  .rp-top .rk.k2{color:#866700;background:#FBF5DF;border-color:#EFE2AE}.rp-top .rk.k3{color:#475569;background:#EEF1F6;border-color:#DDE3EC}
   .rp-top .rs{font-size:.74rem;font-weight:800;border-radius:6px;padding:2px 7px;margin-left:auto}
   .rp-top .rs.ok{background:#DCFCE7;color:#15803D}.rp-top .rs.no{background:#FEE2E2;color:#B91C1C}.rp-top .rs.wait{background:var(--surface-2);color:var(--muted)}
   .rp-note{margin:6px 0 0;white-space:pre-wrap}
@@ -1894,7 +1894,7 @@
      🔴 상태 · 금액을 바꾸면 ext_job_events 에 누가 · 언제 · 무엇에서 무엇으로를 남깁니다(카톡 공지 댓글로 바뀌던 것을 대신). */
   var JST=['시작 전','작업 중','자료 대기','중간 컨펌','최종 컨펌','최종 제출','관리','완료','중단'];
   var JST_COL={'시작 전':['#EEF1F6','#56657F'],'작업 중':['#E3ECFF','#1E47C0'],'자료 대기':['#FFF1D6','#8A5A00'],'중간 컨펌':['#EFE6FF','#5B21B6'],
-    '최종 컨펌':['#FBE7A1','#6B4E00'],'최종 제출':['#D8F3EF','#0F6B5E'],'관리':['#12294D','#FFFFFF'],'완료':['#E2F5EA','#1E7A4C'],'중단':['#F6E3E1','#A1322A']};
+    '최종 컨펌':['#FBF2D3','#6B4E00'],'최종 제출':['#D8F3EF','#0F6B5E'],'관리':['#E4EAF4','#2C3E5C'],'완료':['#E2F5EA','#1E7A4C'],'중단':['#F6E3E1','#A1322A']};
   function jst(st){var c=JST_COL[st]||JST_COL['시작 전'];return '<span class="jst" style="background:'+c[0]+';color:'+c[1]+'">'+esc(st)+'</span>';}
   function pjJobs(pid,team){
     return EXT.jobs.filter(function(j){return j.project_id===pid&&(!team||j.team===team);})
