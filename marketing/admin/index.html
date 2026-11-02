@@ -189,6 +189,8 @@
   .pill{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 15px;font-size:.85rem;font-weight:700;color:var(--muted);cursor:pointer}
   .pill.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface));color:var(--accent)}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .kchk{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.88rem}
+  .kchk label{display:flex;align-items:center;gap:6px;font-weight:600;color:var(--ink);margin:0}
   .todo{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:7px;background:var(--surface)}
   .todo input[type=checkbox]{width:17px;height:17px;accent-color:var(--accent);flex:0 0 auto;cursor:pointer}
   .todo .t{flex:1;font-size:.9rem}
@@ -964,18 +966,85 @@
   </div>
 </div></div>
 
+<!-- 홈페이지 계약서 작성 (2026-11-02) — 견적서와 따로 PDF 를 만듭니다. 비운 칸은 견적서 값 · 계약서 빈칸으로 나갑니다. -->
+<div class="modal" id="contractModal"><div class="sheet wide">
+  <div class="sheet-h">
+    <div><h3>계약서 작성 · 홈페이지 제작 · 관리</h3><div class="meta" id="k_meta">-</div></div>
+    <button class="x" type="button" onclick="closeModal('contractModal')">✕</button>
+  </div>
+  <div class="sheet-b">
+    <div class="muted" style="font-size:.82rem;margin-bottom:12px">회색 글씨는 견적서 값입니다. 비워 두면 견적서 값이 들어가고, 견적서에 없는 칸은 계약서에 빈칸(밑줄)으로 나가 서명할 때 손으로 채웁니다. 계약서 문구는 바뀌지 않습니다.</div>
+    <div class="sec-t">요금 (제3조)</div>
+    <div class="grid2">
+      <div class="fld"><label>요금 방식</label>
+        <select class="inp" id="k_plan" onchange="kTotal()"><option value="">고르지 않음 (☐ 빈칸)</option><option value="정가">정가 (약정 없음 · 최소 3개월)</option>
+          <option value="6">약정 6개월</option><option value="12">약정 12개월</option><option value="24">약정 24개월</option></select></div>
+      <div class="fld"><label>고객 구분 <span class="muted" style="font-weight:500">— 제9조 위약금 비율이 갈립니다</span></label>
+        <select class="inp" id="k_ctype"><option value="">고르지 않음 (☐ 빈칸)</option><option value="사업자">사업자 고객 (사업자등록번호로 계약)</option>
+          <option value="개인">개인 고객 (교회 · 비영리단체 · 그 밖)</option></select></div>
+    </div>
+    <div class="grid2">
+      <div class="fld"><label>제작비 (부가세 포함)</label><input class="inp" id="k_once" inputmode="numeric" oninput="this.value=comma(this.value);kTotal()"></div>
+      <div class="fld"><label>월 관리비 (부가세 포함)</label><input class="inp" id="k_month" inputmode="numeric" oninput="this.value=comma(this.value);kTotal()"></div>
+    </div>
+    <div id="k_total" style="font-size:.86rem;font-weight:700;margin:-4px 0 10px"></div>
+
+    <div class="sec-t">고객 (서명란)</div>
+    <div class="grid2">
+      <div class="fld"><label>상호 (이름)</label><input class="inp" id="k_name"></div>
+      <div class="fld"><label>대표자</label><input class="inp" id="k_owner"></div>
+      <div class="fld"><label>사업자등록번호 · 고유번호</label><input class="inp" id="k_biz"></div>
+      <div class="fld"><label>법인등록번호 <span class="muted" style="font-weight:500">— 법인 고객만</span></label><input class="inp" id="k_corp"></div>
+      <div class="fld"><label>주소</label><input class="inp" id="k_addr"></div>
+      <div class="fld"><label>연락처</label><input class="inp" id="k_contact"></div>
+    </div>
+
+    <div class="sec-t">서비스 내용 (제2조 · 별지 1)</div>
+    <div class="fld"><label>항목 (제2조 제1항)</label><input class="inp" id="k_items"></div>
+    <div class="fld"><label>기능 ☑ <span class="muted" style="font-weight:500">— 기본 홈페이지는 늘 ☑</span></label><div class="kchk" id="k_feat"></div></div>
+    <div class="grid2">
+      <div class="fld"><label>게시판 개수</label><input class="inp" id="k_bcnt" placeholder="예: 2"></div>
+      <div class="fld"><label>게시판 종류</label><input class="inp" id="k_bkind" placeholder="예: Q&A(비밀글) · 갤러리"></div>
+      <div class="fld"><label>신청서 받을 이메일</label><input class="inp" id="k_formmail"></div>
+      <div class="fld"><label>홈페이지 호스팅 업체 (제8조)</label><input class="inp" id="k_host"></div>
+    </div>
+    <div class="fld"><label>견적으로 더한 기능 · 일정</label><input class="inp" id="k_extra"></div>
+
+    <div class="sec-t">도메인 (제6조 · 별지 2) <span class="muted" style="font-weight:500;font-size:.8rem">— 새 유료 도메인의 등록을 대행할 때만</span></div>
+    <div class="grid2">
+      <div class="fld"><label>도메인 등록 회사</label><input class="inp" id="k_dreg"></div>
+      <div class="fld"><label>등록 기간 (년) · 비용 (원)</label><div style="display:flex;gap:8px"><input class="inp" id="k_dyears" style="width:90px" placeholder="년"><input class="inp" id="k_dcost" inputmode="numeric" placeholder="원" oninput="this.value=comma(this.value)"></div></div>
+      <div class="fld"><label>소유자 구분</label><select class="inp" id="k_dtype"><option value="">고르지 않음 (빈칸)</option><option value="개인">개인</option><option value="기관">기관 (사업자 · 법인 · 교회 · 단체)</option></select></div>
+      <div class="fld"><label>&nbsp;</label><label style="font-weight:600;color:var(--ink)"><input type="checkbox" id="k_dagree"> 고객이 신청서에서 도메인 등록 회사 제공에 동의함</label></div>
+    </div>
+    <div class="grid2" id="k_dom"></div>
+
+    <div class="sec-t">서명 날짜 <span class="muted" style="font-weight:500;font-size:.8rem">— 비우면 「20 . . .」 빈칸</span></div>
+    <div class="grid2">
+      <div class="fld"><label>회사</label><input class="inp" type="date" id="k_date1"></div>
+      <div class="fld"><label>고객</label><input class="inp" type="date" id="k_date2"></div>
+    </div>
+  </div>
+  <div class="sheet-f">
+    <button class="btn btn-primary" type="button" onclick="saveContract('pdf')">💾 저장하고 계약서 PDF 받기</button>
+    <button class="btn btn-ghost" type="button" onclick="saveContract(true)">저장하고 미리보기</button>
+    <button class="btn btn-ghost" type="button" onclick="saveContract(false)">저장만</button>
+    <button class="btn btn-ghost" type="button" onclick="closeModal('contractModal')">닫기</button>
+  </div>
+</div></div>
+
 <!-- 견적서 미리보기(인쇄용) -->
 <div class="modal" id="paperModal"><div class="sheet wide">
   <div class="sheet-h">
-    <div><h3>견적서 미리보기</h3><div class="meta">① <b>PDF로 저장</b>(다운로드 폴더에 바로 저장됩니다) → ② 메일 작성 창에서 저장한 <b>PDF를 첨부</b> → ③ 전송. 브라우저에서는 파일을 자동으로 첨부할 수 없어 두 단계로 나뉩니다.</div></div>
+    <div><h3 id="paper_t">견적서 미리보기</h3><div class="meta">① <b>PDF로 저장</b>(다운로드 폴더에 바로 저장됩니다) → ② 메일 작성 창에서 저장한 <b>PDF를 첨부</b> → ③ 전송. 브라우저에서는 파일을 자동으로 첨부할 수 없어 두 단계로 나뉩니다.</div></div>
     <button class="x" type="button" onclick="closePaper()">✕</button>
   </div>
   <div class="sheet-b" style="background:#eef1f7"><div id="paper"></div></div>
   <div class="sheet-f" style="flex-wrap:wrap">
-    <button class="btn btn-primary" type="button" onclick="savePdf(this)">① 💾 PDF로 저장</button>
-    <button class="btn btn-ghost" type="button" onclick="mailQuoteGmail()">② 📧 Gmail로 작성</button>
-    <button class="btn btn-ghost" type="button" onclick="mailQuote()">② ✉️ 메일 앱으로 작성</button>
-    <button class="btn btn-ghost" type="button" onclick="copyQuoteText()">📋 상세 내용 복사</button>
+    <button class="btn btn-primary" type="button" onclick="savePaperPdf(this)">① 💾 PDF로 저장</button>
+    <button class="btn btn-ghost q-only" type="button" onclick="mailQuoteGmail()">② 📧 Gmail로 작성</button>
+    <button class="btn btn-ghost q-only" type="button" onclick="mailQuote()">② ✉️ 메일 앱으로 작성</button>
+    <button class="btn btn-ghost q-only" type="button" onclick="copyQuoteText()">📋 상세 내용 복사</button>
     <button class="btn btn-ghost" type="button" onclick="window.print()">🖨 인쇄</button>
     <button class="btn btn-ghost" type="button" onclick="closePaper()">닫기</button>
   </div>
@@ -2050,6 +2119,12 @@
       terms:defaultTerms(r)
     };
   }
+  function contractState(r){
+    var k=(r.quote||{}).contract; if(!k)return '아직 작성 안 함 — 견적서 값만 들어가고 요금 방식 · 고객 구분은 빈칸';
+    var a=[k['요금']==='약정'?('약정 '+k['약정']+'개월'):(k['요금']==='정가'?'정가':'요금 방식 빈칸'),
+           k['고객']?(k['고객']+' 고객'):'고객 구분 빈칸'];
+    return a.join(' · ')+' · 저장 '+fdate(k.saved_at);
+  }
   function renderQuoteBox(){
     var r=CURROW,el=$('d_quote');
     if(r.quote_no){
@@ -2062,11 +2137,19 @@
         +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="previewQuote()">✉️ 메일 보내기</button>'
         +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="payLink(this)">🔗 '
           +(r.quote_key?'결제 링크 복사':'결제 링크 만들기')+'</button></span>'
+        +(isWebContract(r)
+           ? '<span style="flex-basis:100%;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-top:8px;border-top:1px dashed var(--line)">'
+             +'<b style="font-size:.86rem">📝 계약서</b><span class="muted" style="font-size:.8rem">'+contractState(r)+'</span>'
+             +'<span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">'
+             +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="openContract()">✏️ 계약서 작성</button>'
+             +'<button class="btn btn-primary" style="padding:7px 13px" type="button" onclick="savePdf(this,\'contract\')">💾 계약서 PDF</button>'
+             +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="previewContract()">📄 미리보기</button></span></span>'
+           : '')
         +(NEEDS_SIGN.indexOf(r.kind)>=0
            ? '<b style="flex-basis:100%;font-size:.84rem" class="'+(r.contract_signed_at?'':'warn')+'">'
              +(r.contract_signed_at
                 ? '✓ 계약 서명 받음 · '+fdate(r.contract_signed_at)
-                : '🔴 계약 서명을 아직 안 받았습니다 — 견적서 PDF 뒤쪽의 계약서로 서명을 먼저 받으세요')
+                : '🔴 계약 서명을 아직 안 받았습니다 — '+(isWebContract(r)?'계약서 PDF':'견적서 PDF 뒤쪽의 계약서')+'로 서명을 먼저 받으세요')
              +' <button class="btn btn-ghost" style="padding:4px 10px;font-size:.78rem" type="button" '
              +'onclick="markSigned()">'+(r.contract_signed_at?'기록 지우기':'서명 받았다고 기록')+'</button></b>'
            : '')
@@ -2671,7 +2754,7 @@
     var r=CURROW; if(!r||!r.quote_no){toast('견적서를 먼저 저장해 주세요');return;}
     if(NEEDS_SIGN.indexOf(r.kind)>=0 && !r.contract_signed_at){
       if(!confirm('이 건은 «계약 서명»을 먼저 받아야 합니다.\n\n'
-        +'견적서 PDF 뒤쪽의 계약서에 서명을 받으셨습니까?\n'
+        +(isWebContract(r)?'계약서 PDF에 서명을 받으셨습니까?\n':'견적서 PDF 뒤쪽의 계약서에 서명을 받으셨습니까?\n')
         +'받으셨으면 [확인]을 누르면 서명 기록을 남기고 링크를 만듭니다.'))return;
       await markSigned();
     }
@@ -2841,7 +2924,8 @@
        +(SET.owner?' · 대표 '+esc(SET.owner):'')
        +(SET.biz_no?' · '+esc(SET.biz_no):'')
        +(SET.email?' · '+esc(SET.email):'')+'</div>'
-     +(needContract(t)?contractHTML(r,q,t):'')
+     /* 홈페이지는 계약서를 따로 받습니다(2026-11-02) — 견적서 뒤에 붙이는 것은 그 밖의 갈래만 */
+     +(needContract(t)&&!isWebContract(r)?contractHTML(r,q,t):'')
      +'</div>';
   }
 
@@ -2864,20 +2948,129 @@
     var body=(g==='web'&&window.WEB_CONTRACT_TPL)?webContractHTML(r,q,t):genContractHTML(r,q,t);
     return '<div class="p-break html2pdf__page-break"></div><div class="c-doc">'+body+'</div>';
   }
-  function webContractHTML(r,q,t){
+  /* ══════════ 홈페이지 계약서 — 견적서와 «따로» 받습니다 (2026-11-02 이은총 님) ══════════
+     · 견적서 PDF 와 계약서 PDF 가 파일 두 개로 나갑니다. 홈페이지 견적서 뒤에는 계약서를 붙이지 않습니다.
+       (SNS 등 그 밖의 갈래는 예전처럼 견적서 뒤에 붙습니다 — 아직 그대로)
+     · 계약서 값은 기본으로 견적서에서 옵니다(상호 · 연락처 · 제작비 · 월 관리비 · 품목 · 기능 ☑).
+       「계약서 작성」 창에서 요금 방식 · 고객 구분 · 별지 칸 등을 직접 넣고, 견적서 값도 바꿀 수 있습니다.
+     · 저장 = requests.quote 안의 contract (새 칸 없음). 견적서 값과 같은 칸은 비워 저장해, 견적서를 고치면 계약서도 따라갑니다.
+     · 계약서 문구는 contract-web.js 그대로입니다 — 여기서는 {{…}} 자리만 채웁니다. 값이 없으면 원래 빈칸(밑줄) · ☐ 로 찍습니다. */
+  var C_FEAT=[/회원/,/게시판/,/공지/,/신청서|신청 ?폼/,/목록/,/한\s*·?\s*영|영문|영어/,/카드/];
+  var C_FEAT_KO=['회원가입','게시판','공지','신청서','목록 · 검색','한 · 영 함께 표기','카드 결제'];
+  var C_DKEYS=[['주소1','원하는 주소 1순위'],['주소2','원하는 주소 2순위'],['이름','소유자명 (이름 · 기관명)'],['영문','소유자명 (영문)'],
+               ['증종류','등록증 종류 (기관만)'],['증번호','등록증 번호 (기관만)'],['메일','이메일 (소유자 확인용)'],['휴대','휴대전화 (소유자 확인용)'],
+               ['전화','전화번호'],['한글주소','우편번호 · 주소 (한글)'],['영문주소','주소 (영문)']];
+  var C_FROMQ=['상호','등록번호','주소','연락처','품목','제작비','월관리비'];   /* 견적서에서 오는 칸 — 같으면 비워 저장 */
+  function webDefaults(r,q,t){
     var c=cCust(q,r), names=(q.items||[]).map(function(it){return (it&&it.name||'').trim();}).filter(Boolean);
     var all=names.join(' / ');
     /* 제2조 「항목」에는 제작 품목만 — 매월 · 매년 품목(월 관리비 등)은 제3조 금액에 들어갑니다 */
     var made=(q.items||[]).filter(function(it){return it&&(it.name||'').trim()&&!/매월|매년/.test(it.cycle||'');}).map(function(it){return it.name.trim();});
     if(made.length)names=made;
-    var FEAT=[/회원/,/게시판/,/공지/,/신청서|신청 ?폼/,/목록/,/한\s*·?\s*영|영문|영어/,/카드/];
-    var v={'상호':cVal(c.name),'품목':cVal(names.join(' · ')),'견적번호':cVal(r.quote_no),
-           '제작비':cWon(t.once),'월관리비':(t.month?'월 '+cWon(t.month):cWon(0)),
-           '등록번호':cVal(c.biz),'주소':cVal(c.addr),'연락처':cVal(c.contact),'직인':cStamp()};
-    FEAT.forEach(function(re,i){ v['F'+i]=re.test(all)?'☑':'☐'; });
+    return {'상호':c.name,'등록번호':c.biz,'주소':c.addr,'연락처':c.contact,'품목':names.join(' · '),
+            '제작비':t.once?String(t.once):'','월관리비':t.month?String(t.month):'',
+            F:C_FEAT.map(function(re){return re.test(all);})};
+  }
+  function webCV(r,q,t){                    /* 견적서 값 + 계약서 창에서 넣은 값 */
+    var d=webDefaults(r,q,t), k=q.contract||{}, v={};
+    for(var x in k)v[x]=k[x];
+    C_FROMQ.forEach(function(x){ v[x]=(k[x]!=null&&(''+k[x]).trim()!=='')?k[x]:d[x]; });
+    v.F=Array.isArray(k.F)?k.F:d.F; v.D=k.D||{};
+    return v;
+  }
+  function cValS(v){ v=(v==null?'':(''+v)).trim(); return v?esc(v):'<span class="c-blank s"></span>'; }
+  function cNum(v){ v=Number(digits(v))||0; return v?v.toLocaleString('ko-KR'):'<span class="c-blank"></span>'; }
+  function cDate(v){ if(!v)return '20&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;&nbsp;&nbsp;.';
+    var p=String(v).split('-'); return p.length===3?p[0]+'. '+p[1]+'. '+p[2]+'.':esc(v); }
+  function webContractHTML(r,q,t){
+    var c=webCV(r,q,t), once=Number(digits(c['제작비']))||0, mon=Number(digits(c['월관리비']))||0;
+    var yak=c['요금']==='약정'&&c['약정'], D=c.D||{}, own=c['소유자'];
+    var v={'상호':cVal(c['상호']),'품목':cVal(c['품목']),'견적번호':cVal(r.quote_no),
+           '제작비':cWon(once),'월관리비':(mon?'월 '+cWon(mon):cWon(0)),
+           '등록번호':cVal(c['등록번호']),'주소':cVal(c['주소']),'연락처':cVal(c['연락처']),'직인':cStamp(),
+           '정가☐':c['요금']==='정가'?'☑':'☐','약정☐':c['요금']==='약정'?'☑':'☐',
+           '약정개월':yak?'<strong>'+esc(c['약정'])+'</strong>':'6 · 12 · 24',
+           '사업자☐':c['고객']==='사업자'?'☑':'☐','개인☐':c['고객']==='개인'?'☑':'☐',
+           '총액개월':yak?esc(c['약정']):'<span class="c-blank s"></span>',
+           '총액':yak?(once+mon*Number(c['약정'])).toLocaleString('ko-KR'):'<span class="c-blank"></span>',
+           '게시판수':cValS(c['게시판수']),'게시판종류':cVal(c['게시판종류']),'신청서메일':cVal(c['신청서메일']),
+           '추가기능':cVal(c['추가기능']),'호스팅':cVal(c['호스팅']),
+           '도메인회사':cVal(c['도메인회사']),'도메인기간':cValS(c['도메인기간']),'도메인비용':cNum(c['도메인비용']),
+           '도메인동의☐':c['도메인동의']?'☑':'☐',
+           '대표자':cVal(c['대표자']),'법인번호':cVal(c['법인번호']),'회사날짜':cDate(c['회사날짜']),'고객날짜':cDate(c['고객날짜'])};
+    C_FEAT.forEach(function(re,i){ v['F'+i]=c.F[i]?'☑':'☐'; });
+    /* 별지 2 — 고른 쪽(개인 · 기관) 칸에만 넣고 다른 쪽은 「—」. 안 골랐으면 둘 다 빈칸 */
+    C_DKEYS.forEach(function(p){ var x=p[0];
+      v['개.'+x]=own==='기관'?'—':(own==='개인'?cVal(D[x]):'<span class="c-blank"></span>');
+      v['기.'+x]=own==='개인'?'—':(own==='기관'?cVal(D[x]):'<span class="c-blank"></span>'); });
     return '<h1 class="c-title">홈페이지 제작 · 관리 계약서</h1><div class="c-sub">CONTRACT</div>'
       +window.WEB_CONTRACT_TPL.replace(/\{\{([^}]+)\}\}/g,function(m,k){ return (k in v)?v[k]:m; });
   }
+  function isWebContract(r){ return groupOf(r)==='web'&&!!window.WEB_CONTRACT_TPL&&!!(r&&r.quote)&&needContract(quoteTotals(r.quote)); }
+  function contractPaperHTML(){
+    var r=CURROW,q=r.quote||{},t=quoteTotals(q);
+    var body=(groupOf(r)==='web'&&window.WEB_CONTRACT_TPL)?webContractHTML(r,q,t):genContractHTML(r,q,t);
+    return '<div class="paper" id="paperBody"><div class="c-doc">'+body+'</div></div>';
+  }
+
+  /* ---------- 「계약서 작성」 창 ---------- */
+  function kv(id){ var e=$(id); return e?e.value.trim():''; }
+  window.openContract=function(){
+    var r=CURROW; if(!r||!r.quote){toast('견적서를 먼저 저장해 주세요');return;}
+    var q=r.quote,t=quoteTotals(q),d=webDefaults(r,q,t),c=webCV(r,q,t);
+    $('k_meta').textContent=(r.quote_no||'')+' · '+(c['상호']||'');
+    [['k_name','상호'],['k_biz','등록번호'],['k_addr','주소'],['k_contact','연락처'],['k_items','품목'],['k_once','제작비'],['k_month','월관리비']]
+      .forEach(function(p){ var money=(p[0]==='k_once'||p[0]==='k_month');
+        $(p[0]).value=money?comma(c[p[1]]):(c[p[1]]||'');
+        $(p[0]).placeholder=d[p[1]]?'견적서 : '+(money?comma(d[p[1]]):d[p[1]]):''; });
+    $('k_owner').value=c['대표자']||''; $('k_corp').value=c['법인번호']||'';
+    $('k_plan').value=c['요금']==='정가'?'정가':(c['요금']==='약정'&&c['약정']?String(c['약정']):'');
+    $('k_ctype').value=c['고객']||'';
+    $('k_feat').innerHTML=C_FEAT_KO.map(function(n,i){
+      return '<label><input type="checkbox" id="k_f'+i+'"'+(c.F[i]?' checked':'')+'> '+n+(d.F[i]?' <span class="muted">(견적서)</span>':'')+'</label>'; }).join('');
+    $('k_bcnt').value=c['게시판수']||''; $('k_bkind').value=c['게시판종류']||'';
+    $('k_formmail').value=c['신청서메일']||''; $('k_extra').value=c['추가기능']||''; $('k_host').value=c['호스팅']||'';
+    $('k_dreg').value=c['도메인회사']||''; $('k_dyears').value=c['도메인기간']||''; $('k_dcost').value=comma(c['도메인비용']||'');
+    $('k_dagree').checked=!!c['도메인동의']; $('k_dtype').value=c['소유자']||'';
+    $('k_dom').innerHTML=C_DKEYS.map(function(p){
+      return '<div class="fld"><label>'+p[1]+'</label><input class="inp" id="k_d_'+p[0]+'" value="'+esc((c.D||{})[p[0]]||'')+'"></div>'; }).join('');
+    $('k_date1').value=c['회사날짜']||''; $('k_date2').value=c['고객날짜']||'';
+    kTotal(); $('contractModal').classList.add('open');
+  };
+  window.kTotal=function(){
+    var p=$('k_plan').value, once=Number(digits(kv('k_once')))||Number(digits($('k_once').placeholder))||0,
+        mon=Number(digits(kv('k_month')))||Number(digits($('k_month').placeholder))||0;
+    $('k_total').textContent=(p&&p!=='정가')?('약정 기간 총액 : '+won(once+mon*Number(p))+' (제작비 '+won(once)+' + 월 '+won(mon)+' × '+p+'개월)'):'';
+  };
+  window.saveContract=async function(after){
+    var r=CURROW; if(!r||!r.quote)return;
+    var q=r.quote,t=quoteTotals(q),d=webDefaults(r,q,t),p=$('k_plan').value;
+    var C={'상호':kv('k_name'),'등록번호':kv('k_biz'),'주소':kv('k_addr'),'연락처':kv('k_contact'),'품목':kv('k_items'),
+           '제작비':digits(kv('k_once')),'월관리비':digits(kv('k_month')),
+           '대표자':kv('k_owner'),'법인번호':kv('k_corp'),
+           '요금':p==='정가'?'정가':(p?'약정':''),'약정':(p&&p!=='정가')?p:'','고객':$('k_ctype').value,
+           F:C_FEAT.map(function(re,i){return !!$('k_f'+i).checked;}),
+           '게시판수':kv('k_bcnt'),'게시판종류':kv('k_bkind'),'신청서메일':kv('k_formmail'),'추가기능':kv('k_extra'),'호스팅':kv('k_host'),
+           '도메인회사':kv('k_dreg'),'도메인기간':kv('k_dyears'),'도메인비용':digits(kv('k_dcost')),'도메인동의':!!$('k_dagree').checked,
+           '소유자':$('k_dtype').value,D:{},'회사날짜':$('k_date1').value,'고객날짜':$('k_date2').value,
+           saved_at:new Date().toISOString()};
+    C_DKEYS.forEach(function(x){ var v=kv('k_d_'+x[0]); if(v)C.D[x[0]]=v; });
+    /* 견적서 값과 같은 칸은 비워 둡니다 — 견적서를 고치면 계약서도 따라가게 */
+    C_FROMQ.forEach(function(x){ if(String(C[x]||'')===String(d[x]||''))C[x]=''; });
+    if(C.F.every(function(b,i){return b===d.F[i];}))delete C.F;
+    if(after && (!C['요금']||!C['고객'])
+       && !confirm('요금 방식 또는 고객 구분이 비어 있습니다 (제9조 위약금 기준이 여기서 갈립니다).\n빈칸(☐)으로 둔 채 계속할까요?'))return;
+    var nq=JSON.parse(JSON.stringify(q)); nq.contract=C;
+    var res=await sb.from('requests').update({quote:nq}).eq('id',r.id).select().maybeSingle();
+    if(res.error){toast('저장 실패: '+res.error.message);return;}
+    if(!res.data){toast('권한이 없어 저장되지 않았습니다');return;}
+    CURROW=res.data;
+    var arr=DATA[groupOf(CURROW)]||[];
+    for(var i=0;i<arr.length;i++){if(arr[i].id===CURROW.id){arr[i]=CURROW;break;}}
+    renderQuoteBox(); closeModal('contractModal'); toast('계약서 내용을 저장했습니다');
+    if(after==='pdf')savePdf(null,'contract');
+    else if(after)previewContract();
+  };
   function genContractHTML(r,q,t){
     var c=cCust(q,r), tm=q.terms||{}, no=cVal(r.quote_no), n=0;
     function art(title,html){ n++; return '<h5>제'+n+'조 ('+title+')</h5>'+html; }
@@ -2928,16 +3121,17 @@
       document.head.appendChild(sc);
     });
   }
-  function pdfName(){
-    return ('견적서_'+(CURROW.academy_name||'')+'_'+(CURROW.quote_no||''))
+  function pdfName(kind){
+    return ((kind==='contract'?'계약서':'견적서')+'_'+(CURROW.academy_name||'')+'_'+(CURROW.quote_no||''))
       .replace(/\s+/g,'').replace(/[\\/:*?"<>|]/g,'')+'.pdf';
   }
-  window.savePdf=async function(btn){
+  window.savePdf=async function(btn,kind){
     if(!CURROW||!CURROW.quote){toast('먼저 견적서를 작성해 주세요');return;}
+    var isC=kind==='contract';     /* 계약서만 따로 (2026-11-02) */
     /* 미리보기를 안 열어도 됩니다 — 저장된 견적서로 새로 그립니다.
        🔴 발행 주체(사업자)를 저장된 값으로 먼저 맞춥니다 — 안 그러면 다른 사업자 이름·직인이 찍힐 수 있습니다. */
     useProfile(profOf(CURROW.quote.from||guessProfile(CURROW)).id);
-    var tmp=document.createElement('div'); tmp.innerHTML=paperHTML();
+    var tmp=document.createElement('div'); tmp.innerHTML=isC?contractPaperHTML():paperHTML();
     var src=tmp.firstElementChild;
     var label=btn?btn.textContent:'';
     if(btn){btn.disabled=true;btn.textContent='PDF 만드는 중…';}else toast('PDF 만드는 중…');
@@ -2945,7 +3139,7 @@
     catch(e){
       if(btn){btn.disabled=false;btn.textContent=label;}
       toast('PDF 도구를 못 불러왔습니다 — 인쇄 창에서 「PDF로 저장」을 골라 주세요');
-      if(!$('paperModal').classList.contains('open'))previewQuote();
+      if(!$('paperModal').classList.contains('open')){ if(isC)previewContract(); else previewQuote(); }
       setTimeout(function(){window.print();},300); return;
     }
     /* 화면 크기에 따라 견적서 폭이 달라지지 않게, A4 폭(794px)으로 고정한 사본을 화면 밖에 만들어 찍습니다 */
@@ -2960,7 +3154,7 @@
     /* 🔴 아래 여백은 0 — 몇 px 만 넘쳐도 html2pdf 가 «빈 쪽»을 하나 더 붙입니다 (위·아래 8mm 는 margin 이 맡음) */
     paper.style.cssText='max-width:none;width:794px;margin:0;padding:32px 46px 0;border-radius:0;box-shadow:none';
     box.appendChild(paper); document.body.appendChild(box);
-    var name=pdfName();
+    var name=pdfName(kind);
     try{
       await html2pdf().set({
         margin:[8,0,8,0],                               /* 위·아래 8mm — 여러 쪽일 때 글이 종이 끝에 붙지 않게 */
@@ -2986,10 +3180,28 @@
     /* ⚠️ 미리보기·메일은 목록에서 바로 열 수도 있습니다. 그때 SET 이 다른 사업자로
        남아 있으면 **엉뚱한 이름의 견적서**가 나갑니다. 저장된 주체로 먼저 맞춥니다. */
     useProfile(profOf(CURROW.quote.from||guessProfile(CURROW)).id);
+    setPaperMode('quote');
     $('paper').innerHTML=paperHTML();
     /* "PDF로 저장" 시 브라우저가 문서 제목을 파일명으로 제안하므로, 나중에 메일에 첨부할 파일을 알아보기 쉽게 임시로 바꿔둠 */
     PAPER_TITLE_PREV=document.title;
     document.title=('견적서_'+(CURROW.academy_name||'')+'_'+(CURROW.quote_no||'')).replace(/\s+/g,'');
+    $('paperModal').classList.add('open');
+  };
+  /* 미리보기 창 하나로 견적서 · 계약서를 같이 씁니다 — 계약서일 때는 메일 · 복사 단추를 숨깁니다 */
+  var PAPER_MODE='quote';
+  function setPaperMode(m){
+    PAPER_MODE=m;
+    $('paper_t').textContent=m==='contract'?'계약서 미리보기':'견적서 미리보기';
+    document.querySelectorAll('#paperModal .q-only').forEach(function(b){b.classList.toggle('hide',m==='contract');});
+  }
+  window.savePaperPdf=function(btn){ return savePdf(btn,PAPER_MODE); };
+  window.previewContract=function(){
+    if(!CURROW||!CURROW.quote){toast('먼저 견적서를 작성해 주세요');return;}
+    useProfile(profOf(CURROW.quote.from||guessProfile(CURROW)).id);
+    setPaperMode('contract');
+    $('paper').innerHTML=contractPaperHTML();
+    PAPER_TITLE_PREV=document.title;
+    document.title=pdfName('contract').replace(/\.pdf$/,'');
     $('paperModal').classList.add('open');
   };
   window.closePaper=function(){
