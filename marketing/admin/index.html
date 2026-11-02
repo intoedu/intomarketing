@@ -1819,7 +1819,7 @@
   function teamBox(pid,t,extra){
     var ms=pjMembers(pid,t), c=XCOL[t];
     return '<div class="org-team'+(extra||'')+'"><div class="th" style="background:'+c[0]+'">'+esc(XKO[t])+' <span class="n">'+ms.length+'</span>'
-      +'<button type="button" title="이 팀에 사람 넣기" onclick="emOpen(null,\''+pid+'\',\''+t+'\')">＋</button></div>'
+      +(canOrg(pid)?'<button type="button" title="이 팀에 사람 넣기" onclick="emOpen(null,\''+pid+'\',\''+t+'\')">＋</button>':'')+'</div>'
       +'<div class="tb" style="background:'+c[1]+'55">'+(ms.length?ms.map(memHTML).join(''):'<div class="org-empty">아직 아무도 없습니다</div>')+'</div></div>';
   }
   var XTABS=[['org','조직도'],['job','작업 구조'],['time','타임라인'],['todo','할 일'],['done','한 일'],['num','숫자']];
@@ -2165,7 +2165,7 @@
   window.subDel=async function(id){
     if(!confirm('이 세부 항목을 뺄까요?'))return;
     var r=await sb.from('ext_subtasks').delete().eq('id',id).select();
-    if(r.error||!(r.data||[]).length){toast('빼기 실패: '+(r.error?r.error.message:'권한을 확인해 주세요'));return;}
+    if(r.error||!(r.data||[]).length){toast('빼기 실패: '+dbMsg(r.error,'권한을 확인해 주세요'));return;}
     await xReload();
   };
   window.epAdd=async function(jid){
@@ -2183,7 +2183,7 @@
   window.epDel=async function(id){
     if(!confirm('이 회차를 뺄까요?'))return;
     var r=await sb.from('ext_episodes').delete().eq('id',id).select();
-    if(r.error||!(r.data||[]).length){toast('빼기 실패: '+(r.error?r.error.message:'권한을 확인해 주세요'));return;}
+    if(r.error||!(r.data||[]).length){toast('빼기 실패: '+dbMsg(r.error,'권한을 확인해 주세요'));return;}
     await xReload();
   };
 
@@ -2503,6 +2503,12 @@
   function jobPays(jid){return EXT.pays.filter(function(x){return x.job_id===jid;});}
   function payOf(jid,epId,period){return EXT.pays.filter(function(x){return x.job_id===jid&&(x.episode_id||null)===(epId||null)&&(x.period||null)===(period||null);})[0]||null;}
   function canPay(pid){return !!ME&&(ME.role==='owner'||isMgr(pid));}
+  /* 조직도 고치기 = 최고관리자 · 관리자(admin) · 그 프로젝트 관리자 — DB 정책 ext_members_* 와 같음 (11/2 DB 보강) */
+  function canOrg(pid){return !!ME&&(ME.role==='owner'||ME.role==='admin'||isMgr(pid));}
+  /* DB 가 막은 이유를 쉬운 말로 — 입금 표시된 회차 · 작업은 지우지 못함(ext_payments 외래키 restrict) */
+  function dbMsg(e,dflt){if(!e)return dflt;var m=e.message||'';
+    if(/ext_payments/.test(m)&&/foreign key/i.test(m))return '입금 표시(✅)된 기록이 있어서 지울 수 없습니다. 멈춘 작업은 상태를 「중단」으로 바꿔 주세요';
+    if(/row-level security/i.test(m))return '권한이 없습니다';return m;}
   function ymNow(){return kstToday().slice(0,7);}
   function ymNext(m){var y=+m.slice(0,4),n=+m.slice(5,7)+1;if(n>12){n=1;y++;}return y+'-'+('0'+n).slice(-2);}
   function ymKo(m){return (+m.slice(5,7))+'월분';}
@@ -3002,7 +3008,7 @@
     var id=$('jb_id').value, j=EXT.jobs.filter(function(x){return x.id===id;})[0]; if(!j)return;
     if(!confirm('「'+j.title+'」 작업을 지울까요? 바뀐 기록도 같이 지워집니다.\n멈춘 작업이면 지우지 말고 상태를 「중단」으로 바꾸는 것이 좋습니다.'))return;
     var r=await sb.from('ext_jobs').delete().eq('id',id).select();
-    if(r.error||!(r.data||[]).length){toast('삭제 실패: '+(r.error?r.error.message:'최고관리자만 지울 수 있습니다'));return;}
+    if(r.error||!(r.data||[]).length){toast('삭제 실패: '+dbMsg(r.error,'최고관리자만 지울 수 있습니다'));return;}
     closeModal('jbModal'); await xReload(); toast('지웠습니다');
   };
 
@@ -3032,7 +3038,7 @@
     var id=$('pj_id').value, p=pjOf(id); if(!p)return;
     if(!confirm('「'+p.name+'」 프로젝트를 지울까요?\n조직도 · 의뢰 연결도 같이 지워집니다. 연결된 내부 의뢰 자체는 그대로 남습니다.'))return;
     var r=await sb.from('ext_projects').delete().eq('id',id).select();
-    if(r.error||!(r.data||[]).length){toast('삭제 실패: '+(r.error?r.error.message:'최고관리자만 지울 수 있습니다'));return;}
+    if(r.error||!(r.data||[]).length){toast('삭제 실패: '+dbMsg(r.error,'최고관리자만 지울 수 있습니다'));return;}
     closeModal('pjModal'); PJ=null; await xReload(); renderList(); toast('지웠습니다');
   };
   window.pjLink=async function(){
@@ -3052,6 +3058,7 @@
   window.emOpen=function(id,pid,team){
     var x=id?EXT.members.filter(function(m){return m.id===id;})[0]:null;
     var p=pjOf(x?x.project_id:pid); if(!p)return;
+    if(!canOrg(p.id)){toast('조직도는 최고관리자 · 관리자 · 이 프로젝트 관리자만 고칠 수 있습니다');return;}
     $('em_h').textContent=x?'조직도 — '+x.person_name:'사람 넣기';
     $('em_meta').textContent=pjLabel(p);
     $('em_id').value=x?x.id:''; $('em_id').dataset.pid=p.id;
@@ -3076,14 +3083,14 @@
     if(!row.person_name){toast('실명을 적어 주세요');return;}
     var r=id?await sb.from('ext_members').update(row).eq('id',id).select().maybeSingle()
             :await sb.from('ext_members').insert(Object.assign({project_id:pid,sort:pjMembers(pid,row.team).length+1},row)).select().maybeSingle();
-    if(r.error||!r.data){toast('저장 실패: '+(r.error?(/duplicate|unique/i.test(r.error.message)?'같은 팀에 같은 이름이 이미 있습니다':r.error.message):'권한을 확인해 주세요'));return;}
+    if(r.error||!r.data){toast('저장 실패: '+(r.error?(/duplicate|unique/i.test(r.error.message)?'같은 팀에 같은 이름이 이미 있습니다':dbMsg(r.error)):'권한을 확인해 주세요'));return;}
     closeModal('emModal'); await xReload(); toast('저장했습니다');
   };
   window.emDelete=async function(){
     var id=$('em_id').value; if(!id)return;
     if(!confirm('이 사람을 이 프로젝트 조직도에서 뺄까요?'))return;
     var r=await sb.from('ext_members').delete().eq('id',id).select();
-    if(r.error||!(r.data||[]).length){toast('빼기 실패: '+(r.error?r.error.message:'권한을 확인해 주세요'));return;}
+    if(r.error||!(r.data||[]).length){toast('빼기 실패: '+dbMsg(r.error,'권한을 확인해 주세요'));return;}
     closeModal('emModal'); await xReload(); toast('뺐습니다');
   };
 
