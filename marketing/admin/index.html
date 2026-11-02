@@ -89,6 +89,17 @@
   .ext-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 18px}
   .ext-tabs button{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 15px;font-size:.85rem;font-weight:700;color:var(--muted);cursor:pointer}
   .ext-tabs button.on{border-color:var(--band-bg);background:var(--band-bg);color:#fff}
+  /* 8단계 카톡 문구 */
+  .kk-types{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+  .kk-types button{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 14px;font-size:.86rem;font-weight:700;color:var(--muted);cursor:pointer}
+  .kk-types button.on{border-color:#C9B8F2;background:#F4F0FD;color:#55399B}
+  .kk-opts{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:0 0 12px;font-size:.84rem;font-weight:600;color:var(--muted)}
+  .kk-opts label{display:flex;align-items:center;gap:6px}.kk-opts select.inp{width:auto;max-width:420px;padding:6px 10px}
+  .kk-opts .ck input{width:16px;height:16px}
+  .kk-warn{border:1px solid #F6E3BF;background:#FFFBF2;border-radius:12px;padding:10px 14px;margin:0 0 12px;font-size:.82rem;line-height:1.7;color:#8A5A00}
+  .kk-out{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+  .kk-bar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);font-size:.8rem}.kk-bar .btn{margin-left:auto}
+  .kk-out textarea{display:block;width:100%;min-height:360px;border:0;padding:14px 16px;font:inherit;font-size:.88rem;line-height:1.65;resize:vertical;background:#FCFCFD;color:var(--ink);white-space:pre-wrap;box-sizing:border-box}
   .ext-tabs button[disabled]{opacity:.45;cursor:default}
   .org{display:flex;flex-direction:column;align-items:center}
   .org-node{border-radius:14px;padding:14px 18px;background:var(--surface);border:1px solid var(--line);min-width:280px;max-width:100%}
@@ -1826,7 +1837,7 @@
       +(canOrg(pid)?'<button type="button" title="이 팀에 사람 넣기" onclick="emOpen(null,\''+pid+'\',\''+t+'\')">＋</button>':'')+'</div>'
       +'<div class="tb" style="background:'+c[1]+'55">'+(ms.length?ms.map(memHTML).join(''):'<div class="org-empty">아직 아무도 없습니다</div>')+'</div></div>';
   }
-  var XTABS=[['org','조직도'],['job','작업 구조'],['time','타임라인'],['todo','할 일'],['done','한 일'],['num','숫자']];
+  var XTABS=[['org','조직도'],['job','작업 구조'],['time','타임라인'],['todo','할 일'],['done','한 일'],['num','숫자'],['kakao','카톡 문구']];
   window.renderExt=function(){
     if(SCOPE!=='out')return;
     if(AXIS==='work')return renderExtTeam();
@@ -1841,7 +1852,7 @@
     $('extTitle').textContent=p.name+(p.short_name?' ('+p.short_name+')':'');
     $('extSub').textContent=[p.partner?'함께 : '+p.partner:'', p.client_person?'의뢰고객 : '+p.client_person:'', p.status].filter(Boolean).join(' · ');
     $('extAct').innerHTML='<button class="btn btn-ghost" type="button" onclick="pjOpen(\''+p.id+'\')">✏️ 프로젝트 정보</button>';
-    var XOPEN={org:1,job:1,time:1,todo:1,done:1,num:1};   /* 열린 탭 — 단계마다 하나씩 엽니다 */
+    var XOPEN={org:1,job:1,time:1,todo:1,done:1,num:1,kakao:1};   /* 열린 탭 — 단계마다 하나씩 엽니다 */
     if(!XOPEN[XTAB])XTAB='org';
     var h='<div class="ext-tabs">'+XTABS.map(function(t){
       var n=t[0]==='job'?' '+pjJobs(p.id).length:t[0]==='done'?' '+pjReps(p.id).length:t[0]==='num'?(pjOwe(p.id)?' ☑️ '+pjOwe(p.id):''):(t[0]==='time'&&tlAlerts(p.id)?' <span style="font-size:.78rem;opacity:.75">확인 '+tlAlerts(p.id)+'</span>':'');
@@ -1851,6 +1862,7 @@
     if(XTAB==='todo'){$('extBody').innerHTML=h+todoTabHTML(p.id);fillThumbs();return;}
     if(XTAB==='done'){$('extBody').innerHTML=h+doneTabHTML(p.id);fillThumbs();return;}
     if(XTAB==='num'){$('extBody').innerHTML=h+numTabHTML(p.id);return;}
+    if(XTAB==='kakao'){$('extBody').innerHTML=h+kakaoTabHTML(p.id);kkFit();return;}
     /* 조직도 : 의뢰고객 → 총괄(관리자) → 팀 */
     h+='<div class="org">'
       +'<div class="org-node org-client"><b>'+esc(p.client_person||'의뢰고객 (미입력)')+'</b><span>최종 컨펌'+(p.client_kakao?' · 카톡 @'+esc(p.client_kakao):'')+'</span></div>'
@@ -2676,6 +2688,135 @@
     h+='</div>';
     return h;
   }
+
+  /* ---------- 외부 8단계 : 카톡 문구 (2026-11-02 이은총 님) ----------
+     설명서 9장 형식 그대로 — 이모지 · 줄바꿈까지. 기한 낱말은 «중간 컨펌 · 최종 컨펌 · 마감기한» (11/2 확정, 설명서의 중간보고 · 최종보고 대신).
+     ① 중간방 공지 : 맨 위 ⭐️ = 이번 공지의 대상 작업 · 아래 목록 범위는 «그 팀만 / 프로젝트 전체» 고름
+     ② 건당 회차 공지 : 📌 작업 - 단가 / 1. YYMMDD 제목 - 링크 (중단 회차 뺌)
+     ③ 전체방 마감기한 공지 : ⭐⭐마감기한⭐⭐ + 진행 중 작업 전부(묶음별 기한 · 세부사항) + 작업 진행 상황 및 금액
+     입금 계좌 = 설정(견적서 사업자 「인투마케팅」)의 입금 계좌 칸 — 코드에 계좌를 적지 않음.
+     ✅ = 받을 돈이 다 들어온 작업 · ☑️ = 아직 남은 작업. 묶음 : 완료 → 진행 완료 · 중단 → 진행 중단 · 나머지 → 진행 중. 시간 안 적은 기한은 20:00 으로 적고 위에 알림. */
+  var KK={type:'mid',job:'',scope:'team',subs:true,ep:''};
+  window.kkSet=function(k,v){KK[k]=v;renderExt();};
+  function kkOrder(js){var T=XTEAMS.map(function(t){return t[0];});return js.slice().sort(function(a,b){return (T.indexOf(a.team)-T.indexOf(b.team))||(a.sort-b.sort);});}
+  function kkWon(j){if(j.amount==null||j.amount==='')return '금액 미정';var n=Number(j.amount).toLocaleString('ko-KR')+'원';
+    return j.price_type==='월정액'?'월 '+n:j.price_type==='건당'?'1건당 '+n:n;}
+  function kkMark(j){var L=payLines(j);return (L.some(function(l){return l.row;})&&!L.some(function(l){return !l.row&&l.owe;}))?'✅':'☑️';}
+  function kkBank(){
+    var pf=profOf('mkt')||QPROF.filter(function(x){return /인투마케팅/.test(x.company||'');})[0]||{};
+    var s=(pf.bank||'').trim(); if(!s)return null;
+    var m=s.match(/^(.*?)\s*\(\s*예금주\s*[:：]?\s*(.+?)\s*\)\s*$/);
+    return m?[m[1],'예금주 : '+m[2]]:[s];
+  }
+  function kkDues(j,W,onlyDue){
+    var gs=jobDues(j.id), out=[];
+    function one(d,k,name){var v=d&&d[k+'_at'];if(!v)return name+' : -';
+      var x=kst(v);if(!(d[k+'_time_set']))W.notime++;return name+' : '+x.d.replace(/-/g,'.')+' ('+x.t+'까지)';}
+    if(!gs.length){var end=j.status==='완료'||j.status==='중단';   /* 끝난 · 멈춘 작업은 「세팅 필요」를 붙이지 않음 */
+      if(!end&&W.unset.indexOf(j.title)<0)W.unset.push(j.title);var dl='마감기한 : -'+(end?'':' (세팅 필요)');
+      return onlyDue?[dl]:['중간 컨펌 : -','최종 컨펌 : -',dl];}
+    gs.forEach(function(d,i){
+      if(gs.length>1||d.label){if(i)out.push('');out.push((d.label||('묶음 '+(i+1)))+(d.done?' (끝남)':''));}
+      if(!onlyDue){out.push(one(d,'mid','중간 컨펌'));out.push(one(d,'final','최종 컨펌'));}
+      out.push(one(d,'due','마감기한'));
+    });
+    return out;
+  }
+  function kkSubs(j){
+    var ss=jobSubs(j.id); if(!ss.length)return [];
+    var gs=jobDues(j.id), out=['** 세부사항 · '+j.title+' **'];
+    function line(s){return (s.no!=null?s.no+'. ':'- ')+s.title;}
+    gs.forEach(function(d){var mine=ss.filter(function(s){return s.deadline_id===d.id;});if(!mine.length)return;
+      var x=kst(d.due_at);out.push(x?'~'+x.d.slice(5).replace('-','.'):(d.label||'기한 미정'));mine.forEach(function(s){out.push(line(s));});});
+    var rest=ss.filter(function(s){return !s.deadline_id||!gs.some(function(d){return d.id===s.deadline_id;});});
+    if(rest.length){if(out.length>1)out.push('기한 미정');rest.forEach(function(s){out.push(line(s));});}
+    return out;
+  }
+  /* 작업 진행 상황 및 금액 — 진행 완료는 마감기한만, 진행 중 · 중단은 기한 3개 (설명서 9-1 규칙) */
+  function kkList(js,W){
+    var G=[['진행 완료',js.filter(function(j){return j.status==='완료';})],['진행 중',js.filter(function(j){return j.status!=='완료'&&j.status!=='중단';})],['진행 중단',js.filter(function(j){return j.status==='중단';})]];
+    var out=['📋 작업 진행 상황 및 금액'];
+    G.forEach(function(g){if(!g[1].length)return;out.push('','','🔻 '+g[0]);
+      g[1].forEach(function(j){out.push('',kkMark(j)+' '+j.title+' - '+kkWon(j));if(j.amount==null&&W.noamt.indexOf(j.title)<0)W.noamt.push(j.title);out.push.apply(out,kkDues(j,W,g[0]==='진행 완료'));});});
+    return out;
+  }
+  var KK_LEGEND=['━━━━━━━━━━━━━━','✔️ 입금 표시','━━━━━━━━━━━━━━','','✅ : 입금 완료','☑️ : 입금 미완료'];
+  function kkText(pid,W){
+    var all=kkOrder(pjJobs(pid)), out=[];
+    if(KK.type==='ep'){
+      var eps=all.filter(function(j){return j.price_type==='건당'&&(!KK.ep||j.id===KK.ep);});
+      if(!eps.length)return '';
+      eps.forEach(function(j,i){
+        if(i)out.push('');
+        out.push('📌 '+j.title+' - '+kkWon(j));
+        var L=jobEps(j.id).filter(function(e){return e.status!=='중단';});
+        if(!L.length)out.push('(아직 회차 없음)');
+        L.forEach(function(e,n){out.push((n+1)+'. '+(e.ymd?e.ymd+' ':'')+e.title+(e.link?' - '+e.link:''));});
+      });
+      return out.join('\n');
+    }
+    if(KK.type==='all'){
+      var act=all.filter(function(j){return j.status!=='완료'&&j.status!=='중단';});
+      out.push('⭐⭐마감기한⭐⭐');
+      act.forEach(function(j){out.push('','⭐️'+kkMark(j)+' '+j.title+' - '+kkWon(j)+' ⭐️');out.push.apply(out,kkDues(j,W));
+        var sb=kkSubs(j);if(sb.length){out.push('');out.push.apply(out,sb);}});
+      if(!act.length)out.push('','(진행 중인 작업이 없습니다)');
+      var W2={notime:0,unset:[],noamt:W.noamt};   /* 아래 목록에 같은 작업이 또 나오므로 시간 미정 · 기한 없음은 위에서만 셈 */
+      out.push('','');out.push.apply(out,kkList(all,W2)); W.notime=W2.notime;
+      out.push('','');out.push.apply(out,KK_LEGEND);
+      return out.join('\n');
+    }
+    var j=EXT.jobs.filter(function(x){return x.id===KK.job&&x.project_id===pid;})[0];
+    if(!j)return '';
+    var sb=KK.subs?kkSubs(j):[];
+    out.push('⭐️'+kkMark(j)+' '+j.title+' - '+kkWon(j)+' ⭐️');
+    if(sb.length)out.push('*맨밑 세부사항에 번호 표기*');
+    out.push('');out.push.apply(out,kkDues(j,W));
+    var bk=kkBank(); W.nobank=!bk;
+    out.push('','','💳 입금 계좌 정보','');out.push.apply(out,bk||['(설정에 입금 계좌가 없습니다)']);
+    out.push('','※ 매달 15일 합산 후 입금','','');
+    var W2={notime:0,unset:W.unset,noamt:W.noamt};   /* 맨 위 작업이 목록에 또 나와도 시간 미정은 한 번만 셈 */
+    var lj=KK.scope==='all'?all:all.filter(function(x){return x.team===j.team;});
+    out.push.apply(out,kkList(lj,W2)); W.notime=(lj.indexOf(j)>=0&&j.status!=='완료')?W2.notime:W.notime+W2.notime;
+    if(sb.length){out.push('','');out.push.apply(out,sb);}
+    out.push('','');out.push.apply(out,KK_LEGEND);
+    return out.join('\n');
+  }
+  function kakaoTabHTML(pid){
+    var all=kkOrder(pjJobs(pid));
+    if(!all.some(function(j){return j.id===KK.job;})){var a=all.filter(function(j){return j.status!=='완료'&&j.status!=='중단';})[0]||all[0];KK.job=a?a.id:'';}
+    if(KK.ep&&!all.some(function(j){return j.id===KK.ep;}))KK.ep='';
+    var T=[['mid','중간방 공지'],['ep','건당 회차 공지'],['all','전체방 마감기한 공지']];
+    var h='<div class="kk-types">'+T.map(function(t){return '<button type="button" class="'+(KK.type===t[0]?'on':'')+'" onclick="kkSet(\'type\',\''+t[0]+'\')">'+t[1]+'</button>';}).join('')+'</div>';
+    h+='<div class="kk-opts">';
+    if(KK.type==='mid'){
+      h+='<label>공지할 작업 <select class="inp" onchange="kkSet(\'job\',this.value)">'+all.map(function(j){return '<option value="'+j.id+'"'+(j.id===KK.job?' selected':'')+'>['+esc(XKO[j.team])+'] '+esc(j.title)+' · '+esc(j.status)+'</option>';}).join('')+'</select></label>'
+        +'<label>아래 목록 <select class="inp" onchange="kkSet(\'scope\',this.value)"><option value="team"'+(KK.scope==='team'?' selected':'')+'>이 작업의 팀만</option><option value="all"'+(KK.scope==='all'?' selected':'')+'>프로젝트 전체</option></select></label>'
+        +'<label class="ck"><input type="checkbox"'+(KK.subs?' checked':'')+' onchange="kkSet(\'subs\',this.checked)"> 세부사항 넣기</label>';
+    }else if(KK.type==='ep'){
+      var eps=all.filter(function(j){return j.price_type==='건당';});
+      h+=eps.length?'<label>작업 <select class="inp" onchange="kkSet(\'ep\',this.value)"><option value="">건당 작업 전부</option>'+eps.map(function(j){return '<option value="'+j.id+'"'+(j.id===KK.ep?' selected':'')+'>'+esc(j.title)+'</option>';}).join('')+'</select></label>'
+        :'<span class="muted">이 프로젝트에 건당 작업이 없습니다.</span>';
+    }else h+='<span class="muted">끝나지 않은 작업 전부(묶음별 기한 · 세부사항 포함) + 작업 진행 상황 및 금액</span>';
+    h+='</div>';
+    var W={notime:0,unset:[],noamt:[],nobank:false}, txt=kkText(pid,W);
+    var warn=[];
+    if(W.nobank)warn.push('입금 계좌가 설정에 없습니다 — 「설정 → 견적서 사업자(인투마케팅) → 입금 계좌」를 채워 주세요.');
+    if(W.notime)warn.push('시간을 안 적은 기한 '+W.notime+'곳은 「20:00까지」로 적혔습니다.');
+    if(W.unset.length)warn.push('기한이 없는 작업 : '+W.unset.map(esc).join(' · ')+' — 「세팅 필요」로 적혔습니다.');
+    if(W.noamt.length)warn.push('금액 미정 : '+W.noamt.map(esc).join(' · '));
+    h+=(warn.length?'<div class="kk-warn">'+warn.map(function(w){return '<div>'+w+'</div>';}).join('')+'</div>':'');
+    h+=txt?'<div class="kk-out"><div class="kk-bar"><span class="muted">카톡에 그대로 붙여 넣으세요 · 여기서 고쳐서 복사해도 됩니다(저장은 안 됨)</span><button class="btn btn-primary" type="button" onclick="kkCopy()">📋 복사</button></div>'
+      +'<textarea id="kkText" spellcheck="false">'+esc(txt)+'</textarea></div>'
+      :'<div class="card"><div class="empty">만들 문구가 없습니다.</div></div>';
+    return h;
+  }
+  function kkFit(){var t=$('kkText');if(t){t.style.height='auto';t.style.height=(t.scrollHeight+4)+'px';}}
+  window.kkCopy=async function(){
+    var t=$('kkText'); if(!t)return;
+    try{await navigator.clipboard.writeText(t.value);toast('복사했습니다 — 카톡에 붙여 넣으세요');}
+    catch(e){t.focus();t.select();try{document.execCommand('copy');toast('복사했습니다 — 카톡에 붙여 넣으세요');}catch(e2){toast('복사가 안 됩니다 — 글자를 직접 선택해서 복사해 주세요');}}
+  };
 
   /* ---------- 외부 7단계 : 경영 현황 · 관리비 대장 모아보기 (2026-11-02 이은총 님) ----------
      경영 현황 = 최고관리자 · 관리자(staff.role admin) · 외주 조직도 총괄/관리자만. 전체 진행 · 사람별 업무량(내부 의뢰 담당 포함 — 이은총 님 승인) ·
