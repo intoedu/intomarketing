@@ -150,7 +150,7 @@
   .dd{display:inline-block;font-size:.7rem;font-weight:800;padding:1px 7px;border-radius:999px;margin-right:5px;background:var(--surface-2);color:var(--muted)}
   .dd.over{background:#C0392B;color:#fff}.dd.today{background:#E8590C;color:#fff}.dd.soon{background:#FFE8CC;color:#9A4A00}
   .need{display:inline-block;font-size:.72rem;font-weight:800;padding:2px 8px;border-radius:999px;background:#FDECEA;color:#A1322A}
-  .tw{color:#B45309;font-weight:800;cursor:help}
+  .tw{color:#B45309;font-weight:600;font-size:.72rem;margin-left:4px;cursor:help}
   .dl-row{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:var(--surface-2)}
   .dl-top{display:flex;gap:8px;align-items:center;margin-bottom:10px}
   .dl-top .inp{flex:1;padding:8px 11px;font-size:.86rem}
@@ -179,6 +179,8 @@
   .gantt td.nm i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}
   .mk{display:inline-block;min-width:20px;padding:1px 4px;border-radius:6px;font-weight:800;font-size:.7rem;color:#fff;margin:1px}
   .mk.m{background:#7C3AED}.mk.f{background:#B98A00}.mk.d{background:#C0392B}.mk.x{opacity:.35}
+  .mk.nt{outline:1.5px dashed #B45309;outline-offset:1px}   /* 시간 미정(20:00 으로 봄) — ⚠ 대신 (11/2 이은총 님) */
+  .gantt .mk{display:block;width:max-content;margin:3px auto}
   /* 외부 — 할 일 · 내 할 일 */
   .td-job{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:10px;overflow:hidden}
   .td-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:11px 14px}
@@ -1274,7 +1276,7 @@
       <div class="fld"><label for="jb_payer">입금하는 곳 <span class="muted" style="font-weight:500">— 비우면 프로젝트 기본</span></label><input class="inp" id="jb_payer" list="jb_payer_l"><datalist id="jb_payer_l"></datalist></div>
     </div>
     <div class="fld"><label>담당자</label><div class="jb-who" id="jb_who"></div></div>
-    <div class="fld"><label>기한 <span class="muted" style="font-weight:500">— 중간 컨펌 · 최종 컨펌 · 마감기한. 시간을 안 적으면 20:00 으로 저장되고 ⚠ 가 붙습니다. 세부 항목마다 기한이 다르면 묶음을 더 만드세요.</span></label>
+    <div class="fld"><label>기한 <span class="muted" style="font-weight:500">— 중간 컨펌 · 최종 컨펌 · 마감기한. 시간을 안 적으면 20:00 으로 저장되고 「시간 미정」이 붙습니다. 세부 항목마다 기한이 다르면 묶음을 더 만드세요.</span></label>
       <div id="jb_dl"></div>
       <button class="btn btn-ghost" type="button" style="padding:7px 14px;font-size:.84rem" onclick="dlAdd()">＋ 기한 묶음 추가</button></div>
     <div class="fld"><label for="jb_inc">포함 항목 <span class="muted" style="font-weight:500">— 큰 항목은 그냥, 세부 항목은 줄 앞에 「·」</span></label>
@@ -1840,7 +1842,7 @@
     var XOPEN={org:1,job:1,time:1,todo:1,done:1,num:1};   /* 열린 탭 — 단계마다 하나씩 엽니다 */
     if(!XOPEN[XTAB])XTAB='org';
     var h='<div class="ext-tabs">'+XTABS.map(function(t){
-      var n=t[0]==='job'?' '+pjJobs(p.id).length:t[0]==='done'?' '+pjReps(p.id).length:t[0]==='num'?(pjOwe(p.id)?' ☑️ '+pjOwe(p.id):''):(t[0]==='time'&&tlAlerts(p.id)?' ⚠ '+tlAlerts(p.id):'');
+      var n=t[0]==='job'?' '+pjJobs(p.id).length:t[0]==='done'?' '+pjReps(p.id).length:t[0]==='num'?(pjOwe(p.id)?' ☑️ '+pjOwe(p.id):''):(t[0]==='time'&&tlAlerts(p.id)?' <span class="tw" style="font-size:.78rem">확인 '+tlAlerts(p.id)+'</span>':'');
       return '<button type="button"'+(XOPEN[t[0]]?' onclick="xTab(\''+t[0]+'\')"'+(XTAB===t[0]?' class="on"':''):' disabled title="다음 단계에서 만듭니다"')+'>'+t[1]+n+'</button>';}).join('')+'</div>';
     if(XTAB==='job'){$('extBody').innerHTML=h+jobsHTML(p.id);return;}
     if(XTAB==='time'){$('extBody').innerHTML=h+timelineHTML(p.id);return;}
@@ -1941,7 +1943,7 @@
     if(n===0)return '<span class="dd today">오늘</span>';
     return '<span class="dd'+(n<=3?' soon':'')+'">D-'+n+'</span>';}
   function dueTxt(iso,set){var k=kst(iso);if(!k)return '-';
-    return k.d.slice(5).replace('-','.')+' ('+k.wd+') '+k.t+(set?'':' <span class="tw" title="시간을 안 적어서 20:00 으로 봅니다">⚠</span>');}
+    return k.d.slice(5).replace('-','.')+' ('+k.wd+') '+k.t+(set?'':'<span class="tw" title="시간을 안 적어서 20:00 으로 봅니다">시간 미정</span>');}
   function jobDues(jid){return EXT.dues.filter(function(d){return d.job_id===jid;}).sort(function(a,b){return a.sort-b.sort;});}
   function jobActive(j){return j.status!=='완료'&&j.status!=='중단';}
   function needSetup(j){return jobActive(j)&&j.status!=='관리'&&!jobDues(j.id).some(function(d){return d.due_at;});}
@@ -1986,7 +1988,7 @@
       h+='<div class="tl-warn">';
       if(need.length)h+='<div><b>기한 세팅 필요 '+need.length+'</b> — '+need.map(function(j){return '<a onclick="jbOpen(\''+j.id+'\')">'+esc(j.title)+'</a>';}).join(' · ')+'</div>';
       if(noTime.length){var seen={},list=[];noTime.forEach(function(p){if(!seen[p.job.id]){seen[p.job.id]=1;list.push(p.job);}});
-        h+='<div><b>⚠ 시간 미입력 '+noTime.length+'곳</b> (20:00 으로 봄) — '+list.map(function(j){return '<a onclick="jbOpen(\''+j.id+'\')">'+esc(j.title)+'</a>';}).join(' · ')+'</div>';}
+        h+='<div><b>시간 미정 '+noTime.length+'곳</b> (20:00 으로 봄) — '+list.map(function(j){return '<a onclick="jbOpen(\''+j.id+'\')">'+esc(j.title)+'</a>';}).join(' · ')+'</div>';}
       if(bad.length)h+='<div><b>순서가 이상한 기한 '+bad.length+'</b> (중간 ≤ 최종 ≤ 마감) — '+bad.map(function(x){return '<a onclick="jbOpen(\''+x.j.id+'\')">'+esc(x.j.title)+(x.d.label?' · '+esc(x.d.label):'')+'</a>';}).join(' · ')+'</div>';
       h+='</div>';
     }
@@ -1996,7 +1998,7 @@
     var today=kstToday();
     var rows=[]; pjJobs(pid).forEach(function(j){if(!jobActive(j))return;jobDues(j.id).forEach(function(d){rows.push({j:j,d:d});});});
     h+='<div style="display:flex;align-items:center;gap:8px;margin:0 0 8px"><b style="font-size:.95rem">2주 달력</b>'
-      +'<span class="muted" style="font-size:.78rem"><span class="mk m">중</span> 중간 컨펌 <span class="mk f">최</span> 최종 컨펌 <span class="mk d">마</span> 마감기한 · 흐린 칸 = 끝남</span>'
+      +'<span class="muted" style="font-size:.78rem"><span class="mk m">중간</span> 중간 컨펌 <span class="mk f">최종</span> 최종 컨펌 <span class="mk d">마감</span> 마감기한 · 점선 = 시간 미정(20:00 으로 봄) · 흐린 칸 = 끝남</span>'
       +'<span style="margin-left:auto"><button class="btn btn-ghost" style="padding:5px 12px" type="button" onclick="tlShift(-1)">‹</button> '
       +'<button class="btn btn-ghost" style="padding:5px 12px" type="button" onclick="tlShift(0)">오늘</button> '
       +'<button class="btn btn-ghost" style="padding:5px 12px" type="button" onclick="tlShift(1)">›</button></span></div>';
@@ -2007,7 +2009,7 @@
         +days.map(function(x){
           var mk=DKIND.filter(function(k){var v=kst(r.d[k[0]+'_at']);return v&&v.d===x.d;}).map(function(k){
             var set=r.d[k[0]+'_time_set'], v=kst(r.d[k[0]+'_at']);
-            return '<span class="mk '+k[2]+(r.d.done?' x':'')+'" title="'+k[1]+' '+v.t+(set?'':' (시간 미입력)')+'">'+k[1].slice(0,1)+(set?'':'⚠')+'</span>';}).join('');
+            return '<span class="mk '+k[2]+(r.d.done?' x':'')+(set?'':' nt')+'" title="'+k[1]+' '+v.t+(set?'':' (시간 미정)')+'">'+k[1].slice(0,2)+'</span>';}).join('');
           return '<td class="'+(x.wd===0||x.wd===6?'we':'')+(x.d===today?' now':'')+'">'+mk+'</td>';}).join('')+'</tr>';
     }).join(''):'<tr><td class="nm" colspan="15">기한이 들어간 진행 중 작업이 없습니다.</td></tr>';
     h+='</tbody></table></div>';
@@ -2017,7 +2019,7 @@
     h+='<div class="card tl-list">'+(pts.length?pts.map(function(p){
       var who=(p.job.member_ids||[]).map(memName).filter(Boolean);
       return '<div class="row" onclick="jbOpen(\''+p.job.id+'\')"><div>'+ddHTML(p.at)+'</div><div class="tnum">'+dueTxt(p.at,p.set)+'</div>'
-        +'<div><span class="mk '+p.kind[2]+'">'+p.kind[1].slice(0,1)+'</span> '+p.kind[1]+'</div>'
+        +'<div><span class="mk '+p.kind[2]+'">'+p.kind[1]+'</span></div>'
         +'<div><i style="display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;background:'+XCOL[p.job.team][0]+'"></i><b style="font-weight:700">'+esc(p.job.title)+'</b>'+(p.dl.label?' <span class="muted">· '+esc(p.dl.label)+'</span>':'')+'</div>'
         +'<div class="muted" style="font-size:.82rem">'+(who.length?esc(who.join(' · ')):'담당자 미정')+'</div></div>';
     }).join(''):'<div class="jb-empty">끝나지 않은 기한이 없습니다.</div>')+'</div>';
