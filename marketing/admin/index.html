@@ -148,7 +148,7 @@
   /* 외부 — 타임라인 · 기한 (시간 안 적으면 20:00 · 경고) */
   .job .nx{font-size:.8rem;font-variant-numeric:tabular-nums}
   .dd{display:inline-block;font-size:.7rem;font-weight:800;padding:1px 7px;border-radius:999px;margin-right:5px;background:var(--surface-2);color:var(--muted)}
-  .dd.over{background:#C0392B;color:#fff}.dd.today{background:#E8590C;color:#fff}.dd.soon{background:#FFE8CC;color:#9A4A00}
+  .dd.over{background:#FCE6E3;color:#B4433A}.dd.today{background:#FFEBDB;color:#B5530A}.dd.soon{background:#FFF4E5;color:#9A5A12}   /* 연하게 (11/2 이은총 님 「색이 너무 찐해서 정신없어」) */
   .need{display:inline-block;font-size:.72rem;font-weight:800;padding:2px 8px;border-radius:999px;background:#FDECEA;color:#A1322A}
   .tw{color:#B45309;font-weight:600;font-size:.72rem;margin-left:4px;cursor:help}
   .dl-row{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:var(--surface-2)}
@@ -165,21 +165,21 @@
   .dl-warn{font-size:.78rem;color:#B45309;font-weight:700;margin-top:8px;line-height:1.6}
   .dl-warn:empty{display:none}
   @media(max-width:860px){.dl-3{grid-template-columns:1fr}}
-  .tl-warn{border:1px solid #F5C2BD;background:#FFF6F5;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:.86rem;line-height:1.75}
-  .tl-warn b{color:#A1322A}
+  .tl-warn{border:1px solid #F6DDD9;background:#FFFAF9;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:.86rem;line-height:1.75}
+  .tl-warn b{color:#B4433A}
   .tl-warn a{cursor:pointer;text-decoration:underline;color:var(--ink);font-weight:600}
   .gantt{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
   .gantt table{border-collapse:collapse;width:100%;min-width:900px;font-size:.78rem}
   .gantt th,.gantt td{border-bottom:1px solid var(--line);border-left:1px solid var(--line);padding:6px 4px;text-align:center}
   .gantt th{background:var(--surface-2);font-weight:700;color:var(--muted)}
   .gantt th.we,.gantt td.we{background:#F7F8FB}
-  .gantt th.now,.gantt td.now{background:#FFF4D6}
+  .gantt th.now,.gantt td.now{background:#FFF9E8}
   .gantt td.nm{text-align:left;white-space:nowrap;padding:6px 10px;border-left:0;max-width:240px;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
   .gantt td.nm:hover{color:var(--accent)}
   .gantt td.nm i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}
-  .mk{display:inline-block;min-width:20px;padding:1px 4px;border-radius:6px;font-weight:800;font-size:.7rem;color:#fff;margin:1px}
-  .mk.m{background:#7C3AED}.mk.f{background:#B98A00}.mk.d{background:#C0392B}.mk.x{opacity:.35}
-  .mk.nt{outline:1.5px dashed #B45309;outline-offset:1px}   /* 시간 미정(20:00 으로 봄) — ⚠ 대신 (11/2 이은총 님) */
+  .mk{display:inline-block;min-width:20px;padding:1px 6px;border-radius:6px;font-weight:700;font-size:.7rem;border:1px solid transparent;margin:1px}
+  .mk.m{background:#F2EDFD;color:#6A48BF;border-color:#E0D4F8}.mk.f{background:#FBF5DF;color:#866700;border-color:#EFE2AE}.mk.d{background:#FCECEA;color:#B4433A;border-color:#F4D2CE}.mk.x{opacity:.4}
+  .mk.nt{border-style:dashed;border-color:currentColor}   /* 시간 미정(20:00 으로 봄) — ⚠ 대신 (11/2 이은총 님) */
   .gantt .mk{display:block;width:max-content;margin:3px auto}
   /* 외부 — 할 일 · 내 할 일 */
   .td-job{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:10px;overflow:hidden}
@@ -1842,7 +1842,7 @@
     var XOPEN={org:1,job:1,time:1,todo:1,done:1,num:1};   /* 열린 탭 — 단계마다 하나씩 엽니다 */
     if(!XOPEN[XTAB])XTAB='org';
     var h='<div class="ext-tabs">'+XTABS.map(function(t){
-      var n=t[0]==='job'?' '+pjJobs(p.id).length:t[0]==='done'?' '+pjReps(p.id).length:t[0]==='num'?(pjOwe(p.id)?' ☑️ '+pjOwe(p.id):''):(t[0]==='time'&&tlAlerts(p.id)?' <span class="tw" style="font-size:.78rem">확인 '+tlAlerts(p.id)+'</span>':'');
+      var n=t[0]==='job'?' '+pjJobs(p.id).length:t[0]==='done'?' '+pjReps(p.id).length:t[0]==='num'?(pjOwe(p.id)?' ☑️ '+pjOwe(p.id):''):(t[0]==='time'&&tlAlerts(p.id)?' <span style="font-size:.78rem;opacity:.75">확인 '+tlAlerts(p.id)+'</span>':'');
       return '<button type="button"'+(XOPEN[t[0]]?' onclick="xTab(\''+t[0]+'\')"'+(XTAB===t[0]?' class="on"':''):' disabled title="다음 단계에서 만듭니다"')+'>'+t[1]+n+'</button>';}).join('')+'</div>';
     if(XTAB==='job'){$('extBody').innerHTML=h+jobsHTML(p.id);return;}
     if(XTAB==='time'){$('extBody').innerHTML=h+timelineHTML(p.id);return;}
