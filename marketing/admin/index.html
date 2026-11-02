@@ -237,6 +237,29 @@
   .rp-file.gone{cursor:default;opacity:.5}
   .rp-zip{margin-top:8px;border:1.5px solid var(--line);background:var(--surface);border-radius:8px;padding:5px 11px;font-size:.8rem;font-weight:700;cursor:pointer}
   .rp-zip:hover{border-color:var(--accent);color:var(--accent)}
+  /* 외부 — 숫자 (입금 ✅ / ☑️) */
+  .job .pb{font-size:.74rem;font-weight:700;color:var(--muted);margin-top:2px}
+  .job .pb.owe{color:#B45309}
+  .pay-l{display:flex;align-items:center;gap:10px;padding:6px 0;border-top:1px solid var(--line);font-size:.86rem}
+  .pay-l:first-child{border-top:0}
+  .pay-l .lb2{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pay-l .am{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+  .pay-l .who{font-size:.74rem;color:var(--muted);white-space:nowrap}
+  .pay-b{border:1.5px solid var(--line);background:var(--surface);border-radius:8px;padding:3px 10px;font-size:.8rem;font-weight:800;cursor:pointer;white-space:nowrap}
+  .pay-b.on{background:#DCFCE7;border-color:#86EFAC;color:#15803D}
+  .pay-b.off{color:#B45309}
+  .pay-b:disabled{cursor:default;opacity:.85}
+  .pay-l.na{color:var(--muted)}
+  .num-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 14px}
+  .num-card{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px 16px}
+  .num-card .k{font-size:.78rem;font-weight:800;color:var(--muted)}
+  .num-card .v{font-size:1.35rem;font-weight:900;margin-top:4px;font-variant-numeric:tabular-nums}
+  .num-card .s{font-size:.74rem;color:var(--muted);margin-top:2px}
+  .num-job{padding:10px 0;border-top:1px solid var(--line)}
+  .num-job:first-of-type{border-top:0}
+  .num-job .nh{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.88rem;margin-bottom:4px}
+  .num-job .nh .pj{font-size:.72rem;font-weight:800;color:#fff;border-radius:6px;padding:2px 7px}
+  @media(max-width:860px){.num-cards{grid-template-columns:1fr}}
   .rp-fb{margin-top:8px;padding:7px 10px;border-radius:8px;background:#FFF7ED;font-size:.82rem;white-space:pre-wrap}
   .ep .inp{padding:5px 8px;font-size:.8rem}
   .ep a{color:var(--accent);font-size:.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -1222,7 +1245,9 @@
     <div class="fld"><label for="jb_inc">포함 항목 <span class="muted" style="font-weight:500">— 큰 항목은 그냥, 세부 항목은 줄 앞에 「·」</span></label>
       <textarea class="inp" id="jb_inc" style="min-height:150px" placeholder="1. 블로그 기본 환경 구축&#10;· 구글 계정 및 블로그 개설&#10;· 블로그명 및 URL 주소 설정&#10;2. 최종 점검&#10;· PC·모바일 화면 및 기능 테스트"></textarea></div>
     <div class="fld"><label for="jb_memo">메모</label><textarea class="inp" id="jb_memo"></textarea></div>
-    <div class="sec-t">바뀐 기록 (상태 · 금액)</div>
+    <div class="sec-t">입금 ✅ / ☑️ <span class="muted" style="font-weight:500;font-size:.78rem">— 누르면 바로 저장 · 그 프로젝트 관리자 · 최고관리자만</span></div>
+    <div id="jb_pay" class="muted" style="font-size:.84rem">저장한 뒤에 표시할 수 있습니다.</div>
+    <div class="sec-t">바뀐 기록 (상태 · 금액 · 입금)</div>
     <div class="jb-ev" id="jb_ev">-</div>
   </div>
   <div class="sheet-f">
@@ -1416,7 +1441,7 @@
 
   var QALL={};
 
-  var ME=null, STAFF=[], COMMS=[], DATA={}, CUR='web', COKEY=null, SCOPE='in', AXIS='work', EXT={projects:[],members:[],links:[],jobs:[],dues:[],subs:[],eps:[],reps:[],files:[],err:''}, PJ=null, XTEAM='web', XTAB='org', TL_OFF=0, CURROW=null, STTAB='wait', SET={}, QD=null;
+  var ME=null, STAFF=[], COMMS=[], DATA={}, CUR='web', COKEY=null, SCOPE='in', AXIS='work', EXT={projects:[],members:[],links:[],jobs:[],dues:[],subs:[],eps:[],reps:[],files:[],pays:[],err:''}, PJ=null, XTEAM='web', XTAB='org', TL_OFF=0, CURROW=null, STTAB='wait', SET={}, QD=null;
   /* ---------- 홈페이지 6차 — 「제작 자료」(2차) 건을 신청(1차) 건에 붙여 보기 (2026-10-13) ----------
      DB 에는 신청 건과 제작 자료 건이 «따로» 들어옵니다(고객은 이미 낸 건을 고칠 수 없습니다).
      화면에서만 한 건으로 봅니다. 짝 = 같은 「신청 번호」 + 같은 고객 계정(user_id).
@@ -1708,7 +1733,9 @@
     var ep=await sb.from('ext_episodes').select('*').order('sort').order('created_at');
     var rp=await sb.from('ext_reports').select('*').order('at',{ascending:false});
     var fl=await sb.from('ext_files').select('*').order('created_at');
-    EXT.err=(a.error||m.error||l.error||j.error||d.error||st.error||ep.error||rp.error||fl.error||{}).message||'';
+    var py=await sb.from('ext_payments').select('*').order('created_at');
+    EXT.err=(a.error||m.error||l.error||j.error||d.error||st.error||ep.error||rp.error||fl.error||py.error||{}).message||'';
+    EXT.pays=py.error?[]:(py.data||[]);
     EXT.reps=rp.error?[]:(rp.data||[]); EXT.files=fl.error?[]:(fl.data||[]);
     EXT.subs=st.error?[]:(st.data||[]); EXT.eps=ep.error?[]:(ep.data||[]);
     EXT.dues=d.error?[]:(d.data||[]);
@@ -1767,15 +1794,16 @@
     $('extTitle').textContent=p.name+(p.short_name?' ('+p.short_name+')':'');
     $('extSub').textContent=[p.partner?'함께 : '+p.partner:'', p.client_person?'의뢰고객 : '+p.client_person:'', p.status].filter(Boolean).join(' · ');
     $('extAct').innerHTML='<button class="btn btn-ghost" type="button" onclick="pjOpen(\''+p.id+'\')">✏️ 프로젝트 정보</button>';
-    var XOPEN={org:1,job:1,time:1,todo:1,done:1};   /* 열린 탭 — 단계마다 하나씩 엽니다 */
+    var XOPEN={org:1,job:1,time:1,todo:1,done:1,num:1};   /* 열린 탭 — 단계마다 하나씩 엽니다 */
     if(!XOPEN[XTAB])XTAB='org';
     var h='<div class="ext-tabs">'+XTABS.map(function(t){
-      var n=t[0]==='job'?' '+pjJobs(p.id).length:t[0]==='done'?' '+pjReps(p.id).length:(t[0]==='time'&&tlAlerts(p.id)?' ⚠ '+tlAlerts(p.id):'');
+      var n=t[0]==='job'?' '+pjJobs(p.id).length:t[0]==='done'?' '+pjReps(p.id).length:t[0]==='num'?(pjOwe(p.id)?' ☑️ '+pjOwe(p.id):''):(t[0]==='time'&&tlAlerts(p.id)?' ⚠ '+tlAlerts(p.id):'');
       return '<button type="button"'+(XOPEN[t[0]]?' onclick="xTab(\''+t[0]+'\')"'+(XTAB===t[0]?' class="on"':''):' disabled title="다음 단계에서 만듭니다"')+'>'+t[1]+n+'</button>';}).join('')+'</div>';
     if(XTAB==='job'){$('extBody').innerHTML=h+jobsHTML(p.id);return;}
     if(XTAB==='time'){$('extBody').innerHTML=h+timelineHTML(p.id);return;}
     if(XTAB==='todo'){$('extBody').innerHTML=h+todoTabHTML(p.id);fillThumbs();return;}
     if(XTAB==='done'){$('extBody').innerHTML=h+doneTabHTML(p.id);fillThumbs();return;}
+    if(XTAB==='num'){$('extBody').innerHTML=h+numTabHTML(p.id);return;}
     /* 조직도 : 의뢰고객 → 총괄(관리자) → 팀 */
     h+='<div class="org">'
       +'<div class="org-node org-client"><b>'+esc(p.client_person||'의뢰고객 (미입력)')+'</b><span>최종 컨펌'+(p.client_kakao?' · 카톡 @'+esc(p.client_kakao):'')+'</span></div>'
@@ -1834,7 +1862,7 @@
     return '<div class="job'+(j.status==='중단'||j.status==='완료'?' off':'')+'" onclick="jbOpen(\''+j.id+'\')">'
       +'<div>'+jst(j.status)+'</div>'
       +'<div class="t"><b>'+esc(j.title)+'</b>'+(j.brand?'<span class="br">'+esc(j.brand)+'</span>':'')+'</div>'
-      +'<div class="pr">'+jobPrice(j)+'</div>'
+      +'<div class="pr">'+jobPrice(j)+payBadge(j)+'</div>'
       +'<div class="wh">'+(who.length?esc(who.join(' · ')):'담당자 미정')+'</div>'
       +'<div class="nx">'+nextDueHTML(j)+'</div>'
       +'<div class="ic">'+(inc?'포함 '+(j.includes||[]).length+'개':'')+'</div></div>';
@@ -2404,6 +2432,106 @@
     return h;
   }
 
+  /* ---------- 외부 6단계 : 숫자 — 입금 ✅ / ☑️ (2026-11-02 이은총 님) ----------
+     ext_payments 에 줄이 있으면 ✅ 입금 완료, 없으면 ☑️ 미입금 (설명서 7장 · 9장 — 진행 상태와 따로).
+     단건 = 작업 하나에 한 번 · 월정액 = 달마다(시작한 달 ~ 이번 달) · 건당 = 회차마다.
+     받을 돈(미입금) 셈 : 단건은 「중단」 빼고 · 월정액은 달마다 · 건당은 「완료」 회차만(설명서 6-2 「단가 × 완료 회차 수」).
+     입금 줄의 amount = 표시한 때의 금액. 아직 안 받은 건당 회차는 지금 단가로 셈(옛 단가 적용 여부는 이은총 님 확인 전).
+     🔴 15일 합산 정산서(기간별)는 정산 기간 기준을 정한 뒤 붙임. 입금 계좌번호는 코드에 넣지 않음(카톡 문구 단계에서 설정값으로). */
+  function jobPays(jid){return EXT.pays.filter(function(x){return x.job_id===jid;});}
+  function payOf(jid,epId,period){return EXT.pays.filter(function(x){return x.job_id===jid&&(x.episode_id||null)===(epId||null)&&(x.period||null)===(period||null);})[0]||null;}
+  function canPay(pid){return !!ME&&(ME.role==='owner'||isMgr(pid));}
+  function ymNow(){return kstToday().slice(0,7);}
+  function ymNext(m){var y=+m.slice(0,4),n=+m.slice(5,7)+1;if(n>12){n=1;y++;}return y+'-'+('0'+n).slice(-2);}
+  function ymKo(m){return (+m.slice(5,7))+'월분';}
+  function jobMonths(j){   /* 시작한 달 ~ 이번 달 (끝났거나 멈춘 작업은 그 달까지) */
+    var start=(kst(j.created_at)||{d:kstToday()}).d.slice(0,7), end=ymNow();
+    if((j.status==='완료'||j.status==='중단')&&j.updated_at)end=kst(j.updated_at).d.slice(0,7);
+    jobPays(j.id).forEach(function(x){if(x.period){if(x.period<start)start=x.period;if(x.period>end)end=x.period;}});
+    var out=[],m=start,guard=0; while(m<=end&&guard++<120){out.push(m);m=ymNext(m);} return out;
+  }
+  /* 입금 줄 — {label, epId, period, amount, row(✅ 이면 입금 줄), owe(받을 돈에 넣는지)} */
+  function payLines(j){
+    if(j.price_type==='월정액')return jobMonths(j).reverse().map(function(m){var r=payOf(j.id,null,m);
+      return {label:m.slice(0,4)+'년 '+ymKo(m),period:m,amount:r?r.amount:j.amount,row:r,owe:true};});
+    if(j.price_type==='건당')return jobEps(j.id).map(function(e){var r=payOf(j.id,e.id,null);
+      return {label:(e.ymd?e.ymd+' ':'')+e.title,epId:e.id,amount:r?r.amount:j.amount,row:r,owe:e.status==='완료',ep:e};});
+    var r=payOf(j.id,null,null);
+    return [{label:'작업 금액',amount:r?r.amount:j.amount,row:r,owe:j.status!=='중단'}];
+  }
+  function pjOwe(pid){var n=0;pjJobs(pid).forEach(function(j){payLines(j).forEach(function(l){if(!l.row&&l.owe)n++;});});return n;}
+  function payBadge(j){
+    var L=payLines(j), owe=L.filter(function(l){return !l.row&&l.owe;});
+    if(j.price_type==='월정액'){var c=L[0];if(!c)return '';
+      return '<div class="pb'+(owe.length?' owe':'')+'">'+(c.row?'✅ ':'☑️ ')+ymKo(c.period)+(owe.length&&(!c.row?owe.length>1:true)?' · 미입금 '+owe.length+'달':'')+'</div>';}
+    if(j.price_type==='건당'){var done=L.filter(function(l){return l.owe;}), pd=L.filter(function(l){return l.row;});
+      return '<div class="pb'+(owe.length?' owe':'')+'">'+(done.length?(owe.length?'☑️ ':'✅ ')+'입금 '+pd.length+'/'+done.length+'편':'완료 회차 없음')+'</div>';}
+    return '<div class="pb'+(owe.length?' owe':'')+'">'+(L[0].row?'✅ 입금':j.status==='중단'?'☑️ 중단 (청구 안 함)':'☑️ 미입금')+'</div>';
+  }
+  function payLineHTML(j,l,o){
+    o=o||{}; var can=canPay(j.project_id), r=l.row;
+    var who=r?((r.paid_at?r.paid_at.slice(5).replace('-','/')+' 확인':'날짜 모름')+(r.by_staff?' · '+(staffName(r.by_staff)||''):'')+(r.note?' · '+r.note:'')):(!l.owe?(l.ep?'회차 '+l.ep.status:'중단 — 받을 돈에서 뺌'):'');
+    return '<div class="pay-l'+(!r&&!l.owe?' na':'')+'">'
+      +'<button class="pay-b '+(r?'on':'off')+'" type="button"'+(can?' onclick="payToggle(\''+j.id+'\',\''+(l.epId||'')+'\',\''+(l.period||'')+'\')"':' disabled title="입금 표시는 그 프로젝트 관리자 · 최고관리자만"')+'>'+(r?'✅ 입금 완료':'☑️ 미입금')+'</button>'
+      +(o.title?'<span class="lb2"><b>'+esc(j.title)+'</b> · '+esc(l.label)+'</span>':'<span class="lb2">'+esc(l.label)+'</span>')
+      +'<span class="who">'+esc(who)+'</span><span class="am">'+wonS(l.amount)+'</span></div>';
+  }
+  function payBoxHTML(j){
+    var L=payLines(j);
+    if(!L.length)return '<span class="muted">'+(j.price_type==='건당'?'아직 회차가 없습니다 — 「할 일」 탭에서 회차를 넣으면 회차마다 입금을 표시합니다.':'표시할 줄이 없습니다.')+'</span>';
+    return L.map(function(l){return payLineHTML(j,l);}).join('');
+  }
+  window.payToggle=async function(jid,epId,period){
+    var j=EXT.jobs.filter(function(x){return x.id===jid;})[0]; if(!j)return;
+    if(!canPay(j.project_id)){toast('입금 표시는 그 프로젝트 관리자 · 최고관리자만 할 수 있습니다');return;}
+    epId=epId||null; period=period||null;
+    var l=payLines(j).filter(function(x){return (x.epId||null)===epId&&(x.period||null)===period;})[0]; if(!l)return;
+    var what=(period?ymKo(period)+' ':'')+(l.ep?l.label+' ':'')+wonS(l.amount);
+    if(l.row){
+      if(!confirm('「'+j.title+'」 '+what+'\n입금 완료(✅) 표시를 지우고 ☑️ 미입금으로 돌릴까요?'))return;
+      var d=await sb.from('ext_payments').delete().eq('id',l.row.id).select();
+      if(d.error||!(d.data||[]).length){toast('바꾸기 실패: '+(d.error?d.error.message:'권한을 확인해 주세요'));return;}
+      await sb.from('ext_job_events').insert({job_id:jid,kind:'pay',from_val:'✅',to_val:'☑️',note:what,by_staff:ME.id});
+      toast('☑️ 미입금으로 돌렸습니다');
+    }else{
+      if(l.amount==null&&!confirm('금액이 아직 정해지지 않았습니다. 금액 없이 입금 완료로 표시할까요?'))return;
+      var r=await sb.from('ext_payments').insert({job_id:jid,episode_id:epId,period:period,amount:l.amount,paid_at:kstToday(),by_staff:ME.id}).select().single();
+      if(r.error){toast('저장 실패: '+r.error.message);return;}
+      await sb.from('ext_job_events').insert({job_id:jid,kind:'pay',from_val:'☑️',to_val:'✅',note:what,by_staff:ME.id});
+      toast('✅ 입금 완료로 표시했습니다');
+    }
+    await xReload();
+    if($('jbModal').classList.contains('open')&&$('jb_id').value===jid){
+      var nj=EXT.jobs.filter(function(x){return x.id===jid;})[0]; if(nj)$('jb_pay').innerHTML=payBoxHTML(nj);
+    }
+  };
+  function numTabHTML(pid){
+    var js=pjJobs(pid), all=[];
+    js.forEach(function(j){payLines(j).forEach(function(l){l.j=j;all.push(l);});});
+    var paid=all.filter(function(l){return l.row;}), owe=all.filter(function(l){return !l.row&&l.owe;});
+    var sum=function(a){return a.reduce(function(s,l){return s+(l.amount||0);},0);};
+    var unk=owe.filter(function(l){return l.amount==null;}).length;
+    var h='<p class="muted" style="font-size:.84rem;margin:-6px 0 14px">입금 완료 ✅ · 미입금 ☑️ 를 작업마다 표시합니다(진행 상태와 따로). 단건은 한 번, 월정액은 달마다, 건당은 회차마다. '
+      +'받을 돈은 「중단」 작업과 아직 완료 안 된 회차를 뺀 금액입니다.'+(canPay(pid)?'':' 입금 표시는 이 프로젝트 관리자 · 최고관리자만 바꿀 수 있습니다.')+'</p>';
+    h+='<div class="num-cards">'
+      +'<div class="num-card"><div class="k">받을 돈 (전체)</div><div class="v">'+wonS(sum(paid)+sum(owe))+'</div><div class="s">입금 완료 + 미입금</div></div>'
+      +'<div class="num-card"><div class="k">✅ 입금 완료</div><div class="v" style="color:#15803D">'+wonS(sum(paid))+'</div><div class="s">'+paid.length+'건</div></div>'
+      +'<div class="num-card"><div class="k">☑️ 미입금</div><div class="v" style="color:#B45309">'+wonS(sum(owe))+'</div><div class="s">'+owe.length+'건'+(unk?' · 금액 미정 '+unk+'건은 합계에서 빠짐':'')+'</div></div></div>';
+    h+='<div class="card ext-card"><h3>☑️ 미입금 '+owe.length+'건</h3>'
+      +(owe.length?owe.map(function(l){return payLineHTML(l.j,l,{title:1});}).join(''):'<div class="muted" style="font-size:.85rem">받을 돈이 모두 들어왔습니다.</div>')+'</div>';
+    h+='<div class="card ext-card"><h3>작업별 입금</h3>';
+    ['web','sns','design','video','blog'].forEach(function(t){
+      pjJobs(pid,t).forEach(function(j){
+        var L=payLines(j);
+        h+='<div class="num-job"><div class="nh"><span class="pj" style="background:'+XCOL[t][0]+'">'+esc(XKO[t])+'</span>'+jst(j.status)
+          +'<b style="cursor:pointer" onclick="jbOpen(\''+j.id+'\')">'+esc(j.title)+'</b><span class="muted">'+esc(j.price_type)+' · '+(j.price_type==='월정액'&&j.amount!=null?'월 ':j.price_type==='건당'&&j.amount!=null?'1건 ':'')+wonS(j.amount)+'</span></div>'
+          +(L.length?L.map(function(l){return payLineHTML(j,l);}).join(''):'<div class="muted" style="font-size:.8rem">아직 회차가 없습니다.</div>')+'</div>';
+      });
+    });
+    h+='</div><p class="muted" style="font-size:.78rem">📅 「매달 15일 합산」 정산서(기간별 합계)는 정산 기간 기준을 정한 뒤 이 탭에 붙입니다.</p>';
+    return h;
+  }
+
   /* 내 할 일 */
   function myLists(){
     var mgrWait=EXT.jobs.filter(function(j){return isMgr(j.project_id)&&['중간 컨펌','자료 대기','최종 컨펌'].indexOf(j.status)>=0;});
@@ -2542,11 +2670,12 @@
     $('jb_delnote').textContent=j&&ME.role!=='owner'?'삭제는 최고관리자만 · 멈춘 작업은 상태를 「중단」으로':'';
     $('jb_ev').textContent=j?'불러오는 중…':'저장하면 여기에 남습니다.';
     $('jbModal').classList.add('open');
+    if(j)$('jb_pay').innerHTML=payBoxHTML(j); else $('jb_pay').textContent='저장한 뒤에 표시할 수 있습니다.';
     if(j){
       var r=await sb.from('ext_job_events').select('*').eq('job_id',j.id).order('at',{ascending:false});
       $('jb_ev').innerHTML=r.error?'불러오기 실패: '+esc(r.error.message):((r.data||[]).length?(r.data||[]).map(function(e){
         var v=e.kind==='price'?wonS(e.from_val)+' → '+wonS(e.to_val):esc(e.from_val||'-')+' → '+esc(e.to_val||'-');
-        return fdatetime(e.at)+' · '+(e.kind==='price'?'금액':e.kind==='due'?'기한':'상태')+' '+v+(e.by_staff?' · '+esc(staffName(e.by_staff)||''):'')+(e.note?' · '+esc(e.note):'');
+        return fdatetime(e.at)+' · '+(e.kind==='price'?'금액':e.kind==='due'?'기한':e.kind==='pay'?'입금':'상태')+' '+v+(e.by_staff?' · '+esc(staffName(e.by_staff)||''):'')+(e.note?' · '+esc(e.note):'');
       }).join('<br>'):'아직 바뀐 기록이 없습니다.');
     }
   };
