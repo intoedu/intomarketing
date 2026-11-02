@@ -1710,7 +1710,7 @@
   function openCo(k){
     COKEY=k;
     document.querySelectorAll('.navb[data-nav],#navCo .navb').forEach(function(x){x.classList.remove('on');});
-    var b=document.querySelector('#navCo .navb[data-co="'+k+'"]'); if(b)b.classList.add('on'); $('navMy').classList.remove('on');offSpecial();
+    var b=document.querySelector('#navCo .navb[data-co="'+CSS.escape(k)+'"]'); if(b)b.classList.add('on'); $('navMy').classList.remove('on');offSpecial();
     ['viewList','viewStaff','viewSet','viewLinks','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
     $('viewList').classList.remove('hide');
     $('listTitle').textContent=(CO[k]?CO[k].name:'')+' — 업체별';
@@ -1769,9 +1769,10 @@
     var rp=await sb.from('ext_reports').select('*').order('at',{ascending:false});
     var fl=await sb.from('ext_files').select('*').order('created_at');
     var py=await sb.from('ext_payments').select('*').order('created_at');
-    var dn=await sb.from('ext_job_events').select('job_id,at').eq('kind','status').eq('to_val','완료');
-    DONE_AT={}; (dn.data||[]).forEach(function(e){if(!DONE_AT[e.job_id]||e.at>DONE_AT[e.job_id])DONE_AT[e.job_id]=e.at;});
-    EXT.err=(a.error||m.error||l.error||j.error||d.error||st.error||ep.error||rp.error||fl.error||py.error||{}).message||'';
+    var dn=await sb.from('ext_job_events').select('job_id,at,to_val').eq('kind','status').in('to_val',['완료','중단']);
+    DONE_AT={}; END_AT={}; (dn.data||[]).forEach(function(e){var o=e.to_val==='완료'?DONE_AT:END_AT;if(!o[e.job_id]||e.at>o[e.job_id])o[e.job_id]=e.at;});
+    Object.keys(DONE_AT).forEach(function(k){if(!END_AT[k]||DONE_AT[k]>END_AT[k])END_AT[k]=DONE_AT[k];});
+    EXT.err=(a.error||m.error||l.error||j.error||d.error||st.error||ep.error||rp.error||fl.error||py.error||dn.error||{}).message||'';
     EXT.pays=py.error?[]:(py.data||[]);
     EXT.reps=rp.error?[]:(rp.data||[]); EXT.files=fl.error?[]:(fl.data||[]);
     EXT.subs=st.error?[]:(st.data||[]); EXT.eps=ep.error?[]:(ep.data||[]);
@@ -1788,7 +1789,7 @@
   function pjLabel(p){return p.short_name?p.short_name+' · '+p.name:p.name;}
   function linkedPj(reqId){return EXT.links.filter(function(x){return x.request_id===reqId;}).map(function(x){return pjOf(x.project_id);}).filter(Boolean);}
   function renderExtNav(){
-    var onOk=SCOPE==='out'&&$('viewMy').classList.contains('hide');   /* 내 할 일을 보는 중이면 프로젝트 · 팀 단추에 불을 켜지 않음 */
+    var onOk=SCOPE==='out'&&!$('viewExt').classList.contains('hide');   /* 내 할 일 · 경영 현황 · 관리비 대장을 보는 중이면 프로젝트 · 팀 단추에 불을 켜지 않음 */
     $('navOut').innerHTML=EXT.projects.map(function(p){
       return '<button class="navb co'+(PJ===p.id&&onOk?' on':'')+'" type="button" data-pj="'+p.id+'">'
         +'<span class="nm">'+esc(pjLabel(p))+'</span>'+(p.status!=='진행중'?'<span class="cnt">'+esc(p.status)+'</span>':'')+'</button>';
@@ -1801,8 +1802,10 @@
         +'<span class="nm">'+esc(t[1])+'</span><span class="cnt">'+Object.keys(n).length+'</span></button>';
     }).join('');
   }
-  $('navOut').addEventListener('click',function(e){var b=e.target.closest('.navb[data-pj]');if(!b)return;PJ=b.getAttribute('data-pj');renderExtNav();renderExt();});
-  $('navOutWork').addEventListener('click',function(e){var b=e.target.closest('.navb[data-xt]');if(!b)return;XTEAM=b.getAttribute('data-xt');renderExtNav();renderExt();});
+  /* 내 할 일 · 경영 현황 · 관리비 대장을 보다가 프로젝트 · 팀을 누르면 외부 화면으로 돌아옴 (11/2 점검) */
+  function toExt(){['viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});$('viewExt').classList.remove('hide');$('navMy').classList.remove('on');offSpecial();}
+  $('navOut').addEventListener('click',function(e){var b=e.target.closest('.navb[data-pj]');if(!b)return;PJ=b.getAttribute('data-pj');toExt();renderExtNav();renderExt();});
+  $('navOutWork').addEventListener('click',function(e){var b=e.target.closest('.navb[data-xt]');if(!b)return;XTEAM=b.getAttribute('data-xt');toExt();renderExtNav();renderExt();});
 
   function memHTML(x){
     return '<button class="mem" type="button" onclick="emOpen(\''+x.id+'\')">'
@@ -2063,7 +2066,8 @@
     var j=EXT.jobs.filter(function(x){return x.id===jid;})[0]; if(!j||j.status===st)return true;
     var r=await sb.from('ext_jobs').update({status:st,updated_at:new Date().toISOString()}).eq('id',jid).select().maybeSingle();
     if(r.error||!r.data){toast('바꾸기 실패: '+(r.error?r.error.message:'권한을 확인해 주세요'));return false;}
-    await sb.from('ext_job_events').insert({job_id:jid,kind:'status',from_val:j.status,to_val:st,by_staff:ME.id,note:note||null});
+    var ev=await sb.from('ext_job_events').insert({job_id:jid,kind:'status',from_val:j.status,to_val:st,by_staff:ME.id,note:note||null});
+    if(ev.error)toast('상태는 바꿨지만 기록 실패: '+ev.error.message);
     if(quiet)return true;
     toast('「'+st+'」(으)로 바꿨습니다'); await xReload(); return true;
   };
@@ -2119,7 +2123,7 @@
       show.forEach(function(e,i){
         h+='<div class="ep"><span class="tnum muted">'+esc(e.ymd||'-')+'</span><span>'+(eps.indexOf(e)+1)+'. '+esc(e.title)+'</span>'
           +'<select class="inp" onchange="epSet(\''+e.id+'\',{status:this.value})">'+EPST.map(function(x){return '<option'+(x===e.status?' selected':'')+'>'+x+'</option>';}).join('')+'</select>'
-          +(e.link?'<a href="'+esc(e.link)+'" target="_blank" rel="noopener">'+esc(e.link)+'</a>'
+          +(e.link?(/^https?:\/\//i.test(e.link)?'<a href="'+esc(e.link)+'" target="_blank" rel="noopener">'+esc(e.link)+'</a>':'<span>'+esc(e.link)+'</span>')
             :'<input class="inp" placeholder="결과물 링크 붙여 넣기" onchange="epSet(\''+e.id+'\',{link:this.value.trim()||null})">')
           +'<button class="up" type="button" title="이 회차 결과물 올리기 (중간 컨펌)" onclick="rpOpen(\''+j.id+'\',\'중간 컨펌\',\''+e.id+'\')">📎</button>'
           +(o.mineOnly?'<span></span>':'<button class="x3" type="button" title="빼기" onclick="epDel(\''+e.id+'\')" style="border:0;background:none;color:var(--muted);cursor:pointer">✕</button>')+'</div>';
@@ -2146,7 +2150,7 @@
   }
   window.subToggle=async function(id,on){
     var r=await sb.from('ext_subtasks').update({done:on,done_at:on?new Date().toISOString():null,done_by:on?ME.id:null}).eq('id',id).select().maybeSingle();
-    if(r.error||!r.data){toast('저장 실패: '+(r.error?r.error.message:'권한을 확인해 주세요'));return;}
+    if(r.error||!r.data){toast('저장 실패: '+(r.error?r.error.message:'권한을 확인해 주세요'));await xReload();return;}
     await xReload();
   };
   window.subAdd=async function(jid){
@@ -2171,7 +2175,7 @@
   window.epSet=async function(id,patch){
     if(patch.status)patch.done_at=patch.status==='완료'?new Date().toISOString():null;
     var r=await sb.from('ext_episodes').update(patch).eq('id',id).select().maybeSingle();
-    if(r.error||!r.data){toast('저장 실패: '+(r.error?r.error.message:'권한을 확인해 주세요'));return;}
+    if(r.error||!r.data){toast('저장 실패: '+(r.error?r.error.message:'권한을 확인해 주세요'));await xReload();return;}
     toast('저장했습니다'); await xReload();
   };
   window.epDel=async function(id){
@@ -2244,11 +2248,13 @@
     await xReload();
     if($('rvModal').classList.contains('open')){var r=lastRep($('rv_job').value);$('rv_rep').value=r?r.id:'';$('rv_body').innerHTML=r?repHTML(r):'<div class="muted" style="font-size:.84rem">올라온 링크 · 파일이 없습니다.</div>';fillThumbs();}
   }
+  /* 지웠다고 안 돌아온 파일이 정말 남아 있는지 — 이미 없으면(자동 삭제 등) 지운 것으로 봄 (11/2 점검) */
+  async function stillThere(paths){var out=[];for(var i=0;i<paths.length;i++){var t=await sb.storage.from('ext-files').createSignedUrl(paths[i],60);if(!t.error&&t.data)out.push(paths[i]);}return out;}
   window.fileDel=async function(fid){
     var f=EXT.files.filter(function(x){return x.id===fid;})[0]; if(!f||f.deleted_at||!canDel(f.created_by))return;
     if(!confirm('「'+f.name+'」 파일을 지울까요? 되살릴 수 없습니다. (보고 · 링크 · 메모는 남습니다)'))return;
     var d=await sb.storage.from('ext-files').remove([f.path]);
-    if(d.error||!(d.data||[]).length){toast('지우기 실패: '+(d.error?d.error.message:'권한을 확인해 주세요'));return;}
+    if(d.error||(!(d.data||[]).length&&(await stillThere([f.path])).length)){toast('지우기 실패: '+(d.error?d.error.message:'권한을 확인해 주세요'));return;}
     var u=await sb.from('ext_files').update({deleted_at:new Date().toISOString(),deleted_by:ME.id}).eq('id',fid).select().maybeSingle();
     if(u.error||!u.data)toast('파일은 지웠지만 기록 실패: '+(u.error?u.error.message:'권한을 확인해 주세요')); else toast('파일을 지웠습니다');
     await afterDel();
@@ -2259,7 +2265,9 @@
     if(!confirm('이 보고를 통째로 지울까요?\n링크 · 메모 · 피드백'+(live.length?' · 파일 '+live.length+'개':'')+'가 모두 지워지고 되살릴 수 없습니다.\n(작업 상태와 상태 기록은 그대로 남습니다)'))return;
     if(live.length){
       var d=await sb.storage.from('ext-files').remove(live.map(function(f){return f.path;}));
-      if(d.error||(d.data||[]).length<live.length){toast('파일 지우기 실패: '+(d.error?d.error.message:'권한을 확인해 주세요'));return;}
+      var gone=(d.data||[]).map(function(x){return x.name;});
+      var left=d.error?[1]:await stillThere(live.map(function(f){return f.path;}).filter(function(p){return gone.indexOf(p)<0;}));
+      if(left.length){toast('파일 지우기 실패: '+(d.error?d.error.message:'권한을 확인해 주세요'));await afterDel();return;}
     }
     var x=await sb.from('ext_reports').delete().eq('id',rid).select();
     if(x.error||!(x.data||[]).length){toast('보고 지우기 실패: '+(x.error?x.error.message:'권한을 확인해 주세요'));return;}
@@ -2406,17 +2414,25 @@
       if(u.error){bad.push(f0.name+' ('+u.error.message+')');continue;}
       rows.push({report_id:rid,job_id:jid,path:path,name:f.name,size:f.size,mime:f.type||null,shrunk:f!==f0,created_by:ME.id});
     }
-    if(rows.length){var e=await sb.from('ext_files').insert(rows); if(e.error)bad.push('파일 기록 실패: '+e.error.message);}
+    if(rows.length){var e=await sb.from('ext_files').insert(rows);
+      if(e.error){bad.push('파일 기록 실패: '+e.error.message);await sb.storage.from('ext-files').remove(rows.map(function(x){return x.path;}));rows=[];}}   /* 기록 없는 파일이 저장 칸에 남지 않게 */
+    if(!links.length&&!rows.length){   /* 올라간 것이 하나도 없으면 빈 보고를 지우고 상태도 그대로 (11/2 점검) */
+      await sb.from('ext_reports').delete().eq('id',rid);
+      $('rp_prog').textContent=''; go.disabled=false; go.textContent='올리기';
+      alert('아무 파일도 올리지 못해서 보고를 올리지 않았습니다. 상태도 그대로입니다.\n'+bad.join('\n')); await xReload(); return;
+    }
+    var stOk=true;
     if(kind!=='결과물'){
       if(epId){
         var ep=EXT.eps.filter(function(x){return x.id===epId;})[0], patch={status:'중간 컨펌'};
         if(ep&&!ep.link&&links[0])patch.link=links[0];
-        await sb.from('ext_episodes').update(patch).eq('id',epId);
-      }else await setJobSt(jid,'중간 컨펌','결과물 올림'+(links.length?' · 링크 '+links.length:'')+(rows.length?' · 파일 '+rows.length:''),true);
+        var eu=await sb.from('ext_episodes').update(patch).eq('id',epId).select().maybeSingle(); stOk=!eu.error&&!!eu.data;
+      }else stOk=await setJobSt(jid,'중간 컨펌','결과물 올림'+(links.length?' · 링크 '+links.length:'')+(rows.length?' · 파일 '+rows.length:''),true);
     }
     $('rp_prog').textContent=''; go.disabled=false; go.textContent='올리기';
     closeModal('rpModal'); RP_FILES=[];
-    if(bad.length)alert('올리지 못한 파일이 있습니다.\n'+bad.join('\n'));
+    if(!stOk)bad.unshift('결과물은 올렸지만 상태를 「중간 컨펌」으로 바꾸지 못했습니다 — 상태 단추를 다시 눌러 주세요');
+    if(bad.length)alert('확인해 주세요.\n'+bad.join('\n'));
     else toast(kind==='결과물'?'결과물을 올렸습니다':'중간 컨펌으로 올렸습니다 — 카톡 중간방에 관리자 태그도 해 주세요');
     await xReload();
   };
@@ -2440,15 +2456,17 @@
     var fin=j.status==='최종 컨펌', label=rvLabel(j,to);
     if(label==='수정 요청'&&!note){toast('수정할 점을 적어 주세요');return;}
     $('rv_go').disabled=true;
+    var done=await setJobSt(jid,to,label+(note?' — '+note:''),true);   /* 상태가 바뀐 다음에 보고 줄에 적음 — 「통과」만 적히고 상태는 그대로인 일이 없게 (11/2 점검) */
+    if(!done){$('rv_go').disabled=false;return;}
+    var warn='';
     if(rid){
       var r=EXT.reps.filter(function(x){return x.id===rid;})[0];
       var rn=[r&&r.result_note,note?(fin?'[대표님] ':'')+note:''].filter(Boolean).join('\n');
       var u=await sb.from('ext_reports').update({result:label,result_note:rn||null,result_by:ME.id,result_at:new Date().toISOString()}).eq('id',rid).select().maybeSingle();
-      if(u.error||!u.data){toast('저장 실패: '+(u.error?u.error.message:'권한을 확인해 주세요'));$('rv_go').disabled=false;return;}
+      if(u.error||!u.data)warn=' (피드백은 보고 줄에 못 적었고 상태 기록에만 남았습니다)';
     }
-    var done=await setJobSt(jid,to,label+(note?' — '+note:''),true);
-    $('rv_go').disabled=false; if(!done)return;
-    closeModal('rvModal'); toast(label+' — 「'+to+'」(으)로 바꿨습니다'); await xReload();
+    $('rv_go').disabled=false;
+    closeModal('rvModal'); toast(label+' — 「'+to+'」(으)로 바꿨습니다'+warn); await xReload();
   };
 
   /* 한 일 탭 */
@@ -2488,7 +2506,7 @@
   function ymKo(m){return (+m.slice(5,7))+'월분';}
   function jobMonths(j){   /* 시작한 달 ~ 이번 달 (끝났거나 멈춘 작업은 그 달까지) */
     var start=j.fee_start||(kst(j.created_at)||{d:kstToday()}).d.slice(0,7), end=ymNow();
-    if((j.status==='완료'||j.status==='중단')&&j.updated_at)end=kst(j.updated_at).d.slice(0,7);
+    if(j.status==='완료'||j.status==='중단'){var ea=END_AT[j.id]||j.updated_at;if(ea)end=kst(ea).d.slice(0,7);}   /* updated_at 은 메모만 고쳐도 바뀌어서 상태 기록을 먼저 씀 (11/2 점검) */
     jobPays(j.id).forEach(function(x){if(x.period){if(x.period<start)start=x.period;if(x.period>end)end=x.period;}});
     var out=[],m=start,guard=0; while(m<=end&&guard++<120){out.push(m);m=ymNext(m);} return out;
   }
@@ -2524,7 +2542,13 @@
     if(!L.length)return '<span class="muted">'+(j.price_type==='건당'?'아직 회차가 없습니다 — 「할 일」 탭에서 회차를 넣으면 회차마다 입금을 표시합니다.':'표시할 줄이 없습니다.')+'</span>';
     return L.map(function(l){return payLineHTML(j,l);}).join('');
   }
+  var PAY_BUSY=false;
   window.payToggle=async function(jid,epId,period){
+    if(PAY_BUSY)return;
+    if(EXT.err){toast('외주 자료를 다 못 불러와서 입금 표시를 막았습니다 — 새로고침해 주세요');return;}
+    PAY_BUSY=true; try{await payToggle0(jid,epId,period);}finally{PAY_BUSY=false;}
+  };
+  async function payToggle0(jid,epId,period){
     var j=EXT.jobs.filter(function(x){return x.id===jid;})[0]; if(!j)return;
     if(!canPay(j.project_id)){toast('입금 표시는 그 프로젝트 관리자 · 최고관리자만 할 수 있습니다');return;}
     epId=epId||null; period=period||null;
@@ -2534,14 +2558,14 @@
       if(!confirm('「'+j.title+'」 '+what+'\n입금 완료(✅) 표시를 지우고 ☑️ 미입금으로 돌릴까요?'))return;
       var d=await sb.from('ext_payments').delete().eq('id',l.row.id).select();
       if(d.error||!(d.data||[]).length){toast('바꾸기 실패: '+(d.error?d.error.message:'권한을 확인해 주세요'));return;}
-      await sb.from('ext_job_events').insert({job_id:jid,kind:'pay',from_val:'✅',to_val:'☑️',note:what,by_staff:ME.id});
-      toast('☑️ 미입금으로 돌렸습니다');
+      var e1=await sb.from('ext_job_events').insert({job_id:jid,kind:'pay',from_val:'✅',to_val:'☑️',note:what,by_staff:ME.id});
+      toast('☑️ 미입금으로 돌렸습니다'+(e1.error?' (기록 남기기 실패)':''));
     }else{
       if(l.amount==null&&!confirm('금액이 아직 정해지지 않았습니다. 금액 없이 입금 완료로 표시할까요?'))return;
       var r=await sb.from('ext_payments').insert({job_id:jid,episode_id:epId,period:period,amount:l.amount,paid_at:kstToday(),by_staff:ME.id,payer:jobPayer(j)}).select().single();
-      if(r.error){toast('저장 실패: '+r.error.message);return;}
-      await sb.from('ext_job_events').insert({job_id:jid,kind:'pay',from_val:'☑️',to_val:'✅',note:what,by_staff:ME.id});
-      toast('✅ 입금 완료로 표시했습니다');
+      if(r.error){toast(/duplicate|unique/i.test(r.error.message)?'이미 입금 완료로 표시돼 있습니다':'저장 실패: '+r.error.message);await xReload();return;}
+      var e2=await sb.from('ext_job_events').insert({job_id:jid,kind:'pay',from_val:'☑️',to_val:'✅',note:what,by_staff:ME.id});
+      toast('✅ 입금 완료로 표시했습니다'+(e2.error?' (기록 남기기 실패)':''));
     }
     await xReload();
     if($('jbModal').classList.contains('open')&&$('jb_id').value===jid){
@@ -2553,7 +2577,7 @@
      단건 = 「완료」로 바꾼 날(기록 없으면 입금 확인 날 = 선입금) · 월정액 M월분 = M월 15일 정산(확인 요청 중).
      입금하는 곳 = 작업 payer → 프로젝트 payer_default → 함께하는 회사. ✅ 줄에는 그때 입금처를 따로 남김(나중에 TK 직접으로 바뀌어도 옛 정산은 그대로).
      슬라이드 편집 10/28 회차 = 새 단가 30,000원(이은총 님 11/2). 팀원 작업비 정산은 나중에. */
-  var DONE_AT={}, NUM_S=null;
+  var DONE_AT={}, END_AT={}, NUM_S=null;   /* END_AT = 완료 · 중단으로 바꾼 마지막 때 */
   function pjPayer(p){return (p&&(p.payer_default||p.partner||p.name))||'-';}
   function jobPayer(j){return j.payer||pjPayer(pjOf(j.project_id));}
   function payerOf(j,l){return (l.row&&l.row.payer)||jobPayer(j);}
@@ -2758,8 +2782,9 @@
     var it=((LEDGERS[a]||{}).items||[]).filter(function(x){return x.id===id;})[0]; if(!it)return;
     var v=(it.paid||{})[m]||'', nx=v===''?'o':(v==='o'?'x':'');
     it.paid=it.paid||{}; if(nx)it.paid[m]=nx; else delete it.paid[m]; renderFeeAll();
-    await saveLedger(function(cur){var c=cur.items.filter(function(x){return x.id===id;})[0]; if(!c)return;
+    var ok=await saveLedger(function(cur){var c=cur.items.filter(function(x){return x.id===id;})[0]; if(!c)return;
       c.paid=c.paid||{}; if(nx)c.paid[m]=nx; else delete c.paid[m];},a);
+    if(ok!==true)await loadLedger();   /* 저장 못 했으면 먼저 바꿔 둔 칸을 되돌림 */
     renderFeeAll();
   };
   window.renderFeeAll=function(){
@@ -2968,15 +2993,15 @@
     if(old&&String(old.amount==null?'':old.amount)!==String(row.amount==null?'':row.amount))ev.push({job_id:r.data.id,kind:'price',from_val:old.amount==null?null:String(old.amount),to_val:row.amount==null?null:String(row.amount),by_staff:ME.id});
     var dr=await dlSave(r.data.id,ev);
     if(ev.length){var e=await sb.from('ext_job_events').insert(ev); if(e.error)toast('기록 남기기 실패: '+e.error.message);}
-    if(dr){await loadExt();renderExt();toast('작업은 저장했지만 기한 저장 실패: '+dr);return;}
-    closeModal('jbModal'); await loadExt(); renderExtNav(); renderExt(); toast(id?'저장했습니다':'작업을 만들었습니다');
+    if(dr){await xReload();toast('작업은 저장했지만 기한 저장 실패: '+dr);return;}
+    closeModal('jbModal'); await xReload(); toast(id?'저장했습니다':'작업을 만들었습니다');
   };
   window.jbDelete=async function(){
     var id=$('jb_id').value, j=EXT.jobs.filter(function(x){return x.id===id;})[0]; if(!j)return;
     if(!confirm('「'+j.title+'」 작업을 지울까요? 바뀐 기록도 같이 지워집니다.\n멈춘 작업이면 지우지 말고 상태를 「중단」으로 바꾸는 것이 좋습니다.'))return;
     var r=await sb.from('ext_jobs').delete().eq('id',id).select();
     if(r.error||!(r.data||[]).length){toast('삭제 실패: '+(r.error?r.error.message:'최고관리자만 지울 수 있습니다'));return;}
-    closeModal('jbModal'); await loadExt(); renderExt(); toast('지웠습니다');
+    closeModal('jbModal'); await xReload(); toast('지웠습니다');
   };
 
   /* 프로젝트 창 */
@@ -3006,7 +3031,7 @@
     if(!confirm('「'+p.name+'」 프로젝트를 지울까요?\n조직도 · 의뢰 연결도 같이 지워집니다. 연결된 내부 의뢰 자체는 그대로 남습니다.'))return;
     var r=await sb.from('ext_projects').delete().eq('id',id).select();
     if(r.error||!(r.data||[]).length){toast('삭제 실패: '+(r.error?r.error.message:'최고관리자만 지울 수 있습니다'));return;}
-    closeModal('pjModal'); PJ=null; await loadExt(); renderExtNav(); renderExt(); renderList(); toast('지웠습니다');
+    closeModal('pjModal'); PJ=null; await xReload(); renderList(); toast('지웠습니다');
   };
   window.pjLink=async function(){
     var rid=$('pjReqSel').value; if(!rid||!PJ){toast('연결할 의뢰를 골라 주세요');return;}
@@ -3050,14 +3075,14 @@
     var r=id?await sb.from('ext_members').update(row).eq('id',id).select().maybeSingle()
             :await sb.from('ext_members').insert(Object.assign({project_id:pid,sort:pjMembers(pid,row.team).length+1},row)).select().maybeSingle();
     if(r.error||!r.data){toast('저장 실패: '+(r.error?(/duplicate|unique/i.test(r.error.message)?'같은 팀에 같은 이름이 이미 있습니다':r.error.message):'권한을 확인해 주세요'));return;}
-    closeModal('emModal'); await loadExt(); renderExtNav(); renderExt(); toast('저장했습니다');
+    closeModal('emModal'); await xReload(); toast('저장했습니다');
   };
   window.emDelete=async function(){
     var id=$('em_id').value; if(!id)return;
     if(!confirm('이 사람을 이 프로젝트 조직도에서 뺄까요?'))return;
     var r=await sb.from('ext_members').delete().eq('id',id).select();
     if(r.error||!(r.data||[]).length){toast('빼기 실패: '+(r.error?r.error.message:'권한을 확인해 주세요'));return;}
-    closeModal('emModal'); await loadExt(); renderExtNav(); renderExt(); toast('뺐습니다');
+    closeModal('emModal'); await xReload(); toast('뺐습니다');
   };
 
   /* ---------- 📘 업무 매뉴얼 (2026-10-19) ----------
@@ -3210,6 +3235,8 @@
     var a=area||lgArea(); if(!a)return false; var key=LG_KEY[a];
     var r=await sb.from('settings').select('value').eq('key',key).maybeSingle();
     if(r.error){toast('대장을 못 불러왔습니다: '+r.error.message);return false;}
+    if(!(r.data&&r.data.value&&Array.isArray(r.data.value.items))&&((LEDGERS[a]||{}).items||[]).length){   /* 빈 대장으로 덮어쓰지 않게 (11/2 점검) */
+      toast('대장을 못 불러와서 저장하지 않았습니다 — 새로고침 후 다시 눌러 주세요');await loadLedger();renderFee();return false;}
     var cur=(r.data&&r.data.value&&Array.isArray(r.data.value.items))?r.data.value:{items:[]};
     mutate(cur);
     /* 🔴 settings 쓰기는 대표 · 관리자만 됩니다(RLS). 직원도 대장만 저장하도록 전용 함수(web_fees_save · sns_fees_save)를 씁니다
