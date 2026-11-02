@@ -1214,6 +1214,7 @@
       <div class="fld"><label for="pj_status">상태</label><select class="inp" id="pj_status"><option>진행중</option><option>보류</option><option>종료</option></select></div>
       <div class="fld"><label for="pj_client">의뢰고객 (최종 컨펌하는 분)</label><input class="inp" id="pj_client" placeholder="정부영 대표님"></div>
       <div class="fld"><label for="pj_ckakao">의뢰고객 카톡 표시 이름</label><input class="inp" id="pj_ckakao" placeholder="TK 정부영대표님"></div>
+      <div class="fld"><label for="pj_payer">입금하는 곳 (기본) <span class="muted" style="font-weight:500">— 작업마다 다르면 작업 창에서</span></label><input class="inp" id="pj_payer" placeholder="한길마케팅"></div>
     </div>
     <div class="fld"><label for="pj_memo">메모 (브랜드 · 사이트 등)</label><textarea class="inp" id="pj_memo"></textarea></div>
   </div>
@@ -1237,6 +1238,7 @@
       <div class="fld"><label for="jb_status">상태</label><select class="inp" id="jb_status"></select></div>
       <div class="fld"><label for="jb_ptype">가격 방식</label><select class="inp" id="jb_ptype"><option value="단건">단건 — 한 번 하고 끝</option><option value="월정액">월정액 — 매달</option><option value="건당">건당 — 회차마다</option></select></div>
       <div class="fld"><label for="jb_amount">금액 (원) <span class="muted" style="font-weight:500">— 월정액은 한 달, 건당은 1건</span></label><input class="inp" id="jb_amount" inputmode="numeric" placeholder="50000"></div>
+      <div class="fld"><label for="jb_payer">입금하는 곳 <span class="muted" style="font-weight:500">— 비우면 프로젝트 기본</span></label><input class="inp" id="jb_payer" list="jb_payer_l"><datalist id="jb_payer_l"></datalist></div>
     </div>
     <div class="fld"><label>담당자</label><div class="jb-who" id="jb_who"></div></div>
     <div class="fld"><label>기한 <span class="muted" style="font-weight:500">— 중간 컨펌 · 최종 컨펌 · 마감기한. 시간을 안 적으면 20:00 으로 저장되고 ⚠ 가 붙습니다. 세부 항목마다 기한이 다르면 묶음을 더 만드세요.</span></label>
@@ -1734,6 +1736,8 @@
     var rp=await sb.from('ext_reports').select('*').order('at',{ascending:false});
     var fl=await sb.from('ext_files').select('*').order('created_at');
     var py=await sb.from('ext_payments').select('*').order('created_at');
+    var dn=await sb.from('ext_job_events').select('job_id,at').eq('kind','status').eq('to_val','완료');
+    DONE_AT={}; (dn.data||[]).forEach(function(e){if(!DONE_AT[e.job_id]||e.at>DONE_AT[e.job_id])DONE_AT[e.job_id]=e.at;});
     EXT.err=(a.error||m.error||l.error||j.error||d.error||st.error||ep.error||rp.error||fl.error||py.error||{}).message||'';
     EXT.pays=py.error?[]:(py.data||[]);
     EXT.reps=rp.error?[]:(rp.data||[]); EXT.files=fl.error?[]:(fl.data||[]);
@@ -2474,7 +2478,8 @@
     return '<div class="pay-l'+(!r&&!l.owe?' na':'')+'">'
       +'<button class="pay-b '+(r?'on':'off')+'" type="button"'+(can?' onclick="payToggle(\''+j.id+'\',\''+(l.epId||'')+'\',\''+(l.period||'')+'\')"':' disabled title="입금 표시는 그 프로젝트 관리자 · 최고관리자만"')+'>'+(r?'✅ 입금 완료':'☑️ 미입금')+'</button>'
       +(o.title?'<span class="lb2"><b>'+esc(j.title)+'</b> · '+esc(l.label)+'</span>':'<span class="lb2">'+esc(l.label)+'</span>')
-      +'<span class="who">'+esc(who)+'</span><span class="am">'+wonS(l.amount)+'</span></div>';
+      +(o.payer?'<span class="who">'+esc(payerOf(j,l))+'</span>':'')
+      +'<span class="who"'+(r&&can?' style="cursor:pointer;text-decoration:underline dotted" title="입금 확인한 날 고치기" onclick="payDate(\''+r.id+'\')"':'')+'>'+esc(who)+'</span><span class="am">'+wonS(l.amount)+'</span></div>';
   }
   function payBoxHTML(j){
     var L=payLines(j);
@@ -2495,7 +2500,7 @@
       toast('☑️ 미입금으로 돌렸습니다');
     }else{
       if(l.amount==null&&!confirm('금액이 아직 정해지지 않았습니다. 금액 없이 입금 완료로 표시할까요?'))return;
-      var r=await sb.from('ext_payments').insert({job_id:jid,episode_id:epId,period:period,amount:l.amount,paid_at:kstToday(),by_staff:ME.id}).select().single();
+      var r=await sb.from('ext_payments').insert({job_id:jid,episode_id:epId,period:period,amount:l.amount,paid_at:kstToday(),by_staff:ME.id,payer:jobPayer(j)}).select().single();
       if(r.error){toast('저장 실패: '+r.error.message);return;}
       await sb.from('ext_job_events').insert({job_id:jid,kind:'pay',from_val:'☑️',to_val:'✅',note:what,by_staff:ME.id});
       toast('✅ 입금 완료로 표시했습니다');
@@ -2505,6 +2510,66 @@
       var nj=EXT.jobs.filter(function(x){return x.id===jid;})[0]; if(nj)$('jb_pay').innerHTML=payBoxHTML(nj);
     }
   };
+  /* ---------- 6단계 2차 : 15일 정산 · 입금하는 곳 (2026-11-02 이은총 님) ----------
+     🔴 정산 기간 = 전월 16일 ~ 당월 15일, 그달 15일에 합산(이은총 님 ㉠). 기준일 : 건당 = 회차 완료일(없으면 YYMMDD) ·
+     단건 = 「완료」로 바꾼 날(기록 없으면 입금 확인 날 = 선입금) · 월정액 M월분 = M월 15일 정산(확인 요청 중).
+     입금하는 곳 = 작업 payer → 프로젝트 payer_default → 함께하는 회사. ✅ 줄에는 그때 입금처를 따로 남김(나중에 TK 직접으로 바뀌어도 옛 정산은 그대로).
+     슬라이드 편집 10/28 회차 = 새 단가 30,000원(이은총 님 11/2). 팀원 작업비 정산은 나중에. */
+  var DONE_AT={}, NUM_S=null;
+  function pjPayer(p){return (p&&(p.payer_default||p.partner||p.name))||'-';}
+  function jobPayer(j){return j.payer||pjPayer(pjOf(j.project_id));}
+  function payerOf(j,l){return (l.row&&l.row.payer)||jobPayer(j);}
+  function lineDate(j,l){
+    if(j.price_type==='월정액')return l.period+'-15';
+    if(j.price_type==='건당'){var e=l.ep;
+      if(e&&e.status==='완료'){if(e.done_at)return kst(e.done_at).d;if(/^\d{6}$/.test(e.ymd||''))return '20'+e.ymd.slice(0,2)+'-'+e.ymd.slice(2,4)+'-'+e.ymd.slice(4,6);}
+      return l.row&&l.row.paid_at||null;}
+    if(j.status==='완료'&&DONE_AT[j.id])return kst(DONE_AT[j.id]).d;
+    return l.row&&l.row.paid_at||null;
+  }
+  function lineDone(j,l){return j.price_type==='월정액'||(j.price_type==='건당'?!!(l.ep&&l.ep.status==='완료'):j.status==='완료');}
+  function settleOf(d){var y=+d.slice(0,4),m=+d.slice(5,7);if(+d.slice(8,10)>15){m++;if(m>12){m=1;y++;}}return y+'-'+('0'+m).slice(-2);}
+  function ymPrev(m){var y=+m.slice(0,4),n=+m.slice(5,7)-1;if(n<1){n=12;y--;}return y+'-'+('0'+n).slice(-2);}
+  function settleRange(S){var a=ymPrev(S);return (+a.slice(5,7))+'/16 ~ '+(+S.slice(5,7))+'/15';}
+  window.numMove=function(n){NUM_S=n>0?ymNext(NUM_S):ymPrev(NUM_S);renderExt();};
+  window.payDate=async function(id){
+    var r=EXT.pays.filter(function(x){return x.id===id;})[0]; if(!r)return;
+    var j=EXT.jobs.filter(function(x){return x.id===r.job_id;})[0]; if(!j||!canPay(j.project_id))return;
+    var v=prompt('입금 확인한 날 (예: 2026-11-02) — 비우면 「날짜 모름」',r.paid_at||kstToday()); if(v===null)return;
+    v=v.trim(); if(v&&!/^\d{4}-\d{2}-\d{2}$/.test(v)){toast('2026-11-02 처럼 적어 주세요');return;}
+    var u=await sb.from('ext_payments').update({paid_at:v||null}).eq('id',id).select().maybeSingle();
+    if(u.error||!u.data){toast('저장 실패: '+(u.error?u.error.message:'권한을 확인해 주세요'));return;}
+    toast('입금 날짜를 고쳤습니다'); await xReload();
+  };
+  function settleHTML(pid,all){
+    if(!NUM_S)NUM_S=settleOf(kstToday());
+    var inS=[], unk=[];
+    all.forEach(function(l){
+      if(!(l.row||(l.owe&&lineDone(l.j,l))))return;   /* 받았거나, 끝나서 받을 일만 */
+      var d=lineDate(l.j,l); if(!d){unk.push(l);return;}
+      if(settleOf(d)===NUM_S){l.d=d;inS.push(l);}
+    });
+    var sum=function(a){return a.reduce(function(s,l){return s+(l.amount||0);},0);};
+    var h='<div class="card ext-card"><h3 style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">📅 정산 '
+      +'<button class="btn btn-ghost" type="button" style="padding:3px 10px" onclick="numMove(-1)">◀</button>'
+      +'<span>'+(+NUM_S.slice(0,4))+'년 '+(+NUM_S.slice(5,7))+'월 15일 <span class="muted" style="font-weight:600;font-size:.82rem">('+settleRange(NUM_S)+')</span></span>'
+      +'<button class="btn btn-ghost" type="button" style="padding:3px 10px" onclick="numMove(1)">▶</button>'
+      +(NUM_S===settleOf(kstToday())?'<span class="badge" style="background:#EEF4FF;color:var(--accent)">이번 정산</span>':'')+'</h3>';
+    if(!inS.length)h+='<div class="muted" style="font-size:.85rem">이 기간에 끝났거나 입금된 일이 없습니다.</div>';
+    var payers=[]; inS.forEach(function(l){var x=payerOf(l.j,l);if(payers.indexOf(x)<0)payers.push(x);});
+    payers.forEach(function(x){
+      var L=inS.filter(function(l){return payerOf(l.j,l)===x;}).sort(function(a,b){return a.d<b.d?-1:1;});
+      var pd=L.filter(function(l){return l.row;}), ow=L.filter(function(l){return !l.row;});
+      h+='<div class="num-job"><div class="nh"><b>💳 '+esc(x)+'</b><span class="muted">→ 인투마케팅</span>'
+        +'<span style="margin-left:auto;font-size:.84rem">합계 <b>'+wonS(sum(L))+'</b> · ✅ '+wonS(sum(pd))+' · <span style="color:#B45309">☑️ '+wonS(sum(ow))+'</span></span></div>'
+        +L.map(function(l){return payLineHTML(l.j,l,{title:1});}).join('')+'</div>';
+    });
+    if(payers.length>1)h+='<div style="text-align:right;font-size:.88rem;margin-top:6px">이 기간 전체 <b>'+wonS(sum(inS))+'</b> · 미입금 <b style="color:#B45309">'+wonS(sum(inS.filter(function(l){return !l.row;})))+'</b></div>';
+    if(unk.length)h+='<details style="margin-top:10px"><summary class="muted" style="font-size:.8rem;cursor:pointer">⚠ 기준일을 몰라서 어느 정산인지 못 정한 것 '+unk.length+'건</summary>'
+      +'<p class="muted" style="font-size:.78rem;margin:6px 0">건당은 회차에 날짜(YYMMDD)를 넣고, 입금된 것은 확인 날짜를 눌러 넣으면 그 기간으로 들어갑니다.</p>'
+      +unk.map(function(l){return payLineHTML(l.j,l,{title:1,payer:1});}).join('')+'</details>';
+    return h+'</div>';
+  }
   function numTabHTML(pid){
     var js=pjJobs(pid), all=[];
     js.forEach(function(j){payLines(j).forEach(function(l){l.j=j;all.push(l);});});
@@ -2517,18 +2582,19 @@
       +'<div class="num-card"><div class="k">받을 돈 (전체)</div><div class="v">'+wonS(sum(paid)+sum(owe))+'</div><div class="s">입금 완료 + 미입금</div></div>'
       +'<div class="num-card"><div class="k">✅ 입금 완료</div><div class="v" style="color:#15803D">'+wonS(sum(paid))+'</div><div class="s">'+paid.length+'건</div></div>'
       +'<div class="num-card"><div class="k">☑️ 미입금</div><div class="v" style="color:#B45309">'+wonS(sum(owe))+'</div><div class="s">'+owe.length+'건'+(unk?' · 금액 미정 '+unk+'건은 합계에서 빠짐':'')+'</div></div></div>';
-    h+='<div class="card ext-card"><h3>☑️ 미입금 '+owe.length+'건</h3>'
-      +(owe.length?owe.map(function(l){return payLineHTML(l.j,l,{title:1});}).join(''):'<div class="muted" style="font-size:.85rem">받을 돈이 모두 들어왔습니다.</div>')+'</div>';
+    h+=settleHTML(pid,all);
+    h+='<div class="card ext-card"><h3>☑️ 미입금 전체 '+owe.length+'건 <span class="muted" style="font-weight:600;font-size:.8rem">— 아직 안 끝난 단건 포함 · 기간 상관없이</span></h3>'
+      +(owe.length?owe.map(function(l){return payLineHTML(l.j,l,{title:1,payer:1});}).join(''):'<div class="muted" style="font-size:.85rem">받을 돈이 모두 들어왔습니다.</div>')+'</div>';
     h+='<div class="card ext-card"><h3>작업별 입금</h3>';
     ['web','sns','design','video','blog'].forEach(function(t){
       pjJobs(pid,t).forEach(function(j){
         var L=payLines(j);
         h+='<div class="num-job"><div class="nh"><span class="pj" style="background:'+XCOL[t][0]+'">'+esc(XKO[t])+'</span>'+jst(j.status)
-          +'<b style="cursor:pointer" onclick="jbOpen(\''+j.id+'\')">'+esc(j.title)+'</b><span class="muted">'+esc(j.price_type)+' · '+(j.price_type==='월정액'&&j.amount!=null?'월 ':j.price_type==='건당'&&j.amount!=null?'1건 ':'')+wonS(j.amount)+'</span></div>'
+          +'<b style="cursor:pointer" onclick="jbOpen(\''+j.id+'\')">'+esc(j.title)+'</b><span class="muted">💳 '+esc(jobPayer(j))+' · '+esc(j.price_type)+' · '+(j.price_type==='월정액'&&j.amount!=null?'월 ':j.price_type==='건당'&&j.amount!=null?'1건 ':'')+wonS(j.amount)+'</span></div>'
           +(L.length?L.map(function(l){return payLineHTML(j,l);}).join(''):'<div class="muted" style="font-size:.8rem">아직 회차가 없습니다.</div>')+'</div>';
       });
     });
-    h+='</div><p class="muted" style="font-size:.78rem">📅 「매달 15일 합산」 정산서(기간별 합계)는 정산 기간 기준을 정한 뒤 이 탭에 붙입니다.</p>';
+    h+='</div>';
     return h;
   }
 
@@ -2663,6 +2729,8 @@
     $('jb_status').value=j?j.status:'작업 중';
     $('jb_title').value=j?j.title:''; $('jb_brand').value=j&&j.brand||'';
     $('jb_ptype').value=j?j.price_type:'단건'; $('jb_amount').value=j&&j.amount!=null?j.amount:'';
+    $('jb_payer').value=j&&j.payer||''; $('jb_payer').placeholder='프로젝트 기본 : '+pjPayer(p);
+    $('jb_payer_l').innerHTML=[p.payer_default,p.partner,p.name+' (직접)'].filter(function(x,i,a){return x&&a.indexOf(x)===i;}).map(function(x){return '<option value="'+esc(x)+'">';}).join('');
     $('jb_inc').value=j?incText(j.includes):''; $('jb_memo').value=j&&j.memo||'';
     jbWho(j?(j.member_ids||[]):[]);
     $('jb_dl').innerHTML=''; (j?jobDues(j.id):[]).forEach(function(d){dlAdd(d);}); if(!j||!jobDues(j.id).length)dlAdd();
@@ -2685,7 +2753,7 @@
     var row={title:$('jb_title').value.trim(),brand:$('jb_brand').value.trim()||null,team:$('jb_team').value,status:$('jb_status').value,
       price_type:$('jb_ptype').value,amount:amt===''?null:Number(amt),
       member_ids:Array.prototype.map.call(document.querySelectorAll('#jb_who input:checked'),function(x){return x.value;}),
-      includes:incParse($('jb_inc').value),memo:$('jb_memo').value.trim()||null,updated_at:new Date().toISOString()};
+      includes:incParse($('jb_inc').value),memo:$('jb_memo').value.trim()||null,payer:$('jb_payer').value.trim()||null,updated_at:new Date().toISOString()};
     if(!row.title){toast('작업명을 적어 주세요');return;}
     var r=id?await sb.from('ext_jobs').update(row).eq('id',id).select().maybeSingle()
             :await sb.from('ext_jobs').insert(Object.assign({project_id:pid,created_by:ME.id,sort:pjJobs(pid,row.team).length+1},row)).select().maybeSingle();
@@ -2713,12 +2781,13 @@
     $('pj_id').value=p?p.id:''; $('pj_name').value=p?p.name:''; $('pj_short').value=p&&p.short_name||'';
     $('pj_partner').value=p&&p.partner||''; $('pj_status').value=p?p.status:'진행중';
     $('pj_client').value=p&&p.client_person||''; $('pj_ckakao').value=p&&p.client_kakao||''; $('pj_memo').value=p&&p.memo||'';
+    $('pj_payer').value=p&&p.payer_default||'';
     $('pj_del').classList.toggle('hide',!(p&&ME.role==='owner'));
     $('pjModal').classList.add('open'); setTimeout(function(){$('pj_name').focus();},50);
   };
   window.pjSave=async function(){
     var id=$('pj_id').value, row={name:$('pj_name').value.trim(),short_name:$('pj_short').value.trim()||null,partner:$('pj_partner').value.trim()||null,
-      status:$('pj_status').value,client_person:$('pj_client').value.trim()||null,client_kakao:$('pj_ckakao').value.trim()||null,memo:$('pj_memo').value.trim()||null};
+      status:$('pj_status').value,client_person:$('pj_client').value.trim()||null,client_kakao:$('pj_ckakao').value.trim()||null,memo:$('pj_memo').value.trim()||null,payer_default:$('pj_payer').value.trim()||null};
     if(!row.name){toast('고객사 이름을 적어 주세요');return;}
     var r=id?await sb.from('ext_projects').update(row).eq('id',id).select().maybeSingle()
             :await sb.from('ext_projects').insert(Object.assign({created_by:ME.id},row)).select().maybeSingle();
