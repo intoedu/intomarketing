@@ -73,6 +73,17 @@
   .navb.on .cnt{background:rgba(255,255,255,.16);color:#fff}
   .navb .cnt.alert{background:var(--bad);color:#fff}
   .side-sep{height:1px;background:var(--line);margin:12px 4px}
+  /* 내부 | 외부 · 업무별 | 업체별 전환 (2026-11-02 이은총 님) */
+  .side{overflow-y:auto}
+  .seg{display:flex;gap:3px;background:var(--surface-2);border-radius:10px;padding:3px}
+  .seg button{flex:1;border:0;background:none;padding:8px 0;border-radius:8px;font-weight:800;font-size:.88rem;color:var(--muted);cursor:pointer}
+  .seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(14,27,51,.12)}
+  .seg.sm{margin-bottom:4px}
+  .seg.sm button{font-size:.78rem;padding:5px 0}
+  .navgrp{display:flex;flex-direction:column;gap:6px}
+  .navgrp .navb.co{font-size:.86rem;padding:8px 12px;font-weight:700}
+  .navgrp .navb.co span.nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .side-note{font-size:.8rem;color:var(--muted);line-height:1.55;padding:6px 10px}
   .mn-sub{border:0;background:none;cursor:pointer;font-size:.74rem;font-weight:700;color:var(--muted);padding:0 12px 6px 40px;text-align:left;width:100%}
   .mn-sub:hover{color:var(--accent);text-decoration:underline}
   .mn-f{display:flex;flex-direction:column;gap:6px;font-size:.84rem;font-weight:700;border:1px dashed var(--line);border-radius:10px;padding:12px 14px}
@@ -329,6 +340,8 @@
     .side .logo{padding:0 10px 0 0}
     .navb{width:auto}
     .side-sep{display:none}
+    .navgrp{flex-direction:row;flex-wrap:wrap}
+    .seg{width:100%}
     .mn-sub{width:auto;padding:10px 8px}
     .side-foot{margin:0 0 0 auto;border:0;padding:0;display:flex;gap:6px;align-items:center}
     .whoami{margin:0}
@@ -412,12 +425,26 @@
 <div class="app hide" id="app">
   <aside class="side">
     <div class="logo"><div class="mark">IM</div><div><b>의뢰 관리</b><span>인투마케팅</span></div></div>
+    <!-- 내부 | 외부 (2026-11-02 이은총 님) — 내부 = 우리 홈페이지 신청서로 들어온 일 · 외부 = 카톡 · 대표님 요청으로 들어온 외주 일(고객사별).
+         둘 다 「업무별」(팀) · 「업체별」(같은 업체가 여러 팀에 신청한 것을 한데) 두 가지로 봅니다. 의뢰 권한(requests)이 없으면 전환 단추를 숨깁니다. -->
+    <div class="seg" id="scopeSeg" aria-label="내부 · 외부">
+      <button class="on" type="button" data-scope="in">내부</button>
+      <button type="button" data-scope="out">외부</button>
+    </div>
+    <div class="seg sm" id="axisSeg" aria-label="보는 방법">
+      <button class="on" type="button" data-axis="work">업무별</button>
+      <button type="button" data-axis="co" id="axisCo">업체별</button>
+    </div>
+    <div class="navgrp" id="navWork">
     <button class="navb on" data-nav="web" type="button">홈페이지 제작 <span class="cnt" id="c-web">0</span></button>
     <button class="navb" data-nav="sns" type="button">SNS 채널 <span class="cnt" id="c-sns">0</span></button>
     <button class="navb" data-nav="design" type="button">그래픽 디자인 <span class="cnt" id="c-design">0</span></button>
     <button class="navb" data-nav="video" type="button">영상 제작 <span class="cnt" id="c-video">0</span></button>
     <button class="navb" data-nav="blog" type="button">블로그 · 리뷰 <span class="cnt" id="c-blog">0</span></button>
     <button class="navb" data-nav="etc" type="button">기타 <span class="cnt" id="c-etc">0</span></button>
+    </div>
+    <div class="navgrp hide" id="navCo"></div>
+    <div class="navgrp hide" id="navOut"><p class="side-note">외주 프로젝트(고객사별) 화면을 만드는 중입니다. 첫 고객사는 트루스코리아입니다.</p></div>
     <button class="navb hide" id="navBlog" type="button" onclick="window.open(BLOG_URL,'_blank')">📝 블로그 센터 ↗</button>
     <div class="side-sep"></div>
     <button class="navb hide" data-nav="staff" id="navStaff" type="button">관리자 목록 <span class="cnt" id="c-staff">0</span></button>
@@ -618,6 +645,17 @@
     <!-- 주소 모음 —
          이것저것 흩어져 있어 찾기 어렵다고 하셔서 한곳에 모았습니다.
          ⚠️ 학원별 진행현황 주소는 여기 없습니다 — 학원마다 달라서 블로그 센터에 있습니다. -->
+    <!-- 외부 (외주) — 2026-11-02 틀만. 고객사 · 조직도 · 작업 · 기한 표가 생기면 여기에 채웁니다 -->
+    <section id="viewExt" class="hide">
+      <div class="head"><div><h1>외부 작업 (외주)</h1>
+        <p>카톡 · 대표님 요청으로 들어온 외주 작업을 고객사(프로젝트)별 · 업무별로 관리하는 화면입니다.</p></div></div>
+      <div class="card" style="padding:22px 24px;line-height:1.7">
+        <b>만드는 중입니다.</b><br>
+        순서 : 조직도 → 작업 구조 → 기한(중간보고 · 최종보고 · 마감기한) → 할 일 → 한 일 → 숫자.<br>
+        지금 「내부 → 기타」에 있는 트루스코리아 의뢰는 그대로 두고, 이 화면이 열리면 트루스코리아 프로젝트에 연결해 같이 보이게 합니다.
+      </div>
+    </section>
+
     <section id="viewLinks" class="hide">
       <div class="head">
         <div><h1>주소 모음</h1><p>자주 쓰는 주소를 한곳에 모았습니다. [복사]를 눌러 그대로 보내시면 됩니다.</p></div>
@@ -1088,7 +1126,7 @@
 
   var QALL={};
 
-  var ME=null, STAFF=[], COMMS=[], DATA={}, CUR='web', CURROW=null, STTAB='wait', SET={}, QD=null;
+  var ME=null, STAFF=[], COMMS=[], DATA={}, CUR='web', COKEY=null, SCOPE='in', AXIS='work', CURROW=null, STTAB='wait', SET={}, QD=null;
   /* ---------- 홈페이지 6차 — 「제작 자료」(2차) 건을 신청(1차) 건에 붙여 보기 (2026-10-13) ----------
      DB 에는 신청 건과 제작 자료 건이 «따로» 들어옵니다(고객은 이미 낸 건을 고칠 수 없습니다).
      화면에서만 한 건으로 봅니다. 짝 = 같은 「신청 번호」 + 같은 고객 계정(user_id).
@@ -1202,6 +1240,7 @@
         var k=b.getAttribute('data-nav');
         if(AREAS[k]){b.classList.add('hide');b.classList.remove('on');}
       });
+      $('scopeSeg').classList.add('hide');$('axisSeg').classList.add('hide');
       var firstNav=document.querySelector('.navb[data-nav]:not(.hide)');
       if(firstNav)setTimeout(function(){firstNav.click();},0);
     }
@@ -1240,6 +1279,7 @@
       cp.classList.toggle('alert',PT_APPS.length>0);
     }
     Object.keys(AREAS).forEach(function(a){$('c-'+a).textContent=DATA[a].length;});
+    renderCoNav();
     var pend=STAFF.filter(function(s){return s.status==='pending';}).length;
     var c=$('c-staff');c.textContent=pend;c.classList.toggle('alert',pend>0);
     $('waitCnt').textContent='('+pend+')';
@@ -1264,17 +1304,91 @@
       var k=b.getAttribute('data-nav');
       document.querySelectorAll('.navb[data-nav]').forEach(function(x){x.classList.remove('on');});
       b.classList.add('on');
-      ['viewList','viewStaff','viewSet','viewLinks','viewSite','viewPartner'].forEach(function(v){$(v).classList.add('hide');});
+      document.querySelectorAll('#navCo .navb').forEach(function(x){x.classList.remove('on');});
+      ['viewList','viewStaff','viewSet','viewLinks','viewSite','viewPartner','viewExt'].forEach(function(v){$(v).classList.add('hide');});
       if(k==='staff'){$('viewStaff').classList.remove('hide');renderStaff();return;}
       if(k==='site'){$('viewSite').classList.remove('hide');fillSite();return;}
       if(k==='partner'){$('viewPartner').classList.remove('hide');renderPartners();loadPartnerRules();return;}
       if(k==='set'){$('viewSet').classList.remove('hide');fillSettings();return;}
       if(k==='links'){$('viewLinks').classList.remove('hide');renderLinks();return;}
       $('viewList').classList.remove('hide');
+      /* 업무 단추를 누르면(다른 곳에서 .click() 으로 부를 때도) 「내부 · 업무별」로 돌아옵니다 */
+      COKEY=null; if(SCOPE!=='in'||AXIS!=='work'){SCOPE='in';AXIS='work';syncSeg();}
       CUR=k;$('listTitle').textContent=AREAS[k]+' 의뢰';
+      $('listSub').textContent=LIST_SUB;
       renderList();
     });
   });
+
+  /* ---------- 내부 | 외부 · 업무별 | 업체별 (2026-11-02 이은총 님) ----------
+     업체별 = 같은 업체(상호명)가 여러 팀에 신청한 의뢰를 한 목록에. 신청 데이터는 그대로이고 «묶어서 보여 주기만» 합니다.
+     🔴 상호명 글자로 묶습니다(띄어쓰기 · (주) · 주식회사 · 대소문자 무시). 이름을 다르게 적은 신청은 따로 보입니다. */
+  var LIST_SUB=$('listSub').textContent, CO={};
+  function coKey(n){return (n||'').replace(/\(주\)|㈜|주식회사/g,'').replace(/\s+/g,'').toLowerCase();}
+  function coRows(){
+    var seen={}, out={};
+    Object.keys(DATA).forEach(function(g){(DATA[g]||[]).forEach(function(r){
+      if(seen[r.id])return; seen[r.id]=1;          /* 정기 콘텐츠는 SNS 목록에도 들어 있어 한 번만 셉니다 */
+      var k=coKey(r.academy_name); if(!k)k='__none';
+      (out[k]=out[k]||{name:r.academy_name||'(상호 없음)',rows:[]}).rows.push(r);
+    });});
+    Object.keys(out).forEach(function(k){   /* 팀을 섞었으니 접수일로 다시 줄 세움 — 이름은 가장 최근 신청의 상호명 */
+      out[k].rows.sort(function(a,b){var x=a.created_at||'',y=b.created_at||'';return x<y?1:x>y?-1:0;});
+      out[k].name=out[k].rows[0].academy_name||'(상호 없음)';
+    });
+    return out;
+  }
+  function renderCoNav(){
+    CO=coRows();
+    var keys=Object.keys(CO).sort(function(a,b){
+      var x=CO[a].rows[0].created_at||'', y=CO[b].rows[0].created_at||''; return x<y?1:x>y?-1:0;});
+    $('navCo').innerHTML=keys.length?keys.map(function(k){
+      var teams={}; CO[k].rows.forEach(function(r){teams[groupOf(r)]=1;});
+      return '<button class="navb co'+(COKEY===k?' on':'')+'" type="button" data-co="'+esc(k)+'" title="'+esc(Object.keys(teams).map(function(g){return AREAS[g];}).join(' · '))+'">'
+        +'<span class="nm">'+esc(CO[k].name)+'</span><span class="cnt">'+CO[k].rows.length+'</span></button>';
+    }).join(''):'<p class="side-note">아직 신청한 업체가 없습니다.</p>';
+    if(COKEY&&!CO[COKEY])COKEY=null;
+  }
+  $('navCo').addEventListener('click',function(e){
+    var b=e.target.closest('.navb[data-co]'); if(!b)return;
+    openCo(b.getAttribute('data-co'));
+  });
+  function openCo(k){
+    COKEY=k;
+    document.querySelectorAll('.navb[data-nav],#navCo .navb').forEach(function(x){x.classList.remove('on');});
+    var b=document.querySelector('#navCo .navb[data-co="'+k+'"]'); if(b)b.classList.add('on');
+    ['viewList','viewStaff','viewSet','viewLinks','viewSite','viewPartner','viewExt'].forEach(function(v){$(v).classList.add('hide');});
+    $('viewList').classList.remove('hide');
+    $('listTitle').textContent=(CO[k]?CO[k].name:'')+' — 업체별';
+    $('listSub').textContent='이 업체가 신청한 의뢰를 팀 구분 없이 모았습니다. 줄을 누르면 원래 팀의 상세가 열립니다.';
+    renderList();
+  }
+  function syncSeg(){
+    document.querySelectorAll('#scopeSeg button').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-scope')===SCOPE);});
+    document.querySelectorAll('#axisSeg button').forEach(function(x){x.classList.toggle('on',x.getAttribute('data-axis')===AXIS);});
+    $('axisCo').textContent=SCOPE==='out'?'프로젝트별':'업체별';
+    $('navWork').classList.toggle('hide',!(SCOPE==='in'&&AXIS==='work'));
+    $('navCo').classList.toggle('hide',!(SCOPE==='in'&&AXIS==='co'));
+    $('navOut').classList.toggle('hide',SCOPE!=='out');
+  }
+  function showScope(){
+    syncSeg();
+    if(SCOPE==='out'){
+      COKEY=null;
+      document.querySelectorAll('.navb[data-nav],#navCo .navb').forEach(function(x){x.classList.remove('on');});
+      ['viewList','viewStaff','viewSet','viewLinks','viewSite','viewPartner'].forEach(function(v){$(v).classList.add('hide');});
+      $('viewExt').classList.remove('hide');
+      return;
+    }
+    if(AXIS==='co'){
+      var first=document.querySelector('#navCo .navb[data-co]');
+      if(COKEY&&CO[COKEY])openCo(COKEY); else if(first)openCo(first.getAttribute('data-co'));
+      return;
+    }
+    var b=document.querySelector('.navb[data-nav="'+CUR+'"]'); if(b)b.click();
+  }
+  document.querySelectorAll('#scopeSeg button').forEach(function(x){x.addEventListener('click',function(){SCOPE=x.getAttribute('data-scope');showScope();});});
+  document.querySelectorAll('#axisSeg button').forEach(function(x){x.addEventListener('click',function(){AXIS=x.getAttribute('data-axis');showScope();});});
 
   /* ---------- 📘 업무 매뉴얼 (2026-10-19) ----------
      · 저장 칸 'manuals'(비공개) : 읽기 = 승인된 직원 · 올리기 = 최고관리자 (DB 정책 manuals_*)
@@ -1404,7 +1518,7 @@
   function lgAdd(s,n){var d=new Date(+s.slice(0,4),+s.slice(5,7)-1+n,1);return lgYM(d);}
   function lgNow(){return lgYM(new Date());}
   function lgToday(){var d=new Date();return lgYM(d)+'-'+('0'+d.getDate()).slice(-2);}
-  function lgArea(){return LG_KEY[CUR]?CUR:null;}
+  function lgArea(){return (!COKEY&&LG_KEY[CUR])?CUR:null;}   /* 업체별 보기에서는 대장을 숨깁니다 */
   function lgItems(){var L=LEDGERS[lgArea()]; return (L&&Array.isArray(L.items))?L.items:[];}
   /* 만든 날 — 예전 줄에는 created 가 없어서, id('f' + 만든 시각 36진수 + 덧붙인 4글자)에서 거꾸로 읽습니다 */
   function lgCreated(x){
@@ -1608,7 +1722,8 @@
   };
   window.renderList=function(){
     renderFee();
-    var rows=DATA[CUR]||[];
+    if(COKEY)CO=coRows();   /* 상세에서 고친 줄(syncRow)이 바로 보이게 다시 묶습니다 */
+    var rows=COKEY?((CO[COKEY]||{}).rows||[]):(DATA[CUR]||[]);
     var q=($('q').value||'').trim().toLowerCase();
     var fs=$('fStatus').value, fm=$('fMine').value;
     var view=rows.filter(function(r){
@@ -1635,7 +1750,8 @@
       h+='<tr onclick="openDetail(\''+r.id+'\')">'
        +'<td class="num tnum">'+(i+1)+'</td>'
        +'<td><span class="nm">'+esc(r.academy_name||'-')+'</span>'+(r.is_premium?' <span class="badge b-prem">프리미엄</span>':'')+'<span class="sub">'+esc(r.manager_name||'')+(r.phone?' · '+esc(r.phone):'')+'</span></td>'
-       +'<td>'+(r.work_type?esc(r.work_type):'<span class="muted">-</span>')
+       +'<td>'+(COKEY?'<span class="badge" style="background:var(--surface-2);color:var(--ink)">'+esc(AREAS[groupOf(r)])+'</span> ':'')   /* 업체별 보기 : 어느 팀 건인지 */
+             +(r.work_type?esc(r.work_type):'<span class="muted">-</span>')
              /* 정기 콘텐츠가 붙은 건은 한눈에 보이게. SNS 목록에서는 «어느 팀 건인지»도 적습니다. */
              +(r.content_sub?' <span class="badge" style="background:#EAF0FE;color:#1E47C0">정기 월'
                  +esc(r.content_monthly||'?')+(CUR==='sns'&&groupOf(r)!=='sns'?' · '+esc(r.kind):'')
