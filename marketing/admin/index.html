@@ -99,9 +99,9 @@
   .org-mg{width:100%;max-width:760px}
   .org-teams{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;width:100%;padding-top:22px;border-top:2px solid #CBD5E4}
   .org-team{border-radius:14px;border:1px solid var(--line);overflow:hidden;background:var(--surface)}
-  .org-team .th{padding:10px 12px 10px 14px;font-weight:800;font-size:.92rem;color:#fff;display:flex;align-items:center;gap:8px}
-  .org-team .th .n{font-size:.72rem;font-weight:800;background:rgba(255,255,255,.22);padding:1px 8px;border-radius:999px}
-  .org-team .th button{margin-left:auto;border:0;background:rgba(255,255,255,.2);color:#fff;font-weight:800;border-radius:8px;padding:3px 9px;cursor:pointer;font-size:.8rem}
+  .org-team .th{padding:10px 12px 10px 14px;font-weight:800;font-size:.92rem;display:flex;align-items:center;gap:8px}
+  .org-team .th .n{font-size:.72rem;font-weight:800;background:rgba(255,255,255,.75);padding:1px 8px;border-radius:999px}
+  .org-team .th button{margin-left:auto;border:0;background:rgba(255,255,255,.8);color:inherit;font-weight:800;border-radius:8px;padding:3px 9px;cursor:pointer;font-size:.8rem}
   .org-team .tb{padding:10px;display:flex;flex-direction:column;gap:6px;min-height:58px}
   .org-mg .tb{flex-direction:row;flex-wrap:wrap}
   .org-mg .tb .mem{width:auto;flex:1 1 200px}
@@ -125,9 +125,9 @@
   .tv-pj{margin-bottom:14px}
   /* 외부 — 작업 구조 */
   .jb-team{margin-bottom:16px}
-  .jb-team .th{border-radius:12px 12px 0 0;padding:9px 14px;color:#fff;font-weight:800;font-size:.9rem;display:flex;align-items:center;gap:8px}
-  .jb-team .th .n{font-size:.72rem;background:rgba(255,255,255,.22);padding:1px 8px;border-radius:999px}
-  .jb-team .th button{margin-left:auto;border:0;background:rgba(255,255,255,.2);color:#fff;font-weight:800;border-radius:8px;padding:3px 10px;cursor:pointer;font-size:.8rem}
+  .jb-team .th{border-radius:12px 12px 0 0;padding:9px 14px;font-weight:800;font-size:.9rem;display:flex;align-items:center;gap:8px}
+  .jb-team .th .n{font-size:.72rem;background:rgba(255,255,255,.75);padding:1px 8px;border-radius:999px}
+  .jb-team .th button{margin-left:auto;border:0;background:rgba(255,255,255,.8);color:inherit;font-weight:800;border-radius:8px;padding:3px 10px;cursor:pointer;font-size:.8rem}
   .jb-list{border:1px solid var(--line);border-top:0;border-radius:0 0 12px 12px;background:var(--surface)}
   .job{display:grid;grid-template-columns:92px 1fr 130px 130px 170px 64px;gap:12px;align-items:center;padding:11px 14px;border-top:1px solid var(--line);cursor:pointer;font-size:.88rem}
   .job:first-child{border-top:0}
@@ -1758,7 +1758,9 @@
   var XTEAMS=[['manage','총괄'],['web','홈페이지'],['sns','SNS'],['design','디자인'],['video','영상'],['blog','블로그 · 리뷰']];
   var XKO={}; XTEAMS.forEach(function(t){XKO[t[0]]=t[1];});
   /* [진한 색, 연한 색] — 카톡방 썸네일 색과 같게(설명서 3-1). 블로그 · 리뷰는 설명서에 색이 없어 임시로 청록 */
-  var XCOL={manage:['#B98A00','#FBE7A1'],web:['#1D4ED8','#C6D7FB'],sns:['#15803D','#BDE8CB'],design:['#5B21B6','#D9C9FA'],video:['#C2410C','#FAD3B5'],blog:['#0E7490','#BFE7F0']};
+  /* 팀 색 = [점 · 옅은 바탕 · 글자] — 연하게 (11/2 이은총 님 「각 팀들 색도 너무 찐해」) */
+  var XCOL={manage:['#D9B95A','#FAF0CC','#7A5C00'],web:['#7B9CE6','#E2EAFB','#2B4C9B'],sns:['#6DB887','#DCF0E2','#23683A'],design:['#A08AD9','#EAE3FA','#55399B'],video:['#E6976A','#FBE4D6','#9A4416'],blog:['#5FB3C4','#D9EFF3','#1D6576']};
+  function tcs(t){var c=XCOL[t]||XCOL.web;return 'background:'+c[1]+';color:'+c[2];}   /* 팀 이름표 · 팀 머리줄 */
   var XROLE_ORDER={'관리자':0,'팀장':1,'담당자':2};
   async function loadExt(){
     var R=await Promise.all([   /* 한꺼번에 불러옴 — 저장할 때마다 다시 부르므로 하나씩 기다리지 않게 (11/2 점검) */
@@ -1820,7 +1822,7 @@
   }
   function teamBox(pid,t,extra){
     var ms=pjMembers(pid,t), c=XCOL[t];
-    return '<div class="org-team'+(extra||'')+'"><div class="th" style="background:'+c[0]+'">'+esc(XKO[t])+' <span class="n">'+ms.length+'</span>'
+    return '<div class="org-team'+(extra||'')+'"><div class="th" style="'+tcs(t)+'">'+esc(XKO[t])+' <span class="n">'+ms.length+'</span>'
       +(canOrg(pid)?'<button type="button" title="이 팀에 사람 넣기" onclick="emOpen(null,\''+pid+'\',\''+t+'\')">＋</button>':'')+'</div>'
       +'<div class="tb" style="background:'+c[1]+'55">'+(ms.length?ms.map(memHTML).join(''):'<div class="org-empty">아직 아무도 없습니다</div>')+'</div></div>';
   }
@@ -1914,7 +1916,7 @@
   }
   function jobTeamHTML(pid,t){
     var js=pjJobs(pid,t), c=XCOL[t];
-    return '<div class="jb-team"><div class="th" style="background:'+c[0]+'">'+esc(XKO[t])+' 작업 <span class="n">'+js.length+'</span>'
+    return '<div class="jb-team"><div class="th" style="'+tcs(t)+'">'+esc(XKO[t])+' 작업 <span class="n">'+js.length+'</span>'
       +'<button type="button" onclick="jbOpen(null,\''+pid+'\',\''+t+'\')">＋ 작업</button></div>'
       +'<div class="jb-list">'+(js.length?js.map(jobRow).join(''):'<div class="jb-empty">아직 작업이 없습니다</div>')+'</div></div>';
   }
@@ -2088,7 +2090,7 @@
     o=o||{}; var p=pjOf(j.project_id), mgr=isMgr(j.project_id);
     var subs=jobSubs(j.id), eps=jobEps(j.id);
     var h='<div class="td-job"><div class="td-h">'+jst(j.status)
-      +(o.showPj?'<span class="pj" style="background:'+XCOL[j.team][0]+'">'+esc((p&&(p.short_name||p.name))||'')+' · '+esc(XKO[j.team])+'</span>':'')
+      +(o.showPj?'<span class="pj" style="'+tcs(j.team)+'">'+esc((p&&(p.short_name||p.name))||'')+' · '+esc(XKO[j.team])+'</span>':'')
       +'<span class="tt" onclick="jbOpen(\''+j.id+'\')">'+esc(j.title)+'</span>'
       +(subs.length?'<span class="muted" style="font-size:.78rem">세부 '+subs.filter(function(x){return x.done;}).length+'/'+subs.length+'</span>':'')
       +'<div class="td-btns">'+actBtns(j,mgr)+'</div>'
@@ -2144,7 +2146,7 @@
     ['web','sns','design','video','blog'].forEach(function(t){
       var js=pjJobs(pid,t); if(!js.length)return;
       var live=js.filter(jobActive), off=js.filter(function(j){return !jobActive(j);});
-      h+='<div class="jb-team"><div class="th" style="background:'+XCOL[t][0]+'">'+esc(XKO[t])+' <span class="n">'+live.length+'</span></div>'
+      h+='<div class="jb-team"><div class="th" style="'+tcs(t)+'">'+esc(XKO[t])+' <span class="n">'+live.length+'</span></div>'
         +'<div style="border:1px solid var(--line);border-top:0;border-radius:0 0 12px 12px;padding:10px;background:'+XCOL[t][1]+'33">'
         +(live.length?live.map(function(j){return todoCard(j);}).join(''):'<div class="jb-empty">진행 중인 작업이 없습니다</div>')
         +(off.length?'<details style="margin-top:4px"><summary class="muted" style="font-size:.8rem;cursor:pointer">끝났거나 멈춘 작업 '+off.length+'개</summary>'+off.map(function(j){return todoCard(j);}).join('')+'</details>':'')
@@ -2479,7 +2481,7 @@
     ['web','sns','design','video','blog'].forEach(function(t){
       var js=pjJobs(pid,t); if(!js.length)return;
       var w=js.filter(function(j){return jobReps(j.id).length;}), wo=js.filter(function(j){return !jobReps(j.id).length;});
-      h+='<div class="jb-team"><div class="th" style="background:'+XCOL[t][0]+'">'+esc(XKO[t])+' <span class="n">'+w.length+'</span></div>'
+      h+='<div class="jb-team"><div class="th" style="'+tcs(t)+'">'+esc(XKO[t])+' <span class="n">'+w.length+'</span></div>'
         +'<div style="border:1px solid var(--line);border-top:0;border-radius:0 0 12px 12px;padding:10px;background:'+XCOL[t][1]+'33">';
       w.forEach(function(j){
         h+='<div class="td-job"><div class="td-h">'+jst(j.status)+'<span class="tt" onclick="jbOpen(\''+j.id+'\')">'+esc(j.title)+'</span>'
@@ -2666,7 +2668,7 @@
     ['web','sns','design','video','blog'].forEach(function(t){
       pjJobs(pid,t).forEach(function(j){
         var L=payLines(j);
-        h+='<div class="num-job"><div class="nh"><span class="pj" style="background:'+XCOL[t][0]+'">'+esc(XKO[t])+'</span>'+jst(j.status)
+        h+='<div class="num-job"><div class="nh"><span class="pj" style="'+tcs(t)+'">'+esc(XKO[t])+'</span>'+jst(j.status)
           +'<b style="cursor:pointer" onclick="jbOpen(\''+j.id+'\')">'+esc(j.title)+'</b><span class="muted">💳 '+esc(jobPayer(j))+' · '+esc(j.price_type)+' · '+(j.price_type==='월정액'&&j.amount!=null?'월 ':j.price_type==='건당'&&j.amount!=null?'1건 ':'')+wonS(j.amount)+'</span></div>'
           +(L.length?L.map(function(l){return payLineHTML(j,l);}).join(''):'<div class="muted" style="font-size:.8rem">아직 회차가 없습니다.</div>')+'</div>';
       });
@@ -2744,7 +2746,7 @@
         +'<span class="c">'+o.ext.length+'</span><span class="c">'+o.inner.length+'</span>'
         +'<span class="c">'+(o.week||'')+'</span><span class="c" style="color:var(--bad);font-weight:800">'+(o.late||'')+'</span><span class="c" style="color:#7C3AED;font-weight:800">'+(o.wait||'')+'</span></summary>'
         +'<div class="bs-list">'+(t?'':'<span class="muted">맡은 일이 없습니다.</span>')
-        +o.ext.map(function(j){var p=pjOf(j.project_id);return '<div class="bs-it" onclick="jbOpen(\''+j.id+'\')">'+jst(j.status)+'<span class="pj" style="background:'+XCOL[j.team][0]+'">'+esc((p&&(p.short_name||p.name))||'')+' · '+esc(XKO[j.team])+'</span>'+esc(j.title)+' '+nextDueHTML(j)+'</div>';}).join('')
+        +o.ext.map(function(j){var p=pjOf(j.project_id);return '<div class="bs-it" onclick="jbOpen(\''+j.id+'\')">'+jst(j.status)+'<span class="pj" style="'+tcs(j.team)+'">'+esc((p&&(p.short_name||p.name))||'')+' · '+esc(XKO[j.team])+'</span>'+esc(j.title)+' '+nextDueHTML(j)+'</div>';}).join('')
         +o.inner.map(function(r){return '<div class="bs-it" onclick="openDetail(\''+r.id+'\')"><span class="badge b-'+normStatus(r.status)+'">'+normStatus(r.status)+'</span><span class="pj" style="background:#475569">내부 · '+esc(AREAS[groupOf(r)])+'</span>'+esc(r.academy_name||'-')+((r.due_stages||{}).done?' <span class="muted">최종 마감 '+esc(r.due_stages.done.slice(5).replace('-','/'))+'</span>':'')+'</div>';}).join('')
         +'</div></details>';
     });
