@@ -2004,7 +2004,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
     <b>다음 순서</b>
     <ol class="flow">
       <li><b>견적서 발송</b><span>담당자가 신청 내용을 확인한 뒤 1~2영업일 안에 연락하고 견적서를 보냅니다. 최종 금액은 견적서로 확정합니다.</span></li>
-      <li><b>계약서 서명 · 제작비 입금</b><span>월 관리비는 오픈일부터 매달 납부합니다.</span></li>
+      <li><b>계약서 서명 · 제작비 입금</b><span>월 관리비는 홈페이지를 오픈한 달부터 매달 납부합니다.</span></li>
       <li><b>「제작 자료」 링크로 자료 제출</b><span>들어갈 글 · 연락 정보 · 디자인 · 로고 · 사진 · 홈페이지 주소(도메인) · 희망 오픈 시기를 계약 · 입금 후 1주 안에 제출합니다.</span></li>
       <li><b>담당자 요청 확인</b><span>제작에 더 필요한 내용이 있으면 담당자가 「제작 자료」 화면에 요청 사항을 남깁니다. 확인 후 답변해 주십시오.</span></li>
       <li><b>완성본 · 오픈</b><span>완성본을 보시고 수정 5회 안에서 다듬은 뒤 오픈합니다. 추가 기능이 있으면 견적서의 일정을 따릅니다.</span></li>
@@ -2055,7 +2055,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
     <p class="q-plan" id="q_plan"></p>
     <div class="q-big">
       <div><span class="k">계약 시 납부 금액</span><span class="n tnum" id="q_due"></span><span class="s" id="q_due_s"></span></div>
-      <div><span class="k">매달 (오픈일부터 CMS 자동이체)</span><span class="n tnum" id="q_month"></span><span class="s" id="q_total"></span></div>
+      <div><span class="k">매달 (오픈한 달부터)</span><span class="n tnum" id="q_month"></span><span class="s" id="q_total"></span></div>
     </div>
     <table class="q-tab" aria-label="요금 방식별 금액">
       <thead><tr><th>요금 방식</th><th>계약할 때 (제작비)</th><th>약정 총액</th></tr></thead>
@@ -2474,7 +2474,7 @@ function drawQuote(){
     ? (p.off ? p.v+' · 제작비 '+(p.off===100?'무료':p.off+'% 할인 (정가보다 '+won(p.save)+'원 적게)') : '정가 · 약정 없음 · 최소 3개월')
     : '요금 방식을 선택하면 해당 기준으로 변경됩니다 (현재 정가 기준)';
   $('q_due').textContent=won(show.due)+'원';
-  $('q_due_s').textContent=show.make?'제작비만 · 월 관리비는 오픈일부터':'제작비 무료 · 월 관리비는 오픈일부터';
+  $('q_due_s').textContent=show.make?'제작비만 · 월 관리비는 오픈한 달부터':'제작비 무료 · 월 관리비는 오픈한 달부터';
   $('q_month').textContent=won(c.mon)+'원';
   $('q_total').textContent=show.total!=null
     ? show.m+'개월 약정 총액 '+won(show.total)+'원 (제작비 포함)'
