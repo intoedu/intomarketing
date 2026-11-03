@@ -412,6 +412,15 @@
   .pill.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface));color:var(--accent)}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .kchk{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.88rem}
+  /* 홈페이지 견적 — 신청서 기능 · 가격 자동 (2026-11-03) */
+  .qweb{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);padding:10px 14px;margin:0 0 10px;font-size:.84rem;font-weight:700}
+  .qweb select.inp{width:auto;padding:6px 10px}
+  .qweb .btn{padding:6px 12px;font-size:.8rem}
+  .qweb .muted{font-weight:500;font-size:.8rem;flex-basis:100%}
+  details.kdom>summary{cursor:pointer;list-style:none}
+  details.kdom>summary::-webkit-details-marker{display:none}
+  details.kdom>summary .sec-t::before{content:"＋ ";color:var(--muted)}
+  details.kdom[open]>summary .sec-t::before{content:"－ "}
   .kchk label{display:flex;align-items:center;gap:6px;font-weight:600;color:var(--ink);margin:0}
   .todo{display:flex;align-items:center;gap:9px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin-bottom:7px;background:var(--surface)}
   .todo input[type=checkbox]{width:17px;height:17px;accent-color:var(--accent);flex:0 0 auto;cursor:pointer}
@@ -1179,6 +1188,12 @@
       <div class="muted" style="font-size:.8rem;margin-top:5px" id="q_from_hint"></div></div>
 
     <div class="sec-t">견적 항목</div>
+    <!-- 홈페이지만 — 신청서에서 고른 기능 · 요금 방식으로 가격이 미리 들어갑니다 (2026-11-03 이은총 님) -->
+    <div class="qweb hide" id="q_webbar">요금 방식
+      <select class="inp" id="q_plan" onchange="qPlan()"><option value="정가">정가 (약정 없음)</option><option value="6">약정 6개월 · 제작비 30% 할인</option>
+        <option value="12">약정 12개월 · 제작비 60% 할인</option><option value="24">약정 24개월 · 제작비 무료</option></select>
+      <button class="btn btn-ghost" type="button" onclick="qWebFill()">↺ 신청서 기능 · 가격으로 다시 채우기</button>
+      <span class="muted" id="q_webhint"></span></div>
     <table class="qtable"><thead><tr>
       <th style="width:34px">#</th><th>항목</th>
       <th style="width:112px" class="r">개당가격</th><th style="width:78px" class="r">수량</th>
@@ -1363,7 +1378,7 @@
     <button class="x" type="button" onclick="closeModal('contractModal')">✕</button>
   </div>
   <div class="sheet-b">
-    <div class="muted" style="font-size:.82rem;margin-bottom:12px">회색 글씨는 견적서 값입니다. 비워 두면 견적서 값이 들어가고, 견적서에 없는 칸은 계약서에 빈칸(밑줄)으로 나가 서명할 때 손으로 채웁니다. 계약서 문구는 바뀌지 않습니다.</div>
+    <div class="muted" style="font-size:.82rem;margin-bottom:12px">홈페이지 신청서 · 견적서에 있는 값은 <b>미리 채워 두었습니다</b> — 다른 것만 고치세요. 칸을 비우면 신청서 · 견적서 값이 다시 들어가고, 둘 다 없는 칸만 계약서에 빈칸(밑줄)으로 나가 서명할 때 손으로 채웁니다. 계약서 문구는 바뀌지 않습니다.</div>
     <div class="sec-t">요금 (제3조)</div>
     <div class="grid2">
       <div class="fld"><label>요금 방식</label>
@@ -1400,7 +1415,7 @@
     </div>
     <div class="fld"><label>견적으로 더한 기능 · 일정</label><input class="inp" id="k_extra"></div>
 
-    <div class="sec-t">도메인 (제6조 · 별지 2) <span class="muted" style="font-weight:500;font-size:.8rem">— 새 유료 도메인의 등록을 대행할 때만</span></div>
+    <details class="kdom" id="k_domwrap"><summary><div class="sec-t">도메인 (제6조 · 별지 2) <span class="muted" style="font-weight:500;font-size:.8rem">— 새 유료 도메인의 등록을 대행할 때만 · 제작 자료가 들어와 있으면 거기서 채웁니다</span></div></summary>
     <div class="grid2">
       <div class="fld"><label>도메인 등록 회사</label><input class="inp" id="k_dreg"></div>
       <div class="fld"><label>등록 기간 (년) · 비용 (원)</label><div style="display:flex;gap:8px"><input class="inp" id="k_dyears" style="width:90px" placeholder="년"><input class="inp" id="k_dcost" inputmode="numeric" placeholder="원" oninput="this.value=comma(this.value)"></div></div>
@@ -1408,6 +1423,7 @@
       <div class="fld"><label>&nbsp;</label><label style="font-weight:600;color:var(--ink)"><input type="checkbox" id="k_dagree"> 고객이 신청서에서 도메인 등록 회사 제공에 동의함</label></div>
     </div>
     <div class="grid2" id="k_dom"></div>
+    </details>
 
     <div class="sec-t">서명 날짜 <span class="muted" style="font-weight:500;font-size:.8rem">— 비우면 「20 . . .」 빈칸</span></div>
     <div class="grid2">
@@ -3934,6 +3950,58 @@
     return {flow:t.flow||'',include:t.include||'',exclude:t.exclude||'',refund:t.refund||''};
   }
 
+  /* ══════════ 홈페이지 견적 — 신청서 기능 · 요금 방식으로 가격 자동 (2026-11-03 이은총 님) ══════════
+     「홈페이지는 가격이 거의 같으니 견적서 만들 때 기본으로 다 들어가 있게, 수정 · 세일은 담당자가」
+     · 기능 = 신청서 details['고른 기능'] (예: 「기본 홈페이지, 회원가입, 게시판 2개, 공지」) · 요금 방식 = details['요금 방식(희망)']
+     · 제작 기능은 한 줄씩(기존 비용 = 정가), 월 관리비는 한 줄(매월). 약정 할인은 제작비 합계에 적용 · 만원 단위 올림 — 신청서 예상 금액과 같은 값
+       (줄마다 천 원 단위로 깎고 남는 차이는 「기본 홈페이지」 줄에 더함)
+     🔴 가격 = apply/index.html 의 PRICE · PLANS 와 같은 값(가격표 1031 2장). 가격이 바뀌면 두 곳을 같이 고칩니다. */
+  var WEB_PRICE={
+    base:  {n:'기본 홈페이지',     make:100000, mon:50000},
+    member:{n:'회원가입',          make:100000, mon:20000},
+    board: {n:'게시판',            make:50000,  mon:10000, extraMon:10000},
+    notice:{n:'공지',              make:0,      mon:0},
+    form:  {n:'신청서',            make:20000,  mon:10000},
+    list:  {n:'목록 · 검색',        make:30000,  mon:10000},
+    lang:  {n:'한 · 영 함께 표기',   make:20000,  mon:5000},
+    pay:   {n:'카드 결제',          make:300000, mon:50000}
+  };
+  var WEB_KEYS=['base','member','board','notice','form','list','lang','pay'];
+  var WEB_OFF={'정가':0,'6':30,'12':60,'24':100};
+  function webFeats(r){                     /* 신청서에서 고른 기능 — 없으면 기본 홈페이지만 */
+    var s=((r&&r.details)||{})['고른 기능']||'', f={base:1};
+    s.split(/\s*,\s*/).forEach(function(x){
+      x=x.trim(); var m=x.match(/^게시판\s*(\d+)\s*개/);
+      if(m)f.board=Number(m[1])||1; else if(x==='게시판')f.board=1;
+      else WEB_KEYS.forEach(function(k){ if(k!=='board'&&WEB_PRICE[k].n===x)f[k]=1; });
+    });
+    return f;
+  }
+  function webPlanOf(r){                    /* 신청서의 요금 방식 → '정가' · '6' · '12' · '24' (없으면 '') */
+    var p=((r&&r.details)||{})['요금 방식(희망)']||'', m=p.match(/(\d+)\s*개월/);
+    return p==='정가'?'정가':(m&&WEB_OFF[m[1]]!=null?m[1]:'');
+  }
+  function webPlanTxt(p){ return p==='정가'?'정가':(p?'약정 '+p+'개월':''); }
+  function webQuoteItems(f,plan){
+    var off=WEB_OFF[plan]||0, rows=[], make=0, mon=0;
+    WEB_KEYS.forEach(function(k){
+      if(!f[k])return;
+      var p=WEB_PRICE[k], nm=p.n, m=p.mon;
+      if(k==='board'){ nm='게시판 '+f.board+'개'; m=p.mon+(f.board-1)*p.extraMon; }
+      if(!p.make&&!p.mon)nm+=' (무료)';
+      rows.push({name:nm,unit:String(p.make),qty:'1',cycle:'1회',before:String(p.make),price:String(p.make)});
+      make+=p.make; mon+=m;
+    });
+    if(off){
+      var goal=off===100?0:Math.ceil(make*(100-off)/100/10000)*10000, sum=0;
+      rows.forEach(function(it){ var v=off===100?0:Math.floor(Number(it.before)*(100-off)/100/1000)*1000; it.price=String(v); sum+=v; });
+      rows[0].price=String(Number(rows[0].price)+goal-sum);
+    }
+    rows.push({name:'월 관리비',unit:String(mon),qty:'1',cycle:'매월',before:String(mon),price:String(mon)});
+    return rows;
+  }
+  function webFeatTxt(f){ return WEB_KEYS.filter(function(k){return f[k];}).map(function(k){return k==='board'?'게시판 '+f.board+'개':WEB_PRICE[k].n;}).join(', '); }
+
   function defaultQuote(r){
     var d=r.details||{};
     return {
@@ -3947,10 +4015,10 @@
     };
   }
   function contractState(r){
-    var k=(r.quote||{}).contract; if(!k)return '아직 작성 안 함 — 견적서 값만 들어가고 요금 방식 · 고객 구분은 빈칸';
-    var a=[k['요금']==='약정'?('약정 '+k['약정']+'개월'):(k['요금']==='정가'?'정가':'요금 방식 빈칸'),
-           k['고객']?(k['고객']+' 고객'):'고객 구분 빈칸'];
-    return a.join(' · ')+' · 저장 '+fdate(k.saved_at);
+    var q=r.quote||{}, k=q.contract, c=webCV(r,q,quoteTotals(q));
+    var a=[c['요금']==='약정'?('약정 '+c['약정']+'개월'):(c['요금']==='정가'?'정가':'요금 방식 빈칸'),
+           c['고객']?(c['고객']+' 고객'):'고객 구분 빈칸'];
+    return (k?'':'아직 작성 안 함 — 신청서 · 견적서 값으로 채워짐 · ')+a.join(' · ')+(k?' · 저장 '+fdate(k.saved_at):'');
   }
   function renderQuoteBox(){
     var r=CURROW,el=$('d_quote');
@@ -4354,7 +4422,22 @@
 
   window.openQuote=function(){
     var r=CURROW;QD=r.quote?JSON.parse(JSON.stringify(r.quote)):defaultQuote(r);
+    var isWeb=groupOf(r)==='web';
+    if(isWeb&&!r.quote){                    /* 새 홈페이지 견적서 — 신청서 기능 · 요금 방식으로 가격까지 */
+      QD.plan=webPlanOf(r)||'정가';
+      QD.items=webQuoteItems(webFeats(r),QD.plan);
+      QD.project=(QD.project?QD.project+' · ':'')+webPlanTxt(QD.plan);
+    }
     if(!QD.items||!QD.items.length)QD.items=[NEWITEM()];
+    Q_AUTO=isWeb&&!r.quote?JSON.stringify(QD.items):null;
+    $('q_webbar').classList.toggle('hide',!isWeb);
+    if(isWeb){
+      $('q_plan').value=QD.plan||webPlanOf(r)||'정가';
+      var hasF=!!((r.details||{})['고른 기능']);
+      $('q_webhint').textContent=(hasF?'신청서 기능 : '+webFeatTxt(webFeats(r)):'신청서에 고른 기능이 없어 기본 홈페이지만 넣습니다')
+        +' · 신청서 요금 방식 : '+(webPlanTxt(webPlanOf(r))||'고르지 않음')
+        +' — 금액은 가격표 기준이고, 깎아 주거나 다를 때는 표에서 바로 고치면 됩니다.';
+    }
     $('q_meta').textContent=(r.academy_name||'')+' · '+(r.quote_no?('견적번호 '+r.quote_no):'새 견적서');
     $('q_to_company').value=QD.to.company||'';$('q_to_manager').value=QD.to.manager||'';
     $('q_to_phone').value=QD.to.phone||'';$('q_to_email').value=QD.to.email||'';
@@ -4509,6 +4592,20 @@
   };
   window.qDel=function(i){QD.items.splice(i,1);if(!QD.items.length)QD.items=[NEWITEM()];renderQuoteRows();};
   window.addQuoteRow=function(){QD.items.push(NEWITEM());renderQuoteRows();};
+  /* 홈페이지 — 요금 방식 바꾸기 · 신청서 기준으로 다시 채우기 */
+  var Q_AUTO=null;                          /* 자동으로 채운 표 — 그대로면 요금 방식을 바꿀 때 묻지 않고 다시 채웁니다 */
+  function qWebRefill(ask){
+    if(ask&&JSON.stringify(QD.items)!==Q_AUTO&&!confirm('표의 금액 · 항목을 신청서 기능과 요금 방식('+webPlanTxt(QD.plan)+')으로 다시 채웁니다.\n직접 고친 금액은 사라집니다. 계속할까요?'))return false;
+    QD.items=webQuoteItems(webFeats(CURROW),QD.plan); Q_AUTO=JSON.stringify(QD.items);
+    var pj=$('q_project'), v=pj.value.replace(/\s*·\s*(정가|약정 \d+개월)\s*$/,'');
+    pj.value=(v?v+' · ':'')+webPlanTxt(QD.plan);
+    renderQuoteRows(); return true;
+  }
+  window.qPlan=function(){
+    var prev=QD.plan; QD.plan=$('q_plan').value;
+    if(!qWebRefill(true)){ QD.plan=prev; $('q_plan').value=prev||'정가'; }
+  };
+  window.qWebFill=function(){ QD.plan=$('q_plan').value; qWebRefill(true); };
   window.presetQuote=function(){
     var r=CURROW,pre=[];
     var g=groupOf(r);
@@ -4631,12 +4728,13 @@
     if(!preview && /○/.test([QD.terms.flow,QD.terms.include,QD.terms.exclude,QD.terms.refund].join(''))
        && !confirm('견적서 문구에 「○」가 남아 있습니다.\n금액 · 기간 · 횟수를 채우지 않은 채로 저장할까요?'))return;
     QD.from=$('q_from')?$('q_from').value:QPROF_ID;   /* 어느 사업자 이름으로 냈는지 남깁니다 */
+    if(groupOf(CURROW)==='web')QD.plan=$('q_plan').value;   /* 요금 방식 — 계약서 제3조 기본값으로 씁니다 */
     /* 기존 비용·할인가 중 «한쪽만» 적었으면 같은 금액으로 채웁니다 (할인 없음으로 봄).
        둘 다 비었고 개당가격 × 수량이 있으면 그 값으로 둘 다 채웁니다. */
     QD.items.forEach(function(it){
       var b=Number(it.before)||0,p=Number(it.price)||0,uq=(Number(it.unit)||0)*(Number(it.qty)||0);
       if(!b&&!p&&uq){it.before=String(uq);it.price=String(uq);}
-      else if(b&&!p)it.price=String(b);
+      else if(b&&!p&&String(it.price)!=='0')it.price=String(b);   /* 「0」(24개월 약정 · 무료)은 일부러 적은 0 */
       else if(p&&!b)it.before=String(p);
     });
     QD.items=QD.items.filter(function(it){return it.name||Number(it.before)||Number(it.price);});
@@ -4701,7 +4799,7 @@
         +'<td class="r">'+(qn?qn.toLocaleString('ko-KR'):'')+'</td>'
         +'<td>'+(it?esc(it.cycle||'1회'):'')+'</td>'
         +'<td class="r">'+(it&&Number(it.before)?Number(it.before).toLocaleString('ko-KR'):'')+'</td>'
-        +'<td class="r"><b>'+(it&&Number(it.price)?Number(it.price).toLocaleString('ko-KR'):'')+'</b></td></tr>';
+        +'<td class="r"><b>'+(it&&(Number(it.price)||(it.name&&String(it.price)==='0'))?Number(it.price).toLocaleString('ko-KR'):'')+'</b></td></tr>';
     }
     var cyc='', wp=webPay(r,t);
     if(wp){
@@ -4802,22 +4900,48 @@
   var C_DKEYS=[['주소1','원하는 주소 1순위'],['주소2','원하는 주소 2순위'],['이름','소유자명 (이름 · 기관명)'],['영문','소유자명 (영문)'],
                ['증종류','등록증 종류 (기관만)'],['증번호','등록증 번호 (기관만)'],['메일','이메일 (소유자 확인용)'],['휴대','휴대전화 (소유자 확인용)'],
                ['전화','전화번호'],['한글주소','우편번호 · 주소 (한글)'],['영문주소','주소 (영문)']];
-  var C_FROMQ=['상호','등록번호','주소','연락처','품목','제작비','월관리비'];   /* 견적서에서 오는 칸 — 같으면 비워 저장 */
+  var C_FROMQ=['상호','등록번호','주소','연락처','품목','제작비','월관리비',   /* 견적서 · 신청서에서 오는 칸 — 같으면 비워 저장 */
+               '대표자','법인번호','요금','약정','고객','게시판수','게시판종류','신청서메일','도메인회사','도메인동의','소유자'];
+  /* 제작 자료(2차)의 「도메인 소유자 정보」 글 → 별지 2 칸 (줄마다 「이름: 값」) */
+  var C_DOWN={'소유자명':'이름','소유자명(영문)':'영문','등록증 종류':'증종류','기관 등록증 번호':'증번호','이메일':'메일','휴대전화':'휴대','전화번호':'전화','주소(영문)':'영문주소'};
+  function webMatOf(r){ var a=MATS[r&&r.id]; return a&&a.length?a[a.length-1]:null; }
   function webDefaults(r,q,t){
     var c=cCust(q,r), names=(q.items||[]).map(function(it){return (it&&it.name||'').trim();}).filter(Boolean);
     var all=names.join(' / ');
     /* 제2조 「항목」에는 제작 품목만 — 매월 · 매년 품목(월 관리비 등)은 제3조 금액에 들어갑니다 */
     var made=(q.items||[]).filter(function(it){return it&&(it.name||'').trim()&&!/매월|매년/.test(it.cycle||'');}).map(function(it){return it.name.trim();});
     if(made.length)names=made;
-    return {'상호':c.name,'등록번호':c.biz,'주소':c.addr,'연락처':c.contact,'품목':names.join(' · '),
+    var dt=r.details||{}, plan=q.plan||webPlanOf(r), ct=dt['고객 구분(신청서 기준)']||'';
+    var bm=all.match(/게시판\s*(\d+)\s*개/), fb=webFeats(r).board;
+    var o={'상호':c.name,'등록번호':c.biz||dt['등록증 번호']||'','주소':c.addr,'연락처':c.contact,'품목':names.join(' · '),
             '제작비':t.once?String(t.once):'','월관리비':t.month?String(t.month):'',
+            '대표자':dt['대표자']||'','법인번호':dt['법인등록번호']||'',
+            '요금':plan==='정가'?'정가':(plan?'약정':''),'약정':(plan&&plan!=='정가')?plan:'',
+            '고객':/^사업자 고객/.test(ct)?'사업자':(/^개인 고객/.test(ct)?'개인':''),
+            '게시판수':bm?bm[1]:(/게시판/.test(all)&&fb?String(fb):''),'게시판종류':dt['게시판 종류']||'','신청서메일':dt['신청서 받을 이메일']||'',
+            '도메인회사':'','도메인동의':false,'소유자':'',D:{},
             F:C_FEAT.map(function(re){return re.test(all);})};
+    /* 제작 자료가 들어와 있으면 도메인(별지 2)도 — 보통은 계약 뒤에 들어오므로 비어 있는 게 정상 */
+    var md=(webMatOf(r)||{}).details||{};
+    if(/등록 대행/.test(md['도메인']||'')){
+      var w=(md['도메인']||'').match(/1순위\s*([^·]+?)\s*·\s*2순위\s*([^·]+?)\s*·/);
+      if(w){ o.D['주소1']=w[1].trim(); if(w[2].trim()!=='undefined')o.D['주소2']=w[2].trim(); }
+      o['도메인회사']=md['도메인 등록 회사']||''; o['도메인동의']=/^동의함/.test(md['도메인 제3자 제공 동의']||'');
+      var zip='',ad='';
+      (md['도메인 소유자 정보']||'').split('\n').forEach(function(l){
+        var i=l.indexOf(': '); if(i<0)return; var k=l.slice(0,i).trim(), v=l.slice(i+2).trim(); if(!v)return;
+        if(k==='소유자 구분')o['소유자']=v; else if(k==='우편번호')zip=v; else if(k==='주소(한글)')ad=v; else if(C_DOWN[k])o.D[C_DOWN[k]]=v;
+      });
+      if(zip||ad)o.D['한글주소']=[zip,ad].filter(Boolean).join(' · ');
+    }
+    return o;
   }
   function webCV(r,q,t){                    /* 견적서 값 + 계약서 창에서 넣은 값 */
     var d=webDefaults(r,q,t), k=q.contract||{}, v={};
     for(var x in k)v[x]=k[x];
     C_FROMQ.forEach(function(x){ v[x]=(k[x]!=null&&(''+k[x]).trim()!=='')?k[x]:d[x]; });
-    v.F=Array.isArray(k.F)?k.F:d.F; v.D=k.D||{};
+    v.F=Array.isArray(k.F)?k.F:d.F; v.D={};
+    for(var y in d.D)v.D[y]=d.D[y]; for(var z in (k.D||{}))v.D[z]=k.D[z];
     return v;
   }
   function cValS(v){ v=(v==null?'':(''+v)).trim(); return v?esc(v):'<span class="c-blank s"></span>'; }
@@ -4865,6 +4989,8 @@
       .forEach(function(p){ var money=(p[0]==='k_once'||p[0]==='k_month');
         $(p[0]).value=money?comma(c[p[1]]):(c[p[1]]||'');
         $(p[0]).placeholder=d[p[1]]?'견적서 : '+(money?comma(d[p[1]]):d[p[1]]):''; });
+    [['k_owner','대표자'],['k_corp','법인번호'],['k_bcnt','게시판수'],['k_bkind','게시판종류'],['k_formmail','신청서메일'],['k_dreg','도메인회사']]
+      .forEach(function(p){ $(p[0]).placeholder=d[p[1]]?'신청서 : '+d[p[1]]:''; });
     $('k_owner').value=c['대표자']||''; $('k_corp').value=c['법인번호']||'';
     $('k_plan').value=c['요금']==='정가'?'정가':(c['요금']==='약정'&&c['약정']?String(c['약정']):'');
     $('k_ctype').value=c['고객']||'';
@@ -4876,6 +5002,7 @@
     $('k_dagree').checked=!!c['도메인동의']; $('k_dtype').value=c['소유자']||'';
     $('k_dom').innerHTML=C_DKEYS.map(function(p){
       return '<div class="fld"><label>'+p[1]+'</label><input class="inp" id="k_d_'+p[0]+'" value="'+esc((c.D||{})[p[0]]||'')+'"></div>'; }).join('');
+    $('k_domwrap').open=!!(c['도메인회사']||c['소유자']||Object.keys(c.D||{}).length);
     $('k_date1').value=c['회사날짜']||''; $('k_date2').value=c['고객날짜']||'';
     kTotal(); $('contractModal').classList.add('open');
   };
@@ -4896,7 +5023,7 @@
            '도메인회사':kv('k_dreg'),'도메인기간':kv('k_dyears'),'도메인비용':digits(kv('k_dcost')),'도메인동의':!!$('k_dagree').checked,
            '소유자':$('k_dtype').value,D:{},'회사날짜':$('k_date1').value,'고객날짜':$('k_date2').value,
            saved_at:new Date().toISOString()};
-    C_DKEYS.forEach(function(x){ var v=kv('k_d_'+x[0]); if(v)C.D[x[0]]=v; });
+    C_DKEYS.forEach(function(x){ var v=kv('k_d_'+x[0]); if(v&&v!==(d.D[x[0]]||''))C.D[x[0]]=v; });
     /* 견적서 값과 같은 칸은 비워 둡니다 — 견적서를 고치면 계약서도 따라가게 */
     C_FROMQ.forEach(function(x){ if(String(C[x]||'')===String(d[x]||''))C[x]=''; });
     if(C.F.every(function(b,i){return b===d.F[i];}))delete C.F;
