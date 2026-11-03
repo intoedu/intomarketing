@@ -2055,7 +2055,8 @@
         margin:[8,0,8,0],                               /* 위·아래 8mm — 여러 쪽일 때 글이 종이 끝에 붙지 않게 */
         filename:name,
         image:{type:'jpeg',quality:0.97},
-        html2canvas:{scale:2,backgroundColor:'#ffffff',useCORS:true},
+        /* 🔴 scrollX · scrollY 0 — 화면을 내린 채로 누르면 내린 만큼 내용이 아래로 밀려 첫 쪽이 비고 끝이 잘렸습니다 (11/3) */
+        html2canvas:{scale:2,backgroundColor:'#ffffff',useCORS:true,scrollX:0,scrollY:0},
         jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
         /* 표 한 줄·조항 한 칸·서명란이 쪽 경계에서 반으로 잘리지 않게 */
         pagebreak:{mode:['css','legacy'],avoid:['tr','.p-h','.p-cols','.p-sum','.p-sec','.p-sign','.p-f']}
