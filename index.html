@@ -1542,13 +1542,16 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         쓰는 자리의 원칙은 10/6 과 같습니다 — «노랑은 면과 선에만, 그 위 글자는 짙은 초록».
         노랑 글자는 흰 바탕에서 1.5:1 이라 읽히지 않습니다. 글자색으로 쓰지 마세요.
         (흰 글자 위 초록 7.7:1 · 노랑 위 짙은 초록 9.4:1 · 초록 위 노랑 5.2:1) */
-  #v-design{--d-green:#365C29;--d-green-2:#2A4A1F;--d-yellow:#ECD545;--d-yellow-pale:#FBF7D4;--d-yellow-line:#E6DB86;
-            --accent:#365C29;--accent-ink:#365C29;--brand:#365C29;--gold:#ECD545;--gold-ink:#365C29;
-            --ink:#1F2E1A;--muted:#56634F;--line:#E3E6D2;--surface-2:#F8F6DF;
+  /* 🔴 2026-11-11 디자인팀 새 색 — 초록 · 노랑을 버리고 파랑 · 크림으로 (견본 : 포인트 #7694C5 · 하늘 #D0DFF3 · 크림 #FDEFD2).
+        변수 이름(d-green · d-yellow)은 그대로, 값만 바꿈. 포인트 #7694C5 는 흰 글자엔 흐려서 글자 · 단추 · 띠는 진한 파랑 #3E5E94.
+        크림은 면 · 형광펜에만. /design/ 페이지와 같은 값. */
+  #v-design{--d-green:#3E5E94;--d-green-2:#2F4A78;--d-yellow:#FDEFD2;--d-yellow-pale:#FFF8EA;--d-yellow-line:#E9D9B5;
+            --accent:#3E5E94;--accent-ink:#3E5E94;--brand:#3E5E94;--gold:#FDEFD2;--gold-ink:#3E5E94;
+            --ink:#1B2740;--muted:#4A5873;--line:#D6E1F0;--surface-2:#EEF3FA;
             color:var(--ink)}
   /* 작은 머리글 — 노랑 형광펜을 그은 모양 */
   #v-design .kicker{display:inline-block;padding:0 4px;color:var(--d-green);
-                    background:linear-gradient(transparent 58%,var(--d-yellow) 58%)}
+                    background:linear-gradient(transparent 58%,#D0DFF3 58%)}
   #v-design .h2{color:var(--d-green)}
   #v-design .card h3{color:var(--d-green)}
   #v-design .ico{color:var(--d-green)}
@@ -1565,46 +1568,46 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         그런 표는 «묶인 분류 칸만» 노랑으로, 묶음이 없는 표만 한 줄 건너 노랑으로 칠합니다. */
   #v-design .ptw{border-color:var(--d-yellow-line)}
   #v-design .ptab th{background:var(--d-green);color:#fff}
-  #v-design .ptab th,#v-design .ptab td{border-bottom-color:#ECE7B8}
+  #v-design .ptab th,#v-design .ptab td{border-bottom-color:#E3D6B8}
   #v-design .ptab td[rowspan]{background:var(--d-yellow-pale)}
   #v-design .ptab:not(:has(td[rowspan])) tbody tr:nth-child(even) td{background:var(--d-yellow-pale)}
   #v-design .ptab .lo{color:var(--d-green)}
   #v-design .pnote{background:var(--d-yellow-pale)}
 
   /* 맨 위 메뉴바 · 맨 아래 띠 — 디자인 화면에서만 초록 */
-  body[data-view="design"] header{background:rgba(54,92,41,.96);border-bottom-color:#4C7340}
-  body[data-view="design"] .brand .mk{background:#ECD545;color:#1F2E1A}
-  body[data-view="design"] .brand small{color:#C9DBBE}
-  body[data-view="design"] .navlink{color:#E3EDDB}
+  body[data-view="design"] header{background:rgba(62,94,148,.96);border-bottom-color:#5A79AD}
+  body[data-view="design"] .brand .mk{background:#FDEFD2;color:#1B2740}
+  body[data-view="design"] .brand small{color:#C9D8EF}
+  body[data-view="design"] .navlink{color:#E3EBF8}
   body[data-view="design"] .navlink:hover{color:#fff;background:rgba(255,255,255,.12)}
-  body[data-view="design"] .navlink.active{color:#1F2E1A;background:#ECD545}
-  body[data-view="design"] .headcta{background:#ECD545;color:#1F2E1A}
-  body[data-view="design"] .headcta:hover{background:#F4E06A}
+  body[data-view="design"] .navlink.active{color:#1B2740;background:#FDEFD2}
+  body[data-view="design"] .headcta{background:#FDEFD2;color:#1B2740}
+  body[data-view="design"] .headcta:hover{background:#FFF6E2}
   body[data-view="design"] .imab,
-  body[data-view="design"] .burger{color:#E3EDDB}
-  body[data-view="design"] .msheet{background:#365C29;border-top-color:#4C7340}
-  body[data-view="design"] .msheet a{color:#E3EDDB;border-bottom-color:rgba(255,255,255,.12)}
-  body[data-view="design"] .msheet a.sub{color:#C9DBBE}
-  body[data-view="design"] footer{background:#365C29;color:#D3E0C9}
+  body[data-view="design"] .burger{color:#E3EBF8}
+  body[data-view="design"] .msheet{background:#3E5E94;border-top-color:#5A79AD}
+  body[data-view="design"] .msheet a{color:#E3EBF8;border-bottom-color:rgba(255,255,255,.12)}
+  body[data-view="design"] .msheet a.sub{color:#C9D8EF}
+  body[data-view="design"] footer{background:#2F4A78;color:#D6E2F3}
   body[data-view="design"] footer .biz b,
-  body[data-view="design"] footer .pol a{color:#F1F6EC}
+  body[data-view="design"] footer .pol a{color:#F2F6FC}
   body[data-view="design"] footer .pol{border-top-color:rgba(255,255,255,.22)}
-  body[data-view="design"] footer .pol span{color:#7C9C6E}
-  body[data-view="design"] footer .cr{color:#C2D4B7}
+  body[data-view="design"] footer .pol span{color:#7F97C2}
+  body[data-view="design"] footer .cr{color:#C3D3EC}
 
   /* 어두운 화면 — 바탕이 어두우므로 초록은 밝게, 형광펜은 끕니다(밝은 글자 뒤 노랑은 안 읽힙니다) */
   @media(prefers-color-scheme:dark){
-    #v-design{--d-green:#3F6B30;--d-green-2:#4B7D3A;--d-yellow-pale:#22271A;--d-yellow-line:#3F4A2A;
-              --accent:#9CCB86;--accent-ink:#B4DBA0;--brand:#9CCB86;--gold-ink:#ECD545;
-              --ink:#E9EFE4;--muted:#A9B5A1;--line:#2C3A26;--surface-2:#1A2416}
-    #v-design .kicker{background:none;padding:0;color:#ECD545}
-    #v-design .h2,#v-design .card h3,#v-design .ico,#v-design .ptab .lo{color:#B4DBA0}
-    #v-design .tag{color:#E9DC7A}
-    #v-design .btn-ghost{color:#B4DBA0;border-color:#4B7D3A}
-    #v-design .ptab th,#v-design .ptab td{border-bottom-color:#2C3A26}
-    body[data-view="design"] header{background:rgba(34,58,25,.96);border-bottom-color:#35542A}
+    #v-design{--d-green:#3A5A8E;--d-green-2:#4A6CA3;--d-yellow-pale:#1C2333;--d-yellow-line:#33405A;
+              --accent:#9DB6DE;--accent-ink:#B5C9E8;--brand:#9DB6DE;--gold-ink:#FDEFD2;
+              --ink:#E6ECF5;--muted:#A3AEC2;--line:#2B3650;--surface-2:#161D2B}
+    #v-design .kicker{background:none;padding:0;color:#FDEFD2}
+    #v-design .h2,#v-design .card h3,#v-design .ico,#v-design .ptab .lo{color:#B5C9E8}
+    #v-design .tag{color:#F3E2BE}
+    #v-design .btn-ghost{color:#B5C9E8;border-color:#4A6CA3}
+    #v-design .ptab th,#v-design .ptab td{border-bottom-color:#2B3650}
+    body[data-view="design"] header{background:rgba(24,36,58,.96);border-bottom-color:#2E4268}
     body[data-view="design"] .msheet,
-    body[data-view="design"] footer{background:#223A19}
+    body[data-view="design"] footer{background:#18243A}
   }
 </style>
 <section class="view" id="v-design">

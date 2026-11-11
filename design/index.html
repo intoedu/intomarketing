@@ -2,8 +2,8 @@
 <html lang="ko" class="no-js">
 <!-- ══════════════════════════════════════════════════════════════
    디자인 세부페이지 ( intomarketing.co.kr/design/ )   2026-10-31 첫 판
-   글 = 디자인팀 원고 그대로(이은총 님 10/31 전달) · 색 = 초록 + 노랑 포인트 · 바탕 연두 · 캐릭터 넣지 않음
-   🔴 색은 디자인팀 확정값 — 초록 #365C29 · 노랑 #ECD545. 노랑은 면 · 선에만, 노랑 위 글자는 짙은 초록.
+   글 = 디자인팀 원고 그대로(이은총 님 10/31 전달) · 색 = (11/11부터) 파랑 + 크림 포인트 · 바탕 하늘 · 캐릭터 넣지 않음
+   🔴 색은 디자인팀 새 색(2026-11-11) — 포인트 #7694C5 · 진한 파랑 #3E5E94 · 하늘 #D0DFF3 · 크림 #FDEFD2. 크림은 면 · 형광펜에만
    🔴 카드(.flip) : 흰 바탕 · 검정 글자 · 초록 강조 → 누르거나 마우스를 올리면 초록 바탕 · 연두 강조 · 흰 글자.
       한 묶음에서 하나만 켜집니다. 맨 앞 카드가 처음부터 켜져 있는 것은 «누를 수 있다»는 표시입니다.
    🔴 가격 · 제작 사례는 이 쪽에 없습니다 — 메인 #design 화면에 있습니다(「가격 · 제작 사례 보기」 단추).
@@ -25,7 +25,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="인투마케팅">
 <meta property="og:title" content="디자인 · 인투마케팅">
-<meta property="og:description" content="필요한 디자인, 한 곳에서 편하게 — 로고 · 명함 · 인쇄물 · SNS 콘텐츠 · 책 편집">
+<meta property="og:description" content="필요한 모든 디자인을 인투마케팅에서 — 로고 · 명함 · 인쇄물 · SNS 콘텐츠 · 책 편집">
 <meta property="og:url" content="https://intomarketing.co.kr/design/">
 <meta property="og:locale" content="ko_KR">
 <meta property="og:image" content="https://intomarketing.co.kr/og-main.png">
@@ -39,7 +39,7 @@
 <link rel="icon" href="/favicon-48.png?v=2" sizes="48x48" type="image/png">
 <link rel="icon" href="/favicon-192.png?v=2" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
-<meta name="theme-color" content="#365C29">
+<meta name="theme-color" content="#3E5E94">
 <meta name="color-scheme" content="light">
 <script>document.documentElement.className='js';</script>
 <style>
@@ -49,13 +49,16 @@
   --band-bg:#12294D; --band-line:#2A436E;
   --f:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
   --ease:cubic-bezier(.22,.9,.28,1);
-  /* ═══ 디자인 쪽 색 — 🔴 초록 · 노랑은 디자인팀 확정값(10/12). 노랑은 면 · 선에만 ═══ */
-  --green:#365C29; --green-2:#2B4A20; --green-line:#4C7340;
-  --yellow:#ECD545; --yellow-pale:#FBF7D4;
-  --lime:#EEF5DF;      /* 바탕 연두 */
-  --lime-2:#DCEBC0;    /* 연두 선 · 면 */
-  --lime-on:#CFE8A6;   /* 초록 바탕 위 연두 글자 (#365C29 위 7:1 이상) */
-  --ink:#1F2E1A; --muted:#56634F; --line:#D5E2C2;
+  /* ═══ 디자인 쪽 색 — 🔴 2026-11-11 디자인팀 새 색(견본 : 포인트 #7694C5 · 연한 하늘 #D0DFF3 · 크림 #FDEFD2 · 바탕 #B3D1EE).
+         10/12 초록 · 노랑은 버림. 변수 이름(green · yellow · lime)은 그대로 두고 값만 파랑 · 크림으로 바꿈.
+         포인트 #7694C5 는 흰 글자를 얹기엔 흐려서(3:1 아래) 단추 · 글자 · 띠는 같은 계열의 진한 파랑을 씀 ═══ */
+  --point:#7694C5;     /* 포인트 — 선 · 면 · 강조 밑줄 */
+  --green:#3E5E94; --green-2:#2F4A78; --green-line:#5A79AD;   /* 진한 파랑 — 단추 · 강조 글자 · 띠 (흰 글자 6:1 이상) */
+  --yellow:#FDEFD2; --yellow-pale:#FFF8EA;                     /* 크림 — 형광펜 · 면에만 */
+  --lime:#D0DFF3;      /* 바탕 하늘 (디자인팀 「살짝 더 어두워도」) */
+  --lime-2:#B3D1EE;    /* 하늘 선 · 면 */
+  --lime-on:#DCE7F7;   /* 진한 파랑 바탕 위 밝은 글자 */
+  --ink:#1B2740; --muted:#4A5873; --line:#BCCDE8;
   --cw:1216px; --gut:clamp(20px,4vw,32px);
 }
 *{box-sizing:border-box}
@@ -76,7 +79,7 @@ section[id]{scroll-margin-top:72px}
 
 /* ══════════ 공통 글자 ══════════ */
 .eyebrow{display:inline-block;font-size:var(--t-sm);font-weight:800;letter-spacing:.14em;color:var(--green);margin-bottom:16px;
-         padding-bottom:4px;border-bottom:3px solid var(--yellow)}
+         padding-bottom:4px;border-bottom:3px solid var(--point)}
 .h1{font-size:clamp(40px,6.4vw,76px);line-height:1.12;letter-spacing:-.045em;font-weight:300}
 .h2{font-size:clamp(30px,4.2vw,52px);line-height:1.2;letter-spacing:-.04em;font-weight:300}
 .h1 b,.h2 b{font-weight:800}
@@ -88,12 +91,12 @@ section[id]{scroll-margin-top:72px}
 .btn{display:inline-flex;align-items:center;min-height:52px;padding:0 26px;border-radius:999px;font-weight:800;font-size:var(--t-md);
      transition:background-color .18s,color .18s,transform .18s var(--ease),box-shadow .18s}
 .btn:active{transform:scale(.97)}
-.btn-g{background:var(--green);color:#fff;box-shadow:0 10px 24px -12px rgba(54,92,41,.7)}
+.btn-g{background:var(--green);color:#fff;box-shadow:0 10px 24px -12px rgba(62,94,148,.7)}
 .btn-g:hover{background:var(--green-2)}
 .btn-line{border:2px solid var(--green);color:var(--green)}
 .btn-line:hover{background:var(--green);color:#fff}
 .btn-y{background:var(--yellow);color:var(--green-2)}
-.btn-y:hover{background:#F4E06A}
+.btn-y:hover{background:#FFF6E2}
 .btn-wline{border:2px solid rgba(255,255,255,.7);color:#fff}
 .btn-wline:hover{background:#fff;color:var(--green)}
 
@@ -102,7 +105,7 @@ section[id]{scroll-margin-top:72px}
 .sec.white{background:#fff}
 .sec.green{background:var(--green);color:#fff}
 .sec.green .eyebrow{color:var(--lime-on);border-bottom-color:var(--yellow)}
-.sec.green .lead{color:#DCE8D2}
+.sec.green .lead{color:#DCE6F5}
 .sec.green .lead b{color:#fff}
 
 /* ══════════ 1. 첫 화면 ══════════ */
@@ -110,7 +113,7 @@ section[id]{scroll-margin-top:72px}
 .hero-in{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
 .hero-art{position:relative;aspect-ratio:1/1;max-width:460px;width:100%;justify-self:end}
 .tile{position:absolute;width:52%;aspect-ratio:1/1;border-radius:24px;background:#fff;border:1px solid var(--line);
-      box-shadow:0 24px 48px -28px rgba(31,46,26,.45);display:flex;flex-direction:column;justify-content:space-between;padding:20px;
+      box-shadow:0 24px 48px -28px rgba(27,39,64,.45);display:flex;flex-direction:column;justify-content:space-between;padding:20px;
       transition:transform .4s var(--ease),background-color .25s,color .25s}
 .tile span{font-size:var(--t-xs);font-weight:800;letter-spacing:.12em;color:var(--green)}
 .tile i{display:block;flex:1;position:relative}
@@ -150,9 +153,9 @@ section[id]{scroll-margin-top:72px}
 .flip .no{font-size:clamp(28px,3vw,40px);font-weight:900;letter-spacing:-.04em;color:var(--green);line-height:1;margin:0;transition:color .25s}
 .flip .en{font-size:var(--t-sm);font-weight:800;letter-spacing:.12em;color:var(--green);margin:0;transition:color .25s}
 .flip:hover,.flip.on,.sec.white .flip:hover,.sec.white .flip.on{background:var(--green);border-color:var(--green);color:#fff;transform:translateY(-4px);
-      box-shadow:0 22px 40px -24px rgba(31,46,26,.7)}
+      box-shadow:0 22px 40px -24px rgba(27,39,64,.7)}
 .flip:hover em,.flip.on em,.flip:hover .no,.flip.on .no,.flip:hover .en,.flip.on .en{color:var(--lime-on)}
-.flip:hover p,.flip.on p{color:#E6EFDF}
+.flip:hover p,.flip.on p{color:#E4ECF8}
 @media(hover:none){.flip:hover:not(.on){background:#fff;color:var(--ink);transform:none;box-shadow:none;border-color:var(--line)}
   .sec.white .flip:hover:not(.on){background:var(--lime);border-color:transparent}
   .flip:hover:not(.on) em,.flip:hover:not(.on) .no,.flip:hover:not(.on) .en{color:var(--green)}
@@ -169,7 +172,7 @@ section[id]{scroll-margin-top:72px}
 .oneteam{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
 .merge{display:grid;gap:12px}
 .merge .far{display:flex;justify-content:space-between;align-items:center;background:var(--lime);border-radius:16px;padding:16px 22px;font-weight:700}
-.merge .far s{color:#8A9682;text-decoration-thickness:2px}
+.merge .far s{color:#7F8BA3;text-decoration-thickness:2px}
 .merge .one{margin-top:8px;background:var(--green);color:#fff;border-radius:16px;padding:22px;text-align:center;font-size:var(--t-lg);letter-spacing:-.02em}
 .merge .one b{color:var(--lime-on)}
 
@@ -239,24 +242,24 @@ footer .pol a:hover{text-decoration:underline}
 footer .pol span{margin:0 8px;color:#38537E}
 footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
 
-/* ══════════ 디자인 쪽은 머리띠 · 바닥도 초록 — 메인 body[data-view="design"] 과 같은 값 ══════════ */
-header{background:rgba(54,92,41,.96);border-bottom-color:#4C7340}
-.brand small{color:#C9DBBE}
-.navlink{color:#E3EDDB}
+/* ══════════ 디자인 쪽은 머리띠 · 바닥도 진한 파랑 (11/11 새 색 · 메인 body[data-view="design"] 은 아직 초록) ══════════ */
+header{background:rgba(62,94,148,.96);border-bottom-color:#5A79AD}
+.brand small{color:#C9D8EF}
+.navlink{color:#E3EBF8}
 .navlink:hover{color:#fff;background:rgba(255,255,255,.12)}
-.navlink.active{color:#1F2E1A;background:#ECD545}
-.headcta{background:#ECD545;color:#1F2E1A}
-.headcta:hover{background:#F4E06A}
-.imab,.burger{color:#E3EDDB}
-.msheet{background:#365C29;border-top-color:#4C7340}
-.msheet a{color:#E3EDDB;border-bottom-color:rgba(255,255,255,.12)}
-.msheet a.sub{color:#C9DBBE}
-.msheet #authbar-m a,.msheet .imab-m{color:#E3EDDB}
-footer{background:#2B4A20;color:#D3E0C9}
-footer .biz b,footer .pol a{color:#F1F6EC}
+.navlink.active{color:#1B2740;background:#FDEFD2}
+.headcta{background:#FDEFD2;color:#1B2740}
+.headcta:hover{background:#FFF6E2}
+.imab,.burger{color:#E3EBF8}
+.msheet{background:#3E5E94;border-top-color:#5A79AD}
+.msheet a{color:#E3EBF8;border-bottom-color:rgba(255,255,255,.12)}
+.msheet a.sub{color:#C9D8EF}
+.msheet #authbar-m a,.msheet .imab-m{color:#E3EBF8}
+footer{background:#2F4A78;color:#D6E2F3}
+footer .biz b,footer .pol a{color:#F2F6FC}
 footer .pol{border-top-color:rgba(255,255,255,.22)}
-footer .pol span{color:#7C9C6E}
-footer .cr{color:#C2D4B7}
+footer .pol span{color:#7F97C2}
+footer .cr{color:#C3D3EC}
 </style>
 </head>
 <body>
@@ -310,7 +313,7 @@ footer .cr{color:#C2D4B7}
   <div class="w hero-in">
     <div class="hero-txt">
       <p class="eyebrow">DESIGN</p>
-      <h1 class="h1">필요한 디자인,<br><span class="hl">한 곳에서</span> <b>편하게.</b></h1>
+      <h1 class="h1">필요한 모든 디자인을<br><span class="hl">인투마케팅</span><b>에서.</b></h1>
       <p class="lead">로고부터 명함, 인쇄·홍보물, SNS 콘텐츠까지<br>
         브랜드와 목적에 맞는 디자인을 고민하고 제작합니다.</p>
       <p class="lead sm">매번 다른 디자이너를 찾고, 작업마다 다른 가격과 방식에 맞출 필요 없이
@@ -352,8 +355,8 @@ footer .cr{color:#C2D4B7}
       </article>
       <article class="flip" tabindex="0" role="button" aria-pressed="false">
         <p class="no">03</p>
-        <h3>디자인 이후까지 <em>함께합니다.</em></h3>
-        <p>디자인 파일을 전달하고 끝나는 것이 아니라 수정부터 인쇄·배송까지 필요한 과정을 함께합니다.</p>
+        <h3>완성까지 <em>함께합니다.</em></h3>
+        <p>시안을 보내고 끝나는 것이 아니라 수정과 확정을 거쳐, 바로 쓸 수 있는 최종 파일까지 함께합니다.</p>
       </article>
     </div>
   </div>
@@ -412,14 +415,14 @@ footer .cr{color:#C2D4B7}
     <div>
       <p class="eyebrow">ONE TEAM</p>
       <h2 class="h2">디자인이 여러 개라면,<br><b>따로 찾지 않아도 됩니다.</b></h2>
-      <p class="lead">로고는 여기, 전단지는 저기, SNS는 또 다른 곳에 맡기지 않아도 됩니다.<br>
+      <p class="lead">디자인, 여러 업체에 맡기지 않으셔도 됩니다.<br>
         브랜드를 이해한 하나의 팀이 필요한 디자인을 연결해서 만들어갑니다.</p>
       <p class="lead"><b>작은 배너 하나부터 하나의 브랜드를 만드는 일까지.</b></p>
     </div>
     <div class="merge" aria-hidden="true">
-      <p class="far"><span>로고</span><s>여기</s></p>
-      <p class="far"><span>전단지</span><s>저기</s></p>
-      <p class="far"><span>SNS</span><s>또 다른 곳</s></p>
+      <p class="far"><span>로고</span><s>A마케팅 회사</s></p>
+      <p class="far"><span>전단지</span><s>B마케팅 회사</s></p>
+      <p class="far"><span>SNS</span><s>개인 프리랜서</s></p>
       <p class="one">인투마케팅 <b>하나의 팀</b></p>
     </div>
   </div>
