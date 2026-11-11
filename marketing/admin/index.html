@@ -2786,7 +2786,112 @@
         return '<div class="bs-w" onclick="jbOpen(\''+x.j.id+'\')"><span class="tnum">'+dueTxt(x.at,x.set)+'</span>'+ddHTML(x.at)+'<span class="mk '+x.kind[2]+'">'+x.kind[1]+'</span>'
           +'<span><b>'+esc(x.j.title)+'</b>'+(x.dl.label?' · '+esc(x.dl.label):'')+' <span class="muted">'+esc((p&&(p.short_name||p.name))||'')+'</span></span><span class="muted">'+esc(who||'담당 미정')+'</span></div>';}).join('')
         :'<div class="muted" style="font-size:.85rem">이번 주 기한이 없습니다.</div>')+'</div>';
-    $('bossBody').innerHTML=h;
+    $('bossBody').innerHTML=finCard()+h;
+  };
+
+  /* ---------- 재정 내보내기 (2026-11-11 이은총 님 · 재정 × 블로그 센터 연결안 ①) ----------
+     대표님 재정표(마케팅_통합관리대장 v3-5)의 A~S 칸 순서 그대로 CSV 세 장 — 매출 · 지출 · 개인별 몫.
+     🔴 재정표의 공급가액 · 부가세 · 합계 · 미수잔액 등은 «수식 칸» → CSV 에서 그 칸은 비워 두고,
+        대표님은 「선택하여 붙여넣기 → 내용 있는 셀만 붙여넣기」로 붙입니다(수식이 지워지지 않게).
+     매출 = 그달 «입금일» 기준 : 블로그 주문(연습 주문 뺌) · 의뢰(모든 센터) · 외주 입금 · 관리비 대장 ✅ · 블로그 환불(마이너스).
+        금액은 전부 부가세 포함(9/30 결정)이라 수량 1 · 단가 = 합계 ÷ 1.1 로 넣음(재정표 수식이 부가세를 다시 붙임 · 1원 차이 날 수 있음).
+     지출 = 정산월 기준 공동체 이체(원고료 + 검수 수당 + 검색어 보상 + 운영비) · 영업실장 커미션. 보낸 날이 없으면 비고에 「아직 안 보냄」.
+        부가세 없는 지급이라 과세구분 「면세」(재정표 급여와 같은 처리) · 계정과목 · 증빙종류는 비움 — 세무사 확인.
+     개인별 몫 = 블로거 원고료 · 검수 수당 사람마다 — 🔴 공동체 이체 안에 이미 들어 있으니 지출에 또 더하지 말 것. 주민번호 · 계좌는 내보내지 않음.
+     대표 · 관리자(staff.role owner · admin)만. DB 는 읽기만 합니다. */
+  function canFin(){return !!ME&&(ME.role==='owner'||ME.role==='admin');}
+  function finCard(){
+    if(!canFin())return '';
+    var ym=$('finYM')?$('finYM').value:lgNow();
+    return '<div class="card ext-card"><h3>재정 내보내기 <span class="muted" style="font-weight:600;font-size:.8rem">— 재정표(마케팅 통합관리대장) 칸 순서 그대로 · 대표 · 관리자만</span></h3>'
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
+      +'<input class="inp" type="month" id="finYM" value="'+esc(ym)+'" style="width:auto">'
+      +'<button class="btn btn-ghost" type="button" onclick="finExport(\'sales\')">① 매출 → 매출관리대장</button>'
+      +'<button class="btn btn-ghost" type="button" onclick="finExport(\'cost\')">② 지출 → 매입비용대장</button>'
+      +'<button class="btn btn-ghost" type="button" onclick="finExport(\'people\')">③ 개인별 몫 (원천세 참고)</button></div>'
+      +'<p class="muted" style="font-size:.8rem;margin:8px 0 0;line-height:1.6">CSV 를 열어 둘째 줄부터 복사 → 재정표 빈 줄 A칸에서 <b>선택하여 붙여넣기 → 내용 있는 셀만 붙여넣기</b> (공급가액 · 부가세 · 합계는 재정표 수식이 계산합니다).<br>'
+      +'매출은 그달 <b>입금일</b>, 지출 · 개인별 몫은 <b>정산월</b> 기준입니다. ③은 ②의 공동체 이체 안에 이미 들어 있는 금액이라 장부에 또 더하지 마세요.</p></div>';
+  }
+  function finRange(ym){var a=ym+'-01', b=lgAdd(ym,1)+'-01'; return {ym:ym,a:a,b:b,in:function(d){return !!d&&d.slice(0,10)>=a&&d.slice(0,10)<b;}};}
+  function kDay(ts){if(!ts)return '';return ts.length<=10?ts:new Date(Date.parse(ts)+9*3600e3).toISOString().slice(0,10);}
+  function exVat(t){return Math.round((Number(t)||0)/1.1);}
+  function csvDown(name,head,rows){
+    var q=function(v){v=v==null?'':String(v);return '"'+v.replace(/"/g,'""')+'"';};
+    var txt='﻿'+[head].concat(rows).map(function(r){return r.map(q).join(',');}).join('\r\n');
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/csv;charset=utf-8'}));a.download=name;
+    document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},500);
+  }
+  function finChk(errs){return function(r,what){if(r.error)errs.push(what+': '+r.error.message);return r.data||[];};}
+  /* 매출관리대장 A~S — F 공급가액 · H 부가세 · I 합계 · P 미수잔액 · Q 증빙점검 · R 홈택스대조 = 재정표 수식(비움) */
+  function saleRow(day,who,what,total,pay,memo){
+    return [day,who,what,1,exVat(total),'','과세','','',pay||'','','','',day,Math.round(Number(total)||0),'','','',memo||''];
+  }
+  async function finSales(R){
+    var rows=[], errs=[], chk=finChk(errs);
+    chk(await sb.from('blog_orders').select('id,academy_name,total_qty,amount_total,paid_at,paid_amount,payment_memo,is_practice,track').gte('paid_at',R.a).lt('paid_at',R.b),'블로그 주문')
+      .filter(function(x){return !x.is_practice;}).forEach(function(x){
+        rows.push(saleRow(x.paid_at,x.academy_name,(x.track==='review'?'리뷰 ':'블로그 홍보 ')+(x.total_qty||'')+'편',x.paid_amount!=null?x.paid_amount:x.amount_total,'','블로그 센터'+(x.payment_memo?' · '+x.payment_memo:'')));});
+    chk(await sb.from('requests').select('*').or('paid_at.not.is.null,pay_at.not.is.null'),'의뢰').forEach(function(x){
+      var day=x.pay_at?kDay(x.pay_at):x.paid_at; if(!R.in(day))return;
+      var t=quoteTotals(x.quote), tot=x.pay_amount||x.amount||(webPay(x,t)?t.once:t.firstPay);
+      rows.push(saleRow(day,x.academy_name,(AREAS[groupOf(x)]||'의뢰')+(x.quote_no?' · '+x.quote_no:''),tot,x.pay_method==='card'?'카드':'',
+        (x.center==='esc'?'학원지원센터':'인투마케팅')+' 의뢰'+(tot?'':' · 🔴 금액 없음 — 견적서 확인')));});
+    /* 외주 입금은 「날짜 모름」(paid_at 비움)으로 확인한 줄이 있음 → 확인 누른 날(created_at, 한국 날짜)로 대신 적고 비고에 표시 */
+    var extRow=function(x,day){var j=EXT.jobs.filter(function(y){return y.id===x.job_id;})[0], pj=j&&pjOf(j.project_id);
+      rows.push(saleRow(day,x.payer||(j?jobPayer(j):''),'외주 · '+((pj&&(pj.short_name||pj.name))||'')+(j?' · '+j.title:'')+(x.period?' · '+x.period:''),x.amount,'',
+        '외주 입금'+(x.paid_at?'':' · 🔴 입금 날짜 모름 — 확인 누른 날로 적음. 통장 보고 날짜 고치기')+(x.note?' · '+x.note:'')));};
+    chk(await sb.from('ext_payments').select('*').gte('paid_at',R.a).lt('paid_at',R.b),'외주 입금').forEach(function(x){extRow(x,x.paid_at);});
+    chk(await sb.from('ext_payments').select('*').is('paid_at',null).gte('created_at',lgAdd(R.ym,-1)+'-28').lt('created_at',lgAdd(R.ym,1)+'-02'),'외주 입금(날짜 모름)').forEach(function(x){
+      var day=kDay(x.created_at); if(R.in(day))extRow(x,day);});
+    await loadLedger(); if(LG_ERR)errs.push('관리비 대장: '+LG_ERR);
+    ['web','sns'].forEach(function(a){(LEDGERS[a].items||[]).forEach(function(x){if(!x.paid||x.paid[R.ym]!=='o')return;
+      var d=R.ym+'-'+('0'+(x.day||1)).slice(-2);
+      rows.push(saleRow(d,x.name,LG_NAME[a]+' 월 관리비 '+R.ym+(x.qno?' · '+x.qno:''),x.fee,'','관리비 대장 ✅ — 대장에 입금 날짜가 없어 납부일로 적음'));});});
+    var f=chk(await sb.from('blog_refunds').select('*').gte('refunded_on',R.a).lt('refunded_on',R.b),'환불');
+    if(f.length){var on=chk(await sb.from('blog_orders').select('id,academy_name').in('id',f.map(function(x){return x.order_id;})),'환불 주문');
+      f.forEach(function(x){var n=(on.filter(function(y){return y.id===x.order_id;})[0]||{}).academy_name||'';
+        rows.push(saleRow(x.refunded_on,n,'블로그 환불 '+(x.qty||'')+'편',-(x.amount||0),'','환불'+(x.reason?' · '+x.reason:'')));});}
+    rows.sort(function(a,b){return (a[0]||'').localeCompare(b[0]||'');});
+    return {rows:rows,errs:errs,head:['매출일자','거래처','품목/내용','수량','단가','공급가액(수식)','과세구분','부가세(수식)','합계금액(수식)','결제구분','세금계산서','발행일','승인번호','수금일','수금액','미수잔액(수식)','증빙점검(수식)','홈택스대조(수식)','비고']};
+  }
+  /* 매입비용대장 A~S — C 구분 · H 부가세 · I 합계 · L 공제매입세액 · P · Q · R = 재정표 수식(비움) */
+  function costRow(day,who,what,amt,memo){
+    return [day,who,'','',what,amt,'면세','','','','','','계좌이체',day,day?amt:'','','','',memo];
+  }
+  async function finCost(R){
+    var rows=[], errs=[], chk=finChk(errs);
+    var cm=chk(await sb.from('communities').select('id,name'),'공동체'), cn=function(id){return (cm.filter(function(c){return c.id===id;})[0]||{}).name||'';};
+    chk(await sb.from('community_payouts').select('*').eq('month',R.a),'공동체 이체').forEach(function(x){
+      var rv=Number(x.review_amount)||0, t=(x.amount||0)+rv+(x.kw_amount||0)+(x.ops_amount||0), d=kDay(x.sent_at);
+      rows.push(costRow(d,cn(x.community_id)+' 공동체','블로그 '+R.ym+' 정산 — 원고료 '+(x.amount||0)+' · 검수 '+rv+' · 검색어 보상 '+(x.kw_amount||0)+' · 운영비 '+(x.ops_amount||0)+' ('+(x.people_count||0)+'명 · '+(x.post_count||0)+'편)',t,
+        (d?'':'🔴 아직 안 보냄(센터에 보낸 날 없음) · ')+'계정과목 · 증빙종류는 세무사 확인'));});
+    var pp=chk(await sb.from('partner_payouts').select('*').eq('month',R.a),'커미션');
+    if(pp.length){var pt=chk(await sb.from('partners').select('*'),'영업실장');
+      pp.forEach(function(x){var p=pt.filter(function(y){return y.id===x.partner_id;})[0]||{}, d=kDay(x.sent_at);
+        rows.push(costRow(d,p.name||p.company||'영업실장','영업실장 커미션 '+R.ym+' ('+(x.order_count||0)+'건)',x.amount||0,(d?'':'🔴 아직 안 보냄 · ')+'계정과목 · 증빙종류는 세무사 확인'));});}
+    rows.sort(function(a,b){return (a[0]||'9').localeCompare(b[0]||'9');});
+    return {rows:rows,errs:errs,head:['지출일자','거래처','구분(수식)','계정과목','품목/내용','공급가액','과세구분','부가세(수식)','합계금액(수식)','증빙종류','승인번호','공제매입세액(수식)','결제구분','지급일','지급액','미지급잔액(수식)','증빙점검(수식)','홈택스대조(수식)','비고']};
+  }
+  /* 원천세대장 A~S — I~N 원천세 계산 · P · Q 기한 = 재정표 수식(비움). 소득구분은 세무사 확인 뒤 대표님이 넣음 */
+  async function finPeople(R){
+    var rows=[], errs=[], chk=finChk(errs), cut=function(name,phone,what,amt,memo){return ['',name,phone,'','','',what,amt,'','','','','','','','','','',memo];};
+    var bp=chk(await sb.from('blog_payouts').select('*').eq('month',R.a),'블로거 원고료');
+    var bl=bp.length?chk(await sb.from('bloggers').select('id,name,phone').in('id',bp.map(function(x){return x.blogger_id;})),'블로거'):[];
+    bp.forEach(function(x){var b=bl.filter(function(y){return y.id===x.blogger_id;})[0]||{};
+      rows.push(cut(b.name||'',b.phone||'','블로그 '+R.ym+' 원고 '+(x.post_count||0)+'편'+(x.kw_count?' · 검색어 보상 '+x.kw_count+'건':''),(x.amount||0)+(x.kw_amount||0),'블로거 · 공동체 이체에 포함'));});
+    chk(await sb.from('review_payouts').select('*').eq('month',R.a),'검수 수당').forEach(function(x){
+      rows.push(cut(staffName(x.staff_id)||'','','검수 '+R.ym+' 승인 '+(x.approve_count||0)+' · 확인 '+(x.verify_count||0)+'건',(x.amount||0)+(x.kw_amount||0),'검수자 · 공동체 이체에 포함'));});
+    return {rows:rows,errs:errs,head:['지급일자','성명','연락처','주민등록번호','소득구분','계정과목','업무내용','지급총액(세전)','필요경비(수식)','과세대상(수식)','소득세(수식)','지방소득세(수식)','원천세 합계(수식)','실지급액(수식)','지급방법','신고 기한(수식)','간이지급명세서 기한(수식)','신고완료','비고']};
+  }
+  window.finExport=async function(kind){
+    if(!canFin()){toast('재정 내보내기는 대표 · 관리자만 할 수 있습니다');return;}
+    var ym=($('finYM')&&$('finYM').value)||lgNow(), R=finRange(ym);
+    var fn={sales:finSales,cost:finCost,people:finPeople}[kind], nm={sales:'매출',cost:'지출',people:'개인별몫'}[kind];
+    toast('재정 '+nm+' '+ym+' 만드는 중…');
+    var res=await fn(R);
+    if(res.errs.length)toast('일부를 못 읽었습니다 — '+res.errs[0]);
+    if(!res.rows.length){if(!res.errs.length)toast(ym+' '+nm+' 기록이 없습니다');return;}
+    csvDown('재정_'+nm+'_'+ym+'.csv',res.head,res.rows);
   };
 
   /* 관리비 대장 모아보기 */
