@@ -1468,7 +1468,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
         <p class="pnote" style="margin-top:8px">예) 인스타 게시물 1건당 3장 기준 —
           월 4건 <b style="color:var(--ink)">340,000</b> · 월 8건 <b style="color:var(--ink)">504,000</b> · 월 12건 <b style="color:var(--ink)">624,000</b>
           (기본 운영비 132,000 + (디자인 30,000 + 업로드 건당 금액) × 건수).<br>
-          영상 포함 시 영상 제작비는 <a onclick="go('video')" style="cursor:pointer">영상 가격표</a>를 따릅니다.</p>
+          영상 포함 시 영상 제작비는 <a onclick="go('video','v-video')" style="cursor:pointer">영상 가격표</a>를 따릅니다.</p>
 
         <h3 class="h3" style="margin-top:32px;font-size:1.15rem">추가 금액 · 할인</h3>
         <div class="ptw">
@@ -2438,6 +2438,10 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
   /* 🔴 디자인은 «누르면» 별도 쪽(/design/)으로 — 메인 카드 · 둘러보기가 go('design') 를 거칩니다 (2026-10-31 이은총 님).
         /web/ · /sns/ 와 달리 show() 에서는 돌려보내지 않습니다 — /#design 주소(가격 · 제작 사례)는 /design/ 의 「가격 · 제작 사례 보기」가 씁니다. */
   var DESIGN_PAGE='/design/';
+  /* 🔴 영상도 «누르면» 별도 쪽(/video/)으로 — 디자인과 같은 방식 (2026-11-11 · 영상팀 참고 사이트로 새로 만듦).
+        show() 에서는 돌려보내지 않습니다 — /#video 주소(가격 표 · 옵션 · 결제)는 /video/ 의 「가격 자세히 보기」와 결제 안내가 씁니다.
+        go('video', 앵커) 처럼 앵커를 주면 돌려보내지 않고 메인 영상 화면(가격)을 엽니다. */
+  var VIDEO_PAGE='/video/';
   function show(view,anchor,keepScroll){
     if(view==='web'){ location.replace(WEB_PAGE); return; }
     if(view==='sns'){ location.replace(SNS_PAGE); return; }
@@ -2468,6 +2472,7 @@ body[data-view="home"] #v-home .item .price{background:rgba(46,95,232,.09);color
     if(view==='web'){ closeMenu(); SY[cur]=window.scrollY||0; location.href=WEB_PAGE; return; }
     if(view==='sns'){ closeMenu(); SY[cur]=window.scrollY||0; location.href=SNS_PAGE; return; }
     if(view==='design'){ closeMenu(); SY[cur]=window.scrollY||0; location.href=DESIGN_PAGE; return; }
+    if(view==='video' && !anchor){ closeMenu(); SY[cur]=window.scrollY||0; location.href=VIDEO_PAGE; return; }
     if(VIEWS.indexOf(view)<0)view='home';
     var s=mine();
     if(!(history&&history.pushState)){ show(view,anchor); return; }

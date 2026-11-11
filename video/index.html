@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="ko" class="no-js">
+<!-- ══════════════════════════════════════════════════════════════
+   영상 세부페이지 ( intomarketing.co.kr/video/ )   2026-11-11 첫 판 · 9번 창
+   모양 = 영상팀이 준 참고 사이트(어두운 바탕 · 세로로 좁은 큰 영어 글씨 · 둥근 큰 카드 · 흐르는 띠) 느낌. 글 = 메인 #v-video 의 문구 · 금액에서만 가져옴
+   🔴 영상 작업물은 사내용이라 비공개 — 카드의 화면 칸은 CSS 그림만. 공개 가능한 영상을 받으면 .media 안을 바꿀 것
+   🔴 금액은 메인 #v-video 와 같은 값(60초 기준 · 부가세 포함). 메인을 고치면 여기도
+   🔴 가격 표 전체 · 옵션 · 결제는 메인 /#video 에 있음(「가격 자세히 보기」)
+   🔴 머리말 · 손전화 메뉴 · 하단은 메인 index.html 복사본(디자인 세부페이지에서 가져옴). 사업자 정보 블록 · 「ESC 학원지원」 줄 · 인투오피스 줄을 지우지 마십시오
+   🔴 기한 약속(「○영업일 안에」)을 넣지 마십시오
+   🔴 이 파일은 처음 한 번만 조립 도구로 만들었습니다. 이제부터는 이 파일을 직접 고치십시오
+   ══════════════════════════════════════════════════════════════ -->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<title>영상 제작 · 인투마케팅</title>
+<meta name="description" content="인투마케팅 영상 제작 — 숏폼 · 홍보 스케치 · 인터뷰 · 정보전달 영상. 기획 · 촬영 · 편집을 직접 수행하며 스튜디오가 아닌 현장에서 촬영합니다.">
+<link rel="canonical" href="https://intomarketing.co.kr/video/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="인투마케팅">
+<meta property="og:title" content="영상 제작 · 인투마케팅">
+<meta property="og:description" content="현장에서 찍고, 직접 편집합니다 — 숏폼 · 홍보 스케치 · 인터뷰 · 정보전달 영상">
+<meta property="og:url" content="https://intomarketing.co.kr/video/">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://intomarketing.co.kr/og-main.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="인투마케팅 — 홍보에 필요한 것을 한 회사에서">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://intomarketing.co.kr/og-main.png">
+<link rel="icon" href="/favicon.ico?v=2" sizes="any">
+<link rel="icon" href="/favicon-32.png?v=2" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-48.png?v=2" sizes="48x48" type="image/png">
+<link rel="icon" href="/favicon-192.png?v=2" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<meta name="theme-color" content="#0E0F12">
+<meta name="color-scheme" content="dark">
+<script>document.documentElement.className='js';</script>
+<style>
+/* ═══ 영상 쪽 색 — 참고 사이트(어두운 바탕 · 큰 세로로 좁은 글씨 · 둥근 큰 카드) 느낌. 메인 영상 화면처럼 검정 ═══ */
+:root{
+  --t-xs:12px; --t-sm:13px; --t-base:15px; --t-md:17px; --t-lg:22px; --t-xl:30px;
+  --surface:#FFFFFF; --surface-2:#F3F6FB;
+  --band-bg:#0E0F12; --band-line:#2A2E35;
+  --f:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --fd:"Bebas Neue","Pretendard Variable",Pretendard,sans-serif;   /* 영어 큰 글씨 — 세로로 좁은 글꼴 */
+  --ease:cubic-bezier(.22,.9,.28,1);
+  --bg:#0B0C0F; --card:#14161B; --card-2:#0F1014; --cl:#23262D;
+  --ink:#ECEAE6; --muted:#A3A4AB; --pill:#25272E; --pill-ink:#C9CAD0;
+  --peach:#F2D9CB; --peach-2:#B9978A;       /* 큰 글씨 그라데이션 (참고 사이트의 은색 → 살구색) */
+  --up:#A6E36B;                              /* 가격 줄 화살표 · REC 점 옆 강조 */
+  --cw:1160px; --gut:clamp(20px,4vw,32px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);line-height:1.7;font-size:var(--t-md);overflow-x:clip;word-break:keep-all;overflow-wrap:break-word}
+[hidden]{display:none!important}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,p,ol,ul{margin:0}
+ol,ul{padding:0;list-style:none}
+h1,h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:12px;top:12px;z-index:99;background:#fff;color:#000;padding:8px 16px;border-radius:8px}
+:focus-visible{outline:3px solid var(--peach);outline-offset:3px}
+.wrap{max-width:1480px;margin:0 auto;padding:0 clamp(20px,2.6vw,40px)}
+.w{max-width:calc(var(--cw) + var(--gut)*2);margin:0 auto;padding:0 var(--gut)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+section[id]{scroll-margin-top:72px}
+
+/* ══════════ 공통 ══════════ */
+.grad{background:linear-gradient(180deg,var(--peach) 10%,var(--peach-2) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sec{padding:clamp(72px,10vw,128px) 0}
+.sec.tight{padding:clamp(40px,6vw,64px) 0}
+.big{font-family:var(--fd);font-weight:400;font-size:clamp(56px,9vw,112px);line-height:.95;letter-spacing:.01em;text-align:center;
+     background:linear-gradient(180deg,#F4E6DD 15%,#A88C82 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.big.huge{font-size:clamp(64px,12vw,156px)}
+.sub{margin-top:16px;text-align:center;color:var(--muted);font-size:clamp(var(--t-md),1.5vw,20px)}
+.lead{margin-top:24px;font-size:clamp(var(--t-md),1.35vw,19px);color:var(--muted);line-height:1.85;max-width:40em}
+.lead b{color:var(--ink)}
+.acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.acts.center{justify-content:center}
+.btn{display:inline-flex;align-items:center;min-height:52px;padding:0 26px;border-radius:999px;font-weight:800;font-size:var(--t-md);
+     transition:background-color .18s,color .18s,transform .18s var(--ease),border-color .18s}
+.btn:active{transform:scale(.97)}
+.btn-w{background:var(--peach);color:#1A1412}
+.btn-w:hover{background:#FBE9DE}
+.btn-line{border:1.5px solid #4A4D56;color:var(--ink)}
+.btn-line:hover{border-color:var(--peach);color:var(--peach)}
+.note{margin-top:36px;color:var(--muted);font-size:var(--t-base);line-height:1.85;max-width:56em}
+.note b{color:var(--ink)}
+.note a{color:var(--peach);text-decoration:underline;text-underline-offset:3px}
+
+/* ══════════ 첫 화면 ══════════ */
+.hero{padding:clamp(56px,9vw,120px) 0 clamp(40px,7vw,96px);
+      background:radial-gradient(60% 60% at 80% 30%,rgba(242,217,203,.08),transparent 70%)}
+.hero-in{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(32px,5vw,72px);align-items:center}
+.kick{font-family:var(--fd);font-size:clamp(18px,1.8vw,22px);letter-spacing:.12em;color:var(--peach-2)}
+.disp{margin-top:12px;font-size:clamp(44px,6.6vw,88px);line-height:1.08;letter-spacing:-.05em;font-weight:900;
+      background:linear-gradient(180deg,#F6ECE6 20%,#B9978A 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-art{position:relative;aspect-ratio:1/1;max-width:440px;width:100%;justify-self:end}
+.vf{position:absolute;inset:12% 6% 18% 6%;border-radius:22px;border:1px solid var(--cl);
+    background:radial-gradient(120% 90% at 30% 20%,#2A2D35 0%,#121318 60%,#0B0C0F 100%);box-shadow:0 40px 80px -40px rgba(0,0,0,.9)}
+.vf .rec{position:absolute;left:18px;top:14px;font:700 12px/1 var(--f);letter-spacing:.14em;color:#F1F1F1;display:flex;align-items:center;gap:6px}
+.vf .rec i{width:9px;height:9px;border-radius:50%;background:#FF4D4D;box-shadow:0 0 10px #FF4D4D;animation:blink 1.4s infinite}
+.vf .tc{position:absolute;right:18px;top:14px;font:600 12px/1 ui-monospace,Menlo,monospace;color:#C9CAD0}
+.cn{position:absolute;width:22px;height:22px;border-color:rgba(255,255,255,.55);border-style:solid;border-width:0}
+.cn1{left:14%;top:22%;border-left-width:2px;border-top-width:2px}.cn2{right:14%;top:22%;border-right-width:2px;border-top-width:2px}
+.cn3{left:14%;bottom:16%;border-left-width:2px;border-bottom-width:2px}.cn4{right:14%;bottom:16%;border-right-width:2px;border-bottom-width:2px}
+.play{position:absolute;left:50%;top:52%;width:72px;height:72px;margin:-36px 0 0 -36px;border-radius:50%;background:rgba(242,217,203,.92)}
+.play::after{content:"";position:absolute;left:29px;top:22px;border-left:20px solid #1A1412;border-top:14px solid transparent;border-bottom:14px solid transparent}
+.fl{position:absolute;padding:8px 14px;border-radius:12px;background:#1B1D23;border:1px solid #30333B;color:var(--pill-ink);
+    font-size:var(--t-sm);font-weight:700;box-shadow:0 16px 30px -16px rgba(0,0,0,.9);animation:bob 5s ease-in-out infinite}
+.fl b{color:var(--up);font-family:var(--fd);font-weight:400;font-size:18px;letter-spacing:.04em;margin-right:2px}
+.fl1{left:-2%;top:4%}.fl2{right:-2%;top:38%;animation-delay:-1.6s}.fl3{left:10%;bottom:4%;animation-delay:-3.2s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* ══════════ 카드 (참고 사이트의 프로젝트 카드 모양) ══════════ */
+#works .sub{margin-bottom:clamp(40px,6vw,72px)}
+.proj{margin-top:clamp(56px,8vw,96px)}
+.proj:first-of-type{margin-top:0}
+.media{position:relative;border-radius:24px;border:1px solid var(--cl);overflow:hidden;aspect-ratio:16/8;
+       background:radial-gradient(100% 120% at 50% 0%,#20232A 0%,var(--card-2) 70%)}
+.meta{display:grid;grid-template-columns:auto 1fr auto;gap:8px 20px;margin-top:28px;align-items:start}
+.no{font-size:var(--t-md);color:var(--ink);padding-top:14px;font-variant-numeric:tabular-nums}
+.mt h3{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 16px;font-size:clamp(20px,2vw,26px);font-weight:800;letter-spacing:-.03em;color:var(--ink)}
+.mt h3 .en{font-family:var(--fd);font-weight:400;font-size:clamp(40px,5vw,60px);line-height:1;letter-spacing:.01em;
+           background:linear-gradient(180deg,#F6E4D9 10%,#C4A193 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pills span{background:var(--pill);color:var(--pill-ink);border-radius:999px;padding:4px 14px;font-size:var(--t-base);font-weight:600;letter-spacing:.02em}
+.desc{margin-top:16px;color:var(--muted);max-width:52em}
+.price{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 28px;margin-top:18px;color:var(--muted);font-size:var(--t-base)}
+.price .pl{font-family:var(--fd);font-size:22px;letter-spacing:.06em;color:var(--peach)}
+.price span:not(.pl)::before{content:"↗";color:var(--up);font-weight:800;margin-right:8px}
+.price b{font-size:clamp(20px,2vw,24px);color:#fff;font-weight:800;margin-right:2px}
+.go{font-size:34px;line-height:1;color:#fff;padding:12px 4px;transition:transform .2s var(--ease)}
+.go:hover{transform:translateX(6px);color:var(--peach)}
+
+/* 카드 안 그림 — CSS 로만 (작업물 아님) */
+.m-short{display:grid;place-items:center}
+.phone{position:relative;height:84%;aspect-ratio:9/16;border-radius:26px;border:6px solid #2C2F37;
+       background:linear-gradient(180deg,#3A2F2B 0%,#1A1716 55%,#0E0E10 100%);box-shadow:0 30px 60px -30px #000}
+.phone .bar{position:absolute;right:10px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.18)}
+.phone .b1{bottom:34%}.phone .b2{bottom:24%}
+.phone .cap{position:absolute;left:12px;right:46px;bottom:12%;font-size:13px;font-weight:800;color:#fff;line-height:1.4}
+.frame{position:absolute;inset:10% 9%;border-radius:16px;border:1px solid #30333B;overflow:hidden;
+       background:linear-gradient(180deg,#3B4252 0%,#5D4A44 55%,#211C1B 100%)}
+.frame .rec{position:absolute;left:16px;top:12px;font:700 12px/1 var(--f);letter-spacing:.14em;color:#fff;display:flex;align-items:center;gap:6px}
+.frame .rec i{width:8px;height:8px;border-radius:50%;background:#FF4D4D;animation:blink 1.4s infinite}
+.frame .hz{position:absolute;left:0;right:0;bottom:0;height:38%;background:linear-gradient(180deg,#2A2321,#141112)}
+.frame .sun{position:absolute;left:58%;bottom:30%;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,#FFD9B0 0%,rgba(255,170,120,.35) 45%,transparent 70%)}
+.frame.iv{background:linear-gradient(180deg,#2B2F38,#17191E)}
+.frame.iv .person{position:absolute;left:50%;bottom:0;width:30%;height:72%;transform:translateX(-50%);
+                  background:radial-gradient(circle at 50% 22%,#6C5A53 0 16%,transparent 16.5%),radial-gradient(120% 70% at 50% 100%,#3E3632 0 55%,transparent 56%)}
+.frame.iv .lt{position:absolute;left:7%;bottom:12%;display:flex;flex-direction:column;gap:6px;padding:10px 14px;border-left:3px solid var(--peach);background:rgba(10,10,12,.72)}
+.frame.iv .lt b{font-family:var(--fd);font-weight:400;font-size:20px;letter-spacing:.08em;color:#fff}
+.frame.iv .lt i{width:110px;height:6px;border-radius:3px;background:rgba(255,255,255,.35)}
+.frame.info{background:linear-gradient(180deg,#1E2129,#121419)}
+.frame.info .ch{position:absolute;left:7%;top:16%;display:flex;gap:8px}
+.frame.info .ch i{font-style:normal;font:700 12px/1 var(--f);color:#1A1412;background:var(--peach);border-radius:6px;padding:6px 8px}
+.frame.info .ch i+i{background:#2C2F37;color:#C9CAD0}
+.frame.info .ln{position:absolute;left:7%;height:10px;border-radius:5px;background:rgba(255,255,255,.16)}
+.frame.info .l1{top:38%;width:56%}.frame.info .l2{top:48%;width:44%}.frame.info .l3{top:58%;width:50%}
+.frame.info .subt{position:absolute;left:50%;bottom:10%;transform:translateX(-50%);padding:6px 14px;border-radius:6px;background:rgba(0,0,0,.6);color:#fff;font-size:13px;font-weight:700;white-space:nowrap}
+
+/* ══════════ 진행 순서 ══════════ */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:clamp(40px,6vw,64px)}
+.steps li{background:var(--card);border:1px solid var(--cl);border-radius:20px;padding:28px 24px}
+.steps .sn{font-family:var(--fd);font-size:40px;line-height:1;color:var(--peach)}
+.steps h3{margin-top:14px;font-size:var(--t-lg);font-weight:800;letter-spacing:-.02em}
+.steps p{margin-top:10px;color:var(--muted);font-size:var(--t-base);line-height:1.8}
+
+/* ══════════ 패키지 ══════════ */
+.pk{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:clamp(40px,6vw,64px)}
+.pkc{background:var(--card);border:1px solid var(--cl);border-radius:24px;padding:clamp(28px,3.4vw,40px)}
+.pkc.hi{background:linear-gradient(180deg,#1E1A19,#141214);border-color:#5A4740}
+.pkn{font-family:var(--fd);font-size:30px;letter-spacing:.08em;color:var(--peach)}
+.pkp{margin-top:6px;font-size:var(--t-md);color:var(--muted)}
+.pkp b{font-size:clamp(34px,4vw,44px);font-weight:900;letter-spacing:-.03em;color:#fff;margin-right:4px}
+.pkd{margin-top:8px;color:var(--muted);font-size:var(--t-base)}
+.pkc ul{margin-top:20px;border-top:1px solid var(--cl);padding-top:16px;display:grid;gap:8px}
+.pkc li{position:relative;padding-left:24px;font-size:var(--t-base)}
+.pkc li::before{content:"✓";position:absolute;left:0;color:var(--up);font-weight:800}
+
+/* ══════════ 흐르는 띠 ══════════ */
+.mq-t{text-align:center;font-family:var(--fd);font-size:clamp(26px,3vw,36px);letter-spacing:.08em;color:var(--peach-2)}
+.mq{margin-top:24px;overflow:hidden;border-top:1px solid var(--cl);border-bottom:1px solid var(--cl);
+    -webkit-mask:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.mq-in{display:flex;gap:12px;width:max-content;padding:18px 0;animation:mq 40s linear infinite}
+.mq-in span{flex:none;background:var(--pill);color:var(--pill-ink);border-radius:999px;padding:8px 20px;font-weight:700;font-size:var(--t-md)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ══════════ 끝 ══════════ */
+.end{padding-bottom:clamp(96px,12vw,160px);background:radial-gradient(50% 60% at 50% 60%,rgba(242,217,203,.07),transparent 70%)}
+
+/* ══════════ 스크롤하면 하나씩 ══════════ */
+.js .rv{opacity:0;transform:translateY(18px);transition:opacity .6s var(--ease) var(--d,0ms),transform .6s var(--ease) var(--d,0ms)}
+.js .rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.js .rv{opacity:1;transform:none;transition:none}.fl,.mq-in,.rec i{animation:none}}
+
+/* ══════════ 좁은 화면 ══════════ */
+@media(max-width:900px){
+  .hero-in{grid-template-columns:1fr}
+  .hero-art{justify-self:center;max-width:340px}
+  .steps{grid-template-columns:1fr 1fr}
+  .pk{grid-template-columns:1fr}
+  .media{aspect-ratio:4/3}
+}
+@media(max-width:560px){
+  .steps{grid-template-columns:1fr}
+  .meta{grid-template-columns:1fr auto}
+  .no{grid-column:1/-1;padding-top:0}
+  .media{aspect-ratio:1/1}
+}
+
+/* ══════════ 머리띠 — 메인 index.html 에서 복사 (메인과 같은 남색 띠) ══════════ */
+header{position:sticky;top:0;z-index:60;background:rgba(18,41,77,.94);
+       backdrop-filter:saturate(150%) blur(10px);border-bottom:1px solid var(--band-line)}
+.nav{display:flex;align-items:center;gap:8px;height:62px}
+.brand{min-height:44px;display:flex;align-items:center;gap:8px;color:#fff;line-height:1.75}
+.brand .mk{width:32px;height:32px;display:grid;place-items:center;background:#fff;overflow:hidden;border-radius:11px;box-shadow:0 0 0 1px rgba(15,23,42,.08)}
+.brand .mk img{width:100%;height:100%;object-fit:contain}
+.brand b{font-size:var(--t-base);font-weight:800;letter-spacing:-.01em}
+.brand small{display:block;font-size:var(--t-xs);font-weight:600;color:#93B0DE;letter-spacing:.04em;line-height:1.2}
+.links{margin-left:auto;display:flex;align-items:center;gap:2px}
+.navlink{min-height:44px;display:inline-flex;align-items:center;background:none;border:0;cursor:pointer;color:#C6D8F4;font-size:var(--t-base);font-weight:600;
+         padding:8px 12px;border-radius:9px;transition:background-color .15s,color .15s}
+.navlink:hover{color:#fff;background:rgba(255,255,255,.09)}
+.navlink.active{color:#fff;background:rgba(255,255,255,.13)}
+.navitem{position:relative}
+.caret{display:inline-block;width:0;height:0;margin-left:4px;vertical-align:2px;border:4px solid transparent;border-top-color:currentColor}
+.drop{position:absolute;top:calc(100% + 6px);right:0;min-width:286px;background:var(--surface);color:#0E1B33;
+      border:1px solid #E2E8F2;border-radius:12px;padding:8px;line-height:1.75;
+      box-shadow:0 18px 44px -18px rgba(14,27,51,.42);opacity:0;visibility:hidden;transform:translateY(-6px);
+      transition:opacity .16s,transform .16s,visibility .16s}
+.navitem:hover .drop,.navitem:focus-within .drop{opacity:1;visibility:visible;transform:none}
+.drop a{display:block;padding:8px 12px;border-radius:9px;font-size:var(--t-base);font-weight:700}
+.drop a:hover{background:var(--surface-2)}
+.drop a small{display:block;font-size:var(--t-xs);font-weight:500;color:#56657F;margin-top:1px}
+.headcta{background:#2E5FE8;color:#fff;font-weight:700;font-size:var(--t-base);line-height:1.75;padding:8px 16px;border-radius:9px;margin-left:8px}
+.headcta:hover{background:#3D6BF0}
+.imab{color:#C6D8F4;margin-left:6px}
+.msheet #authbar-m a,.msheet .imab-m{color:#DCE6F8}
+.burger{display:none;background:none;border:0;color:#DCE6F8;cursor:pointer;padding:8px;margin-left:8px;min-height:44px;min-width:44px}
+.burger svg{width:24px;height:24px}
+.msheet{display:none;background:var(--band-bg);border-top:1px solid var(--band-line);padding:8px 24px 16px}
+.msheet a{display:block;padding:12px 4px;color:#DCE6F8;font-weight:700;font-size:var(--t-base);border-bottom:1px solid rgba(255,255,255,.07)}
+.msheet a.sub{padding-left:16px;font-weight:600;color:#A8C0E6;font-size:var(--t-sm)}
+.msheet.on{display:block}
+@media(max-width:900px){.links,.headcta{display:none}.burger{display:block;margin-left:auto}}
+
+/* ══════════ 하단 — 메인 footer 복사 (메인과 같은 남색) ══════════ */
+footer{background:#0C1E39;color:#A9C4EA;padding:48px 0 56px;font-size:var(--t-sm);line-height:2}
+footer .fb{color:#fff;font-weight:800;font-size:var(--t-base);margin-bottom:16px}
+footer .biz b{color:#DCE6F8;font-weight:600}
+footer .pol{margin-top:16px;padding-top:16px;border-top:1px solid rgba(147,180,232,.22)}
+footer .pol a{color:#DCE6F8;font-weight:700}
+footer .pol a:hover{text-decoration:underline}
+footer .pol span{margin:0 8px;color:#38537E}
+footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
+
+/* ══════════ 영상 쪽은 머리띠 · 바닥도 검정 — 메인 body[data-view="video"] 과 같은 값 ══════════ */
+header{background:rgba(14,15,18,.94);border-bottom-color:#2A2E35}
+.navlink.active{color:#1A1412;background:#F2D9CB}
+.headcta{background:#F2D9CB;color:#1A1412}
+.headcta:hover{background:#FBE9DE}
+.msheet{background:#0E0F12;border-top-color:#2A2E35}
+footer{background:#0A0B0E;color:#8C9299}
+footer .biz b,footer .pol a{color:#D6D8DC}
+footer .pol{border-top-color:rgba(255,255,255,.12)}
+footer .pol span{color:#3A3F47}
+footer .cr{color:#6C727A}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<!-- ══════════ 머리띠 — 🔴 메인 index.html 의 <header> 복사본. 메인을 고치면 여기도 ══════════ -->
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="/">
+      <span class="mk"><img src="/favicon-192.png?v=2" alt="" width="32" height="32"></span>
+      <span><b>인투마케팅</b><small>INTO MARKETING</small></span>
+    </a>
+    <nav class="links" aria-label="주요 메뉴">
+      <a class="navlink" href="/">홈</a>
+      <div class="navitem">
+        <button class="navlink active" id="nl-svc" type="button">지원 항목 <i class="caret"></i></button>
+        <div class="drop">
+          <a href="/#blog">블로그 · 리뷰<small>실 운영 블로거가 본인 계정에 직접 작성</small></a>
+          <a href="/web/">홈페이지 제작<small>기획 · 제작 · 배포 · 월 관리</small></a>
+          <a href="/sns/">SNS 채널<small>채널 세팅 · 지도 등록 · 정기 콘텐츠</small></a>
+          <a href="/design/">디자인<small>로고 · 명함 · 인쇄물 · 카드뉴스</small></a>
+          <a href="/video/" aria-current="page">영상 제작<small>숏폼 · 롱폼 · 기획 · 촬영 · 편집</small></a>
+        </div>
+      </div>
+      <a class="navlink" href="/#contact">문의</a>
+      <a class="navlink" href="/my/">마이페이지</a>
+      <span class="imab" id="authbar"></span>
+    </nav>
+    <a class="headcta" href="/#contact">상담 문의</a>
+    <button class="burger" id="burger" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="msheet">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+  <div class="msheet" id="msheet">
+    <a href="/">홈</a>
+    <a href="/#blog">블로그 · 리뷰</a>
+    <a class="sub" href="/web/">홈페이지 제작</a>
+    <a class="sub" href="/sns/">SNS 채널</a>
+    <a class="sub" href="/design/">디자인</a>
+    <a class="sub" href="/video/" aria-current="page">영상 제작</a>
+    <a href="/#contact">상담 문의</a>
+    <a href="/my/">마이페이지</a>
+    <div id="authbar-m"></div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ══════════ 첫 화면 ══════════ -->
+<section class="hero">
+  <div class="w hero-in">
+    <div>
+      <p class="kick">INTO MARKETING · VIDEO</p>
+      <h1 class="disp">현장에서 찍고,<br>직접 편집합니다.</h1>
+      <p class="lead">기획 · 촬영 · 편집을 직접 수행하며, <b>스튜디오가 아닌 현장에서 촬영</b>합니다.<br>
+         현장 촬영부터 진행하거나, 보유하신 원본으로 <b>편집만</b> 진행할 수 있습니다.</p>
+      <div class="acts">
+        <a class="btn btn-w" href="/apply/video/">영상 의뢰서 쓰기 →</a>
+        <a class="btn btn-line" href="/#video">가격 자세히 보기</a>
+      </div>
+    </div>
+    <!-- 오른쪽 그림 — 카메라 화면 모양(그림 파일 없이 CSS 로만). 실제 작업물이 아닙니다 -->
+    <div class="hero-art" aria-hidden="true">
+      <div class="vf">
+        <span class="rec"><i></i>REC</span>
+        <span class="tc">00:00:59:24</span>
+        <span class="cn cn1"></span><span class="cn cn2"></span><span class="cn cn3"></span><span class="cn cn4"></span>
+        <span class="play"></span>
+      </div>
+      <div class="fl fl1">숏폼 9:16</div>
+      <div class="fl fl2">롱폼 16:9</div>
+      <div class="fl fl3"><b>60s</b> 기준</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 만드는 영상 — 카드 ══════════
+     🔴 영상 작업물은 사내용이라 비공개입니다(포트폴리오 게재 규칙). 카드의 화면 칸은 CSS 그림만 둡니다.
+        영상팀이 «공개해도 되는» 영상을 주면 각 .media 안의 그림을 그 영상(또는 썸네일)로 바꾸십시오.
+     🔴 금액은 메인 #v-video 표와 같은 값(60초 기준 · 부가세 포함). 메인을 고치면 여기도. -->
+<section class="sec" id="works">
+  <div class="w">
+    <h2 class="big">WHAT WE MAKE</h2>
+    <p class="sub">만드는 영상 — 세로형 숏폼부터 가로형 롱폼까지</p>
+
+    <article class="proj">
+      <div class="media m-short"><div class="phone"><span class="bar b1"></span><span class="bar b2"></span><span class="cap">한 편에 하나의 메시지</span></div></div>
+      <div class="meta">
+        <span class="no">01</span>
+        <div class="mt">
+          <h3><span class="en">SHORT-FORM</span>숏폼</h3>
+          <p class="pills"><span>세로형</span><span>릴스</span><span>쇼츠</span><span>틱톡</span></p>
+          <p class="desc">릴스 · 쇼츠 · 틱톡용 세로형 단편 영상입니다. 한 편에 하나의 메시지만 담는 것을 원칙으로 합니다.</p>
+          <p class="price"><span class="pl">PRICE</span><span><b>25,000</b>원 편집만</span><span><b>155,000</b>원 기획 + 촬영 + 편집</span></p>
+        </div>
+        <a class="go" href="/apply/video/" aria-label="숏폼 의뢰하기">→</a>
+      </div>
+    </article>
+
+    <article class="proj">
+      <div class="media m-wide"><div class="frame"><span class="rec"><i></i>REC</span><span class="hz"></span><span class="sun"></span></div></div>
+      <div class="meta">
+        <span class="no">02</span>
+        <div class="mt">
+          <h3><span class="en">PROMO SKETCH</span>홍보 스케치</h3>
+          <p class="pills"><span>가로형</span><span>현장 촬영</span><span>짐벌 · 드론 선택</span></p>
+          <p class="desc">현장 분위기를 담는 영상입니다. 매장 · 공간 소개나 행사 기록에 씁니다.</p>
+          <p class="price"><span class="pl">PRICE</span><span><b>150,000</b>원 편집만</span><span><b>530,000</b>원 기획 + 촬영 + 편집</span></p>
+        </div>
+        <a class="go" href="/apply/video/" aria-label="홍보 스케치 의뢰하기">→</a>
+      </div>
+    </article>
+
+    <article class="proj">
+      <div class="media m-wide"><div class="frame iv"><span class="person"></span><span class="lt"><b>INTERVIEW</b><i></i></span></div></div>
+      <div class="meta">
+        <span class="no">03</span>
+        <div class="mt">
+          <h3><span class="en">INTERVIEW</span>홍보 인터뷰</h3>
+          <p class="pills"><span>사람이 말하는 영상</span><span>출연자 1명 기준</span><span>인터뷰 추가 가능</span></p>
+          <p class="desc">사람이 직접 말하는 영상입니다. 대본 구성부터 촬영 · 편집까지 수행합니다.</p>
+          <p class="price"><span class="pl">PRICE</span><span><b>200,000</b>원 편집만</span><span><b>600,000</b>원 기획 + 촬영 + 편집</span></p>
+        </div>
+        <a class="go" href="/apply/video/" aria-label="홍보 인터뷰 의뢰하기">→</a>
+      </div>
+    </article>
+
+    <article class="proj">
+      <div class="media m-wide"><div class="frame info"><span class="ch"><i>01</i><i>02</i><i>03</i></span><span class="ln l1"></span><span class="ln l2"></span><span class="ln l3"></span><span class="subt">자막 · 챕터 구성</span></div></div>
+      <div class="meta">
+        <span class="no">04</span>
+        <div class="mt">
+          <h3><span class="en">EXPLAINER</span>정보전달 영상</h3>
+          <p class="pills"><span>설명</span><span>강의</span><span>안내</span><span>챕터 구성</span></p>
+          <p class="desc">설명 · 강의 · 안내처럼 내용을 전하는 영상입니다. 여러 차례 촬영한 소스를 한 편으로 구성하는 것도 포함합니다.</p>
+          <p class="price"><span class="pl">PRICE</span><span><b>200,000</b>원 편집만</span><span><b>600,000</b>원 기획 + 촬영 + 편집</span></p>
+        </div>
+        <a class="go" href="/apply/video/" aria-label="정보전달 영상 의뢰하기">→</a>
+      </div>
+    </article>
+
+    <p class="note">금액은 <b>60초 기준 · 부가세 포함</b>이며, 선택한 작업(기획 · 촬영 · 편집)만 합산합니다.
+       60초를 넘으면 60초마다 합계의 50%를 더합니다. 촬영은 1회 120분 기준입니다.
+       강의 영상 · 촬영만 의뢰 · 옵션은 <a href="/#video">가격 자세히 보기</a>에서 확인하실 수 있습니다.</p>
+  </div>
+</section>
+
+<!-- ══════════ 진행 순서 ══════════ -->
+<section class="sec">
+  <div class="w">
+    <h2 class="big">HOW WE WORK</h2>
+    <p class="sub">필요한 단계만 골라서 의뢰하실 수 있습니다</p>
+    <ol class="steps">
+      <li><span class="sn">01</span><h3>기획</h3><p>무엇을 누구에게 보여 줄지 정하고 촬영 구성을 짭니다. 프리미엄 구성은 콘티까지 만듭니다.</p></li>
+      <li><span class="sn">02</span><h3>현장 촬영</h3><p>스튜디오가 아닌 현장에서 촬영합니다. 1회 120분 기준이며, 짐벌 · 드론 촬영을 더할 수 있습니다.</p></li>
+      <li><span class="sn">03</span><h3>편집</h3><p>자막 · 음악을 넣어 한 편으로 완성합니다. 보유하신 원본이 있으면 편집만 의뢰하실 수 있습니다.</p></li>
+      <li><span class="sn">04</span><h3>확인 · 수정</h3><p>완성본을 확인하시고 고칠 부분을 말씀해 주시면 반영합니다. 포함된 수정 횟수는 구성마다 다릅니다.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ══════════ 추천 패키지 — 🔴 메인 #v-video 「추천 패키지」 표와 같은 값. 기한 약속(영업일)은 여기 넣지 않음 ══════════ -->
+<section class="sec">
+  <div class="w">
+    <h2 class="big">PACKAGES</h2>
+    <p class="sub">자주 선택되는 구성 — 개별 항목 합계와 같은 금액입니다</p>
+    <div class="pk">
+      <div class="pkc">
+        <p class="pkn">STANDARD</p>
+        <p class="pkp"><b>630,000</b>원</p>
+        <p class="pkd">첫 제작 · 매장 · 공간 소개 홍보영상</p>
+        <ul><li>기획</li><li>촬영 120분 · 짐벌</li><li>본편 60초</li><li>숏폼(30초) 1편</li><li>수정 1회</li></ul>
+      </div>
+      <div class="pkc hi">
+        <p class="pkn">PREMIUM</p>
+        <p class="pkp"><b>1,045,000</b>원</p>
+        <p class="pkd">광고 활용 · 외관 · 주변까지 촬영하는 구성</p>
+        <ul><li>기획 + 콘티</li><li>촬영 240분 · 짐벌 · 드론</li><li>모션그래픽</li><li>본편 1분 30초</li><li>숏폼(30초) 2편</li><li>수정 2회</li></ul>
+      </div>
+    </div>
+    <p class="note">부가세 포함입니다. 편집만 필요하거나 예산이 정해진 경우 별도 구성으로 조정합니다.</p>
+  </div>
+</section>
+
+<!-- ══════════ 흐르는 띠 ══════════ -->
+<section class="sec tight" aria-label="할 수 있는 작업">
+  <p class="mq-t">WHAT'S INCLUDED</p>
+  <div class="mq" aria-hidden="true"><div class="mq-in">
+    <span>기획</span><span>콘티</span><span>현장 촬영</span><span>짐벌</span><span>드론</span><span>인터뷰</span><span>편집</span><span>자막</span><span>음악</span><span>썸네일</span><span>모션그래픽</span><span>숏폼 재편집</span>
+    <span>기획</span><span>콘티</span><span>현장 촬영</span><span>짐벌</span><span>드론</span><span>인터뷰</span><span>편집</span><span>자막</span><span>음악</span><span>썸네일</span><span>모션그래픽</span><span>숏폼 재편집</span>
+  </div></div>
+  <p class="sr">기획 · 콘티 · 현장 촬영 · 짐벌 · 드론 · 인터뷰 · 편집 · 자막 · 음악 · 썸네일 · 모션그래픽 · 숏폼 재편집</p>
+</section>
+
+<!-- ══════════ 끝 ══════════ -->
+<section class="sec end">
+  <div class="w">
+    <h2 class="big huge">LET'S MAKE IT<br>TOGETHER</h2>
+    <p class="sub">영상, 인투마케팅과 함께 만들어 보세요.</p>
+    <div class="acts center">
+      <a class="btn btn-w" href="/apply/video/">영상 의뢰서 쓰기 →</a>
+      <a class="btn btn-line" href="/#contact">상담 문의</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══════════ 하단 — 🔴 메인 index.html 의 <footer> 복사본. 메인을 고치면 여기도 ══════════ -->
+<footer>
+  <div class="wrap">
+    <p class="fb">인투마케팅</p>
+    <!-- 🔴 사업자 정보 블록 — 카카오 비즈니스 심사 통과 근거입니다. 지우지 마세요. -->
+    <div class="biz">
+      상호 : <b>인투마케팅</b> &nbsp;|&nbsp; 대표자 : <b>양회광</b><br>
+      사업자등록번호 : 306-24-53380<br>
+      주소 : 대전광역시 유성구 은구비남로33번길 13-8, 3397호<br>
+      전화 : 010-7318-1790 &nbsp;|&nbsp; 이메일 : info@intomarketing.co.kr<br>
+      카카오톡 채널 : 인투마케팅 (고객 문의) · ESC 학원지원 (블로거 문의)<br>
+      <!-- 🔴 ESC 학원지원 줄을 지우지 마세요 — 블로거용 알림톡 17종이 그 채널에 묶여 있습니다 (행정 창 2026-10-14) -->
+      통신판매업 신고번호 : 2026-대전유성-1694<br>
+      <!-- 🔴 인투오피스 줄을 지우지 마세요 — 인투오피스 카카오 비즈 앱 심사에서 「같은 사업자가 운영」을 보여 주는 근거입니다 (2026-10-15) -->
+      운영 서비스 : <a href="https://intoedu.github.io/into-office/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">인투오피스 (INTO OFFICE)</a> — 전자계약 · 전자서명
+    </div>
+    <div class="pol">
+      <a href="/privacy/">개인정보처리방침</a><span>|</span><a href="/terms/">이용약관</a><span>|</span><a href="/payment/">결제 · 환불 안내</a><span>|</span><a href="https://intoedu.github.io/into-office/" target="_blank" rel="noopener">인투오피스</a>
+    </div>
+    <p class="cr">© 2026 인투마케팅 (INTO MARKETING). All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var $$ = function(s, r){ return [].slice.call((r || document).querySelectorAll(s)); };
+  /* ── 손전화 메뉴 ── */
+  var burger = document.getElementById('burger'), sheet = document.getElementById('msheet');
+  if(burger) burger.addEventListener('click', function(){
+    var on = sheet.classList.toggle('on');
+    burger.setAttribute('aria-expanded', on ? 'true' : 'false');
+  });
+  /* ── 스크롤하면 하나씩 ── */
+  var rv = $$('.big, .sec .sub, .proj, .steps li, .pkc, .note');
+  rv.forEach(function(el){ el.classList.add('rv'); });
+  $$('.steps, .pk').forEach(function(g){
+    [].forEach.call(g.children, function(c, i){ if(i > 0) c.style.setProperty('--d', Math.min(i, 5) * 80 + 'ms'); });
+  });
+  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(still || !('IntersectionObserver' in window)){ rv.forEach(function(el){ el.classList.add('in'); }); }
+  else{
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: .1 });
+    rv.forEach(function(el){ io.observe(el); });
+  }
+})();
+</script>
+
+<!-- 실장 전용 링크(?p=코드)로 들어온 것을 기억해 둡니다 — 신청서에서 씁니다 (메인과 같음) -->
+<script src="/ref.js"></script>
+<!-- 머리띠에 로그인 상태를 보여 줍니다 (메인과 같은 순서) -->
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="/apply/account.js"></script>
+<script defer src="/authbar.js"></script>
+</body>
+</html>
