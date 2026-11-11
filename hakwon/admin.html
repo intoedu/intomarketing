@@ -490,7 +490,7 @@
         <div class="fld"><label>어느 사업자를 고칠까요</label>
           <select class="inp" id="st_pick" onchange="pickProfile(this.value)"></select>
           <div class="muted" style="font-size:.82rem;margin-top:6px">
-            블로그·리뷰 홍보는 <b>인투마케팅</b>, 나머지 지원사업은 <b>인투유학</b>이 팝니다.
+            블로그·리뷰 홍보와 <b>홈페이지 제작</b>은 <b>인투마케팅</b>, 나머지 지원사업은 <b>인투유학</b>이 팝니다.
             다른 지원사업도 사업자를 내시면 아래 [+ 사업자 추가]로 늘리시면 됩니다.</div></div>
         <div class="grid2">
           <div class="fld"><label>이 사업자를 부를 이름 <span class="muted">(우리끼리 구분용)</span></label>
@@ -1650,9 +1650,11 @@
     renderQuoteRows();
     $('quoteModal').classList.add('open');
   };
-  /* 마케팅 의뢰면 인투마케팅이 기본입니다 (블로그·리뷰를 파는 주체) */
+  /* 마케팅 의뢰 · 홈페이지 제작이면 인투마케팅이 기본입니다 (블로그·리뷰 · 홈페이지를 파는 주체).
+     🔴 2026-11-11 이은총 님 「홈페이지 파는 거는 당연히 인투마케팅」 — 홈페이지 계약서 틀 · 이용약관도 인투마케팅이라
+        견적서에 찍히는 회사와 계약하는 회사가 같아야 합니다. */
   function guessProfile(r){
-    if(r&&r.area==='마케팅'){
+    if(r&&(r.area==='마케팅'||termsKey(r)==='web')){
       for(var i=0;i<QPROF.length;i++){if(QPROF[i].id==='mkt')return 'mkt';}
     }
     return QPROF[0]?QPROF[0].id:'';
@@ -2156,7 +2158,7 @@
   };
 
   /* ---------- 견적서 설정 ---------- */
-  /* ⭐ 사업자가 둘 이상입니다 (블로그·리뷰는 「인투마케팅」, 나머지는 「인투유학」).
+  /* ⭐ 사업자가 둘 이상입니다 (블로그·리뷰 · 홈페이지 제작은 「인투마케팅」, 나머지는 「인투유학」).
      앞으로 다른 지원사업도 따로 사업자를 낼 수 있어서 **프로필 목록**으로 둡니다.
      ⚠️ SET 은 예전처럼 「지금 쓰는 한 벌」입니다 — 아래 견적서 그리는 코드들이
      전부 SET.company 식으로 읽고 있어서, 그 부분은 손대지 않으려고 이렇게 했습니다. */
@@ -2455,7 +2457,7 @@
         사업자 정보를 지우면 전자상거래법 표시 의무를 어기게 되고,
         카카오 비즈니스 심사도 그 이유로 반려된 적이 있습니다.
      🔴 학원지원센터는 파는 «주체가 둘»입니다 —
-        블로그·리뷰 홍보는 인투마케팅, 나머지 지원사업은 인투유학. */
+        블로그·리뷰 홍보 · 홈페이지 제작은 인투마케팅, 나머지 지원사업은 인투유학. */
   window.fillSite=function(){
     var ft=SITE.footer||{}, pr=SITE.price||{}, ents=ft.entities||[];
     var stages=(pr.web||{}).stages||[];
