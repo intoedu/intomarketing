@@ -209,6 +209,8 @@
   .pbig{font-size:1.85rem;font-weight:850;color:var(--gold);line-height:1.15;letter-spacing:-.02em;
         font-variant-numeric:tabular-nums}
   .pbig small{font-size:var(--t-sm);font-weight:700;color:var(--muted);letter-spacing:0}
+  s.pwas{color:var(--muted);font-weight:500;font-size:.62em;margin-right:6px;letter-spacing:0}   /* 11/13 없앤 관리비 — 옛 금액에 줄 */
+  .wtbl s.pwas{font-size:1em}
   .pbig.quote{font-size:var(--t-lg);color:var(--accent)}
   .psmall{font-size:var(--t-sm);color:var(--muted);margin-top:8px}
   .pterms{font-size:var(--t-xs);color:var(--muted);margin-top:8px;line-height:1.7;
@@ -1005,10 +1007,9 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
     <div class="wrap" style="max-width:820px">
       <div class="sec-head reveal"><div class="kicker">FAQ</div><h2>자주 묻는 질문</h2></div>
       <div class="reveal">
-        <details open><summary>제작비는 얼마인가요?<span class="plus"></span></summary><div class="ans"><b>기본 홈페이지</b>(제작비 100,000원 · 월 50,000원)에 필요한 기능을 더하는 방식입니다(예: 회원가입 100,000원 · 월 20,000원, 게시판 50,000원 · 월 10,000원). <b>정가</b>는 제작비를 한 번에 내고 매달 관리비를 냅니다. <b>약정</b>은 제작비를 할인받는 방식으로, <b>월 관리비는 정가와 같고</b> <b>24개월이면 제작비가 무료</b>입니다. 약정은 6개월부터이며, 정가는 최소 이용 기간이 3개월입니다. <b>프리미엄(파트너) 학원</b>은 <b>첫 달 월 관리비가 무료</b>입니다.</div></details>
+        <details open><summary>제작비는 얼마인가요?<span class="plus"></span></summary><div class="ans"><b>기본 홈페이지</b>(제작비 100,000원 · 월 50,000원)에 필요한 기능을 더하는 방식입니다(예: 회원가입 100,000원 · 월 20,000원, 게시판 50,000원 · 월 관리비 <s>10,000원</s> 무료). <b>정가</b>는 제작비를 한 번에 내고 매달 관리비를 냅니다. <b>약정</b>은 제작비를 할인받는 방식으로, <b>월 관리비는 정가와 같고</b> <b>24개월이면 제작비가 무료</b>입니다. 약정은 6개월부터이며, 정가는 최소 이용 기간이 3개월입니다. <b>프리미엄(파트너) 학원</b>은 <b>첫 달 월 관리비가 무료</b>입니다.</div></details>
         <details><summary>유료 도메인 비용은 누가 내나요?<span class="plus"></span></summary><div class="ans">도메인은 학원 소유가 되기 때문에 학원에서 부담합니다. 비용은 등록 회사와 주소 종류에 따라 다르며 연 1~2만원을 넘을 수 있습니다. 신청 시 사용 여부를 선택하실 수 있고, 무료 주소로도 시작할 수 있습니다.</div></details>
         <details><summary>원어민 수업 시차는 어떻게 되나요?<span class="plus"></span></summary><div class="ans">필리핀은 한국보다 1시간, 미국은 14시간 느립니다. 희망 시간은 한국시간 기준으로 입력하며, 미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다(현지 심야 시간대).</div></details>
-        <details><summary>온라인 카드 결제도 되나요?<span class="plus"></span></summary><div class="ans">현재는 계좌 안내로 진행하며, 카드 결제(PG) 연동 기능은 추후 단계에서 추가될 예정입니다.</div></details>
         <details><summary>파트너 학원이 아니어도 신청할 수 있나요?<span class="plus"></span></summary><div class="ans">본 사이트는 파트너 학원 전용입니다. 신규 제휴는 문의하기로 접수하시면 별도로 안내합니다.</div></details>
       </div>
     </div>
@@ -1584,10 +1585,9 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
           가격·견적 등 개별 협의가 필요한 내용은 <b>1대1 상담</b>을 이용해 주십시오 — 작성자와 담당자만 열람합니다.</p>
         <div id="qnaList" class="board-list"><div class="board-empty">불러오는 중…</div></div>
         <div class="sec-head" style="max-width:none;margin:52px 0 20px"><div class="kicker">FAQ</div><h2 style="font-size:1.4rem">자주 묻는 질문</h2></div>
-        <details open><summary>제작비는 얼마인가요?<span class="plus"></span></summary><div class="ans"><b>기본 홈페이지</b>(제작비 100,000원 · 월 50,000원)에 필요한 기능을 더하는 방식입니다(예: 회원가입 100,000원 · 월 20,000원, 게시판 50,000원 · 월 10,000원). <b>정가</b>는 제작비를 한 번에 내고 매달 관리비를 냅니다. <b>약정</b>은 제작비를 할인받는 방식으로, <b>월 관리비는 정가와 같고</b> <b>24개월이면 제작비가 무료</b>입니다. 약정은 6개월부터이며, 정가는 최소 이용 기간이 3개월입니다. <b>프리미엄(파트너) 학원</b>은 <b>첫 달 월 관리비가 무료</b>입니다.</div></details>
+        <details open><summary>제작비는 얼마인가요?<span class="plus"></span></summary><div class="ans"><b>기본 홈페이지</b>(제작비 100,000원 · 월 50,000원)에 필요한 기능을 더하는 방식입니다(예: 회원가입 100,000원 · 월 20,000원, 게시판 50,000원 · 월 관리비 <s>10,000원</s> 무료). <b>정가</b>는 제작비를 한 번에 내고 매달 관리비를 냅니다. <b>약정</b>은 제작비를 할인받는 방식으로, <b>월 관리비는 정가와 같고</b> <b>24개월이면 제작비가 무료</b>입니다. 약정은 6개월부터이며, 정가는 최소 이용 기간이 3개월입니다. <b>프리미엄(파트너) 학원</b>은 <b>첫 달 월 관리비가 무료</b>입니다.</div></details>
         <details><summary>유료 도메인 비용은 누가 내나요?<span class="plus"></span></summary><div class="ans">도메인은 학원 소유가 되기 때문에 학원에서 부담합니다. 비용은 등록 회사와 주소 종류에 따라 다르며 연 1~2만원을 넘을 수 있습니다. 신청 시 사용 여부를 선택하실 수 있고, 무료 주소로도 시작할 수 있습니다.</div></details>
         <details><summary>원어민 수업 시차는 어떻게 되나요?<span class="plus"></span></summary><div class="ans">필리핀은 한국보다 1시간, 미국은 14시간 느립니다. 희망 시간은 한국시간 기준으로 입력하며, 미국 선생님은 한국시간 오후 1시~오후 8시 수업이 어렵습니다(현지 심야 시간대).</div></details>
-        <details><summary>온라인 카드 결제도 되나요?<span class="plus"></span></summary><div class="ans">현재는 계좌 안내로 진행하며, 카드 결제(PG) 연동 기능은 추후 단계에서 추가될 예정입니다.</div></details>
         <details><summary>파트너 학원이 아니어도 신청할 수 있나요?<span class="plus"></span></summary><div class="ans">본 사이트는 파트너 학원 전용입니다. 신규 제휴는 문의하기로 접수하시면 별도로 안내합니다.</div></details>
       </div>
     </div>
@@ -2696,16 +2696,18 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
           (예전 파트너 요금 45,000 / 72,000 · 제작비 없음은 없앴습니다)
         · 2026-10-03 오후: 카드 결제 제작비 300,000 · 신청서 제작비 20,000 · 한·영 월 5,000 · 공지 월 5,000
         · 2026-10-04 저녁: 기본 홈페이지 제작비 100,000 · 공지 무료 · 계약 시에는 제작비만 (월 관리비는 오픈일부터 CMS · 파트너는 그 첫 달이 무료)
+        · 🔴 2026-11-13: 게시판(추가분 포함) · 신청서 · 목록 · 한영 월 관리비 무료 — 옛 금액(was)에 줄 긋고 「무료」 · 카드 결제 판매 안 함
+          · 블로그 · 유튜브 자동 반영 30,000 / 월 10,000 새로 (새 고객부터 · 이미 계약한 학원 관리비는 그대로)
         · 값을 바꾸면 메인 index.html 가격표 · /apply/ 신청서(PRICE) · 매뉴얼 1번도 같이 바꾸십시오. */
   var WEB_ITEMS=[
     {n:'기본 홈페이지',make:100000,mon:50000,d:'학원 소개, 원장 인사말, 시설·시간표 안내, 오시는 길(지도), 전화·카톡 상담 버튼'},
     {n:'회원가입',make:100000,mon:20000,d:'회원가입·로그인, 관리자 화면'},
-    {n:'게시판',make:50000,mon:10000,d:'회원가입과 함께 선택. Q&amp;A(비밀글) · 자유게시판 · 갤러리 중 1개, 1개 추가마다 월 10,000원'},
+    {n:'게시판',make:50000,mon:0,was:10000,d:'회원가입과 함께 선택. Q&amp;A(비밀글) · 자유게시판 · 갤러리 중 1개. 추가 게시판도 월 관리비 무료'},
     {n:'공지',make:0,mon:0,d:'전달받은 공지 · 소식 글을 월 1건, 월간 수정 시 함께 게시합니다 (회원가입 불필요)'},
-    {n:'신청서',make:20000,mon:10000,d:'상담 · 수강 신청을 이메일로 접수합니다'},
-    {n:'목록 · 검색',make:30000,mon:10000,d:'여러 항목을 목록으로 표시하고 검색 기능을 제공합니다'},
-    {n:'한 · 영 함께 표기',make:20000,mon:5000,d:'한국어 · 영어 2개 언어'},
-    {n:'카드 결제',make:300000,mon:50000,d:'온라인 카드 결제. 결제 회사 가입과 심사는 학원에서 직접 진행합니다'}
+    {n:'신청서',make:20000,mon:0,was:10000,d:'상담 · 수강 신청을 이메일로 접수합니다'},
+    {n:'목록 · 검색',make:30000,mon:0,was:10000,d:'여러 항목을 목록으로 표시하고 검색 기능을 제공합니다'},
+    {n:'한 · 영 함께 표기',make:20000,mon:0,was:5000,d:'한국어 · 영어 2개 언어'},
+    {n:'블로그 · 유튜브 자동 반영',make:30000,mon:10000,d:'블로그에 올린 글 · 유튜브에 올린 영상을 홈페이지에 자동으로 보여 줍니다'}
   ];
   var WEB_PLANS=[['정가',0],['6개월',30],['12개월',60],['24개월',100]];
   function webMake(total,pct){return Math.ceil(total*(100-pct)/100/10000)*10000;}   /* 만원 단위 올림 (10/1 밤) */
@@ -2717,13 +2719,14 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
         +(i===0?'<div class="pbest">필수</div>':'')
         +'<div class="pstage">'+(i===0?'기본':'기능 추가')+'</div>'
         +'<div class="psub">'+it.n+'</div>'
-        +'<div class="pmoney"><div class="pbig tnum">'+(!it.make&&!it.mon?'무료':wonf(it.mon)+'<small> 원 / 월</small>')+'</div>'
-        +'<div class="psmall">'+(!it.make&&!it.mon?'제작비 · 월 관리비 없음':'제작비 <b>'+wonf(it.make)+'원</b>')+'</div></div>'
+        +'<div class="pmoney"><div class="pbig tnum">'+(!it.make&&!it.mon&&!it.was?'무료':(it.was&&!it.mon?'<s class="pwas">'+wonf(it.was)+'</s>무료<small> / 월</small>':wonf(it.mon)+'<small> 원 / 월</small>'))+'</div>'
+        +'<div class="psmall">'+(!it.make&&!it.mon&&!it.was?'제작비 · 월 관리비 없음':'제작비 <b>'+wonf(it.make)+'원</b>')+'</div></div>'
         +'<p class="pdesc">'+it.d+'</p></div>';
     });
     /* 약정 표 — 예시 2가지 (기본만 / 기본 + 회원가입 + 게시판) */
     var exA=WEB_ITEMS[0], exB={make:WEB_ITEMS[0].make+WEB_ITEMS[1].make+WEB_ITEMS[2].make,
                                mon:WEB_ITEMS[0].mon+WEB_ITEMS[1].mon+WEB_ITEMS[2].mon};
+    var exBwas=exB.mon+(WEB_ITEMS[2].was||0);   /* 11/13 — 게시판 관리비를 없애기 전 합계(80,000) */
     h+='<div class="wtbl"><table><thead><tr><th>요금 방식</th><th>제작비 할인</th>'
       +'<th>예시 1<small>기본 홈페이지</small></th><th>예시 2<small>기본 + 회원가입 + 게시판</small></th></tr></thead><tbody>'
       +WEB_PLANS.map(function(p){
@@ -2733,7 +2736,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
           +'<td>'+(free?'<b class="isfree">무료</b>':wonf(webMake(exA.make,p[1])))+'</td>'
           +'<td>'+(free?'<b class="isfree">무료</b>':wonf(webMake(exB.make,p[1])))+'</td></tr>';
       }).join('')
-      +'<tr><td>월 관리비<small>전 요금 방식 동일</small></td><td></td><td>'+wonf(exA.mon)+'</td><td>'+wonf(exB.mon)+'</td></tr>'
+      +'<tr><td>월 관리비<small>전 요금 방식 동일</small></td><td></td><td>'+wonf(exA.mon)+'</td><td>'+(exBwas>exB.mon?'<s class="pwas">'+wonf(exBwas)+'</s>':'')+wonf(exB.mon)+'</td></tr>'
       +'</tbody></table></div>'
       +'<p class="pdesc" style="grid-column:1/-1;margin-top:4px">약정 시 선택 항목의 제작비 합계에서 할인하며, 할인한 금액은 만원 단위로 올림합니다. '
       +'계약 시에는 제작비만 청구하고, 월 관리비는 오픈한 달부터 매월 청구합니다. '
