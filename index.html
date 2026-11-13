@@ -327,6 +327,7 @@ body[data-view="design"] .brand .mk{background:#fff}
 .ptab td b{font-weight:800}
 .ptab td .sm{display:block;font-size:var(--t-xs);color:var(--muted);font-weight:500;margin-top:2px}
 .ptab .lo{color:var(--accent-ink,#1E47C0);font-weight:800;font-variant-numeric:tabular-nums}
+.ptab s.was{color:var(--muted);font-weight:500;margin-right:6px}   /* 11/13 없앤 관리비 — 옛 금액에 줄 */
 /* 2026-10-01 «기본 + 기능» 가격표 — 휴대폰에서도 옆으로 밀지 않고 한 화면에 보이게 */
 .ptab.fit{min-width:0}
 .ptab.fit th,.ptab.fit td{padding:12px 12px}
@@ -1227,7 +1228,8 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
               2026-10-03 오후: 카드 결제 제작비 300,000 · 신청서 제작비 20,000 · 한·영 월 5,000 · 공지 월 5,000
               2026-10-03 오후: 약정 3개월 없앰 · 6개월 30% · 12개월 60% · 24개월 무료
               2026-10-03 오후: 정가 최소 이용 기간 3개월
-              2026-10-04 저녁: 기본 홈페이지 제작비 100,000 · 공지 무료 · 계약 시에는 제작비만 (월 관리비는 오픈일부터 CMS) -->
+              2026-10-04 저녁: 기본 홈페이지 제작비 100,000 · 공지 무료 · 계약 시에는 제작비만 (월 관리비는 오픈일부터 CMS)
+              🔴 2026-11-13: 게시판(추가분 포함) · 신청서 · 목록 · 한영 월 관리비 무료(옛 금액에 줄) · 카드 결제 판매 안 함 · 블로그 · 유튜브 자동 반영 30,000 / 월 10,000 (새 고객부터) -->
         <div class="ptw">
           <table class="ptab fit">
             <thead><tr><th>항목</th><th>제작비</th><th>월 관리비</th></tr></thead>
@@ -1236,18 +1238,18 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
                   <td>100,000</td><td>50,000</td></tr>
               <tr><td><b>+ 회원가입</b><span class="sm">회원가입·로그인, 관리자 화면</span></td>
                   <td>100,000</td><td>20,000</td></tr>
-              <tr><td><b>+ 게시판</b><span class="sm">회원가입과 함께 선택 · Q&amp;A(비밀글) · 자유게시판 · 갤러리 중 1개. 1개 추가마다 월 10,000원</span></td>
-                  <td>50,000</td><td>10,000</td></tr>
+              <tr><td><b>+ 게시판</b><span class="sm">회원가입과 함께 선택 · Q&amp;A(비밀글) · 자유게시판 · 갤러리 중 1개. 추가 게시판도 월 관리비 무료</span></td>
+                  <td>50,000</td><td class="lo"><s class="was">10,000</s>무료</td></tr>
               <tr><td><b>+ 공지</b><span class="sm">전달받은 공지 · 소식 글을 월 1건, 월간 수정 시 함께 게시합니다 (회원가입 불필요)</span></td>
                   <td class="lo">무료</td><td class="lo">무료</td></tr>
               <tr><td><b>+ 신청서</b><span class="sm">상담 · 예약 · 신청을 이메일로 접수합니다</span></td>
-                  <td>20,000</td><td>10,000</td></tr>
+                  <td>20,000</td><td class="lo"><s class="was">10,000</s>무료</td></tr>
               <tr><td><b>+ 목록 · 검색</b><span class="sm">여러 항목을 목록으로 표시하고 검색 기능을 제공합니다</span></td>
-                  <td>30,000</td><td>10,000</td></tr>
+                  <td>30,000</td><td class="lo"><s class="was">10,000</s>무료</td></tr>
               <tr><td><b>+ 한 · 영 함께 표기</b><span class="sm">한국어 · 영어 2개 언어</span></td>
-                  <td>20,000</td><td>5,000</td></tr>
-              <tr><td><b>+ 카드 결제</b><span class="sm">온라인 카드 결제. 결제 회사 가입과 심사는 고객이 직접 진행합니다</span></td>
-                  <td>300,000</td><td>50,000</td></tr>
+                  <td>20,000</td><td class="lo"><s class="was">5,000</s>무료</td></tr>
+              <tr><td><b>+ 블로그 · 유튜브 자동 반영</b><span class="sm">블로그에 올린 글 · 유튜브에 올린 영상을 홈페이지에 자동으로 보여 줍니다</span></td>
+                  <td>30,000</td><td>10,000</td></tr>
             </tbody>
           </table>
         </div>
@@ -1270,7 +1272,7 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
               <tr><td><b>24개월</b></td>
                   <td class="lo">무료</td><td class="lo">무료</td><td class="lo">무료</td></tr>
               <tr><td><b>월 관리비</b><span class="sm">전 요금 방식 동일</span></td>
-                  <td></td><td>50,000</td><td>80,000</td></tr>
+                  <td></td><td>50,000</td><td><s class="was">80,000</s>70,000</td></tr>
             </tbody>
           </table>
         </div>

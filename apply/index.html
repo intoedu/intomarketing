@@ -1407,7 +1407,7 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
         <div class="won tnum" data-won="board"></div></label>
       <div class="subbox stage" id="board_box">
         <div class="fld" id="fld_boards"><span class="lab sm">필요한 게시판</span>
-          <p class="desc">1개는 포함입니다. <b>1개 추가마다 월 +10,000원</b>이 추가됩니다.</p>
+          <p class="desc">1개는 포함입니다. 더 추가해도 <b>월 관리비 <s>+10,000원</s> 무료</b>입니다.</p>
           <div class="chips" data-multi="boards" role="group" aria-label="필요한 게시판">
             <label class="chip"><input type="checkbox" value="Q&A(비밀글)">Q&amp;A(비밀글) <small>방문자 질문 · 비밀글 가능</small></label>
             <label class="chip"><input type="checkbox" value="자유게시판">자유게시판 <small>회원 작성</small></label>
@@ -1447,12 +1447,11 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
           <span class="next">→ 다음 「선택 기능 설정」에서 영문 상호를 입력합니다.</span></div>
         <div class="won tnum" data-won="lang"></div></label>
 
-      <label class="feat"><input type="checkbox" data-feat="pay">
-        <div><b>카드 결제<span class="wm" data-wm="pay"></span></b><span class="d">온라인 카드 결제 · 결제 회사 가입과 심사는 직접 진행하셔야 합니다</span>
-          <span class="fit"><em class="y">적합</em><span>홈페이지에서 바로 결제를 받을 때</span>
-            <em class="n">불필요</em><span>매장 결제 · 계좌 이체로 충분할 때 · 예약만 받을 때(「신청서」)</span></span>
-          <span class="next">→ 다음 「선택 기능 설정」에서 결제 대상 · 통신판매업 신고번호 · 공개 이메일을 입력합니다.</span></div>
-        <div class="won tnum" data-won="pay"></div></label>
+      <!-- 🔴 11/13 카드 결제는 판매하지 않음(이은총 님) — 칸을 뺐고 아래 set_pay · 확인 규칙은 남겨 둠(고를 수 없으니 안 나옴) -->
+      <label class="feat"><input type="checkbox" data-feat="auto">
+        <div><b>블로그 · 유튜브 자동 반영<span class="wm" data-wm="auto"></span></b><span class="d">블로그에 올린 글 · 유튜브에 올린 영상을 홈페이지에 자동으로 보여 줍니다</span>
+          <span class="next">→ 다음 「선택 기능 설정」에서 블로그 · 유튜브 주소를 입력합니다.</span></div>
+        <div class="won tnum" data-won="auto"></div></label>
     </div>
     <div class="fsum" id="feat_sum" aria-live="polite"></div>
     <div class="note warn" id="cta_note" hidden>신청서 기능이 제외되어 「홈페이지의 목적」의 <b>「신청 · 예약 받는 방법」</b>을 다시 선택해 주십시오. 홈페이지 신청서로 접수하려면 신청서 기능이 필요합니다.</div>
@@ -1524,6 +1523,12 @@ svg.ic{width:1em;height:1em;flex:0 0 auto;fill:none;stroke:currentColor;stroke-w
       <div class="fld"><div class="lab-row"><label class="lab sm" for="f_en_name" style="margin:0">영문 상호</label><span class="where">영어 화면 상단</span></div>
         <p class="desc">간판 · 명함에 영문 상호가 있으면 동일하게 입력해 주십시오.</p>
         <input class="inp" id="f_en_name" placeholder="예: OO COFFEE" autocapitalize="characters"></div>
+    </div>
+
+    <div class="fgroup stage" id="set_auto"><h3 class="gh">블로그 · 유튜브 자동 반영</h3>
+      <div class="fld"><label class="lab sm" for="f_auto_url">블로그 · 유튜브 주소</label>
+        <p class="desc">홈페이지에 보여 줄 블로그 · 유튜브 채널 주소입니다. 둘 다 있으면 한 줄에 하나씩 입력해 주십시오.</p>
+        <textarea class="inp" id="f_auto_url" rows="2" placeholder="예: https://blog.naver.com/○○○&#10;https://www.youtube.com/@○○○"></textarea></div>
     </div>
 
     <div class="fgroup stage" id="set_pay"><h3 class="gh">카드 결제</h3>
@@ -2121,14 +2126,17 @@ var MIN_LEN={f_about:50, f_greet:30};
 var PRICE={
   base:  {n:'기본 홈페이지',   make:100000, mon:50000},                    /* 제작비 100,000 (10/4 저녁) */
   member:{n:'회원가입',        make:100000, mon:20000},
-  board: {n:'게시판',          make:50000,  mon:10000, extraMon:10000},   /* 1개 포함, 1개 더할 때마다 월 +10,000 (제작비 추가 없음) */
+  /* 🔴 2026-11-13 이은총 님 새 가격 — 게시판 · 신청서 · 목록 · 한영의 월 관리비 없앰(추가 게시판도 무료) · 카드 결제 판매 안 함 · 블로그 · 유튜브 자동 반영 새로.
+        없앤 관리비는 «할인한 느낌»으로 옛 금액에 줄을 긋고 「무료」 — wasMon(옛 월 관리비) · wasExtra(옛 게시판 1개 추가 월). 계산에는 안 들어감 */
+  board: {n:'게시판',          make:50000,  mon:0, extraMon:0, wasMon:10000, wasExtra:10000},   /* 1개 포함, 더 늘려도 월 관리비 없음 (11/13) */
   notice:{n:'공지',            make:0,      mon:0},                       /* 고객이 보낸 공지 글을 저희가 올림 · 회원가입 없이 (10/1 밤 결정) · 무료 (10/4 저녁) */
-  form:  {n:'신청서',          make:20000,  mon:10000},                   /* 제작비 20,000 (10/3 오후) */
-  list:  {n:'목록 · 검색',      make:30000,  mon:10000},
-  lang:  {n:'한 · 영 함께 표기', make:20000,  mon:5000},                    /* 월 5,000 (10/3 오후) */
-  pay:   {n:'카드 결제',        make:300000, mon:50000}                    /* 제작비 300,000 (10/3 오후) */
+  form:  {n:'신청서',          make:20000,  mon:0, wasMon:10000},                   /* 제작비 20,000 (10/3 오후) */
+  list:  {n:'목록 · 검색',      make:30000,  mon:0, wasMon:10000},
+  lang:  {n:'한 · 영 함께 표기', make:20000,  mon:0, wasMon:5000},                    /* 월 5,000 (10/3 오후) */
+  pay:   {n:'카드 결제',        make:300000, mon:50000},                   /* 🔴 11/13 판매 안 함 — FEAT_ORDER 에서 뺌(옛 신청 읽기용으로 값만 둠) */
+  auto:  {n:'블로그 · 유튜브 자동 반영', make:30000, mon:10000}                /* 11/13 새 기능 */
 };
-var FEAT_ORDER=['member','board','notice','form','list','lang','pay'];
+var FEAT_ORDER=['member','board','notice','form','list','lang','auto'];
 /* 약정 = 제작비 합계에서 off% 할인, 할인한 금액은 만원 단위로 «올림» (2026-10-01 밤 결정). 월 관리비는 모두 같음 */
 var PLANS=[{v:'정가',m:0,off:0},{v:'약정 6개월',m:6,off:30},
            {v:'약정 12개월',m:12,off:60},{v:'약정 24개월',m:24,off:100}];
@@ -2410,8 +2418,9 @@ function calc(){
   var lines=[{k:'base',n:PRICE.base.n,make:PRICE.base.make,mon:PRICE.base.mon}];
   keys.forEach(function(k){
     var p=PRICE[k], mon=p.mon, n=p.n;
-    if(k==='board'){ mon=p.mon+(nBoard-1)*p.extraMon; n=p.n+' '+nBoard+'개'; }
-    lines.push({k:k,n:n,make:p.make,mon:mon});
+    var was=p.wasMon||0;
+    if(k==='board'){ mon=p.mon+(nBoard-1)*p.extraMon; n=p.n+' '+nBoard+'개'; if(was)was=p.wasMon+(nBoard-1)*(p.wasExtra||0); }
+    lines.push({k:k,n:n,make:p.make,mon:mon,was:mon?0:was});
   });
   var make=0,mon=0; lines.forEach(function(l){make+=l.make;mon+=l.mon;});
   var plans=PLANS.map(function(p){
@@ -2435,8 +2444,10 @@ function quoteText(c){
 }
 
 /* ── 예상 금액 그리기 — 기본 홈페이지 + 추가 기능(+금액) ── */
-function isFree(pr){ return !!pr&&!pr.make&&!pr.mon; }   /* 공지 — 무료 (10/4 저녁) */
-function plusTxt(pr){ return isFree(pr)?'무료':'제작비 +'+won(pr.make)+'원 · 월 관리비 +'+won(pr.mon)+'원'; }
+function isFree(pr){ return !!pr&&!pr.make&&!pr.mon&&!pr.wasMon; }   /* 공지 — 무료 (10/4 저녁) */
+/* 월 관리비 글자 — 없앤 관리비는 옛 금액에 줄 긋고 「무료」 (11/13) */
+function monHTML(pr,lab){ return (lab||'월 관리비 ')+(pr.mon?'+'+won(pr.mon)+'원':(pr.wasMon?'<s>+'+won(pr.wasMon)+'원</s> 무료':'없음')); }
+function plusTxt(pr){ return isFree(pr)?'무료':'제작비 +'+won(pr.make)+'원 · '+monHTML(pr); }
 function drawQuote(){
   var c=calc(), p=chosenPlan(c), show=p||c.plans[0];
   FEAT_ORDER.concat(['base']).forEach(function(k){
@@ -2444,14 +2455,14 @@ function drawQuote(){
     var pr=PRICE[k];
     el.innerHTML=k==='base'
       ? '제작비 '+won(pr.make)+'원<small>월 관리비 '+won(pr.mon)+'원</small>'
-      : (isFree(pr)?'<b>무료</b><small>제작비 · 월 관리비 없음</small>':'제작비 +'+won(pr.make)+'원<small>월 관리비 +'+won(pr.mon)+'원</small>');
+      : (isFree(pr)?'<b>무료</b><small>제작비 · 월 관리비 없음</small>':'제작비 +'+won(pr.make)+'원<small>'+monHTML(pr)+'</small>');
   });
-  [].forEach.call(document.querySelectorAll('[data-wm]'),function(el){ var pr=PRICE[el.getAttribute('data-wm')]; if(pr)el.textContent=isFree(pr)?'무료':'제작비 +'+won(pr.make)+'원 · 월 +'+won(pr.mon)+'원'; });
+  [].forEach.call(document.querySelectorAll('[data-wm]'),function(el){ var pr=PRICE[el.getAttribute('data-wm')]; if(pr)el.innerHTML=isFree(pr)?'무료':'제작비 +'+won(pr.make)+'원 · '+monHTML(pr,'월 '); });
   [].forEach.call(document.querySelectorAll('[data-price]'),function(el){
-    var pr=PRICE[el.getAttribute('data-price')]; if(pr)el.textContent=plusTxt(pr);
+    var pr=PRICE[el.getAttribute('data-price')]; if(pr)el.innerHTML=plusTxt(pr);
   });
   [].forEach.call(document.querySelectorAll('[data-tagp]'),function(el){   /* 10/4 4차: 「선택 기능 설정」 제목 옆 금액은 뺐음 (남은 곳 없음) */
-    var k=el.getAttribute('data-tagp'), pr=PRICE[k]; if(pr)el.textContent=plusTxt(pr);
+    var k=el.getAttribute('data-tagp'), pr=PRICE[k]; if(pr)el.innerHTML=plusTxt(pr);
   });
   c.plans.forEach(function(x){ var el=document.querySelector('[data-due="'+x.v+'"]'); if(el)el.textContent=won(x.due)+'원'; });
   var base=c.lines[0], adds=c.lines.slice(1);
@@ -2459,7 +2470,7 @@ function drawQuote(){
   $('q_items').innerHTML='<li><span class="nm">'+base.n+'</span><span class="v tnum"><b>'+won(base.make)+'</b> · 월 '+won(base.mon)+'</span></li>'
     +(adds.length
       ? '<li class="grp">+ 추가 기능 '+adds.length+'개</li>'+adds.map(function(l){
-          return '<li class="add"><span class="nm">+ '+l.n+'</span><span class="v tnum">'+(l.make||l.mon?'<b>+'+won(l.make)+'</b> · 월 +'+won(l.mon):'<b>무료</b>')+'</span></li>';
+          return '<li class="add"><span class="nm">+ '+l.n+'</span><span class="v tnum">'+(l.make||l.mon?'<b>+'+won(l.make)+'</b> · 월 '+(l.mon?'+'+won(l.mon):(l.was?'<s>+'+won(l.was)+'</s> 무료':'없음')):'<b>무료</b>')+'</span></li>';
         }).join('')
       : '<li class="grp none">추가 기능 없음 · 기본 홈페이지만</li>');
   /* 「기능 · 요금」 아래 — 기본에 더한 합계 */
@@ -2488,7 +2499,7 @@ function drawQuote(){
   $('q_dom').hidden=false;   /* 도메인은 10/17부터 제작 자료에서 고름 — 신청서 예상 금액에는 늘 안내 */
   $('q_dom_self').hidden=!selfBuy();
   $('mini_txt').innerHTML='<span style="white-space:nowrap">계약 시 '+won(show.due)+'원</span> · <span style="white-space:nowrap">매달 '+won(c.mon)+'원</span>';
-  $('board_cnt').textContent='지금 게시판 '+c.nBoard+'개 → 게시판 제작비 +'+won(PRICE.board.make)+'원 · 월 관리비 +'+won(PRICE.board.mon+(c.nBoard-1)*PRICE.board.extraMon)+'원';
+  $('board_cnt').innerHTML='지금 게시판 '+c.nBoard+'개 → 게시판 제작비 +'+won(PRICE.board.make)+'원 · 월 관리비 <s>+'+won(PRICE.board.wasMon+(c.nBoard-1)*PRICE.board.wasExtra)+'원</s> 무료';
 }
 $('q_tab').addEventListener('click',function(e){
   var tr=e.target.closest('tr[data-plan]'); if(!tr)return;
@@ -2755,7 +2766,7 @@ function syncLocks(){
   fm.disabled=ext; $('feat_form').classList.toggle('lock',ext);
 }
 /* 기능에 딸린 칸 — 게시판 종류는 「기능 · 요금」 안(금액이 바뀜), 나머지는 「선택 기능 설정」 단계 (고른 것이 없으면 단계째 숨김) */
-var SET_FEATS=['form','list','lang','pay'];
+var SET_FEATS=['form','list','lang','auto','pay'];
 function syncFeatures(){
   var k=picked();
   $('board_box').classList.toggle('show',k.indexOf('board')>=0);
@@ -3021,6 +3032,7 @@ var CHECKS=[
   C('step_feat','f_list_what','목록 대상',has('f_list_what'),'목록 대상을 입력해 주십시오.',feat('list')),
   C('step_feat','f_list_items','최초 등록 항목',has('f_list_items'),'최초 등록 항목을 한 줄에 하나씩 입력해 주십시오.',feat('list')),
   C('step_feat','f_en_name','영문 상호',function(){return /[A-Za-z]/.test(val('f_en_name'));},'영문 상호를 영문으로 입력해 주십시오.',feat('lang')),
+  C('step_feat','f_auto_url','블로그 · 유튜브 주소',has('f_auto_url'),'홈페이지에 보여 줄 블로그 · 유튜브 주소를 입력해 주십시오.',feat('auto')),
   C('step_feat','f_pay_what','결제 대상과 금액',has('f_pay_what'),'결제 대상과 금액을 입력해 주십시오.',feat('pay')),
   C('step_feat','seg_mailorder','통신판매업 신고번호',picked1('tg_mailorder'),'통신판매업 신고번호 유무를 선택해 주십시오.',feat('pay')),
   C('step_feat','f_mailorder_no','통신판매업 신고번호',has('f_mailorder_no'),'통신판매업 신고번호를 입력해 주십시오.',function(){return hasFeat('pay')&&one('tg_mailorder')==='있음';}),
@@ -4388,6 +4400,11 @@ function brief(o){
     add('- **한 · 영 함께 표기**: 한/영 전환 버튼. 본문은 `<span data-lang="ko">…</span><span data-lang="en">…</span>` 쌍으로 쓰고 한쪽만 고치지 않음. 영어는 고객 글을 옮긴 것이라 `data-tbd="영문 확인"` 으로 표시해 고객 확인을 받음');
     add('  - 영문 상호: '+o.enName);
   }
+  if(has('auto')){
+    add('- **블로그 · 유튜브 자동 반영**: 고객 블로그 · 유튜브 채널의 최신 글 · 영상을 홈페이지에 자동으로 보여 줌(블로그는 RSS · 유튜브는 채널 피드). 불러오지 못하면 그 칸만 숨기고 화면은 깨지지 않게');
+    add('  - 주소 (고객이 적은 그대로):');
+    lines(o.auto).forEach(function(x){ add('    - '+x); });
+  }
   if(has('pay')){
     add('- **카드 결제**: 포트원(PortOne) 연결. 결제 회사 심사 전에는 결제 대신 「신청」만 받게 두고 심사가 끝나면 켬. 결제 금액은 서버에서 다시 확인(화면 값만 믿지 않음). 결제 열쇠는 화면 코드에 넣지 않음');
     add('  - 결제 받을 것: '+o.pay.what);
@@ -4583,6 +4600,7 @@ function collect(){
     form:hasK('form')?{title:ft,mail:val('f_form_mail'),fields:ff}:null,
     list:hasK('list')?{what:val('f_list_what'),items:val('f_list_items')}:null,
     enName:hasK('lang')?val('f_en_name'):'',
+    auto:hasK('auto')?val('f_auto_url'):'',
     pay:hasK('pay')?{what:val('f_pay_what'),mailorder:one('tg_mailorder')==='있음'?val('f_mailorder_no'):'',pubMail:val('f_pub_mail')}:null,
     more:one('tg_more')==='있음'?val('f_more'):'',
     old:one('tg_old')==='있음'?val('f_old'):'', head:val('f_head'), about:val('f_about'),
@@ -4641,6 +4659,7 @@ function drawReview(){
       o.form?['신청서',[o.form.title?'「'+o.form.title+'」':'',o.form.mail,o.form.fields.length?'받을 칸 '+o.form.fields.join(', '):''].filter(Boolean).join(' · ')]:null,
       o.list?['목록',[o.list.what,cut(o.list.items.replace(/\n+/g,' · '),80)].filter(Boolean).join('\n')]:null,
       hasFeat('lang')?['영문 상호',o.enName]:null,
+      hasFeat('auto')?['블로그 · 유튜브 주소',o.auto]:null,
       o.pay?['카드 결제',[o.pay.what,one('tg_mailorder')==='없음'?'통신판매업 신고 전':(o.pay.mailorder?'신고번호 '+o.pay.mailorder:''),o.pay.pubMail].filter(Boolean).join('\n')]:null]]);
   S.push(['step4','들어갈 글',[
       ['한 줄 소개',o.head],['소개 글',cut(o.about,120)],
@@ -4743,6 +4762,7 @@ $('form').addEventListener('submit',async function(e){
     '신청서':o.form?('「'+o.form.title+'」 · 받을 칸: '+o.form.fields.join(', ')):'', '신청서 받을 이메일':o.form?o.form.mail:'',
     '목록':o.list?(o.list.what+'\n'+o.list.items):'',
     '영문 상호':o.enName,
+    '블로그 · 유튜브 주소':o.auto,
     '카드 결제':o.pay?(o.pay.what+'\n통신판매업 신고번호: '+(o.pay.mailorder||'신고 전 (오픈 전에 받기)')+'\n공개 이메일: '+o.pay.pubMail):'',
     '그 밖에 필요한 기능':o.more,
     '요금 방식(희망)':o.plan, '예상 금액':o.quote,

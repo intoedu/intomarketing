@@ -326,6 +326,7 @@ tr:last-child th,tr:last-child td{border-bottom:0}
 .opt small{display:block;font-size:14px;color:var(--sub);line-height:1.5}
 .won{font-size:15px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;line-height:1.35}
 .won em{display:block;font-style:normal;font-size:12.5px;color:var(--faint);font-weight:600}
+.won em b.free{color:var(--cobalt-ink);font-weight:800}   /* 11/13 없앤 관리비 — 옛 금액에 줄 긋고 무료 */
 .switch{position:relative;width:50px;height:30px;border-radius:999px;border:0;background:#D5D6DE;transition:background .2s}
 .switch::after{content:"";position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .25s var(--ease)}
 .switch[aria-checked="true"]{background:var(--cobalt)}
@@ -1279,11 +1280,12 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       <div class="opts">
         <div class="opt"><span><b>기본 홈페이지</b><small>필수 · 소개, 대표 인사말, 서비스 · 메뉴 안내, 자주 묻는 질문, 오시는 길(지도), 전화 · 카카오톡 버튼</small></span><span class="won">100,000<em>월 50,000</em></span><button class="switch fixed" type="button" role="switch" aria-checked="true" aria-label="기본 홈페이지 (필수)" disabled></button></div>
         <div class="opt"><span><b>회원가입</b><small>회원가입 · 로그인, 관리자 화면</small></span><span class="won">100,000<em>월 20,000</em></span><button class="switch" type="button" role="switch" aria-checked="false" data-k="member" aria-label="회원가입"></button></div>
-        <div class="opt"><span><b>게시판</b><small>회원가입과 함께 선택 · Q&amp;A(비밀글) · 자유게시판 · 갤러리 중 1개. 1개 추가마다 월 10,000원</small></span><span class="won">50,000<em>월 10,000</em></span><button class="switch" type="button" role="switch" aria-checked="false" data-k="board" aria-label="게시판" disabled></button></div>
-        <div class="opt"><span><b>신청서</b><small>상담 · 예약 · 신청을 이메일로 접수합니다</small></span><span class="won">20,000<em>월 10,000</em></span><button class="switch" type="button" role="switch" aria-checked="false" data-k="form" aria-label="신청서"></button></div>
-        <div class="opt"><span><b>목록 · 검색</b><small>여러 항목을 목록으로 표시하고 검색 기능을 제공합니다</small></span><span class="won">30,000<em>월 10,000</em></span><button class="switch" type="button" role="switch" aria-checked="false" data-k="list" aria-label="목록 · 검색"></button></div>
-        <div class="opt"><span><b>한 · 영 함께 표기</b><small>한국어 · 영어 2개 언어</small></span><span class="won">20,000<em>월 5,000</em></span><button class="switch" type="button" role="switch" aria-checked="false" data-k="lang" aria-label="한 · 영 함께 표기"></button></div>
-        <div class="opt"><span><b>카드 결제</b><small>온라인 카드 결제. 결제 회사 가입과 심사는 고객이 직접 진행합니다</small></span><span class="won">300,000<em>월 50,000</em></span><button class="switch" type="button" role="switch" aria-checked="false" data-k="pay" aria-label="카드 결제"></button></div>
+        <div class="opt"><span><b>게시판</b><small>회원가입과 함께 선택 · Q&amp;A(비밀글) · 자유게시판 · 갤러리 중 1개. 추가 게시판도 월 관리비 무료</small></span><span class="won">50,000<em>월 <s>10,000</s> <b class="free">무료</b></em></span><button class="switch" type="button" role="switch" aria-checked="false" data-k="board" aria-label="게시판" disabled></button></div>
+        <div class="opt"><span><b>신청서</b><small>상담 · 예약 · 신청을 이메일로 접수합니다</small></span><span class="won">20,000<em>월 <s>10,000</s> <b class="free">무료</b></em></span><button class="switch" type="button" role="switch" aria-checked="false" data-k="form" aria-label="신청서"></button></div>
+        <div class="opt"><span><b>목록 · 검색</b><small>여러 항목을 목록으로 표시하고 검색 기능을 제공합니다</small></span><span class="won">30,000<em>월 <s>10,000</s> <b class="free">무료</b></em></span><button class="switch" type="button" role="switch" aria-checked="false" data-k="list" aria-label="목록 · 검색"></button></div>
+        <div class="opt"><span><b>한 · 영 함께 표기</b><small>한국어 · 영어 2개 언어</small></span><span class="won">20,000<em>월 <s>5,000</s> <b class="free">무료</b></em></span><button class="switch" type="button" role="switch" aria-checked="false" data-k="lang" aria-label="한 · 영 함께 표기"></button></div>
+        <!-- 🔴 11/13 카드 결제 판매 안 함 · 블로그 · 유튜브 자동 반영 새로 · 게시판 · 신청서 · 목록 · 한영 월 관리비 무료(옛 금액에 줄) -->
+        <div class="opt"><span><b>블로그 · 유튜브 자동 반영</b><small>블로그에 올린 글 · 유튜브에 올린 영상을 홈페이지에 자동으로 보여 줍니다</small></span><span class="won">30,000<em>월 10,000</em></span><button class="switch" type="button" role="switch" aria-checked="false" data-k="auto" aria-label="블로그 · 유튜브 자동 반영"></button></div>
         <div class="opt"><span><b>공지</b><small>전달받은 공지 · 소식 글을 월 1건, 월간 수정 시 함께 게시합니다 (회원가입 불필요)</small></span><span class="won">무료<em>월 무료</em></span><button class="switch fixed" type="button" role="switch" aria-checked="true" aria-label="공지 (무료 포함)" disabled></button></div>
       </div>
       <aside class="receipt" aria-live="polite">
@@ -1380,7 +1382,6 @@ footer .cr{margin-top:12px;color:#6D8CB8;font-size:var(--t-xs)}
       <details><summary>네이버에서 검색되나요?</summary><p>모든 홈페이지에 네이버 · 구글 검색 등록이 포함됩니다. 노출 순위는 검색 회사가 결정합니다.</p></details>
       <details><summary>약정 없이도 이용할 수 있나요?</summary><p>정가(약정 없음)는 최소 이용 기간이 3개월이며, 3개월이 지나면 언제든 해지할 수 있습니다. 해지를 원하시면 다음 납부일 7일 전까지 알려 주십시오. 정가 3개월이나 약정 기간 중에 해지하면 위약금이 있으며, 자세한 기준은 제작 · 관리 계약서에 따릅니다.</p></details>
       <details><summary>도메인은 누구 명의인가요?</summary><p>유료 도메인은 고객 명의로 등록되어 고객 소유가 됩니다. 비용은 고객 부담이며 등록 회사와 주소 종류에 따라 다릅니다(연 1~2만원을 넘을 수 있습니다). 무료 주소는 비용이 없지만 해지하면 주소가 사라집니다.</p></details>
-      <details><summary>카드 결제도 붙일 수 있나요?</summary><p>추가 기능으로 가능합니다(제작비 300,000원 · 월 50,000원). 결제 회사 가입과 심사는 고객이 직접 진행하며, 홈페이지 하단에 통신판매업 신고번호를 표시해야 합니다.</p></details>
       <details><summary>해지하면 홈페이지는 어떻게 되나요?</summary><p>해지하면 홈페이지를 닫습니다. 유료 도메인은 고객 명의로 등록되어 있어 해지 후에도 고객 소유이며, 무료 주소는 해지하면 사라집니다. 자세한 기준은 제작 · 관리 계약서에 따릅니다.</p></details>
     </div>
   </div>
@@ -1530,7 +1531,7 @@ if(burger)burger.addEventListener('click',function(){var on=sheet.classList.togg
 
 /* ===== 견적 ===== */
 (function(){
-  const P={member:[100000,20000,'회원가입'],board:[50000,10000,'게시판'],form:[20000,10000,'신청서'],list:[30000,10000,'목록 · 검색'],lang:[20000,5000,'한 · 영 표기'],pay:[300000,50000,'카드 결제']};
+  const P={member:[100000,20000,'회원가입'],board:[50000,0,'게시판'],form:[20000,0,'신청서'],list:[30000,0,'목록 · 검색'],lang:[20000,0,'한 · 영 표기'],auto:[30000,10000,'블로그 · 유튜브 자동 반영']};   /* 11/13 새 가격 */
   const sw=[...document.querySelectorAll('.switch[data-k]')],plans=[...document.querySelectorAll('.plans button')];
   const member=document.querySelector('[data-k="member"]'),board=document.querySelector('[data-k="board"]');
   let d=0;const f=n=>n.toLocaleString('ko-KR');

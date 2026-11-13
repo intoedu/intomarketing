@@ -4104,14 +4104,17 @@
   var WEB_PRICE={
     base:  {n:'기본 홈페이지',     make:100000, mon:50000},
     member:{n:'회원가입',          make:100000, mon:20000},
-    board: {n:'게시판',            make:50000,  mon:10000, extraMon:10000},
+    /* 🔴 11/13 새 가격(새 고객부터) — 게시판(추가분 포함) · 신청서 · 목록 · 한영 월 관리비 0 · 자동 반영 새로.
+          이미 계약한 고객의 관리비는 그대로(관리비 장부는 손대지 않음). 카드 결제는 판매 안 하지만 옛 신청 읽기용으로 남김 */
+    board: {n:'게시판',            make:50000,  mon:0, extraMon:0},
     notice:{n:'공지',              make:0,      mon:0},
-    form:  {n:'신청서',            make:20000,  mon:10000},
-    list:  {n:'목록 · 검색',        make:30000,  mon:10000},
-    lang:  {n:'한 · 영 함께 표기',   make:20000,  mon:5000},
+    form:  {n:'신청서',            make:20000,  mon:0},
+    list:  {n:'목록 · 검색',        make:30000,  mon:0},
+    lang:  {n:'한 · 영 함께 표기',   make:20000,  mon:0},
+    auto:  {n:'블로그 · 유튜브 자동 반영', make:30000, mon:10000},
     pay:   {n:'카드 결제',          make:300000, mon:50000}
   };
-  var WEB_KEYS=['base','member','board','notice','form','list','lang','pay'];
+  var WEB_KEYS=['base','member','board','notice','form','list','lang','auto','pay'];
   var WEB_OFF={'정가':0,'6':30,'12':60,'24':100};
   function webFeats(r){                     /* 신청서에서 고른 기능 — 없으면 기본 홈페이지만 */
     var s=((r&&r.details)||{})['고른 기능']||'', f={base:1};
