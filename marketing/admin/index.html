@@ -129,6 +129,22 @@
   .jb-team .th .n{font-size:.72rem;background:rgba(255,255,255,.75);padding:1px 8px;border-radius:999px}
   .jb-team .th button{margin-left:auto;border:0;background:rgba(255,255,255,.8);color:inherit;font-weight:800;border-radius:8px;padding:3px 10px;cursor:pointer;font-size:.8rem}
   .jb-list{border:1px solid var(--line);border-top:0;border-radius:0 0 12px 12px;background:var(--surface)}
+  /* 외주 견적서 (11/13) */
+  .xq-box{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin:0 0 18px}
+  .xq-box .xq-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line)}
+  .xq-box .xq-h .muted{font-size:.78rem}
+  .xq-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 14px;border-top:1px solid var(--line);font-size:.86rem}
+  .xq-row:first-of-type{border-top:0}
+  .xq-row .qno{font-weight:800;font-variant-numeric:tabular-nums}
+  .xq-row .who{color:var(--muted)}
+  .xq-row .act{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+  .xq-row .act .btn{padding:5px 11px;font-size:.8rem}
+  .xq-empty{padding:12px 14px;color:var(--muted);font-size:.84rem}
+  .xq-pick{border:1px solid var(--line);border-radius:10px;margin:0 0 10px}
+  .xq-pick .th{padding:7px 12px;font-weight:800;font-size:.85rem;border-radius:10px 10px 0 0}
+  .xq-pick label{display:flex;gap:10px;align-items:center;padding:8px 12px;border-top:1px solid var(--line);font-size:.86rem;cursor:pointer}
+  .xq-pick label .pr{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .xq-pick label .py{font-size:.76rem;color:var(--muted)}
   .job{display:grid;grid-template-columns:92px 1fr 130px 130px 170px 64px;gap:12px;align-items:center;padding:11px 14px;border-top:1px solid var(--line);cursor:pointer;font-size:.88rem}
   .job:first-child{border-top:0}
   .job:hover{background:var(--surface-2)}
@@ -1179,6 +1195,9 @@
       <div class="fld"><label>프로젝트명</label><input class="inp" id="q_project" placeholder="예: 인력지원 · 필리핀 원어민 매칭"></div>
       <div class="fld"><label>유효기간 (일)</label><input class="inp" id="q_valid" type="number" min="1" value="30"></div>
     </div>
+    <!-- 외주 견적서만 (11/13) — 받는 곳 = 일을 맡긴 회사, 제작 대상 = 실제로 만들어 주는 회사 -->
+    <div class="fld hide" id="q_target_w"><label>제작 대상 <span class="muted" style="font-weight:500">— 실제로 만들어 주는 회사 (견적서 「견적 정보」에 찍힘)</span></label>
+      <input class="inp" id="q_target" placeholder="예: 트루스코리아 · 케이르네"></div>
     <div class="grid2">
       <div class="fld"><label>납품 기한 <span class="muted" style="font-weight:500">— 언제까지 드리는지</span></label>
         <input class="inp" id="q_delivery" placeholder="예: 계약금 입금 후 3주 이내 / 2026-10-15"></div>
@@ -1308,8 +1327,26 @@
   <div class="sheet-f">
     <button class="btn btn-ghost hide" type="button" id="jb_del" onclick="jbDelete()" style="color:var(--bad)">작업 삭제</button>
     <span class="muted" style="font-size:.78rem" id="jb_delnote"></span>
-    <button class="btn btn-ghost" type="button" style="margin-left:auto" onclick="closeModal('jbModal')">닫기</button>
+    <button class="btn btn-ghost hide" type="button" id="jb_xq" style="margin-left:auto" onclick="xqFromJob()">📋 이 작업으로 견적서</button>
+    <button class="btn btn-ghost" type="button" id="jb_close" style="margin-left:auto" onclick="closeModal('jbModal')">닫기</button>
     <button class="btn btn-primary" type="button" onclick="jbSave()">저장</button>
+  </div>
+</div></div>
+
+<!-- 외부 : 견적서에 넣을 작업 고르기 (11/13 이은총 님) -->
+<div class="modal" id="xqModal"><div class="sheet">
+  <div class="sheet-h"><div><h3>외주 견적서 만들기</h3><div class="meta" id="xq_meta"></div></div>
+    <button class="x" type="button" onclick="closeModal('xqModal')">✕</button></div>
+  <div class="sheet-b">
+    <input type="hidden" id="xq_pid">
+    <p class="muted" style="font-size:.82rem;margin:0 0 12px">견적서에 넣을 작업을 고르세요 — 하나만 골라도, 여러 개를 묶어도 됩니다.<br>
+      <b style="color:var(--ink)">받는 곳</b> = 일을 맡긴 회사(작업의 「입금하는 곳」) · <b style="color:var(--ink)">제작 대상</b> = 실제로 만들어 주는 회사(프로젝트 · 브랜드). 다음 창에서 고칠 수 있습니다.</p>
+    <div id="xq_list"></div>
+    <div class="muted" id="xq_warn" style="font-size:.82rem;margin-top:6px"></div>
+  </div>
+  <div class="sheet-f">
+    <button class="btn btn-ghost" type="button" style="margin-left:auto" onclick="closeModal('xqModal')">닫기</button>
+    <button class="btn btn-primary" type="button" onclick="xqNext()">다음 — 견적서 작성</button>
   </div>
 </div></div>
 
@@ -1497,7 +1534,7 @@
 
   var QALL={};
 
-  var ME=null, STAFF=[], COMMS=[], DATA={}, CUR='web', COKEY=null, SCOPE='in', AXIS='work', EXT={projects:[],members:[],links:[],jobs:[],dues:[],subs:[],eps:[],reps:[],files:[],pays:[],err:''}, PJ=null, XTEAM='web', XTAB='org', TL_OFF=0, CURROW=null, STTAB='wait', SET={}, QD=null;
+  var ME=null, STAFF=[], COMMS=[], DATA={}, CUR='web', COKEY=null, SCOPE='in', AXIS='work', EXT={projects:[],members:[],links:[],jobs:[],dues:[],subs:[],eps:[],reps:[],files:[],pays:[],quotes:[],err:''}, PJ=null, XTEAM='web', XTAB='org', TL_OFF=0, CURROW=null, STTAB='wait', SET={}, QD=null;
   /* ---------- 홈페이지 6차 — 「제작 자료」(2차) 건을 신청(1차) 건에 붙여 보기 (2026-10-13) ----------
      DB 에는 신청 건과 제작 자료 건이 «따로» 들어옵니다(고객은 이미 낸 건을 고칠 수 없습니다).
      화면에서만 한 건으로 봅니다. 짝 = 같은 「신청 번호」 + 같은 고객 계정(user_id).
@@ -1793,7 +1830,9 @@
       sb.from('ext_reports').select('*').order('at',{ascending:false}),
       sb.from('ext_files').select('*').order('created_at'),
       sb.from('ext_payments').select('*').order('created_at'),
-      sb.from('ext_job_events').select('job_id,at,to_val').eq('kind','status').in('to_val',['완료','중단'])]);
+      sb.from('ext_job_events').select('job_id,at,to_val').eq('kind','status').in('to_val',['완료','중단']),
+      sb.from('ext_quotes').select('*').order('created_at',{ascending:false})]);   /* 외주 견적서 (11/13) */
+    EXT.quotes=R[11].error?[]:(R[11].data||[]);
     var a=R[0],m=R[1],l=R[2],j=R[3],d=R[4],st=R[5],ep=R[6],rp=R[7],fl=R[8],py=R[9],dn=R[10];
     DONE_AT={}; END_AT={}; (dn.data||[]).forEach(function(e){var o=e.to_val==='완료'?DONE_AT:END_AT;if(!o[e.job_id]||e.at>o[e.job_id])o[e.job_id]=e.at;});
     Object.keys(DONE_AT).forEach(function(k){if(!END_AT[k]||DONE_AT[k]>END_AT[k])END_AT[k]=DONE_AT[k];});
@@ -1943,10 +1982,160 @@
     var js=pjJobs(pid);
     var live=js.filter(function(j){return j.status!=='완료'&&j.status!=='중단';}).length;
     return '<p class="muted" style="font-size:.84rem;margin:-6px 0 14px">작업 '+js.length+'개 · 진행 중 '+live+'개. 작업을 누르면 금액 · 상태 · 담당자 · 포함 항목을 고칩니다. 기한은 작업 창 안에서 넣고, 「타임라인」 탭에서 모아 봅니다.</p>'
+      +xqHTML(pid)
       +['web','sns','design','video','blog'].filter(function(t){return t!=='blog'||pjJobs(pid,'blog').length||pjMembers(pid,'blog').length;})
         .map(function(t){return jobTeamHTML(pid,t);}).join('');
   }
   window.xTab=function(k){XTAB=k;renderExt();};
+
+  /* ══════════ 외주 견적서 (2026-11-13 이은총 님) ══════════
+     「프로젝트 안 업무들도 견적서를 뽑아 줘야」 — 작업을 골라(하나 · 여럿) 한 장으로.
+     🔴 받는 곳 = 우리에게 일을 맡긴 회사(작업의 「입금하는 곳」 · 예: 한길마케팅)
+        제작 대상 · 건명 = 우리가 실제로 만들어 주는 회사(프로젝트 이름 + 브랜드 · 예: 트루스코리아 · 케이르네)
+     저장 = ext_quotes(새 표 · 이은총 님 허락) — requests 는 건드리지 않습니다. 견적서 창 · 종이 · PDF 는 내부 견적서 것을 그대로 씁니다
+     (CURROW 자리에 «외주 견적서 줄»을 잠깐 넣어 씀 · _ext 표시). 결제 링크 · 홈페이지 계약서는 없음(계좌 이체).
+     견적번호 = next_quote_no() 일련번호 그대로 ITM-<팀>-<연도>-<번호> (작업 팀이 섞이면 ETC). */
+  function xqOf(pid){return EXT.quotes.filter(function(x){return x.project_id===pid;});}
+  function xqRow(x,pid,jobIds,quote){
+    var q=x?x.quote:quote;
+    return {_ext:{pid:x?x.project_id:pid,job_ids:x?(x.job_ids||[]):jobIds},id:x?x.id:null,kind:'외주',
+            academy_name:(q&&q.to&&q.to.company)||'',quote:q,quote_no:x?x.quote_no:null,quote_issued_at:x?x.quote_issued_at:null};
+  }
+  function xqTarget(p,js){
+    var br=[]; js.forEach(function(j){var b=(j.brand||'').trim(); if(b&&br.indexOf(b)<0)br.push(b);});
+    return p.name+(br.length?' · '+br.join(', '):'');
+  }
+  function xqHTML(pid){
+    var qs=xqOf(pid);
+    return '<div class="xq-box"><div class="xq-h"><b>📋 외주 견적서 '+qs.length+'</b>'
+      +'<span class="muted">받는 곳 = 일을 맡긴 회사 · 제작 대상 = 실제로 만들어 주는 회사</span>'
+      +'<button class="btn btn-primary" style="margin-left:auto;padding:6px 13px;font-size:.82rem" type="button" onclick="xqPick(\''+pid+'\')">＋ 견적서 만들기</button></div>'
+      +(qs.length?qs.map(function(x){
+        var q=x.quote||{}, t=quoteTotals(q);
+        var amt=(t.once?won(t.once):'')+(t.month?(t.once?' + ':'')+'월 '+won(t.month):'')+(t.year?' + 연 '+won(t.year):'');
+        return '<div class="xq-row"><span class="qno">'+esc(x.quote_no||'번호 없음')+'</span>'
+          +'<span class="muted">'+(x.quote_issued_at?fdate(x.quote_issued_at):'')+'</span>'
+          +'<span>받는 곳 <b>'+esc((q.to&&q.to.company)||'-')+'</b></span>'
+          +'<span class="who">제작 대상 '+esc(q.target||'-')+'</span>'
+          +'<span>'+(amt||'금액 없음')+'</span><span class="muted">작업 '+(x.job_ids||[]).length+'개</span>'
+          +'<span class="act"><button class="btn btn-ghost" type="button" onclick="xqEdit(\''+x.id+'\')">✏️ 편집</button>'
+          +'<button class="btn btn-ghost" type="button" onclick="xqView(\''+x.id+'\')">📄 미리보기</button>'
+          +'<button class="btn btn-primary" type="button" onclick="xqPdf(\''+x.id+'\',this)">💾 PDF</button>'
+          +'<button class="btn btn-ghost" type="button" title="견적서 지우기" onclick="xqDel(\''+x.id+'\')">🗑</button></span></div>';
+      }).join(''):'<div class="xq-empty">아직 외주 견적서가 없습니다. 「＋ 견적서 만들기」에서 작업을 골라 만드세요.</div>')
+      +'</div>';
+  }
+  window.xqPick=function(pid,only){
+    var p=pjOf(pid); if(!p)return;
+    $('xq_pid').value=pid; $('xq_meta').textContent=pjLabel(p);
+    var teams=['web','sns','design','video','blog'];
+    $('xq_list').innerHTML=teams.map(function(t){
+      var js=pjJobs(pid,t); if(!js.length)return '';
+      return '<div class="xq-pick"><div class="th" style="'+tcs(t)+'">'+esc(XKO[t])+'</div>'+js.map(function(j){
+        var chk=only?only===j.id:false;
+        return '<label><input type="checkbox" data-xq="'+j.id+'"'+(chk?' checked':'')+' onchange="xqWarn()">'
+          +'<span><b>'+esc(j.title)+'</b>'+(j.brand?' <span class="muted">· '+esc(j.brand)+'</span>':'')
+          +'<br><span class="py">'+esc(j.status)+' · 받는 곳 '+esc(jobPayer(j))+'</span></span>'
+          +'<span class="pr">'+esc(j.price_type)+' '+(j.price_type==='월정액'&&j.amount!=null?'월 ':'')+wonS(j.amount)+'</span></label>';
+      }).join('')+'</div>';
+    }).join('')||'<div class="xq-empty">이 프로젝트에 작업이 없습니다. 「작업 구조」에서 먼저 작업을 넣어 주세요.</div>';
+    xqWarn(); $('xqModal').classList.add('open');
+  };
+  window.xqFromJob=function(){
+    var id=$('jb_id').value; var j=EXT.jobs.filter(function(x){return x.id===id;})[0]; if(!j)return;
+    closeModal('jbModal'); xqPick(j.project_id,j.id);
+  };
+  function xqChosen(){
+    var ids=[].slice.call(document.querySelectorAll('#xq_list input[data-xq]:checked')).map(function(x){return x.getAttribute('data-xq');});
+    return EXT.jobs.filter(function(j){return ids.indexOf(j.id)>=0;});
+  }
+  window.xqWarn=function(){
+    var js=xqChosen(), py={}; js.forEach(function(j){py[jobPayer(j)]=1;});
+    var n=Object.keys(py).length, miss=js.filter(function(j){return j.amount==null;}).length;
+    $('xq_warn').innerHTML=!js.length?'작업을 하나 이상 고르세요.'
+      :(n>1?'<b style="color:var(--bad)">받는 곳이 다른 작업이 섞였습니다('+esc(Object.keys(py).join(' · '))+').</b> 받는 곳마다 따로 만들어 주세요.'
+        :'고른 작업 '+js.length+'개 · 받는 곳 <b>'+esc(Object.keys(py)[0])+'</b>'+(miss?' · <b>금액 미정 '+miss+'개</b>는 다음 창에서 금액을 넣어 주세요':''));
+  };
+  function xqDelivery(js){            /* 고른 작업의 마감기한 중 가장 늦은 날 */
+    var last=''; js.forEach(function(j){jobDues(j.id).forEach(function(d){var k=kst(d.due_at); if(k&&k.d>last)last=k.d;});});
+    return last;
+  }
+  window.xqNext=function(){
+    var pid=$('xq_pid').value, p=pjOf(pid), js=xqChosen();
+    if(!p)return; if(!js.length){toast('작업을 하나 이상 고르세요');return;}
+    var py={}; js.forEach(function(j){py[jobPayer(j)]=1;});
+    if(Object.keys(py).length>1){toast('받는 곳이 다른 작업은 따로 만들어 주세요');return;}
+    var payer=Object.keys(py)[0].replace(/\s*\(직접\)\s*$/,'');   /* 입금처 「트루스코리아 (직접)」 → 받는 곳 「트루스코리아」 */
+    /* 같은 회사에 보낸 견적서가 있으면 담당자 · 연락처를 이어 씀 */
+    var prev=EXT.quotes.filter(function(x){return x.quote&&x.quote.to&&x.quote.to.company===payer;})[0];
+    var to=prev?JSON.parse(JSON.stringify(prev.quote.to)):{company:payer,manager:'',phone:'',email:'',biz_no:'',addr:''};
+    if(!prev&&payer===p.name)to.manager=p.client_person||'';
+    var target=xqTarget(p,js);
+    var items=js.map(function(j){
+      var nm=j.title+((j.brand&&j.title.indexOf(j.brand)<0)?' ('+j.brand+')':'');
+      var unit=j.amount!=null?Number(j.amount):0, qty=1, cyc='1회';
+      if(j.price_type==='월정액')cyc='매월';
+      if(j.price_type==='건당'){ nm+=' · 건당'; qty=EXT.eps.filter(function(e){return e.job_id===j.id&&e.status!=='중단';}).length||1; }
+      var tot=unit*qty;
+      return {name:nm,unit:unit?String(unit):'',qty:String(qty),cycle:cyc,before:tot?String(tot):'',price:tot?String(tot):''};
+    });
+    var row=xqRow(null,pid,js.map(function(j){return j.id;}),null);
+    var q=defaultQuote(row);
+    q.to=to; q.target=target;
+    q.project=target+' — '+(js.length===1?js[0].title:('외주 작업 '+js.length+'건'));
+    q.delivery=xqDelivery(js);
+    q.items=items;
+    row.quote=q; row.academy_name=to.company;
+    closeModal('xqModal');
+    CURROW=row; openQuote();
+  };
+  window.xqEdit=function(id){
+    var x=EXT.quotes.filter(function(q){return q.id===id;})[0]; if(!x)return;
+    CURROW=xqRow(x); openQuote();
+  };
+  window.xqView=function(id){
+    var x=EXT.quotes.filter(function(q){return q.id===id;})[0]; if(!x)return;
+    CURROW=xqRow(x); previewQuote();
+  };
+  window.xqPdf=function(id,btn){
+    var x=EXT.quotes.filter(function(q){return q.id===id;})[0]; if(!x)return;
+    CURROW=xqRow(x); savePdf(btn);
+  };
+  window.xqDel=async function(id){
+    var x=EXT.quotes.filter(function(q){return q.id===id;})[0]; if(!x)return;
+    if(!confirm((x.quote_no||'이 견적서')+' 를 지울까요?\n이미 보낸 견적서라면 지우지 말고 새로 만들어 고친 번호로 다시 보내는 것이 좋습니다.'))return;
+    var r=await sb.from('ext_quotes').delete().eq('id',id).select();
+    if(r.error){toast('지우기 실패: '+r.error.message);return;}
+    if(!(r.data||[]).length){toast('권한이 없어 지워지지 않았습니다 — 최고관리자 · 프로젝트 관리자 · 만든 본인만');return;}
+    EXT.quotes=EXT.quotes.filter(function(q){return q.id!==id;}); renderExt(); toast('지웠습니다');
+  };
+  function xqNo(raw,jobIds){
+    var teams={}; EXT.jobs.forEach(function(j){if(jobIds.indexOf(j.id)>=0)teams[j.team]=1;});
+    var ks=Object.keys(teams), code=ks.length===1?(QNO_CODE[ks[0]]||'ETC'):'ETC';
+    var m=/^[A-Z]+-(\d{4})-(\d+)$/.exec(String(raw||''));
+    return m?('ITM-'+code+'-'+m[1].slice(2)+'-'+m[2]):String(raw||'').replace(/^ESC-/,'ITM-');
+  }
+  async function xqSave(preview){
+    var c=CURROW, now=new Date().toISOString();
+    var row={project_id:c._ext.pid,job_ids:c._ext.job_ids,quote:QD,updated_at:now};
+    if(!c.quote_no){
+      var no=await sb.rpc('next_quote_no');
+      if(no.error){toast('견적번호 생성 실패: '+no.error.message);return;}
+      row.quote_no=xqNo(no.data,c._ext.job_ids); row.quote_issued_at=now;
+    }
+    var r=c.id?await sb.from('ext_quotes').update(row).eq('id',c.id).select().maybeSingle()
+              :await sb.from('ext_quotes').insert(row).select().maybeSingle();
+    if(r.error){toast('저장 실패: '+r.error.message);return;}
+    if(!r.data){toast('권한이 없어 저장되지 않았습니다');return;}
+    EXT.quotes=[r.data].concat(EXT.quotes.filter(function(q){return q.id!==r.data.id;}))
+      .sort(function(a,b){return a.created_at<b.created_at?1:-1;});
+    CURROW=xqRow(r.data);
+    closeModal('quoteModal');
+    if(SCOPE==='out'&&PJ===r.data.project_id)renderExt();
+    toast('외주 견적서를 저장했습니다 · '+r.data.quote_no);
+    if(preview==='pdf')savePdf(null);
+    else if(preview)previewQuote();
+  }
 
   /* ---------- 외부 3단계 : 기한 · 타임라인 (2026-11-02 이은총 님) ----------
      기한 이름 = 중간 컨펌 · 최종 컨펌 · 마감기한 (작업 상태 낱말과 같게 — 이은총 님 11/2 권고안 채택).
@@ -3102,6 +3291,7 @@
     jbWho(j?(j.member_ids||[]):[]);
     $('jb_dl').innerHTML=''; (j?jobDues(j.id):[]).forEach(function(d){dlAdd(d);}); if(!j||!jobDues(j.id).length)dlAdd();
     $('jb_del').classList.toggle('hide',!(j&&ME.role==='owner'));
+    $('jb_xq').classList.toggle('hide',!j); $('jb_close').style.marginLeft=j?'0':'auto';
     $('jb_delnote').textContent=j&&ME.role!=='owner'?'삭제는 최고관리자만 · 멈춘 작업은 상태를 「중단」으로':'';
     $('jb_ev').textContent=j?'불러오는 중…':'저장하면 여기에 남습니다.';
     $('jbModal').classList.add('open');
@@ -4591,6 +4781,8 @@
     $('q_to_phone').value=QD.to.phone||'';$('q_to_email').value=QD.to.email||'';
     $('q_to_bizno').value=QD.to.biz_no||'';$('q_to_addr').value=QD.to.addr||'';
     $('q_project').value=QD.project||'';$('q_valid').value=QD.valid_days||30;$('q_note').value=QD.note||'';
+    $('q_target_w').classList.toggle('hide',!r._ext); $('q_target').value=QD.target||'';   /* 외주 견적서만 (11/13) */
+    if(r._ext)$('q_meta').textContent='외주 · '+(r.quote_no?('견적번호 '+r.quote_no):'새 견적서')+' · 받는 곳 = 일을 맡긴 회사 · 제작 대상 = 실제로 만들어 주는 회사';
     $('q_delivery').value=QD.delivery||'';
     $('q_owner_staff').value=QD.owner_staff||((ME&&(ME.name||ME.email))||'');
     $('q_pay').value=QD.pay||'';$('q_bank').value=QD.bank||'';
@@ -4870,6 +5062,7 @@
     QD.pay=$('q_pay').value;
     QD.bank=$('q_bank').value.trim();
     QD.note=$('q_note').value;
+    if(CURROW&&CURROW._ext)QD.target=$('q_target').value.trim();   /* 외주 견적서 — 제작 대상 (11/13) */
     QD.terms={flow:$('q_flow').value,include:$('q_inc').value,
               exclude:$('q_exc').value,refund:$('q_ref').value};
     /* 견적서 기본 문구의 「○」(금액 · 기간 등 건마다 채우는 자리)가 남아 있으면 한 번 묻습니다 (2026-10-13) */
@@ -4894,6 +5087,7 @@
       var rv=/^[^\n]*제작\s*중[^\n]*?(\d+)\s*회/m.exec(QD.terms.include);
       if(rv&&rv[1]!=='5'&&!confirm('계약서 제5조는 「제작 중 수정 5회」입니다. 견적서 조항에는 '+rv[1]+'회로 적혀 있어 계약서와 다릅니다.\n그대로 저장할까요?'))return;
     }
+    if(CURROW&&CURROW._ext){ await xqSave(preview); return; }   /* 외주 견적서는 ext_quotes 에 (requests 는 안 건드림 · 11/13) */
     var patch={quote:QD};
     if(!CURROW.quote_no){
       var no=await sb.rpc('next_quote_no');
@@ -4988,6 +5182,7 @@
          +'<div class="pr"><span>작성일</span><span>'+issued.getFullYear()+'. '+('0'+(issued.getMonth()+1)).slice(-2)+'. '+('0'+issued.getDate()).slice(-2)+'.</span></div>'
          +'<div class="pr"><span>유효기간</span><span>발행일로부터 '+(q.valid_days||30)+'일</span></div>'
          +'<div class="pr"><span>프로젝트</span><span>'+esc(q.project||'')+'</span></div>'
+         +(q.target?'<div class="pr"><span>제작 대상</span><span>'+esc(q.target)+'</span></div>':'')   /* 외주 견적서 (11/13) */
          +(q.delivery?'<div class="pr"><span>납품 기한</span><span>'+esc(q.delivery)+'</span></div>':'')
          +(q.owner_staff?'<div class="pr"><span>담당자</span><span>'+esc(q.owner_staff)+'</span></div>':'')+'</div>'
      +'</div>'
