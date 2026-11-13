@@ -209,8 +209,16 @@
   .pbig{font-size:1.85rem;font-weight:850;color:var(--gold);line-height:1.15;letter-spacing:-.02em;
         font-variant-numeric:tabular-nums}
   .pbig small{font-size:var(--t-sm);font-weight:700;color:var(--muted);letter-spacing:0}
-  s.pwas{color:var(--muted);font-weight:500;font-size:.62em;margin-right:6px;letter-spacing:0}   /* 11/13 없앤 관리비 — 옛 금액에 줄 */
-  .wtbl s.pwas{font-size:1em}
+/* 11/13 없앤 관리비 — 옛 금액에 줄 긋고, 꺾인 화살표로 다음 줄 「무료」(새 금액)로 이어 줌 · 제작비와 헷갈리지 않게 */
+.cut{display:inline-flex;flex-direction:column;align-items:flex-start;gap:3px;line-height:1.2;vertical-align:top}
+.cut s{color:var(--muted);font-weight:500;text-decoration-thickness:1.5px}
+.cut .to{position:relative;padding-left:22px;color:var(--gold);font-weight:800}
+.cut .to::before{content:"";position:absolute;left:4px;top:-6px;width:12px;height:calc(50% + 5px);border-left:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);border-bottom-left-radius:4px}
+.cut .to::after{content:"";position:absolute;left:14px;top:calc(50% - 4px);border-left:6px solid var(--muted);border-top:4px solid transparent;border-bottom:4px solid transparent}
+.pbig .cut s{font-size:.5em;letter-spacing:0}
+.pbig .cut .to{padding-left:26px}
+.wtbl .cut{align-items:flex-end}
+.wtbl .cut .to{color:var(--accent-ink)}
   .pbig.quote{font-size:var(--t-lg);color:var(--accent)}
   .psmall{font-size:var(--t-sm);color:var(--muted);margin-top:8px}
   .pterms{font-size:var(--t-xs);color:var(--muted);margin-top:8px;line-height:1.7;
@@ -2719,7 +2727,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
         +(i===0?'<div class="pbest">필수</div>':'')
         +'<div class="pstage">'+(i===0?'기본':'기능 추가')+'</div>'
         +'<div class="psub">'+it.n+'</div>'
-        +'<div class="pmoney"><div class="pbig tnum">'+(!it.make&&!it.mon&&!it.was?'무료':(it.was&&!it.mon?'<s class="pwas">'+wonf(it.was)+'</s>무료<small> / 월</small>':wonf(it.mon)+'<small> 원 / 월</small>'))+'</div>'
+        +'<div class="pmoney"><div class="pbig tnum">'+(!it.make&&!it.mon&&!it.was?'무료':(it.was&&!it.mon?'<span class="cut"><s>월 '+wonf(it.was)+'원</s><span class="to">관리비 무료</span></span>':wonf(it.mon)+'<small> 원 / 월</small>'))+'</div>'
         +'<div class="psmall">'+(!it.make&&!it.mon&&!it.was?'제작비 · 월 관리비 없음':'제작비 <b>'+wonf(it.make)+'원</b>')+'</div></div>'
         +'<p class="pdesc">'+it.d+'</p></div>';
     });
@@ -2736,7 +2744,7 @@ img{outline:1px solid rgba(0,0,0,.1);outline-offset:-1px}
           +'<td>'+(free?'<b class="isfree">무료</b>':wonf(webMake(exA.make,p[1])))+'</td>'
           +'<td>'+(free?'<b class="isfree">무료</b>':wonf(webMake(exB.make,p[1])))+'</td></tr>';
       }).join('')
-      +'<tr><td>월 관리비<small>전 요금 방식 동일</small></td><td></td><td>'+wonf(exA.mon)+'</td><td>'+(exBwas>exB.mon?'<s class="pwas">'+wonf(exBwas)+'</s>':'')+wonf(exB.mon)+'</td></tr>'
+      +'<tr><td>월 관리비<small>전 요금 방식 동일</small></td><td></td><td>'+wonf(exA.mon)+'</td><td>'+(exBwas>exB.mon?'<span class="cut"><s>'+wonf(exBwas)+'</s><span class="to">'+wonf(exB.mon)+'</span></span>':wonf(exB.mon))+'</td></tr>'
       +'</tbody></table></div>'
       +'<p class="pdesc" style="grid-column:1/-1;margin-top:4px">약정 시 선택 항목의 제작비 합계에서 할인하며, 할인한 금액은 만원 단위로 올림합니다. '
       +'계약 시에는 제작비만 청구하고, 월 관리비는 오픈한 달부터 매월 청구합니다. '
