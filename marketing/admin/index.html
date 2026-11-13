@@ -207,6 +207,9 @@
   .td-add .inp{padding:6px 9px;font-size:.82rem}
   .td-add .btn{padding:6px 12px;font-size:.8rem}
   .ep{display:grid;grid-template-columns:70px 1fr 120px 1fr 30px 22px;gap:8px;align-items:center;padding:4px 0;font-size:.85rem}
+  /* 끝난 회차 — 내 할 일에서도 보이게(11/13 이은총 님) · 흐리게 + 제목 줄 긋기 */
+  .ep.done>span:nth-child(2){text-decoration:line-through;color:var(--muted)}
+  .ep.done{opacity:.75}
   .ep .up{border:1px solid var(--line);background:var(--surface);border-radius:7px;cursor:pointer;padding:3px 0;font-size:.8rem}
   /* 외부 — 한 일 (보고 · 결과물) */
   .rp-drop{border:2px dashed var(--line);border-radius:12px;padding:16px;text-align:center;font-size:.84rem;color:var(--muted);background:var(--surface-2)}
@@ -2101,7 +2104,9 @@
   function jobSubs(jid){return EXT.subs.filter(function(x){return x.job_id===jid;}).sort(function(a,b){return ((a.no==null?999:a.no)-(b.no==null?999:b.no))||a.sort-b.sort;});}
   function jobEps(jid){return EXT.eps.filter(function(x){return x.job_id===jid;}).sort(function(a,b){return a.sort-b.sort;});}
   function yymmdd(){return kstToday().slice(2).replace(/-/g,'');}
-  /* 작업 카드 한 장 — 할 일 탭 · 내 할 일 공용. o.mineOnly = 내 할 일(끝난 세부 · 회차 숨김), o.showPj = 프로젝트 이름 표시 */
+  /* 작업 카드 한 장 — 할 일 탭 · 내 할 일 공용. o.mineOnly = 내 할 일, o.showPj = 프로젝트 이름 표시
+     🔴 11/13 이은총 님 「추가한 것들 삭제할 수 있게 · 작업 완료된 것들 표시되게」 — 내 할 일에서도 끝난 세부 · 회차를 흐리게 보여 주고,
+        회차는 내 할 일에서도 ✕ 로 뺄 수 있음(세부 항목 ✕ 는 할 일 탭에서만 — 관리자가 만든 항목이라). */
   function todoCard(j,o){
     o=o||{}; var p=pjOf(j.project_id), mgr=isMgr(j.project_id);
     var subs=jobSubs(j.id), eps=jobEps(j.id);
@@ -2121,7 +2126,6 @@
       var ds=jobDues(j.id);
       h+='<div class="td-sec"><div class="lb">세부 항목</div>';
       subs.forEach(function(x){
-        if(o.mineOnly&&x.done)return;
         var d=ds.filter(function(y){return y.id===x.deadline_id;})[0];
         h+='<div class="st'+(x.done?' done':'')+'"><input type="checkbox"'+(x.done?' checked':'')+' onchange="subToggle(\''+x.id+'\',this.checked)">'
           +'<span class="no">'+(x.no==null?'·':x.no+'.')+'</span><span class="tx">'+esc(x.title)+'</span>'
@@ -2140,17 +2144,18 @@
     }
     /* 건당 회차 */
     if(j.price_type==='건당'){
-      var show=o.mineOnly?eps.filter(function(e){return e.status!=='완료'&&e.status!=='중단';}):eps;
+      var show=eps;   /* 11/13 — 내 할 일에서도 끝난 회차까지 다 보여 줌 */
       h+='<div class="td-sec"><div class="lb">회차 '+eps.filter(function(e){return e.status==='완료';}).length+'/'+eps.length+' 완료 · 1건 '+wonS(j.amount)+'</div>';
       show.forEach(function(e,i){
-        h+='<div class="ep"><span class="tnum muted">'+esc(e.ymd||'-')+'</span><span>'+(eps.indexOf(e)+1)+'. '+esc(e.title)+'</span>'
+        var fin=e.status==='완료'||e.status==='중단';
+        h+='<div class="ep'+(fin?' done':'')+'"><span class="tnum muted">'+esc(e.ymd||'-')+'</span><span>'+(eps.indexOf(e)+1)+'. '+esc(e.title)+'</span>'
           +'<select class="inp" onchange="epSet(\''+e.id+'\',{status:this.value})">'+EPST.map(function(x){return '<option'+(x===e.status?' selected':'')+'>'+x+'</option>';}).join('')+'</select>'
           +(e.link?(/^https?:\/\//i.test(e.link)?'<a href="'+esc(e.link)+'" target="_blank" rel="noopener">'+esc(e.link)+'</a>':'<span>'+esc(e.link)+'</span>')
             :'<input class="inp" placeholder="결과물 링크 붙여 넣기" onchange="epSet(\''+e.id+'\',{link:this.value.trim()||null})">')
           +'<button class="up" type="button" title="이 회차 결과물 올리기 (중간 컨펌)" onclick="rpOpen(\''+j.id+'\',\'중간 컨펌\',\''+e.id+'\')">📎</button>'
-          +(o.mineOnly?'<span></span>':'<button class="x3" type="button" title="빼기" onclick="epDel(\''+e.id+'\')" style="border:0;background:none;color:var(--muted);cursor:pointer">✕</button>')+'</div>';
+          +'<button class="x3" type="button" title="빼기" onclick="epDel(\''+e.id+'\')" style="border:0;background:none;color:var(--muted);cursor:pointer">✕</button></div>';
       });
-      if(!show.length)h+='<div class="muted" style="font-size:.8rem">'+(o.mineOnly?'진행 중인 회차가 없습니다.':'아직 회차가 없습니다.')+'</div>';
+      if(!show.length)h+='<div class="muted" style="font-size:.8rem">아직 회차가 없습니다.</div>';
       h+='<div class="td-add"><input class="inp" style="width:80px" id="ey_'+j.id+'" value="'+yymmdd()+'" title="YYMMDD">'
         +'<input class="inp" style="flex:1" id="et_'+j.id+'" placeholder="회차 제목 추가" onkeydown="if(event.key===\'Enter\')epAdd(\''+j.id+'\')">'
         +'<button class="btn btn-ghost" type="button" onclick="epAdd(\''+j.id+'\')">추가</button></div></div>';
@@ -2201,7 +2206,8 @@
     toast('저장했습니다'); await xReload();
   };
   window.epDel=async function(id){
-    if(!confirm('이 회차를 뺄까요?'))return;
+    var e0=EXT.eps.filter(function(x){return x.id===id;})[0];
+    if(!confirm(e0&&e0.status==='완료'?'완료된 회차입니다. 빼면 받을 돈(건당 정산)에서도 빠집니다.\n그래도 뺄까요?':'이 회차를 뺄까요?'))return;
     var r=await sb.from('ext_episodes').delete().eq('id',id).select();
     if(r.error||!(r.data||[]).length){toast('빼기 실패: '+dbMsg(r.error,'권한을 확인해 주세요'));return;}
     await xReload();
