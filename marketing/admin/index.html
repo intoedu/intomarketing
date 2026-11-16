@@ -1387,7 +1387,7 @@
     <button class="x" type="button" onclick="closeModal('xqdModal')">✕</button></div>
   <div class="sheet-b" id="xqd_body"></div>
   <div class="sheet-f">
-    <button class="btn btn-ghost" type="button" style="color:var(--bad)" onclick="xqDel(XQD)">견적서 삭제</button>
+    <button class="btn btn-ghost" type="button" style="color:var(--bad)" onclick="xqdDel()">견적서 삭제</button>
     <button class="btn btn-ghost" type="button" style="margin-left:auto" onclick="closeModal('xqdModal')">닫기</button>
   </div>
 </div></div>
@@ -2094,9 +2094,9 @@
       '<div class="xqd-q"><span class="qno">'+esc(x.quote_no||'번호 없음')+'</span>'
       +'<b class="muted" style="font-weight:600;font-size:.84rem">'+(x.quote_issued_at?'발행 '+fdate(x.quote_issued_at)+' · ':'')+(xqAmt(q)||'금액 없음')+'</b>'
       +'<span class="acts"><button class="btn btn-ghost" type="button" onclick="xqdEdit()">✏️ 편집</button>'
-      +'<button class="btn btn-primary" type="button" onclick="xqPdf(XQD,this)">💾 PDF 받기</button>'
-      +'<button class="btn btn-ghost" type="button" onclick="xqView(XQD)">📄 미리보기</button>'
-      +'<button class="btn btn-ghost" type="button" onclick="xqView(XQD)">✉️ 메일 보내기</button></span></div>'
+      +'<button class="btn btn-primary" type="button" onclick="xqdPdf(this)">💾 PDF 받기</button>'
+      +'<button class="btn btn-ghost" type="button" onclick="xqdView()">📄 미리보기</button>'
+      +'<button class="btn btn-ghost" type="button" onclick="xqdView()">✉️ 메일 보내기</button></span></div>'
       +'<div style="margin-top:10px">'+stRow('📤','보냄',x.sent_at,'sent','보냈다고 기록')+stRow('✍️','서명',x.signed_at,'sign','서명 받았다고 기록')+'</div>'
       +(t.month&&!x.signed_at?'<p class="warn" style="font-size:.84rem;margin:8px 0 0">🔴 월정액이 들어 있어 견적서 PDF 뒤쪽에 계약서가 붙습니다 — 서명을 받으면 「서명 받았다고 기록」을 눌러 주세요.</p>':'')
       +'<dl class="xqd-info"><dt>받는 곳</dt><dd><b>'+esc((q.to&&q.to.company)||'-')+'</b>'+(q.to&&q.to.manager?' · '+esc(q.to.manager):'')+'</dd>'
@@ -2112,6 +2112,11 @@
       }).join('')
       +'<p class="muted" style="font-size:.8rem;margin:8px 0 0">입금은 작업 창의 「입금 ✅ / ☑️」에서 기록합니다. 작업을 누르면 그 작업 창이 열립니다.</p>';
   }
+  /* 🔴 11/16 고침 — 단추 글(onclick)은 바깥에서 돌아서 XQD 를 못 봅니다(이 안에만 있는 이름). 그래서 미리보기 · PDF · 삭제가 눌러도 아무 일이 없었습니다.
+     단추는 아래 window.xqd… 를 부르고, 그 안에서 XQD 를 씁니다. */
+  window.xqdPdf=function(btn){ if(XQD)xqPdf(XQD,btn); };
+  window.xqdView=function(){ if(XQD)xqView(XQD); };
+  window.xqdDel=function(){ if(XQD)xqDel(XQD); };
   window.xqdEdit=function(){var id=XQD; closeModal('xqdModal'); XQD_BACK=id; xqEdit(id);};
   window.xqdToPj=function(){var x=xqById(XQD); if(!x)return; closeModal('xqdModal'); PJ=x.project_id; XQALL=false; XTAB='quote'; toExt(); renderExtNav(); renderExt();};
   window.xqMark=async function(kind){
@@ -3900,6 +3905,8 @@
     return (x.due&&x.due<lgToday())?'late':'ing';
   }
   var LG_SHOWN=null;   /* 지금 대장을 보여 주는 화면(web · sns) — 화면이 바뀔 때만 접기 · 펴기를 정함 */
+  /* 🔴 11/16 — 대장 찾기 · 거르기 칸(oninput="renderFee()")이 바깥에서 부르므로 꺼내 둠. 없으면 칸을 바꿔도 목록이 안 바뀜 */
+  window.renderFee=function(){return renderFee();};
   function renderFee(){
     var box=$('feeBox'); if(!box)return;
     var a=lgArea();
@@ -5125,6 +5132,7 @@
         저장되는 값은 예전과 같이 «쉼표 없는 숫자 글자»입니다 (옛 견적서와 호환). */
   function digits(v){return String(v==null?'':v).replace(/[^0-9]/g,'').replace(/^0+(?=\d)/,'');}
   function comma(v){var d=digits(v);return d?Number(d).toLocaleString('ko-KR'):'';}
+  window.comma=comma;   /* 🔴 11/16 — 계약서 창 금액 칸(oninput="this.value=comma(...)")이 바깥에서 부름 */
   function qNumBox(i,k,v,ph){
     return '<input class="qi r" type="text" inputmode="numeric" autocomplete="off" data-qi="'+i+'" data-qk="'+k+'"'
       +' value="'+esc(comma(v))+'" placeholder="'+ph+'" oninput="qNum(this)"'
