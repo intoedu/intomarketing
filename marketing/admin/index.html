@@ -2098,7 +2098,7 @@
       +'<button class="btn btn-ghost" type="button" onclick="xqdView()">📄 미리보기</button>'
       +'<button class="btn btn-ghost" type="button" onclick="xqdView()">✉️ 메일 보내기</button></span></div>'
       +'<div style="margin-top:10px">'+stRow('📤','보냄',x.sent_at,'sent','보냈다고 기록')+stRow('✍️','서명',x.signed_at,'sign','서명 받았다고 기록')+'</div>'
-      +(t.month&&!x.signed_at?'<p class="warn" style="font-size:.84rem;margin:8px 0 0">🔴 월정액이 들어 있어 견적서 PDF 뒤쪽에 계약서가 붙습니다 — 서명을 받으면 「서명 받았다고 기록」을 눌러 주세요.</p>':'')
+      +xqdCBox(x)
       +'<dl class="xqd-info"><dt>받는 곳</dt><dd><b>'+esc((q.to&&q.to.company)||'-')+'</b>'+(q.to&&q.to.manager?' · '+esc(q.to.manager):'')+'</dd>'
       +'<dt>제작 대상</dt><dd>'+esc(q.target||'-')+'</dd><dt>건명</dt><dd>'+esc(q.project||'-')+'</dd>'
       +'<dt>납품 예정</dt><dd>'+esc(q.delivery||'-')+'</dd>'
@@ -2117,6 +2117,37 @@
   window.xqdPdf=function(btn){ if(XQD)xqPdf(XQD,btn); };
   window.xqdView=function(){ if(XQD)xqView(XQD); };
   window.xqdDel=function(){ if(XQD)xqDel(XQD); };
+  /* 계약서 — 외주는 견적서에 붙이지 않고 여기서 고름 (11/16 이은총 님 「계약서를 옵션으로, 우리가 정할 수 있게」) */
+  function xqdCBox(x){
+    var q=x.quote||{}, m=q.contract_mode||'none', k=q.contract;
+    var opt=[['none','없음 — 맡긴 업체가 씀'],['gen','우리 계약서 — 일반 (서비스 이용)']];
+    if(window.WEB_CONTRACT_TPL)opt.splice(1,0,['web','우리 계약서 — 홈페이지 제작 · 관리']);
+    var hint=m==='none'?'견적서만 나갑니다. 계약서는 일을 맡긴 업체 양식으로 씁니다.'
+            :m==='web'?(k?'저장 '+fdate(k.saved_at):'아직 작성 안 함 — 견적서 값으로 채워짐 · 「✏️ 계약서 작성」에서 요금 방식 · 고객 구분을 넣으세요')
+            :'견적서의 품목 · 금액 · 조항으로 만든 계약서';
+    var sb2='padding:6px 12px;font-size:.82rem';
+    return '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)">'
+      +'<b style="font-size:.88rem">📝 계약서</b>'
+      +'<select class="inp" style="width:auto" onchange="xqdCMode(this.value)">'+opt.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===m?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select>'
+      +(m==='none'?'':'<span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">'
+        +(m==='web'?'<button class="btn btn-ghost" style="'+sb2+'" type="button" onclick="xqdContract(\'edit\')">✏️ 계약서 작성</button>':'')
+        +'<button class="btn btn-primary" style="'+sb2+'" type="button" onclick="xqdContract(\'pdf\',this)">💾 계약서 PDF</button>'
+        +'<button class="btn btn-ghost" style="'+sb2+'" type="button" onclick="xqdContract(\'view\')">📄 미리보기</button></span>')
+      +'<span class="muted" style="flex-basis:100%;font-size:.8rem">'+esc(hint)+(m!=='none'&&!x.signed_at?' · 서명을 받으면 위 「서명 받았다고 기록」을 눌러 주세요.':'')+'</span></div>';
+  }
+  window.xqdCMode=async function(v){
+    var x=xqById(XQD); if(!x)return;
+    var nq=JSON.parse(JSON.stringify(x.quote||{})); nq.contract_mode=v;
+    var r=await sb.from('ext_quotes').update({quote:nq,updated_at:new Date().toISOString()}).eq('id',x.id).select().maybeSingle();
+    if(r.error){toast('저장 실패: '+r.error.message);xqdRender(x);return;}
+    if(!r.data){toast('권한이 없어 저장되지 않았습니다 — 최고관리자 · 프로젝트 관리자 · 만든 본인만');xqdRender(x);return;}
+    EXT.quotes=EXT.quotes.map(function(q){return q.id===x.id?r.data:q;}); xqdRender(r.data);
+    toast(v==='none'?'계약서 없음으로 바꿨습니다':'계약서를 고쳤습니다');
+  };
+  window.xqdContract=function(act,btn){
+    var x=xqById(XQD); if(!x)return; CURROW=xqRow(x);
+    if(act==='edit')openContract(); else if(act==='pdf')savePdf(btn,'contract'); else previewContract();
+  };
   window.xqdEdit=function(){var id=XQD; closeModal('xqdModal'); XQD_BACK=id; xqEdit(id);};
   window.xqdToPj=function(){var x=xqById(XQD); if(!x)return; closeModal('xqdModal'); PJ=x.project_id; XQALL=false; XTAB='quote'; toExt(); renderExtNav(); renderExt();};
   window.xqMark=async function(kind){
@@ -5514,7 +5545,7 @@
        +(SET.biz_no?' · '+esc(SET.biz_no):'')
        +(SET.email?' · '+esc(SET.email):'')+'</div>'
      /* 홈페이지는 계약서를 따로 받습니다(2026-11-02) — 견적서 뒤에 붙이는 것은 그 밖의 갈래만 */
-     +(needContract(t)&&!isWebContract(r)?contractHTML(r,q,t):'')
+     +(!r._ext&&cKind(r)==='gen'?contractHTML(r,q,t):'')   /* 11/16 — 외주는 붙이지 않음(상세 창에서 따로) · 「기타」+홈페이지 관리비는 홈페이지 계약서로 따로 */
      +'</div>';
   }
 
@@ -5621,10 +5652,34 @@
     return '<h1 class="c-title">홈페이지 제작 · 관리 계약서</h1><div class="c-sub">CONTRACT</div>'
       +window.WEB_CONTRACT_TPL.replace(/\{\{([^}]+)\}\}/g,function(m,k){ return (k in v)?v[k]:m; });
   }
-  function isWebContract(r){ return groupOf(r)==='web'&&!!window.WEB_CONTRACT_TPL&&!!(r&&r.quote)&&needContract(quoteTotals(r.quote)); }
+  /* ══ 계약서 갈래를 한곳에서 정합니다 (2026-11-16 이은총 님) ══
+     · 외주 : 견적서 뒤에 붙이지 않습니다. 상세 창에서 고릅니다 — quote.contract_mode
+         'none' 없음(맡긴 업체가 자기 양식으로 씀 · 기본) · 'web' 우리 홈페이지 계약서 · 'gen' 우리 일반 계약서.
+       「어느 팀을 통해 들어온 외주냐에 따라 우리가 쓸 때도, 맡긴 업체가 쓸 때도 있다」 → 건마다 고름.
+     · 내부 : 매월 · 매년 금액이 없으면 계약서 없음(입금 = 동의 두 줄) · 홈페이지 갈래 = 홈페이지 계약서(따로 PDF)
+         · 「기타」인데 홈페이지 관리비(매월)가 들어 있으면 → 홈페이지 계약서(따로 PDF) — 예전엔 「기타 이용 계약서」가 붙었음
+         · 그 밖 = 견적서 뒤에 붙는 일반 계약서(genContractHTML) */
+  function webMonthly(q){ return ((q&&q.items)||[]).some(function(it){ return it&&/매월|매년/.test(it.cycle||'')&&/홈페이지/.test(it.name||'')&&Number(it.price)>0; }); }
+  function cKind(r){
+    var q=(r&&r.quote)||{};
+    if(r&&r._ext){ var m=q.contract_mode; return (m==='web'&&window.WEB_CONTRACT_TPL)?'web':(m==='gen'?'gen':'none'); }
+    if(!needContract(quoteTotals(q)))return 'none';
+    var g=groupOf(r);
+    if(window.WEB_CONTRACT_TPL&&(g==='web'||(g==='etc'&&webMonthly(q))))return 'web';
+    return 'gen';
+  }
+  function isWebContract(r){ return !!(r&&r.quote)&&!r._ext&&cKind(r)==='web'; }
+  function cArea(r){                        /* 일반 계약서 제목 앞머리 — 외주는 들어간 작업의 팀(섞이면 「서비스」) */
+    if(r&&r._ext){
+      var tm={}; EXT.jobs.forEach(function(j){ if((r._ext.job_ids||[]).indexOf(j.id)>=0)tm[j.team]=1; });
+      var ks=Object.keys(tm); return ks.length===1&&AREAS[ks[0]]&&ks[0]!=='etc'?AREAS[ks[0]]:'서비스';
+    }
+    return AREAS[groupOf(r)]||'서비스';
+  }
   function contractPaperHTML(){
     var r=CURROW,q=r.quote||{},t=quoteTotals(q);
-    var body=(groupOf(r)==='web'&&window.WEB_CONTRACT_TPL)?webContractHTML(r,q,t):genContractHTML(r,q,t);
+    var web=cKind(r)==='web'||(!r._ext&&groupOf(r)==='web'&&!!window.WEB_CONTRACT_TPL);
+    var body=web?webContractHTML(r,q,t):genContractHTML(r,q,t);
     return '<div class="paper" id="paperBody"><div class="c-doc">'+body+'</div></div>';
   }
 
@@ -5679,6 +5734,16 @@
     if(after && (!C['요금']||!C['고객'])
        && !confirm('요금 방식 또는 고객 구분이 비어 있습니다 (제9조 위약금 기준이 여기서 갈립니다).\n빈칸(☐)으로 둔 채 계속할까요?'))return;
     var nq=JSON.parse(JSON.stringify(q)); nq.contract=C;
+    if(r._ext){                               /* 외주 견적서 — ext_quotes.quote 안에 (requests 는 안 건드림 · 11/16) */
+      var xr=await sb.from('ext_quotes').update({quote:nq,updated_at:new Date().toISOString()}).eq('id',r.id).select().maybeSingle();
+      if(xr.error){toast('저장 실패: '+xr.error.message);return;}
+      if(!xr.data){toast('권한이 없어 저장되지 않았습니다');return;}
+      EXT.quotes=EXT.quotes.map(function(x){return x.id===xr.data.id?xr.data:x;});
+      CURROW=xqRow(xr.data); closeModal('contractModal'); toast('계약서 내용을 저장했습니다');
+      if(XQD===xr.data.id&&$('xqdModal').classList.contains('open'))xqdRender(xr.data);
+      if(after==='pdf')savePdf(null,'contract'); else if(after)previewContract();
+      return;
+    }
     var res=await sb.from('requests').update({quote:nq}).eq('id',r.id).select().maybeSingle();
     if(res.error){toast('저장 실패: '+res.error.message);return;}
     if(!res.data){toast('권한이 없어 저장되지 않았습니다');return;}
@@ -5697,7 +5762,7 @@
       return '<tr><td>'+esc(it.name)+'</td><td>'+esc(it.cycle||'1회')+'</td><td style="text-align:right">'+cWon(it.price)+'</td></tr>'; }).join('');
     var pay=((q.pay||'').trim()||(SET.pay_note||'').trim()), bank=((q.bank||'').trim()||(SET.bank||'').trim());
     var money=[]; if(t.once)money.push('1회성 비용 '+cWon(t.once)); if(t.month)money.push('매월 '+cWon(t.month)); if(t.year)money.push('매년 '+cWon(t.year));
-    var h='<h1 class="c-title">'+esc((AREAS[groupOf(r)]||'서비스'))+' 이용 계약서</h1><div class="c-sub">CONTRACT</div>'
+    var h='<h1 class="c-title">'+esc(cArea(r))+' 이용 계약서</h1><div class="c-sub">CONTRACT</div>'
       +'<p><strong>'+esc(SET.company||'인투마케팅')+'</strong>(이하 "회사")과 <strong>'+cVal(c.name)+'</strong>(이하 "고객")은 견적서 <strong>'+no+'</strong>에 적은 서비스에 관하여 다음과 같이 계약합니다.</p>';
     h+=art('목적과 효력','<ol><li>이 계약은 회사가 견적서 '+no+'에 적은 서비스를 제공하는 데 필요한 권리와 의무를 정하는 것을 목적으로 합니다.</li>'
       +'<li>이 계약은 회사와 고객이 서명한 날부터 효력이 생깁니다.</li></ol>');
