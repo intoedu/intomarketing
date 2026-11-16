@@ -237,6 +237,15 @@
   .st .x3{border:0;background:none;color:var(--muted);cursor:pointer;font-size:.8rem;padding:0 2px}
   .st .x3:hover{color:var(--bad)}
   .td-add{display:flex;gap:6px;margin-top:6px}
+  /* 작업 창 회차 칸 (11/16) */
+  .jbe{display:grid;grid-template-columns:30px 80px 1.1fr 1.5fr 118px 24px;gap:6px;align-items:center;padding:3px 0}
+  .jbe .inp{padding:6px 8px;font-size:.82rem}
+  .jbe .no{font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
+  .jbe .lk{display:flex;gap:4px;align-items:center}.jbe .lk a{font-size:.9rem;text-decoration:none}
+  .jbe .x3{border:0;background:none;color:var(--muted);cursor:pointer}
+  .jbe.add{margin-top:6px;padding-top:8px;border-top:1px dashed var(--line);grid-template-columns:30px 80px 1.1fr 1.5fr 142px}
+  .jbe-sum{display:flex;justify-content:flex-end;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:.9rem}
+  @media(max-width:760px){.jbe,.jbe.add{grid-template-columns:30px 1fr 1fr}.jbe .lk,.jbe .stc{grid-column:2/4}}
   .td-add .inp{padding:6px 9px;font-size:.82rem}
   .td-add .btn{padding:6px 12px;font-size:.8rem}
   .ep{display:grid;grid-template-columns:70px 1fr 120px 1fr 30px 22px;gap:8px;align-items:center;padding:4px 0;font-size:.85rem}
@@ -1336,6 +1345,10 @@
     <div class="fld"><label for="jb_inc">포함 항목 <span class="muted" style="font-weight:500">— 큰 항목은 그냥, 세부 항목은 줄 앞에 「·」</span></label>
       <textarea class="inp" id="jb_inc" style="min-height:150px" placeholder="1. 블로그 기본 환경 구축&#10;· 구글 계정 및 블로그 개설&#10;· 블로그명 및 URL 주소 설정&#10;2. 최종 점검&#10;· PC·모바일 화면 및 기능 테스트"></textarea></div>
     <div class="fld"><label for="jb_memo">메모</label><textarea class="inp" id="jb_memo"></textarea></div>
+    <div id="jb_epw" class="hide">
+      <div class="sec-t">회차 · 건당 정산 <span class="muted" style="font-weight:500;font-size:.78rem">— 한 건씩 넣거나, 카톡에 정리한 목록을 통째로 붙여 넣으세요 · 고치면 바로 저장</span></div>
+      <div id="jb_eps"></div>
+    </div>
     <div class="sec-t">입금 ✅ / ☑️ <span class="muted" style="font-weight:500;font-size:.78rem">— 누르면 바로 저장 · 그 프로젝트 관리자 · 최고관리자만</span></div>
     <div id="jb_pay" class="muted" style="font-size:.84rem">저장한 뒤에 표시할 수 있습니다.</div>
     <div class="sec-t">바뀐 기록 (상태 · 금액 · 입금)</div>
@@ -2411,7 +2424,8 @@
     if(!$('viewMy').classList.contains('hide'))renderMy();
     else if(!$('viewFee').classList.contains('hide'))renderFeeAll();
     else if(!$('viewBoss').classList.contains('hide'))renderBoss();
-    else renderExt();}
+    else renderExt();
+    if($('jbModal').classList.contains('open'))jbEpRender();}   /* 작업 창 회차 칸도 새로 (11/16) */
   function jobSubs(jid){return EXT.subs.filter(function(x){return x.job_id===jid;}).sort(function(a,b){return ((a.no==null?999:a.no)-(b.no==null?999:b.no))||a.sort-b.sort;});}
   function jobEps(jid){return EXT.eps.filter(function(x){return x.job_id===jid;}).sort(function(a,b){return a.sort-b.sort;});}
   function yymmdd(){return kstToday().slice(2).replace(/-/g,'');}
@@ -3281,7 +3295,81 @@
     $('feeAllBody').innerHTML=h;
   };
   window.feeGoIn=function(a){var b=document.querySelector('.navb[data-nav="'+a+'"]'); if(b)b.click(); setTimeout(function(){var f=$('feeBox'); if(f){f.open=true;f.scrollIntoView({behavior:'smooth'});}},80);};
-  window.jbFeeShow=function(){var on=$('jb_ptype').value==='월정액';document.querySelectorAll('#jbModal .jb-fee').forEach(function(x){x.classList.toggle('hide',!on);});};
+  window.jbFeeShow=function(){var on=$('jb_ptype').value==='월정액';document.querySelectorAll('#jbModal .jb-fee').forEach(function(x){x.classList.toggle('hide',!on);});jbEpRender();};
+  /* ── 작업 창 회차 칸 (2026-11-16 이은총 님 「관리자가 더 직접 추가할 수 있게」 · 「유튜브 링크도」) ──
+     건당 작업이면 작업 창 안에서 회차를 보고 · 고치고 · 넣음(번호 자동 · 날짜 · 제목 · 링크 · 상태) + 맨 밑 정산 합계(epBill).
+     「여러 개 한꺼번에」 = 카톡 정리 꼴(「📌 이름 - 금액」 줄 · 「1. 261030 제목 - 링크」 줄 · 「= 합계」 줄)을 붙여 넣으면 회차 줄만 골라 넣음.
+     같은 링크(링크가 없으면 같은 제목)가 이미 있으면 건너뜀. 🔴 할 일 탭 카드와 입력칸 id 가 겹치지 않게 jbe_ 를 씀. */
+  function jbEpJob(){var id=$('jb_id').value;return id?EXT.jobs.filter(function(x){return x.id===id;})[0]||null:null;}
+  window.jbEpRender=function(){
+    var w=$('jb_epw'); if(!w)return;
+    var j=jbEpJob(), on=$('jb_ptype').value==='건당';
+    w.classList.toggle('hide',!on); if(!on)return;
+    if(!j||j.price_type!=='건당'){$('jb_eps').innerHTML='<div class="muted" style="font-size:.84rem">가격 방식을 「건당」으로 저장한 뒤에 회차를 넣을 수 있습니다.</div>';return;}
+    var eps=jobEps(j.id), b=epBill(j);
+    var h='<div class="muted" style="font-size:.84rem;margin:0 0 6px">1건 <b style="color:var(--ink)">'+wonS(j.amount)+'</b> · 회차 '+eps.length+'개 (완료 '+eps.filter(function(e){return e.status==='완료';}).length+')</div>';
+    h+=eps.map(function(e,i){
+      return '<div class="jbe"><span class="no">'+(i+1)+'.</span>'
+        +'<input class="inp" value="'+esc(e.ymd||'')+'" placeholder="YYMMDD" onchange="epSet(\''+e.id+'\',{ymd:this.value.trim()||null})">'
+        +'<input class="inp" value="'+esc(e.title||'')+'" onchange="if(this.value.trim())epSet(\''+e.id+'\',{title:this.value.trim()});else toast(\'제목을 비울 수 없습니다\')">'
+        +'<span class="lk"><input class="inp" style="flex:1" value="'+esc(e.link||'')+'" placeholder="유튜브 링크" onchange="epSet(\''+e.id+'\',{link:this.value.trim()||null})">'
+          +(e.link&&/^https?:\/\//i.test(e.link)?'<a href="'+esc(e.link)+'" target="_blank" rel="noopener" title="새 창에서 열기">↗</a>':'')+'</span>'
+        +'<select class="inp stc" onchange="epSet(\''+e.id+'\',{status:this.value})">'+EPST.map(function(x){return '<option'+(x===e.status?' selected':'')+'>'+x+'</option>';}).join('')+'</select>'
+        +'<button class="x3" type="button" title="빼기" onclick="epDel(\''+e.id+'\')">✕</button></div>';
+    }).join('');
+    h+='<div class="jbe add"><span class="no">'+(eps.length+1)+'.</span>'
+      +'<input class="inp" id="jbe_y" value="'+yymmdd()+'" placeholder="YYMMDD">'
+      +'<input class="inp" id="jbe_t" placeholder="제목" onkeydown="if(event.key===\'Enter\')jbEpAdd()">'
+      +'<input class="inp" id="jbe_l" placeholder="유튜브 링크 (선택)" onkeydown="if(event.key===\'Enter\')jbEpAdd()">'
+      +'<span style="display:flex;gap:4px"><select class="inp" id="jbe_s" style="flex:1"><option>완료</option><option>작업 중</option></select>'
+      +'<button class="btn btn-ghost" type="button" style="padding:6px 12px;font-size:.8rem" onclick="jbEpAdd()">추가</button></span></div>';
+    h+='<details style="margin-top:8px"><summary class="muted" style="font-size:.82rem;cursor:pointer">📋 여러 개 한꺼번에 붙여 넣기 (카톡 정리 그대로)</summary>'
+      +'<textarea class="inp" id="jbe_bulk" style="min-height:120px;margin-top:6px;font-size:.82rem" placeholder="1. 261030 북한 최후 무기는 대통령 - https://youtube.com/shorts/…&#10;2. 261031 \'5.18은 폭동\' - https://youtube.com/shorts/…&#10;(「📌 …」 줄 · 「= 합계」 줄은 알아서 빼고 넣습니다)"></textarea>'
+      +'<div style="display:flex;gap:8px;align-items:center;margin-top:6px"><select class="inp" id="jbe_bs" style="width:auto"><option>완료</option><option>작업 중</option></select>'
+      +'<button class="btn btn-primary" type="button" style="padding:7px 14px;font-size:.84rem" onclick="jbEpBulk()">붙여 넣은 회차 넣기</button>'
+      +'<span class="muted" style="font-size:.78rem">같은 링크가 이미 있으면 건너뜁니다</span></div></details>';
+    h+='<div class="jbe-sum"><span class="muted">정산 '+b.n+'건 × '+wonS(j.amount)+(eps.length>b.n?' (중단 '+(eps.length-b.n)+'건 뺌)':'')+'</span><b class="tnum">= '+(b.sum!=null?won(b.sum):'금액 미정')+'</b></div>';
+    $('jb_eps').innerHTML=h;
+  };
+  function epDoneAt(ymd,st){
+    if(st!=='완료')return null;
+    var m=/^(\d{2})(\d{2})(\d{2})$/.exec(ymd||'');
+    return m?new Date('20'+m[1]+'-'+m[2]+'-'+m[3]+'T12:00:00+09:00').toISOString():new Date().toISOString();
+  }
+  window.jbEpAdd=async function(){
+    var j=jbEpJob(); if(!j)return;
+    var t=$('jbe_t').value.trim(), l=$('jbe_l').value.trim(), y=$('jbe_y').value.trim(), st=$('jbe_s').value;
+    if(!t){toast('제목을 적어 주세요');return;}
+    var r=await sb.from('ext_episodes').insert({job_id:j.id,ymd:y||null,title:t,link:l||null,status:st,done_at:epDoneAt(y,st),sort:jobEps(j.id).length+1});
+    if(r.error){toast('추가 실패: '+r.error.message);return;}
+    toast('회차를 넣었습니다'); await xReload();
+  };
+  function epParse(txt){
+    return String(txt||'').split(/\r?\n/).map(function(l){return l.trim();}).filter(function(l){
+      return l&&l.indexOf('📌')!==0&&l.charAt(0)!=='='&&!/^합계/.test(l);
+    }).map(function(l){
+      var us=l.match(/https?:\/\/\S+/g), link=us?us[us.length-1]:null;
+      var t=l.replace(/https?:\/\/\S+/g,'').replace(/^\d+\s*[.)]\s*/,'').trim(), ymd=null;
+      var y=/^(\d{6})\s+/.exec(t); if(y){ymd=y[1];t=t.slice(y[0].length);}
+      t=t.replace(/\s*[-–—:]\s*$/,'').trim();
+      return {ymd:ymd,title:t||(link?'(제목 없음)':''),link:link};
+    }).filter(function(x){return x.title;});
+  }
+  window.jbEpBulk=async function(){
+    var j=jbEpJob(); if(!j)return;
+    var rows=epParse($('jbe_bulk').value), st=$('jbe_bs').value, have=jobEps(j.id), skip=0, add=[];
+    rows.forEach(function(x){
+      var dup=have.concat(add).some(function(e){return x.link?e.link===x.link:(!e.link&&e.title===x.title);});
+      if(dup){skip++;return;}
+      add.push(x);
+    });
+    if(!add.length){toast(rows.length?'모두 이미 들어 있습니다 ('+skip+'개)':'넣을 회차 줄을 찾지 못했습니다');return;}
+    if(!confirm('회차 '+add.length+'개를 「'+st+'」로 넣을까요?'+(skip?'\n(이미 있는 '+skip+'개는 건너뜁니다)':'')+'\n\n첫 줄 : '+(add[0].ymd?add[0].ymd+' ':'')+add[0].title))return;
+    var n0=have.length;
+    var r=await sb.from('ext_episodes').insert(add.map(function(x,i){return {job_id:j.id,ymd:x.ymd,title:x.title,link:x.link,status:st,done_at:epDoneAt(x.ymd,st),sort:n0+i+1};}));
+    if(r.error){toast('넣기 실패: '+r.error.message);return;}
+    $('jbe_bulk').value=''; toast('회차 '+add.length+'개를 넣었습니다'+(skip?' · '+skip+'개 건너뜀':'')); await xReload();
+  };
 
   /* 내 할 일 */
   function myLists(){
@@ -3422,7 +3510,7 @@
     $('jb_dl').innerHTML=''; (j?jobDues(j.id):[]).forEach(function(d){dlAdd(d);}); if(!j||!jobDues(j.id).length)dlAdd();
     $('jb_del').classList.toggle('hide',!(j&&ME.role==='owner'));
     $('jb_xq').classList.toggle('hide',!j); $('jb_close').style.marginLeft=j?'0':'auto';
-    $('jb_mvb').classList.toggle('hide',!j); $('jb_mv').classList.add('hide');
+    $('jb_mvb').classList.toggle('hide',!j); $('jb_mv').classList.add('hide'); jbEpRender();
     $('jb_delnote').textContent=j&&ME.role!=='owner'?'삭제는 최고관리자만 · 멈춘 작업은 상태를 「중단」으로':'';
     $('jb_ev').textContent=j?'불러오는 중…':'저장하면 여기에 남습니다.';
     $('jbModal').classList.add('open');
