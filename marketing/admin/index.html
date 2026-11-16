@@ -145,6 +145,11 @@
   .xq-pick label{display:flex;gap:10px;align-items:center;padding:8px 12px;border-top:1px solid var(--line);font-size:.86rem;cursor:pointer}
   .xq-pick label .pr{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
   .xq-pick label .py{font-size:.76rem;color:var(--muted)}
+  .xq-pick label.off{opacity:.5;cursor:not-allowed;background:var(--surface-2)}   /* 이미 견적서에 들어간 작업 — 회색 · 체크 안 됨 (11/16) */
+  .xq-note{border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:9px 12px;margin:0 0 10px;font-size:.82rem}
+  .jb-mv{border:1px solid var(--line);background:var(--surface-2);border-radius:12px;padding:12px 14px;margin:0 0 14px}   /* 작업 → 다른 프로젝트로 옮기기 (11/16) */
+  .jb-mv .note{font-size:.82rem;color:var(--muted);line-height:1.6;margin-top:6px}
+  .jb-mv .note b{color:var(--ink)}
   .job{display:grid;grid-template-columns:92px 1fr 130px 130px 170px 64px;gap:12px;align-items:center;padding:11px 14px;border-top:1px solid var(--line);cursor:pointer;font-size:.88rem}
   .job:first-child{border-top:0}
   .job:hover{background:var(--surface-2)}
@@ -1141,13 +1146,6 @@
   </div>
 </div></div>
 
-<!-- 영업실장 링크 -->
-    <button class="x" type="button" onclick="closeModal('linkModal')">✕</button>
-  </div>
-  <div class="sheet-b" id="lk_body"></div>
-  <div class="sheet-f"><button class="btn btn-ghost" type="button" onclick="closeModal('linkModal')">닫기</button></div>
-</div></div>
-
 <!-- 업무 매뉴얼 — PDF 내려받기 · 최고관리자만 새 파일 올리기 -->
 <div class="modal" id="mnModal"><div class="sheet">
   <div class="sheet-h">
@@ -1301,6 +1299,13 @@
     <button class="x" type="button" onclick="closeModal('jbModal')">✕</button></div>
   <div class="sheet-b">
     <input type="hidden" id="jb_id">
+    <div class="jb-mv hide" id="jb_mv">
+      <div class="fld" style="margin:0"><label for="jb_mv_to">이 작업을 옮길 프로젝트</label><select class="inp" id="jb_mv_to" onchange="jbMvShow()"></select></div>
+      <div class="note" id="jb_mv_note"></div>
+      <div style="display:flex;gap:8px;margin-top:10px" id="jb_mv_btns">
+        <button class="btn btn-primary" type="button" style="padding:7px 14px;font-size:.84rem" onclick="jbMove()">이 프로젝트로 옮기기</button>
+        <button class="btn btn-ghost" type="button" style="padding:7px 14px;font-size:.84rem" onclick="jbMvToggle(false)">취소</button></div>
+    </div>
     <div class="grid2">
       <div class="fld"><label for="jb_title">작업명 *</label><input class="inp" id="jb_title" placeholder="TK 구글스팟 세팅"></div>
       <div class="fld"><label for="jb_brand">브랜드 (선택)</label><input class="inp" id="jb_brand" placeholder="트루스데일리 · 케이르네 …"></div>
@@ -1327,6 +1332,7 @@
   <div class="sheet-f">
     <button class="btn btn-ghost hide" type="button" id="jb_del" onclick="jbDelete()" style="color:var(--bad)">작업 삭제</button>
     <span class="muted" style="font-size:.78rem" id="jb_delnote"></span>
+    <button class="btn btn-ghost hide" type="button" id="jb_mvb" onclick="jbMvToggle(true)">↪ 다른 프로젝트로 옮기기</button>
     <button class="btn btn-ghost hide" type="button" id="jb_xq" style="margin-left:auto" onclick="xqFromJob()">📋 이 작업으로 견적서</button>
     <button class="btn btn-ghost" type="button" id="jb_close" style="margin-left:auto" onclick="closeModal('jbModal')">닫기</button>
     <button class="btn btn-primary" type="button" onclick="jbSave()">저장</button>
@@ -2030,13 +2036,16 @@
     var p=pjOf(pid); if(!p)return;
     $('xq_pid').value=pid; $('xq_meta').textContent=pjLabel(p);
     var teams=['web','sns','design','video','blog'];
-    $('xq_list').innerHTML=teams.map(function(t){
+    /* 11/16 이은총 님 — 이미 외주 견적서에 들어간 작업은 회색 · 체크 안 됨(자리는 그대로 · 팀별로 나뉘어 있어 밑으로 내리지 않음) */
+    var inQ={}; xqOf(pid).forEach(function(x){(x.job_ids||[]).forEach(function(id){if(!inQ[id])inQ[id]=x.quote_no||'번호 없는 견적서';});});
+    $('xq_list').innerHTML=(only&&inQ[only]?'<div class="xq-note">이 작업은 이미 견적서 <b>'+esc(inQ[only])+'</b>에 들어 있습니다. 고치려면 「작업 구조」의 견적서 목록에서 ✏️ 편집을 눌러 주세요.</div>':'')
+      +teams.map(function(t){
       var js=pjJobs(pid,t); if(!js.length)return '';
       return '<div class="xq-pick"><div class="th" style="'+tcs(t)+'">'+esc(XKO[t])+'</div>'+js.map(function(j){
-        var chk=only?only===j.id:false;
-        return '<label><input type="checkbox" data-xq="'+j.id+'"'+(chk?' checked':'')+' onchange="xqWarn()">'
+        var q=inQ[j.id], chk=!q&&only?only===j.id:false;
+        return '<label'+(q?' class="off" title="이미 견적서 '+esc(q)+'에 들어 있습니다"':'')+'><input type="checkbox" data-xq="'+j.id+'"'+(chk?' checked':'')+(q?' disabled':'')+' onchange="xqWarn()">'
           +'<span><b>'+esc(j.title)+'</b>'+(j.brand?' <span class="muted">· '+esc(j.brand)+'</span>':'')
-          +'<br><span class="py">'+esc(j.status)+' · 받는 곳 '+esc(jobPayer(j))+'</span></span>'
+          +'<br><span class="py">'+(q?'견적서 <b>'+esc(q)+'</b>에 들어 있음 · ':'')+esc(j.status)+' · 받는 곳 '+esc(jobPayer(j))+'</span></span>'
           +'<span class="pr">'+esc(j.price_type)+' '+(j.price_type==='월정액'&&j.amount!=null?'월 ':'')+wonS(j.amount)+'</span></label>';
       }).join('')+'</div>';
     }).join('')||'<div class="xq-empty">이 프로젝트에 작업이 없습니다. 「작업 구조」에서 먼저 작업을 넣어 주세요.</div>';
@@ -2047,7 +2056,7 @@
     closeModal('jbModal'); xqPick(j.project_id,j.id);
   };
   function xqChosen(){
-    var ids=[].slice.call(document.querySelectorAll('#xq_list input[data-xq]:checked')).map(function(x){return x.getAttribute('data-xq');});
+    var ids=[].slice.call(document.querySelectorAll('#xq_list input[data-xq]:checked:not(:disabled)')).map(function(x){return x.getAttribute('data-xq');});
     return EXT.jobs.filter(function(j){return ids.indexOf(j.id)>=0;});
   }
   window.xqWarn=function(){
@@ -3293,6 +3302,7 @@
     $('jb_dl').innerHTML=''; (j?jobDues(j.id):[]).forEach(function(d){dlAdd(d);}); if(!j||!jobDues(j.id).length)dlAdd();
     $('jb_del').classList.toggle('hide',!(j&&ME.role==='owner'));
     $('jb_xq').classList.toggle('hide',!j); $('jb_close').style.marginLeft=j?'0':'auto';
+    $('jb_mvb').classList.toggle('hide',!j); $('jb_mv').classList.add('hide');
     $('jb_delnote').textContent=j&&ME.role!=='owner'?'삭제는 최고관리자만 · 멈춘 작업은 상태를 「중단」으로':'';
     $('jb_ev').textContent=j?'불러오는 중…':'저장하면 여기에 남습니다.';
     $('jbModal').classList.add('open');
@@ -3301,7 +3311,7 @@
       var r=await sb.from('ext_job_events').select('*').eq('job_id',j.id).order('at',{ascending:false});
       $('jb_ev').innerHTML=r.error?'불러오기 실패: '+esc(r.error.message):((r.data||[]).length?(r.data||[]).map(function(e){
         var v=e.kind==='price'?wonS(e.from_val)+' → '+wonS(e.to_val):esc(e.from_val||'-')+' → '+esc(e.to_val||'-');
-        return fdatetime(e.at)+' · '+(e.kind==='price'?'금액':e.kind==='due'?'기한':e.kind==='pay'?'입금':'상태')+' '+v+(e.by_staff?' · '+esc(staffName(e.by_staff)||''):'')+(e.note?' · '+esc(e.note):'');
+        return fdatetime(e.at)+' · '+(e.kind==='price'?'금액':e.kind==='due'?'기한':e.kind==='pay'?'입금':e.kind==='project'?'프로젝트':'상태')+' '+v+(e.by_staff?' · '+esc(staffName(e.by_staff)||''):'')+(e.note?' · '+esc(e.note):'');
       }).join('<br>'):'아직 바뀐 기록이 없습니다.');
     }
   };
@@ -3325,6 +3335,77 @@
     if(ev.length){var e=await sb.from('ext_job_events').insert(ev); if(e.error)toast('기록 남기기 실패: '+e.error.message);}
     if(dr){await xReload();toast('작업은 저장했지만 기한 저장 실패: '+dr);return;}
     closeModal('jbModal'); await xReload(); toast(id?'저장했습니다':'작업을 만들었습니다');
+  };
+  /* ── 작업 → 다른 프로젝트로 옮기기 (2026-11-16 이은총 님 「다른 프로젝트에 잘못 추가하는 경우」) ──
+     기한 · 회차 · 세부 항목 · 보고 · 파일 · 입금 기록은 모두 job_id 로 묶여 있어 project_id 만 바꾸면 함께 따라감.
+     🔴 담당자(member_ids · 회차 · 세부 항목의 member_id)는 프로젝트마다 따로인 조직도 사람이라 «새 프로젝트의 같은 사람»으로 바꿈
+        (같은 직원 계정 → 같은 이름 순, 같은 팀 먼저). 새 조직도에 없으면 담당에서 빠짐(미리 알려 줌).
+     🔴 외주 견적서에 들어간 작업은 못 옮김(견적서는 원래 프로젝트 것) — 견적서를 지운 뒤 옮김.
+     입금하는 곳이 「옛 프로젝트 (직접)」이면 비워서 새 프로젝트 기본을 따르게 함. 그 밖에 적어 둔 입금처는 그대로. 권한 = 최고관리자 · 이 프로젝트 관리자. */
+  function jbMvQuotes(j){return xqOf(j.project_id).filter(function(x){return (x.job_ids||[]).indexOf(j.id)>=0;});}
+  function jbMvPlan(j,to){
+    var map={}, keep=[], drop=[];
+    function pick(mid){
+      if(!mid)return null; if(mid in map)return map[mid];
+      var m=EXT.members.filter(function(x){return x.id===mid;})[0], c=null;
+      if(m){
+        var cs=pjMembers(to).filter(function(x){return (m.staff_id&&x.staff_id===m.staff_id)||x.person_name===m.person_name;});
+        c=cs.filter(function(x){return x.team===m.team;})[0]||cs[0]||null;
+        var nm=m.person_name||''; if(c){if(keep.indexOf(nm)<0)keep.push(nm);}else if(drop.indexOf(nm)<0)drop.push(nm);
+      }
+      return (map[mid]=c?c.id:null);
+    }
+    var mids=[]; (j.member_ids||[]).forEach(function(id){var n=pick(id); if(n&&mids.indexOf(n)<0)mids.push(n);});
+    var eps=EXT.eps.filter(function(e){return e.job_id===j.id&&e.member_id;}), subs=EXT.subs.filter(function(x){return x.job_id===j.id&&x.member_id;});
+    eps.forEach(function(e){pick(e.member_id);}); subs.forEach(function(x){pick(x.member_id);});
+    return {map:map,keep:keep,drop:drop,mids:mids,eps:eps,subs:subs};
+  }
+  function jbMvJob(){var id=$('jb_id').value; return EXT.jobs.filter(function(x){return x.id===id;})[0]||null;}
+  window.jbMvToggle=function(on){
+    var box=$('jb_mv'), j=jbMvJob();
+    if(!on||!j){box.classList.add('hide');return;}
+    box.classList.remove('hide'); box.scrollIntoView({block:'nearest'});
+    var qs=jbMvQuotes(j), others=EXT.projects.filter(function(p){return p.id!==j.project_id;});
+    var stop=!canPay(j.project_id)?'옮기기는 <b>최고관리자</b> · <b>이 프로젝트 관리자</b>만 할 수 있습니다.'
+      :qs.length?'이 작업은 외주 견적서 <b>'+esc(qs.map(function(x){return x.quote_no||'번호 없는 견적서';}).join(' · '))+'</b>에 들어 있어 옮길 수 없습니다. 「작업 구조」의 견적서 목록에서 그 견적서를 지운 뒤 옮겨 주세요.'
+      :!others.length?'옮길 다른 프로젝트가 없습니다.':'';
+    $('jb_mv_to').parentNode.classList.toggle('hide',!!stop); $('jb_mv_btns').firstElementChild.classList.toggle('hide',!!stop);
+    if(stop){$('jb_mv_note').innerHTML=stop;return;}
+    $('jb_mv_to').innerHTML='<option value="">— 프로젝트 고르기 —</option>'+others.map(function(p){return '<option value="'+p.id+'">'+esc(pjLabel(p))+(p.status&&p.status!=='진행중'?' ('+esc(p.status)+')':'')+'</option>';}).join('');
+    jbMvShow();
+  };
+  window.jbMvShow=function(){
+    var j=jbMvJob(), to=$('jb_mv_to').value; if(!j)return;
+    if(!to){$('jb_mv_note').innerHTML='작업에 딸린 기한 · 회차 · 세부 항목 · 보고 · 입금 기록은 모두 함께 옮겨집니다.';return;}
+    var P=jbMvPlan(j,to), tp=pjOf(to), op=pjOf(j.project_id);
+    var direct=j.payer&&op&&j.payer===op.name+' (직접)';
+    $('jb_mv_note').innerHTML='· 기한 · 회차 · 세부 항목 · 보고 · 입금 기록은 모두 함께 옮겨집니다.<br>'
+      +(P.keep.length?'· 담당자 <b>'+esc(P.keep.join(', '))+'</b> → 「'+esc(tp.name)+'」 조직도의 같은 사람으로 이어집니다.<br>':'')
+      +(P.drop.length?'· <b style="color:var(--bad)">「'+esc(tp.name)+'」 조직도에 없는 사람: '+esc(P.drop.join(', '))+'</b> — 담당에서 빠집니다. 그대로 잇고 싶으면 먼저 그 프로젝트 조직도에 넣고 옮겨 주세요.<br>':'')
+      +'· 입금하는 곳 : '+(!j.payer||direct?'새 프로젝트 기본(<b>'+esc(pjPayer(tp))+'</b>)':'적어 둔 <b>'+esc(j.payer)+'</b> 그대로 — 새 프로젝트에 맞지 않으면 옮긴 뒤 고쳐 주세요')+'<br>'
+      +'· 이 창에서 고치고 아직 저장하지 않은 내용은 옮길 때 반영되지 않습니다.';
+  };
+  window.jbMove=async function(){
+    var j=jbMvJob(), to=$('jb_mv_to').value; if(!j)return;
+    if(!to){toast('옮길 프로젝트를 골라 주세요');return;}
+    if(!canPay(j.project_id)){toast('최고관리자 · 이 프로젝트 관리자만 옮길 수 있습니다');return;}
+    if(jbMvQuotes(j).length){toast('견적서에 들어 있는 작업은 옮길 수 없습니다');return;}
+    var P=jbMvPlan(j,to), tp=pjOf(to), op=pjOf(j.project_id);
+    if(!confirm('「'+j.title+'」 작업을\n「'+(op?op.name:'')+'」 → 「'+tp.name+'」 프로젝트로 옮길까요?'
+      +(P.drop.length?'\n\n새 프로젝트 조직도에 없어 담당에서 빠지는 사람: '+P.drop.join(', '):'')))return;
+    var row={project_id:to,member_ids:P.mids,updated_at:new Date().toISOString(),sort:pjJobs(to,j.team).length+1};
+    if(j.payer&&op&&j.payer===op.name+' (직접)')row.payer=null;
+    var r=await sb.from('ext_jobs').update(row).eq('id',j.id).select().maybeSingle();
+    if(r.error||!r.data){toast('옮기기 실패: '+(r.error?r.error.message:'권한을 확인해 주세요'));return;}
+    var bad=[];
+    for(var i=0;i<P.eps.length;i++){var e=P.eps[i], n=P.map[e.member_id]||null; if(n===e.member_id)continue;
+      var u=await sb.from('ext_episodes').update({member_id:n}).eq('id',e.id); if(u.error)bad.push('회차');}
+    for(var k=0;k<P.subs.length;k++){var x=P.subs[k], n2=P.map[x.member_id]||null; if(n2===x.member_id)continue;
+      var u2=await sb.from('ext_subtasks').update({member_id:n2}).eq('id',x.id); if(u2.error)bad.push('세부 항목');}
+    var ev=await sb.from('ext_job_events').insert({job_id:j.id,kind:'project',from_val:op?op.name:null,to_val:tp.name,by_staff:ME.id,
+      note:'다른 프로젝트로 옮김'+(P.drop.length?' · 담당에서 빠짐 : '+P.drop.join(', '):'')});
+    closeModal('jbModal'); await xReload();
+    toast('「'+tp.name+'」 프로젝트로 옮겼습니다'+(bad.length?' — 일부 담당자('+bad.filter(function(v,i,a){return a.indexOf(v)===i;}).join(' · ')+')는 못 바꿨습니다':'')+(ev.error?' · 기록 남기기 실패':''));
   };
   window.jbDelete=async function(){
     var id=$('jb_id').value, j=EXT.jobs.filter(function(x){return x.id===id;})[0]; if(!j)return;
