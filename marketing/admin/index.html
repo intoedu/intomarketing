@@ -1726,6 +1726,7 @@
       $('viewList').classList.remove('hide');
       /* 업무 단추를 누르면(다른 곳에서 .click() 으로 부를 때도) 「내부 · 업무별」로 돌아옵니다 */
       COKEY=null; if(SCOPE!=='in'||AXIS!=='work'){SCOPE='in';AXIS='work';syncSeg();}
+      LG_SHOWN=null;   /* 업무 단추로 들어올 때마다 관리비 대장 접기 · 펴기를 다시 정함 (11/16) */
       CUR=k;$('listTitle').textContent=AREAS[k]+' 의뢰';
       $('listSub').textContent=LIST_SUB;
       renderList();
@@ -3609,11 +3610,13 @@
     if(x.status==='완료')return 'done';
     return (x.due&&x.due<lgToday())?'late':'ing';
   }
+  var LG_SHOWN=null;   /* 지금 대장을 보여 주는 화면(web · sns) — 화면이 바뀔 때만 접기 · 펴기를 정함 */
   function renderFee(){
     var box=$('feeBox'); if(!box)return;
     var a=lgArea();
-    if(!a){box.classList.add('hide');return;}
+    if(!a){box.classList.add('hide');LG_SHOWN=null;return;}
     box.classList.remove('hide');
+    if(LG_SHOWN!==a){box.open=(a!=='web');LG_SHOWN=a;}   /* 11/16 이은총 님 — 홈페이지 화면에 들어올 때는 접어 둠(눌러서 폄) · 저장해 다시 그릴 때는 그대로 · SNS 는 펴 둠 */
     $('lgTitle').textContent=LG_NAME[a]+' 관리비 대장';
     if(!LG_END)LG_END=lgNow();
     if(!$('lgMonth').value)$('lgMonth').value=lgNow();
