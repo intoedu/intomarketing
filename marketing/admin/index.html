@@ -1992,7 +1992,12 @@
       .sort(function(a,b){return (JST.indexOf(a.status)-JST.indexOf(b.status))||(a.sort-b.sort);});
   }
   function wonS(n){return n==null||n===''?'금액 미정':Number(n).toLocaleString('ko-KR')+'원';}
-  function jobPrice(j){return '<span>'+esc(j.price_type)+'</span>'+(j.price_type==='월정액'&&j.amount!=null?'월 ':'')+wonS(j.amount);}
+  function jobPrice(j){
+    if(j.price_type==='건당'){var b=epBill(j);   /* 11/16 — 건당은 건수 · 합계도 */
+      return '<span>건당</span>'+wonS(j.amount)+(b.n?' <span class="muted" style="font-weight:600">· '+b.n+'건'+(b.sum!=null?' = '+won(b.sum):'')+'</span>':'');}
+    return '<span>'+esc(j.price_type)+'</span>'+(j.price_type==='월정액'&&j.amount!=null?'월 ':'')+wonS(j.amount);}
+  /* 건당 정산 = 중단 뺀 회차 수 × 1건 금액 (견적서 수량과 같은 기준 · 11/16) */
+  function epBill(j){var n=EXT.eps.filter(function(e){return e.job_id===j.id&&e.status!=='중단';}).length;return {n:n,sum:j.amount!=null?n*Number(j.amount):null};}
   function memName(id){var m=EXT.members.filter(function(x){return x.id===id;})[0];return m?m.person_name:null;}
   function jobRow(j){
     var who=(j.member_ids||[]).map(memName).filter(Boolean);
@@ -2462,9 +2467,16 @@
           +'<button class="x3" type="button" title="빼기" onclick="epDel(\''+e.id+'\')" style="border:0;background:none;color:var(--muted);cursor:pointer">✕</button></div>';
       });
       if(!show.length)h+='<div class="muted" style="font-size:.8rem">아직 회차가 없습니다.</div>';
-      h+='<div class="td-add"><input class="inp" style="width:80px" id="ey_'+j.id+'" value="'+yymmdd()+'" title="YYMMDD">'
-        +'<input class="inp" style="flex:1" id="et_'+j.id+'" placeholder="회차 제목 추가" onkeydown="if(event.key===\'Enter\')epAdd(\''+j.id+'\')">'
-        +'<button class="btn btn-ghost" type="button" onclick="epAdd(\''+j.id+'\')">추가</button></div></div>';
+      /* 11/16 이은총 님 — 한 줄씩 추가 : 번호는 자동 · 날짜 · 제목 · 링크 / 맨 밑에 합계 */
+      h+='<div class="td-add" style="flex-wrap:wrap"><b class="tnum muted" style="align-self:center;min-width:28px">'+(eps.length+1)+'.</b>'
+        +'<input class="inp" style="width:80px" id="ey_'+j.id+'" value="'+yymmdd()+'" title="YYMMDD">'
+        +'<input class="inp" style="flex:1;min-width:150px" id="et_'+j.id+'" placeholder="제목" onkeydown="if(event.key===\'Enter\')epAdd(\''+j.id+'\')">'
+        +'<input class="inp" style="flex:1;min-width:150px" id="el_'+j.id+'" placeholder="유튜브 링크 (선택)" onkeydown="if(event.key===\'Enter\')epAdd(\''+j.id+'\')">'
+        +'<button class="btn btn-ghost" type="button" onclick="epAdd(\''+j.id+'\')">추가</button></div>';
+      var bl=epBill(j);
+      h+='<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);font-size:.88rem">'
+        +'<span class="muted">정산 '+bl.n+'건 × '+wonS(j.amount)+(eps.length>bl.n?' (중단 '+(eps.length-bl.n)+'건 뺌)':'')+'</span>'
+        +'<b class="tnum">= '+(bl.sum!=null?won(bl.sum):'금액 미정')+'</b></div></div>';
     }
     return h+'</div>';
   }
@@ -2501,7 +2513,8 @@
   };
   window.epAdd=async function(jid){
     var t=($('et_'+jid).value||'').trim(); if(!t){toast('회차 제목을 적어 주세요');return;}
-    var r=await sb.from('ext_episodes').insert({job_id:jid,ymd:($('ey_'+jid).value||'').trim()||null,title:t,status:'작업 중',sort:jobEps(jid).length+1});
+    var lk=$('el_'+jid)?($('el_'+jid).value||'').trim():'';
+    var r=await sb.from('ext_episodes').insert({job_id:jid,ymd:($('ey_'+jid).value||'').trim()||null,title:t,link:lk||null,status:'작업 중',sort:jobEps(jid).length+1});
     if(r.error){toast('추가 실패: '+r.error.message);return;}
     await xReload();
   };
