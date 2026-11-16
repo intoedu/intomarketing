@@ -3616,7 +3616,7 @@
     var a=lgArea();
     if(!a){box.classList.add('hide');LG_SHOWN=null;return;}
     box.classList.remove('hide');
-    if(LG_SHOWN!==a){box.open=(a!=='web');LG_SHOWN=a;}   /* 11/16 이은총 님 — 홈페이지 화면에 들어올 때는 접어 둠(눌러서 폄) · 저장해 다시 그릴 때는 그대로 · SNS 는 펴 둠 */
+    if(LG_SHOWN!==a){box.open=false;LG_SHOWN=a;}   /* 11/16 이은총 님 — 홈페이지 · SNS 화면에 들어올 때는 접어 둠(눌러서 폄) · 저장해 다시 그릴 때는 그대로 */
     $('lgTitle').textContent=LG_NAME[a]+' 관리비 대장';
     if(!LG_END)LG_END=lgNow();
     if(!$('lgMonth').value)$('lgMonth').value=lgNow();
