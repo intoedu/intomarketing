@@ -172,6 +172,9 @@
   .job .pr span{font-weight:600;color:var(--muted);font-size:.76rem;margin-right:4px}
   .job .wh{color:var(--muted);font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .job .ic{color:var(--muted);font-size:.78rem;text-align:right}
+  .job .xqc{margin-top:4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .job .xqc button{border:1px solid var(--line);background:var(--surface);color:var(--accent-ink);border-radius:7px;padding:2px 9px;font-size:.74rem;font-weight:700;cursor:pointer;font-family:inherit}
+  .job .xqc button:hover{border-color:var(--accent)}
   .jst{display:inline-block;font-size:.74rem;font-weight:800;padding:3px 9px;border-radius:999px;white-space:nowrap;text-align:center}
   .jb-empty{padding:12px 14px;font-size:.82rem;color:var(--muted)}
   .jb-who{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.88rem}
@@ -2017,11 +2020,19 @@
     var inc=(j.includes||[]).reduce(function(a,g){return a+1+((g.items||[]).length);},0);
     return '<div class="job'+(j.status==='중단'||j.status==='완료'?' off':'')+'" onclick="jbOpen(\''+j.id+'\')">'
       +'<div>'+jst(j.status)+'</div>'
-      +'<div class="t"><b>'+esc(j.title)+'</b>'+(j.brand?'<span class="br">'+esc(j.brand)+'</span>':'')+'</div>'
+      +'<div class="t"><b>'+esc(j.title)+'</b>'+(j.brand?'<span class="br">'+esc(j.brand)+'</span>':'')+jobXqHTML(j)+'</div>'
       +'<div class="pr">'+jobPrice(j)+payBadge(j)+'</div>'
       +'<div class="wh">'+(who.length?esc(who.join(' · ')):'담당자 미정')+'</div>'
       +'<div class="nx">'+nextDueHTML(j)+'</div>'
       +'<div class="ic">'+(inc?'포함 '+(j.includes||[]).length+'개':'')+'</div></div>';
+  }
+  /* 11/16 이은총 님 「업무별에서도 작업별로」 — 작업 줄마다 그 작업이 든 외주 견적서(누르면 상세 : PDF · 미리보기) · 없으면 「＋ 견적서」 */
+  function jobXqHTML(j){
+    var x=EXT.quotes.filter(function(q){return (q.job_ids||[]).indexOf(j.id)>=0;})[0];
+    if(x){var st=xqState(x);
+      return '<div class="xqc" onclick="event.stopPropagation()"><button type="button" title="견적서 열기 — PDF · 미리보기 · 메일" onclick="xqdOpen(\''+x.id+'\')">📋 '+esc(x.quote_no||'견적서')+'</button><span class="badge xq-'+st.k+'">'+st.t+'</span></div>';}
+    if(j.status==='중단')return '';
+    return '<div class="xqc" onclick="event.stopPropagation()"><button type="button" title="이 작업으로 외주 견적서 만들기" onclick="xqPick(\''+j.project_id+'\',\''+j.id+'\')">＋ 견적서</button></div>';
   }
   function jobTeamHTML(pid,t){
     var js=pjJobs(pid,t), c=XCOL[t];
@@ -5825,35 +5836,55 @@
       if(!$('paperModal').classList.contains('open')){ if(isC)previewContract(); else previewQuote(); }
       setTimeout(function(){window.print();},300); return;
     }
-    /* 화면 크기에 따라 견적서 폭이 달라지지 않게, A4 폭(794px)으로 고정한 사본을 화면 밖에 만들어 찍습니다 */
-    var box=document.createElement('div');
-    box.style.cssText='position:fixed;left:-10000px;top:0;width:794px;background:#fff;z-index:-1';
-    var paper=src.cloneNode(true); paper.removeAttribute('id'); paper.classList.add('pdf');
-    /* 화면에선 표를 5줄로 채워 보여 주지만, PDF 에선 빈 줄을 뺍니다 — 간단한 견적서가 1쪽에 들어가게 */
-    paper.querySelectorAll('table.p-t tbody tr').forEach(function(tr){
-      var rest=[].slice.call(tr.children,1);        /* 첫 칸(번호) 말고 전부 비었을 때만 */
-      if(rest.length&&rest.every(function(td){return !td.textContent.trim();}))tr.remove();
-    });
-    /* 🔴 아래 여백은 0 — 몇 px 만 넘쳐도 html2pdf 가 «빈 쪽»을 하나 더 붙입니다 (위·아래 8mm 는 margin 이 맡음) */
-    paper.style.cssText='max-width:none;width:794px;margin:0;padding:32px 46px 0;border-radius:0;box-shadow:none';
-    box.appendChild(paper); document.body.appendChild(box);
-    var name=pdfName(kind);
+    /* 🔴 11/16 바꿈 — 예전엔 견적서 사본을 «지금 화면» 밖에 붙여 찍었습니다. 그러면 화면 상태(사파리 확대 · 스크롤 · 열려 있는 창)에 따라
+       PDF 가 크게 확대되고 오른쪽이 잘려 나온 일이 있었습니다(외주 견적서 ITM-WEB-26-0026 · 사파리).
+       이제는 A4 폭(794px)짜리 «빈 화면(iframe)»을 따로 만들어 거기에 견적서만 넣고, PDF 도구도 그 안에서 돌립니다 — 바깥 화면 상태와 상관없음. */
+    var name=pdfName(kind), fr=null;
     try{
-      await html2pdf().set({
+      fr=document.createElement('iframe');
+      fr.setAttribute('aria-hidden','true'); fr.tabIndex=-1;
+      fr.style.cssText='position:fixed;left:-10000px;top:0;width:794px;height:1123px;border:0;pointer-events:none';
+      document.body.appendChild(fr);
+      var w=fr.contentWindow, d=w.document;
+      var css=[].map.call(document.querySelectorAll('style'),function(x){return x.textContent;}).join('\n');
+      var links=[].map.call(document.querySelectorAll('link[rel="stylesheet"]'),function(l){return '<link rel="stylesheet" href="'+l.href+'">';}).join('');
+      d.open();
+      d.write('<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=794">'+links
+        +'<style>'+css+'</style><style>html,body{margin:0;padding:0;background:#fff;width:794px;overflow:hidden}</style></head><body>'
+        +src.outerHTML+'</body></html>');
+      d.close();
+      var paper=d.body.firstElementChild; paper.removeAttribute('id'); paper.classList.add('pdf');
+      /* 화면에선 표를 5줄로 채워 보여 주지만, PDF 에선 빈 줄을 뺍니다 — 간단한 견적서가 1쪽에 들어가게 */
+      paper.querySelectorAll('table.p-t tbody tr').forEach(function(tr){
+        var rest=[].slice.call(tr.children,1);        /* 첫 칸(번호) 말고 전부 비었을 때만 */
+        if(rest.length&&rest.every(function(td){return !td.textContent.trim();}))tr.remove();
+      });
+      /* 🔴 아래 여백은 0 — 몇 px 만 넘쳐도 html2pdf 가 «빈 쪽»을 하나 더 붙입니다 (위·아래 8mm 는 margin 이 맡음) */
+      paper.style.cssText='max-width:none;width:794px;margin:0;padding:32px 46px 0;border-radius:0;box-shadow:none';
+      /* PDF 도구를 빈 화면 안에 불러옵니다(이미 받은 파일이라 바로 뜸) · 글꼴 · 직인 그림이 다 뜬 뒤에 찍습니다 */
+      await new Promise(function(ok,no){ var sc=d.createElement('script'); sc.src=H2P_URL; sc.onload=function(){ok();}; sc.onerror=function(){no(new Error('load'));}; d.head.appendChild(sc); });
+      if(d.fonts&&d.fonts.ready){ try{ await Promise.race([d.fonts.ready,new Promise(function(r){setTimeout(r,3000);})]); }catch(e){} }
+      await Promise.all([].map.call(d.images,function(im){ return im.complete?0:new Promise(function(r){im.onload=im.onerror=r;setTimeout(r,3000);}); }));
+      /* 🔴 설정은 빈 화면 «안의» 배열로 넘깁니다 — 바깥 배열을 넘기면 도구가 배열로 못 알아봐 「Invalid margin array」 */
+      var opt={
         margin:[8,0,8,0],                               /* 위·아래 8mm — 여러 쪽일 때 글이 종이 끝에 붙지 않게 */
         filename:name,
         image:{type:'jpeg',quality:0.97},
-        /* 🔴 scrollX · scrollY 0 — 화면을 내린 채로 누르면 내린 만큼 내용이 아래로 밀려 첫 쪽이 비고 끝이 잘렸습니다 (11/3) */
-        html2canvas:{scale:2,backgroundColor:'#ffffff',useCORS:true,scrollX:0,scrollY:0},
+        html2canvas:{scale:2,backgroundColor:'#ffffff',useCORS:true,scrollX:0,scrollY:0,windowWidth:794},
         jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
         /* 표 한 줄·조항 한 칸·서명란이 쪽 경계에서 반으로 잘리지 않게 */
         pagebreak:{mode:['css','legacy'],avoid:['tr','.p-h','.p-cols','.p-sum','.p-sec','.p-sign','.p-f','.c-doc h5','.c-doc li','.c-doc p','.c-doc .box']}
-      }).from(paper).save();
+      };
+      var blob=await w.html2pdf().set(w.JSON.parse(JSON.stringify(opt))).from(paper).outputPdf('blob');
+      /* 내려받기는 바깥 화면에서 (사파리에서도 파일 이름 그대로 저장되게) */
+      var url=URL.createObjectURL(blob), a=document.createElement('a');
+      a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){URL.revokeObjectURL(url);},60000);
       toast('PDF를 저장했습니다 · '+name);
     }catch(e){
       toast('PDF 저장 실패: '+(e&&e.message||e)+' — 🖨 인쇄로 저장해 주세요');
     }finally{
-      box.remove();
+      if(fr)fr.remove();
       if(btn){btn.disabled=false;btn.textContent=label;}
     }
   };
