@@ -5840,6 +5840,14 @@
        PDF 가 크게 확대되고 오른쪽이 잘려 나온 일이 있었습니다(외주 견적서 ITM-WEB-26-0026 · 사파리).
        이제는 A4 폭(794px)짜리 «빈 화면(iframe)»을 따로 만들어 거기에 견적서만 넣고, PDF 도구도 그 안에서 돌립니다 — 바깥 화면 상태와 상관없음. */
     var name=pdfName(kind), fr=null;
+    /* 🔴 11/17 — 사파리는 화면 확대(⌘+ / ⌘-)가 100%가 아니면 PDF 글자가 겹치고 크기가 틀어집니다
+       (외주 견적서 ITM-WEB-26-0026 : 85% 상태에서 그림 폭 1350 · 글자 겹침). 만들기 전에 한 번 묻습니다. */
+    var zr=(window.outerWidth&&window.innerWidth)?window.outerWidth/window.innerWidth:1;
+    if(/Safari/.test(navigator.userAgent)&&!/Chrome|Chromium|Edg|CriOS/.test(navigator.userAgent)&&Math.abs(zr-1)>0.04){
+      if(!confirm('사파리 화면 확대가 약 '+Math.round(zr*100)+'%로 보입니다.\n100%가 아니면 PDF 글자가 겹치거나 크기가 틀어집니다.\n\n[취소]를 누르고 ⌘0 (100%)으로 맞춘 뒤 다시 눌러 주세요.\n(사이드바를 열어 두어도 이렇게 보일 수 있습니다 — 그때는 [확인])')){
+        if(btn){btn.disabled=false;btn.textContent=label;} return;
+      }
+    }
     try{
       fr=document.createElement('iframe');
       fr.setAttribute('aria-hidden','true'); fr.tabIndex=-1;
@@ -5854,6 +5862,10 @@
         +src.outerHTML+'</body></html>');
       d.close();
       var paper=d.body.firstElementChild; paper.removeAttribute('id'); paper.classList.add('pdf');
+      /* 빈 화면 안에서도 1000px 이 1000px 로 재지는지 확인 — 다르면 확대 상태라 PDF 가 깨집니다 */
+      var pr=d.createElement('div'); pr.style.cssText='position:absolute;left:0;top:0;width:1000px;height:1px'; d.body.appendChild(pr);
+      var pz=pr.getBoundingClientRect().width/1000; pr.remove();
+      if(Math.abs(pz-1)>0.02)throw new Error('화면 확대가 '+Math.round(pz*100)+'%입니다 — ⌘0 (100%)으로 맞춘 뒤 다시 눌러 주세요');
       /* 화면에선 표를 5줄로 채워 보여 주지만, PDF 에선 빈 줄을 뺍니다 — 간단한 견적서가 1쪽에 들어가게 */
       paper.querySelectorAll('table.p-t tbody tr').forEach(function(tr){
         var rest=[].slice.call(tr.children,1);        /* 첫 칸(번호) 말고 전부 비었을 때만 */
@@ -5882,7 +5894,7 @@
       setTimeout(function(){URL.revokeObjectURL(url);},60000);
       toast('PDF를 저장했습니다 · '+name);
     }catch(e){
-      toast('PDF 저장 실패: '+(e&&e.message||e)+' — 🖨 인쇄로 저장해 주세요');
+      var em=String(e&&e.message||e); toast(/^화면 확대/.test(em)?em:'PDF 저장 실패: '+em+' — 🖨 인쇄로 저장해 주세요');
     }finally{
       if(fr)fr.remove();
       if(btn){btn.disabled=false;btn.textContent=label;}
