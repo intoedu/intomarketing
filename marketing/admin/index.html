@@ -732,7 +732,7 @@
     <button class="navb hide" data-nav="partner" id="navPartner" type="button">영업실장 <span class="cnt" id="c-partner">0</span></button>
     <button class="navb hide" data-nav="set" id="navSet" type="button">견적서 설정</button>
     <button class="navb" data-nav="links" type="button">🔗 주소 모음</button>
-    <button class="navb hide" data-nav="pf" id="navPf" type="button">🗂 결과물 후보</button>
+    <button class="navb hide" data-nav="pf" id="navPf" type="button">🗂 결과물.Zip</button>
     <!-- 업무 매뉴얼 (2026-10-19 매뉴얼 창 요청 · 이은총 님) — 직원 전원. 누르면 바로 새 탭.
          파일 = Supabase 비공개 저장 칸 'manuals' 의 manual.html · manual.pdf (저장소에 넣지 않음 — 원고료 · 커미션 · 대표님 성함이 들어 있음) -->
     <div class="side-sep"></div>
@@ -959,10 +959,10 @@
       </div>
     </section>
 
-    <!-- 결과물 후보 (11/19) — 시스템에 이미 있는 결과물 링크를 서비스별로 «읽어서 보여 주기만» 합니다. 저장 · 선택 기능 없음 -->
+    <!-- 결과물.Zip (11/19 · 옛 이름 결과물 후보) — 시스템에 이미 있는 결과물 링크를 서비스별로 «읽어서 보여 주기만» 합니다. 저장 · 선택 기능 없음 -->
     <section id="viewPf" class="hide">
       <div class="head">
-        <div><h1>결과물 후보</h1><p>지금 시스템에 저장된 결과물 링크를 서비스별로 모아 <b>보기만</b> 합니다. 여기서 고르거나 저장하는 것은 없습니다.
+        <div><h1>결과물.Zip</h1><p>지금 시스템에 저장된 결과물 링크를 서비스별로 모아 <b>보기만</b> 합니다. 여기서 고르거나 저장하는 것은 없습니다.
           고객 이름 · 연락처 · 금액은 보이지 않고, 어드민 안에서만 보입니다.</p></div>
       </div>
       <div class="pills" id="pfTabs" style="margin-bottom:16px"></div>
@@ -1708,7 +1708,7 @@
     $('meRole').textContent=ROLE_KO[me.role]||'직원';
     if(me.role==='owner'||can('manage_staff')){$('navStaff').classList.remove('hide');$('navSet').classList.remove('hide');$('navSite').classList.remove('hide');$('navPartner').classList.remove('hide');}
     mnLoad();   /* 업무 매뉴얼 날짜 — 직원 전원 */
-    if(can('requests'))$('navPf').classList.remove('hide');   /* 결과물 후보 — 의뢰 관리 권한이 있는 직원만 (11/19) */
+    if(can('requests'))$('navPf').classList.remove('hide');   /* 결과물.Zip — 의뢰 관리 권한이 있는 직원만 (11/19) */
     if(can('blog_admin')||can('blog_review'))$('navBlog').classList.remove('hide');
     /* 의뢰 관리 권한이 없으면 문의·견적을 아예 안 보여 줍니다 (2026-09-29).
        서버(RLS)도 같은 규칙이라 화면을 억지로 열어도 내용이 안 옵니다. */
@@ -3915,7 +3915,7 @@
     }).join('');
   };
 
-  /* ══════════ 결과물 후보 — 읽기 전용 (2026-11-19 이은총 님) ══════════
+  /* ══════════ 결과물.Zip(옛 이름 결과물 후보) — 읽기 전용 (2026-11-19 이은총 님) ══════════
      지금 시스템에 저장된 결과물 «링크»만 서비스별로 모아 보여 줍니다. DB 에 아무것도 쓰지 않습니다(select 만).
      · 출처 ① 의뢰(requests · 인투마케팅) : 「만든 사이트 주소」(site_url)가 있는 의뢰. 서비스 = groupOf(의뢰 종류)
            ② 외주(ext_jobs · ext_reports · ext_episodes) : 결과물 보고 링크 · 회차 링크. 서비스 = 외주 작업의 팀. 작업마다 묶음(job_id 로 실제 연결된 것만)
