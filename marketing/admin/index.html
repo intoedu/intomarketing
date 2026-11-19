@@ -751,6 +751,8 @@
       <div class="head">
         <div><h1 id="listTitle">홈페이지 제작 의뢰</h1><p id="listSub">인투마케팅 홈페이지에서 들어온 신청입니다. 담당자·진행·견적서를 여기서 관리합니다.</p></div>
       </div>
+      <!-- 실제 매출 요약 (11/19) — 입금이 확인된 금액만 · 경영 현황을 볼 수 있는 사람만 · renderRev() -->
+      <div class="card hide" id="revBox" style="padding:14px 18px;margin-bottom:14px"></div>
       <div class="stats">
         <div class="stat"><b class="tnum" id="s-all">0</b><span>전체</span></div>
         <div class="stat"><b class="tnum" id="s-new">0</b><span>접수</span></div>
@@ -4070,6 +4072,117 @@
     $('pfWrap').innerHTML=h;
   };
 
+  /* ══════════ 실제 매출 요약 — 서비스 화면 맨 위 (2026-11-19 이은총 님) ══════════
+     «입금이 확인된 돈»만 셉니다. 매출(받은 돈) 기준이며 비용을 빼지 않았으므로 순이익이 아닙니다. DB 에 쓰지 않습니다(select 만).
+     · 내부 의뢰(requests · 이 어드민이 읽는 인투마케팅 의뢰) : 입금 확인 = 입금일(paid_at) · 카드 결제(pay_at) · 입금 표시(paid) 중 하나.
+           금액 = 카드 결제 금액(pay_amount) → 없으면 「금액」(amount). 🔴 견적서 금액으로 대신하지 않음(견적만 있는 돈은 매출이 아님).
+           입금은 확인됐는데 금액 칸이 비면 0원이 아니라 「금액 기록 없음」으로 따로 셉니다.
+     · 외부 작업(ext_payments) : 줄 하나 = 고객 쪽(입금처)에게서 받은 돈. 서비스 = 그 외주 작업의 팀. 입금 날짜가 없는 줄도 금액은 넣고, 건수 · 금액을 따로 보여 줌.
+     · 블로그 센터 주문(blog_orders, 블로그 · 리뷰 화면만) : 실제 입금 = paid_amount(주문 금액 amount_total 로 대신하지 않음) − 환불(blog_refunds).
+           연습 주문은 뺌. 센터는 연결된 의뢰의 center 로 나눔 — 인투마케팅 · 학원지원센터 소계를 따로.
+     · 🔴 한 번만 셈 : ① 블로그 주문과 연결된 블로그 의뢰는 의뢰 쪽 금액을 빼고 주문 쪽만 ② 외부 프로젝트와 연결된 내부 의뢰(ext_project_requests)는
+           외부 입금과 같은 돈일 수 있어 내부 합계에서 빼고 따로 보여 줌 ③ 관리비 대장 ✓ 은 날짜 · 실제 금액 기록이 없어 아직 매출에 넣지 않음(참고로만).
+     · 앞으로 받을 돈(미입금 · 계약 예정 · 관리비 예정)은 넣지 않음. 「경영 현황」 셈 · 의뢰 저장 · 외부 화면은 그대로. */
+  var REV={d:null,loading:false};
+  var REV_TEAM={web:'web',sns:'sns',design:'design',video:'video'};
+  function revLoad(){
+    if(REV.loading)return; REV.loading=true;
+    (async function(){
+      var d={err:[]}, chk=function(r,w){if(r.error){d.err.push(w+' — '+r.error.message);return [];}return r.data||[];};
+      d.jobs=chk(await sb.from('ext_jobs').select('id,team'),'외부 작업');
+      d.pays=chk(await sb.from('ext_payments').select('id,job_id,amount,paid_at'),'외부 입금');
+      d.links=chk(await sb.from('ext_project_requests').select('request_id'),'외부 연결');
+      d.orders=chk(await sb.from('blog_orders').select('id,request_id,is_practice,paid_at,paid_amount'),'블로그 주문');
+      d.refunds=chk(await sb.from('blog_refunds').select('order_id,amount'),'블로그 환불');
+      var rids=d.orders.map(function(o){return o.request_id;}).filter(Boolean);
+      d.ocenter={};
+      if(rids.length)chk(await sb.from('requests').select('id,center').in('id',rids),'블로그 주문의 의뢰').forEach(function(q){d.ocenter[q.id]=q.center;});
+      d.ledger=chk(await sb.from('settings').select('key,value').in('key',['web_fees','sns_fees']),'관리비 대장');
+      d.at=new Date();
+      REV.d=d; REV.loading=false; renderRev();
+    })().catch(function(e){REV.d={err:['불러오지 못했습니다 — '+(e&&e.message||e)],jobs:[],pays:[],links:[],orders:[],refunds:[],ocenter:{},ledger:[],at:new Date()};REV.loading=false;renderRev();});
+  }
+  window.revReload=function(){REV.d=null;renderRev();};
+  function revCalc(svc){
+    var d=REV.d, o={in:{sum:0,n:0,noDate:0,noDateSum:0,noAmt:0,none:0,amtOnly:0},ext:{sum:0,n:0,noDate:0,noDateSum:0},
+      blog:{mkt:{sum:0,n:0,ref:0,noAmt:0,noDate:0},esc:{sum:0,n:0,ref:0,noAmt:0,noDate:0},unk:{sum:0,n:0,ref:0,noAmt:0,noDate:0}},
+      skipBlog:0, skipExt:{n:0,sum:0}, ledger:{n:0,sum:0}};
+    var blogReq={}; d.orders.forEach(function(x){if(!x.is_practice&&x.request_id)blogReq[x.request_id]=1;});
+    var extReq={}; d.links.forEach(function(x){extReq[x.request_id]=1;});
+    /* ① 내부 의뢰 */
+    var seen={};
+    Object.keys(DATA).forEach(function(g){(DATA[g]||[]).forEach(function(r){
+      if(seen[r.id])return; seen[r.id]=1; if(groupOf(r)!==svc)return;
+      var amt=(r.pay_amount!=null&&r.pay_amount!=='')?Number(r.pay_amount):((r.amount!=null&&r.amount!=='')?Number(r.amount):null);
+      var ok=!!(r.paid_at||r.pay_at||r.paid), dated=!!(r.paid_at||r.pay_at);
+      if(blogReq[r.id]){o.skipBlog++;return;}
+      if(extReq[r.id]){o.skipExt.n++; if(ok&&amt!=null)o.skipExt.sum+=amt; return;}
+      if(!ok){ if(amt!=null)o.in.amtOnly++; else o.in.none++; return; }
+      if(amt==null){o.in.noAmt++;return;}
+      o.in.sum+=amt; o.in.n++; if(!dated){o.in.noDate++;o.in.noDateSum+=amt;}
+    });});
+    /* ② 외부 작업 */
+    var team={}; d.jobs.forEach(function(j){team[j.id]=REV_TEAM[j.team]||'';});
+    d.pays.forEach(function(p){
+      if(team[p.job_id]!==svc||p.amount==null)return;
+      var a=Number(p.amount)||0; o.ext.sum+=a; o.ext.n++; if(!p.paid_at){o.ext.noDate++;o.ext.noDateSum+=a;}
+    });
+    /* ③ 블로그 센터 주문 */
+    if(svc==='blog'){
+      var ref={}; d.refunds.forEach(function(f){ref[f.order_id]=(ref[f.order_id]||0)+(Number(f.amount)||0);});
+      d.orders.forEach(function(x){
+        if(x.is_practice)return;
+        var c=d.ocenter[x.request_id], b=o.blog[c==='mkt'?'mkt':(c==='esc'?'esc':'unk')];
+        if(!x.paid_at&&x.paid_amount==null)return;            /* 입금 기록 없음 = 매출 아님 */
+        if(x.paid_amount==null){b.noAmt++;return;}
+        b.sum+=Number(x.paid_amount)||0; b.n++; if(!x.paid_at)b.noDate++;
+        if(ref[x.id]){b.ref+=ref[x.id]; b.sum-=ref[x.id];}
+      });
+    }
+    /* 참고 : 관리비 대장 ✓ (매출에 넣지 않음) */
+    if(svc==='web'||svc==='sns'){
+      d.ledger.forEach(function(row){if((row.key==='sns_fees'?'sns':'web')!==svc)return;
+        ((row.value&&row.value.items)||[]).forEach(function(it){var p=it.paid||{};Object.keys(p).forEach(function(m){if(p[m]==='o'){o.ledger.n++;o.ledger.sum+=Number(it.fee)||0;}});});});
+    }
+    return o;
+  }
+  window.renderRev=function(){
+    var box=$('revBox'); if(!box)return;
+    if(!canBoss()||COKEY||!AREAS[CUR]){box.classList.add('hide');return;}
+    box.classList.remove('hide');
+    if(!REV.d){box.innerHTML='<div class="muted" style="font-size:.85rem">실제 매출 불러오는 중…</div>'; revLoad(); return;}
+    var o=revCalc(CUR), d=REV.d;
+    var row=function(k,v,s,strong){return '<div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;padding:6px 0;border-top:1px dashed var(--line)'+(strong?';font-weight:800':'')+'">'
+      +'<span style="min-width:150px">'+k+'</span><b class="tnum" style="min-width:110px">'+v+'</b><span class="muted" style="font-size:.8rem;flex:1;min-width:200px">'+(s||'')+'</span></div>';};
+    var dateNote=function(n,s,unit){return n?'<b style="color:var(--warn)">입금 날짜 없음 '+n+unit+' · '+won(s)+'</b>':'';};
+    var h='<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
+      +'<b style="font-size:.98rem">💰 실제 매출 — '+esc(AREAS[CUR])+'</b>'
+      +'<span class="badge" style="background:#EEF4FF;color:var(--accent)">입금 확인된 금액 · 매출 기준 · 순이익 아님</span>'
+      +'<button class="btn btn-ghost" style="margin-left:auto;padding:4px 10px;font-size:.78rem" type="button" onclick="revReload()">↻ 다시 불러오기</button></div>'
+      +'<div class="muted" style="font-size:.78rem;margin:4px 0 6px">기준 : 시스템에 기록된 전체 기간 · '+esc(fdatetime(d.at))+' 불러옴 · 비용(원고료 · 작업비)을 빼지 않은 금액 · 견적만 있는 돈 · 입금 확인 전 돈 · 앞으로 받을 돈은 넣지 않음</div>';
+    if(d.err.length)h+='<div style="color:var(--bad);font-size:.8rem;margin-bottom:4px">'+d.err.map(esc).join('<br>')+'</div>';
+    var total=o.in.sum+o.ext.sum;
+    h+=row('내부 의뢰',won(o.in.sum),'입금 확인 '+o.in.n+'건'+(o.in.noDate?' · '+dateNote(o.in.noDate,o.in.noDateSum,'건'):'')
+      +(o.in.noAmt?' · <b style="color:var(--warn)">입금 확인됐지만 금액 기록 없음 '+o.in.noAmt+'건 (합계 밖)</b>':''));
+    if(CUR==='blog'||CUR==='etc')h+=row('외부 작업','—','이 서비스로 나뉜 외부 작업이 없습니다');
+    else h+=row('외부 작업',won(o.ext.sum),'입금 '+o.ext.n+'줄 (고객 쪽 입금처에게서 받은 돈)'+(o.ext.noDate?' · '+dateNote(o.ext.noDate,o.ext.noDateSum,'줄'):''));
+    if(CUR==='blog'){
+      var B=o.blog, bl=function(k,b){return row('블로그 센터 · '+k,won(b.sum),'입금 확인 주문 '+b.n+'건'+(b.ref?' · 환불 −'+won(b.ref)+' 반영':'')
+        +(b.noDate?' · <b style="color:var(--warn)">입금 날짜 없음 '+b.noDate+'건</b>':'')+(b.noAmt?' · <b style="color:var(--warn)">입금 금액 기록 없음 '+b.noAmt+'건 (합계 밖)</b>':''));};
+      h+=bl('인투마케팅',B.mkt)+bl('학원지원센터',B.esc);
+      if(B.unk.n||B.unk.noAmt)h+=bl('센터 확인 필요',B.unk);
+      total+=B.mkt.sum+B.esc.sum+B.unk.sum;
+    }
+    h+=row('합계',won(total),CUR==='blog'?'내부 의뢰 + 블로그 센터(인투마케팅 + 학원지원센터) — 각 소계는 위':'내부 의뢰 + 외부 작업',true);
+    var notes=[];
+    if(o.in.none||o.in.amtOnly)notes.push('입금 기록이 없는 내부 의뢰 '+(o.in.none+o.in.amtOnly)+'건은 0원이 아니라 «기록 없음»이라 넣지 않았습니다'+(o.in.none?' (금액 · 입금일 둘 다 비어 있음 '+o.in.none+'건)':'')+' — 의뢰 상세 「금액」 · 「입금일」을 채우면 들어갑니다');
+    if(o.skipBlog)notes.push('블로그 주문과 연결된 의뢰 '+o.skipBlog+'건은 블로그 센터 주문 쪽에서만 셉니다');
+    if(o.skipExt.n)notes.push('외부 프로젝트와 연결된 내부 의뢰 '+o.skipExt.n+'건'+(o.skipExt.sum?' ('+won(o.skipExt.sum)+')':'')+'은 외부 입금과 같은 돈일 수 있어 내부 합계에서 뺐습니다');
+    if(o.ledger.n)notes.push('관리비 대장 ✓(받음) '+o.ledger.n+'칸 · 대장 월액으로 '+won(o.ledger.sum)+' — 입금 날짜 · 실제 받은 금액이 기록되지 않아 매출에 넣지 않았습니다(확인 필요)');
+    if(notes.length)h+='<div class="muted" style="font-size:.78rem;margin-top:8px;line-height:1.65">· '+notes.join('<br>· ')+'</div>';
+    box.innerHTML=h;
+  };
+
   /* ══════════ 관리비 대장 — 홈페이지 · SNS (2026-10-16 이은총 님) ══════════
      · 저장 = settings['web_fees'] · settings['sns_fees'] .value = {items:[{id,name,fee,qno,status,due,signed,start:'YYYY-MM',day:1|10,req,created,paid:{'YYYY-MM':'o'|'x'}}]}
        settings 는 직원(is_staff)만 읽습니다 — 고객 화면에서 보이지 않습니다.
@@ -4292,6 +4405,7 @@
   };
   window.renderList=function(){
     renderFee();
+    renderRev();   /* 실제 매출 요약 (11/19) — 읽기만 */
     if(COKEY)CO=coRows();   /* 상세에서 고친 줄(syncRow)이 바로 보이게 다시 묶습니다 */
     var rows=COKEY?((CO[COKEY]||{}).rows||[]):(DATA[CUR]||[]);
     var q=($('q').value||'').trim().toLowerCase();
