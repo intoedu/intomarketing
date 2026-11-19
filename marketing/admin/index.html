@@ -458,6 +458,11 @@
   .pills{display:flex;gap:7px;flex-wrap:wrap}
   .pill{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 15px;font-size:.85rem;font-weight:700;color:var(--muted);cursor:pointer}
   .pill.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface));color:var(--accent)}
+  .pill.opt{border-style:dashed}
+  .pill.old{border-style:dotted;opacity:.75}
+  .stage-note{font-size:.8rem;color:var(--muted);line-height:1.55;margin:8px 0 12px}
+  .stage-note b{color:var(--ink)}
+  .fld .due-h{display:block;font-size:.74rem;color:var(--muted);margin-top:4px;line-height:1.45}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .kchk{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.88rem}
   /* 홈페이지 견적 — 신청서 기능 · 가격 자동 (2026-11-03) */
@@ -1078,13 +1083,10 @@
     <textarea class="inp" id="d_memo" placeholder="진행하면서 남길 메모를 적어주세요." onchange="saveField('memo',this.value)"></textarea>
 
     <div class="sec-t">제작 진행</div>
+    <!-- 진행 단계 · 마감일 칸은 서비스(영역)마다 다릅니다 — STAGE_SETS 에서 그립니다 (11/19) -->
     <div class="pills" id="d_stage"></div>
-    <div class="grid2">
-      <div class="fld"><label>디자인 마감</label><input class="inp" type="date" id="d_due_design" onchange="saveDue('design',this.value)"></div>
-      <div class="fld"><label>개발 마감</label><input class="inp" type="date" id="d_due_dev" onchange="saveDue('dev',this.value)"></div>
-      <div class="fld"><label>검수 마감</label><input class="inp" type="date" id="d_due_check" onchange="saveDue('check',this.value)"></div>
-      <div class="fld"><label>최종 마감</label><input class="inp" type="date" id="d_due_done" onchange="saveDue('done',this.value)"></div>
-    </div>
+    <div class="stage-note" id="d_stage_note"></div>
+    <div class="grid2" id="d_dues"></div>
     <div class="grid2">
       <div class="fld"><label>금액 (원)</label>
         <input class="inp tnum" type="number" id="d_amount" placeholder="예: 45000"
@@ -4165,9 +4167,7 @@
     $('d_assignee').value=r.assignee_id||'';
     $('d_memo').value=r.memo||'';
     renderStagePills(r.stage||'');
-    var du=r.due_stages||{};
-    $('d_due_design').value=du.design||''; $('d_due_dev').value=du.dev||'';
-    $('d_due_check').value=du.check||'';   $('d_due_done').value=du.done||'';
+    renderDues(r);
     $('d_amount').value=(r.amount==null?'':r.amount);
     $('d_paid_at').value=r.paid_at||'';
     $('d_site').value=r.site_url||'';
@@ -4420,12 +4420,93 @@
   /* 입금은 «두 칸이 함께» 움직여야 합니다.
      따로 저장하면 「입금 완료인데 입금일이 없는」 줄이 생깁니다. */
   window.savePaid=function(v){ savePatch({paid:!!v,paid_at:v||null},'paid_at'); };
-  var STAGES=['접수·견적','디자인','개발','검수','완료'];
+  /* ── 서비스별 진행 단계 · 마감일 칸 (2026-11-19 · 이은총 님 지시 · 근거 = 통합 매뉴얼 1012) ──
+     · 옛 공통 단계 ['접수·견적','디자인','개발','검수','완료'] 는 옛 홈페이지 어드민에서 온 것이라 버림.
+       11/19 DB 확인 : requests.stage · due_stages 를 쓰는 신청 0건 → 이름만 바꿔도 잃는 기록 없음.
+     · 🔴 마지막 마감은 늘 키 'done' — 경영 현황(늦음 · 이번 주)과 모아 보기(admin/)가 due_stages.done 을 읽습니다.
+     · 나머지 키는 서비스 이름을 앞에 붙임(web_draft …) — 영역을 바꿔도 다른 서비스의 마감으로 잘못 읽히지 않게.
+     · 지금 서비스에 없는 단계 · 마감 키가 DB 에 있으면 「예전」으로 따로 보여 줌(지우지 않음).
+     · 기한(h)은 «안내 글»입니다. 날짜를 저절로 채우지 않습니다(영업일 · 공휴일 셈은 담당자가 · 매뉴얼 기준).
+     · opt = 건너뛸 수 있는 단계(점선). 단계는 차례와 상관없이 눌러 고를 수 있습니다. */
+  var STAGE_SETS={
+    web:{stages:[
+        {n:'견적·계약',h:'입금 확인 포함'},
+        {n:'자료 받기',h:'자료를 모두 받은 날 = 작업 시작일'},
+        {n:'디자인 초안',h:'작업 시작일부터 1주 안'},
+        {n:'수정',h:'제작 중 수정 총 5회'},
+        {n:'완성본',h:'오픈 전 점검 포함 · 작업 시작일부터 2주 안'},
+        {n:'오픈'},{n:'관리 중'}],
+      dues:[{k:'web_draft',l:'디자인 초안 마감',h:'작업 시작일부터 1주'},
+            {k:'web_final',l:'완성본 마감',h:'작업 시작일부터 2주'},
+            {k:'done',l:'오픈 마감'}]},
+    sns:{stages:[
+        {n:'견적·입금',h:'담당자 배정 포함'},
+        {n:'정보·권한 받기',h:'다 받으면 의뢰 시작 안내'},
+        {n:'채널 점검'},{n:'세팅안 컨펌'},{n:'세팅 완료·오픈 보고'},
+        {n:'정기 운영',h:'매달 계획표 → 컨펌 → 제작 → 사전 공유 → 업로드 → 월간 리포트'}],
+      dues:[{k:'sns_plan',l:'세팅안 컨펌 마감'},
+            {k:'sns_open',l:'오픈 보고 마감'},
+            {k:'done',l:'최종 마감'}]},
+    design:{stages:[
+        {n:'견적',h:'의뢰서 작성 요청 · 디자이너 연결 포함'},
+        {n:'자료·계약금'},
+        {n:'1차 시안',h:'계약금 입금 확인 후 10시간 안 · 시안 2개'},
+        {n:'수정',h:'무료 수정 2회'},
+        {n:'잔금·파일 전달'}],
+      dues:[{k:'design_draft',l:'1차 시안 마감',h:'계약금 입금 확인 후 10시간 안 · 시안 2개'},
+            {k:'done',l:'최종 마감'}]},
+    video:{stages:[
+        {n:'견적·입금',h:'첫 연락 포함'},
+        {n:'제작정보 받기',h:'다 받으면 의뢰 시작 안내'},
+        {n:'기획안 컨펌'},
+        {n:'촬영',opt:true,h:'편집만 의뢰한 건은 건너뜀'},
+        {n:'편집·중간보고',h:'20만 원 이하 건은 중간보고 생략(편집만)'},
+        {n:'최종본·수정'},{n:'납품'}],
+      dues:[{k:'video_plan',l:'기획안 마감'},
+            {k:'video_shoot',l:'촬영일',h:'편집만 의뢰한 건은 비워 둠'},
+            {k:'video_mid',l:'중간보고',h:'20만 원 이하 건은 비워 둠(생략)'},
+            {k:'done',l:'최종 마감'}]},
+    blog:{stages:[
+        {n:'견적·입금'},{n:'자료 받기'},{n:'의뢰 시작'},
+        {n:'원고·발행',h:'키워드 배정 · 원고 검수 · 발행 확인은 블로그 센터에서'},
+        {n:'마감·종료',h:'마감 7일 전 점검 · 종료 안내 · 연장 확인 포함'}],
+      dues:[{k:'blog_start',l:'의뢰 시작일',h:'시작 안내를 보낸 날 — 모든 기한의 기준일'},
+            {k:'blog_first',l:'첫 발행 마감',h:'매뉴얼 「D+7 전」(D = 의뢰 시작일) — 날짜 셈 확인 필요'},
+            {k:'done',l:'주문 마감일',h:'의뢰 시작일부터 30일 · 전 편 발행 목표는 27일째까지'}]},
+    etc:{stages:[{n:'견적·입금'},{n:'자료 받기'},{n:'작업'},{n:'확인·수정'},{n:'완료'}],
+      dues:[{k:'etc_mid',l:'중간 확인 마감'},
+            {k:'done',l:'최종 마감'}]}
+  };
+  var OLD_DUE_LABEL={design:'디자인 마감',dev:'개발 마감',check:'검수 마감'};
+  function stageSet(r){ return STAGE_SETS[groupOf(r)]||STAGE_SETS.etc; }
   window.setStage=function(v){ saveField('stage',v); renderStagePills(v); };
   function renderStagePills(cur){
-    $('d_stage').innerHTML=STAGES.map(function(s){
-      return '<button class="pill'+(cur===s?' on':'')+'" type="button" onclick="setStage(\''+s+'\')">'+s+'</button>';
+    var set=stageSet(CURROW), names=set.stages.map(function(s){return s.n;});
+    var h=set.stages.map(function(s){
+      return '<button class="pill'+(cur===s.n?' on':'')+(s.opt?' opt':'')+'" type="button" data-s="'+esc(s.n)+'"'
+        +(s.h?' title="'+esc(s.h)+'"':'')+' onclick="setStage(this.dataset.s)">'+esc(s.n)+'</button>';
     }).join('');
+    /* 이 서비스에 없는 단계가 저장돼 있으면 지우지 않고 「예전」으로 보여 줌 */
+    if(cur&&names.indexOf(cur)<0)h+='<button class="pill on old" type="button" title="이 서비스의 단계 목록에 없는 값 — 맞는 단계를 눌러 바꿔 주세요">예전 : '+esc(cur)+'</button>';
+    $('d_stage').innerHTML=h;
+    var hit=set.stages.filter(function(s){return s.n===cur;})[0];
+    var notes=set.stages.filter(function(s){return s.opt;}).map(function(s){return '점선 「'+esc(s.n)+'」 = '+esc(s.h||'건너뛸 수 있음');});
+    $('d_stage_note').innerHTML=(hit&&hit.h?'<b>'+esc(hit.n)+'</b> — '+esc(hit.h):'단계를 누르면 그 단계에 들어가는 일이 여기 나옵니다.')
+      +(notes.length?'<br>'+notes.join(' · '):'');
+  }
+  function renderDues(r){
+    var set=stageSet(r), du=(r&&r.due_stages)||{}, keys=set.dues.map(function(d){return d.k;});
+    var fld=function(k,l,h,v){
+      return '<div class="fld"><label>'+esc(l)+'</label>'
+        +'<input class="inp" type="date" data-k="'+esc(k)+'" value="'+esc(v||'')+'" onchange="saveDue(this.dataset.k,this.value)">'
+        +(h?'<small class="due-h">'+esc(h)+'</small>':'')+'</div>';
+    };
+    var h=set.dues.map(function(d){return fld(d.k,d.l,d.h,du[d.k]);}).join('');
+    Object.keys(du).forEach(function(k){
+      if(keys.indexOf(k)>=0||!du[k])return;
+      h+=fld(k,'예전 : '+(OLD_DUE_LABEL[k]||k),'이 서비스의 마감 칸에 없는 기록 — 지우려면 날짜를 비우세요',du[k]);
+    });
+    $('d_dues').innerHTML=h;
   }
 
   window.saveField=async function(field,value){
