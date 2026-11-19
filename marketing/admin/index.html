@@ -1095,7 +1095,14 @@
         <input class="inp" type="date" id="d_paid_at" onchange="savePaid(this.value)"></div>
     </div>
     <div class="fld"><label>만든 사이트 주소</label>
-      <input class="inp" id="d_site" placeholder="https://" onchange="saveField('site_url',this.value||null)"></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <input class="inp" id="d_site" style="flex:1;min-width:200px" placeholder="https://" onchange="saveField('site_url',this.value||null)" oninput="renderSiteBtns()">
+        <!-- 홈페이지 제작 의뢰 + 주소가 있을 때만 보임 (11/19) -->
+        <span id="d_site_btns" style="display:none;gap:8px">
+          <button class="btn btn-primary" style="padding:7px 13px" type="button" onclick="copySite()">📋 링크 복사</button>
+          <button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="openSite()">링크 열기 ↗</button>
+        </span>
+      </div></div>
 
     <div class="sec-t">할 일 <span class="muted" id="d_progtxt" style="font-weight:600"></span></div>
     <div id="d_todos"></div>
@@ -3848,6 +3855,28 @@
     catch(e){toast('복사에 실패했습니다. 아래 주소를 직접 긁어 주세요');}
   };
 
+  /* ── 만든 사이트 주소 — 「링크 복사」 · 「링크 열기」 (2026-11-19 · 이은총 님) ──
+     · 홈페이지 제작 의뢰(groupOf = web)이고 칸에 주소가 있을 때만 단추가 보입니다. 다른 서비스 화면은 그대로.
+     · 복사 = 칸에 적힌 그대로(저장값을 바꾸지 않음). 막히면 칸의 글을 골라 두고 Cmd+C 안내(lgCopyMsg 와 같은 방식).
+     · 열기 = 새 탭. http(s):// 가 없고 「글자.글자」 꼴이면 앞에 https:// 를 붙여 엽니다 — 결과물 링크(rpSave)와 같은 규칙.
+       그 꼴도 아니면 열지 않고 알려 줍니다. 저장된 주소는 손대지 않습니다. */
+  function siteVal(){ var el=$('d_site'); return el?(el.value||'').trim():''; }
+  window.renderSiteBtns=function(){
+    var b=$('d_site_btns'); if(!b)return;
+    b.style.display=(CURROW&&groupOf(CURROW)==='web'&&siteVal())?'inline-flex':'none';
+  };
+  window.copySite=async function(){
+    var v=siteVal(); if(!v)return;
+    try{await navigator.clipboard.writeText(v);toast('주소를 복사했습니다');}
+    catch(e){var el=$('d_site');el.focus();el.select();toast('복사가 막혀 있습니다 — 주소를 골라 두었으니 Cmd+C 를 눌러 주세요');}
+  };
+  window.openSite=function(){
+    var v=siteVal(); if(!v)return;
+    var u=/^https?:\/\//i.test(v)?v:(/^\S+\.\S+$/.test(v)?'https://'+v:'');
+    if(!u){toast('주소 모양을 확인해 주세요 — 예: pdcs.kr 또는 https://pdcs.kr');return;}
+    window.open(u,'_blank','noopener');
+  };
+
   window.renderLinks=function(){
     $('linkWrap').innerHTML=LINK_GROUPS.map(function(G){
       return '<div style="margin-bottom:22px">'
@@ -4171,6 +4200,7 @@
     $('d_amount').value=(r.amount==null?'':r.amount);
     $('d_paid_at').value=r.paid_at||'';
     $('d_site').value=r.site_url||'';
+    renderSiteBtns();
     renderPartnerPick(r);
     renderTodos();
     renderQuoteBox();
