@@ -732,6 +732,7 @@
     <button class="navb hide" data-nav="partner" id="navPartner" type="button">영업실장 <span class="cnt" id="c-partner">0</span></button>
     <button class="navb hide" data-nav="set" id="navSet" type="button">견적서 설정</button>
     <button class="navb" data-nav="links" type="button">🔗 주소 모음</button>
+    <button class="navb hide" data-nav="pf" id="navPf" type="button">🗂 결과물 후보</button>
     <!-- 업무 매뉴얼 (2026-10-19 매뉴얼 창 요청 · 이은총 님) — 직원 전원. 누르면 바로 새 탭.
          파일 = Supabase 비공개 저장 칸 'manuals' 의 manual.html · manual.pdf (저장소에 넣지 않음 — 원고료 · 커미션 · 대표님 성함이 들어 있음) -->
     <div class="side-sep"></div>
@@ -955,6 +956,19 @@
       <div class="qbox" style="display:block;line-height:1.75;margin-top:16px">
         <b>학원별 진행현황 주소</b>는 여기 없습니다 — <b>블로그 센터의 「🔗 주소 모음」</b>에 있습니다.
         학원마다 주소가 달라서 거기서 학원 이름으로 찾으셔야 합니다.
+      </div>
+    </section>
+
+    <!-- 결과물 후보 (11/19) — 시스템에 이미 있는 결과물 링크를 서비스별로 «읽어서 보여 주기만» 합니다. 저장 · 선택 기능 없음 -->
+    <section id="viewPf" class="hide">
+      <div class="head">
+        <div><h1>결과물 후보</h1><p>지금 시스템에 저장된 결과물 링크를 서비스별로 모아 <b>보기만</b> 합니다. 여기서 고르거나 저장하는 것은 없습니다.
+          고객 이름 · 연락처 · 금액은 보이지 않고, 어드민 안에서만 보입니다.</p></div>
+      </div>
+      <div class="pills" id="pfTabs" style="margin-bottom:16px"></div>
+      <div id="pfWrap"><div class="muted">불러오는 중…</div></div>
+      <div class="qbox" style="display:block;line-height:1.75;margin-top:16px">
+        시스템 밖(바탕화면 · 드라이브)에만 있는 원본 파일은 여기 나오지 않습니다. 결과물 링크가 없는 의뢰는 넣지 않습니다.
       </div>
     </section>
 
@@ -1694,6 +1708,7 @@
     $('meRole').textContent=ROLE_KO[me.role]||'직원';
     if(me.role==='owner'||can('manage_staff')){$('navStaff').classList.remove('hide');$('navSet').classList.remove('hide');$('navSite').classList.remove('hide');$('navPartner').classList.remove('hide');}
     mnLoad();   /* 업무 매뉴얼 날짜 — 직원 전원 */
+    if(can('requests'))$('navPf').classList.remove('hide');   /* 결과물 후보 — 의뢰 관리 권한이 있는 직원만 (11/19) */
     if(can('blog_admin')||can('blog_review'))$('navBlog').classList.remove('hide');
     /* 의뢰 관리 권한이 없으면 문의·견적을 아예 안 보여 줍니다 (2026-09-29).
        서버(RLS)도 같은 규칙이라 화면을 억지로 열어도 내용이 안 옵니다. */
@@ -1771,12 +1786,13 @@
       b.classList.add('on');
       document.querySelectorAll('#navCo .navb').forEach(function(x){x.classList.remove('on');});
       $('navMy').classList.remove('on');offSpecial();
-      ['viewList','viewStaff','viewSet','viewLinks','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
+      ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
       if(k==='staff'){$('viewStaff').classList.remove('hide');renderStaff();return;}
       if(k==='site'){$('viewSite').classList.remove('hide');fillSite();return;}
       if(k==='partner'){$('viewPartner').classList.remove('hide');renderPartners();loadPartnerRules();return;}
       if(k==='set'){$('viewSet').classList.remove('hide');fillSettings();return;}
       if(k==='links'){$('viewLinks').classList.remove('hide');renderLinks();return;}
+      if(k==='pf'){$('viewPf').classList.remove('hide');renderPf();return;}
       $('viewList').classList.remove('hide');
       /* 업무 단추를 누르면(다른 곳에서 .click() 으로 부를 때도) 「내부 · 업무별」로 돌아옵니다 */
       COKEY=null; if(SCOPE!=='in'||AXIS!=='work'){SCOPE='in';AXIS='work';syncSeg();}
@@ -1824,7 +1840,7 @@
     COKEY=k;
     document.querySelectorAll('.navb[data-nav],#navCo .navb').forEach(function(x){x.classList.remove('on');});
     var b=document.querySelector('#navCo .navb[data-co="'+CSS.escape(k)+'"]'); if(b)b.classList.add('on'); $('navMy').classList.remove('on');offSpecial();
-    ['viewList','viewStaff','viewSet','viewLinks','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
+    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
     $('viewList').classList.remove('hide');
     $('listTitle').textContent=(CO[k]?CO[k].name:'')+' — 업체별';
     $('listSub').textContent='이 업체가 신청한 의뢰를 팀 구분 없이 모았습니다. 줄을 누르면 원래 팀의 상세가 열립니다.';
@@ -1844,7 +1860,7 @@
     if(SCOPE==='out'){
       COKEY=null;
       document.querySelectorAll('.navb[data-nav],#navCo .navb').forEach(function(x){x.classList.remove('on');});
-      ['viewList','viewStaff','viewSet','viewLinks','viewSite','viewPartner','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
+      ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
       $('viewExt').classList.remove('hide'); $('navMy').classList.remove('on');offSpecial();
       if(AXIS==='co'&&!PJ&&EXT.projects.length)PJ=EXT.projects[0].id;
       renderExtNav(); renderExt();
@@ -3098,7 +3114,7 @@
   function openSpecial(id,btn){
     document.querySelectorAll('.navb[data-nav],#navCo .navb,#navOut .navb,#navOutWork .navb').forEach(function(x){x.classList.remove('on');});
     $('navMy').classList.remove('on'); offSpecial(); if(btn)$(btn).classList.add('on');
-    ['viewList','viewStaff','viewSet','viewLinks','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
+    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
     $(id).classList.remove('hide');
   }
   function inRows(){var seen={},out=[];Object.keys(DATA).forEach(function(g){(DATA[g]||[]).forEach(function(r){if(seen[r.id])return;seen[r.id]=1;out.push(r);});});return out;}
@@ -3442,7 +3458,7 @@
   window.openMy=function(){
     document.querySelectorAll('.navb[data-nav],#navCo .navb,#navOut .navb,#navOutWork .navb').forEach(function(x){x.classList.remove('on');});
     $('navMy').classList.add('on');
-    ['viewList','viewStaff','viewSet','viewLinks','viewSite','viewPartner','viewExt','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
+    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
     $('viewMy').classList.remove('hide'); renderMy();
   };
   window.renderMy=function(){
@@ -3897,6 +3913,161 @@
         }).join('')
         +'</div>';
     }).join('');
+  };
+
+  /* ══════════ 결과물 후보 — 읽기 전용 (2026-11-19 이은총 님) ══════════
+     지금 시스템에 저장된 결과물 «링크»만 서비스별로 모아 보여 줍니다. DB 에 아무것도 쓰지 않습니다(select 만).
+     · 출처 ① 의뢰(requests · 인투마케팅) : 「만든 사이트 주소」(site_url)가 있는 의뢰. 서비스 = groupOf(의뢰 종류)
+           ② 외주(ext_jobs · ext_reports · ext_episodes) : 결과물 보고 링크 · 회차 링크. 서비스 = 외주 작업의 팀. 작업마다 묶음(job_id 로 실제 연결된 것만)
+           ③ 블로그 센터(blog_orders · blog_posts) : 발행 주소가 있는 글을 «주문별»로 묶음. 연습 주문 · 발행 글 0편 주문은 뺌
+     · 🔴 보이지 않게 한 것 : 고객 · 업체 이름, 담당자 이름 · 연락처 · 메일, 금액, 외주 작업 제목(업체 · 사람 이름이 들어 있음).
+           식별은 견적번호 · 짧은 번호(#앞 8자리) · 날짜 · 상태만. 필요한 칸만 골라 읽습니다(select 칸 목록).
+     · 링크 열기 = 새 탭. http(s):// 가 없고 「글자.글자」 꼴이면 https:// 를 붙여 엶(rpSave · openSite 와 같은 규칙). 그 꼴도 아니면 열기 단추를 뺌.
+     · 서비스 목록은 AREAS 를 따름 — 서비스가 늘면 AREAS · PF_SVCS 에 더하면 됨. 어느 서비스인지 모르는 항목은 「분류 불분명」에 따로. */
+  var PF={data:null,svc:'web',loading:false};
+  var PF_SVCS=['web','sns','design','video','blog'];
+  var PF_TEAM={web:'web',sns:'sns',design:'design',video:'video'};
+  var PF_ORDER_ST={active:'진행 중',ended:'끝남',paused:'멈춤'};
+  function pfUrl(x){x=(x||'').trim(); if(/^https?:\/\//i.test(x))return x; if(/^\S+\.\S+$/.test(x))return 'https://'+x; return '';}
+  function pfShort(id){return '#'+String(id||'').slice(0,8);}
+  function pfDate(s){return s?String(s).slice(0,10):'';}
+  window.pfOpen=function(u){var v=pfUrl(u); if(v)window.open(v,'_blank','noopener');};
+  function pfLinkRow(u,meta){
+    var ok=!!pfUrl(u);
+    return '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 0;border-top:1px dashed var(--line)">'
+      +'<div style="flex:1;min-width:220px">'+(meta?'<div class="muted" style="font-size:.78rem;margin-bottom:2px">'+meta+'</div>':'')
+      +'<div style="font-size:.84rem;word-break:break-all">'+esc(u)+'</div></div>'
+      +'<div style="display:flex;gap:6px;flex-wrap:wrap">'
+      +'<button class="btn btn-primary" style="padding:5px 11px;font-size:.8rem" type="button" data-u="'+esc(u)+'" onclick="copyLink(this.dataset.u)">📋 복사</button>'
+      +(ok?'<button class="btn btn-ghost" style="padding:5px 11px;font-size:.8rem" type="button" data-u="'+esc(u)+'" onclick="pfOpen(this.dataset.u)">열기 ↗</button>'
+          :'<span class="muted" style="font-size:.76rem">주소 모양이 아니라 열기 단추 없음</span>')
+      +'</div></div>';
+  }
+  async function pfLoad(){
+    var d={req:[],ext:{},blog:[],err:[]};
+    /* ① 의뢰 — 이미 불러온 DATA(인투마케팅 의뢰)에서 필요한 칸만 씀 */
+    var seen={};
+    Object.keys(DATA).forEach(function(g){(DATA[g]||[]).forEach(function(r){
+      if(seen[r.id])return; seen[r.id]=1;
+      var u=(r.site_url||'').trim(); if(!u)return;
+      d.req.push({id:r.id,svc:groupOf(r),kind:r.kind||'',work:r.work_type||'',status:normStatus(r.status),qno:r.quote_no||'',at:r.updated_at||r.created_at,url:u});
+    });});
+    /* ② 외주 */
+    var J=await sb.from('ext_jobs').select('id,team,status');
+    var R=await sb.from('ext_reports').select('id,job_id,kind,links,at');
+    var E=await sb.from('ext_episodes').select('id,job_id,ymd,status,link,sort');
+    if(J.error||R.error||E.error)d.err.push('외주 자료를 읽지 못했습니다'+((J.error||R.error||E.error).message?' — '+(J.error||R.error||E.error).message:''));
+    else{
+      var jobs={}; (J.data||[]).forEach(function(j){jobs[j.id]=j;});
+      var add=function(jid,link,meta,at){
+        var j=jobs[jid]; var svc=j?(PF_TEAM[j.team]||'unk'):'unk';
+        var key=jid||'none';
+        var box=(d.ext[key]=d.ext[key]||{jid:jid,svc:svc,status:j?j.status:'',known:!!j,links:[],at:''});
+        box.links.push({u:link,meta:meta}); if(at&&at>box.at)box.at=at;
+      };
+      (R.data||[]).forEach(function(x){(x.links||[]).forEach(function(u){if((u||'').trim())add(x.job_id,u.trim(),'결과물 보고 · '+esc(pfDate(x.at)),x.at||'');});});
+      (E.data||[]).slice().sort(function(a,b){return (a.sort||0)-(b.sort||0);}).forEach(function(x){
+        var u=(x.link||'').trim(); if(u)add(x.job_id,u,'회차 링크'+(x.ymd?' · '+esc(x.ymd):'')+(x.status?' · '+esc(x.status):''),x.ymd||'');});
+    }
+    /* ③ 블로그 센터 — 주문별 */
+    var O=await sb.from('blog_orders').select('id,track,is_practice,status,ordered_at,total_qty,request_id');
+    var P=await sb.from('blog_posts').select('id,order_id,seq,subject,keyword,published_url,published_at').not('published_url','is',null);
+    if(O.error||P.error)d.err.push('블로그 센터 자료를 읽지 못했습니다'+((O.error||P.error).message?' — '+(O.error||P.error).message:''));
+    else{
+      var byO={}; (P.data||[]).forEach(function(p){if(!(p.published_url||'').trim())return;(byO[p.order_id]=byO[p.order_id]||[]).push(p);});
+      var orders=(O.data||[]).filter(function(o){return !o.is_practice&&(byO[o.id]||[]).length;});
+      var rids=orders.map(function(o){return o.request_id;}).filter(Boolean), reqs={};
+      if(rids.length){var Q=await sb.from('requests').select('id,center,quote_no').in('id',rids); (Q.data||[]).forEach(function(q){reqs[q.id]=q;});}
+      var lost=0; (P.data||[]).forEach(function(p){if((p.published_url||'').trim()&&!(O.data||[]).some(function(o){return o.id===p.order_id;}))lost++;});
+      d.blogLost=lost;
+      d.blogSkipped=(O.data||[]).length-orders.length;
+      orders.forEach(function(o){
+        var q=reqs[o.request_id]||null;
+        d.blog.push({id:o.id,track:o.track,status:o.status,ordered:o.ordered_at,qty:o.total_qty,
+          center:q?(q.center==='esc'?'학원지원센터':(q.center==='mkt'?'인투마케팅':'')):'',qno:q?q.quote_no||'':'',
+          posts:byO[o.id].slice().sort(function(a,b){return (a.seq||0)-(b.seq||0);})});
+      });
+      d.blog.sort(function(a,b){return (b.ordered||'').localeCompare(a.ordered||'');});
+    }
+    return d;
+  }
+  window.pfReload=function(){PF.data=null;renderPf();};
+  window.pfTab=function(s){PF.svc=s;renderPf();};
+  window.renderPf=async function(){
+    if(!PF.data){
+      if(PF.loading)return; PF.loading=true; $('pfWrap').innerHTML='<div class="muted">불러오는 중…</div>';
+      try{PF.data=await pfLoad();}catch(e){PF.data={req:[],ext:{},blog:[],err:['불러오지 못했습니다 — '+(e&&e.message||e)]};}
+      PF.loading=false;
+    }
+    var d=PF.data, ext=Object.keys(d.ext).map(function(k){return d.ext[k];});
+    var cnt=function(s){
+      return d.req.filter(function(x){return x.svc===s;}).length
+        +ext.filter(function(x){return x.svc===s;}).length
+        +(s==='blog'?d.blog.length:0);
+    };
+    var svcs=PF_SVCS.slice(); if(cnt('etc'))svcs.push('etc'); if(cnt('unk'))svcs.push('unk');
+    if(svcs.indexOf(PF.svc)<0)PF.svc='web';
+    var label=function(s){return s==='unk'?'분류 불분명':(AREAS[s]||s);};
+    $('pfTabs').innerHTML=svcs.map(function(s){
+      return '<button class="pill'+(PF.svc===s?' on':'')+'" type="button" onclick="pfTab(\''+s+'\')">'+esc(label(s))+' <span class="muted">'+cnt(s)+'</span></button>';
+    }).join('')+'<button class="pill" type="button" onclick="pfReload()" title="DB 에서 다시 읽기">↻ 다시 불러오기</button>';
+    var s=PF.svc, h='';
+    if(d.err.length)h+='<div class="qbox" style="display:block;margin-bottom:14px;color:var(--bad)">'+d.err.map(esc).join('<br>')+'</div>';
+    /* ① 의뢰 */
+    var R=d.req.filter(function(x){return x.svc===s;}).sort(function(a,b){return String(b.at).localeCompare(String(a.at));});
+    if(R.length){
+      h+='<div class="muted" style="font-size:.82rem;font-weight:700;margin:4px 0 8px">의뢰에 저장된 주소 · '+R.length+'건</div>';
+      h+=R.map(function(x){
+        var warn=x.status!=='완료'?' · <b style="color:var(--warn)">의뢰가 «'+esc(x.status)+'» 상태 — 완성본인지 확인 필요</b>':'';
+        return '<div class="card" style="padding:12px 16px;margin-bottom:10px">'
+          +'<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.86rem">'
+          +'<b>'+esc(x.qno||'견적번호 없음')+'</b><span class="muted">'+esc(x.kind)+(x.work?' · '+esc(x.work):'')+' · '+esc(x.status)+'</span>'
+          +'<button class="btn btn-ghost" style="margin-left:auto;padding:5px 11px;font-size:.8rem" type="button" onclick="openDetail(\''+x.id+'\')">의뢰 열기</button></div>'
+          +pfLinkRow(x.url,'출처 : 의뢰 「만든 사이트 주소」'+warn)
+          +'</div>';
+      }).join('');
+    }
+    /* ② 외주 */
+    var X=ext.filter(function(x){return x.svc===s;}).sort(function(a,b){return String(b.at).localeCompare(String(a.at));});
+    if(X.length){
+      h+='<div class="muted" style="font-size:.82rem;font-weight:700;margin:14px 0 8px">외주 결과물 링크 · 작업 '+X.length+'건</div>';
+      h+=X.map(function(x){
+        return '<div class="card" style="padding:12px 16px;margin-bottom:10px">'
+          +'<div style="font-size:.86rem"><b>외주 작업 '+(x.jid?esc(pfShort(x.jid)):'(번호 없음)')+'</b> <span class="muted">'
+          +(x.known?esc(x.status||'')+' · 링크 '+x.links.length+'개 · 작업 제목은 업체 · 사람 이름이 들어 있어 숨김 (외부 → 업무별에서 확인)'
+                   :'연결된 외주 작업을 찾지 못함 — 출처 확인 필요 · 링크 '+x.links.length+'개')+'</span></div>'
+          +x.links.map(function(l){return pfLinkRow(l.u,'출처 : 외주 · '+l.meta);}).join('')
+          +'</div>';
+      }).join('');
+    }
+    /* ③ 블로그 센터 — 주문별(접힌 채로 시작) */
+    if(s==='blog'&&d.blog.length){
+      h+='<div class="muted" style="font-size:.82rem;font-weight:700;margin:14px 0 8px">블로그 센터 발행 글 · 주문 '+d.blog.length+'건 · 글 '
+        +d.blog.reduce(function(a,o){return a+o.posts.length;},0)+'편 — 주문을 누르면 글이 펼쳐집니다</div>';
+      h+=d.blog.map(function(o){
+        return '<details class="card" style="padding:12px 16px;margin-bottom:10px">'
+          +'<summary style="cursor:pointer;font-size:.86rem;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'
+          +'<b>블로그 주문 '+esc(pfShort(o.id))+'</b>'
+          +'<span class="muted">'+esc(o.center||'센터 확인 필요')+(o.qno?' · '+esc(o.qno):'')+' · 주문 '+esc(pfDate(o.ordered))
+          +' · '+esc(o.track==='review'?'리뷰':'블로그')+' · '+esc(PF_ORDER_ST[o.status]||o.status||'')+'</span>'
+          +'<b style="margin-left:auto">발행 '+o.posts.length+' / '+(o.qty||'?')+'편</b></summary>'
+          +'<div style="margin-top:6px">'
+          +o.posts.map(function(p){
+            var t=(p.subject||'').trim()?esc(p.subject):'<span class="muted">제목 기록 없음</span>'+((p.keyword||'').trim()?' · 검색어 '+esc(p.keyword):'');
+            return pfLinkRow(p.published_url,(p.seq?p.seq+'번째 · ':'')+t+(p.published_at?' · 발행 '+esc(pfDate(p.published_at)):''));
+          }).join('')
+          +'<div style="margin-top:8px"><button class="btn btn-ghost" style="padding:5px 11px;font-size:.8rem" type="button" '
+          +'onclick="window.open(BLOG_URL+\'#order='+o.id+'\',\'_blank\')">블로그 센터에서 열기 ↗</button></div>'
+          +'</div></details>';
+      }).join('');
+      var notes=[]; if(d.blogSkipped)notes.push('연습 주문 · 발행 글이 없는 주문 '+d.blogSkipped+'건은 뺐습니다');
+      if(d.blogLost)notes.push('주문을 찾을 수 없는 발행 글 '+d.blogLost+'편은 묶지 않았습니다(출처 확인 필요)');
+      if(notes.length)h+='<div class="muted" style="font-size:.8rem;margin-top:6px">'+notes.join(' · ')+'</div>';
+    }
+    if(!h||(d.err.length&&!R.length&&!X.length&&!(s==='blog'&&d.blog.length)))
+      h+='<div class="card" style="padding:28px 18px;text-align:center"><b>'+esc(label(s))+' — 아직 시스템에 저장된 결과물이 없습니다.</b>'
+        +'<div class="muted" style="font-size:.84rem;margin-top:6px">의뢰의 「만든 사이트 주소」 · 외주 결과물 보고 · 회차 링크'+(s==='blog'?' · 블로그 센터 발행 글':'')+'에 링크가 생기면 여기에 나옵니다.</div></div>';
+    $('pfWrap').innerHTML=h;
   };
 
   /* ══════════ 관리비 대장 — 홈페이지 · SNS (2026-10-16 이은총 님) ══════════
