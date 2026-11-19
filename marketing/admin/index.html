@@ -4073,27 +4073,29 @@
     $('pfWrap').innerHTML=h;
   };
 
-  /* ══════════ 실제 매출 요약 — 서비스 화면 맨 위 (2026-11-19 이은총 님) ══════════
-     «입금이 확인된 돈»만 셉니다. 매출(받은 돈) 기준이며 비용을 빼지 않았으므로 순이익이 아닙니다. DB 에 쓰지 않습니다(select 만).
-     · 내부 의뢰(requests · 이 어드민이 읽는 인투마케팅 의뢰) : 입금 확인 = 입금일(paid_at) · 카드 결제(pay_at) · 입금 표시(paid) 중 하나.
-           금액 = 카드 결제 금액(pay_amount) → 없으면 「금액」(amount). 🔴 견적서 금액으로 대신하지 않음(견적만 있는 돈은 매출이 아님).
-           입금은 확인됐는데 금액 칸이 비면 0원이 아니라 「금액 기록 없음」으로 따로 셉니다.
-     · 외부 작업(ext_payments) : 줄 하나 = 고객 쪽(입금처)에게서 받은 돈. 서비스 = 그 외주 작업의 팀. 입금 날짜가 없는 줄도 금액은 넣고, 건수 · 금액을 따로 보여 줌.
-     · 블로그 센터 주문(blog_orders, 블로그 · 리뷰 화면만) : 실제 입금 = paid_amount(주문 금액 amount_total 로 대신하지 않음) − 환불(blog_refunds).
-           연습 주문은 뺌. 센터는 연결된 의뢰의 center 로 나눔 — 인투마케팅 · 학원지원센터 소계를 따로.
-     · 🔴 한 번만 셈 : ① 블로그 주문과 연결된 블로그 의뢰는 의뢰 쪽 금액을 빼고 주문 쪽만 ② 외부 프로젝트와 연결된 내부 의뢰(ext_project_requests)는
-           외부 입금과 같은 돈일 수 있어 내부 합계에서 빼고 따로 보여 줌 ③ 관리비 대장 ✓ 은 날짜 · 실제 금액 기록이 없어 아직 매출에 넣지 않음(참고로만).
-     · 앞으로 받을 돈(미입금 · 계약 예정 · 관리비 예정)은 넣지 않음. 「경영 현황」 셈 · 의뢰 저장 · 외부 화면은 그대로. */
+  /* ══════════ 매출 요약 — 「수익 창출」 · 「입금 완료」 (2026-11-19 이은총 님 · 처음 판 b662e5d 「실제 매출」을 둘로 나눔) ══════════
+     두 금액 모두 매출(받을 · 받은 돈) 기준이며 비용을 빼지 않았으므로 순이익이 아닙니다. 앞으로 생길 금액(미래 예정)은 넣지 않습니다. DB 에 쓰지 않습니다.
+     「수익 창출」 = 진행 중이거나 끝난 일의 «작업 금액» (입금 여부와 상관없음)
+       · 외부 작업 : 외부 「숫자」 탭과 같은 줄(payLines) — 건당 = 완료 회차 × 단가 · 월정액 = 시작 달 ~ 이번 달(끝난 작업은 끝난 달) × 월액 · 단건 = 작업 금액.
+                     입금된 줄은 그 입금 금액. 🔴 「시작 전」 · 「중단」 작업은 넣지 않음(진행 · 완료만).
+       · 내부 의뢰 : 상태가 진행중 · 완료인 의뢰의 「금액」(없으면 카드 결제 금액). 🔴 견적서 금액으로 대신하지 않음 — 금액 칸이 비면 «기록 없음».
+       · 블로그 센터 주문 : 진행(active) · 끝남(ended) 주문의 주문 금액 − 환불. 멈춤(paused) 주문은 넣지 않고 따로 보여 줌. 연습 주문 뺌.
+     「입금 완료」 = 실제 입금이 확인된 돈만
+       · 내부 의뢰 : 입금일 · 카드 결제 · 입금 표시 중 하나 + 금액(카드 결제 금액 → 「금액」). 금액 없는 입금은 «금액 기록 없음».
+       · 외부 작업 : 입금(✅) 줄 전부(작업 상태와 상관없음). 날짜 없는 줄도 넣고 건수 · 금액을 따로 보여 줌.
+       · 블로그 센터 주문 : 실제 입금액(paid_amount) − 환불. 주문 금액으로 대신하지 않음.
+     🔴 한 번만 셈 : ① 블로그 주문과 연결된 블로그 의뢰는 주문 쪽만 ② 외부 프로젝트와 연결된 내부 의뢰는 내부 합계에서 뺌
+                    ③ 관리비 대장 ✓ 은 날짜 · 실제 금액이 없어 두 합계 모두에 넣지 않고 참고로만.
+     권한 : 경영 현황을 볼 수 있는 사람만. 외부 자료는 시작할 때 불러온 EXT 를 그대로 씀(입금 표시를 바꾸면 바로 반영). */
   var REV={d:null,loading:false};
   var REV_TEAM={web:'web',sns:'sns',design:'design',video:'video'};
+  var REV_LIVE={'작업 중':1,'자료 대기':1,'중간 컨펌':1,'최종 컨펌':1,'최종 제출':1,'관리':1,'완료':1};   /* 수익 창출에 넣는 외부 작업 상태 */
+  var REV_ORDER_LIVE={active:1,ended:1};
   function revLoad(){
     if(REV.loading)return; REV.loading=true;
     (async function(){
       var d={err:[]}, chk=function(r,w){if(r.error){d.err.push(w+' — '+r.error.message);return [];}return r.data||[];};
-      d.jobs=chk(await sb.from('ext_jobs').select('id,team,project_id'),'외부 작업');
-      d.pays=chk(await sb.from('ext_payments').select('id,job_id,amount,paid_at'),'외부 입금');
-      d.links=chk(await sb.from('ext_project_requests').select('request_id'),'외부 연결');
-      d.orders=chk(await sb.from('blog_orders').select('id,request_id,is_practice,paid_at,paid_amount'),'블로그 주문');
+      d.orders=chk(await sb.from('blog_orders').select('id,request_id,is_practice,status,amount_total,paid_at,paid_amount'),'블로그 주문');
       d.refunds=chk(await sb.from('blog_refunds').select('order_id,amount'),'블로그 환불');
       var rids=d.orders.map(function(o){return o.request_id;}).filter(Boolean);
       d.ocenter={};
@@ -4101,118 +4103,148 @@
       d.ledger=chk(await sb.from('settings').select('key,value').in('key',['web_fees','sns_fees']),'관리비 대장');
       d.at=new Date();
       REV.d=d; REV.loading=false; renderRev(); revExtRefresh();
-    })().catch(function(e){REV.d={err:['불러오지 못했습니다 — '+(e&&e.message||e)],jobs:[],pays:[],links:[],orders:[],refunds:[],ocenter:{},ledger:[],at:new Date()};REV.loading=false;renderRev();revExtRefresh();});
+    })().catch(function(e){REV.d={err:['불러오지 못했습니다 — '+(e&&e.message||e)],orders:[],refunds:[],ocenter:{},ledger:[],at:new Date()};REV.loading=false;renderRev();revExtRefresh();});
   }
-  window.revReload=function(){REV.d=null;renderRev();if(SCOPE==='out'&&AXIS==='work'){revLoad();revExtRefresh();}};
-  /* ── 외부 업무별(팀) 화면 맨 위 — 그 팀 외부 작업의 실제 입금만 (11/19 · 이은총 님 「외부도」) ──
-     같은 REV 자료 · 같은 규칙(ext_payments 줄 = 고객 쪽에게서 받은 돈 · 날짜 없는 줄은 따로 · 받을 돈은 넣지 않음).
-     프로젝트마다 소계. 내부 의뢰 · 블로그 센터 주문은 여기 없음(내부 서비스 화면에). 경영 현황을 볼 수 있는 사람만. */
-  function revExtRefresh(){ var b=$('revExtBox'); if(b)b.innerHTML=revExtInner(XTEAM); }
-  function revExtInner(t){
-    var d=REV.d; if(!d){revLoad();return '<div class="muted" style="font-size:.85rem">실제 매출 불러오는 중…</div>';}
-    var pj={}; d.jobs.forEach(function(j){if(j.team===t)pj[j.id]=j.project_id||'';});
-    var by={}, sum=0, n=0, nd=0, nds=0;
-    d.pays.forEach(function(p){
-      if(!(p.job_id in pj)||p.amount==null)return;
-      var a=Number(p.amount)||0, k=pj[p.job_id], x=(by[k]=by[k]||{sum:0,n:0,nd:0,nds:0});
-      x.sum+=a; x.n++; sum+=a; n++; if(!p.paid_at){x.nd++;x.nds+=a;nd++;nds+=a;}
+  window.revReload=async function(){REV.d=null; try{await loadExt();}catch(e){} renderRev(); if(SCOPE==='out'&&AXIS==='work'){revLoad();revExtRefresh();}};
+  /* 외부 작업 — 팀 하나의 두 금액 (프로젝트별) */
+  function revExt(team){
+    var o={make:0,makeN:0,paid:0,paidN:0,nd:0,nds:0,byPj:{},skip:{n:0,sum:0},err:EXT.err||''};
+    (EXT.jobs||[]).forEach(function(j){
+      if(REV_TEAM[j.team]!==team)return;
+      var k=j.project_id||'', P=(o.byPj[k]=o.byPj[k]||{make:0,paid:0,nd:0,nds:0,n:0});
+      var lines=payLines(j);
+      if(REV_LIVE[j.status]){
+        lines.forEach(function(l){ if(!(l.row||l.owe))return; var a=Number(l.amount)||0; o.make+=a; P.make+=a; o.makeN++; });
+      } else { var s=0; lines.forEach(function(l){if(l.owe||l.row)s+=Number(l.amount)||0;}); o.skip.n++; o.skip.sum+=s; }
     });
-    var row=function(k,v,s,strong){return '<div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;padding:6px 0;border-top:1px dashed var(--line)'+(strong?';font-weight:800':'')+'">'
-      +'<span style="min-width:150px">'+k+'</span><b class="tnum" style="min-width:110px">'+v+'</b><span class="muted" style="font-size:.8rem;flex:1;min-width:200px">'+(s||'')+'</span></div>';};
-    var dn=function(c,s){return c?'<b style="color:var(--warn)">입금 날짜 없음 '+c+'줄 · '+won(s)+'</b>':'';};
-    var h='<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
-      +'<b style="font-size:.98rem">💰 실제 매출 — 외부 '+esc(XKO[t]||t)+'</b>'
-      +'<span class="badge" style="background:#EEF4FF;color:var(--accent)">입금 확인된 금액 · 매출 기준 · 순이익 아님</span>'
-      +'<button class="btn btn-ghost" style="margin-left:auto;padding:4px 10px;font-size:.78rem" type="button" onclick="revReload()">↻ 다시 불러오기</button></div>'
-      +'<div class="muted" style="font-size:.78rem;margin:4px 0 6px">기준 : 이 팀 외부 작업의 입금 표시(✅) 줄 전체 기간 · '+esc(fdatetime(d.at))+' 불러옴 · 고객 쪽(입금처)에게서 받은 돈 · 작업자 지급 비용을 빼지 않음 · 받을 돈(미입금)은 넣지 않음</div>';
-    if(d.err.length)h+='<div style="color:var(--bad);font-size:.8rem;margin-bottom:4px">'+d.err.map(esc).join('<br>')+'</div>';
-    var ks=Object.keys(by);
-    if(!ks.length&&!Object.keys(pj).length)h+=row('외부 작업','—',t==='blog'?'외부 블로그 작업이 없습니다 — 블로그 센터 주문 매출은 내부 「블로그 · 리뷰」 화면에 있습니다':'이 팀의 외부 작업이 없습니다');
-    else{
-      ks.sort(function(a,b){return by[b].sum-by[a].sum;}).forEach(function(k){var x=by[k],p=k?pjOf(k):null;
-        h+=row(p?esc(pjLabel(p)):'프로젝트 확인 필요',won(x.sum),'입금 '+x.n+'줄'+(x.nd?' · '+dn(x.nd,x.nds):''));});
-      h+=row('합계',won(sum),n?('입금 '+n+'줄'+(nd?' · '+dn(nd,nds):'')):'아직 입금 표시(✅)된 줄이 없습니다',true);
-    }
-    h+='<div class="muted" style="font-size:.78rem;margin-top:8px;line-height:1.65">· 내부 의뢰와 함께 본 합계는 내부 「'+esc(AREAS[REV_TEAM[t]||t]||'')+'」 화면 맨 위에 있습니다'
-      +(nd?'<br>· 날짜 없는 입금은 프로젝트 「숫자」 탭에서 그 줄의 「날짜 모름」을 눌러 고칠 수 있습니다':'')+'</div>';
-    return h;
+    (EXT.pays||[]).forEach(function(p){
+      var j=(EXT.jobs||[]).filter(function(x){return x.id===p.job_id;})[0]; if(!j||REV_TEAM[j.team]!==team||p.amount==null)return;
+      var a=Number(p.amount)||0, k=j.project_id||'', P=(o.byPj[k]=o.byPj[k]||{make:0,paid:0,nd:0,nds:0,n:0});
+      o.paid+=a; o.paidN++; P.paid+=a; P.n++; if(!p.paid_at){o.nd++;o.nds+=a;P.nd++;P.nds+=a;}
+    });
+    return o;
   }
   function revCalc(svc){
-    var d=REV.d, o={in:{sum:0,n:0,noDate:0,noDateSum:0,noAmt:0,none:0,amtOnly:0},ext:{sum:0,n:0,noDate:0,noDateSum:0},
-      blog:{mkt:{sum:0,n:0,ref:0,noAmt:0,noDate:0},esc:{sum:0,n:0,ref:0,noAmt:0,noDate:0},unk:{sum:0,n:0,ref:0,noAmt:0,noDate:0}},
-      skipBlog:0, skipExt:{n:0,sum:0}, ledger:{n:0,sum:0}};
+    var d=REV.d, o={in:{make:0,makeN:0,makeNone:0,makeQuote:0,paid:0,paidN:0,noDate:0,noDateSum:0,noAmt:0,none:0,amtOnly:0},
+      ext:revExt(svc), blog:{}, skipBlog:0, skipExt:{n:0,paid:0,make:0}, ledger:{n:0,sum:0}};
+    ['mkt','esc','unk'].forEach(function(c){o.blog[c]={make:0,paid:0,n:0,ref:0,noAmt:0,noDate:0,paused:0,pausedSum:0,other:0};});
     var blogReq={}; d.orders.forEach(function(x){if(!x.is_practice&&x.request_id)blogReq[x.request_id]=1;});
-    var extReq={}; d.links.forEach(function(x){extReq[x.request_id]=1;});
+    var extReq={}; (EXT.links||[]).forEach(function(x){extReq[x.request_id]=1;});
     /* ① 내부 의뢰 */
     var seen={};
     Object.keys(DATA).forEach(function(g){(DATA[g]||[]).forEach(function(r){
       if(seen[r.id])return; seen[r.id]=1; if(groupOf(r)!==svc)return;
-      var amt=(r.pay_amount!=null&&r.pay_amount!=='')?Number(r.pay_amount):((r.amount!=null&&r.amount!=='')?Number(r.amount):null);
+      var amt=(r.amount!=null&&r.amount!=='')?Number(r.amount):((r.pay_amount!=null&&r.pay_amount!=='')?Number(r.pay_amount):null);
+      var pamt=(r.pay_amount!=null&&r.pay_amount!=='')?Number(r.pay_amount):((r.amount!=null&&r.amount!=='')?Number(r.amount):null);
+      var st=normStatus(r.status), live=(st==='진행중'||st==='완료');
       var ok=!!(r.paid_at||r.pay_at||r.paid), dated=!!(r.paid_at||r.pay_at);
       if(blogReq[r.id]){o.skipBlog++;return;}
-      if(extReq[r.id]){o.skipExt.n++; if(ok&&amt!=null)o.skipExt.sum+=amt; return;}
-      if(!ok){ if(amt!=null)o.in.amtOnly++; else o.in.none++; return; }
-      if(amt==null){o.in.noAmt++;return;}
-      o.in.sum+=amt; o.in.n++; if(!dated){o.in.noDate++;o.in.noDateSum+=amt;}
+      if(extReq[r.id]){o.skipExt.n++; if(live&&amt!=null)o.skipExt.make+=amt; if(ok&&pamt!=null)o.skipExt.paid+=pamt; return;}
+      /* 수익 창출 */
+      if(live){ if(amt!=null){o.in.make+=amt;o.in.makeN++;} else {o.in.makeNone++; if(r.quote&&Array.isArray(r.quote.items)&&r.quote.items.length)o.in.makeQuote++;} }
+      /* 입금 완료 */
+      if(!ok){ if(pamt!=null)o.in.amtOnly++; else o.in.none++; return; }
+      if(pamt==null){o.in.noAmt++;return;}
+      o.in.paid+=pamt; o.in.paidN++; if(!dated){o.in.noDate++;o.in.noDateSum+=pamt;}
     });});
-    /* ② 외부 작업 */
-    var team={}; d.jobs.forEach(function(j){team[j.id]=REV_TEAM[j.team]||'';});
-    d.pays.forEach(function(p){
-      if(team[p.job_id]!==svc||p.amount==null)return;
-      var a=Number(p.amount)||0; o.ext.sum+=a; o.ext.n++; if(!p.paid_at){o.ext.noDate++;o.ext.noDateSum+=a;}
-    });
-    /* ③ 블로그 센터 주문 */
+    /* ② 블로그 센터 주문 */
     if(svc==='blog'){
       var ref={}; d.refunds.forEach(function(f){ref[f.order_id]=(ref[f.order_id]||0)+(Number(f.amount)||0);});
       d.orders.forEach(function(x){
         if(x.is_practice)return;
-        var c=d.ocenter[x.request_id], b=o.blog[c==='mkt'?'mkt':(c==='esc'?'esc':'unk')];
-        if(!x.paid_at&&x.paid_amount==null)return;            /* 입금 기록 없음 = 매출 아님 */
+        var c=d.ocenter[x.request_id], b=o.blog[c==='mkt'?'mkt':(c==='esc'?'esc':'unk')], rf=ref[x.id]||0;
+        if(REV_ORDER_LIVE[x.status]){ if(x.amount_total!=null)b.make+=(Number(x.amount_total)||0)-rf; else b.noAmt++; }
+        else if(x.status==='paused'){ b.paused++; b.pausedSum+=Number(x.amount_total)||0; }
+        else b.other++;
+        if(!x.paid_at&&x.paid_amount==null)return;
         if(x.paid_amount==null){b.noAmt++;return;}
-        b.sum+=Number(x.paid_amount)||0; b.n++; if(!x.paid_at)b.noDate++;
-        if(ref[x.id]){b.ref+=ref[x.id]; b.sum-=ref[x.id];}
+        b.paid+=(Number(x.paid_amount)||0)-rf; b.n++; b.ref+=rf; if(!x.paid_at)b.noDate++;
       });
     }
-    /* 참고 : 관리비 대장 ✓ (매출에 넣지 않음) */
+    /* 참고 : 관리비 대장 ✓ (두 합계 모두에 넣지 않음) */
     if(svc==='web'||svc==='sns'){
       d.ledger.forEach(function(row){if((row.key==='sns_fees'?'sns':'web')!==svc)return;
         ((row.value&&row.value.items)||[]).forEach(function(it){var p=it.paid||{};Object.keys(p).forEach(function(m){if(p[m]==='o'){o.ledger.n++;o.ledger.sum+=Number(it.fee)||0;}});});});
     }
     return o;
   }
+  /* 화면 조각 */
+  function revHead(title,d){
+    return '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
+      +'<b style="font-size:.98rem">💰 매출 — '+esc(title)+'</b>'
+      +'<span class="badge" style="background:#EEF4FF;color:var(--accent)">매출 기준 · 비용을 빼지 않음 · 순이익 아님</span>'
+      +'<button class="btn btn-ghost" style="margin-left:auto;padding:4px 10px;font-size:.78rem" type="button" onclick="revReload()">↻ 다시 불러오기</button></div>'
+      +'<div class="muted" style="font-size:.76rem;margin:4px 0 8px">기준 : 시스템에 기록된 전체 기간 · '+esc(fdatetime(d.at))+' 불러옴 · 앞으로 생길 금액 · 견적만 있는 금액은 넣지 않음</div>';
+  }
+  function revCards(make,paid){
+    var c=function(k,v,s,col){return '<div class="num-card"><div class="k">'+k+'</div><div class="v"'+(col?' style="color:'+col+'"':'')+'>'+v+'</div><div class="s">'+s+'</div></div>';};
+    return '<div class="num-cards" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-bottom:8px">'
+      +c('수익 창출',won(make),'진행 중이거나 끝난 일의 작업 금액 · 입금 여부와 상관없음')
+      +c('입금 완료',won(paid),'실제 입금이 확인된 돈만','#1B5E34')+'</div>';
+  }
+  function revRow(k,make,paid,s,strong){
+    return '<div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;padding:6px 0;border-top:1px dashed var(--line)'+(strong?';font-weight:800':'')+'">'
+      +'<span style="min-width:150px">'+k+'</span>'
+      +'<span style="min-width:200px"><span class="muted" style="font-size:.74rem">수익 창출 </span><b class="tnum">'+make+'</b></span>'
+      +'<span style="min-width:200px"><span class="muted" style="font-size:.74rem">입금 완료 </span><b class="tnum">'+paid+'</b></span>'
+      +'<span class="muted" style="font-size:.78rem;flex:1;min-width:200px">'+(s||'')+'</span></div>';
+  }
+  var revWarn=function(t){return '<b style="color:var(--warn)">'+t+'</b>';};
+  function revExtRefresh(){ var b=$('revExtBox'); if(b)b.innerHTML=revExtInner(XTEAM); }
+  /* 외부 업무별(팀) 화면 맨 위 */
+  function revExtInner(t){
+    var d=REV.d||{at:new Date(),err:[]};
+    var o=revExt(t), ks=Object.keys(o.byPj);
+    var h=revHead('외부 '+(XKO[t]||t),d)+revCards(o.make,o.paid);
+    if(o.err)h+='<div style="color:var(--bad);font-size:.8rem;margin-bottom:4px">외부 자료 — '+esc(o.err)+'</div>';
+    if(!REV_TEAM[t])h+=revRow('외부 작업','—','—',t==='blog'?'외부 블로그 작업이 없습니다 — 블로그 센터 주문 매출은 내부 「블로그 · 리뷰」 화면에 있습니다':'이 팀의 외부 작업이 없습니다');
+    else if(!ks.length)h+=revRow('외부 작업','—','—','이 팀의 외부 작업이 없습니다');
+    else{
+      ks.sort(function(a,b){return (o.byPj[b].make+o.byPj[b].paid)-(o.byPj[a].make+o.byPj[a].paid);}).forEach(function(k){var x=o.byPj[k],p=k?pjOf(k):null;
+        h+=revRow(p?esc(pjLabel(p)):'프로젝트 확인 필요',won(x.make),won(x.paid),'입금 '+x.n+'줄'+(x.nd?' · '+revWarn('입금 날짜 없음 '+x.nd+'줄 · '+won(x.nds)):''));});
+      h+=revRow('합계',won(o.make),won(o.paid),'입금 '+o.paidN+'줄'+(o.nd?' · '+revWarn('입금 날짜 없음 '+o.nd+'줄 · '+won(o.nds)):''),true);
+    }
+    var notes=['수익 창출 = 외부 「숫자」 탭과 같은 줄 — 건당은 완료 회차 × 단가 · 월정액은 시작 달 ~ 이번 달(끝난 작업은 끝난 달) · 단건은 작업 금액'];
+    if(o.skip.n)notes.push('「시작 전」 · 「중단」 작업 '+o.skip.n+'건('+won(o.skip.sum)+')은 수익 창출에 넣지 않았습니다 — 그 작업에 들어온 입금은 입금 완료에 들어갑니다');
+    if(o.nd)notes.push('날짜 없는 입금은 프로젝트 「숫자」 탭에서 그 줄의 「날짜 모름」을 눌러 고칠 수 있습니다');
+    if(REV_TEAM[t])notes.push('내부 의뢰와 함께 본 합계는 내부 「'+esc(AREAS[REV_TEAM[t]||t]||'')+'」 화면 맨 위에 있습니다');
+    return h+'<div class="muted" style="font-size:.78rem;margin-top:8px;line-height:1.65">· '+notes.join('<br>· ')+'</div>';
+  }
+  /* 내부 서비스 화면 맨 위 */
   window.renderRev=function(){
     var box=$('revBox'); if(!box)return;
     if(!canBoss()||COKEY||!AREAS[CUR]){box.classList.add('hide');return;}
     box.classList.remove('hide');
-    if(!REV.d){box.innerHTML='<div class="muted" style="font-size:.85rem">실제 매출 불러오는 중…</div>'; revLoad(); return;}
-    var o=revCalc(CUR), d=REV.d;
-    var row=function(k,v,s,strong){return '<div style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;padding:6px 0;border-top:1px dashed var(--line)'+(strong?';font-weight:800':'')+'">'
-      +'<span style="min-width:150px">'+k+'</span><b class="tnum" style="min-width:110px">'+v+'</b><span class="muted" style="font-size:.8rem;flex:1;min-width:200px">'+(s||'')+'</span></div>';};
-    var dateNote=function(n,s,unit){return n?'<b style="color:var(--warn)">입금 날짜 없음 '+n+unit+' · '+won(s)+'</b>':'';};
-    var h='<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
-      +'<b style="font-size:.98rem">💰 실제 매출 — '+esc(AREAS[CUR])+'</b>'
-      +'<span class="badge" style="background:#EEF4FF;color:var(--accent)">입금 확인된 금액 · 매출 기준 · 순이익 아님</span>'
-      +'<button class="btn btn-ghost" style="margin-left:auto;padding:4px 10px;font-size:.78rem" type="button" onclick="revReload()">↻ 다시 불러오기</button></div>'
-      +'<div class="muted" style="font-size:.78rem;margin:4px 0 6px">기준 : 시스템에 기록된 전체 기간 · '+esc(fdatetime(d.at))+' 불러옴 · 비용(원고료 · 작업비)을 빼지 않은 금액 · 견적만 있는 돈 · 입금 확인 전 돈 · 앞으로 받을 돈은 넣지 않음</div>';
+    if(!REV.d){box.innerHTML='<div class="muted" style="font-size:.85rem">매출 불러오는 중…</div>'; revLoad(); return;}
+    var o=revCalc(CUR), d=REV.d, h='', make=o.in.make+o.ext.make, paid=o.in.paid+o.ext.paid;
+    var B=o.blog; if(CUR==='blog'){make+=B.mkt.make+B.esc.make+B.unk.make; paid+=B.mkt.paid+B.esc.paid+B.unk.paid;}
+    h+=revHead(AREAS[CUR],d)+revCards(make,paid);
     if(d.err.length)h+='<div style="color:var(--bad);font-size:.8rem;margin-bottom:4px">'+d.err.map(esc).join('<br>')+'</div>';
-    var total=o.in.sum+o.ext.sum;
-    h+=row('내부 의뢰',won(o.in.sum),'입금 확인 '+o.in.n+'건'+(o.in.noDate?' · '+dateNote(o.in.noDate,o.in.noDateSum,'건'):'')
-      +(o.in.noAmt?' · <b style="color:var(--warn)">입금 확인됐지만 금액 기록 없음 '+o.in.noAmt+'건 (합계 밖)</b>':''));
-    if(CUR==='blog'||CUR==='etc')h+=row('외부 작업','—','이 서비스로 나뉜 외부 작업이 없습니다');
-    else h+=row('외부 작업',won(o.ext.sum),'입금 '+o.ext.n+'줄 (고객 쪽 입금처에게서 받은 돈)'+(o.ext.noDate?' · '+dateNote(o.ext.noDate,o.ext.noDateSum,'줄'):''));
+    if(o.ext.err)h+='<div style="color:var(--bad);font-size:.8rem;margin-bottom:4px">외부 자료 — '+esc(o.ext.err)+'</div>';
+    var I=o.in;
+    h+=revRow('내부 의뢰',I.makeN?won(I.make):(I.makeNone?'기록 없음':won(0)),I.paidN?won(I.paid):(I.noAmt?'기록 없음':won(0)),
+      [I.makeN?'수익 창출 '+I.makeN+'건':'',
+       I.makeNone?revWarn('진행중 · 완료인데 금액 칸이 빈 의뢰 '+I.makeNone+'건 — 기록 없음'+(I.makeQuote?' (그중 견적서만 있는 '+I.makeQuote+'건 · 견적 금액은 안 씀)':'')):'',
+       I.paidN?'입금 '+I.paidN+'건':'',
+       I.noDate?revWarn('입금 날짜 없음 '+I.noDate+'건 · '+won(I.noDateSum)):'',
+       I.noAmt?revWarn('입금 확인됐지만 금액 기록 없음 '+I.noAmt+'건'):''].filter(Boolean).join(' · '));
+    if(!REV_TEAM[CUR])h+=revRow('외부 작업','—','—','이 서비스로 나뉜 외부 작업이 없습니다');
+    else h+=revRow('외부 작업',won(o.ext.make),won(o.ext.paid),'입금 '+o.ext.paidN+'줄'+(o.ext.nd?' · '+revWarn('입금 날짜 없음 '+o.ext.nd+'줄 · '+won(o.ext.nds)):'')+(o.ext.skip.n?' · 시작 전 · 중단 '+o.ext.skip.n+'건 뺌':''));
     if(CUR==='blog'){
-      var B=o.blog, bl=function(k,b){return row('블로그 센터 · '+k,won(b.sum),'입금 확인 주문 '+b.n+'건'+(b.ref?' · 환불 −'+won(b.ref)+' 반영':'')
-        +(b.noDate?' · <b style="color:var(--warn)">입금 날짜 없음 '+b.noDate+'건</b>':'')+(b.noAmt?' · <b style="color:var(--warn)">입금 금액 기록 없음 '+b.noAmt+'건 (합계 밖)</b>':''));};
+      var bl=function(k,b){return revRow('블로그 센터 · '+k,won(b.make),won(b.paid),['입금 주문 '+b.n+'건',b.ref?'환불 −'+won(b.ref)+' 반영':'',
+        b.paused?revWarn('멈춤 주문 '+b.paused+'건 · 주문 금액 '+won(b.pausedSum)+' — 수익 창출에서 뺌(입금은 입금 완료에 들어감)'):'',
+        b.other?revWarn('상태를 모르는 주문 '+b.other+'건 — 수익 창출에서 뺌'):'',
+        b.noDate?revWarn('입금 날짜 없음 '+b.noDate+'건'):'',b.noAmt?revWarn('금액 기록 없음 '+b.noAmt+'건'):''].filter(Boolean).join(' · '));};
       h+=bl('인투마케팅',B.mkt)+bl('학원지원센터',B.esc);
-      if(B.unk.n||B.unk.noAmt)h+=bl('센터 확인 필요',B.unk);
-      total+=B.mkt.sum+B.esc.sum+B.unk.sum;
+      if(B.unk.n||B.unk.make||B.unk.paused||B.unk.noAmt)h+=bl('센터 확인 필요',B.unk);
     }
-    h+=row('합계',won(total),CUR==='blog'?'내부 의뢰 + 블로그 센터(인투마케팅 + 학원지원센터) — 각 소계는 위':'내부 의뢰 + 외부 작업',true);
+    h+=revRow('합계',won(make),won(paid),CUR==='blog'?'내부 의뢰 + 블로그 센터(인투마케팅 + 학원지원센터 — 소계는 위)':'내부 의뢰 + 외부 작업',true);
     var notes=[];
-    if(o.in.none||o.in.amtOnly)notes.push('입금 기록이 없는 내부 의뢰 '+(o.in.none+o.in.amtOnly)+'건은 0원이 아니라 «기록 없음»이라 넣지 않았습니다'+(o.in.none?' (금액 · 입금일 둘 다 비어 있음 '+o.in.none+'건)':'')+' — 의뢰 상세 「금액」 · 「입금일」을 채우면 들어갑니다');
+    if(I.none||I.amtOnly)notes.push('입금 기록이 없는 내부 의뢰 '+(I.none+I.amtOnly)+'건은 0원이 아니라 «기록 없음» — 의뢰 상세 「금액」 · 「입금일」을 채우면 들어갑니다');
     if(o.skipBlog)notes.push('블로그 주문과 연결된 의뢰 '+o.skipBlog+'건은 블로그 센터 주문 쪽에서만 셉니다');
-    if(o.skipExt.n)notes.push('외부 프로젝트와 연결된 내부 의뢰 '+o.skipExt.n+'건'+(o.skipExt.sum?' ('+won(o.skipExt.sum)+')':'')+'은 외부 입금과 같은 돈일 수 있어 내부 합계에서 뺐습니다');
-    if(o.ledger.n)notes.push('관리비 대장 ✓(받음) '+o.ledger.n+'칸 · 대장 월액으로 '+won(o.ledger.sum)+' — 입금 날짜 · 실제 받은 금액이 기록되지 않아 매출에 넣지 않았습니다(확인 필요)');
+    if(o.skipExt.n)notes.push('외부 프로젝트와 연결된 내부 의뢰 '+o.skipExt.n+'건은 외부 작업과 같은 돈일 수 있어 내부 합계에서 뺐습니다'+((o.skipExt.make||o.skipExt.paid)?' (수익 창출 '+won(o.skipExt.make)+' · 입금 '+won(o.skipExt.paid)+')':''));
+    if(REV_TEAM[CUR])notes.push('외부 수익 창출 = 외부 「숫자」 탭과 같은 줄(건당 = 완료 회차 × 단가 · 월정액 = 시작 달 ~ 이번 달) · 「시작 전」 · 「중단」 작업은 넣지 않음');
+    if(o.ledger.n)notes.push('관리비 대장 ✓(받음) '+o.ledger.n+'칸 · 대장 월액으로 '+won(o.ledger.sum)+' — 입금 날짜 · 실제 받은 금액이 기록되지 않아 두 합계 모두에 넣지 않았습니다(참고)');
     if(notes.length)h+='<div class="muted" style="font-size:.78rem;margin-top:8px;line-height:1.65">· '+notes.join('<br>· ')+'</div>';
     box.innerHTML=h;
   };
