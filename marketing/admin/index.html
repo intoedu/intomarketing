@@ -751,7 +751,7 @@
       <div class="head">
         <div><h1 id="listTitle">홈페이지 제작 의뢰</h1><p id="listSub">인투마케팅 홈페이지에서 들어온 신청입니다. 담당자·진행·견적서를 여기서 관리합니다.</p></div>
       </div>
-      <!-- 실제 매출 요약 (11/19) — 입금이 확인된 금액만 · 경영 현황을 볼 수 있는 사람만 · renderRev() -->
+      <!-- 매출 요약 (11/19) — 수익 창출 · 입금 완료 · 11/20부터 모든 직원 · 기본 접힘 · renderRev() -->
       <div class="card hide" id="revBox" style="padding:14px 18px;margin-bottom:14px"></div>
       <div class="stats">
         <div class="stat"><b class="tnum" id="s-all">0</b><span>전체</span></div>
@@ -1864,7 +1864,7 @@
       document.querySelectorAll('.navb[data-nav],#navCo .navb').forEach(function(x){x.classList.remove('on');});
       ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
       $('viewExt').classList.remove('hide'); $('navMy').classList.remove('on');offSpecial();
-      if(AXIS==='co'&&!PJ&&EXT.projects.length)PJ=EXT.projects[0].id;
+      if(AXIS==='co'&&!PJ&&EXT.projects.length){var pv=EXT.projects.filter(pjShown);PJ=(pv[0]||EXT.projects[0]).id;}   /* 처음엔 목록에 보이는 프로젝트부터 (11/20) */
       renderExtNav(); renderExt();
       return;
     }
@@ -1905,7 +1905,7 @@
       sb.from('ext_payments').select('*').order('created_at'),
       sb.from('ext_job_events').select('job_id,at,to_val').eq('kind','status').in('to_val',['완료','중단']),
       sb.from('ext_quotes').select('*').order('created_at',{ascending:false})]);   /* 외주 견적서 (11/13) */
-    EXT.quotes=R[11].error?[]:(R[11].data||[]);
+    EXT.quotes=R[11].error?[]:(R[11].data||[]); EXT.quotesErr=R[11].error?(R[11].error.message||'외주 견적서'):'';
     var a=R[0],m=R[1],l=R[2],j=R[3],d=R[4],st=R[5],ep=R[6],rp=R[7],fl=R[8],py=R[9],dn=R[10];
     DONE_AT={}; END_AT={}; (dn.data||[]).forEach(function(e){var o=e.to_val==='완료'?DONE_AT:END_AT;if(!o[e.job_id]||e.at>o[e.job_id])o[e.job_id]=e.at;});
     Object.keys(DONE_AT).forEach(function(k){if(!END_AT[k]||DONE_AT[k]>END_AT[k])END_AT[k]=DONE_AT[k];});
@@ -1925,12 +1925,30 @@
   }
   function pjLabel(p){return p.short_name?p.short_name+' · '+p.name:p.name;}
   function linkedPj(reqId){return EXT.links.filter(function(x){return x.request_id===reqId;}).map(function(x){return pjOf(x.project_id);}).filter(Boolean);}
+  /* 왼쪽 프로젝트 목록에서 «빈 프로젝트» 숨기기 (2026-11-20 이은총 님 · 연락판 나-1120-2)
+     보이는 조건 = 아래 셋 중 하나라도 있음 — 이은총 님 「외주 견적서나 연결 의뢰」를 «계약 있음»으로 봄
+       ① 연결 작업 : ext_jobs.project_id 가 이 프로젝트 ② 외주 견적서 : ext_quotes.project_id 가 이 프로젝트(서명 여부 상관없음)
+       ③ 연결 의뢰 : ext_project_requests.project_id 가 이 프로젝트
+     🔴 목록에서만 숨김 — DB 는 그대로 · 금액 · 입금 · 매출 · 경영 현황 · 팀 화면 · 작업 옮기기 목록은 그대로.
+     🔴 셋 중 하나라도 불러오지 못하면(확인할 수 없으면) 숨기지 않음. 지금 고른 프로젝트(갓 만든 것 포함)는 늘 보임.
+     작업 · 견적서 · 연결이 생기면 다시 불러올 때(저장할 때마다 loadExt) 바로 다시 보임. 「숨긴 프로젝트 보기」는 화면만(저장 안 함). */
+  var XSHOWHID=false;
+  function pjShown(p){
+    if(EXT.err||EXT.quotesErr)return true;
+    return EXT.jobs.some(function(j){return j.project_id===p.id;})
+      ||EXT.quotes.some(function(q){return q.project_id===p.id;})
+      ||EXT.links.some(function(l){return l.project_id===p.id;});
+  }
+  window.pjHidToggle=function(){XSHOWHID=!XSHOWHID;renderExtNav();};
   function renderExtNav(){
     var onOk=SCOPE==='out'&&!$('viewExt').classList.contains('hide');   /* 내 할 일 · 경영 현황 · 관리비 대장을 보는 중이면 프로젝트 · 팀 단추에 불을 켜지 않음 */
-    $('navOut').innerHTML=EXT.projects.map(function(p){
-      return '<button class="navb co'+(PJ===p.id&&onOk?' on':'')+'" type="button" data-pj="'+p.id+'">'
-        +'<span class="nm">'+esc(pjLabel(p))+'</span>'+(p.status!=='진행중'?'<span class="cnt">'+esc(p.status)+'</span>':'')+'</button>';
+    var hid=EXT.projects.filter(function(p){return !pjShown(p);});
+    $('navOut').innerHTML=EXT.projects.filter(function(p){return pjShown(p)||p.id===PJ||XSHOWHID;}).map(function(p){
+      var empty=!pjShown(p);
+      return '<button class="navb co'+(PJ===p.id&&onOk?' on':'')+'" type="button" data-pj="'+p.id+'"'+(empty?' title="작업 · 외주 견적서 · 연결 의뢰가 없는 프로젝트 — 평소에는 목록에서 숨김"':'')+'>'
+        +'<span class="nm">'+esc(pjLabel(p))+'</span>'+(empty?'<span class="cnt">빈 프로젝트</span>':(p.status!=='진행중'?'<span class="cnt">'+esc(p.status)+'</span>':''))+'</button>';
     }).join('')+(EXT.err?'<p class="side-note">불러오기 실패 : '+esc(EXT.err)+'</p>':'')
+      +(hid.length?'<button class="navb add" type="button" onclick="pjHidToggle()">'+(XSHOWHID?'▴ 빈 프로젝트 접기':'▾ 숨긴 빈 프로젝트 '+hid.length+'곳 보기')+'</button>':'')
       +'<button class="navb add" type="button" onclick="pjOpen()">＋ 프로젝트 추가</button>'
       +'<button class="navb co'+(XQALL&&onOk?' on':'')+'" type="button" onclick="xqAll()"><span class="nm">📋 외주 견적서</span><span class="cnt">'+EXT.quotes.length+'</span></button>'
       +'<button class="navb add" type="button" onclick="openFee(\'ext\')">💰 외부 관리비 대장</button>';
@@ -2016,7 +2034,7 @@
     $('extSub').textContent='외주 프로젝트마다 '+XKO[t]+' 팀의 사람과 작업을 봅니다.';
     $('extAct').innerHTML='';
     var ps=EXT.projects.filter(function(p){return p.status!=='종료';});
-    $('extBody').innerHTML=(canBoss()?'<div class="card" id="revExtBox" style="padding:14px 18px;margin-bottom:14px">'+revExtInner(t)+'</div>':'')   /* 실제 매출 (11/19) */
+    $('extBody').innerHTML='<div class="card" id="revExtBox" style="padding:14px 18px;margin-bottom:14px">'+revExtInner(t)+'</div>'   /* 매출 요약 (11/19 · 11/20 모든 직원 · 기본 접힘) */
       +(ps.length?ps.map(function(p){
       return '<div class="tv-pj"><h3>'+esc(pjLabel(p))+'</h3>'+teamBox(p.id,t)+'<div style="height:10px"></div>'+jobTeamHTML(p.id,t)+'</div>';
     }).join(''):'<div class="card"><div class="empty"><b>진행 중인 프로젝트가 없습니다</b></div></div>');
@@ -4086,8 +4104,10 @@
        · 블로그 센터 주문 : 실제 입금액(paid_amount) − 환불. 주문 금액으로 대신하지 않음.
      🔴 한 번만 셈 : ① 블로그 주문과 연결된 블로그 의뢰는 주문 쪽만 ② 외부 프로젝트와 연결된 내부 의뢰는 내부 합계에서 뺌
                     ③ 관리비 대장 ✓ 은 날짜 · 실제 금액이 없어 두 합계 모두에 넣지 않고 참고로만.
-     권한 : 경영 현황을 볼 수 있는 사람만. 외부 자료는 시작할 때 불러온 EXT 를 그대로 씀(입금 표시를 바꾸면 바로 반영). */
-  var REV={d:null,loading:false};
+     권한 : 11/20부터 어드민에 들어온 모든 직원(이은총 님 · 앞 판은 경영 현황을 볼 수 있는 사람만). 읽는 표는 모두 is_staff 읽기 허용.
+     접기 · 펼치기 (11/20 이은총 님) : 어드민에 들어오면 접힌 채로 보임(REV.open=false · 저장 안 함). 단추는 «보이기»만 바꿈 —
+       다시 그리지도 · 다시 불러오지도 않고 .rev-body 의 hide 만 켜고 끔(revToggle). 금액 · 계산 · 저장 자료는 그대로. 외부 자료는 시작할 때 불러온 EXT 를 그대로 씀(입금 표시를 바꾸면 바로 반영). */
+  var REV={d:null,loading:false,open:false};   /* open = 펼침 여부 (화면만 · 새로 들어오면 접힘) */
   var REV_TEAM={web:'web',sns:'sns',design:'design',video:'video'};
   var REV_LIVE={'작업 중':1,'자료 대기':1,'중간 컨펌':1,'최종 컨펌':1,'최종 제출':1,'관리':1,'완료':1};   /* 수익 창출에 넣는 외부 작업 상태 */
   var REV_ORDER_LIVE={active:1,ended:1};
@@ -4171,10 +4191,11 @@
   /* 화면 조각 */
   function revHead(title,d){
     return '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
+      +'<button class="btn btn-ghost rev-tg" style="padding:4px 10px;font-size:.78rem" type="button" aria-expanded="'+(REV.open?'true':'false')+'" onclick="revToggle()">'+(REV.open?'▾ 접기':'▸ 펼치기')+'</button>'
       +'<b style="font-size:.98rem">💰 매출 — '+esc(title)+'</b>'
       +'<span class="badge" style="background:#EEF4FF;color:var(--accent)">매출 기준 · 비용을 빼지 않음 · 순이익 아님</span>'
       +'<button class="btn btn-ghost" style="margin-left:auto;padding:4px 10px;font-size:.78rem" type="button" onclick="revReload()">↻ 다시 불러오기</button></div>'
-      +'<div class="muted" style="font-size:.76rem;margin:4px 0 8px">기준 : 시스템에 기록된 전체 기간 · '+esc(fdatetime(d.at))+' 불러옴 · 앞으로 생길 금액 · 견적만 있는 금액은 넣지 않음</div>';
+      +'<div class="rev-body'+(REV.open?'':' hide')+'"><div class="muted" style="font-size:.76rem;margin:4px 0 8px">기준 : 시스템에 기록된 전체 기간 · '+esc(fdatetime(d.at))+' 불러옴 · 앞으로 생길 금액 · 견적만 있는 금액은 넣지 않음</div>';
   }
   function revCards(make,paid){
     var c=function(k,v,s,col){return '<div class="num-card"><div class="k">'+k+'</div><div class="v"'+(col?' style="color:'+col+'"':'')+'>'+v+'</div><div class="s">'+s+'</div></div>';};
@@ -4190,6 +4211,12 @@
       +'<span class="muted" style="font-size:.78rem;flex:1;min-width:200px">'+(s||'')+'</span></div>';
   }
   var revWarn=function(t){return '<b style="color:var(--warn)">'+t+'</b>';};
+  /* 접기 · 펼치기 — 보이기만 바꿈 (다시 그리기 · 불러오기 · 저장 없음) */
+  window.revToggle=function(){
+    REV.open=!REV.open;
+    document.querySelectorAll('.rev-body').forEach(function(el){el.classList.toggle('hide',!REV.open);});
+    document.querySelectorAll('.rev-tg').forEach(function(b){b.textContent=REV.open?'▾ 접기':'▸ 펼치기';b.setAttribute('aria-expanded',REV.open?'true':'false');});
+  };
   function revExtRefresh(){ var b=$('revExtBox'); if(b)b.innerHTML=revExtInner(XTEAM); }
   /* 외부 업무별(팀) 화면 맨 위 */
   function revExtInner(t){
@@ -4208,12 +4235,12 @@
     if(o.skip.n)notes.push('「시작 전」 · 「중단」 작업 '+o.skip.n+'건('+won(o.skip.sum)+')은 수익 창출에 넣지 않았습니다 — 그 작업에 들어온 입금은 입금 완료에 들어갑니다');
     if(o.nd)notes.push('날짜 없는 입금은 프로젝트 「숫자」 탭에서 그 줄의 「날짜 모름」을 눌러 고칠 수 있습니다');
     if(REV_TEAM[t])notes.push('내부 의뢰와 함께 본 합계는 내부 「'+esc(AREAS[REV_TEAM[t]||t]||'')+'」 화면 맨 위에 있습니다');
-    return h+'<div class="muted" style="font-size:.78rem;margin-top:8px;line-height:1.65">· '+notes.join('<br>· ')+'</div>';
+    return h+'<div class="muted" style="font-size:.78rem;margin-top:8px;line-height:1.65">· '+notes.join('<br>· ')+'</div></div>';   /* 끝 </div> = .rev-body */
   }
   /* 내부 서비스 화면 맨 위 */
   window.renderRev=function(){
     var box=$('revBox'); if(!box)return;
-    if(!canBoss()||COKEY||!AREAS[CUR]){box.classList.add('hide');return;}
+    if(COKEY||!AREAS[CUR]){box.classList.add('hide');return;}   /* 11/20 모든 직원에게 보임 (canBoss 조건 뺌) */
     box.classList.remove('hide');
     if(!REV.d){box.innerHTML='<div class="muted" style="font-size:.85rem">매출 불러오는 중…</div>'; revLoad(); return;}
     var o=revCalc(CUR), d=REV.d, h='', make=o.in.make+o.ext.make, paid=o.in.paid+o.ext.paid;
@@ -4246,7 +4273,7 @@
     if(REV_TEAM[CUR])notes.push('외부 수익 창출 = 외부 「숫자」 탭과 같은 줄(건당 = 완료 회차 × 단가 · 월정액 = 시작 달 ~ 이번 달) · 「시작 전」 · 「중단」 작업은 넣지 않음');
     if(o.ledger.n)notes.push('관리비 대장 ✓(받음) '+o.ledger.n+'칸 · 대장 월액으로 '+won(o.ledger.sum)+' — 입금 날짜 · 실제 받은 금액이 기록되지 않아 두 합계 모두에 넣지 않았습니다(참고)');
     if(notes.length)h+='<div class="muted" style="font-size:.78rem;margin-top:8px;line-height:1.65">· '+notes.join('<br>· ')+'</div>';
-    box.innerHTML=h;
+    box.innerHTML=h+'</div>';   /* 끝 </div> = .rev-body */
   };
 
   /* ══════════ 관리비 대장 — 홈페이지 · SNS (2026-10-16 이은총 님) ══════════
