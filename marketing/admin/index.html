@@ -337,15 +337,23 @@
   .adm-pay>summary::-webkit-details-marker{display:none}
   /* 재정 관리 · 입금 처리 (2026-11-21) */
   .fin-tbl{display:flex;flex-direction:column;gap:0;overflow-x:auto}
-  .fin-r{display:grid;grid-template-columns:28px 150px 130px 110px minmax(240px,1fr) minmax(200px,1fr);gap:8px;align-items:start;padding:8px 0;border-top:1px solid var(--line);font-size:.82rem;min-width:900px}
-  .fin-r.fin-h{font-weight:800;color:var(--muted);border-top:0;font-size:.76rem}
-  .fin-r .inp{padding:5px 8px;font-size:.82rem;width:100%}
-  .fin-r .fin-tm{margin-top:4px;width:80px}
-  .fin-r .fin-am{text-align:right}
-  .fin-r small{display:block;margin-top:3px;font-size:.72rem}
-  .fin-r span.ok{color:#15803D;font-weight:700}
-  .fin-r span.bad{color:#B45309}
-  .fin-r.bad{background:#FFFBEB}
+  .fin-tbl{display:flex;flex-direction:column;overflow-x:auto}
+  .fin-sec{margin-bottom:14px}
+  .fin-sec h4{margin:4px 0 6px;font-size:.92rem}
+  .fin-m{display:grid;grid-template-columns:44px minmax(180px,1.4fr) 96px 96px 96px 110px 140px 190px minmax(170px,1fr);gap:8px;align-items:center;padding:6px 0;border-top:1px solid var(--line);font-size:.82rem;min-width:1180px}
+  .fin-m.fin-h{font-weight:800;color:var(--muted);border-top:0;font-size:.76rem}
+  .fin-m .r{text-align:right}
+  .fin-m .inp{padding:5px 8px;font-size:.82rem;width:100%}
+  .fin-m .fin-amt{display:flex;gap:4px;align-items:center}
+  .fin-m .fin-am{text-align:right}
+  .fin-m small{display:block;margin-top:2px;font-size:.72rem}
+  .fin-m span.ok{color:#15803D;font-weight:700}
+  .fin-m span.bad{color:#B45309}
+  .fin-m.bad{background:#FFFBEB}
+  .fin-pj{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 0 4px;border-top:2px solid var(--line);font-size:.84rem;min-width:1180px}
+  .fin-pj .muted{font-size:.76rem}
+  .fin-tot{margin-top:6px;font-size:.82rem;text-align:right}
+  .fin-why{margin:0 0 14px;padding:10px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:.82rem;line-height:1.7}
   .fin-pv{margin-top:12px;padding:12px 14px;border:1.5px solid #93C5FD;background:#EFF6FF;border-radius:12px;font-size:.84rem;line-height:1.6}
   .fin-pv h4{margin:0 0 6px;font-size:.92rem}
   .fin-d{display:grid;grid-template-columns:130px 110px 100px 1fr 100px 160px;gap:8px;padding:5px 0;border-top:1px dashed var(--line);font-size:.8rem}
@@ -998,7 +1006,7 @@
         <div class="adm-tag">🔒 관리자 · 최고관리자 전용</div>
         <div class="card due-card" id="bossDue" style="padding:12px 18px;margin-bottom:14px"></div>
         <details class="card adm-pay" id="bossPayD" style="padding:12px 18px;margin-bottom:14px">
-          <summary><b style="font-size:.95rem">💳 재정 관리 · 입금 처리</b><span class="muted" style="font-size:.8rem">은행 거래내역 붙여 넣기 → 후보 → 미리 보기 → 최종 확인한 것만 저장 · 블로그 센터 주문은 후보만</span><span class="muted" style="margin-left:auto;font-size:.76rem">눌러서 펼치기 · 접기</span></summary>
+          <summary><b style="font-size:.95rem">💳 재정 관리 · 입금 처리</b><span class="muted" style="font-size:.8rem">내부 · 외부 입금 대기 목록 → 통장에서 확인한 줄만 체크 → 미리 보기 → 최종 확인한 것만 저장 · 블로그 센터 주문은 블로그 센터에서</span><span class="muted" style="margin-left:auto;font-size:.76rem">눌러서 펼치기 · 접기</span></summary>
           <div style="margin-top:10px" id="payBody"></div>
         </details>
         <div id="bossFin"></div>
@@ -3443,7 +3451,7 @@
     if(!canFin()){z.classList.add('hide');['bossDue','payBody','bossFin'].forEach(function(id){var b=$(id);if(b)b.innerHTML='';});return;}
     z.classList.remove('hide');
     renderDueBoss(); renderPay();
-    $('bossFin').innerHTML=reqCard()+finCard();
+    $('bossFin').innerHTML=dlWhyHTML()+reqCard()+finCard();
   }
 
   /* ---------- 마감기한 · 독촉 메시지 복사 (2026-11-21 이은총 님 · 연락판 나-1121-3) ----------
@@ -3552,11 +3560,10 @@
      권한 : 최고관리자 · 관리자(canFin = staff.role owner · admin) — 메뉴 · 화면 · 처리 모두. DB 도 같은 기준(is_fin_admin · 12_재정_입금처리.sql).
      대상 : 내부 의뢰(인투마케팅 · 입금 완료만 — 금액이 «같을 때만») · 외부 작업 입금 줄(입금 완료 / 부분 입금 — 11/21 부분 입금 그대로) ·
             블로그 센터 주문(«후보만 보여 주기» — 처리는 지금처럼 블로그 센터 · 이은총 님 11/21). 관리비 대장은 여기 넣지 않음(따로 그대로).
-     🔴 분석 결과는 «제안»일 뿐 — 체크하고 미리 보기 → 최종 확인을 눌러야만 저장. 거래내역 형식 표본이 없어서(이은총 님 「표본 없이 진행」)
-        날짜 · 시각 · 입금자 · 금액을 넓게 읽고, 읽은 값은 모두 화면에서 고칠 수 있게 함. 출금 줄(「출금」 · 「-」)은 뺌.
-     🔴 두 번 반영 막기 : fin_bank_txns.fingerprint 유일(거래일|시각|금액|입금자|같은 값 순번) — 표가 없으면 «처리» 단추를 막음.
-     🔴 자동으로 안 하는 것 : 후보가 여럿 · 금액이 남은 돈보다 큼 · 내부 의뢰 금액이 다름(부분 입금 안 씀) · 금액 칸 빈 의뢰 · 같은 대상 두 번 → 검토로 남김. */
-  var FIN={rows:[],blog:[],done:[],doneErr:'',tableOk:null,loading:false,skipped:0,preview:null};
+     🔴 11/21 나-1121-5 : 은행 거래내역 붙여 넣기 · 분석 · 자동 후보 제안을 없애고 «입금 대기 목록에서 통장을 직접 확인한 줄만 체크»로 바꿈.
+        내부 · 외부를 나눠 보여 주고 금액 소계도 따로. 블로그 센터 주문은 건수 · 합계만 알림(처리는 블로그 센터).
+     🔴 두 번 반영 막기 : fin_bank_txns.fingerprint 유일 — 표가 없으면 «처리» 단추를 막음. (11/21 붙여 넣기로 처리한 예전 기록도 그대로 보임) */
+  var FIN={sel:{},blog:[],done:[],doneErr:'',tableOk:null,loading:false,preview:null};
   window.openPay=function(){   /* 11/21 나-1121-4 : 따로 있던 메뉴 · 화면을 없애고 경영 현황 안 전용 영역으로 */
     if(!canFin()){toast('재정 관리는 최고관리자 · 관리자만 볼 수 있습니다');return;}
     openBoss(); var d=$('bossPayD'); if(d){d.open=true;d.scrollIntoView({block:'start'});}
@@ -3570,74 +3577,7 @@
       var d=await sb.from('fin_bank_txns').select('*').order('created_at',{ascending:false}).limit(300);
       FIN.tableOk=!d.error; FIN.doneErr=d.error?d.error.message:''; FIN.done=d.error?[]:(d.data||[]);
     }finally{FIN.loading=false;}
-    FIN.rows.forEach(finEval); renderPay();
-  }
-  /* ── 거래내역 글 읽기 (형식 표본 없음 → 넓게 읽고 고칠 수 있게) */
-  var FIN_KW=/(거래일시|거래일자|거래일|일시|적요|기록사항|내용|메모|받는분|보낸분|입금자명|입금자|의뢰인|거래후잔액|잔액|입금액|출금액|입금|출금|이체|타행|당행|자행|모바일|인터넷|스마트|폰뱅킹|펌뱅킹|오픈뱅킹|뱅킹|송금|대체|CMS|ATM|FB|원)/gi;
-  function finNorm(s){return String(s||'').replace(/\s+/g,'').replace(/[()\[\]{}.,·\-_/|:'"]/g,'').toLowerCase();}
-  function finParse(text){
-    var lines=String(text||'').replace(/\r/g,'').split('\n').map(function(x){return x.trim();}).filter(Boolean);
-    var recs=[], cur=null, now=kstToday(), y0=+now.slice(0,4), m0=+now.slice(5,7), m0n=m0, out=0;
-    var dateRe=/(20\d{2})\s*[.\-\/년]\s*(\d{1,2})\s*[.\-\/월]\s*(\d{1,2})\s*일?|(?:^|[^\d])(\d{2})[.\-\/](\d{1,2})[.\-\/](\d{1,2})(?!\d)|(?:^|[^\d])(\d{1,2})\s*[.\-\/월]\s*(\d{1,2})\s*일?(?![\d,])/;
-    /* 표 머리줄(탭으로 나뉜 「입금 · 잔액 · 보낸분」 등)이 있으면 그 칸 자리대로 읽음 */
-    var H=null;
-    lines.forEach(function(l){
-      if(!dateRe.test(l)){
-        if(/\t/.test(l)&&/(입금|잔액|출금)/.test(l)){var c=l.split('\t').map(function(x){return x.trim();});
-          var fi=function(re,not){for(var i=0;i<c.length;i++){if(re.test(c[i])&&!(not&&not.test(c[i])))return i;}return -1;};
-          H={n:c.length,dep:fi(/입금/,/입금자|입금인/),wd:fi(/출금|지급/),bal:fi(/잔액/),name:(fi(/보낸분|입금자|입금인|의뢰인|성명|이름/)>=0?fi(/보낸분|입금자|입금인|의뢰인|성명|이름/):fi(/받는분|기록사항|적요|내용/))};cur=null;return;}
-        if(cur&&!cur.oneLine&&cur.raw.length<4)cur.raw.push(l);   /* 여러 줄 모양만 이어 붙임 (최대 3줄) */
-        return;
-      }
-      cur={raw:[l],hdr:(H&&/\t/.test(l)&&Math.abs(l.split('\t').length-H.n)<=1)?H:null};
-      cur.oneLine=!!cur.hdr||/(\d{1,3}(,\d{3})+|\d{4,})\s*원?/.test(l.replace(dateRe,' ').replace(/\d{1,2}:\d{2}(:\d{2})?/,' '));
-      recs.push(cur);
-    });
-    var rows=[];
-    recs.forEach(function(r){
-      if(r.hdr){   /* 머리줄 칸 자리대로 */
-        var c=r.raw[0].split('\t').map(function(x){return x.trim();}), H2=r.hdr;
-        var num=function(i){if(i<0||i>=c.length)return 0;var v=String(c[i]).replace(/[,\s원+]/g,'');return /^\d+$/.test(v)?+v:0;};
-        var dep=num(H2.dep), wd=num(H2.wd);
-        if(H2.dep>=0&&!dep&&wd){out++;return;}
-        if(H2.dep>=0&&dep){
-          var t0=r.raw[0], m0=t0.match(dateRe), yy, mm, dd0;
-          if(m0[1]){yy=+m0[1];mm=+m0[2];dd0=+m0[3];} else if(m0[4]){yy=2000+(+m0[4]);mm=+m0[5];dd0=+m0[6];} else {mm=+m0[7];dd0=+m0[8];yy=(mm>m0n)?y0-1:y0;}
-          var tm0=t0.match(/(?:^|[^\d])([01]?\d|2[0-3]):([0-5]\d)(?::[0-5]\d)?(?!\d)/);
-          var nm=H2.name>=0?String(c[H2.name]||'').trim():'';
-          rows.push({date:(mm>=1&&mm<=12&&dd0>=1&&dd0<=31)?yy+'-'+('0'+mm).slice(-2)+'-'+('0'+dd0).slice(-2):'',time:tm0?('0'+tm0[1]).slice(-2)+':'+tm0[2]:'',
-            payer:nm,amount:dep,raw:t0,warn:nm?[]:['입금자']});
-          return;
-        }
-      }
-      var t=r.raw.join('  '), m=t.match(dateRe), y, mo, d;
-      if(m[1]){y=+m[1];mo=+m[2];d=+m[3];} else if(m[4]){y=2000+(+m[4]);mo=+m[5];d=+m[6];} else {mo=+m[7];d=+m[8];y=(mo>m0)?y0-1:y0;}
-      var date=(mo>=1&&mo<=12&&d>=1&&d<=31)?y+'-'+('0'+mo).slice(-2)+'-'+('0'+d).slice(-2):'';
-      var rest=t.replace(m[0],' ');
-      var tm=rest.match(/(?:^|[^\d])([01]?\d|2[0-3]):([0-5]\d)(?::[0-5]\d)?(?!\d)/), time='';
-      if(tm){time=('0'+tm[1]).slice(-2)+':'+tm[2]; rest=rest.replace(tm[0],' ');}
-      var isOut=/출금|지급|-\s*\d/.test(rest)&&!/입금|\+\s*\d/.test(rest);
-      if(isOut){out++;return;}
-      var nums=[], re=/([+]?)(\d{1,3}(?:,\d{3})+|\d{3,})\s*원?/g, x;
-      while((x=re.exec(rest))){var before=rest.slice(Math.max(0,x.index-6),x.index);
-        nums.push({v:+x[2].replace(/,/g,''),s:x[0],bal:/잔액/.test(before),dep:/입금|\+/.test(before+x[1])});}
-      var cand=nums.filter(function(n){return !n.bal&&n.v>=100;}), pick=cand.filter(function(n){return n.dep;})[0]||cand[0]||null;
-      var warn=[];
-      if(!date)warn.push('날짜');
-      if(!pick)warn.push('금액'); else if(cand.length>1&&!cand.some(function(n){return n.dep;}))warn.push('금액 후보 '+cand.length+'개');
-      nums.forEach(function(n){rest=rest.split(n.s).join(' ');});
-      var payer=rest.replace(FIN_KW,' ').replace(/[\d+\-*#:,.()\[\]|\/\\]+/g,' ').replace(/\s+/g,' ').trim();
-      var toks=payer.split(' ').filter(function(w){return /[가-힣A-Za-z]/.test(w);});
-      payer=toks.slice(0,3).join(' ');
-      if(!payer)warn.push('입금자');
-      rows.push({date:date,time:time,payer:payer,amount:pick?pick.v:null,raw:t,warn:warn});
-    });
-    FIN.skipped=out;
-    return rows;
-  }
-  function finFp(rows){   /* 같은 붙여넣기 안에서 같은 값이 몇 번째인지까지 넣음 */
-    var cnt={};
-    rows.forEach(function(r){var k=[r.date,r.time||'',r.amount||'',finNorm(r.payer)].join('|'); cnt[k]=(cnt[k]||0)+1; r.fp=k+'|'+cnt[k];});
+    renderPay();
   }
   /* ── 연결할 수 있는 대상 */
   function finTargets(){
@@ -3657,131 +3597,122 @@
         label:'블로그 센터 · '+(o.academy_name||'(이름 없음)'),can:false,why:'블로그 주문 입금은 블로그 센터에서 처리합니다(후보만 보여 줌)'});});
     return T;
   }
-  function finNameHit(payer,names){
-    var p=finNorm(payer); if(p.length<2)return false;
-    return names.some(function(n){n=finNorm(n); return n.length>=2&&(n.indexOf(p)>=0||p.indexOf(n)>=0);});
-  }
-  function finCands(row,T){
-    var a=Number(row.amount)||0, out=[];
-    T.forEach(function(t){
-      var name=finNameHit(row.payer,t.names), exact=t.due!=null&&a===t.due, part=t.kind==='ext'&&a>0&&a<t.due;
-      if(!(exact||name))return;
-      out.push({t:t,name:name,exact:exact,part:part,score:(name?2:0)+(exact?3:(part?1:0))});
-    });
-    return out.sort(function(x,y){return y.score-x.score;});
-  }
-  /* 한 줄 평가 : 후보 · 제안 · 처리 결과 미리 보기 */
-  function finEval(row){
-    var T=finTargets(), map={}; T.forEach(function(t){map[t.key]=t;});
-    row.cands=finCands(row,T);
-    if(row.pick===undefined){   /* 처음 한 번만 제안 — 체크는 안 함 */
-      var ex=row.cands.filter(function(c){return c.exact;});
-      var only=ex.length===1&&(ex[0].name||(T.filter(function(t){return t.due===Number(row.amount);}).length===1&&!row.cands.some(function(c){return c.name;})));   /* 금액만 같으면 : 금액 같은 대상이 하나뿐이고 이름 맞는 다른 후보가 없을 때만 */
-      row.pick=only?ex[0].t.key:'';
-      row.sure=!!only;
-    }
-    row.target=row.pick?map[row.pick]||null:null;
-    row.res=finCheck(row);
-  }
-  function finCheck(row){
-    var a=Number(row.amount)||0, t=row.target;
-    if(FIN.done.some(function(d){return d.fingerprint===row.fp;}))return {ok:false,msg:'이미 반영한 거래입니다'};
-    if(!/^\d{4}-\d{2}-\d{2}$/.test(row.date||''))return {ok:false,msg:'날짜를 확인해 주세요'};
-    if(!(a>0))return {ok:false,msg:'금액을 확인해 주세요'};
-    if(!t)return {ok:false,msg:row.cands&&row.cands.length>1?'후보 '+row.cands.length+'개 — 직접 고르세요':(row.cands&&row.cands.length?'후보를 골라 주세요':'맞는 대상이 없습니다')};
+  /* ── 입금 대기 목록에서 직접 처리 (11/21 이은총 님 · 연락판 나-1121-5) ──
+     은행 거래내역 붙여 넣기 · 분석 · 자동 후보 제안은 없앰. 관리자가 통장을 직접 보고 확인한 줄만 체크해 처리.
+     🔴 자동 선택 · 자동 저장 없음 : 체크는 처음에 모두 꺼짐 · 외부 입금액 칸은 비어 있음(「잔액 전부」 단추를 눌러야 채움) · 미리 보기 → 최종 확인 뒤에만 저장.
+     대상 = finTargets() 그대로(이은총 님 11/21 답 : 내부 = 취소 빼고 미입금 전부 · 외부 = 「전체 미입금」 기준 — 다 받은 줄 · 중단 단건은 원래 빠짐).
+     내부 의뢰 = 전액 확인 → 입금 완료만(부분 입금 없음 · 금액 칸 빈 의뢰는 막음). 외부 = 확인한 금액 = 잔액 → 입금 완료 · 작으면 부분 입금 · 크면 막음.
+     두 번 반영 막기 = fin_bank_txns.fingerprint 「m|대상|처리 전 입금액|입금액|입금일」 유일 + 처리 직전에 최신 자료로 다시 확인(그 사이 입금 상태가 바뀌었으면 건너뜀). */
+  function finSt(k){var S=FIN.sel[k]; if(!S){S=FIN.sel[k]={on:false,amt:null,date:kstToday()};} return S;}
+  function finPrior(t){return t.kind==='ext'?(Number(t.l.paid)||0):0;}
+  function finManCheck(t,s){
     if(!t.can)return {ok:false,msg:t.why||'처리할 수 없는 대상'};
-    if(t.kind==='request'){
-      if(a!==t.due)return {ok:false,msg:'의뢰 금액 '+wonS(t.due)+'과 다릅니다 — 내부 의뢰는 금액이 같을 때만 입금 완료로 처리'};
-      return {ok:true,kind:'full',msg:'입금 없음 → ✅ 입금 완료 ('+row.date+')'};
-    }
-    if(a>t.due)return {ok:false,msg:'남은 금액 '+wonS(t.due)+'보다 큽니다'};
-    if(a===t.due)return {ok:true,kind:'full',msg:(t.l.kind==='partial'?'◐ 부분 입금 '+wonS(t.l.paid):'☑️ 미입금')+' → ✅ 입금 완료 (전체 '+wonS(t.l.amount)+')'};
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(s.date||''))return {ok:false,msg:'입금일을 확인해 주세요'};
+    if(s.date>kstToday())return {ok:false,msg:'입금일이 오늘보다 뒤입니다'};
+    if(t.kind==='request')return {ok:true,kind:'full',amt:t.due,msg:'☑️ 미입금 → ✅ 입금 완료 ('+s.date+')'};
+    var a=Number(s.amt);
+    if(s.amt==null||!(a>0))return {ok:false,msg:'통장에서 확인한 금액을 넣어 주세요'};
+    if(a>t.due)return {ok:false,msg:'잔액 '+wonS(t.due)+'보다 큽니다 — 넘는 금액은 처리하지 않습니다'};
+    if(a===t.due)return {ok:true,kind:'full',amt:a,msg:(t.l.kind==='partial'?'◐ 부분 입금 '+wonS(t.l.paid):'☑️ 미입금')+' → ✅ 입금 완료 (전체 '+wonS(t.l.amount)+')'};
     var np=(Number(t.l.paid)||0)+a;
-    return {ok:true,kind:'partial',newPaid:np,msg:(t.l.kind==='partial'?'◐ '+wonS(t.l.paid):'☑️ 미입금')+' → ◐ 부분 입금 '+wonS(np)+' ('+payPct(np,t.l.amount)+'% · 남은 '+wonS(t.l.amount-np)+')'};
+    return {ok:true,kind:'partial',amt:a,newPaid:np,msg:(t.l.kind==='partial'?'◐ '+wonS(t.l.paid):'☑️ 미입금')+' → ◐ 부분 입금 '+wonS(np)+' ('+payPct(np,t.l.amount)+'% · 남은 '+wonS(t.l.amount-np)+')'};
   }
-  function finDupTargets(sel){var seen={},dup={};sel.forEach(function(r){if(!r.pick)return;if(seen[r.pick])dup[r.pick]=1;seen[r.pick]=1;});return dup;}
-  /* ── 화면 */
-  window.finParseGo=function(){
-    var rows=finParse($('fin_text').value);
-    finFp(rows); rows.forEach(finEval); FIN.rows=rows; FIN.preview=null; renderPay();
-    toast(rows.length?rows.length+'줄을 읽었습니다 — 아직 저장하지 않았습니다':'읽은 입금 줄이 없습니다 — 날짜가 들어간 줄을 붙여 넣어 주세요');
-  };
-  window.finClear=function(){FIN.rows=[];FIN.preview=null;FIN.skipped=0;$('fin_text').value='';renderPay();};
-  window.finAddRow=function(){var r={date:kstToday(),time:'',payer:'',amount:null,raw:'(직접 넣음)',warn:[]};FIN.rows.push(r);finFp(FIN.rows);FIN.rows.forEach(function(x){x.res=null;});FIN.rows.forEach(finEval);FIN.preview=null;renderPay();};
-  window.finEdit=function(i,k,v){
-    var r=FIN.rows[i]; if(!r)return;
-    if(k==='amount')v=payAmtParse(v);
-    if(k==='sel'){r.sel=!!v;FIN.preview=null;renderPayRows();return;}
-    if(k==='pick'){r.pick=v;r.sure=false;}
-    else{r[k]=(typeof v==='string')?v.trim():v; finFp(FIN.rows); if(r.sure){r.pick=undefined;r.sure=false;}}   /* 제안만 했던 줄은 고친 값으로 다시 제안 */
-    FIN.rows.forEach(finEval); FIN.preview=null; renderPayRows();
-  };
-  function finOpt(c){var t=c.t;return t.label+' · '+(t.kind==='ext'?'남은 ':'')+wonS(t.due)+(c.exact?' · 금액 같음':(c.part?' · 부분 가능':''))+(c.name?' · 이름 맞음':'');}
-  function renderPayRows(){
-    var box=$('fin_rows'); if(!box)return;
-    var dup=finDupTargets(FIN.rows.filter(function(r){return r.sel;}));
-    if(!FIN.rows.length){box.innerHTML='<div class="muted" style="font-size:.85rem">위에 거래내역을 붙여 넣고 「분석」을 누르세요. 줄을 직접 넣을 수도 있습니다.</div>';return;}
-    var T=finTargets();
-    box.innerHTML='<div class="fin-tbl"><div class="fin-r fin-h"><span></span><span>거래일 · 시각</span><span>입금자</span><span>금액</span><span>연결할 대상 (후보 먼저)</span><span>처리하면</span></div>'
-      +FIN.rows.map(function(r,i){
-        var res=r.res||{}, isDup=r.sel&&r.pick&&dup[r.pick];
-        var opts='<option value="">— 연결 안 함 —</option>';
-        var ck={}; (r.cands||[]).forEach(function(c){ck[c.t.key]=1;opts+='<option value="'+esc(c.t.key)+'"'+(r.pick===c.t.key?' selected':'')+'>★ '+esc(finOpt(c))+'</option>';});
-        opts+='<optgroup label="그 밖의 대상">'+T.filter(function(t){return !ck[t.key];}).map(function(t){return '<option value="'+esc(t.key)+'"'+(r.pick===t.key?' selected':'')+'>'+esc(t.label+' · '+wonS(t.due))+'</option>';}).join('')+'</optgroup>';
-        var bad=!res.ok||isDup;
-        return '<div class="fin-r'+(bad?' bad':'')+'">'
-          +'<span><input type="checkbox"'+(r.sel?' checked':'')+(res.ok&&!isDup?'':' disabled')+' onchange="finEdit('+i+',\'sel\',this.checked)" title="처리할 거래로 고르기"></span>'
-          +'<span><input class="inp" type="date" value="'+esc(r.date||'')+'" onchange="finEdit('+i+',\'date\',this.value)"><input class="inp fin-tm" value="'+esc(r.time||'')+'" placeholder="시각" onchange="finEdit('+i+',\'time\',this.value)"></span>'
-          +'<span><input class="inp" value="'+esc(r.payer||'')+'" placeholder="입금자" onchange="finEdit('+i+',\'payer\',this.value)"></span>'
-          +'<span><input class="inp fin-am" inputmode="numeric" value="'+(r.amount!=null?moneyFmt(r.amount):'')+'" placeholder="금액" onchange="finEdit('+i+',\'amount\',this.value)"></span>'
-          +'<span><select class="inp" onchange="finEdit('+i+',\'pick\',this.value)">'+opts+'</select>'
-            +(r.pick&&r.sure?'<small class="muted">제안 — 확인 뒤 체크하세요</small>':'')+(r.warn&&r.warn.length?'<small style="color:#B45309">읽기 확인 : '+esc(r.warn.join(' · '))+'</small>':'')+'</span>'
-          +'<span class="'+(bad?'bad':'ok')+'">'+(isDup?'같은 대상을 다른 거래에도 골랐습니다 — 한 번에 하나만':esc(res.msg||''))+'</span></div>';
-      }).join('')+'</div>';
-    var n=FIN.rows.filter(function(r){return r.sel&&r.res&&r.res.ok;}).length;
-    $('fin_go').disabled=!n; $('fin_go').textContent='선택한 '+n+'건 미리 보기';
+  function finFpMan(t,a,date){return 'm|'+t.key+'|'+finPrior(t)+'|'+a+'|'+date;}
+  /* 내부 · 외부 나눠 묶기 — 프로젝트(내부 = 서비스 · 외부 = 프로젝트)별 · 소계가 섞이지 않게 */
+  function finSplit(){
+    var T=finTargets(), P={request:[],ext:[]};
+    T.forEach(function(t){
+      if(t.kind==='request'){t.pj=AREAS[groupOf(t.r)]||'의뢰'; t.name=(t.r.academy_name||'(이름 없음)'); t.st=normStatus(t.r.status); t.total=t.due; t.paid=0; t.state='미입금'; P.request.push(t);}
+      else if(t.kind==='ext'){var p=pjOf(t.j.project_id); t.pj=(p&&(p.short_name||p.name))||'(프로젝트 없음)'; t.name=t.j.title+(t.l.label&&t.l.label!=='작업 금액'?' · '+t.l.label:''); t.st=t.j.status;
+        t.total=Number(t.l.amount)||0; t.paid=Number(t.l.paid)||0; t.state=t.l.kind==='partial'?'부분 입금':'미입금'; P.ext.push(t);}
+    });
+    ['request','ext'].forEach(function(k){P[k].sort(function(a,b){return a.pj.localeCompare(b.pj,'ko')||a.name.localeCompare(b.name,'ko');});});
+    return P;
   }
-  function finSums(){
-    var T=finTargets(), s={request:[0,0,0],ext:[0,0],blog:[0,0]};
-    T.forEach(function(t){if(t.kind==='request'){if(t.due!=null){s.request[0]++;s.request[1]+=t.due;}else s.request[2]++;}else{s[t.kind][0]++;s[t.kind][1]+=Number(t.due)||0;}});
-    return s;
+  function finSum(L){var s={n:L.length,total:0,paid:0,due:0,noAmt:0,none:0,part:0};
+    L.forEach(function(t){if(t.due==null){s.noAmt++;}else{s.total+=t.total||0;s.paid+=t.paid||0;s.due+=t.due||0;} if(t.state==='부분 입금')s.part++; else s.none++;});
+    return s;}
+  window.finTick=function(k,on){finSt(k).on=!!on; FIN.preview=null; renderPayList();};
+  window.finSetAmt=function(k,v){finSt(k).amt=payAmtParse(v); FIN.preview=null; renderPayList();};
+  window.finSetDate=function(k,v){finSt(k).date=String(v||'').trim(); FIN.preview=null; renderPayList();};
+  window.finFull=function(k){var t=finTargets().filter(function(x){return x.key===k;})[0]; if(!t||t.kind!=='ext')return; finSt(k).amt=t.due; FIN.preview=null; renderPayList();};   /* 사람이 눌러야만 잔액을 채움 */
+  window.finClearSel=function(){FIN.sel={}; FIN.preview=null; renderPayList();};
+  function finRowHTML(t){
+    var S=finSt(t.key), res=finManCheck(t,S), isX=t.kind==='ext';
+    var amt=isX?'<input class="inp fin-am" inputmode="numeric" placeholder="확인한 금액" value="'+(S.amt!=null?moneyFmt(S.amt):'')+'" onchange="finSetAmt(\''+esc(t.key)+'\',this.value)"'+(t.can?'':' disabled')+'>'
+        +(t.can?'<button class="due-cp" type="button" onclick="finFull(\''+esc(t.key)+'\')" title="잔액 전부를 입금액 칸에 넣습니다(저장은 아님)">잔액 전부</button>':'')
+      :'<span class="tnum">'+(t.due!=null?'전액 '+wonS(t.due):'—')+'</span>';
+    return '<div class="fin-m'+(S.on&&!res.ok?' bad':'')+'">'
+      +'<span><input type="checkbox"'+(S.on?' checked':'')+(t.can?'':' disabled')+' onchange="finTick(\''+esc(t.key)+'\',this.checked)" title="통장에서 직접 확인한 입금만 체크"></span>'
+      +'<span><b>'+esc(t.name)+'</b><small class="muted">'+esc(t.st||'')+(isX&&t.j.price_type?' · '+esc(t.j.price_type):'')+'</small></span>'
+      +'<span class="r tnum">'+(t.due==null?'<span style="color:#B45309">금액 없음</span>':wonS(t.total))+'</span>'
+      +'<span class="r tnum">'+wonS(t.paid)+'</span>'
+      +'<span class="r tnum"><b>'+(t.due==null?'—':wonS(t.due))+'</b></span>'
+      +'<span>'+(t.state==='부분 입금'?'◐ 부분 입금 '+(payPct(t.paid,t.total)!=null?payPct(t.paid,t.total)+'%':''):'☑️ 미입금')+'</span>'
+      +'<span><input class="inp" type="date" value="'+esc(S.date||'')+'" max="'+kstToday()+'" onchange="finSetDate(\''+esc(t.key)+'\',this.value)"'+(t.can?'':' disabled')+'></span>'
+      +'<span class="fin-amt">'+amt+'</span>'
+      +'<span class="'+(!t.can||(S.on&&!res.ok)?'bad':(S.on?'ok':'muted'))+'" style="font-size:.78rem">'+esc(!t.can?(t.why||'처리할 수 없음'):(S.on?res.msg:'체크하면 처리 대상'))+'</span></div>';
+  }
+  function finListHTML(k,L){
+    var title=k==='request'?'내부 의뢰':'외부 작업', s=finSum(L), h='';
+    h+='<div class="fin-sec"><h4>'+(k==='request'?'🏠 ':'🤝 ')+title+' <span class="muted" style="font-weight:600;font-size:.8rem">— 입금 대기 '+s.n+'건 · 미입금 '+s.none+(k==='ext'?' · 부분 입금 '+s.part:'')+'</span></h4>';
+    if(!L.length)return h+'<div class="muted" style="font-size:.84rem">입금 대기 중인 '+title+'가 없습니다.</div></div>';
+    h+='<div class="fin-tbl"><div class="fin-m fin-h"><span>확인</span><span>작업명</span><span class="r">청구액</span><span class="r">기입금액</span><span class="r">잔액</span><span>입금 상태</span><span>입금일</span><span>입금액</span><span>처리하면</span></div>';
+    var g=null;
+    L.forEach(function(t){
+      if(t.pj!==g){g=t.pj; var sub=finSum(L.filter(function(x){return x.pj===g;}));
+        h+='<div class="fin-pj"><b>📁 '+esc(g)+'</b><span class="muted">'+sub.n+'건 · 청구 '+wonS(sub.total)+' · 기입금 '+wonS(sub.paid)+' · 잔액 '+wonS(sub.due)+(sub.noAmt?' · 금액 없음 '+sub.noAmt+'건':'')+'</span></div>';}
+      h+=finRowHTML(t);
+    });
+    h+='</div><div class="fin-tot">'+title+' 소계 : 청구 <b>'+wonS(s.total)+'</b> · 기입금 <b>'+wonS(s.paid)+'</b> · 잔액 <b>'+wonS(s.due)+'</b>'+(s.noAmt?' · <span style="color:#B45309">금액 칸 빈 '+s.noAmt+'건은 합계에서 빠짐</span>':'')+'</div></div>';
+    return h;
+  }
+  function renderPayList(){
+    var box=$('fin_list'); if(!box)return;
+    var P=finSplit(), live={};
+    P.request.concat(P.ext).forEach(function(t){live[t.key]=1;});
+    Object.keys(FIN.sel).forEach(function(k){if(!live[k])delete FIN.sel[k];});   /* 사라진 대상(다 받음 · 취소 등)의 체크는 버림 */
+    box.innerHTML=finListHTML('request',P.request)+finListHTML('ext',P.ext);
+    var sel=P.request.concat(P.ext).filter(function(t){return finSt(t.key).on;}), ok=sel.filter(function(t){return finManCheck(t,finSt(t.key)).ok;});
+    var go=$('fin_go'); if(go){go.disabled=!sel.length; go.textContent='체크한 '+sel.length+'건 미리 보기'+(sel.length>ok.length?' (확인 필요 '+(sel.length-ok.length)+')':'');}
+    if(FIN.preview)finPreviewHTML();
   }
   window.renderPay=function(){
     var b=$('payBody'); if(!b)return;
     if(!canFin()){b.innerHTML='<div class="card"><div class="empty"><b>최고관리자 · 관리자만 볼 수 있습니다</b></div></div>';return;}
-    var S=finSums(), card=function(k,v,s){return '<div class="num-card"><div class="k">'+k+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div></div>';};
-    var h='<div class="num-cards" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">'
-      +card('내부 의뢰 · 받을 돈',wonS(S.request[1]),S.request[0]+'건'+(S.request[2]?' · 금액 칸 빈 의뢰 '+S.request[2]+'건(합계에서 빠짐)':''))
-      +card('외부 작업 · 남은 돈',wonS(S.ext[1]),S.ext[0]+'줄 · 받을 차례인 줄만')
-      +card('블로그 센터 · 미입금 주문',wonS(S.blog[1]),S.blog[0]+'건 · 처리는 블로그 센터에서')+'</div>'
-      +'<p class="muted" style="font-size:.78rem;margin:-4px 0 12px">홈페이지 관리비 대장은 이 화면에 넣지 않습니다(「💰 관리비 대장 모아보기」에서 따로).</p>';
-    if(FIN.tableOk===false)h+='<div class="card" style="border-color:#FCA5A5;background:#FEF2F2;font-size:.84rem">⚠ 처리 기록 표(fin_bank_txns)가 아직 DB 에 없습니다 — 분석 · 후보 · 미리 보기는 되지만 «처리»는 막아 둡니다(같은 거래를 두 번 반영하지 않으려고). 「12 재정 입금처리」 SQL 을 적용하면 열립니다.</div>';
-    h+='<div class="card ext-card"><h3>① 거래내역 붙여 넣기</h3>'
-      +'<textarea class="inp" id="fin_text" style="min-height:120px" placeholder="은행 앱 · 인터넷뱅킹 거래내역을 복사해 그대로 붙여 넣으세요.&#10;예) 2026.11.21 14:03  김○○  50,000  …">'+'</textarea>'
-      +'<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center"><button class="btn btn-primary" type="button" onclick="finParseGo()">분석</button>'
-      +'<button class="btn btn-ghost" type="button" onclick="finAddRow()">＋ 줄 직접 넣기</button><button class="btn btn-ghost" type="button" onclick="finClear()">지우기</button>'
-      +'<span class="muted" style="font-size:.78rem">읽기만 합니다 — 저장은 아래에서 고르고 최종 확인을 눌렀을 때만. 출금 줄은 뺍니다'+(FIN.skipped?' (이번에 뺀 출금 '+FIN.skipped+'줄)':'')+'.</span></div></div>';
-    h+='<div class="card ext-card"><h3>② 거래 확인 · 대상 고르기 <span class="muted" style="font-weight:600;font-size:.8rem">— ★ = 금액이나 이름이 맞는 후보 · 읽은 값이 틀리면 칸을 고치세요</span></h3><div id="fin_rows"></div>'
-      +'<div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-primary" id="fin_go" type="button" onclick="finPreview()" disabled>선택한 0건 미리 보기</button></div><div id="fin_pv"></div></div>';
-    h+='<div class="card ext-card"><h3>최근 반영한 거래 <span class="muted" style="font-weight:600;font-size:.8rem">— 이 화면에서 처리한 것 · 최근 30건</span></h3>'
-      +(FIN.loading?'<div class="muted">불러오는 중…</div>':FIN.tableOk===false?'<div class="muted" style="font-size:.84rem">처리 기록 표가 아직 없습니다.</div>'
-        :(FIN.done.length?FIN.done.slice(0,30).map(function(d){return '<div class="fin-d"><span class="tnum">'+esc(d.txn_date)+(d.txn_time?' '+esc(d.txn_time):'')+'</span><span>'+esc(d.payer||'-')+'</span><span class="tnum">'+wonS(d.amount)+'</span><span>'+esc(d.target_label||'')+'</span><span>'+(d.result==='full'?'✅ 입금 완료':'◐ 부분 입금')+'</span><span class="muted">'+esc(staffName(d.by_staff)||'')+' · '+esc(fdate(d.created_at))+'</span></div>';}).join('')
+    var P=finSplit(), si=finSum(P.request), sx=finSum(P.ext), bs=FIN.blog.reduce(function(a,o){return a+(Number(o.amount_total)||0);},0);
+    var card=function(k,v,s){return '<div class="num-card"><div class="k">'+k+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div></div>';};
+    var h='<div class="num-cards" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">'
+      +card('🏠 내부 의뢰 · 잔액',wonS(si.due),si.n+'건 · 미입금 '+si.none+' · 청구 '+wonS(si.total)+' · 기입금 '+wonS(si.paid)+(si.noAmt?'<br><b style="color:#B45309">금액 칸 빈 '+si.noAmt+'건(합계에서 빠짐)</b>':''))
+      +card('🤝 외부 작업 · 잔액',wonS(sx.due),sx.n+'줄 · 미입금 '+sx.none+' · 부분 입금 '+sx.part+' · 청구 '+wonS(sx.total)+' · 기입금 '+wonS(sx.paid))+'</div>'
+      +'<p class="muted" style="font-size:.78rem;margin:-4px 0 12px;line-height:1.6">내부 · 외부 금액은 따로 셉니다(합치지 않음). 홈페이지 관리비 대장은 여기 넣지 않습니다(「💰 관리비 대장 모아보기」에서 따로). '
+      +'블로그 센터 미입금 주문 '+FIN.blog.length+'건'+(FIN.blog.length?' · '+wonS(bs):'')+' — 입금 처리는 블로그 센터에서 합니다.</p>';
+    if(FIN.tableOk===false)h+='<div class="card" style="border-color:#FCA5A5;background:#FEF2F2;font-size:.84rem">⚠ 처리 기록 표(fin_bank_txns)를 읽지 못했습니다 — 목록 · 미리 보기는 되지만 «처리»는 막아 둡니다(같은 입금을 두 번 반영하지 않으려고).</div>';
+    h+='<div class="card ext-card"><h3>입금 대기 목록 <span class="muted" style="font-weight:600;font-size:.8rem">— 통장에서 직접 확인한 줄만 체크 → 입금일 · 입금액 확인 → 미리 보기 → 최종 확인</span></h3>'
+      +'<p class="muted" style="font-size:.78rem;margin:0 0 8px;line-height:1.6">처음엔 아무것도 체크돼 있지 않습니다. 내부 의뢰는 <b>전액을 확인했을 때만</b> 입금 완료로 처리합니다(부분 입금 없음). 외부 작업은 <b>확인한 금액</b>을 넣으면 잔액과 같을 때 입금 완료, 작으면 부분 입금입니다. 잔액보다 큰 금액은 처리하지 않습니다.</p>'
+      +'<div id="fin_list"></div>'
+      +'<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn btn-primary" id="fin_go" type="button" onclick="finPreview()" disabled>체크한 0건 미리 보기</button>'
+      +'<button class="btn btn-ghost" type="button" onclick="finClearSel()">체크 모두 풀기</button></div><div id="fin_pv"></div></div>';
+    h+='<div class="card ext-card"><h3>최근 반영한 입금 <span class="muted" style="font-weight:600;font-size:.8rem">— 이 화면에서 처리한 것 · 최근 30건</span></h3>'
+      +(FIN.loading?'<div class="muted">불러오는 중…</div>':FIN.tableOk===false?'<div class="muted" style="font-size:.84rem">처리 기록 표를 읽지 못했습니다.</div>'
+        :(FIN.done.length?FIN.done.slice(0,30).map(function(d){return '<div class="fin-d"><span class="tnum">'+esc(d.txn_date)+(d.txn_time?' '+esc(d.txn_time):'')+'</span><span>'+esc(d.payer||(/^m\|/.test(d.fingerprint||'')?'통장 확인':'-'))+'</span><span class="tnum">'+wonS(d.amount)+'</span><span>'+esc(d.target_label||'')+'</span><span>'+(d.result==='full'?'✅ 입금 완료':'◐ 부분 입금')+'</span><span class="muted">'+esc(staffName(d.by_staff)||'')+' · '+esc(fdate(d.created_at))+'</span></div>';}).join('')
           :'<div class="muted" style="font-size:.84rem">아직 없습니다.</div>'))+'</div>';
-    var keep=$('fin_text')?$('fin_text').value:'';
-    b.innerHTML=h; if(keep)$('fin_text').value=keep;
-    renderPayRows(); if(FIN.preview)finPreviewHTML();
+    b.innerHTML=h;
+    renderPayList();
   };
   window.finPreview=function(){
-    var sel=FIN.rows.filter(function(r){return r.sel;}), dup=finDupTargets(sel);
-    FIN.preview={ok:sel.filter(function(r){return r.res&&r.res.ok&&!dup[r.pick];}),bad:sel.filter(function(r){return !(r.res&&r.res.ok)||dup[r.pick];})};
-    finPreviewHTML();
+    var P=finSplit(), all=P.request.concat(P.ext), ok=[], bad=[];
+    all.forEach(function(t){var S=finSt(t.key); if(!S.on)return; var r=finManCheck(t,S);
+      if(r.ok)ok.push({t:t,a:r.amt,date:S.date,res:r,prior:finPrior(t),fp:finFpMan(t,r.amt,S.date)}); else bad.push({t:t,msg:r.msg});});
+    FIN.preview={ok:ok,bad:bad}; finPreviewHTML();
   };
   function finPreviewHTML(){
     var P=FIN.preview, box=$('fin_pv'); if(!P||!box)return;
-    var sum=P.ok.reduce(function(a,r){return a+(Number(r.amount)||0);},0);
-    box.innerHTML='<div class="fin-pv"><h4>미리 보기 — 처리할 '+P.ok.length+'건 · 합계 '+wonS(sum)+'</h4>'
-      +P.ok.map(function(r){return '<div>· <b>'+esc(r.target.label)+'</b> ← '+esc(r.date)+' '+esc(r.payer||'')+' '+wonS(r.amount)+'<br><span class="muted">　'+esc(r.res.msg)+'</span></div>';}).join('')
-      +(P.bad.length?'<div style="color:#B45309;margin-top:6px">빼는 것 '+P.bad.length+'건 — 검토 필요</div>':'')
+    var grp=function(k){return P.ok.filter(function(p){return p.t.kind===k;});}, si=grp('request'), sx=grp('ext'), sm=function(L){return L.reduce(function(a,p){return a+(Number(p.a)||0);},0);};
+    var part=function(L,title){return L.length?'<div style="margin-top:6px"><b>'+title+' '+L.length+'건 · '+wonS(sm(L))+'</b></div>'+L.map(function(p){return '<div>· <b>'+esc(p.t.pj+' · '+p.t.name)+'</b> ← '+esc(p.date)+' 입금 '+wonS(p.a)+'<br><span class="muted">　'+esc(p.res.msg)+'</span></div>';}).join(''):'';};
+    box.innerHTML='<div class="fin-pv"><h4>미리 보기 — 처리할 '+P.ok.length+'건 (아직 저장 안 함)</h4>'
+      +part(si,'🏠 내부 의뢰')+part(sx,'🤝 외부 작업')
+      +(P.bad.length?'<div style="color:#B45309;margin-top:6px">빼는 것 '+P.bad.length+'건 — '+P.bad.map(function(x){return esc(x.t.name)+' : '+esc(x.msg);}).join(' / ')+'</div>':'')
       +'<div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-primary" type="button" onclick="finRun()"'+(P.ok.length&&FIN.tableOk?'':' disabled')+'>'+P.ok.length+'건 처리하기</button>'
       +'<button class="btn btn-ghost" type="button" onclick="FIN_CANCEL()">취소</button>'
       +(FIN.tableOk?'':'<span style="color:var(--bad);font-size:.8rem">처리 기록 표가 없어 막아 둠</span>')+'</div></div>';
@@ -3793,21 +3724,26 @@
     if(!canFin()){toast('최고관리자 · 관리자만 처리할 수 있습니다');return;}
     if(!FIN.tableOk){toast('처리 기록 표가 없어 처리할 수 없습니다');return;}
     var list=FIN.preview.ok; if(!list.length)return;
-    if(!confirm(list.length+'건을 처리합니다.\n\n'+list.map(function(r){return '· '+r.target.label+' ← '+wonS(r.amount)+'\n   '+r.res.msg;}).join('\n')+'\n\n처리할까요? (블로그 주문 · 관리비 대장은 바뀌지 않습니다)'))return;
+    if(!confirm(list.length+'건을 입금 처리합니다. 통장에서 직접 확인한 입금이 맞습니까?\n\n'+list.map(function(p){return '· '+(p.t.kind==='request'?'[내부] ':'[외부] ')+p.t.pj+' · '+p.t.name+' ← '+p.date+' '+wonS(p.a)+'\n   '+p.res.msg;}).join('\n')+'\n\n처리할까요? (블로그 주문 · 관리비 대장은 바뀌지 않습니다)'))return;
     FIN_BUSY=true; var log=[];
     try{
       try{await loadExt();}catch(e){}
-      var dd=await sb.from('fin_bank_txns').select('fingerprint').in('fingerprint',list.map(function(r){return r.fp;}));
+      var dd=await sb.from('fin_bank_txns').select('fingerprint').in('fingerprint',list.map(function(p){return p.fp;}));
       var had={}; (dd.data||[]).forEach(function(x){had[x.fingerprint]=1;});
+      var M={}; finTargets().forEach(function(t){M[t.key]=t;});   /* 최신 자료로 다시 확인 */
       for(var i=0;i<list.length;i++){
-        var r=list[i]; finEval(r);   /* 최신 자료로 다시 확인 */
-        if(had[r.fp]){log.push('⏭ '+r.target.label+' — 이미 반영한 거래');continue;}
-        if(!r.res.ok){log.push('⏭ '+(r.target?r.target.label:'')+' — '+r.res.msg);continue;}
-        log.push(await finApply(r));
+        var p=list[i], t=M[p.t.key], lab=p.t.pj+' · '+p.t.name;
+        if(!t){log.push('⏭ '+lab+' — 이미 다 받았거나 처리 대상이 아닙니다');continue;}
+        if(finPrior(t)!==p.prior){log.push('⏭ '+lab+' — 그 사이 입금 상태가 바뀌었습니다. 다시 확인해 주세요');continue;}
+        var res=finManCheck(t,{amt:p.a,date:p.date});
+        if(!res.ok){log.push('⏭ '+lab+' — '+res.msg);continue;}
+        if(had[p.fp]){log.push('⏭ '+lab+' — 이미 반영한 입금');continue;}
+        log.push(await finApply({fp:p.fp,date:p.date,time:null,payer:null,amount:p.a,target:t,res:res,src:'통장 확인'}));
       }
     }finally{FIN_BUSY=false;}
+    FIN.sel={}; FIN.preview=null;
     await finLoad(); try{await xReload();}catch(e){}
-    FIN.rows.forEach(function(x){x.sel=false;}); FIN.rows.forEach(finEval); FIN.preview=null; renderPay();
+    renderPay();
     alert('처리 결과\n\n'+log.join('\n'));
   };
   async function finApply(r){
@@ -3827,14 +3763,14 @@
     var j=t.j, l=t.l, what=(l.period?ymKo(l.period)+' ':'')+(l.ep?l.label+' ':'')+wonS(l.amount), q;
     if(res.kind==='full'){
       q=l.row?sb.from('ext_payments').update({amount:l.amount,paid_kind:'full'}).eq('id',l.row.id).select().maybeSingle()
-             :sb.from('ext_payments').insert({job_id:j.id,episode_id:l.epId||null,period:l.period||null,amount:l.amount,paid_at:r.date,by_staff:ME.id,payer:jobPayer(j),note:'재정 · 은행 입금'}).select().maybeSingle();
+             :sb.from('ext_payments').insert({job_id:j.id,episode_id:l.epId||null,period:l.period||null,amount:l.amount,paid_at:r.date,by_staff:ME.id,payer:jobPayer(j),note:'재정 · '+(r.src||'은행 입금')}).select().maybeSingle();
     }else{
       q=l.row?sb.from('ext_payments').update({amount:res.newPaid,paid_kind:'partial'}).eq('id',l.row.id).select().maybeSingle()
-             :sb.from('ext_payments').insert({job_id:j.id,episode_id:l.epId||null,period:l.period||null,amount:res.newPaid,paid_kind:'partial',paid_at:r.date,by_staff:ME.id,payer:jobPayer(j),note:'재정 · 은행 입금'}).select().maybeSingle();
+             :sb.from('ext_payments').insert({job_id:j.id,episode_id:l.epId||null,period:l.period||null,amount:res.newPaid,paid_kind:'partial',paid_at:r.date,by_staff:ME.id,payer:jobPayer(j),note:'재정 · '+(r.src||'은행 입금')}).select().maybeSingle();
     }
     var w=await q;
     if(w.error||!w.data){await undo();return '❌ '+t.label+' — '+(w.error?payDbMsg(w.error):'권한이 없습니다');}
-    await sb.from('ext_job_events').insert({job_id:j.id,kind:'pay',from_val:l.full?'✅':(l.kind==='partial'?'◐ '+wonS(l.paid):'☑️'),to_val:res.kind==='full'?'✅':'◐ '+wonS(res.newPaid),note:what+' · 재정 은행 입금 '+wonS(a)+' ('+r.date+')',by_staff:ME.id});
+    await sb.from('ext_job_events').insert({job_id:j.id,kind:'pay',from_val:l.full?'✅':(l.kind==='partial'?'◐ '+wonS(l.paid):'☑️'),to_val:res.kind==='full'?'✅':'◐ '+wonS(res.newPaid),note:what+' · 재정 '+(r.src||'은행 입금')+' '+wonS(a)+' ('+r.date+')',by_staff:ME.id});
     return '✅ '+t.label+' — '+(res.kind==='full'?'입금 완료':'부분 입금 '+wonS(res.newPaid));
   }
 
@@ -3884,11 +3820,17 @@
     return out;
   }
   function reqSum(R){return {n:R.length,due:R.reduce(function(a,x){return a+(Number(x.due)||0);},0),noAmt:R.filter(function(x){return x.due==null;}).length};}
+  function dlWhyHTML(){   /* 11/21 나-1121-5 : 두 내려받기의 목적을 화면에 — 자료 · 계산은 서로 섞지 않음 */
+    return '<div class="fin-why"><b>📥 내려받기 두 가지 — 목적이 다릅니다</b><br>'
+      +'① <b>입금 요청 목록</b> : 아직 <b>받을 금액이 남은</b> 항목을 프로젝트별로 정리한 자료 → <b>거래처에 입금을 요청</b>할 때 씁니다. (지금 기준 · 오늘 상태)<br>'
+      +'② <b>재정 내보내기</b> : 고른 달의 <b>매출(입금된 것) · 지출 · 개인별 몫</b> → 대표님 재정표(장부)에 붙일 때 씁니다. (월별 · 이미 일어난 돈)<br>'
+      +'<span class="muted">두 자료는 따로 계산합니다 — ①의 잔액은 ②의 매출에 들어가지 않고, ②의 매출은 ①에 들어가지 않습니다.</span></div>';
+  }
   function reqCard(){
     if(!canFin())return '';
     var R=reqRows(), S=reqSum(R), cats={};
     R.forEach(function(x){var c=cats[x.cat]=cats[x.cat]||{n:0,due:0};c.n++;c.due+=Number(x.due)||0;});
-    return '<div class="card ext-card"><h3>입금 요청 목록 내려받기 <span class="muted" style="font-weight:600;font-size:.8rem">— 완료돼 입금 요청을 보낼 것 · 카테고리 · 프로젝트별 · 최고관리자 · 관리자만</span></h3>'
+    return '<div class="card ext-card"><h3>① 입금 요청 목록 내려받기 <span class="muted" style="font-weight:600;font-size:.8rem">— 거래처에 입금을 요청할 자료 · 받을 금액이 남은 것 · 카테고리 · 프로젝트별</span></h3>'
       +'<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><button class="btn btn-ghost" type="button" onclick="reqExport()">📥 입금 요청 목록 (CSV)</button>'
       +'<span style="font-size:.84rem">'+S.n+'건 · 잔액 '+wonS(S.due)+(S.noAmt?' · <b style="color:#B45309">금액 없는 '+S.noAmt+'건(합계에서 빠짐)</b>':'')+'</span>'
       +'<span class="muted" style="font-size:.78rem">'+Object.keys(cats).map(function(k){return esc(k)+' '+cats[k].n+'건 '+wonS(cats[k].due);}).join(' · ')+'</span></div>'
@@ -3911,7 +3853,7 @@
   function finCard(){
     if(!canFin())return '';
     var ym=$('finYM')?$('finYM').value:lgNow();
-    return '<div class="card ext-card"><h3>재정 내보내기 <span class="muted" style="font-weight:600;font-size:.8rem">— 재정표(마케팅 통합관리대장) 칸 순서 그대로 · 대표 · 관리자만</span></h3>'
+    return '<div class="card ext-card"><h3>② 재정 내보내기 <span class="muted" style="font-weight:600;font-size:.8rem">— 월별 매출 · 지출 · 개인별 몫 · 재정표(마케팅 통합관리대장) 칸 순서 그대로</span></h3>'
       +'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
       +'<input class="inp" type="month" id="finYM" value="'+esc(ym)+'" style="width:auto">'
       +'<button class="btn btn-ghost" type="button" onclick="finExport(\'sales\')">① 매출 → 매출관리대장</button>'
