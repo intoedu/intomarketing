@@ -303,6 +303,21 @@
   .pay-b.off{color:#B45309}
   .pay-b:disabled{cursor:default;opacity:.85}
   .pay-l.na{color:var(--muted)}
+  /* 입금 세 가지 (2026-11-21) — 미입금 · 부분 입금 · 입금 완료 */
+  .pay-seg{display:inline-flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden;flex:none}
+  .pay-seg button{border:0;border-left:1px solid var(--line);background:var(--surface);padding:3px 8px;font-size:.76rem;font-weight:800;cursor:pointer;white-space:nowrap;color:var(--muted)}
+  .pay-seg button:first-child{border-left:0}
+  .pay-seg button.on.k-none{background:#FFF7ED;color:#B45309}
+  .pay-seg button.on.k-partial{background:#FEF3C7;color:#92400E}
+  .pay-seg button.on.k-full{background:#DCFCE7;color:#15803D}
+  .pay-seg button:disabled{cursor:default;opacity:.9}
+  .pay-l .pp{display:block;font-size:.72rem;font-weight:700;color:#92400E;text-align:right}
+  .pay-ed{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 10px;margin:2px 0 6px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;font-size:.84rem}
+  .pay-ed input{width:120px;padding:5px 8px;border:1.5px solid var(--line);border-radius:8px;font:inherit;text-align:right}
+  .pay-ed input.pct{width:72px}
+  .pay-ed .msg{flex-basis:100%;font-size:.78rem;color:var(--bad);min-height:0}
+  .pay-sum{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;padding:8px 10px;margin-bottom:6px;background:var(--surface-2);border-radius:10px;font-size:.84rem}
+  .pay-sum b{font-variant-numeric:tabular-nums}
   .num-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 14px}
   .num-card{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px 16px}
   .num-card .k{font-size:.78rem;font-weight:800;color:var(--muted)}
@@ -2958,6 +2973,10 @@
 
   /* ---------- 외부 6단계 : 숫자 — 입금 ✅ / ☑️ (2026-11-02 이은총 님) ----------
      ext_payments 에 줄이 있으면 ✅ 입금 완료, 없으면 ☑️ 미입금 (설명서 7장 · 9장 — 진행 상태와 따로).
+     🔵 2026-11-21 이은총 님 「부분 입금」 : 세 가지 = 미입금(줄 없음) · 부분 입금(줄 있음 + paid_kind='partial' · amount = 실제 받은 돈) ·
+        입금 완료(줄 있음 + paid_kind 'full' 또는 칸 없음 = 예전 줄 그대로). 기록 단위는 지금처럼 «입금 줄 하나» (단건 1 · 월정액 달마다 · 건당 회차마다)
+        — 작업 전체 상태는 줄을 합쳐 «보여 주기만» 함(payJobSum). 부분 입금 줄의 전체 금액 = 지금 작업 금액(단가). 받을 돈 = 전체 − 받은 돈.
+        수익 창출(l.amount = 전체 금액)은 그대로, 입금 완료(ext_payments.amount 합)는 실제 받은 돈만. 칸 = 클로드/ext-db/11_외주_부분입금.sql
      단건 = 작업 하나에 한 번 · 월정액 = 달마다(시작한 달 ~ 이번 달) · 건당 = 회차마다.
      받을 돈(미입금) 셈 : 단건은 「중단」 빼고 · 월정액은 달마다 · 건당은 「완료」 회차만(설명서 6-2 「단가 × 완료 회차 수」).
      입금 줄의 amount = 표시한 때의 금액. 아직 안 받은 건당 회차는 지금 단가로 셈(옛 단가 적용 여부는 이은총 님 확인 전).
@@ -2981,36 +3000,62 @@
     var out=[],m=start,guard=0; while(m<=end&&guard++<120){out.push(m);m=ymNext(m);} return out;
   }
   /* 입금 줄 — {label, epId, period, amount, row(✅ 이면 입금 줄), owe(받을 돈에 넣는지)} */
-  function payLines(j){
-    if(j.price_type==='월정액')return jobMonths(j).reverse().map(function(m){var r=payOf(j.id,null,m);
-      return {label:m.slice(0,4)+'년 '+ymKo(m),period:m,amount:r?r.amount:j.amount,row:r,owe:true};});
-    if(j.price_type==='건당')return jobEps(j.id).map(function(e){var r=payOf(j.id,e.id,null);
-      return {label:(e.ymd?e.ymd+' ':'')+e.title,epId:e.id,amount:r?r.amount:j.amount,row:r,owe:e.status==='완료',ep:e};});
-    var r=payOf(j.id,null,null);
-    return [{label:'작업 금액',amount:r?r.amount:j.amount,row:r,owe:j.status!=='중단'}];
+  function payKind(r){return !r?'none':(r.paid_kind==='partial'?'partial':'full');}   /* 칸이 없거나 비면(예전 줄) = 입금 완료 */
+  /* 줄 한 개 : amount = 그 줄 전체 금액(완료 줄은 표시한 때 금액 · 그 밖에는 지금 단가) · paid = 실제 받은 돈 · full = 다 받음 */
+  function payLineOf(o,r,unit){
+    var k=payKind(r);
+    o.row=r; o.kind=k; o.full=(k==='full');
+    o.amount=(k==='full')?r.amount:unit;
+    o.paid=(k==='none')?0:(Number(r.amount)||0);
+    return o;
   }
-  function pjOwe(pid){var n=0;pjJobs(pid).forEach(function(j){payLines(j).forEach(function(l){if(!l.row&&l.owe)n++;});});return n;}
+  function lineDue(l){return l.full?0:Math.max(0,(Number(l.amount)||0)-(Number(l.paid)||0));}   /* 남은 금액 */
+  function payPct(paid,total){total=Number(total)||0; if(total<=0)return null; return Math.round(paid/total*1000)/10;}   /* 소수 한 자리 */
+  function payLines(j){
+    if(j.price_type==='월정액')return jobMonths(j).reverse().map(function(m){
+      return payLineOf({label:m.slice(0,4)+'년 '+ymKo(m),period:m,owe:true},payOf(j.id,null,m),j.amount);});
+    if(j.price_type==='건당')return jobEps(j.id).map(function(e){
+      return payLineOf({label:(e.ymd?e.ymd+' ':'')+e.title,epId:e.id,owe:e.status==='완료',ep:e},payOf(j.id,e.id,null),j.amount);});
+    return [payLineOf({label:'작업 금액',owe:j.status!=='중단'},payOf(j.id,null,null),j.amount)];
+  }
+  /* 작업 전체 입금 (보여 주기만) — 받을 줄(입금 줄이 있거나 받을 차례인 줄)을 합침 */
+  function payJobSum(j){
+    var L=payLines(j).filter(function(l){return l.row||l.owe;}), total=0, paid=0, part=0;
+    L.forEach(function(l){total+=Number(l.amount)||0; paid+=Number(l.paid)||0; if(l.kind==='partial')part++;});
+    var st=!L.length?'none':(L.every(function(l){return l.full;})?'full':(paid>0?'partial':'none'));   /* 줄이 모두 다 받음 = 완료 · 조금이라도 받음 = 부분 */
+    return {n:L.length,total:total,paid:paid,left:Math.max(0,total-paid),pct:payPct(paid,total),part:part,state:st};
+  }
+  function pjOwe(pid){var n=0;pjJobs(pid).forEach(function(j){payLines(j).forEach(function(l){if(!l.full&&l.owe)n++;});});return n;}   /* 부분 입금도 덜 받은 줄로 셈 */
   function payBadge(j){
-    var L=payLines(j), owe=L.filter(function(l){return !l.row&&l.owe;});
+    var L=payLines(j), owe=L.filter(function(l){return !l.full&&l.owe;}), part=L.filter(function(l){return l.kind==='partial';}).length;
+    var ico=function(l){return l.full?'✅ ':(l.kind==='partial'?'◐ ':'☑️ ');};
     if(j.price_type==='월정액'){var c=L[0];if(!c)return '';
-      return '<div class="pb'+(owe.length?' owe':'')+'">'+(c.row?'✅ ':'☑️ ')+ymKo(c.period)+(owe.length&&(!c.row?owe.length>1:true)?' · 미입금 '+owe.length+'달':'')+'</div>';}
-    if(j.price_type==='건당'){var done=L.filter(function(l){return l.owe;}), pd=L.filter(function(l){return l.row;});
-      return '<div class="pb'+(owe.length?' owe':'')+'">'+(done.length?(owe.length?'☑️ ':'✅ ')+'입금 '+pd.length+'/'+done.length+'편':'완료 회차 없음')+'</div>';}
-    return '<div class="pb'+(owe.length?' owe':'')+'">'+(L[0].row?'✅ 입금':j.status==='중단'?'☑️ 중단 (청구 안 함)':'☑️ 미입금')+'</div>';
+      return '<div class="pb'+(owe.length?' owe':'')+'">'+ico(c)+ymKo(c.period)+(c.kind==='partial'?' 부분 '+payPct(c.paid,c.amount)+'%':'')
+        +(owe.length&&(!c.full?owe.length>1:true)?' · '+(part?'덜 받음 ':'미입금 ')+owe.length+'달':'')+'</div>';}
+    if(j.price_type==='건당'){var done=L.filter(function(l){return l.owe;}), pd=L.filter(function(l){return l.full;});
+      return '<div class="pb'+(owe.length?' owe':'')+'">'+(done.length?(owe.length?(part?'◐ ':'☑️ '):'✅ ')+'입금 '+pd.length+'/'+done.length+'편'+(part?' · 부분 '+part+'편':''):'완료 회차 없음')+'</div>';}
+    var l=L[0];
+    return '<div class="pb'+(owe.length?' owe':'')+'">'+(l.full?'✅ 입금':l.kind==='partial'?'◐ 부분 입금 '+payPct(l.paid,l.amount)+'% · 남은 '+wonS(lineDue(l)):j.status==='중단'?'☑️ 중단 (청구 안 함)':'☑️ 미입금')+'</div>';
   }
   function payLineHTML(j,l,o){
     o=o||{}; var can=canPay(j.project_id), r=l.row;
     var who=r?((r.paid_at?r.paid_at.slice(5).replace('-','/')+' 확인':'날짜 모름')+(r.by_staff?' · '+(staffName(r.by_staff)||''):'')+(r.note?' · '+r.note:'')):(!l.owe?(l.ep?'회차 '+l.ep.status:'중단 — 받을 돈에서 뺌'):'');
+    var arg='\''+j.id+'\',\''+(l.epId||'')+'\',\''+(l.period||'')+'\'';
+    var seg=function(k,t){return '<button type="button" class="k-'+k+(l.kind===k?' on':'')+'"'+(can?' onclick="paySet(this,'+arg+',\''+k+'\')"':' disabled')+'>'+t+'</button>';};
     return '<div class="pay-l'+(!r&&!l.owe?' na':'')+'">'
-      +'<button class="pay-b '+(r?'on':'off')+'" type="button"'+(can?' onclick="payToggle(\''+j.id+'\',\''+(l.epId||'')+'\',\''+(l.period||'')+'\')"':' disabled title="입금 표시는 그 프로젝트 관리자 · 최고관리자만"')+'>'+(r?'✅ 입금 완료':'☑️ 미입금')+'</button>'
+      +'<span class="pay-seg"'+(can?'':' title="입금 표시는 그 프로젝트 관리자 · 최고관리자만"')+'>'+seg('none','☑️ 미입금')+seg('partial','◐ 부분 입금')+seg('full','✅ 입금 완료')+'</span>'
       +(o.title?'<span class="lb2"><b>'+esc(j.title)+'</b> · '+esc(l.label)+'</span>':'<span class="lb2">'+esc(l.label)+'</span>')
       +(o.payer?'<span class="who">'+esc(payerOf(j,l))+'</span>':'')
-      +'<span class="who"'+(r&&can?' style="cursor:pointer;text-decoration:underline dotted" title="입금 확인한 날 고치기" onclick="payDate(\''+r.id+'\')"':'')+'>'+esc(who)+'</span><span class="am">'+wonS(l.amount)+'</span></div>';
+      +'<span class="who"'+(r&&can?' style="cursor:pointer;text-decoration:underline dotted" title="입금 확인한 날 고치기" onclick="payDate(\''+r.id+'\')"':'')+'>'+esc(who)+'</span>'
+      +'<span class="am">'+wonS(l.amount)+(l.kind==='partial'?'<span class="pp">입금 '+wonS(l.paid)+' · '+payPct(l.paid,l.amount)+'% · 남은 '+wonS(lineDue(l))+'</span>':'')+'</span></div>';
   }
   function payBoxHTML(j){
     var L=payLines(j);
     if(!L.length)return '<span class="muted">'+(j.price_type==='건당'?'아직 회차가 없습니다 — 「할 일」 탭에서 회차를 넣으면 회차마다 입금을 표시합니다.':'표시할 줄이 없습니다.')+'</span>';
-    return L.map(function(l){return payLineHTML(j,l);}).join('');
+    var S=payJobSum(j), stT={none:'☑️ 미입금',partial:'◐ 부분 입금',full:'✅ 입금 완료'}[S.state];
+    var head='<div class="pay-sum"><span>상태 <b>'+stT+'</b></span><span>입금액 <b>'+wonS(S.paid)+'</b></span><span>남은 금액 <b style="color:'+(S.left?'#B45309':'inherit')+'">'+wonS(S.left)+'</b></span>'
+      +'<span>입금률 <b>'+(S.pct==null?'-':S.pct+'%')+'</b></span><span class="muted" style="font-size:.76rem">전체 '+wonS(S.total)+(L.length>1?' · '+(j.price_type==='건당'?'회차':'달')+'마다 따로 표시 · 받을 차례인 줄만 합침':'')+'</span></div>';
+    return head+L.map(function(l){return payLineHTML(j,l);}).join('');
   }
   var PAY_BUSY=false;
   window.payToggle=async function(jid,epId,period){
@@ -3024,7 +3069,10 @@
     epId=epId||null; period=period||null;
     var l=payLines(j).filter(function(x){return (x.epId||null)===epId&&(x.period||null)===period;})[0]; if(!l)return;
     var what=(period?ymKo(period)+' ':'')+(l.ep?l.label+' ':'')+wonS(l.amount);
-    if(l.row){
+    if(l.kind==='partial'){   /* 부분 입금 → 입금 완료 (11/21) */
+      if(!confirm('「'+j.title+'」 '+what+'\n부분 입금('+wonS(l.paid)+')을 입금 완료(전액 '+wonS(l.amount)+')로 바꿀까요?'))return;
+      if(!await payToFull(j,l,what))return;
+    }else if(l.row){
       if(!confirm('「'+j.title+'」 '+what+'\n입금 완료(✅) 표시를 지우고 ☑️ 미입금으로 돌릴까요?'))return;
       var d=await sb.from('ext_payments').delete().eq('id',l.row.id).select();
       if(d.error||!(d.data||[]).length){toast('바꾸기 실패: '+(d.error?d.error.message:'권한을 확인해 주세요'));return;}
@@ -3042,6 +3090,94 @@
       var nj=EXT.jobs.filter(function(x){return x.id===jid;})[0]; if(nj)$('jb_pay').innerHTML=payBoxHTML(nj);
     }
   };
+  /* ── 입금 세 가지 단추 (2026-11-21 이은총 님) ── 미입금 = 줄 지움 · 입금 완료 = 전액 · 부분 입금 = 금액 / % 입력 창 */
+  function payFind(jid,epId,period){
+    var j=EXT.jobs.filter(function(x){return x.id===jid;})[0]; if(!j)return {};
+    epId=epId||null; period=period||null;
+    return {j:j,l:payLines(j).filter(function(x){return (x.epId||null)===epId&&(x.period||null)===period;})[0]};
+  }
+  function payDbMsg(e){var m=(e&&e.message)||'';
+    if(/paid_kind/.test(m))return '부분 입금 칸이 아직 DB 에 없습니다 — 관리자에게 「11 외주 부분입금」 적용을 요청해 주세요';
+    return /row-level security/i.test(m)?'권한이 없습니다':m;}
+  async function payRefresh(jid){
+    await xReload();
+    if($('jbModal').classList.contains('open')&&$('jb_id').value===jid){
+      var nj=EXT.jobs.filter(function(x){return x.id===jid;})[0]; if(nj)$('jb_pay').innerHTML=payBoxHTML(nj);
+    }
+  }
+  async function payToFull(j,l,what){
+    var u=await sb.from('ext_payments').update({amount:l.amount,paid_kind:'full'}).eq('id',l.row.id).select().maybeSingle();
+    if(u.error||!u.data){toast('바꾸기 실패: '+(u.error?payDbMsg(u.error):'권한을 확인해 주세요'));return false;}
+    var e=await sb.from('ext_job_events').insert({job_id:j.id,kind:'pay',from_val:'◐ '+wonS(l.paid),to_val:'✅',note:what,by_staff:ME.id});
+    toast('✅ 입금 완료로 바꿨습니다'+(e.error?' (기록 남기기 실패)':'')); return true;
+  }
+  window.paySet=async function(btn,jid,epId,period,k){
+    if(PAY_BUSY)return;
+    if(EXT.err){toast('외주 자료를 다 못 불러와서 입금 표시를 막았습니다 — 새로고침해 주세요');return;}
+    var f=payFind(jid,epId,period), j=f.j, l=f.l; if(!j||!l)return;
+    if(!canPay(j.project_id)){toast('입금 표시는 그 프로젝트 관리자 · 최고관리자만 할 수 있습니다');return;}
+    if(k==='partial'){payPartOpen(btn,j,l);return;}
+    if(l.kind===k)return;
+    if(k==='none'&&!l.row)return;
+    if(k==='none'&&l.kind==='partial'){   /* 부분 입금 → 미입금 : 줄을 지움 */
+      var what=(l.period?ymKo(l.period)+' ':'')+(l.ep?l.label+' ':'')+wonS(l.amount);
+      if(!confirm('「'+j.title+'」 '+what+'\n부분 입금('+wonS(l.paid)+') 기록을 지우고 ☑️ 미입금으로 돌릴까요?'))return;
+      PAY_BUSY=true;
+      try{
+        var d=await sb.from('ext_payments').delete().eq('id',l.row.id).select();
+        if(d.error||!(d.data||[]).length){toast('바꾸기 실패: '+(d.error?payDbMsg(d.error):'권한을 확인해 주세요'));return;}
+        var e=await sb.from('ext_job_events').insert({job_id:jid,kind:'pay',from_val:'◐ '+wonS(l.paid),to_val:'☑️',note:what,by_staff:ME.id});
+        toast('☑️ 미입금으로 돌렸습니다'+(e.error?' (기록 남기기 실패)':''));
+        await payRefresh(jid);
+      }finally{PAY_BUSY=false;}
+      return;
+    }
+    PAY_BUSY=true; try{await payToggle0(jid,epId,period);}finally{PAY_BUSY=false;}   /* 미입금 → 완료 · 완료 → 미입금 · 부분 → 완료 는 예전 단추와 같은 길 */
+  };
+  function payPartOpen(btn,j,l){
+    var line=btn.closest('.pay-l'); if(!line)return;
+    var old=line.nextElementSibling; if(old&&old.classList.contains('pay-ed')){old.remove();return;}
+    var total=Number(l.amount)||0;
+    if(l.amount==null||total<=0){toast('작업 금액이 없어서 부분 입금을 쓸 수 없습니다 — 작업 금액을 먼저 넣어 주세요');return;}
+    var cur=l.kind==='partial'?l.paid:'';
+    var ed=document.createElement('div'); ed.className='pay-ed';
+    ed.innerHTML='<b>◐ 부분 입금</b><span class="muted">전체 '+wonS(total)+'</span>'
+      +'<label>입금액 <input class="amt" inputmode="numeric" placeholder="예: 20,000" value="'+(cur!==''?Number(cur).toLocaleString('ko-KR'):'')+'"> 원</label>'
+      +'<label><input class="pct" inputmode="decimal" placeholder="40" value="'+(cur!==''?payPct(cur,total):'')+'"> %</label>'
+      +'<span class="left muted"></span>'
+      +'<button class="btn btn-primary" type="button" style="padding:4px 12px">저장</button><button class="btn btn-ghost" type="button" style="padding:4px 10px">취소</button>'
+      +'<div class="msg"></div>';
+    line.parentNode.insertBefore(ed,line.nextSibling);
+    var A=ed.querySelector('.amt'), P=ed.querySelector('.pct'), M=ed.querySelector('.msg'), Lf=ed.querySelector('.left'), bs=ed.querySelectorAll('button');
+    var show=function(a){Lf.textContent=(a>0&&a<total)?'남은 '+wonS(total-a):'';};
+    A.addEventListener('input',function(){var a=payAmtParse(A.value); M.textContent=''; P.value=(a==null)?'':String(payPct(a,total)); show(a||0);});
+    P.addEventListener('input',function(){var v=P.value.trim().replace(',', '.'); M.textContent=''; if(!/^\d+(\.\d+)?$/.test(v)){A.value='';show(0);return;}
+      var a=payAmtFromPct(Number(v),total); A.value=a.toLocaleString('ko-KR'); show(a);});
+    show(cur||0);
+    bs[1].onclick=function(){ed.remove();};
+    bs[0].onclick=async function(){
+      var a=payAmtParse(A.value), bad=payPartCheck(a,total); if(bad){M.textContent=bad;return;}
+      if(PAY_BUSY)return; PAY_BUSY=true; bs[0].disabled=true;
+      try{ if(await payPartSave(j,l,a))await payRefresh(j.id); else bs[0].disabled=false; }finally{PAY_BUSY=false;}
+    };
+    A.focus();
+  }
+  function payAmtParse(v){v=String(v==null?'':v).replace(/[,\s원₩]/g,''); return /^\d+$/.test(v)?Number(v):null;}
+  function payAmtFromPct(pct,total){return Math.round((Number(total)||0)*pct/100);}
+  function payPartCheck(a,total){
+    if(a==null)return '입금액을 숫자로 적어 주세요 (예: 20000)';
+    if(a<=0)return '부분 입금액은 0원보다 커야 합니다 — 못 받았으면 「미입금」을 누르세요';
+    if(a>=total)return '부분 입금액은 전체 '+wonS(total)+'보다 작아야 합니다 — 다 받았으면 「입금 완료」를 누르세요';
+    return '';
+  }
+  async function payPartSave(j,l,a){
+    var what=(l.period?ymKo(l.period)+' ':'')+(l.ep?l.label+' ':'')+wonS(l.amount), from=l.full?'✅':(l.kind==='partial'?'◐ '+wonS(l.paid):'☑️');
+    var r=l.row?await sb.from('ext_payments').update({amount:a,paid_kind:'partial'}).eq('id',l.row.id).select().maybeSingle()
+               :await sb.from('ext_payments').insert({job_id:j.id,episode_id:l.epId||null,period:l.period||null,amount:a,paid_kind:'partial',paid_at:kstToday(),by_staff:ME.id,payer:jobPayer(j)}).select().maybeSingle();
+    if(r.error||!r.data){toast('저장 실패: '+(r.error?(/duplicate|unique/i.test(r.error.message)?'다른 화면에서 먼저 입금 표시됐습니다 — 새로고침해 주세요':payDbMsg(r.error)):'권한을 확인해 주세요'));return false;}
+    var e=await sb.from('ext_job_events').insert({job_id:j.id,kind:'pay',from_val:from,to_val:'◐ '+wonS(a),note:what+' 중 '+payPct(a,l.amount)+'%',by_staff:ME.id});
+    toast('◐ 부분 입금 '+wonS(a)+' ('+payPct(a,l.amount)+'%)을 저장했습니다'+(e.error?' (기록 남기기 실패)':'')); return true;
+  }
   /* ---------- 6단계 2차 : 15일 정산 · 입금하는 곳 (2026-11-02 이은총 님) ----------
      🔴 정산 기간 = 전월 16일 ~ 당월 15일, 그달 15일에 합산(이은총 님 ㉠). 기준일 : 건당 = 회차 완료일(없으면 YYMMDD) ·
      단건 = 「완료」로 바꾼 날(기록 없으면 입금 확인 날 = 선입금) · 월정액 M월분 = M월 15일 정산(확인 요청 중).
@@ -3087,6 +3223,7 @@
     if(!NUM_S)NUM_S=settleOf(kstToday());
     var sc=settleCalc(all,NUM_S), inS=sc.inS, unk=sc.unk;
     var sum=function(a){return a.reduce(function(s,l){return s+(l.amount||0);},0);};
+    var sumPaid=function(a){return a.reduce(function(s,l){return s+(Number(l.paid)||0);},0);}, sumDue=function(a){return a.reduce(function(s,l){return s+lineDue(l);},0);};   /* 11/21 부분 입금 */
     var h='<div class="card ext-card"><h3 style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">📅 정산 '
       +'<button class="btn btn-ghost" type="button" style="padding:3px 10px" onclick="numMove(-1)">◀</button>'
       +'<span>'+(+NUM_S.slice(0,4))+'년 '+(+NUM_S.slice(5,7))+'월 15일 <span class="muted" style="font-weight:600;font-size:.82rem">('+settleRange(NUM_S)+')</span></span>'
@@ -3096,12 +3233,11 @@
     var payers=[]; inS.forEach(function(l){var x=payerOf(l.j,l);if(payers.indexOf(x)<0)payers.push(x);});
     payers.forEach(function(x){
       var L=inS.filter(function(l){return payerOf(l.j,l)===x;}).sort(function(a,b){return a.d<b.d?-1:1;});
-      var pd=L.filter(function(l){return l.row;}), ow=L.filter(function(l){return !l.row;});
       h+='<div class="num-job"><div class="nh"><b>💳 '+esc(x)+'</b><span class="muted">→ 인투마케팅</span>'
-        +'<span style="margin-left:auto;font-size:.84rem">합계 <b>'+wonS(sum(L))+'</b> · ✅ '+wonS(sum(pd))+' · <span style="color:#B45309">☑️ '+wonS(sum(ow))+'</span></span></div>'
+        +'<span style="margin-left:auto;font-size:.84rem">합계 <b>'+wonS(sum(L))+'</b> · ✅ '+wonS(sumPaid(L))+' · <span style="color:#B45309">☑️ '+wonS(sumDue(L))+'</span></span></div>'
         +L.map(function(l){return payLineHTML(l.j,l,{title:1});}).join('')+'</div>';
     });
-    if(payers.length>1)h+='<div style="text-align:right;font-size:.88rem;margin-top:6px">이 기간 전체 <b>'+wonS(sum(inS))+'</b> · 미입금 <b style="color:#B45309">'+wonS(sum(inS.filter(function(l){return !l.row;})))+'</b></div>';
+    if(payers.length>1)h+='<div style="text-align:right;font-size:.88rem;margin-top:6px">이 기간 전체 <b>'+wonS(sum(inS))+'</b> · 미입금 <b style="color:#B45309">'+wonS(sumDue(inS))+'</b></div>';
     if(unk.length)h+='<details style="margin-top:10px"><summary class="muted" style="font-size:.8rem;cursor:pointer">⚠ 기준일을 몰라서 어느 정산인지 못 정한 것 '+unk.length+'건</summary>'
       +'<p class="muted" style="font-size:.78rem;margin:6px 0">건당은 회차에 날짜(YYMMDD)를 넣고, 입금된 것은 확인 날짜를 눌러 넣으면 그 기간으로 들어갑니다.</p>'
       +unk.map(function(l){return payLineHTML(l.j,l,{title:1,payer:1});}).join('')+'</details>';
@@ -3110,15 +3246,16 @@
   function numTabHTML(pid){
     var js=pjJobs(pid), all=[];
     js.forEach(function(j){payLines(j).forEach(function(l){l.j=j;all.push(l);});});
-    var paid=all.filter(function(l){return l.row;}), owe=all.filter(function(l){return !l.row&&l.owe;});
+    var paid=all.filter(function(l){return l.row;}), owe=all.filter(function(l){return !l.full&&l.owe;});   /* 11/21 : 부분 입금 줄은 둘 다에 (받은 몫 · 남은 몫) */
     var sum=function(a){return a.reduce(function(s,l){return s+(l.amount||0);},0);};
-    var unk=owe.filter(function(l){return l.amount==null;}).length;
-    var h='<p class="muted" style="font-size:.84rem;margin:-6px 0 14px">입금 완료 ✅ · 미입금 ☑️ 를 작업마다 표시합니다(진행 상태와 따로). 단건은 한 번, 월정액은 달마다, 건당은 회차마다. '
+    var sumPaid=function(a){return a.reduce(function(s,l){return s+(Number(l.paid)||0);},0);}, sumDue=function(a){return a.reduce(function(s,l){return s+lineDue(l);},0);};
+    var unk=owe.filter(function(l){return l.amount==null;}).length, partN=all.filter(function(l){return l.kind==='partial';}).length;
+    var h='<p class="muted" style="font-size:.84rem;margin:-6px 0 14px">미입금 ☑️ · 부분 입금 ◐ · 입금 완료 ✅ 를 작업마다 표시합니다(진행 상태와 따로). 단건은 한 번, 월정액은 달마다, 건당은 회차마다. '
       +'받을 돈은 「중단」 작업과 아직 완료 안 된 회차를 뺀 금액입니다.'+(canPay(pid)?'':' 입금 표시는 이 프로젝트 관리자 · 최고관리자만 바꿀 수 있습니다.')+'</p>';
     h+='<div class="num-cards">'
-      +'<div class="num-card"><div class="k">받을 돈 (전체)</div><div class="v">'+wonS(sum(paid)+sum(owe))+'</div><div class="s">입금 완료 + 미입금</div></div>'
-      +'<div class="num-card"><div class="k">✅ 입금 완료</div><div class="v" style="color:#15803D">'+wonS(sum(paid))+'</div><div class="s">'+paid.length+'건</div></div>'
-      +'<div class="num-card"><div class="k">☑️ 미입금</div><div class="v" style="color:#B45309">'+wonS(sum(owe))+'</div><div class="s">'+owe.length+'건'+(unk?' · 금액 미정 '+unk+'건은 합계에서 빠짐':'')+'</div></div></div>';
+      +'<div class="num-card"><div class="k">받을 돈 (전체)</div><div class="v">'+wonS(sumPaid(paid)+sumDue(owe))+'</div><div class="s">입금된 돈 + 남은 돈</div></div>'
+      +'<div class="num-card"><div class="k">✅ 입금된 돈</div><div class="v" style="color:#15803D">'+wonS(sumPaid(paid))+'</div><div class="s">'+paid.length+'건'+(partN?' (부분 입금 '+partN+'건 포함)':'')+'</div></div>'
+      +'<div class="num-card"><div class="k">☑️ 남은 돈</div><div class="v" style="color:#B45309">'+wonS(sumDue(owe))+'</div><div class="s">'+owe.length+'건'+(unk?' · 금액 미정 '+unk+'건은 합계에서 빠짐':'')+'</div></div></div>';
     h+=settleHTML(pid,all);
     h+='<div class="card ext-card"><h3>☑️ 미입금 전체 '+owe.length+'건 <span class="muted" style="font-weight:600;font-size:.8rem">— 아직 안 끝난 단건 포함 · 기간 상관없이</span></h3>'
       +(owe.length?owe.map(function(l){return payLineHTML(l.j,l,{title:1,payer:1});}).join(''):'<div class="muted" style="font-size:.85rem">받을 돈이 모두 들어왔습니다.</div>')+'</div>';
@@ -3183,8 +3320,8 @@
     var late=live.filter(jobLate), setup=live.filter(needSetup), inner=inRows().filter(inLive);
     var S=settleOf(kstToday()), sOwe=0, sAll=0, oweAll=0;
     EXT.projects.forEach(function(p){var all=pjLines(p.id), sc=settleCalc(all,S);
-      sc.inS.forEach(function(l){sAll+=l.amount||0;if(!l.row)sOwe+=l.amount||0;});
-      all.forEach(function(l){if(!l.row&&l.owe)oweAll+=l.amount||0;});});
+      sc.inS.forEach(function(l){sAll+=l.amount||0;sOwe+=lineDue(l);});   /* 11/21 : 미입금 = 남은 금액(부분 입금은 남은 몫만) */
+      all.forEach(function(l){if(l.owe)oweAll+=lineDue(l);});});
     var card=function(k,v,sub,col){return '<div class="num-card"><div class="k">'+k+'</div><div class="v"'+(col?' style="color:'+col+'"':'')+'>'+v+'</div>'+(sub?'<div class="s">'+sub+'</div>':'')+'</div>';};
     var h='<div class="num-cards" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">'
       +card('외부 진행 중',live.length+'건','프로젝트 '+EXT.projects.filter(function(p){return p.status==='진행중';}).length+'곳')
@@ -3216,7 +3353,7 @@
         +'<span class="c">'+js.length+'</span><span class="c">'+js.filter(function(j){return j.status==='중간 컨펌'||j.status==='최종 컨펌';}).length+'</span>'
         +'<span class="c" style="color:var(--bad)">'+(js.filter(jobLate).length||'')+'</span><span class="c" style="color:#B45309">'+(js.filter(needSetup).length||'')+'</span>'
         +'<span class="r">'+wonS(sc.inS.reduce(function(a,l){return a+(l.amount||0);},0))+'</span>'
-        +'<span class="r" style="color:#B45309">'+wonS(all.filter(function(l){return !l.row&&l.owe;}).reduce(function(a,l){return a+(l.amount||0);},0))+'</span></div>';});
+        +'<span class="r" style="color:#B45309">'+wonS(all.filter(function(l){return l.owe;}).reduce(function(a,l){return a+lineDue(l);},0))+'</span></div>';});
     if(!EXT.projects.length)h+='<div class="muted" style="font-size:.85rem">외주 프로젝트가 없습니다.</div>';
     h+='</div>';
     /* 이번 주 기한 */
@@ -3349,7 +3486,7 @@
     EXT.jobs.forEach(function(j){if(j.price_type!=='월정액')return; var p=pjOf(j.project_id), ms=jobMonths(j);
       out.push({src:'ext',name:((p&&(p.short_name||p.name))?(p.short_name||p.name)+' · ':'')+j.title,fee:Number(j.amount)||0,day:j.pay_day||15,daySet:!!j.pay_day,
         start:ms[0]||'',hold:j.status==='중단',payer:jobPayer(j),
-        cell:function(m){if(!ms.length||m<ms[0]||m>ms[ms.length-1])return 'na';return payOf(j.id,null,m)?'o':'blank';},
+        cell:function(m){if(!ms.length||m<ms[0]||m>ms[ms.length-1])return 'na';var k=payKind(payOf(j.id,null,m));return k==='full'?'o':(k==='partial'?'p':'blank');},   /* p = 부분 입금 (11/21) */
         tap:canPay(j.project_id)?'payToggle(\''+j.id+'\',\'\',\'M\')':'',j:j});});
     return out;
   }
@@ -3388,7 +3525,7 @@
             if(c==='na')return '<td class="m"><span class="lg-na">—</span></td>';
             var lateC=c!=='o'&&(m<now||(m===now&&r.day<today))&&!r.hold;
             var tap=r.tap?' onclick="'+r.tap.replace('M',m)+'"':' disabled';
-            if(r.src==='ext')return '<td class="m"><button type="button" class="lg-c '+(c==='o'?'o':'')+'"'+tap+' title="'+m+' — ✅ 입금 완료 / ☑️ 미입금" style="'+(lateC?'border-color:var(--bad)':'')+'">'+(c==='o'?'✅':'☑️')+'</button></td>';
+            if(r.src==='ext')return '<td class="m"><button type="button" class="lg-c '+(c==='o'?'o':'')+'"'+tap+' title="'+m+' — ✅ 입금 완료 / ◐ 부분 입금(누르면 입금 완료로) / ☑️ 미입금" style="'+(lateC?'border-color:var(--bad)':'')+'">'+(c==='o'?'✅':c==='p'?'◐':'☑️')+'</button></td>';
             return '<td class="m"><button type="button" class="lg-c '+(c==='blank'?'':c)+'"'+tap+' title="'+m+' 납부 — 누를 때마다 빈칸 → ✓ → ✗" style="'+(lateC?'border-color:var(--bad)':'')+'">'+(c==='o'?'✓':c==='x'?'✗':'')+'</button></td>';
           }).join('')+'</tr>';
       }).join('')+'</tbody></table></div>'
