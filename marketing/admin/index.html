@@ -1381,7 +1381,7 @@
       <div class="fld"><label for="jb_team">팀</label><select class="inp" id="jb_team" onchange="jbWho()"></select></div>
       <div class="fld"><label for="jb_status">상태</label><select class="inp" id="jb_status"></select></div>
       <div class="fld"><label for="jb_ptype">가격 방식</label><select class="inp" id="jb_ptype" onchange="jbFeeShow()"><option value="단건">단건 — 한 번 하고 끝</option><option value="월정액">월정액 — 매달</option><option value="건당">건당 — 회차마다</option></select></div>
-      <div class="fld"><label for="jb_amount">금액 (원) <span class="muted" style="font-weight:500">— 월정액은 한 달, 건당은 1건</span></label><input class="inp" id="jb_amount" inputmode="numeric" placeholder="50000"></div>
+      <div class="fld"><label for="jb_amount">금액 (원) <span class="muted" style="font-weight:500">— 월정액은 한 달, 건당은 1건</span></label><input class="inp" id="jb_amount" inputmode="numeric" autocomplete="off" placeholder="50,000"></div>
       <div class="fld jb-fee"><label for="jb_payday">납부일 <span class="muted" style="font-weight:500">— 월정액 · 매달 며칠 (비우면 15일)</span></label><input class="inp" id="jb_payday" inputmode="numeric" placeholder="15"></div>
       <div class="fld jb-fee"><label for="jb_feestart">관리비 시작 달 <span class="muted" style="font-weight:500">— 월정액 · 비우면 작업 만든 달</span></label><input class="inp" id="jb_feestart" type="month"></div>
       <div class="fld"><label for="jb_payer">입금하는 곳 <span class="muted" style="font-weight:500">— 비우면 프로젝트 기본</span></label><input class="inp" id="jb_payer" list="jb_payer_l"><datalist id="jb_payer_l"></datalist></div>
@@ -3150,6 +3150,7 @@
     line.parentNode.insertBefore(ed,line.nextSibling);
     var A=ed.querySelector('.amt'), P=ed.querySelector('.pct'), M=ed.querySelector('.msg'), Lf=ed.querySelector('.left'), bs=ed.querySelectorAll('button');
     var show=function(a){Lf.textContent=(a>0&&a<total)?'남은 '+wonS(total-a):'';};
+    moneyInput(A);   /* 11/21 쉼표 — 아래 % 계산보다 먼저 돎 */
     A.addEventListener('input',function(){var a=payAmtParse(A.value); M.textContent=''; P.value=(a==null)?'':String(payPct(a,total)); show(a||0);});
     P.addEventListener('input',function(){var v=P.value.trim().replace(',', '.'); M.textContent=''; if(!/^\d+(\.\d+)?$/.test(v)){A.value='';show(0);return;}
       var a=payAmtFromPct(Number(v),total); A.value=a.toLocaleString('ko-KR'); show(a);});
@@ -3161,6 +3162,27 @@
       try{ if(await payPartSave(j,l,a))await payRefresh(j.id); else bs[0].disabled=false; }finally{PAY_BUSY=false;}
     };
     A.focus();
+  }
+  /* 금액 칸 천 단위 쉼표 (2026-11-21 이은총 님) — 화면에만 쉼표 · 저장 · 계산은 숫자(jbSave 는 숫자만 남김 · payAmtParse 는 쉼표를 뺌).
+     입력 · 지우기 · 붙여넣기 때 커서 앞 «숫자 개수»를 세어 같은 자리로 되돌림. 쉼표 하나만 지운 경우(Backspace / Delete)는 그 옆 숫자를 지움. */
+  function moneyFmt(d){d=String(d||'').replace(/\D/g,'').replace(/^0+(?=\d)/,''); return d?d.replace(/\B(?=(\d{3})+(?!\d))/g,','):'';}
+  function moneyInput(el){
+    if(!el||el.dataset.money)return; el.dataset.money='1';
+    var prev=el.value;
+    el.addEventListener('input',function(e){
+      var v=el.value, pos=el.selectionStart==null?v.length:el.selectionStart;
+      var left=v.slice(0,pos).replace(/\D/g,'').length, all=v.replace(/\D/g,'');
+      var t=e&&e.inputType||'';
+      if(all===prev.replace(/\D/g,'')&&v.length<prev.length){   /* 쉼표만 지움 → 옆 숫자를 지움 */
+        if(t==='deleteContentBackward'&&left>0){all=all.slice(0,left-1)+all.slice(left);left--;}
+        else if(t==='deleteContentForward'){all=all.slice(0,left)+all.slice(left+1);}
+      }
+      var lead=(all.match(/^0+(?=\d)/)||[''])[0].length; left=Math.max(0,left-lead);   /* 앞자리 0 은 버림 */
+      var out=moneyFmt(all); el.value=out; prev=out;
+      var i=0,n=0; while(i<out.length&&n<left){if(/\d/.test(out[i]))n++;i++;}
+      try{if(document.activeElement===el)el.setSelectionRange(i,i);}catch(_){}
+    });
+    el.addEventListener('focus',function(){prev=el.value;});
   }
   function payAmtParse(v){v=String(v==null?'':v).replace(/[,\s원₩]/g,''); return /^\d+$/.test(v)?Number(v):null;}
   function payAmtFromPct(pct,total){return Math.round((Number(total)||0)*pct/100);}
@@ -3741,7 +3763,7 @@
     $('jb_status').innerHTML=JST.map(function(x){return '<option>'+x+'</option>';}).join('');
     $('jb_status').value=j?j.status:'작업 중';
     $('jb_title').value=j?j.title:''; $('jb_brand').value=j&&j.brand||'';
-    $('jb_ptype').value=j?j.price_type:'단건'; $('jb_amount').value=j&&j.amount!=null?j.amount:'';
+    $('jb_ptype').value=j?j.price_type:'단건'; moneyInput($('jb_amount')); $('jb_amount').value=j&&j.amount!=null?moneyFmt(j.amount):'';   /* 11/21 쉼표 (저장은 숫자만) */
     $('jb_payday').value=j&&j.pay_day||''; $('jb_feestart').value=j&&j.fee_start||''; jbFeeShow();
     $('jb_payer').value=j&&j.payer||''; $('jb_payer').placeholder='프로젝트 기본 : '+pjPayer(p);
     $('jb_payer_l').innerHTML=[p.payer_default,p.partner,p.name+' (직접)'].filter(function(x,i,a){return x&&a.indexOf(x)===i;}).map(function(x){return '<option value="'+esc(x)+'">';}).join('');
