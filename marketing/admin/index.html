@@ -318,6 +318,31 @@
   .pay-ed .msg{flex-basis:100%;font-size:.78rem;color:var(--bad);min-height:0}
   .pay-sum{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;padding:8px 10px;margin-bottom:6px;background:var(--surface-2);border-radius:10px;font-size:.84rem}
   .pay-sum b{font-variant-numeric:tabular-nums}
+  /* 마감기한 · 독촉 메시지 (2026-11-21) */
+  .due-card summary{cursor:pointer;list-style:none;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .due-card summary::-webkit-details-marker{display:none}
+  .due-p{border-top:1px solid var(--line);padding:8px 0}
+  .due-p:first-of-type{border-top:0}
+  .due-ph{display:flex;gap:8px;align-items:center;font-size:.86rem;margin-bottom:4px}
+  .due-it{display:grid;grid-template-columns:96px 1fr auto auto;gap:8px;align-items:center;padding:4px 0;font-size:.84rem}
+  .due-it .t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .due-cp{border:1.5px solid var(--line);background:var(--surface);border-radius:8px;padding:2px 8px;font-size:.74rem;font-weight:800;cursor:pointer;white-space:nowrap}
+  @media(max-width:860px){.due-it{grid-template-columns:1fr auto}}
+  /* 재정 관리 · 입금 처리 (2026-11-21) */
+  .fin-tbl{display:flex;flex-direction:column;gap:0;overflow-x:auto}
+  .fin-r{display:grid;grid-template-columns:28px 150px 130px 110px minmax(240px,1fr) minmax(200px,1fr);gap:8px;align-items:start;padding:8px 0;border-top:1px solid var(--line);font-size:.82rem;min-width:900px}
+  .fin-r.fin-h{font-weight:800;color:var(--muted);border-top:0;font-size:.76rem}
+  .fin-r .inp{padding:5px 8px;font-size:.82rem;width:100%}
+  .fin-r .fin-tm{margin-top:4px;width:80px}
+  .fin-r .fin-am{text-align:right}
+  .fin-r small{display:block;margin-top:3px;font-size:.72rem}
+  .fin-r span.ok{color:#15803D;font-weight:700}
+  .fin-r span.bad{color:#B45309}
+  .fin-r.bad{background:#FFFBEB}
+  .fin-pv{margin-top:12px;padding:12px 14px;border:1.5px solid #93C5FD;background:#EFF6FF;border-radius:12px;font-size:.84rem;line-height:1.6}
+  .fin-pv h4{margin:0 0 6px;font-size:.92rem}
+  .fin-d{display:grid;grid-template-columns:130px 110px 100px 1fr 100px 160px;gap:8px;padding:5px 0;border-top:1px dashed var(--line);font-size:.8rem}
+  @media(max-width:860px){.fin-d{grid-template-columns:1fr 1fr}}
   .num-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 14px}
   .num-card{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px 16px}
   .num-card .k{font-size:.78rem;font-weight:800;color:var(--muted)}
@@ -746,6 +771,7 @@
     <div class="side-sep"></div>
     <button class="navb hide" id="navBoss" type="button" onclick="openBoss()">📊 경영 현황</button>
     <button class="navb" id="navFee" type="button" onclick="openFee('all')">💰 관리비 대장 모아보기</button>
+    <button class="navb hide" id="navPay" type="button" onclick="openPay()">💳 재정 관리 · 입금 처리</button>   <!-- 11/21 · 최고관리자 · 관리자만 -->
     <div class="side-sep"></div>
     <button class="navb hide" data-nav="staff" id="navStaff" type="button">관리자 목록 <span class="cnt" id="c-staff">0</span></button>
     <button class="navb hide" data-nav="site" id="navSite" type="button">홈페이지 정보 · 푸터</button>
@@ -773,6 +799,8 @@
       </div>
       <!-- 매출 요약 (11/19) — 수익 창출 · 입금 완료 · 11/20부터 모든 직원 · 기본 접힘 · renderRev() -->
       <div class="card hide" id="revBox" style="padding:14px 18px;margin-bottom:14px"></div>
+      <!-- 마감기한 · 독촉 메시지 복사 (11/21) — 경영 현황을 볼 수 있는 사람만 · renderDueIn() -->
+      <div class="card hide due-card" id="dueBox" style="padding:12px 18px;margin-bottom:14px"></div>
       <div class="stats">
         <div class="stat"><b class="tnum" id="s-all">0</b><span>전체</span></div>
         <div class="stat"><b class="tnum" id="s-new">0</b><span>접수</span></div>
@@ -964,6 +992,10 @@
     <section id="viewFee" class="hide">
       <div class="head"><div><h1>관리비 대장 모아보기</h1><p>내부(홈페이지 · SNS 관리비 대장)와 외부(외주 월정액)를 한 표에서 봅니다. 칸을 누르면 그 대장에 바로 저장됩니다.</p></div></div>
       <div id="feeAllBody"></div>
+    </section>
+    <section id="viewPay" class="hide">   <!-- 재정 관리 · 입금 일괄 처리 (11/21) — 최고관리자 · 관리자만 · renderPay() -->
+      <div class="head"><div><h1>재정 관리 · 입금 처리</h1><p>은행 거래내역을 붙여 넣으면 입금 줄을 읽어 연결 후보를 제안합니다. <b>고르고 미리 보고 최종 확인한 것만</b> 저장합니다. 내부 의뢰 · 외부 작업만 처리하고, 블로그 센터 주문은 후보만 보여 줍니다.</p></div></div>
+      <div id="payBody"></div>
     </section>
     <section id="viewMy" class="hide">
       <div class="head"><div><h1>내 할 일</h1><p id="mySub"></p></div></div>
@@ -1486,7 +1518,9 @@
   <div class="sheet-b">
     <input type="hidden" id="em_id">
     <div class="fld"><label for="em_staff">어드민 계정</label>
+      <input class="inp" id="em_find" placeholder="🔍 이름으로 찾기 — 몇 글자만 적어도 됩니다" autocomplete="off" oninput="emFind()" onkeydown="if(event.key==='Enter'){event.preventDefault();emFind(1);}" style="margin-bottom:6px">   <!-- 11/21 직원 검색 -->
       <select class="inp" id="em_staff" onchange="emPickStaff()"></select>
+      <div class="muted" id="em_found" style="font-size:.76rem;margin-top:4px"></div>
       <div class="muted" style="font-size:.78rem;margin-top:6px">계정이 있는 사람을 고르면 나중에 「내 할 일」에 자기 일이 보입니다. 계정이 없으면 이름만 적어 두고, 계정이 생기면 여기서 연결하면 됩니다.</div></div>
     <div class="grid2">
       <div class="fld"><label for="em_name">실명 *</label><input class="inp" id="em_name"></div>
@@ -1808,7 +1842,7 @@
       b.classList.add('on');
       document.querySelectorAll('#navCo .navb').forEach(function(x){x.classList.remove('on');});
       $('navMy').classList.remove('on');offSpecial();
-      ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
+      ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee','viewPay'].forEach(function(v){$(v).classList.add('hide');});
       if(k==='staff'){$('viewStaff').classList.remove('hide');renderStaff();return;}
       if(k==='site'){$('viewSite').classList.remove('hide');fillSite();return;}
       if(k==='partner'){$('viewPartner').classList.remove('hide');renderPartners();loadPartnerRules();return;}
@@ -1862,7 +1896,7 @@
     COKEY=k;
     document.querySelectorAll('.navb[data-nav],#navCo .navb').forEach(function(x){x.classList.remove('on');});
     var b=document.querySelector('#navCo .navb[data-co="'+CSS.escape(k)+'"]'); if(b)b.classList.add('on'); $('navMy').classList.remove('on');offSpecial();
-    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
+    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee','viewPay'].forEach(function(v){$(v).classList.add('hide');});
     $('viewList').classList.remove('hide');
     $('listTitle').textContent=(CO[k]?CO[k].name:'')+' — 업체별';
     $('listSub').textContent='이 업체가 신청한 의뢰를 팀 구분 없이 모았습니다. 줄을 누르면 원래 팀의 상세가 열립니다.';
@@ -1882,7 +1916,7 @@
     if(SCOPE==='out'){
       COKEY=null;
       document.querySelectorAll('.navb[data-nav],#navCo .navb').forEach(function(x){x.classList.remove('on');});
-      ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
+      ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewMy','viewBoss','viewFee','viewPay'].forEach(function(v){$(v).classList.add('hide');});
       $('viewExt').classList.remove('hide'); $('navMy').classList.remove('on');offSpecial();
       if(AXIS==='co'&&!PJ&&EXT.projects.length){var pv=EXT.projects.filter(pjShown);PJ=(pv[0]||EXT.projects[0]).id;}   /* 처음엔 목록에 보이는 프로젝트부터 (11/20) */
       renderExtNav(); renderExt();
@@ -1979,7 +2013,7 @@
     }).join('');
   }
   /* 내 할 일 · 경영 현황 · 관리비 대장을 보다가 프로젝트 · 팀을 누르면 외부 화면으로 돌아옴 (11/2 점검) */
-  function toExt(){['viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});$('viewExt').classList.remove('hide');$('navMy').classList.remove('on');offSpecial();}
+  function toExt(){['viewMy','viewBoss','viewFee','viewPay'].forEach(function(v){$(v).classList.add('hide');});$('viewExt').classList.remove('hide');$('navMy').classList.remove('on');offSpecial();}
   $('navOut').addEventListener('click',function(e){var b=e.target.closest('.navb[data-pj]');if(!b)return;PJ=b.getAttribute('data-pj');XQALL=false;toExt();renderExtNav();renderExt();});
   $('navOutWork').addEventListener('click',function(e){var b=e.target.closest('.navb[data-xt]');if(!b)return;XTEAM=b.getAttribute('data-xt');toExt();renderExtNav();renderExt();});
 
@@ -2059,6 +2093,7 @@
     var live=EXT.projects.filter(function(p){return p.status!=='종료';});
     var ps=live.filter(function(p){return EXT.err||pjJobs(p.id,t).length||pjMembers(p.id,t).length;}), hidN=live.length-ps.length;
     $('extBody').innerHTML='<div class="card" id="revExtBox" style="padding:14px 18px;margin-bottom:14px">'+revExtInner(t)+'</div>'   /* 매출 요약 (11/19 · 11/20 모든 직원 · 기본 접힘) */
+      +dueExtHTML(t)   /* 마감기한 · 독촉 메시지 (11/21) — 경영 현황을 볼 수 있는 사람만 */
       +(ps.length?ps.map(function(p){
       return '<div class="tv-pj"><h3>'+esc(pjLabel(p))+'</h3>'+teamBox(p.id,t,'',1)+'<div style="height:10px"></div>'+jobTeamHTML(p.id,t,1)+'</div>';
     }).join(''):'<div class="card"><div class="empty"><b>'+(hidN?esc(XKO[t])+' 팀이 맡은 진행 중 프로젝트가 없습니다':'진행 중인 프로젝트가 없습니다')+'</b></div></div>')
@@ -2541,6 +2576,7 @@
   async function xReload(){await loadExt(); renderExtNav(); myCount();
     if(!$('viewMy').classList.contains('hide'))renderMy();
     else if(!$('viewFee').classList.contains('hide'))renderFeeAll();
+    else if(!$('viewPay').classList.contains('hide'))renderPay();
     else if(!$('viewBoss').classList.contains('hide'))renderBoss();
     else renderExt();
     if($('jbModal').classList.contains('open'))jbEpRender();}   /* 작업 창 회차 칸도 새로 (11/16) */
@@ -3299,12 +3335,12 @@
      이번 주 기한 · 이번 정산. 사람 = 어드민 계정(staff) 기준, 계정 없는 조직도 사람은 이름으로.
      관리비 대장 모아보기 = 내부 settings web_fees · sns_fees + 외부 ext_jobs 월정액(ext_payments). 🔴 외부 납부일은 작업마다(pay_day, 비면 15일) —
      내부처럼 1일 · 10일로 묶지 않음(이은총 님 11/2). 칸을 누르면 그 대장에 바로 저장(내부 = saveLedger, 외부 = payToggle). */
-  function offSpecial(){['navBoss','navFee'].forEach(function(id){var b=$(id);if(b)b.classList.remove('on');});}
+  function offSpecial(){['navBoss','navFee','navPay'].forEach(function(id){var b=$(id);if(b)b.classList.remove('on');});}
   function canBoss(){return !!ME&&(ME.role==='owner'||ME.role==='admin'||myMems().some(function(m){return m.team==='manage'||m.role==='관리자';}));}
   function openSpecial(id,btn){
     document.querySelectorAll('.navb[data-nav],#navCo .navb,#navOut .navb,#navOutWork .navb').forEach(function(x){x.classList.remove('on');});
     $('navMy').classList.remove('on'); offSpecial(); if(btn)$(btn).classList.add('on');
-    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
+    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee','viewPay'].forEach(function(v){$(v).classList.add('hide');});
     $(id).classList.remove('hide');
   }
   function inRows(){var seen={},out=[];Object.keys(DATA).forEach(function(g){(DATA[g]||[]).forEach(function(r){if(seen[r.id])return;seen[r.id]=1;out.push(r);});});return out;}
@@ -3389,6 +3425,380 @@
         :'<div class="muted" style="font-size:.85rem">이번 주 기한이 없습니다.</div>')+'</div>';
     $('bossBody').innerHTML=finCard()+h;
   };
+
+  /* ---------- 마감기한 · 독촉 메시지 복사 (2026-11-21 이은총 님 · 연락판 나-1121-3) ----------
+     내부 업무별(서비스 목록) = 그 서비스의 진행 중 의뢰 · requests.due_stages(서비스별 마감 칸 · 날짜만 → 20:00 으로 봄) · 담당 = assignee_id
+     외부 업무별(팀) = 그 팀의 진행 중 작업 · ext_deadlines(끝남 체크 안 한 중간 컨펌 · 최종 컨펌 · 마감기한) · 담당 = member_ids(조직도 이름)
+     한 건에 «다음 마감 하나»만(앞으로 올 것 중 가장 이른 것 · 없으면 가장 늦게 지난 것) — 지난 단계 마감이 계속 뜨지 않게.
+     「의뢰 시작일」(blog_start)은 마감이 아니라 기준일이라 뺌. 마감 체크박스 · 자동 발송 · 외부 메시지 연동 없음 — 글만 복사해 직접 보냄.
+     권한 : 경영 현황을 볼 수 있는 사람(최고관리자 · 관리자 · 외주 총괄)만 이 칸이 보임. DB 에 쓰지 않음. */
+  var DUE_IT=[], DUE_GRP=[];
+  function dueNext(pts){
+    pts=pts.filter(function(x){return x.at;}).sort(function(a,b){return Date.parse(a.at)-Date.parse(b.at);});
+    var up=pts.filter(function(x){return Date.parse(x.at)>=Date.now();});
+    return up[0]||pts[pts.length-1]||null;
+  }
+  function dueWhen(it){var k=kst(it.at);return (+k.d.slice(5,7))+'월 '+(+k.d.slice(8,10))+'일('+k.wd+')'+(it.set?' '+k.t:'');}
+  function dueLeft(it){var n=dayDiff(kst(it.at).d);
+    if(Date.parse(it.at)<Date.now())return n<0?(-n)+'일 지남':'오늘 지남';
+    return n===0?'오늘':'D-'+n;}
+  function dueMsg(list){
+    var late=list.some(function(it){return Date.parse(it.at)<Date.now();});
+    var h='[인투마케팅] 마감 안내'+(list.length>1?' — '+list[0].who+'님':'');
+    if(list.length===1){var it=list[0];
+      return h+'\n· 담당 : '+it.who+'님\n· 작업 : 「'+it.title+'」'+(it.sub?' ('+it.sub+')':'')+'\n· 마감 : '+it.label+' — '+dueWhen(it)+' ('+dueLeft(it)+')\n'
+        +(late?'마감이 지났습니다. 진행 상황을 바로 공유 부탁드립니다.':'진행 상황 확인 부탁드립니다.');}
+    return h+'\n'+list.map(function(it,i){return (i+1)+'. 「'+it.title+'」'+(it.sub?' ('+it.sub+')':'')+' · '+it.label+' — '+dueWhen(it)+' ('+dueLeft(it)+')';}).join('\n')
+      +'\n'+(late?'지난 마감이 있습니다. 진행 상황을 바로 공유 부탁드립니다.':'진행 상황 확인 부탁드립니다.');
+  }
+  window.dueCopy=async function(kind,i){
+    var list=kind==='g'?DUE_GRP[i]:[DUE_IT[i]]; if(!list||!list[0])return;
+    var t=dueMsg(list);
+    try{await navigator.clipboard.writeText(t);toast('독촉 메시지를 복사했습니다 — 카톡 등에 붙여 넣어 보내 주세요');}
+    catch(e){prompt('복사가 막혀 있습니다 — 아래 글을 골라 복사해 주세요',t);}
+  };
+  function dueCardHTML(title,items,empty){
+    DUE_IT=DUE_IT.concat([]); var base=DUE_IT.length; items.forEach(function(it){DUE_IT.push(it);});
+    var by={}, order=[];
+    items.forEach(function(it,i){it._i=base+i; if(!by[it.who]){by[it.who]=[];order.push(it.who);} by[it.who].push(it);});
+    order.forEach(function(w){by[w].sort(function(a,b){return Date.parse(a.at)-Date.parse(b.at);});});
+    order.sort(function(a,b){return Date.parse(by[a][0].at)-Date.parse(by[b][0].at);});
+    var late=items.filter(function(it){return Date.parse(it.at)<Date.now();}).length, soon=items.filter(function(it){var a=Date.parse(it.at);return a>=Date.now()&&a<=Date.now()+7*864e5;}).length;
+    var h='<details><summary><b style="font-size:.95rem">📅 마감기한 — '+esc(title)+'</b>'
+      +'<span class="muted" style="font-size:.8rem">'+items.length+'건 · 다음 마감만</span>'
+      +(late?'<span class="badge" style="background:#FEE2E2;color:var(--bad)">지남 '+late+'</span>':'')
+      +(soon?'<span class="badge" style="background:#FEF3C7;color:#92400E">7일 안 '+soon+'</span>':'')
+      +'<span class="muted" style="margin-left:auto;font-size:.76rem">눌러서 펼치기 · 접기</span></summary><div style="margin-top:8px">';
+    if(!items.length)h+='<div class="muted" style="font-size:.84rem">'+empty+'</div>';
+    order.forEach(function(w){var g=DUE_GRP.length; DUE_GRP.push(by[w]);
+      h+='<div class="due-p"><div class="due-ph"><b>👤 '+esc(w)+'</b><span class="muted">'+by[w].length+'건</span>'
+        +(by[w].length>1?'<button class="due-cp" type="button" style="margin-left:auto" onclick="dueCopy(\'g\','+g+')">📋 이 사람 전체 복사</button>':'')+'</div>'
+        +by[w].map(function(it){return '<div class="due-it"><span class="tnum">'+dueWhen(it).replace('월 ','/').replace('일','')+'</span>'
+          +'<span class="t"><b>'+esc(it.title)+'</b>'+(it.sub?' <span class="muted">'+esc(it.sub)+'</span>':'')+' · '+esc(it.label)+'</span>'
+          +ddHTML(it.at)+'<button class="due-cp" type="button" onclick="dueCopy(\'i\','+it._i+')">📋 독촉 메시지 복사</button></div>';}).join('')+'</div>';});
+    return h+'<div class="muted" style="font-size:.74rem;margin-top:6px">복사만 합니다 — 카카오톡 등에서 직접 보내 주세요. 마감은 의뢰 상세(내부) · 작업 설정(외부)에서 고칩니다.</div></div></details>';
+  }
+  /* 내부 : 지금 보는 서비스 */
+  window.renderDueIn=function(){
+    var box=$('dueBox'); if(!box)return;
+    if(!canBoss()||COKEY||!AREAS[CUR]){box.classList.add('hide');return;}
+    box.classList.remove('hide'); DUE_IT=[]; DUE_GRP=[];
+    var items=[], seen={};
+    inRows().forEach(function(r){
+      if(seen[r.id]||groupOf(r)!==CUR||!inLive(r))return; seen[r.id]=1;
+      var du=r.due_stages||{}, set=stageSet(r), lab={}; set.dues.forEach(function(d){lab[d.k]=d.l;});
+      var pts=Object.keys(du).filter(function(k){return du[k]&&k!=='blog_start'&&/^\d{4}-\d{2}-\d{2}$/.test(du[k]);})
+        .map(function(k){return {at:du[k]+'T20:00:00+09:00',set:false,label:lab[k]||('예전 : '+(OLD_DUE_LABEL[k]||k))};});
+      var nx=dueNext(pts); if(!nx)return;
+      items.push({at:nx.at,set:false,label:nx.label,title:r.academy_name||'(이름 없음)',sub:AREAS[groupOf(r)]||'',who:r.assignee_id?(staffName(r.assignee_id)||'(지운 계정)'):'담당자 미배정'});
+    });
+    box.innerHTML=dueCardHTML(AREAS[CUR],items,'마감기한이 적힌 진행 중 의뢰가 없습니다 — 의뢰 상세의 「단계별 마감」에 날짜를 넣으면 여기 나옵니다.');
+  };
+  /* 외부 : 팀 하나 */
+  function dueExtHTML(t){
+    if(!canBoss())return '';
+    DUE_IT=[]; DUE_GRP=[];
+    var items=[];
+    EXT.jobs.forEach(function(j){
+      if(j.team!==t||!jobActive(j))return;
+      var p=pjOf(j.project_id); if(!p||p.status==='종료')return;
+      var pts=[]; jobDues(j.id).forEach(function(d){if(d.done)return;DKIND.forEach(function(k){var a=d[k[0]+'_at'];if(a)pts.push({at:a,set:d[k[0]+'_time_set'],label:k[1]+(d.label?' · '+d.label:'')});});});
+      var nx=dueNext(pts); if(!nx)return;
+      var who=(j.member_ids||[]).map(memName).filter(Boolean).join(' · ');
+      items.push({at:nx.at,set:!!nx.set,label:nx.label,title:j.title,sub:p.short_name||p.name,who:who||'담당 미정'});
+    });
+    return '<div class="card due-card" style="padding:12px 18px;margin-bottom:14px">'+dueCardHTML('외부 '+(XKO[t]||t),items,'기한이 적힌 진행 중 작업이 없습니다 — 작업 설정의 「기한」에 날짜를 넣으면 여기 나옵니다.')+'</div>';
+  }
+
+  /* ---------- 💳 재정 관리 · 입금 일괄 처리 (2026-11-21 이은총 님 · 연락판 나-1121-3) ----------
+     권한 : 최고관리자 · 관리자(canFin = staff.role owner · admin) — 메뉴 · 화면 · 처리 모두. DB 도 같은 기준(is_fin_admin · 12_재정_입금처리.sql).
+     대상 : 내부 의뢰(인투마케팅 · 입금 완료만 — 금액이 «같을 때만») · 외부 작업 입금 줄(입금 완료 / 부분 입금 — 11/21 부분 입금 그대로) ·
+            블로그 센터 주문(«후보만 보여 주기» — 처리는 지금처럼 블로그 센터 · 이은총 님 11/21). 관리비 대장은 여기 넣지 않음(따로 그대로).
+     🔴 분석 결과는 «제안»일 뿐 — 체크하고 미리 보기 → 최종 확인을 눌러야만 저장. 거래내역 형식 표본이 없어서(이은총 님 「표본 없이 진행」)
+        날짜 · 시각 · 입금자 · 금액을 넓게 읽고, 읽은 값은 모두 화면에서 고칠 수 있게 함. 출금 줄(「출금」 · 「-」)은 뺌.
+     🔴 두 번 반영 막기 : fin_bank_txns.fingerprint 유일(거래일|시각|금액|입금자|같은 값 순번) — 표가 없으면 «처리» 단추를 막음.
+     🔴 자동으로 안 하는 것 : 후보가 여럿 · 금액이 남은 돈보다 큼 · 내부 의뢰 금액이 다름(부분 입금 안 씀) · 금액 칸 빈 의뢰 · 같은 대상 두 번 → 검토로 남김. */
+  var FIN={rows:[],blog:[],done:[],doneErr:'',tableOk:null,loading:false,skipped:0,preview:null};
+  window.openPay=function(){
+    if(!canFin()){toast('재정 관리는 최고관리자 · 관리자만 볼 수 있습니다');return;}
+    openSpecial('viewPay','navPay'); finLoad();
+  };
+  async function finLoad(){
+    if(FIN.loading)return; FIN.loading=true; renderPay();
+    try{
+      var b=await sb.from('blog_orders').select('id,request_id,academy_name,contact_name,amount_total,paid_at,paid_amount,status,is_practice').is('paid_at',null);
+      FIN.blog=b.error?[]:(b.data||[]).filter(function(o){return !o.is_practice&&o.status!=='ended';});
+      FIN.blogErr=b.error?b.error.message:'';
+      var d=await sb.from('fin_bank_txns').select('*').order('created_at',{ascending:false}).limit(300);
+      FIN.tableOk=!d.error; FIN.doneErr=d.error?d.error.message:''; FIN.done=d.error?[]:(d.data||[]);
+    }finally{FIN.loading=false;}
+    FIN.rows.forEach(finEval); renderPay();
+  }
+  /* ── 거래내역 글 읽기 (형식 표본 없음 → 넓게 읽고 고칠 수 있게) */
+  var FIN_KW=/(거래일시|거래일자|거래일|일시|적요|기록사항|내용|메모|받는분|보낸분|입금자명|입금자|의뢰인|거래후잔액|잔액|입금액|출금액|입금|출금|이체|타행|당행|자행|모바일|인터넷|스마트|폰뱅킹|펌뱅킹|오픈뱅킹|뱅킹|송금|대체|CMS|ATM|FB|원)/gi;
+  function finNorm(s){return String(s||'').replace(/\s+/g,'').replace(/[()\[\]{}.,·\-_/|:'"]/g,'').toLowerCase();}
+  function finParse(text){
+    var lines=String(text||'').replace(/\r/g,'').split('\n').map(function(x){return x.trim();}).filter(Boolean);
+    var recs=[], cur=null, now=kstToday(), y0=+now.slice(0,4), m0=+now.slice(5,7), m0n=m0, out=0;
+    var dateRe=/(20\d{2})\s*[.\-\/년]\s*(\d{1,2})\s*[.\-\/월]\s*(\d{1,2})\s*일?|(?:^|[^\d])(\d{2})[.\-\/](\d{1,2})[.\-\/](\d{1,2})(?!\d)|(?:^|[^\d])(\d{1,2})\s*[.\-\/월]\s*(\d{1,2})\s*일?(?![\d,])/;
+    /* 표 머리줄(탭으로 나뉜 「입금 · 잔액 · 보낸분」 등)이 있으면 그 칸 자리대로 읽음 */
+    var H=null;
+    lines.forEach(function(l){
+      if(!dateRe.test(l)){
+        if(/\t/.test(l)&&/(입금|잔액|출금)/.test(l)){var c=l.split('\t').map(function(x){return x.trim();});
+          var fi=function(re,not){for(var i=0;i<c.length;i++){if(re.test(c[i])&&!(not&&not.test(c[i])))return i;}return -1;};
+          H={n:c.length,dep:fi(/입금/,/입금자|입금인/),wd:fi(/출금|지급/),bal:fi(/잔액/),name:(fi(/보낸분|입금자|입금인|의뢰인|성명|이름/)>=0?fi(/보낸분|입금자|입금인|의뢰인|성명|이름/):fi(/받는분|기록사항|적요|내용/))};cur=null;return;}
+        if(cur&&!cur.oneLine&&cur.raw.length<4)cur.raw.push(l);   /* 여러 줄 모양만 이어 붙임 (최대 3줄) */
+        return;
+      }
+      cur={raw:[l],hdr:(H&&/\t/.test(l)&&Math.abs(l.split('\t').length-H.n)<=1)?H:null};
+      cur.oneLine=!!cur.hdr||/(\d{1,3}(,\d{3})+|\d{4,})\s*원?/.test(l.replace(dateRe,' ').replace(/\d{1,2}:\d{2}(:\d{2})?/,' '));
+      recs.push(cur);
+    });
+    var rows=[];
+    recs.forEach(function(r){
+      if(r.hdr){   /* 머리줄 칸 자리대로 */
+        var c=r.raw[0].split('\t').map(function(x){return x.trim();}), H2=r.hdr;
+        var num=function(i){if(i<0||i>=c.length)return 0;var v=String(c[i]).replace(/[,\s원+]/g,'');return /^\d+$/.test(v)?+v:0;};
+        var dep=num(H2.dep), wd=num(H2.wd);
+        if(H2.dep>=0&&!dep&&wd){out++;return;}
+        if(H2.dep>=0&&dep){
+          var t0=r.raw[0], m0=t0.match(dateRe), yy, mm, dd0;
+          if(m0[1]){yy=+m0[1];mm=+m0[2];dd0=+m0[3];} else if(m0[4]){yy=2000+(+m0[4]);mm=+m0[5];dd0=+m0[6];} else {mm=+m0[7];dd0=+m0[8];yy=(mm>m0n)?y0-1:y0;}
+          var tm0=t0.match(/(?:^|[^\d])([01]?\d|2[0-3]):([0-5]\d)(?::[0-5]\d)?(?!\d)/);
+          var nm=H2.name>=0?String(c[H2.name]||'').trim():'';
+          rows.push({date:(mm>=1&&mm<=12&&dd0>=1&&dd0<=31)?yy+'-'+('0'+mm).slice(-2)+'-'+('0'+dd0).slice(-2):'',time:tm0?('0'+tm0[1]).slice(-2)+':'+tm0[2]:'',
+            payer:nm,amount:dep,raw:t0,warn:nm?[]:['입금자']});
+          return;
+        }
+      }
+      var t=r.raw.join('  '), m=t.match(dateRe), y, mo, d;
+      if(m[1]){y=+m[1];mo=+m[2];d=+m[3];} else if(m[4]){y=2000+(+m[4]);mo=+m[5];d=+m[6];} else {mo=+m[7];d=+m[8];y=(mo>m0)?y0-1:y0;}
+      var date=(mo>=1&&mo<=12&&d>=1&&d<=31)?y+'-'+('0'+mo).slice(-2)+'-'+('0'+d).slice(-2):'';
+      var rest=t.replace(m[0],' ');
+      var tm=rest.match(/(?:^|[^\d])([01]?\d|2[0-3]):([0-5]\d)(?::[0-5]\d)?(?!\d)/), time='';
+      if(tm){time=('0'+tm[1]).slice(-2)+':'+tm[2]; rest=rest.replace(tm[0],' ');}
+      var isOut=/출금|지급|-\s*\d/.test(rest)&&!/입금|\+\s*\d/.test(rest);
+      if(isOut){out++;return;}
+      var nums=[], re=/([+]?)(\d{1,3}(?:,\d{3})+|\d{3,})\s*원?/g, x;
+      while((x=re.exec(rest))){var before=rest.slice(Math.max(0,x.index-6),x.index);
+        nums.push({v:+x[2].replace(/,/g,''),s:x[0],bal:/잔액/.test(before),dep:/입금|\+/.test(before+x[1])});}
+      var cand=nums.filter(function(n){return !n.bal&&n.v>=100;}), pick=cand.filter(function(n){return n.dep;})[0]||cand[0]||null;
+      var warn=[];
+      if(!date)warn.push('날짜');
+      if(!pick)warn.push('금액'); else if(cand.length>1&&!cand.some(function(n){return n.dep;}))warn.push('금액 후보 '+cand.length+'개');
+      nums.forEach(function(n){rest=rest.split(n.s).join(' ');});
+      var payer=rest.replace(FIN_KW,' ').replace(/[\d+\-*#:,.()\[\]|\/\\]+/g,' ').replace(/\s+/g,' ').trim();
+      var toks=payer.split(' ').filter(function(w){return /[가-힣A-Za-z]/.test(w);});
+      payer=toks.slice(0,3).join(' ');
+      if(!payer)warn.push('입금자');
+      rows.push({date:date,time:time,payer:payer,amount:pick?pick.v:null,raw:t,warn:warn});
+    });
+    FIN.skipped=out;
+    return rows;
+  }
+  function finFp(rows){   /* 같은 붙여넣기 안에서 같은 값이 몇 번째인지까지 넣음 */
+    var cnt={};
+    rows.forEach(function(r){var k=[r.date,r.time||'',r.amount||'',finNorm(r.payer)].join('|'); cnt[k]=(cnt[k]||0)+1; r.fp=k+'|'+cnt[k];});
+  }
+  /* ── 연결할 수 있는 대상 */
+  function finTargets(){
+    var T=[];
+    inRows().forEach(function(r){
+      if(r.paid||r.paid_at||r.pay_at)return; var st=normStatus(r.status); if(st==='취소')return;
+      var amt=(r.amount!=null&&r.amount!=='')?Number(r.amount):null;
+      T.push({key:'r:'+r.id,kind:'request',r:r,due:amt,names:[r.academy_name,r.manager_name,r.agree_name],
+        label:'내부 · '+(r.academy_name||'(이름 없음)')+' · '+(AREAS[groupOf(r)]||''),can:amt!=null&&amt>0,why:amt==null?'의뢰 금액 칸이 비어 있음 — 의뢰 상세에 금액을 먼저':''});
+    });
+    (EXT.jobs||[]).forEach(function(j){ var p=pjOf(j.project_id);
+      payLines(j).forEach(function(l){ if(!l.owe||l.full)return; var due=lineDue(l); if(!(due>0))return;
+        T.push({key:'x:'+j.id+':'+(l.epId||'')+':'+(l.period||''),kind:'ext',j:j,l:l,due:due,names:[jobPayer(j),p&&p.name,p&&p.short_name,p&&p.partner],
+          label:'외부 · '+((p&&(p.short_name||p.name))||'')+' · '+j.title+(l.label&&l.label!=='작업 금액'?' · '+l.label:''),can:true});});});
+    FIN.blog.forEach(function(o){
+      T.push({key:'b:'+o.id,kind:'blog',o:o,due:o.amount_total!=null?Number(o.amount_total):null,names:[o.academy_name,o.contact_name],
+        label:'블로그 센터 · '+(o.academy_name||'(이름 없음)'),can:false,why:'블로그 주문 입금은 블로그 센터에서 처리합니다(후보만 보여 줌)'});});
+    return T;
+  }
+  function finNameHit(payer,names){
+    var p=finNorm(payer); if(p.length<2)return false;
+    return names.some(function(n){n=finNorm(n); return n.length>=2&&(n.indexOf(p)>=0||p.indexOf(n)>=0);});
+  }
+  function finCands(row,T){
+    var a=Number(row.amount)||0, out=[];
+    T.forEach(function(t){
+      var name=finNameHit(row.payer,t.names), exact=t.due!=null&&a===t.due, part=t.kind==='ext'&&a>0&&a<t.due;
+      if(!(exact||name))return;
+      out.push({t:t,name:name,exact:exact,part:part,score:(name?2:0)+(exact?3:(part?1:0))});
+    });
+    return out.sort(function(x,y){return y.score-x.score;});
+  }
+  /* 한 줄 평가 : 후보 · 제안 · 처리 결과 미리 보기 */
+  function finEval(row){
+    var T=finTargets(), map={}; T.forEach(function(t){map[t.key]=t;});
+    row.cands=finCands(row,T);
+    if(row.pick===undefined){   /* 처음 한 번만 제안 — 체크는 안 함 */
+      var ex=row.cands.filter(function(c){return c.exact;});
+      var only=ex.length===1&&(ex[0].name||(T.filter(function(t){return t.due===Number(row.amount);}).length===1&&!row.cands.some(function(c){return c.name;})));   /* 금액만 같으면 : 금액 같은 대상이 하나뿐이고 이름 맞는 다른 후보가 없을 때만 */
+      row.pick=only?ex[0].t.key:'';
+      row.sure=!!only;
+    }
+    row.target=row.pick?map[row.pick]||null:null;
+    row.res=finCheck(row);
+  }
+  function finCheck(row){
+    var a=Number(row.amount)||0, t=row.target;
+    if(FIN.done.some(function(d){return d.fingerprint===row.fp;}))return {ok:false,msg:'이미 반영한 거래입니다'};
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(row.date||''))return {ok:false,msg:'날짜를 확인해 주세요'};
+    if(!(a>0))return {ok:false,msg:'금액을 확인해 주세요'};
+    if(!t)return {ok:false,msg:row.cands&&row.cands.length>1?'후보 '+row.cands.length+'개 — 직접 고르세요':(row.cands&&row.cands.length?'후보를 골라 주세요':'맞는 대상이 없습니다')};
+    if(!t.can)return {ok:false,msg:t.why||'처리할 수 없는 대상'};
+    if(t.kind==='request'){
+      if(a!==t.due)return {ok:false,msg:'의뢰 금액 '+wonS(t.due)+'과 다릅니다 — 내부 의뢰는 금액이 같을 때만 입금 완료로 처리'};
+      return {ok:true,kind:'full',msg:'입금 없음 → ✅ 입금 완료 ('+row.date+')'};
+    }
+    if(a>t.due)return {ok:false,msg:'남은 금액 '+wonS(t.due)+'보다 큽니다'};
+    if(a===t.due)return {ok:true,kind:'full',msg:(t.l.kind==='partial'?'◐ 부분 입금 '+wonS(t.l.paid):'☑️ 미입금')+' → ✅ 입금 완료 (전체 '+wonS(t.l.amount)+')'};
+    var np=(Number(t.l.paid)||0)+a;
+    return {ok:true,kind:'partial',newPaid:np,msg:(t.l.kind==='partial'?'◐ '+wonS(t.l.paid):'☑️ 미입금')+' → ◐ 부분 입금 '+wonS(np)+' ('+payPct(np,t.l.amount)+'% · 남은 '+wonS(t.l.amount-np)+')'};
+  }
+  function finDupTargets(sel){var seen={},dup={};sel.forEach(function(r){if(!r.pick)return;if(seen[r.pick])dup[r.pick]=1;seen[r.pick]=1;});return dup;}
+  /* ── 화면 */
+  window.finParseGo=function(){
+    var rows=finParse($('fin_text').value);
+    finFp(rows); rows.forEach(finEval); FIN.rows=rows; FIN.preview=null; renderPay();
+    toast(rows.length?rows.length+'줄을 읽었습니다 — 아직 저장하지 않았습니다':'읽은 입금 줄이 없습니다 — 날짜가 들어간 줄을 붙여 넣어 주세요');
+  };
+  window.finClear=function(){FIN.rows=[];FIN.preview=null;FIN.skipped=0;$('fin_text').value='';renderPay();};
+  window.finAddRow=function(){var r={date:kstToday(),time:'',payer:'',amount:null,raw:'(직접 넣음)',warn:[]};FIN.rows.push(r);finFp(FIN.rows);FIN.rows.forEach(function(x){x.res=null;});FIN.rows.forEach(finEval);FIN.preview=null;renderPay();};
+  window.finEdit=function(i,k,v){
+    var r=FIN.rows[i]; if(!r)return;
+    if(k==='amount')v=payAmtParse(v);
+    if(k==='sel'){r.sel=!!v;FIN.preview=null;renderPayRows();return;}
+    if(k==='pick'){r.pick=v;r.sure=false;}
+    else{r[k]=(typeof v==='string')?v.trim():v; finFp(FIN.rows); if(r.sure){r.pick=undefined;r.sure=false;}}   /* 제안만 했던 줄은 고친 값으로 다시 제안 */
+    FIN.rows.forEach(finEval); FIN.preview=null; renderPayRows();
+  };
+  function finOpt(c){var t=c.t;return t.label+' · '+(t.kind==='ext'?'남은 ':'')+wonS(t.due)+(c.exact?' · 금액 같음':(c.part?' · 부분 가능':''))+(c.name?' · 이름 맞음':'');}
+  function renderPayRows(){
+    var box=$('fin_rows'); if(!box)return;
+    var dup=finDupTargets(FIN.rows.filter(function(r){return r.sel;}));
+    if(!FIN.rows.length){box.innerHTML='<div class="muted" style="font-size:.85rem">위에 거래내역을 붙여 넣고 「분석」을 누르세요. 줄을 직접 넣을 수도 있습니다.</div>';return;}
+    var T=finTargets();
+    box.innerHTML='<div class="fin-tbl"><div class="fin-r fin-h"><span></span><span>거래일 · 시각</span><span>입금자</span><span>금액</span><span>연결할 대상 (후보 먼저)</span><span>처리하면</span></div>'
+      +FIN.rows.map(function(r,i){
+        var res=r.res||{}, isDup=r.sel&&r.pick&&dup[r.pick];
+        var opts='<option value="">— 연결 안 함 —</option>';
+        var ck={}; (r.cands||[]).forEach(function(c){ck[c.t.key]=1;opts+='<option value="'+esc(c.t.key)+'"'+(r.pick===c.t.key?' selected':'')+'>★ '+esc(finOpt(c))+'</option>';});
+        opts+='<optgroup label="그 밖의 대상">'+T.filter(function(t){return !ck[t.key];}).map(function(t){return '<option value="'+esc(t.key)+'"'+(r.pick===t.key?' selected':'')+'>'+esc(t.label+' · '+wonS(t.due))+'</option>';}).join('')+'</optgroup>';
+        var bad=!res.ok||isDup;
+        return '<div class="fin-r'+(bad?' bad':'')+'">'
+          +'<span><input type="checkbox"'+(r.sel?' checked':'')+(res.ok&&!isDup?'':' disabled')+' onchange="finEdit('+i+',\'sel\',this.checked)" title="처리할 거래로 고르기"></span>'
+          +'<span><input class="inp" type="date" value="'+esc(r.date||'')+'" onchange="finEdit('+i+',\'date\',this.value)"><input class="inp fin-tm" value="'+esc(r.time||'')+'" placeholder="시각" onchange="finEdit('+i+',\'time\',this.value)"></span>'
+          +'<span><input class="inp" value="'+esc(r.payer||'')+'" placeholder="입금자" onchange="finEdit('+i+',\'payer\',this.value)"></span>'
+          +'<span><input class="inp fin-am" inputmode="numeric" value="'+(r.amount!=null?moneyFmt(r.amount):'')+'" placeholder="금액" onchange="finEdit('+i+',\'amount\',this.value)"></span>'
+          +'<span><select class="inp" onchange="finEdit('+i+',\'pick\',this.value)">'+opts+'</select>'
+            +(r.pick&&r.sure?'<small class="muted">제안 — 확인 뒤 체크하세요</small>':'')+(r.warn&&r.warn.length?'<small style="color:#B45309">읽기 확인 : '+esc(r.warn.join(' · '))+'</small>':'')+'</span>'
+          +'<span class="'+(bad?'bad':'ok')+'">'+(isDup?'같은 대상을 다른 거래에도 골랐습니다 — 한 번에 하나만':esc(res.msg||''))+'</span></div>';
+      }).join('')+'</div>';
+    var n=FIN.rows.filter(function(r){return r.sel&&r.res&&r.res.ok;}).length;
+    $('fin_go').disabled=!n; $('fin_go').textContent='선택한 '+n+'건 미리 보기';
+  }
+  function finSums(){
+    var T=finTargets(), s={request:[0,0,0],ext:[0,0],blog:[0,0]};
+    T.forEach(function(t){if(t.kind==='request'){if(t.due!=null){s.request[0]++;s.request[1]+=t.due;}else s.request[2]++;}else{s[t.kind][0]++;s[t.kind][1]+=Number(t.due)||0;}});
+    return s;
+  }
+  window.renderPay=function(){
+    var b=$('payBody'); if(!b)return;
+    if(!canFin()){b.innerHTML='<div class="card"><div class="empty"><b>최고관리자 · 관리자만 볼 수 있습니다</b></div></div>';return;}
+    var S=finSums(), card=function(k,v,s){return '<div class="num-card"><div class="k">'+k+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div></div>';};
+    var h='<div class="num-cards" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">'
+      +card('내부 의뢰 · 받을 돈',wonS(S.request[1]),S.request[0]+'건'+(S.request[2]?' · 금액 칸 빈 의뢰 '+S.request[2]+'건(합계에서 빠짐)':''))
+      +card('외부 작업 · 남은 돈',wonS(S.ext[1]),S.ext[0]+'줄 · 받을 차례인 줄만')
+      +card('블로그 센터 · 미입금 주문',wonS(S.blog[1]),S.blog[0]+'건 · 처리는 블로그 센터에서')+'</div>'
+      +'<p class="muted" style="font-size:.78rem;margin:-4px 0 12px">홈페이지 관리비 대장은 이 화면에 넣지 않습니다(「💰 관리비 대장 모아보기」에서 따로).</p>';
+    if(FIN.tableOk===false)h+='<div class="card" style="border-color:#FCA5A5;background:#FEF2F2;font-size:.84rem">⚠ 처리 기록 표(fin_bank_txns)가 아직 DB 에 없습니다 — 분석 · 후보 · 미리 보기는 되지만 «처리»는 막아 둡니다(같은 거래를 두 번 반영하지 않으려고). 「12 재정 입금처리」 SQL 을 적용하면 열립니다.</div>';
+    h+='<div class="card ext-card"><h3>① 거래내역 붙여 넣기</h3>'
+      +'<textarea class="inp" id="fin_text" style="min-height:120px" placeholder="은행 앱 · 인터넷뱅킹 거래내역을 복사해 그대로 붙여 넣으세요.&#10;예) 2026.11.21 14:03  김○○  50,000  …">'+'</textarea>'
+      +'<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center"><button class="btn btn-primary" type="button" onclick="finParseGo()">분석</button>'
+      +'<button class="btn btn-ghost" type="button" onclick="finAddRow()">＋ 줄 직접 넣기</button><button class="btn btn-ghost" type="button" onclick="finClear()">지우기</button>'
+      +'<span class="muted" style="font-size:.78rem">읽기만 합니다 — 저장은 아래에서 고르고 최종 확인을 눌렀을 때만. 출금 줄은 뺍니다'+(FIN.skipped?' (이번에 뺀 출금 '+FIN.skipped+'줄)':'')+'.</span></div></div>';
+    h+='<div class="card ext-card"><h3>② 거래 확인 · 대상 고르기 <span class="muted" style="font-weight:600;font-size:.8rem">— ★ = 금액이나 이름이 맞는 후보 · 읽은 값이 틀리면 칸을 고치세요</span></h3><div id="fin_rows"></div>'
+      +'<div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-primary" id="fin_go" type="button" onclick="finPreview()" disabled>선택한 0건 미리 보기</button></div><div id="fin_pv"></div></div>';
+    h+='<div class="card ext-card"><h3>최근 반영한 거래 <span class="muted" style="font-weight:600;font-size:.8rem">— 이 화면에서 처리한 것 · 최근 30건</span></h3>'
+      +(FIN.loading?'<div class="muted">불러오는 중…</div>':FIN.tableOk===false?'<div class="muted" style="font-size:.84rem">처리 기록 표가 아직 없습니다.</div>'
+        :(FIN.done.length?FIN.done.slice(0,30).map(function(d){return '<div class="fin-d"><span class="tnum">'+esc(d.txn_date)+(d.txn_time?' '+esc(d.txn_time):'')+'</span><span>'+esc(d.payer||'-')+'</span><span class="tnum">'+wonS(d.amount)+'</span><span>'+esc(d.target_label||'')+'</span><span>'+(d.result==='full'?'✅ 입금 완료':'◐ 부분 입금')+'</span><span class="muted">'+esc(staffName(d.by_staff)||'')+' · '+esc(fdate(d.created_at))+'</span></div>';}).join('')
+          :'<div class="muted" style="font-size:.84rem">아직 없습니다.</div>'))+'</div>';
+    var keep=$('fin_text')?$('fin_text').value:'';
+    b.innerHTML=h; if(keep)$('fin_text').value=keep;
+    renderPayRows(); if(FIN.preview)finPreviewHTML();
+  };
+  window.finPreview=function(){
+    var sel=FIN.rows.filter(function(r){return r.sel;}), dup=finDupTargets(sel);
+    FIN.preview={ok:sel.filter(function(r){return r.res&&r.res.ok&&!dup[r.pick];}),bad:sel.filter(function(r){return !(r.res&&r.res.ok)||dup[r.pick];})};
+    finPreviewHTML();
+  };
+  function finPreviewHTML(){
+    var P=FIN.preview, box=$('fin_pv'); if(!P||!box)return;
+    var sum=P.ok.reduce(function(a,r){return a+(Number(r.amount)||0);},0);
+    box.innerHTML='<div class="fin-pv"><h4>미리 보기 — 처리할 '+P.ok.length+'건 · 합계 '+wonS(sum)+'</h4>'
+      +P.ok.map(function(r){return '<div>· <b>'+esc(r.target.label)+'</b> ← '+esc(r.date)+' '+esc(r.payer||'')+' '+wonS(r.amount)+'<br><span class="muted">　'+esc(r.res.msg)+'</span></div>';}).join('')
+      +(P.bad.length?'<div style="color:#B45309;margin-top:6px">빼는 것 '+P.bad.length+'건 — 검토 필요</div>':'')
+      +'<div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-primary" type="button" onclick="finRun()"'+(P.ok.length&&FIN.tableOk?'':' disabled')+'>'+P.ok.length+'건 처리하기</button>'
+      +'<button class="btn btn-ghost" type="button" onclick="FIN_CANCEL()">취소</button>'
+      +(FIN.tableOk?'':'<span style="color:var(--bad);font-size:.8rem">처리 기록 표가 없어 막아 둠</span>')+'</div></div>';
+  }
+  window.FIN_CANCEL=function(){FIN.preview=null;var b=$('fin_pv');if(b)b.innerHTML='';};
+  var FIN_BUSY=false;
+  window.finRun=async function(){
+    if(FIN_BUSY||!FIN.preview)return;
+    if(!canFin()){toast('최고관리자 · 관리자만 처리할 수 있습니다');return;}
+    if(!FIN.tableOk){toast('처리 기록 표가 없어 처리할 수 없습니다');return;}
+    var list=FIN.preview.ok; if(!list.length)return;
+    if(!confirm(list.length+'건을 처리합니다.\n\n'+list.map(function(r){return '· '+r.target.label+' ← '+wonS(r.amount)+'\n   '+r.res.msg;}).join('\n')+'\n\n처리할까요? (블로그 주문 · 관리비 대장은 바뀌지 않습니다)'))return;
+    FIN_BUSY=true; var log=[];
+    try{
+      try{await loadExt();}catch(e){}
+      var dd=await sb.from('fin_bank_txns').select('fingerprint').in('fingerprint',list.map(function(r){return r.fp;}));
+      var had={}; (dd.data||[]).forEach(function(x){had[x.fingerprint]=1;});
+      for(var i=0;i<list.length;i++){
+        var r=list[i]; finEval(r);   /* 최신 자료로 다시 확인 */
+        if(had[r.fp]){log.push('⏭ '+r.target.label+' — 이미 반영한 거래');continue;}
+        if(!r.res.ok){log.push('⏭ '+(r.target?r.target.label:'')+' — '+r.res.msg);continue;}
+        log.push(await finApply(r));
+      }
+    }finally{FIN_BUSY=false;}
+    await finLoad(); try{await xReload();}catch(e){}
+    FIN.rows.forEach(function(x){x.sel=false;}); FIN.rows.forEach(finEval); FIN.preview=null; renderPay();
+    alert('처리 결과\n\n'+log.join('\n'));
+  };
+  async function finApply(r){
+    var t=r.target, a=Number(r.amount), res=r.res;
+    var rec={fingerprint:r.fp,txn_date:r.date,txn_time:r.time||null,payer:r.payer||null,amount:a,target_kind:t.kind==='request'?'request':'ext',
+      request_id:t.kind==='request'?t.r.id:null,ext_job_id:t.kind==='ext'?t.j.id:null,ext_episode_id:t.kind==='ext'?(t.l.epId||null):null,ext_period:t.kind==='ext'?(t.l.period||null):null,
+      target_label:t.label,applied_amount:a,result:res.kind,by_staff:ME.id};
+    var ins=await sb.from('fin_bank_txns').insert(rec).select('id').single();
+    if(ins.error)return '❌ '+t.label+' — '+(/duplicate|unique/i.test(ins.error.message)?'이미 반영한 거래':'기록 실패 : '+ins.error.message);
+    var undo=async function(){await sb.from('fin_bank_txns').delete().eq('id',ins.data.id);};
+    if(t.kind==='request'){
+      var u=await sb.from('requests').update({paid:true,paid_at:r.date}).eq('id',t.r.id).is('paid_at',null).select('id,paid,paid_at');
+      if(u.error||!(u.data||[]).length){await undo();return '❌ '+t.label+' — '+(u.error?u.error.message:'이미 입금 처리됐거나 권한이 없습니다');}
+      t.r.paid=true; t.r.paid_at=r.date;
+      return '✅ '+t.label+' — 입금 완료 ('+r.date+')';
+    }
+    var j=t.j, l=t.l, what=(l.period?ymKo(l.period)+' ':'')+(l.ep?l.label+' ':'')+wonS(l.amount), q;
+    if(res.kind==='full'){
+      q=l.row?sb.from('ext_payments').update({amount:l.amount,paid_kind:'full'}).eq('id',l.row.id).select().maybeSingle()
+             :sb.from('ext_payments').insert({job_id:j.id,episode_id:l.epId||null,period:l.period||null,amount:l.amount,paid_at:r.date,by_staff:ME.id,payer:jobPayer(j),note:'재정 · 은행 입금'}).select().maybeSingle();
+    }else{
+      q=l.row?sb.from('ext_payments').update({amount:res.newPaid,paid_kind:'partial'}).eq('id',l.row.id).select().maybeSingle()
+             :sb.from('ext_payments').insert({job_id:j.id,episode_id:l.epId||null,period:l.period||null,amount:res.newPaid,paid_kind:'partial',paid_at:r.date,by_staff:ME.id,payer:jobPayer(j),note:'재정 · 은행 입금'}).select().maybeSingle();
+    }
+    var w=await q;
+    if(w.error||!w.data){await undo();return '❌ '+t.label+' — '+(w.error?payDbMsg(w.error):'권한이 없습니다');}
+    await sb.from('ext_job_events').insert({job_id:j.id,kind:'pay',from_val:l.full?'✅':(l.kind==='partial'?'◐ '+wonS(l.paid):'☑️'),to_val:res.kind==='full'?'✅':'◐ '+wonS(res.newPaid),note:what+' · 재정 은행 입금 '+wonS(a)+' ('+r.date+')',by_staff:ME.id});
+    return '✅ '+t.label+' — '+(res.kind==='full'?'입금 완료':'부분 입금 '+wonS(res.newPaid));
+  }
 
   /* ---------- 재정 내보내기 (2026-11-11 이은총 님 · 재정 × 블로그 센터 연결안 ①) ----------
      대표님 재정표(마케팅_통합관리대장 v3-5)의 A~S 칸 순서 그대로 CSV 세 장 — 매출 · 지출 · 개인별 몫.
@@ -3644,11 +4054,11 @@
       if(ME&&r.assignee_id===ME.id&&normStatus(r.status)!=='완료')inner.push(r);});});
     return {mgr:mgrWait,mine:mine,inner:inner};
   }
-  function myCount(){$('navBoss').classList.toggle('hide',!canBoss());var L=myLists(),n=L.mgr.length+L.mine.length+L.inner.length;var c=$('c-my');if(c){c.textContent=n;c.classList.toggle('alert',L.mgr.length>0);}}
+  function myCount(){$('navBoss').classList.toggle('hide',!canBoss());$('navPay').classList.toggle('hide',!canFin());var L=myLists(),n=L.mgr.length+L.mine.length+L.inner.length;var c=$('c-my');if(c){c.textContent=n;c.classList.toggle('alert',L.mgr.length>0);}}
   window.openMy=function(){
     document.querySelectorAll('.navb[data-nav],#navCo .navb,#navOut .navb,#navOutWork .navb').forEach(function(x){x.classList.remove('on');});
     $('navMy').classList.add('on');
-    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
+    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewBoss','viewFee','viewPay'].forEach(function(v){$(v).classList.add('hide');});
     $('viewMy').classList.remove('hide'); renderMy();
   };
   window.renderMy=function(){
@@ -3939,15 +4349,29 @@
     $('em_h').textContent=x?'조직도 — '+x.person_name:'사람 넣기';
     $('em_meta').textContent=pjLabel(p);
     $('em_id').value=x?x.id:''; $('em_id').dataset.pid=p.id;
-    $('em_staff').innerHTML='<option value="">계정 없음 (이름만 적기)</option>'+STAFF.filter(function(s){return s.status==='approved';})
-      .map(function(s){return '<option value="'+s.id+'">'+esc(s.name||s.email)+'</option>';}).join('');
-    $('em_staff').value=x&&x.staff_id||'';
+    $('em_find').value=''; $('em_found').textContent='';
+    emStaffOpts('',x&&x.staff_id||'');
     $('em_name').value=x?x.person_name:''; $('em_kakao').value=x&&x.kakao_name||'';
     $('em_team').innerHTML=XTEAMS.map(function(t){return '<option value="'+t[0]+'">'+t[1]+'</option>';}).join('');
     $('em_team').value=x?x.team:(team||'web');
     $('em_role').value=x?x.role:((team||'')==='manage'?'관리자':'담당자');
     $('em_del').classList.toggle('hide',!x);
     $('emModal').classList.add('open');
+  };
+  /* 직원 검색 (2026-11-21 이은총 님) — 승인된 직원 목록을 이름(없으면 메일)으로 좁히기만 · 고른 값은 늘 남김 · 계정 만들기 · 고치기 없음 */
+  function emStaffOpts(q,keep){
+    q=String(q||'').trim().toLowerCase().replace(/\s+/g,'');
+    var all=STAFF.filter(function(s){return s.status==='approved';});
+    var hit=all.filter(function(s){var n=String(s.name||s.email||'').toLowerCase().replace(/\s+/g,'');return !q||n.indexOf(q)>=0||s.id===keep;});
+    $('em_staff').innerHTML='<option value="">계정 없음 (이름만 적기)</option>'+hit.map(function(s){return '<option value="'+s.id+'">'+esc(s.name||s.email)+'</option>';}).join('');
+    $('em_staff').value=keep||'';
+    return hit.filter(function(s){return s.id!==keep||!q||String(s.name||s.email||'').toLowerCase().replace(/\s+/g,'').indexOf(q)>=0;});
+  }
+  window.emFind=function(enter){
+    var q=$('em_find').value, keep=$('em_staff').value, hit=emStaffOpts(q,keep);
+    if(!q.trim()){$('em_found').textContent='';return;}
+    $('em_found').textContent=hit.length?hit.length+'명 찾음'+(hit.length===1||enter?' — 「'+(hit[0].name||hit[0].email)+'」를 골랐습니다':' — 목록에서 고르세요'):'맞는 직원이 없습니다 — 계정이 없으면 「계정 없음」으로 두고 실명만 적으세요';
+    if(hit.length===1||(enter&&hit.length)){$('em_staff').value=hit[0].id;emPickStaff();}
   };
   window.emPickStaff=function(){
     var s=STAFF.filter(function(x){return x.id===$('em_staff').value;})[0];
@@ -4672,6 +5096,7 @@
   window.renderList=function(){
     renderFee();
     renderRev();   /* 실제 매출 요약 (11/19) — 읽기만 */
+    renderDueIn();   /* 마감기한 · 독촉 메시지 (11/21) — 읽기만 */
     if(COKEY)CO=coRows();   /* 상세에서 고친 줄(syncRow)이 바로 보이게 다시 묶습니다 */
     var rows=COKEY?((CO[COKEY]||{}).rows||[]):(DATA[CUR]||[]);
     var q=($('q').value||'').trim().toLowerCase();
