@@ -328,6 +328,13 @@
   .due-it .t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .due-cp{border:1.5px solid var(--line);background:var(--surface);border-radius:8px;padding:2px 8px;font-size:.74rem;font-weight:800;cursor:pointer;white-space:nowrap}
   @media(max-width:860px){.due-it{grid-template-columns:1fr auto}}
+  .due-tag{display:inline-block;font-size:.68rem;font-weight:800;padding:1px 6px;border-radius:6px;margin-right:4px;color:#fff;background:#475569;vertical-align:1px}
+  .due-tag.x{background:#B98A00}
+  /* 경영 현황 안 관리자 · 최고관리자 전용 영역 (11/21 나-1121-4) */
+  .adm-zone{border:2px dashed #93C5FD;border-radius:16px;padding:12px 14px 2px;margin-bottom:18px;background:rgba(239,246,255,.45)}
+  .adm-zone>.adm-tag{font-size:.78rem;font-weight:800;color:#1D4ED8;margin:0 0 10px}
+  .adm-pay>summary{cursor:pointer;list-style:none;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .adm-pay>summary::-webkit-details-marker{display:none}
   /* 재정 관리 · 입금 처리 (2026-11-21) */
   .fin-tbl{display:flex;flex-direction:column;gap:0;overflow-x:auto}
   .fin-r{display:grid;grid-template-columns:28px 150px 130px 110px minmax(240px,1fr) minmax(200px,1fr);gap:8px;align-items:start;padding:8px 0;border-top:1px solid var(--line);font-size:.82rem;min-width:900px}
@@ -771,7 +778,6 @@
     <div class="side-sep"></div>
     <button class="navb hide" id="navBoss" type="button" onclick="openBoss()">📊 경영 현황</button>
     <button class="navb" id="navFee" type="button" onclick="openFee('all')">💰 관리비 대장 모아보기</button>
-    <button class="navb hide" id="navPay" type="button" onclick="openPay()">💳 재정 관리 · 입금 처리</button>   <!-- 11/21 · 최고관리자 · 관리자만 -->
     <div class="side-sep"></div>
     <button class="navb hide" data-nav="staff" id="navStaff" type="button">관리자 목록 <span class="cnt" id="c-staff">0</span></button>
     <button class="navb hide" data-nav="site" id="navSite" type="button">홈페이지 정보 · 푸터</button>
@@ -987,15 +993,21 @@
     <!-- 내 할 일 -->
     <section id="viewBoss" class="hide">
       <div class="head"><div><h1>경영 현황</h1><p id="bossSub">외부(외주) · 내부(홈페이지 신청) 일을 한눈에 — 누가 얼마나 맡았는지, 무엇이 밀렸는지.</p></div></div>
+      <!-- 관리자 · 최고관리자 전용 영역 (11/21 나-1121-4) — 마감 · 독촉 / 재정 관리 · 입금 처리 / 입금 요청 · 재정 내보내기. canFin() 만 보임 -->
+      <div id="bossAdmin" class="adm-zone hide">
+        <div class="adm-tag">🔒 관리자 · 최고관리자 전용</div>
+        <div class="card due-card" id="bossDue" style="padding:12px 18px;margin-bottom:14px"></div>
+        <details class="card adm-pay" id="bossPayD" style="padding:12px 18px;margin-bottom:14px">
+          <summary><b style="font-size:.95rem">💳 재정 관리 · 입금 처리</b><span class="muted" style="font-size:.8rem">은행 거래내역 붙여 넣기 → 후보 → 미리 보기 → 최종 확인한 것만 저장 · 블로그 센터 주문은 후보만</span><span class="muted" style="margin-left:auto;font-size:.76rem">눌러서 펼치기 · 접기</span></summary>
+          <div style="margin-top:10px" id="payBody"></div>
+        </details>
+        <div id="bossFin"></div>
+      </div>
       <div id="bossBody"></div>
     </section>
     <section id="viewFee" class="hide">
       <div class="head"><div><h1>관리비 대장 모아보기</h1><p>내부(홈페이지 · SNS 관리비 대장)와 외부(외주 월정액)를 한 표에서 봅니다. 칸을 누르면 그 대장에 바로 저장됩니다.</p></div></div>
       <div id="feeAllBody"></div>
-    </section>
-    <section id="viewPay" class="hide">   <!-- 재정 관리 · 입금 일괄 처리 (11/21) — 최고관리자 · 관리자만 · renderPay() -->
-      <div class="head"><div><h1>재정 관리 · 입금 처리</h1><p>은행 거래내역을 붙여 넣으면 입금 줄을 읽어 연결 후보를 제안합니다. <b>고르고 미리 보고 최종 확인한 것만</b> 저장합니다. 내부 의뢰 · 외부 작업만 처리하고, 블로그 센터 주문은 후보만 보여 줍니다.</p></div></div>
-      <div id="payBody"></div>
     </section>
     <section id="viewMy" class="hide">
       <div class="head"><div><h1>내 할 일</h1><p id="mySub"></p></div></div>
@@ -1842,7 +1854,7 @@
       b.classList.add('on');
       document.querySelectorAll('#navCo .navb').forEach(function(x){x.classList.remove('on');});
       $('navMy').classList.remove('on');offSpecial();
-      ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee','viewPay'].forEach(function(v){$(v).classList.add('hide');});
+      ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
       if(k==='staff'){$('viewStaff').classList.remove('hide');renderStaff();return;}
       if(k==='site'){$('viewSite').classList.remove('hide');fillSite();return;}
       if(k==='partner'){$('viewPartner').classList.remove('hide');renderPartners();loadPartnerRules();return;}
@@ -1896,7 +1908,7 @@
     COKEY=k;
     document.querySelectorAll('.navb[data-nav],#navCo .navb').forEach(function(x){x.classList.remove('on');});
     var b=document.querySelector('#navCo .navb[data-co="'+CSS.escape(k)+'"]'); if(b)b.classList.add('on'); $('navMy').classList.remove('on');offSpecial();
-    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee','viewPay'].forEach(function(v){$(v).classList.add('hide');});
+    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
     $('viewList').classList.remove('hide');
     $('listTitle').textContent=(CO[k]?CO[k].name:'')+' — 업체별';
     $('listSub').textContent='이 업체가 신청한 의뢰를 팀 구분 없이 모았습니다. 줄을 누르면 원래 팀의 상세가 열립니다.';
@@ -1916,7 +1928,7 @@
     if(SCOPE==='out'){
       COKEY=null;
       document.querySelectorAll('.navb[data-nav],#navCo .navb').forEach(function(x){x.classList.remove('on');});
-      ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewMy','viewBoss','viewFee','viewPay'].forEach(function(v){$(v).classList.add('hide');});
+      ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
       $('viewExt').classList.remove('hide'); $('navMy').classList.remove('on');offSpecial();
       if(AXIS==='co'&&!PJ&&EXT.projects.length){var pv=EXT.projects.filter(pjShown);PJ=(pv[0]||EXT.projects[0]).id;}   /* 처음엔 목록에 보이는 프로젝트부터 (11/20) */
       renderExtNav(); renderExt();
@@ -2013,7 +2025,7 @@
     }).join('');
   }
   /* 내 할 일 · 경영 현황 · 관리비 대장을 보다가 프로젝트 · 팀을 누르면 외부 화면으로 돌아옴 (11/2 점검) */
-  function toExt(){['viewMy','viewBoss','viewFee','viewPay'].forEach(function(v){$(v).classList.add('hide');});$('viewExt').classList.remove('hide');$('navMy').classList.remove('on');offSpecial();}
+  function toExt(){['viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});$('viewExt').classList.remove('hide');$('navMy').classList.remove('on');offSpecial();}
   $('navOut').addEventListener('click',function(e){var b=e.target.closest('.navb[data-pj]');if(!b)return;PJ=b.getAttribute('data-pj');XQALL=false;toExt();renderExtNav();renderExt();});
   $('navOutWork').addEventListener('click',function(e){var b=e.target.closest('.navb[data-xt]');if(!b)return;XTEAM=b.getAttribute('data-xt');toExt();renderExtNav();renderExt();});
 
@@ -2576,7 +2588,6 @@
   async function xReload(){await loadExt(); renderExtNav(); myCount();
     if(!$('viewMy').classList.contains('hide'))renderMy();
     else if(!$('viewFee').classList.contains('hide'))renderFeeAll();
-    else if(!$('viewPay').classList.contains('hide'))renderPay();
     else if(!$('viewBoss').classList.contains('hide'))renderBoss();
     else renderExt();
     if($('jbModal').classList.contains('open'))jbEpRender();}   /* 작업 창 회차 칸도 새로 (11/16) */
@@ -3335,12 +3346,12 @@
      이번 주 기한 · 이번 정산. 사람 = 어드민 계정(staff) 기준, 계정 없는 조직도 사람은 이름으로.
      관리비 대장 모아보기 = 내부 settings web_fees · sns_fees + 외부 ext_jobs 월정액(ext_payments). 🔴 외부 납부일은 작업마다(pay_day, 비면 15일) —
      내부처럼 1일 · 10일로 묶지 않음(이은총 님 11/2). 칸을 누르면 그 대장에 바로 저장(내부 = saveLedger, 외부 = payToggle). */
-  function offSpecial(){['navBoss','navFee','navPay'].forEach(function(id){var b=$(id);if(b)b.classList.remove('on');});}
+  function offSpecial(){['navBoss','navFee'].forEach(function(id){var b=$(id);if(b)b.classList.remove('on');});}
   function canBoss(){return !!ME&&(ME.role==='owner'||ME.role==='admin'||myMems().some(function(m){return m.team==='manage'||m.role==='관리자';}));}
   function openSpecial(id,btn){
     document.querySelectorAll('.navb[data-nav],#navCo .navb,#navOut .navb,#navOutWork .navb').forEach(function(x){x.classList.remove('on');});
     $('navMy').classList.remove('on'); offSpecial(); if(btn)$(btn).classList.add('on');
-    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee','viewPay'].forEach(function(v){$(v).classList.add('hide');});
+    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewMy','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
     $(id).classList.remove('hide');
   }
   function inRows(){var seen={},out=[];Object.keys(DATA).forEach(function(g){(DATA[g]||[]).forEach(function(r){if(seen[r.id])return;seen[r.id]=1;out.push(r);});});return out;}
@@ -3371,7 +3382,7 @@
       var dd=(r.due_stages||{}).done; if(dd){var a=Date.parse(dd+'T20:00:00+09:00'); if(a<now)o.late++; else if(a<=lim)o.week++;}});
     return Object.keys(P).map(function(k){return P[k];}).sort(function(a,b){return (b.ext.length+b.inner.length)-(a.ext.length+a.inner.length)||a.name.localeCompare(b.name,'ko');});
   }
-  window.openBoss=function(){if(!canBoss()){toast('경영 현황은 최고관리자 · 관리자 · 외주 총괄만 볼 수 있습니다');return;}openSpecial('viewBoss','navBoss');renderBoss();};
+  window.openBoss=function(){if(!canBoss()){toast('경영 현황은 최고관리자 · 관리자 · 외주 총괄만 볼 수 있습니다');return;}openSpecial('viewBoss','navBoss');renderBoss();if(canFin())finLoad();};
   window.bossPj=function(pid){PJ=pid;XQALL=false;SCOPE='out';AXIS='co';XTAB='org';showScope();};
   window.renderBoss=function(){
     var live=EXT.jobs.filter(jobActive), wait=live.filter(function(j){return j.status==='중간 컨펌'||j.status==='최종 컨펌';});
@@ -3423,16 +3434,27 @@
         return '<div class="bs-w" onclick="jbOpen(\''+x.j.id+'\')"><span class="tnum">'+dueTxt(x.at,x.set)+'</span>'+ddHTML(x.at)+'<span class="mk '+x.kind[2]+'">'+x.kind[1]+'</span>'
           +'<span><b>'+esc(x.j.title)+'</b>'+(x.dl.label?' · '+esc(x.dl.label):'')+' <span class="muted">'+esc((p&&(p.short_name||p.name))||'')+'</span></span><span class="muted">'+esc(who||'담당 미정')+'</span></div>';}).join('')
         :'<div class="muted" style="font-size:.85rem">이번 주 기한이 없습니다.</div>')+'</div>';
-    $('bossBody').innerHTML=finCard()+h;
+    $('bossBody').innerHTML=h;
+    renderBossAdmin();
   };
+  /* 관리자 · 최고관리자 전용 영역 (11/21 나-1121-4) — 외주 총괄에게는 안 보임 */
+  function renderBossAdmin(){
+    var z=$('bossAdmin'); if(!z)return;
+    if(!canFin()){z.classList.add('hide');['bossDue','payBody','bossFin'].forEach(function(id){var b=$(id);if(b)b.innerHTML='';});return;}
+    z.classList.remove('hide');
+    renderDueBoss(); renderPay();
+    $('bossFin').innerHTML=reqCard()+finCard();
+  }
 
   /* ---------- 마감기한 · 독촉 메시지 복사 (2026-11-21 이은총 님 · 연락판 나-1121-3) ----------
      내부 업무별(서비스 목록) = 그 서비스의 진행 중 의뢰 · requests.due_stages(서비스별 마감 칸 · 날짜만 → 20:00 으로 봄) · 담당 = assignee_id
      외부 업무별(팀) = 그 팀의 진행 중 작업 · ext_deadlines(끝남 체크 안 한 중간 컨펌 · 최종 컨펌 · 마감기한) · 담당 = member_ids(조직도 이름)
      한 건에 «다음 마감 하나»만(앞으로 올 것 중 가장 이른 것 · 없으면 가장 늦게 지난 것) — 지난 단계 마감이 계속 뜨지 않게.
      「의뢰 시작일」(blog_start)은 마감이 아니라 기준일이라 뺌. 마감 체크박스 · 자동 발송 · 외부 메시지 연동 없음 — 글만 복사해 직접 보냄.
-     권한 : 경영 현황을 볼 수 있는 사람(최고관리자 · 관리자 · 외주 총괄)만 이 칸이 보임. DB 에 쓰지 않음. */
-  var DUE_IT=[], DUE_GRP=[];
+     권한 : 최고관리자 · 관리자만(canFin — 11/21 나-1121-4 에서 외주 총괄 뺌). DB 에 쓰지 않음.
+     11/21 나-1121-4 : 경영 현황 안 전용 영역에 내부 의뢰 + 외부 작업을 합친 칸(renderDueBoss) · 기존 칸(서비스 목록 위 · 외부 팀 화면)도 그대로 둠(이은총 님 「둘 다 둠」).
+     칸마다 목록을 따로 보관(DUE_NS) — 한 칸을 다시 그려도 다른 칸의 「복사」 단추가 엉뚱한 건을 복사하지 않게. */
+  var DUE_NS={};
   function dueNext(pts){
     pts=pts.filter(function(x){return x.at;}).sort(function(a,b){return Date.parse(a.at)-Date.parse(b.at);});
     var up=pts.filter(function(x){return Date.parse(x.at)>=Date.now();});
@@ -3451,14 +3473,14 @@
     return h+'\n'+list.map(function(it,i){return (i+1)+'. 「'+it.title+'」'+(it.sub?' ('+it.sub+')':'')+' · '+it.label+' — '+dueWhen(it)+' ('+dueLeft(it)+')';}).join('\n')
       +'\n'+(late?'지난 마감이 있습니다. 진행 상황을 바로 공유 부탁드립니다.':'진행 상황 확인 부탁드립니다.');
   }
-  window.dueCopy=async function(kind,i){
-    var list=kind==='g'?DUE_GRP[i]:[DUE_IT[i]]; if(!list||!list[0])return;
+  window.dueCopy=async function(kind,i,ns){
+    var S=DUE_NS[ns||'v']||{it:[],grp:[]}, list=kind==='g'?S.grp[i]:[S.it[i]]; if(!list||!list[0])return;
     var t=dueMsg(list);
     try{await navigator.clipboard.writeText(t);toast('독촉 메시지를 복사했습니다 — 카톡 등에 붙여 넣어 보내 주세요');}
     catch(e){prompt('복사가 막혀 있습니다 — 아래 글을 골라 복사해 주세요',t);}
   };
-  function dueCardHTML(title,items,empty){
-    DUE_IT=DUE_IT.concat([]); var base=DUE_IT.length; items.forEach(function(it){DUE_IT.push(it);});
+  function dueCardHTML(title,items,empty,ns){
+    ns=ns||'v'; var S=DUE_NS[ns]=DUE_NS[ns]||{it:[],grp:[]}; var base=S.it.length; items.forEach(function(it){S.it.push(it);});
     var by={}, order=[];
     items.forEach(function(it,i){it._i=base+i; if(!by[it.who]){by[it.who]=[];order.push(it.who);} by[it.who].push(it);});
     order.forEach(function(w){by[w].sort(function(a,b){return Date.parse(a.at)-Date.parse(b.at);});});
@@ -3470,44 +3492,60 @@
       +(soon?'<span class="badge" style="background:#FEF3C7;color:#92400E">7일 안 '+soon+'</span>':'')
       +'<span class="muted" style="margin-left:auto;font-size:.76rem">눌러서 펼치기 · 접기</span></summary><div style="margin-top:8px">';
     if(!items.length)h+='<div class="muted" style="font-size:.84rem">'+empty+'</div>';
-    order.forEach(function(w){var g=DUE_GRP.length; DUE_GRP.push(by[w]);
+    order.forEach(function(w){var g=S.grp.length; S.grp.push(by[w]);
       h+='<div class="due-p"><div class="due-ph"><b>👤 '+esc(w)+'</b><span class="muted">'+by[w].length+'건</span>'
-        +(by[w].length>1?'<button class="due-cp" type="button" style="margin-left:auto" onclick="dueCopy(\'g\','+g+')">📋 이 사람 전체 복사</button>':'')+'</div>'
+        +(by[w].length>1?'<button class="due-cp" type="button" style="margin-left:auto" onclick="dueCopy(\'g\','+g+',\''+ns+'\')">📋 이 사람 전체 복사</button>':'')+'</div>'
         +by[w].map(function(it){return '<div class="due-it"><span class="tnum">'+dueWhen(it).replace('월 ','/').replace('일','')+'</span>'
-          +'<span class="t"><b>'+esc(it.title)+'</b>'+(it.sub?' <span class="muted">'+esc(it.sub)+'</span>':'')+' · '+esc(it.label)+'</span>'
-          +ddHTML(it.at)+'<button class="due-cp" type="button" onclick="dueCopy(\'i\','+it._i+')">📋 독촉 메시지 복사</button></div>';}).join('')+'</div>';});
+          +'<span class="t">'+(it.tag?'<span class="due-tag'+(it.tag==='외부'?' x':'')+'">'+esc(it.tag)+'</span>':'')+'<b>'+esc(it.title)+'</b>'+(it.sub?' <span class="muted">'+esc(it.sub)+'</span>':'')+' · '+esc(it.label)+'</span>'
+          +ddHTML(it.at)+'<button class="due-cp" type="button" onclick="dueCopy(\'i\','+it._i+',\''+ns+'\')">📋 독촉 메시지 복사</button></div>';}).join('')+'</div>';});
     return h+'<div class="muted" style="font-size:.74rem;margin-top:6px">복사만 합니다 — 카카오톡 등에서 직접 보내 주세요. 마감은 의뢰 상세(내부) · 작업 설정(외부)에서 고칩니다.</div></div></details>';
   }
   /* 내부 : 지금 보는 서비스 */
-  window.renderDueIn=function(){
-    var box=$('dueBox'); if(!box)return;
-    if(!canBoss()||COKEY||!AREAS[CUR]){box.classList.add('hide');return;}
-    box.classList.remove('hide'); DUE_IT=[]; DUE_GRP=[];
+  function dueInItems(area){   /* area 없으면 모든 서비스 */
     var items=[], seen={};
     inRows().forEach(function(r){
-      if(seen[r.id]||groupOf(r)!==CUR||!inLive(r))return; seen[r.id]=1;
+      if(seen[r.id]||(area&&groupOf(r)!==area)||!inLive(r))return; seen[r.id]=1;
       var du=r.due_stages||{}, set=stageSet(r), lab={}; set.dues.forEach(function(d){lab[d.k]=d.l;});
       var pts=Object.keys(du).filter(function(k){return du[k]&&k!=='blog_start'&&/^\d{4}-\d{2}-\d{2}$/.test(du[k]);})
         .map(function(k){return {at:du[k]+'T20:00:00+09:00',set:false,label:lab[k]||('예전 : '+(OLD_DUE_LABEL[k]||k))};});
       var nx=dueNext(pts); if(!nx)return;
-      items.push({at:nx.at,set:false,label:nx.label,title:r.academy_name||'(이름 없음)',sub:AREAS[groupOf(r)]||'',who:r.assignee_id?(staffName(r.assignee_id)||'(지운 계정)'):'담당자 미배정'});
+      items.push({at:nx.at,set:false,label:nx.label,title:r.academy_name||'(이름 없음)',sub:AREAS[groupOf(r)]||'',who:r.assignee_id?(staffName(r.assignee_id)||'(지운 계정)'):'담당자 미배정',rid:r.id});
     });
-    box.innerHTML=dueCardHTML(AREAS[CUR],items,'마감기한이 적힌 진행 중 의뢰가 없습니다 — 의뢰 상세의 「단계별 마감」에 날짜를 넣으면 여기 나옵니다.');
+    return items;
+  }
+  window.renderDueIn=function(){
+    var box=$('dueBox'); if(!box)return;
+    if(!canFin()||COKEY||!AREAS[CUR]){box.classList.add('hide');return;}
+    box.classList.remove('hide'); DUE_NS.in={it:[],grp:[]};
+    box.innerHTML=dueCardHTML(AREAS[CUR],dueInItems(CUR),'마감기한이 적힌 진행 중 의뢰가 없습니다 — 의뢰 상세의 「단계별 마감」에 날짜를 넣으면 여기 나옵니다.','in');
   };
   /* 외부 : 팀 하나 */
-  function dueExtHTML(t){
-    if(!canBoss())return '';
-    DUE_IT=[]; DUE_GRP=[];
+  function dueExtItems(t){   /* t 없으면 모든 팀 */
     var items=[];
     EXT.jobs.forEach(function(j){
-      if(j.team!==t||!jobActive(j))return;
+      if((t&&j.team!==t)||!jobActive(j))return;
       var p=pjOf(j.project_id); if(!p||p.status==='종료')return;
       var pts=[]; jobDues(j.id).forEach(function(d){if(d.done)return;DKIND.forEach(function(k){var a=d[k[0]+'_at'];if(a)pts.push({at:a,set:d[k[0]+'_time_set'],label:k[1]+(d.label?' · '+d.label:'')});});});
       var nx=dueNext(pts); if(!nx)return;
       var who=(j.member_ids||[]).map(memName).filter(Boolean).join(' · ');
-      items.push({at:nx.at,set:!!nx.set,label:nx.label,title:j.title,sub:p.short_name||p.name,who:who||'담당 미정'});
+      items.push({at:nx.at,set:!!nx.set,label:nx.label,title:j.title,sub:p.short_name||p.name,who:who||'담당 미정',team:j.team});
     });
-    return '<div class="card due-card" style="padding:12px 18px;margin-bottom:14px">'+dueCardHTML('외부 '+(XKO[t]||t),items,'기한이 적힌 진행 중 작업이 없습니다 — 작업 설정의 「기한」에 날짜를 넣으면 여기 나옵니다.')+'</div>';
+    return items;
+  }
+  function dueExtHTML(t){
+    if(!canFin())return '';
+    DUE_NS.ext={it:[],grp:[]};
+    return '<div class="card due-card" style="padding:12px 18px;margin-bottom:14px">'+dueCardHTML('외부 '+(XKO[t]||t),dueExtItems(t),'기한이 적힌 진행 중 작업이 없습니다 — 작업 설정의 「기한」에 날짜를 넣으면 여기 나옵니다.','ext')+'</div>';
+  }
+  /* 경영 현황 : 내부 의뢰(모든 서비스) + 외부 작업(모든 팀) 한 칸 — 펼침 상태는 다시 그려도 그대로 */
+  function renderDueBoss(){
+    var box=$('bossDue'); if(!box)return;
+    var d0=box.querySelector('details'), op=!!(d0&&d0.open);
+    DUE_NS.boss={it:[],grp:[]};
+    var items=dueInItems(null).map(function(it){it.tag='내부';return it;})
+      .concat(dueExtItems(null).map(function(it){it.tag='외부';it.sub=it.sub+(XKO[it.team]?' · '+XKO[it.team]:'');return it;}));
+    box.innerHTML=dueCardHTML('내부 의뢰 + 외부 작업',items,'마감기한이 적힌 진행 중 의뢰 · 작업이 없습니다 — 내부는 의뢰 상세 「단계별 마감」, 외부는 작업 설정 「기한」에 날짜를 넣으면 여기 나옵니다.','boss');
+    if(op){var d1=box.querySelector('details');if(d1)d1.open=true;}
   }
 
   /* ---------- 💳 재정 관리 · 입금 일괄 처리 (2026-11-21 이은총 님 · 연락판 나-1121-3) ----------
@@ -3519,9 +3557,9 @@
      🔴 두 번 반영 막기 : fin_bank_txns.fingerprint 유일(거래일|시각|금액|입금자|같은 값 순번) — 표가 없으면 «처리» 단추를 막음.
      🔴 자동으로 안 하는 것 : 후보가 여럿 · 금액이 남은 돈보다 큼 · 내부 의뢰 금액이 다름(부분 입금 안 씀) · 금액 칸 빈 의뢰 · 같은 대상 두 번 → 검토로 남김. */
   var FIN={rows:[],blog:[],done:[],doneErr:'',tableOk:null,loading:false,skipped:0,preview:null};
-  window.openPay=function(){
+  window.openPay=function(){   /* 11/21 나-1121-4 : 따로 있던 메뉴 · 화면을 없애고 경영 현황 안 전용 영역으로 */
     if(!canFin()){toast('재정 관리는 최고관리자 · 관리자만 볼 수 있습니다');return;}
-    openSpecial('viewPay','navPay'); finLoad();
+    openBoss(); var d=$('bossPayD'); if(d){d.open=true;d.scrollIntoView({block:'start'});}
   };
   async function finLoad(){
     if(FIN.loading)return; FIN.loading=true; renderPay();
@@ -3811,6 +3849,65 @@
      개인별 몫 = 블로거 원고료 · 검수 수당 사람마다 — 🔴 공동체 이체 안에 이미 들어 있으니 지출에 또 더하지 말 것. 주민번호 · 계좌는 내보내지 않음.
      대표 · 관리자(staff.role owner · admin)만. DB 는 읽기만 합니다. */
   function canFin(){return !!ME&&(ME.role==='owner'||ME.role==='admin');}
+  /* ---------- 입금 요청 목록 내려받기 (2026-11-21 이은총 님 · 연락판 나-1121-4) ----------
+     «완료되어 입금 요청을 보내야 하는 것»을 카테고리 · 프로젝트별로 정리한 CSV. 최고관리자 · 관리자만. DB 는 읽기만(이미 불러 둔 자료).
+     이은총 님 11/21 답 : 블로그 센터 주문은 이 파일에서 뺌(블로그 센터에서) · 잔액이 남은 것만 · 외부 = 완료된 것 + 월정액은 이번 달까지.
+       내부 의뢰 = 상태 「완료」 + 입금 안 됨(입금 표시 · 입금일 · 카드 결제 없음) · 요청 금액 = 의뢰 「금액」 칸 · 부분 입금 없음 → 기입금 0.
+                   금액 칸이 빈 의뢰는 잔액을 알 수 없어 «넣고» 비고에 표시(0원으로 치지 않음).
+       외부 작업 = 입금 줄 기준(11/21 부분 입금 그대로) : 단건 = 작업 상태 「완료」 · 건당 = 회차 「완료」 · 월정액 = 시작 달 ~ 이번 달(「시작 전」 작업은 뺌). 다 받은 줄은 뺌.
+     홈페이지 · SNS 관리비 대장은 넣지 않음(따로 그대로). 연락처 · 이메일 · 신청자 이름은 넣지 않음(업체명 · 입금하는 곳만). */
+  function reqRows(){
+    var out=[], now=lgNow();
+    inRows().forEach(function(r){
+      if(normStatus(r.status)!=='완료'||r.paid||r.paid_at||r.pay_at)return;
+      var amt=(r.amount!=null&&r.amount!=='')?Number(r.amount):null;
+      out.push({cat:'내부 의뢰',pj:AREAS[groupOf(r)]||'의뢰',item:r.academy_name||'(이름 없음)',payer:r.academy_name||'',done:'완료',
+        total:amt,paid:0,due:amt,state:'미입금',memo:amt==null?'🔴 금액 칸 비어 있음 — 의뢰 상세에 금액을 먼저':''});
+    });
+    (EXT.jobs||[]).forEach(function(j){var p=pjOf(j.project_id), pn=(p&&(p.short_name||p.name))||'(프로젝트 없음)';
+      payLines(j).forEach(function(l){
+        if(l.full)return;
+        var ok, done;
+        if(l.period){ok=l.period<=now&&j.status!=='시작 전';   /* 시작 전 월정액은 만든 달이 줄로 잡혀도 아직 일한 달이 아님 */
+          done=l.period<now?'지난 달분':(j.status==='완료'||j.status==='중단'?'이번 달분 (작업 '+j.status+')':'이번 달분 (진행 중)');}
+        else if(l.epId){ok=l.ep&&l.ep.status==='완료'; done='회차 완료';}
+        else {ok=j.status==='완료'; done='완료';}
+        if(!ok)return;
+        var noAmt=(l.amount==null||l.amount==='');
+        if(!noAmt&&!(lineDue(l)>0))return;
+        out.push({cat:'외부 작업',pj:pn,item:j.title+(l.label&&l.label!=='작업 금액'?' · '+l.label:'')+(XKO[j.team]?' ('+XKO[j.team]+')':''),payer:jobPayer(j)||'',done:done,
+          total:noAmt?null:Number(l.amount),paid:Number(l.paid)||0,due:noAmt?null:lineDue(l),
+          state:l.kind==='partial'?'부분 입금 '+(payPct(l.paid,l.amount)!=null?payPct(l.paid,l.amount)+'%':''):'미입금',
+          memo:(noAmt?'🔴 작업 금액이 비어 있음 — 작업 설정에 금액을 먼저':'')+(j.price_type?(noAmt?' · ':'')+j.price_type:'')});
+      });});
+    out.sort(function(a,b){return (a.cat==='외부 작업')-(b.cat==='외부 작업')||a.pj.localeCompare(b.pj,'ko')||a.item.localeCompare(b.item,'ko');});
+    return out;
+  }
+  function reqSum(R){return {n:R.length,due:R.reduce(function(a,x){return a+(Number(x.due)||0);},0),noAmt:R.filter(function(x){return x.due==null;}).length};}
+  function reqCard(){
+    if(!canFin())return '';
+    var R=reqRows(), S=reqSum(R), cats={};
+    R.forEach(function(x){var c=cats[x.cat]=cats[x.cat]||{n:0,due:0};c.n++;c.due+=Number(x.due)||0;});
+    return '<div class="card ext-card"><h3>입금 요청 목록 내려받기 <span class="muted" style="font-weight:600;font-size:.8rem">— 완료돼 입금 요청을 보낼 것 · 카테고리 · 프로젝트별 · 최고관리자 · 관리자만</span></h3>'
+      +'<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><button class="btn btn-ghost" type="button" onclick="reqExport()">📥 입금 요청 목록 (CSV)</button>'
+      +'<span style="font-size:.84rem">'+S.n+'건 · 잔액 '+wonS(S.due)+(S.noAmt?' · <b style="color:#B45309">금액 없는 '+S.noAmt+'건(합계에서 빠짐)</b>':'')+'</span>'
+      +'<span class="muted" style="font-size:.78rem">'+Object.keys(cats).map(function(k){return esc(k)+' '+cats[k].n+'건 '+wonS(cats[k].due);}).join(' · ')+'</span></div>'
+      +'<p class="muted" style="font-size:.8rem;margin:8px 0 0;line-height:1.6">칸 : 카테고리 · 프로젝트 · 항목 · 입금하는 곳 · 완료 여부 · 요청 금액 · 기입금액 · 잔액 · 입금 상태 · 비고 — 프로젝트마다 소계, 맨 끝에 합계.<br>'
+      +'내부 의뢰 = 상태 「완료」인데 입금 안 된 것 · 외부 작업 = 완료된 작업 · 회차 + 월정액은 이번 달까지 · <b>잔액이 남은 것만</b>. 블로그 센터 주문과 홈페이지 관리비 대장은 넣지 않습니다.</p></div>';
+  }
+  window.reqExport=function(){
+    if(!canFin()){toast('입금 요청 목록은 최고관리자 · 관리자만 내려받을 수 있습니다');return;}
+    var R=reqRows(); if(!R.length){toast('입금 요청을 보낼 완료 건이 없습니다');return;}
+    var rows=[], g=null, sub=null, put=function(){if(sub)rows.push([sub.cat,sub.pj,'소계 '+sub.n+'건','','',sub.total,sub.paid,sub.due,'',sub.noAmt?'금액 없는 '+sub.noAmt+'건 빠짐':'']);};
+    R.forEach(function(x){var k=x.cat+'|'+x.pj;
+      if(k!==g){put();g=k;sub={cat:x.cat,pj:x.pj,n:0,total:0,paid:0,due:0,noAmt:0};}
+      sub.n++; if(x.due==null)sub.noAmt++; else{sub.total+=x.total||0;sub.paid+=x.paid||0;sub.due+=x.due||0;}
+      rows.push([x.cat,x.pj,x.item,x.payer,x.done,x.total==null?'':x.total,x.paid,x.due==null?'':x.due,x.state,x.memo]);});
+    put();
+    var S=reqSum(R), tp=R.reduce(function(a,x){return a+(x.due==null?0:(x.total||0));},0), pp=R.reduce(function(a,x){return a+(x.due==null?0:(x.paid||0));},0);
+    rows.push(['합계','','전체 '+S.n+'건','','',tp,pp,S.due,'',S.noAmt?'금액 없는 '+S.noAmt+'건 빠짐':'']);
+    csvDown('입금요청_'+kstToday()+'.csv',['카테고리','프로젝트','항목','입금하는 곳','완료 여부','요청 금액','기입금액','잔액','입금 상태','비고'],rows);
+  };
   function finCard(){
     if(!canFin())return '';
     var ym=$('finYM')?$('finYM').value:lgNow();
@@ -4054,11 +4151,11 @@
       if(ME&&r.assignee_id===ME.id&&normStatus(r.status)!=='완료')inner.push(r);});});
     return {mgr:mgrWait,mine:mine,inner:inner};
   }
-  function myCount(){$('navBoss').classList.toggle('hide',!canBoss());$('navPay').classList.toggle('hide',!canFin());var L=myLists(),n=L.mgr.length+L.mine.length+L.inner.length;var c=$('c-my');if(c){c.textContent=n;c.classList.toggle('alert',L.mgr.length>0);}}
+  function myCount(){$('navBoss').classList.toggle('hide',!canBoss());var L=myLists(),n=L.mgr.length+L.mine.length+L.inner.length;var c=$('c-my');if(c){c.textContent=n;c.classList.toggle('alert',L.mgr.length>0);}}
   window.openMy=function(){
     document.querySelectorAll('.navb[data-nav],#navCo .navb,#navOut .navb,#navOutWork .navb').forEach(function(x){x.classList.remove('on');});
     $('navMy').classList.add('on');
-    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewBoss','viewFee','viewPay'].forEach(function(v){$(v).classList.add('hide');});
+    ['viewList','viewStaff','viewSet','viewLinks','viewPf','viewSite','viewPartner','viewExt','viewBoss','viewFee'].forEach(function(v){$(v).classList.add('hide');});
     $('viewMy').classList.remove('hide'); renderMy();
   };
   window.renderMy=function(){
