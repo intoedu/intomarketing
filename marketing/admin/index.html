@@ -189,6 +189,86 @@
   .dd{display:inline-block;font-size:.7rem;font-weight:800;padding:1px 7px;border-radius:999px;margin-right:5px;background:var(--surface-2);color:var(--muted)}
   .dd.over{background:#FCE6E3;color:#B4433A}.dd.today{background:#FFEBDB;color:#B5530A}.dd.soon{background:#FFF4E5;color:#9A5A12}   /* 연하게 (11/2 이은총 님 「색이 너무 찐해서 정신없어」) */
   .need{display:inline-block;font-size:.72rem;font-weight:800;padding:2px 8px;border-radius:999px;background:#FDECEA;color:#A1322A}
+  /* ── 11/24 외부 프로젝트 상세 화면 정돈 (나-1124-2) — 흰 바탕 · 서비스 색은 점 · 이름표에만 · 색은 뜻 있는 상태(기다림 · 주의 · 지남 · 완료)에 ── */
+  #extTitle .pj-short{font-size:.78rem;font-weight:700;color:var(--muted);background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:2px 10px;vertical-align:middle;margin-left:6px}
+  #extSub{display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center}
+  #extSub .pj-st{font-size:.74rem;font-weight:800;padding:3px 10px;border-radius:999px;background:#E3ECFF;color:#1E47C0}
+  #extSub .pj-st.end{background:var(--surface-2);color:var(--muted)}
+  #extSub .mi b{color:var(--ink);font-weight:700}
+  .pj-ov{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:0 0 14px}
+  .pj-ov-c{display:flex;flex-direction:column;gap:3px;text-align:left;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer;font:inherit;color:var(--ink);min-width:0}
+  .pj-ov-c:hover{border-color:var(--accent)}
+  .pj-ov-c .lb{font-size:.74rem;font-weight:700;color:var(--muted)}
+  .pj-ov-c b{font-size:1.02rem;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pj-ov-c .sb{font-size:.74rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:1.1em}
+  .pj-ov-c.wait{border-left-color:#7C3AED}
+  .pj-ov-c.warn{border-left-color:#D97706}
+  .pj-ov-c.bad{border-left-color:#B4433A}
+  @media(max-width:1100px){.pj-ov{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media(max-width:640px){.pj-ov{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .ext-tabs{display:flex;gap:2px;flex-wrap:nowrap;align-items:flex-end;margin:0 0 18px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:thin}
+  .ext-tabs .tg{display:flex;gap:2px;flex:0 0 auto}
+  .ext-tabs .sep{flex:0 0 1px;width:1px;height:18px;background:var(--line);margin:0 8px 12px}
+  .ext-tabs button{border:0;border-bottom:3px solid transparent;background:none;border-radius:0;padding:9px 12px 9px;font-size:.88rem;font-weight:700;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:inherit;white-space:nowrap}
+  .ext-tabs button:hover{color:var(--ink)}
+  .ext-tabs button.on{border-bottom-color:var(--band-bg);background:none;color:var(--band-bg);font-weight:800}
+  .tc{display:inline-block;font-size:.7rem;font-weight:700;color:var(--muted);background:var(--surface-2);border-radius:999px;padding:1px 7px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .tc.warn{background:#FFF4E5;color:#9A5A12}
+  .ext-tabs button.on .tc{background:#E4EAF4;color:var(--band-bg)}
+  .ext-tabs button.on .tc.warn{background:#FFF4E5;color:#9A5A12}
+  .sec-h{display:flex;align-items:baseline;gap:4px 12px;flex-wrap:wrap;margin:0 0 12px}
+  .sec-h h3{font-size:1rem;font-weight:800}
+  .sec-h>.muted{font-size:.82rem}
+  .sec-h .lg{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:.74rem;color:var(--muted)}
+  .org-client{border:1px solid var(--line);border-top:3px solid #D9B95A;text-align:center}
+  .org-client .tag{display:block;font-size:.7rem;font-weight:800;color:#7A5C00;margin:0 0 3px}
+  .org-line{background:var(--line)}
+  .org-teams{grid-template-columns:repeat(auto-fit,minmax(215px,1fr));border-top:1px solid var(--line)}
+  .org-team,.jb-team{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+  .org-team .th,.jb-team .th{background:var(--surface);color:var(--ink);border-bottom:1px solid var(--line);border-radius:0;padding:9px 12px;font-size:.9rem;gap:7px}
+  .org-team .th .nm,.jb-team .th .nm{white-space:nowrap}
+  .org-team .th,.jb-team .th{flex-wrap:wrap;row-gap:6px}
+  .org-team .th .dot,.jb-team .th .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+  .org-team .th .n,.jb-team .th .n{font-size:.7rem;font-weight:700;background:var(--surface-2);color:var(--muted);padding:1px 8px;border-radius:999px}
+  .org-team .th button,.jb-team .th button{margin-left:auto;background:var(--surface);border:1px solid var(--line);color:var(--accent-ink);font-weight:800;font-size:.76rem;padding:4px 10px;border-radius:8px;white-space:nowrap;font-family:inherit}
+  .org-team .th button:hover,.jb-team .th button:hover{border-color:var(--accent);background:#F1F5FE}
+  .org-team .tb{background:var(--surface);padding:10px;gap:6px;min-height:0}
+  .org-team.tm-empty{border-style:dashed;background:var(--paper)}
+  .org-team.tm-empty .th{background:transparent;color:var(--muted);border-bottom-style:dashed}
+  .org-team.tm-empty .tb{background:transparent}
+  .org-team.tm-empty .dot{opacity:.45}
+  .org-mg .tb{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+  .mem{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:8px 10px;border-radius:9px}
+  .mem .who{min-width:0}
+  .mem b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .mem .r{margin-left:0}
+  .ac{display:inline-block;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:6px;white-space:nowrap}
+  .ac.ok{color:#1E7A4C;background:#E2F5EA}
+  .ac.na{color:#9A5A12;background:#FFF4E5}
+  .jb-team{margin-bottom:14px}
+  .jb-team.tm-empty .th{color:var(--muted)}
+  .jb-list{border:0;border-radius:0}
+  .job.job-hd{cursor:default;padding:7px 14px;font-size:.72rem;font-weight:800;color:var(--muted);background:var(--surface-2);border-top:0}
+  .job.job-hd:hover{background:var(--surface-2)}
+  .job .wh .nb{color:#9A5A12}
+  .pj-lk{margin-top:22px}
+  .pj-lk>summary{list-style:none;cursor:pointer;display:flex;gap:6px 10px;align-items:center;padding:13px 18px;font-size:.9rem}
+  .pj-lk>summary::-webkit-details-marker{display:none}
+  .pj-lk>summary>b{white-space:nowrap}
+  .pj-lk>summary .pv{flex:1;min-width:0;color:var(--muted);font-size:.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pj-lk>summary .tg{font-size:.74rem;color:var(--accent-ink);font-weight:700;white-space:nowrap}
+  .pj-lk[open]>summary{border-bottom:1px solid var(--line)}
+  .pj-lk .bd{padding:12px 18px 16px}
+  @media(max-width:860px){
+    .job.job-hd{display:none}
+    .job{grid-template-columns:1fr 1fr;gap:8px 14px;padding:12px 14px}
+    .job .st,.job .t{grid-column:1/-1}
+    .job>[data-l]{grid-column:auto;min-width:0}
+    .job>[data-l]::before{content:attr(data-l);display:block;font-size:.68rem;font-weight:700;color:var(--muted);margin-bottom:2px}
+    .job>[data-l]:empty{display:none}
+    .job .ic{text-align:left}
+    .pj-lk>summary .pv{flex-basis:100%;order:3;white-space:normal}
+  }
   .tw{color:#B45309;font-weight:600;font-size:.72rem;margin-left:4px;cursor:help}
   .dl-row{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:var(--surface-2)}
   .dl-top{display:flex;gap:8px;align-items:center;margin-bottom:10px}
@@ -2078,17 +2158,37 @@
   function memHTML(x,worker){   /* worker = 업무별 화면 (11/20 · 역할 「담당자」를 «화면에만» 「작업자」로 · DB 값 그대로) */
     return '<button class="mem" type="button" onclick="emOpen(\''+x.id+'\')">'
       +'<span class="who"><b>'+esc(x.person_name)+'</b>'
-      +'<span class="k">'+(x.kakao_name?'@'+esc(x.kakao_name):'카톡 이름 없음')+'</span>'
-      +(x.staff_id?'':'<span class="na">어드민 계정 없음</span>')+'</span>'
-      +'<span class="r'+(x.role==='팀장'?' lead':'')+'">'+esc(worker&&x.role==='담당자'?'작업자':x.role)+'</span></button>';
+      +'<span class="k">'+(x.kakao_name?'@'+esc(x.kakao_name):'카톡 이름 없음')+'</span></span>'
+      +'<span class="r'+(x.role==='팀장'?' lead':'')+'">'+esc(worker&&x.role==='담당자'?'작업자':x.role)+'</span>'
+      +(x.staff_id?'<span class="ac ok" title="어드민 계정과 연결됨">계정 ✓</span>':'<span class="ac na" title="어드민 계정과 연결되지 않음">계정 없음</span>')+'</button>';   /* 11/24 나-1124-2 : 계정 표시를 오른쪽 칸으로 (글 · 기준 그대로) */
   }
   function teamBox(pid,t,extra,worker){   /* worker = 업무별 화면 (11/20 이은총 님) : 묶음 제목 「○○ 작업자」 · 역할 「담당자」 → 「작업자」 — 화면 글만 */
-    var ms=pjMembers(pid,t), c=XCOL[t];
-    return '<div class="org-team'+(extra||'')+'"><div class="th" style="'+tcs(t)+'">'+esc(XKO[t])+(worker?' 작업자':'')+' <span class="n">'+ms.length+'</span>'
-      +(canOrg(pid)?'<button type="button" title="이 팀에 사람 넣기" onclick="emOpen(null,\''+pid+'\',\''+t+'\')">＋</button>':'')+'</div>'
-      +'<div class="tb" style="background:'+c[1]+'55">'+(ms.length?ms.map(function(x){return memHTML(x,worker);}).join(''):'<div class="org-empty">아직 아무도 없습니다</div>')+'</div></div>';
+    var ms=pjMembers(pid,t), c=XCOL[t]||XCOL.web;
+    return '<div class="org-team'+(extra||'')+(ms.length?'':' tm-empty')+'"><div class="th"><span class="dot" style="background:'+c[0]+'"></span><span class="nm">'+esc(XKO[t])+(worker?' 작업자':'')+'</span><span class="n">'+ms.length+'명</span>'
+      +(canOrg(pid)?'<button type="button" title="이 팀에 사람 넣기" onclick="emOpen(null,\''+pid+'\',\''+t+'\')">＋ '+(worker?'작업자':'사람')+' 추가</button>':'')+'</div>'
+      +'<div class="tb">'+(ms.length?ms.map(function(x){return memHTML(x,worker);}).join(''):'<div class="org-empty">아직 아무도 없습니다</div>')+'</div></div>';
   }
   var XTABS=[['org','조직도'],['job','작업 구조'],['quote','견적서'],['time','타임라인'],['todo','할 일'],['done','한 일'],['num','숫자']];
+  /* 11/24 나-1124-2 : 탭을 보이는 순서만 묶어서 — 구성(누가 · 무엇을) | 진행(할 일 · 기한 · 보고) | 돈 · 서류. 키 · 이름 · 누르면 가는 곳은 그대로 */
+  var XTAB_GROUPS=[['org','job'],['todo','time','done'],['quote','num']];
+  var XTAB_TIP={org:'누가 어느 팀에서 어떤 역할을 맡는지',job:'무슨 일을 누가 맡아 언제까지 하는지 · 금액 · 입금',quote:'이 프로젝트의 외주 견적서',
+    time:'중간 컨펌 · 최종 컨펌 · 마감기한 모아 보기',todo:'지금 해야 할 일',done:'올라온 보고 · 결과물',num:'정산 · 입금'};
+  function pjOverviewHTML(pid){   /* 개요 — 이미 불러온 자료로 세기만(새 자료 · 저장 없음). 칸을 누르면 그 탭으로 */
+    var js=pjJobs(pid), live=js.filter(jobActive), now=Date.now();
+    var mid=live.filter(function(j){return j.status==='중간 컨펌';}).length, fin=live.filter(function(j){return j.status==='최종 컨펌';}).length;
+    var late=live.filter(jobLate).length, setup=live.filter(needSetup).length, owe=pjOwe(pid);
+    var nx=duePoints(pid).filter(function(x){return Date.parse(x.at)>=now;})[0];
+    var mem=EXT.members.filter(function(x){return x.project_id===pid;}), noAcc=mem.filter(function(x){return !x.staff_id;}).length;
+    var cell=function(k,tone,lb,val,sub){return '<button type="button" class="pj-ov-c'+(tone?' '+tone:'')+'" title="「'+esc((XTABS.filter(function(t){return t[0]===k;})[0]||[])[1]||'')+'」 탭 보기" onclick="xTab(\''+k+'\')"><span class="lb">'+lb+'</span><b>'+val+'</b><span class="sb">'+sub+'</span></button>';};
+    return '<div class="pj-ov">'
+      +cell('job','','진행 중 작업',live.length+'개','전체 '+js.length+'개 · 완료 '+js.filter(function(j){return j.status==='완료';}).length+'개')
+      +cell('todo',mid+fin?'wait':'','컨펌 기다림',(mid+fin)+'건','중간 '+mid+' · 최종 '+fin)
+      +cell('time',late?'bad':(setup?'warn':''),'다음 마감',nx?ddHTML(nx.at)+esc(nx.kind[1]):'<span class="muted" style="font-weight:600">예정 없음</span>',
+        late?'<span style="color:#B4433A;font-weight:700">기한 지난 작업 '+late+'개</span>':(setup?'기한 세팅 필요 '+setup+'개':(nx?esc(nx.job.title||''):'')))
+      +cell('num',owe?'warn':'','덜 받은 입금',owe+'줄','부분 입금 포함')
+      +cell('org',noAcc?'warn':'','함께하는 사람',mem.length+'명',noAcc?'어드민 계정 없음 '+noAcc+'명':'모두 계정 연결')
+      +'</div>';
+  }
   window.renderExt=function(){
     if(SCOPE!=='out')return;
     if(AXIS==='work')return renderExtTeam();
@@ -2101,14 +2201,20 @@
       $('extBody').innerHTML='<div class="card"><div class="empty"><b>'+(EXT.err?'불러오기 실패':'아직 프로젝트가 없습니다')+'</b>'+esc(EXT.err||'왼쪽 「＋ 프로젝트 추가」로 고객사를 만드세요.')+'</div></div>';
       return;
     }
-    $('extTitle').textContent=p.name+(p.short_name?' ('+p.short_name+')':'');
-    $('extSub').textContent=[p.partner?'함께 : '+p.partner:'', p.client_person?'의뢰고객 : '+p.client_person:'', p.status].filter(Boolean).join(' · ');
+    $('extTitle').innerHTML=esc(p.name)+(p.short_name?' <span class="pj-short">'+esc(p.short_name)+'</span>':'');   /* 11/24 : 머리 정돈 — 같은 값 */
+    $('extSub').innerHTML=(p.status?'<span class="pj-st'+(p.status==='종료'?' end':'')+'">'+esc(p.status)+'</span>':'')
+      +(p.client_person?'<span class="mi">의뢰고객 <b>'+esc(p.client_person)+'</b></span>':'<span class="mi">의뢰고객 미입력</span>')
+      +(p.partner?'<span class="mi">함께 <b>'+esc(p.partner)+'</b></span>':'');
     $('extAct').innerHTML='<button class="btn btn-ghost" type="button" onclick="pjOpen(\''+p.id+'\')">✏️ 프로젝트 정보</button>';
     var XOPEN={org:1,job:1,quote:1,time:1,todo:1,done:1,num:1};   /* 열린 탭 — 단계마다 하나씩 엽니다 */
     if(!XOPEN[XTAB])XTAB='org';
-    var h='<div class="ext-tabs">'+XTABS.map(function(t){
-      var n=t[0]==='job'?' '+pjJobs(p.id).length:t[0]==='quote'?' '+xqOf(p.id).length:t[0]==='done'?' '+pjReps(p.id).length:t[0]==='num'?(pjOwe(p.id)?' ☑️ '+pjOwe(p.id):''):(t[0]==='time'&&tlAlerts(p.id)?' <span style="font-size:.78rem;opacity:.75">확인 '+tlAlerts(p.id)+'</span>':'');
-      return '<button type="button"'+(XOPEN[t[0]]?' onclick="xTab(\''+t[0]+'\')"'+(XTAB===t[0]?' class="on"':''):' disabled title="다음 단계에서 만듭니다"')+'>'+t[1]+n+'</button>';}).join('')+'</div>';
+    var tname={}; XTABS.forEach(function(t){tname[t[0]]=t[1];});
+    var tbadge=function(k){
+      var c=function(n){return '<span class="tc">'+n+'</span>';}, w=function(x){return '<span class="tc warn">'+x+'</span>';};
+      if(k==='job')return c(pjJobs(p.id).length); if(k==='quote')return c(xqOf(p.id).length); if(k==='done')return c(pjReps(p.id).length);
+      if(k==='num')return pjOwe(p.id)?w('덜 받음 '+pjOwe(p.id)):''; if(k==='time')return tlAlerts(p.id)?w('확인 '+tlAlerts(p.id)):''; return '';};
+    var h=pjOverviewHTML(p.id)+'<div class="ext-tabs" role="tablist">'+XTAB_GROUPS.map(function(g){return '<div class="tg">'+g.map(function(k){
+      return '<button type="button" role="tab" aria-selected="'+(XTAB===k)+'" title="'+esc(XTAB_TIP[k]||'')+'"'+(XOPEN[k]?' onclick="xTab(\''+k+'\')"'+(XTAB===k?' class="on"':''):' disabled')+'>'+tname[k]+tbadge(k)+'</button>';}).join('')+'</div>';}).join('<span class="sep"></span>')+'</div>';
     if(XTAB==='job'){$('extBody').innerHTML=h+jobsHTML(p.id);return;}
     if(XTAB==='quote'){$('extBody').innerHTML=h+'<p class="muted" style="font-size:.84rem;margin:-6px 0 14px">이 프로젝트의 외주 견적서입니다. 줄을 누르면 편집 · PDF · 미리보기 · 메일 보내기 · 보냄 / 서명 기록을 합니다. 모든 프로젝트를 한꺼번에 보려면 왼쪽 「📋 외주 견적서」.</p>'+xqHTML(p.id);return;}
     if(XTAB==='time'){$('extBody').innerHTML=h+timelineHTML(p.id);return;}
@@ -2116,8 +2222,10 @@
     if(XTAB==='done'){$('extBody').innerHTML=h+doneTabHTML(p.id);fillThumbs();return;}
     if(XTAB==='num'){$('extBody').innerHTML=h+numTabHTML(p.id);return;}
     /* 조직도 : 의뢰고객 → 총괄(관리자) → 팀 */
+    h+='<div class="sec-h"><h3>👥 조직도</h3><span class="muted">누가 어느 팀에서 어떤 역할을 맡는지 · 사람을 누르면 고칩니다</span>'
+      +'<span class="lg"><span class="ac ok">계정 ✓</span> 어드민 계정 연결 <span class="ac na">계정 없음</span> 연결 안 됨</span></div>';
     h+='<div class="org">'
-      +'<div class="org-node org-client"><b>'+esc(p.client_person||'의뢰고객 (미입력)')+'</b><span>최종 컨펌'+(p.client_kakao?' · 카톡 @'+esc(p.client_kakao):'')+'</span></div>'
+      +'<div class="org-node org-client"><span class="tag">의뢰고객 · 최종 컨펌</span><b>'+esc(p.client_person||'의뢰고객 (미입력)')+'</b><span>'+(p.client_kakao?'카톡 @'+esc(p.client_kakao):'카톡 이름 없음')+'</span></div>'
       +'<div class="org-line"></div>'
       +teamBox(p.id,'manage',' org-mg')
       +'<div class="org-line"></div>'
@@ -2126,7 +2234,11 @@
     /* 연결된 내부 의뢰 */
     var linked=EXT.links.filter(function(x){return x.project_id===p.id;});
     var all={}; Object.keys(DATA).forEach(function(g){(DATA[g]||[]).forEach(function(r){all[r.id]=r;});});
-    h+='<div class="card ext-card"><h3>연결된 내부 의뢰 <span class="muted" style="font-weight:600;font-size:.8rem">— 홈페이지 신청 · 직접 주문으로 만든 의뢰 중 이 프로젝트 것</span></h3>';
+    var lkr=linked.map(function(x){return all[x.request_id];}).filter(Boolean);
+    h+='<details class="card pj-lk"'+(window.pjLkOpen?' open':'')+' ontoggle="window.pjLkOpen=this.open"><summary><b>🔗 연결된 내부 의뢰</b><span class="tc">'+linked.length+'건</span>'
+      +'<span class="pv">'+(lkr.length?lkr.slice(0,2).map(function(r){return esc(r.academy_name||'-')+' · '+esc(AREAS[groupOf(r)])+' · '+esc(normStatus(r.status));}).join('  /  ')+(linked.length>2?'  외 '+(linked.length-2)+'건':''):(linked.length?'이 화면에서 볼 수 없는 의뢰':'아직 연결한 의뢰가 없습니다'))+'</span>'
+      +'<span class="tg">펼치기 · 접기</span></summary><div class="bd">'
+      +'<p class="muted" style="font-size:.8rem;margin:0 0 6px">홈페이지 신청 · 직접 주문으로 만든 의뢰 중 이 프로젝트 것</p>';
     h+=linked.length?linked.map(function(x){var r=all[x.request_id];
       return '<div class="lk">'+(r?'<a onclick="openDetail(\''+r.id+'\')">'+esc(r.academy_name||'-')+'</a> <span class="badge" style="background:var(--surface-2);color:var(--ink)">'+esc(AREAS[groupOf(r)])+'</span> <span class="muted">'+esc(normStatus(r.status))+(r.quote_no?' · 📄 '+esc(r.quote_no):'')+' · 접수 '+fdate(r.created_at)+'</span>'
         :'<span class="muted">이 화면에서 볼 수 없는 의뢰입니다</span>')
@@ -2136,7 +2248,7 @@
       .sort(function(a,b){return (a.created_at||'')<(b.created_at||'')?1:-1;});
     h+='<div class="addrow" style="margin-top:12px"><select class="inp" id="pjReqSel"><option value="">연결할 의뢰 고르기…</option>'
       +opts.map(function(r){return '<option value="'+r.id+'">'+esc((r.academy_name||'-')+' · '+AREAS[groupOf(r)]+' · '+fdate(r.created_at)+(r.quote_no?' · '+r.quote_no:''))+'</option>';}).join('')
-      +'</select><button class="btn btn-ghost" type="button" onclick="pjLink()">연결</button></div></div>';
+      +'</select><button class="btn btn-ghost" type="button" onclick="pjLink()">연결</button></div></div></details>';
     $('extBody').innerHTML=h;
   };
   /* 외부 · 업무별 : 한 팀이 어느 프로젝트에 누구로 들어가 있는지 (작업 · 기한은 다음 단계) */
@@ -2155,7 +2267,7 @@
       +(ps.length?ps.map(function(p){
       return '<div class="tv-pj"><h3>'+esc(pjLabel(p))+'</h3>'+teamBox(p.id,t,'',1)+'<div style="height:10px"></div>'+jobTeamHTML(p.id,t,1)+'</div>';
     }).join(''):'<div class="card"><div class="empty"><b>'+(hidN?esc(XKO[t])+' 팀이 맡은 진행 중 프로젝트가 없습니다':'진행 중인 프로젝트가 없습니다')+'</b></div></div>')
-      +(hidN?'<p class="muted" style="font-size:.8rem;margin:10px 2px 0">'+esc(XKO[t])+' 작업 · 사람이 없는 프로젝트 '+hidN+'곳은 이 화면에서 숨겼습니다. 이 팀 작업을 새로 넣을 때는 「프로젝트별 → 작업 구조」의 「＋ 작업」을 누르세요.</p>':'');
+      +(hidN?'<p class="muted" style="font-size:.8rem;margin:10px 2px 0">'+esc(XKO[t])+' 작업 · 사람이 없는 프로젝트 '+hidN+'곳은 이 화면에서 숨겼습니다. 이 팀 작업을 새로 넣을 때는 「프로젝트별 → 작업 구조」의 「＋ 작업 추가」를 누르세요.</p>':'');
   }
 
   /* ---------- 외부 2단계 : 작업 구조 (2026-11-02 이은총 님) ----------
@@ -2183,12 +2295,12 @@
     var who=(j.member_ids||[]).map(memName).filter(Boolean);
     var inc=(j.includes||[]).reduce(function(a,g){return a+1+((g.items||[]).length);},0);
     return '<div class="job'+(j.status==='중단'||j.status==='완료'?' off':'')+'" onclick="jbOpen(\''+j.id+'\')">'
-      +'<div>'+jst(j.status)+'</div>'
+      +'<div class="st">'+jst(j.status)+'</div>'
       +'<div class="t"><b>'+esc(j.title)+'</b>'+(j.brand?'<span class="br">'+esc(j.brand)+'</span>':'')+jobXqHTML(j)+'</div>'
-      +'<div class="pr">'+jobPrice(j)+payBadge(j)+'</div>'
-      +'<div class="wh">'+(who.length?esc(who.join(' · ')):'담당자 미정')+'</div>'
-      +'<div class="nx">'+nextDueHTML(j)+'</div>'
-      +'<div class="ic">'+(inc?'포함 '+(j.includes||[]).length+'개':'')+'</div></div>';
+      +'<div class="pr" data-l="금액 · 입금">'+jobPrice(j)+payBadge(j)+'</div>'
+      +'<div class="wh" data-l="담당">'+(who.length?esc(who.join(' · ')):'<span class="nb">담당자 미정</span>')+'</div>'
+      +'<div class="nx" data-l="다음 마감">'+nextDueHTML(j)+'</div>'
+      +'<div class="ic" data-l="포함">'+(inc?'포함 '+(j.includes||[]).length+'개':'')+'</div></div>';
   }
   /* 11/16 이은총 님 「업무별에서도 작업별로」 — 작업 줄마다 그 작업이 든 외주 견적서(누르면 상세 : PDF · 미리보기) · 없으면 「＋ 견적서」 */
   function jobXqHTML(j){
@@ -2199,15 +2311,16 @@
     return '<div class="xqc" onclick="event.stopPropagation()"><button type="button" title="이 작업으로 외주 견적서 만들기" onclick="xqPick(\''+j.project_id+'\',\''+j.id+'\')">＋ 견적서</button></div>';
   }
   function jobTeamHTML(pid,t,fromTeam){   /* fromTeam = 업무별 화면에서 부름 → 「＋ 작업」이 작업자 1명 자동 지정 (11/20) · 프로젝트별 화면은 그대로 */
-    var js=pjJobs(pid,t), c=XCOL[t];
-    return '<div class="jb-team"><div class="th" style="'+tcs(t)+'">'+esc(XKO[t])+' 작업 <span class="n">'+js.length+'</span>'
-      +'<button type="button" onclick="jbOpen(null,\''+pid+'\',\''+t+'\''+(fromTeam?',1':'')+')">＋ 작업</button></div>'
-      +'<div class="jb-list">'+(js.length?js.map(jobRow).join(''):'<div class="jb-empty">아직 작업이 없습니다</div>')+'</div></div>';
+    var js=pjJobs(pid,t), c=XCOL[t]||XCOL.web;
+    return '<div class="jb-team'+(js.length?'':' tm-empty')+'"><div class="th"><span class="dot" style="background:'+c[0]+'"></span><span class="nm">'+esc(XKO[t])+' 작업</span><span class="n">'+js.length+'</span>'
+      +'<button type="button" onclick="jbOpen(null,\''+pid+'\',\''+t+'\''+(fromTeam?',1':'')+')">＋ 작업 추가</button></div>'
+      +'<div class="jb-list">'+(js.length?'<div class="job job-hd" aria-hidden="true"><div>상태</div><div>작업</div><div>금액 · 입금</div><div>담당</div><div>다음 마감</div><div>포함</div></div>'+js.map(jobRow).join(''):'<div class="jb-empty">아직 작업이 없습니다</div>')+'</div></div>';
   }
   function jobsHTML(pid){
     var js=pjJobs(pid);
     var live=js.filter(function(j){return j.status!=='완료'&&j.status!=='중단';}).length;
-    return '<p class="muted" style="font-size:.84rem;margin:-6px 0 14px">작업 '+js.length+'개 · 진행 중 '+live+'개. 작업을 누르면 금액 · 상태 · 담당자 · 포함 항목을 고칩니다. 기한은 작업 창 안에서 넣고, 「타임라인」 탭에서 모아 봅니다.</p>'
+    return '<div class="sec-h"><h3>🧩 작업 구조</h3><span class="muted">무슨 일을 누가 맡아 언제까지 하는지 · 작업 '+js.length+'개 · 진행 중 '+live+'개</span></div>'
+      +'<p class="muted" style="font-size:.82rem;margin:-6px 0 14px">작업을 누르면 금액 · 상태 · 담당자 · 포함 항목을 고칩니다. 기한은 작업 창 안에서 넣고, 「타임라인」 탭에서 모아 봅니다.</p>'
       +xqHTML(pid)
       +['web','sns','design','video','blog'].filter(function(t){return t!=='blog'||pjJobs(pid,'blog').length||pjMembers(pid,'blog').length;})
         .map(function(t){return jobTeamHTML(pid,t);}).join('');
