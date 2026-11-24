@@ -216,6 +216,54 @@
   .tc.warn{background:#FFF4E5;color:#9A5A12}
   .ext-tabs button.on .tc{background:#E4EAF4;color:var(--band-bg)}
   .ext-tabs button.on .tc.warn{background:#FFF4E5;color:#9A5A12}
+  /* ── 11/24 할 일 탭 가독성 (나-1124-5) — 글자 대비 · 읽는 순서 · 조치가 필요한 것만 색 ── */
+  #extSub .mi{color:#3F4D66}
+  .pj-ov-c .lb{font-size:.78rem;color:#3F4D66}
+  .pj-ov-c b{font-size:1.08rem}
+  .pj-ov-c .sb{font-size:.78rem;color:#4A5873}
+  .ext-tabs button{color:#4A5873}
+  .ext-tabs button.on{color:var(--brand);border-bottom-color:var(--accent);background:#EEF3FD;border-radius:8px 8px 0 0}
+  .ext-tabs .tc:not(.warn){color:#4A5873}
+  .td-tab .td-intro{font-size:.88rem;line-height:1.65;color:#3F4D66;margin:-4px 0 16px}
+  .td-tab .td-team .th .n{color:#3F4D66}
+  .td-tab .td-list{padding:12px;background:var(--surface-2)}
+  .td-tab .td-job{border-left:4px solid var(--line);margin-bottom:12px;box-shadow:0 1px 2px rgba(14,27,51,.04)}
+  .td-tab .td-job:last-child{margin-bottom:0}
+  .td-tab .td-job.late{border-left-color:#B4433A}
+  .td-tab .td-h{gap:8px 12px;padding:14px 16px 12px}
+  .td-tab .td-h .jst{font-size:.82rem;padding:4px 11px}
+  .td-tab .td-h .tt{font-size:1.04rem;line-height:1.4;color:var(--ink)}
+  .td-tab .td-h>.muted{font-size:.8rem;color:#4A5873}
+  .td-tab .td-next{font-size:.88rem;line-height:1.6;color:#2B3850;gap:6px 10px}
+  .td-tab .td-next .say{font-weight:700;color:var(--ink)}
+  .td-tab .td-next .say.mgr{color:#5B21B6}
+  .td-tab .td-btns button{font-size:.84rem;padding:6px 12px}
+  .td-tab .td-sec{padding:10px 16px 12px}
+  .td-tab .td-sec .lb{font-size:.8rem;color:#3F4D66}
+  .td-tab .td-sec .muted{color:#4A5873}
+  .td-tab .td-fold>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;margin:0}
+  .td-tab .td-fold>summary::-webkit-details-marker{display:none}
+  .td-tab .td-fold>summary .c{font-weight:700;color:#4A5873;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:0 8px;font-size:.74rem}
+  .td-tab .td-fold>summary .tg{margin-left:auto;font-size:.76rem;font-weight:700;color:var(--accent-ink)}
+  .td-tab .td-fold>summary .tg:after{content:'펼치기 ▾'}
+  .td-tab .td-fold[open]>summary{margin-bottom:6px}
+  .td-tab .td-fold[open]>summary .tg:after{content:'접기 ▴'}
+  .td-tab .td-fold:not([open]){padding-top:9px;padding-bottom:9px}
+  .td-tab .st{font-size:.88rem}
+  .td-tab .td-off{margin-top:10px}
+  .td-tab .td-off>summary{cursor:pointer;font-size:.84rem;font-weight:700;color:#3F4D66;padding:4px 2px}
+  .td-tab .td-off[open]>summary{margin-bottom:10px}
+  @media(max-width:640px){
+    .td-tab .td-h{padding:12px 12px 10px}
+    .td-tab .td-h .tt{flex:1 1 60%;min-width:0;word-break:keep-all;overflow-wrap:anywhere}
+    .td-tab .td-next{order:1}
+    .td-tab .td-btns{order:2;margin-left:0;flex-basis:100%}
+    .td-tab .td-sec{padding:10px 12px}
+    .td-tab .td-list{padding:8px}
+    .td-tab .td-add{flex-wrap:wrap}
+    .td-tab .td-add select.inp{max-width:none!important;flex:1 1 140px}
+    .td-tab .st .meta{white-space:normal;text-align:right}
+  }
   .sec-h{display:flex;align-items:baseline;gap:4px 12px;flex-wrap:wrap;margin:0 0 12px}
   .sec-h h3{font-size:1rem;font-weight:800}
   .sec-h>.muted{font-size:.82rem}
@@ -2220,7 +2268,7 @@
       +cell('time',late?'bad':(setup?'warn':''),'다음 마감',nx?ddHTML(nx.at)+esc(nx.kind[1]):'<span class="muted" style="font-weight:600">예정 없음</span>',
         late?'<span style="color:#B4433A;font-weight:700">기한 지난 작업 '+late+'개</span>':(setup?'기한 세팅 필요 '+setup+'개':(nx?esc(nx.job.title||''):'')))
       +cell('num',owe?'warn':'','덜 받은 입금',owe+'줄','부분 입금 포함')
-      +cell('org',noAcc?'warn':'','함께하는 사람',mem.length+'명',noAcc?'어드민 계정 없음 '+noAcc+'명':'모두 계정 연결')
+      +cell('org','','함께하는 사람',mem.length+'명',noAcc?'어드민 계정 없음 '+noAcc+'명':'모두 계정 연결')
       +'</div>';
   }
   window.renderExt=function(){
@@ -2252,7 +2300,7 @@
     if(XTAB==='job'){$('extBody').innerHTML=h+jobsHTML(p.id);return;}
     if(XTAB==='quote'){$('extBody').innerHTML=h+'<p class="muted" style="font-size:.84rem;margin:-6px 0 14px">이 프로젝트의 외주 견적서입니다. 줄을 누르면 편집 · PDF · 미리보기 · 메일 보내기 · 보냄 / 서명 기록을 합니다. 모든 프로젝트를 한꺼번에 보려면 왼쪽 「📋 외주 견적서」.</p>'+xqHTML(p.id);return;}
     if(XTAB==='time'){$('extBody').innerHTML=h+timelineHTML(p.id);return;}
-    if(XTAB==='todo'){$('extBody').innerHTML=h+todoTabHTML(p.id);fillThumbs();return;}
+    if(XTAB==='todo'){$('extBody').innerHTML=h+'<div class="td-tab">'+todoTabHTML(p.id)+'</div>';fillThumbs();return;}
     if(XTAB==='done'){$('extBody').innerHTML=h+doneTabHTML(p.id);fillThumbs();return;}
     if(XTAB==='num'){$('extBody').innerHTML=h+numTabHTML(p.id);return;}
     /* 조직도 : 의뢰고객 → 총괄(관리자) → 팀 */
@@ -2793,7 +2841,7 @@
   function todoCard(j,o){
     o=o||{}; var p=pjOf(j.project_id), mgr=isMgr(j.project_id);
     var subs=jobSubs(j.id), eps=jobEps(j.id);
-    var h='<div class="td-job"><div class="td-h">'+jst(j.status)
+    var h='<div class="td-job'+(o.fold&&jobLate(j)?' late':'')+'"><div class="td-h">'+jst(j.status)
       +(o.showPj?'<span class="pj" style="'+tcs(j.team)+'">'+esc((p&&(p.short_name||p.name))||'')+' · '+esc(XKO[j.team])+'</span>':'')
       +'<span class="tt" onclick="jbOpen(\''+j.id+'\')">'+esc(j.title)+'</span>'
       +(subs.length?'<span class="muted" style="font-size:.78rem">세부 '+subs.filter(function(x){return x.done;}).length+'/'+subs.length+'</span>':'')
@@ -2807,7 +2855,10 @@
     /* 세부 항목 — 기한 묶음별로 */
     if(subs.length||!o.mineOnly){
       var ds=jobDues(j.id);
-      h+='<div class="td-sec"><div class="lb">세부 항목</div>';
+      /* 11/24 나-1124-5 : 할 일 탭에서는 세부 항목을 접는 칸으로 — 처음엔 항목이 있으면 펼침 · 없으면 접힘. 펼침 상태는 이 화면 기억(TD_OPEN)만 · 저장 안 함 */
+      var fold=!!o.fold, op=fold?(TD_OPEN[j.id]!=null?TD_OPEN[j.id]:subs.length>0):true, sdn=subs.filter(function(x){return x.done;}).length;
+      h+=fold?'<details class="td-sec td-fold"'+(op?' open':'')+' ontoggle="tdTog(\''+j.id+'\',this.open)"><summary class="lb">세부 항목 <span class="c">'+(subs.length?sdn+' / '+subs.length+' 끝':'없음')+'</span><span class="tg"></span></summary>'
+        :'<div class="td-sec"><div class="lb">세부 항목</div>';
       subs.forEach(function(x){
         var d=ds.filter(function(y){return y.id===x.deadline_id;})[0];
         h+='<div class="st'+(x.done?' done':'')+'"><input type="checkbox"'+(x.done?' checked':'')+' onchange="subToggle(\''+x.id+'\',this.checked)">'
@@ -2823,7 +2874,7 @@
           +(ds.length?'<select class="inp" style="max-width:150px" id="sd_'+j.id+'"><option value="">기한 묶음 없음</option>'+ds.map(function(d){return '<option value="'+d.id+'">'+esc(d.label||'작업 전체')+'</option>';}).join('')+'</select>':'')
           +'<button class="btn btn-ghost" type="button" onclick="subAdd(\''+j.id+'\')">추가</button></div>';
       }
-      h+='</div>';
+      h+=fold?'</details>':'</div>';
     }
     /* 건당 회차 */
     if(j.price_type==='건당'){
@@ -2852,15 +2903,17 @@
     }
     return h+'</div>';
   }
+  var TD_OPEN={};   /* 할 일 탭 세부 항목 펼침 — 이 화면에서만 기억(새로 열면 처음으로) · 저장 안 함 (11/24 나-1124-5) */
+  window.tdTog=function(id,op){TD_OPEN[id]=op;};
   function todoTabHTML(pid){
-    var h='<p class="muted" style="font-size:.84rem;margin:-6px 0 14px">진행 중인 작업마다 다음에 할 일 · 세부 항목 · 회차를 봅니다. 위 단추로 상태를 넘기면 기록에 남습니다.</p>';
+    var h='<p class="td-intro">진행 중인 작업마다 다음에 할 일 · 세부 항목 · 회차를 봅니다. 위 단추로 상태를 넘기면 기록에 남습니다.</p>';
     ['web','sns','design','video','blog'].forEach(function(t){
       var js=pjJobs(pid,t); if(!js.length)return;
       var live=js.filter(jobActive), off=js.filter(function(j){return !jobActive(j);});
-      h+='<div class="jb-team"><div class="th" style="'+tcs(t)+'">'+esc(XKO[t])+' <span class="n">'+live.length+'</span></div>'
-        +'<div style="border:1px solid var(--line);border-top:0;border-radius:0 0 12px 12px;padding:10px;background:'+XCOL[t][1]+'33">'
-        +(live.length?live.map(function(j){return todoCard(j);}).join(''):'<div class="jb-empty">진행 중인 작업이 없습니다</div>')
-        +(off.length?'<details style="margin-top:4px"><summary class="muted" style="font-size:.8rem;cursor:pointer">끝났거나 멈춘 작업 '+off.length+'개</summary>'+off.map(function(j){return todoCard(j);}).join('')+'</details>':'')
+      h+='<div class="jb-team td-team"><div class="th"><span class="dot" style="background:'+(XCOL[t]||XCOL.web)[0]+'"></span><span class="nm">'+esc(XKO[t])+'</span><span class="n">진행 '+live.length+'</span></div>'
+        +'<div class="td-list">'
+        +(live.length?live.map(function(j){return todoCard(j,{fold:true});}).join(''):'<div class="jb-empty">진행 중인 작업이 없습니다</div>')
+        +(off.length?'<details class="td-off"><summary>끝났거나 멈춘 작업 '+off.length+'개</summary>'+off.map(function(j){return todoCard(j,{fold:true});}).join('')+'</details>':'')
         +'</div></div>';
     });
     return h;
