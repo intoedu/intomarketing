@@ -1694,6 +1694,10 @@
         <option value="12">약정 12개월 · 제작비 60% 할인</option><option value="24">약정 24개월 · 제작비 무료</option></select>
       <button class="btn btn-ghost" type="button" onclick="qWebFill()">↺ 신청서 기능 · 가격으로 다시 채우기</button>
       <span class="muted" id="q_webhint"></span></div>
+    <!-- 그래픽 디자인만 — 항목 고르기 (11/27 이은총 님 · 연락판 나-1127-3) : 리플렛 하나만 · 금액은 비워 두고 견적마다 표에 직접 적음 -->
+    <div class="qweb hide" id="q_dsnbar">디자인 항목
+      <button class="btn btn-ghost" type="button" onclick="qDsnAdd('리플렛')">＋ 리플렛</button>
+      <span class="muted">표에 한 줄을 넣습니다 · 금액은 견적마다 직접 적어 주세요</span></div>
     <table class="qtable"><thead><tr>
       <th style="width:34px">#</th><th>항목</th>
       <th style="width:112px" class="r">개당가격</th><th style="width:78px" class="r">수량</th>
@@ -6870,6 +6874,7 @@
     if(!QD.items||!QD.items.length)QD.items=[NEWITEM()];
     Q_AUTO=isWeb&&!r.quote?JSON.stringify(QD.items):null;
     $('q_webbar').classList.toggle('hide',!isWeb);
+    $('q_dsnbar').classList.toggle('hide',groupOf(r)!=='design'||!!r._ext);   /* 디자인 항목 고르기 — 그래픽 디자인 견적만 (11/27) */
     if(isWeb){
       $('q_plan').value=QD.plan||webPlanOf(r)||'정가';
       var hasF=!!((r.details||{})['고른 기능']);
@@ -7038,6 +7043,12 @@
   };
   window.qDel=function(i){QD.items.splice(i,1);if(!QD.items.length)QD.items=[NEWITEM()];renderQuoteRows();};
   window.addQuoteRow=function(){QD.items.push(NEWITEM());renderQuoteRows();};
+  /* 디자인 항목 고르기 (11/27 나-1127-3) — 이름만 넣고 금액은 비움(기준 금액 없음 · 이은총 님 「6만원은 빼」). 빈 줄은 정리하고 맨 끝에 붙임 */
+  window.qDsnAdd=function(n){
+    QD.items=QD.items.filter(function(x){return x.name||x.price||x.before||x.unit;});
+    QD.items.push({name:n,unit:'',qty:'1',cycle:'1회',before:'',price:''});
+    renderQuoteRows();
+  };
   /* 홈페이지 — 요금 방식 바꾸기 · 신청서 기준으로 다시 채우기 */
   var Q_AUTO=null;                          /* 자동으로 채운 표 — 그대로면 요금 방식을 바꿀 때 묻지 않고 다시 채웁니다 */
   function qWebRefill(ask){
