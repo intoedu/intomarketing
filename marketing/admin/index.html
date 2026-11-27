@@ -921,6 +921,90 @@
     .grid2{grid-template-columns:1fr}
     .irow{grid-template-columns:1fr;gap:2px}
   }
+  /* ══════════ 11/27 밝은 테마 (나-1127-2) — 화면 색 · 테두리 · 간격만 ══════════
+     🔴 로고 · 파비콘 · 로그인 「IM」 글자색(--brand) · 견적서 · 계약서 종이(.paper · .p-* · .c-*)는 손대지 않음.
+     색 규칙 : 바탕 #F6F8FC · 카드 · 표 · 입력 = 흰색 + 옅은 회색 테두리 · 글자 #172B4D · 보조 글자 슬레이트 #5E6C84
+              강조 파랑 #315EDE 는 선택 메뉴 · 선택 탭 · 주요 단추 · 중요한 링크에만 · 상태 색은 뜻 그대로 옅은 바탕 칩 */
+  :root{--paper:#F6F8FC;--surface-2:#F4F6FA;--ink:#172B4D;--muted:#5E6C84;--line:#E3E8EF;--accent:#315EDE;--accent-ink:#2448B8;
+    --t-soft:#EEF3FF;--t-ring:rgba(49,94,222,.14);--t-shadow:0 1px 2px rgba(23,43,77,.05)}
+  body{background:var(--paper);color:var(--ink)}
+  ::selection{background:#D6E2FF}
+
+  /* 사이드바 — 흰 바탕 · 얇은 회색 경계 · 선택 = 옅은 파랑 + 파란 글자 + 왼쪽 표시 (로고 칸 .mark-logo 는 그대로) */
+  .side{--sd-bg:#FFFFFF;--sd-tx:#42526E;--sd-dim:#6B778C;--sd-hv:#F4F6FA;--sd-on:var(--t-soft);--sd-ln:#E3E8EF;--sd-lk:var(--accent);
+    background:#FFFFFF;border-right:1px solid #E3E8EF;color:var(--sd-tx);scrollbar-color:#CDD5E1 transparent}
+  .side .logo b{color:var(--ink)}
+  .side .logo span{color:var(--sd-dim)}
+  .side .navb{color:var(--sd-tx);font-weight:600}
+  .side .navb:hover{background:var(--sd-hv);color:var(--ink)}
+  .side .navb.on{background:var(--t-soft);color:var(--accent);font-weight:700;box-shadow:inset 3px 0 0 var(--accent)}
+  .side .navb .cnt{background:#EEF1F6;color:#42526E}
+  .side .navb.on .cnt{background:#DCE6FF;color:var(--accent)}
+  .side .navb .cnt.alert{background:#FDECEA;color:#B42318}
+  .side .navb.add{color:var(--accent)}
+  .side .navb.add:hover{color:var(--accent-ink)}
+  .side .seg{background:#F1F4F9}
+  .side .seg button{color:#6B778C}
+  .side .seg button:hover{color:var(--ink)}
+  .side .seg button.on{background:#FFFFFF;color:var(--ink);box-shadow:0 1px 2px rgba(23,43,77,.12)}
+  .side .side-sep{background:#E3E8EF}
+  .side .side-note,.side .mn-sub{color:var(--sd-dim)}
+  .side .mn-sub:hover{color:var(--accent)}
+  .side .side-foot{border-top-color:#E3E8EF}
+  .side .whoami{background:#F4F6FA}
+  .side .whoami b{color:var(--ink)}
+  .side .whoami span{color:var(--sd-dim)}
+
+  /* 머리 · 글자 */
+  .head h1{color:var(--ink)}
+  .head p,.muted{color:var(--muted)}
+
+  /* 카드 · 표 · 입력 — 흰 바탕 + 옅은 테두리 · 그림자는 아주 옅게 */
+  .card,.stat,.org-team,.jb-team,.td-job,.pj-ov-c,.xq-box,.mem,.org-client{box-shadow:var(--t-shadow)}
+  .card,.stat{border-color:var(--line);border-radius:12px}
+  .stat b{color:var(--ink)}
+  th{background:#F8FAFC;color:#5E6C84;border-bottom-color:var(--line)}
+  td{border-bottom-color:#EDF1F6}
+  .inp{border-color:#D9E0EA;background:#FFFFFF;color:var(--ink)}
+  .inp:hover{border-color:#C5CFDD}
+  .inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--t-ring)}
+  .inp::placeholder{color:#8A94A6}
+
+  /* 단추 — 주요 단추만 파랑 · 나머지는 흰 바탕 + 테두리 */
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 1px 2px rgba(49,94,222,.25)}
+  .btn-primary:hover{background:var(--accent-ink)}
+  .btn-ghost{background:#FFFFFF;border-color:#D9E0EA;color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent);background:#FFFFFF}
+  .td-btns button{border-color:#D9E0EA}
+  .td-btns button.go{background:var(--accent);border-color:var(--accent);color:#fff}
+  .td-btns button.go:hover{background:var(--accent-ink);border-color:var(--accent-ink);color:#fff}
+
+  /* 탭 — 선택 탭만 파랑 */
+  .ext-tabs{border-bottom-color:var(--line)}
+  .ext-tabs button{color:#5E6C84}
+  .ext-tabs button:hover{color:var(--ink)}
+  .ext-tabs button.on{color:var(--accent);border-bottom-color:var(--accent);background:var(--t-soft)}
+  .ext-tabs button.on .tc:not(.warn){background:#DCE6FF;color:var(--accent)}
+
+  /* 견적 편집 표 머리 — 짙은 남색 면 대신 옅은 머리줄 (종이 견적서 .p-t 는 그대로) */
+  .qtable th{background:#F4F6FA;color:#42526E;border-bottom:1px solid var(--line)}
+
+  /* 역할 칩 — 짙은 면 대신 옅은 칩(뜻 그대로 : 최고관리자) */
+  .b-owner{background:#E6ECF7;color:#172B4D}
+
+  /* 모달 · 검색 창 — 옅은 배경막 · 부드러운 그림자 */
+  .modal{background:rgba(23,43,77,.32)}
+  .sheet{box-shadow:0 18px 48px rgba(23,43,77,.18);border:1px solid var(--line)}
+  .xs-pop{background:rgba(23,43,77,.32)}
+  .xs-panel{box-shadow:0 18px 48px rgba(23,43,77,.18)}
+  .xs-dd{box-shadow:0 12px 32px rgba(23,43,77,.12)}
+  .xs-sc{background:var(--t-soft);color:var(--accent)}
+
+  @media(max-width:860px){
+    .app .side{border-right:0;border-bottom:1px solid #E3E8EF}
+    .side .navb.on{box-shadow:inset 0 -2px 0 var(--accent)}
+  }
+
 </style>
 <!-- 파비콘 = 메인 사이트와 같은 인투마케팅 로고(루트 파일 그대로 · 2026-11-20 이은총 님 「이걸로 바꿔줘」 · 11/20 잠깐 쓴 남색 IM 은 버림) -->
 <link rel="icon" href="/favicon.ico?v=2" sizes="any">
@@ -1069,7 +1153,7 @@
         <p>어드민 「외부 → 프로젝트별 → 프로젝트 상세」 화면을 보기 편하게 정돈했습니다. 「외부 → 업무별」 화면도 같은 화면 구성 요소를 사용해 함께 바뀌었습니다.</p>
         <p>화면 위쪽에는 프로젝트 이름·상태·의뢰 고객이 정리되어 보이고, 개요 영역에는 진행 작업·컨펌 대기·다음 마감·덜 받은 입금·참여 인원이 한데 모여 보입니다. 탭 모양과 조직도 카드, 작업 목록도 더 알아보기 쉽게 정돈되었고, 연결된 내부 의뢰는 접고 펼칠 수 있습니다.</p>
         <p>이번 변경은 화면 배치와 모양에 한정됩니다. 저장된 자료, 저장 방식, 권한, 금액·입금 계산은 바뀌지 않았습니다.</p>
-        <p>함께 바뀐 것도 있습니다. 왼쪽 메뉴는 남색 바탕과 선 아이콘으로 바뀌었고, 프로젝트 「할 일」 탭에서는 상태와 작업명이 먼저 보이며 세부 항목을 접고 펼칠 수 있습니다. 또 왼쪽 「검색」이나 외부 화면 위쪽 검색칸에서 프로젝트·작업·담당자·견적서 번호를 찾을 수 있습니다(새로 생긴 기능 · 볼 수 있는 자료만 찾음).</p>
+        <p>함께 바뀐 것도 있습니다. 어드민 전체가 밝은 색으로 바뀌었고 왼쪽 메뉴에는 선 아이콘이 붙었으며, 프로젝트 「할 일」 탭에서는 상태와 작업명이 먼저 보이며 세부 항목을 접고 펼칠 수 있습니다. 또 왼쪽 「검색」이나 외부 화면 위쪽 검색칸에서 프로젝트·작업·담당자·견적서 번호를 찾을 수 있습니다(새로 생긴 기능 · 볼 수 있는 자료만 찾음).</p>
         <p>이 변경은 실제 사이트에 반영되었습니다. 화면이 이상하거나 찾기 어려운 부분이 있으면 알려 주세요.</p>
       </div>
     </details>
