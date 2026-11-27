@@ -208,13 +208,26 @@ async function load(){
   draw();
 }
 
-function itemRows(items){
+/* 첫 달 관리비 할인 (2026-11-27 · 연락판 나-1127-1) — 보여 주기만 합니다.
+   🔴 결제 금액(once_due)과 매월 금액(month_due)은 DB 가 품목으로 계산한 값 그대로이고, 이 할인은 «첫 번째 정기 결제 1회»에만 적용됩니다.
+   계산은 어드민 견적서(fdCalc)와 같습니다 : 대상 = 매월 품목 중 fm 표시 · 정률(0~100%) 또는 정액(대상 합계까지) 하나만. */
+function fdOf(q){
+  var f=q&&q.first_disc; if(!f||!f.on)return null;
+  var its=(q.items||[]).filter(function(it){return it&&it.fm&&it.cycle==='매월';});
+  var base=its.reduce(function(a,it){return a+(Number(String(it.price||'').replace(/[^0-9]/g,''))||0);},0);
+  var disc=f.mode==='won'?Math.min(Math.max(0,Math.round(Number(f.won)||0)),base)
+    :Math.round(base*Math.min(100,Math.max(0,Number(f.pct)||0))/100);
+  if(!disc)return null;
+  return {disc:disc,names:its.map(function(it){return it.name||'';}),mode:f.mode,pct:Number(f.pct)||0};
+}
+function itemRows(items,fd){
   var h='';
   (items||[]).forEach(function(it){
     var price=String(it.price||'').replace(/[^0-9]/g,'');
     if(!it.name && !price) return;
     h+='<tr><td>'+esc(it.name||'')+(it.cycle&&it.cycle!=='1회'
-          ?' <span style="color:var(--muted);font-size:12.5px">('+esc(it.cycle)+')</span>':'')+'</td>'
+          ?' <span style="color:var(--muted);font-size:12.5px">('+esc(it.cycle)+')</span>':'')
+      +(fd&&it.fm&&it.cycle==='매월'?' <span style="display:inline-block;font-size:11.5px;font-weight:700;color:#1E47C0;background:#E8EEFC;border-radius:999px;padding:1px 7px">첫 달 할인 대상</span>':'')+'</td>'
       +'<td style="text-align:right;white-space:nowrap">'+esc(it.qty||'')+'</td>'
       +'<td style="text-align:right;white-space:nowrap">'+(price?won(price)+'원':'')+'</td></tr>';
   });
@@ -224,6 +237,7 @@ function itemRows(items){
 function draw(){
   var q=ROW.quote||{}, to=q.to||{}, t=q.terms||{};
   var paid=(ROW.pay_status==='paid');
+  var fd=ROW.month_due?fdOf(q):null;
   $('eff').textContent='견적번호 '+(ROW.quote_no||'-')+' · 발행일 '+dt(ROW.quote_issued_at);
 
   var h='';
@@ -251,15 +265,18 @@ function draw(){
 
    +'<div class="tbl" style="margin-top:18px"><table><thead><tr>'
      +'<th>항목</th><th style="text-align:right">수량</th><th style="text-align:right">금액</th>'
-     +'</tr></thead><tbody>'+itemRows(q.items)+'</tbody></table></div>'
+     +'</tr></thead><tbody>'+itemRows(q.items,fd)+'</tbody></table></div>'
 
    +'<div class="sum">'
      +(ROW.month_due?'<span><span class="k">매월 </span><span class="m">'+won(ROW.month_due)+'원</span></span>':'')
+     +(fd?'<span><span class="k">'+(fd.mode==='pct'?'첫 달 관리비 할인('+fd.pct+'%) ':'첫 달 관리비 할인 ')+'</span><span class="m">- '+won(fd.disc)+'원</span></span>'
+         +'<span><span class="k">첫 달 매월 결제액 </span><span class="m">'+won(ROW.month_due-fd.disc)+'원</span></span>':'')
      +(ROW.year_due?'<span><span class="k">매년 </span><span class="m">'+won(ROW.year_due)+'원</span></span>':'')
      +'<span><span class="k">지금 결제할 금액 </span><span class="v">'+won(ROW.once_due)+'원</span></span>'
    +'</div>'
    +'<p class="pre" style="margin-top:10px">모든 금액은 부가세 포함입니다.'
-   +(ROW.month_due?' 매월 내는 항목은 카드 등록이 필요해 담당자가 따로 안내드립니다.':'')+'</p>'
+   +(ROW.month_due?' 매월 내는 항목은 카드 등록이 필요해 담당자가 따로 안내드립니다.':'')
+   +(fd?'<br>첫 달 관리비 할인은 정기 관리 시작일부터 다음 결제일 전날까지의 첫 결제 기간에 한 번만 적용되며, 다음 결제일부터는 정상 월 요금 '+won(ROW.month_due)+'원이 청구됩니다. 할인 대상 : '+esc(fd.names.join(', '))+'.':'')+'</p>'
    +'</div>';
 
   /* 조건들 */

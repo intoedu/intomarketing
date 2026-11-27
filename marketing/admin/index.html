@@ -806,6 +806,22 @@
   .qsum .r.total{border-bottom:0;border-top:2px solid var(--ink);margin-top:6px;padding-top:12px;font-size:1.05rem;font-weight:800}
   .qsum .r .dis{color:var(--bad)}
   .qsum .r span:last-child{font-weight:700;font-variant-numeric:tabular-nums}
+  /* 첫 달 관리비 할인 (11/27 나-1127-1) */
+  .fd-box{margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface-2)}
+  .fd-on{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0;cursor:pointer;font-size:.9rem}
+  .fd-on .muted{font-size:.8rem;font-weight:500}
+  .fd-body{margin-top:10px;display:flex;flex-direction:column;gap:6px;font-size:.86rem}
+  .fd-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .fd-row label{display:flex;align-items:center;gap:5px;margin:0;font-weight:700;cursor:pointer}
+  .fd-k{font-weight:800;color:#3F4D66;margin-right:6px}
+  .fd-n{width:110px;padding:6px 9px;font-size:.86rem;text-align:right}
+  .fd-list{display:flex;flex-direction:column;gap:4px}
+  .fd-it{display:flex;align-items:center;gap:8px;margin:0;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer;font-weight:600}
+  .fd-it b{margin-left:auto;font-variant-numeric:tabular-nums}
+  .fd-it.on{border-color:var(--accent);background:#F1F5FE}
+  .fd-ck{display:flex;align-items:flex-start;gap:7px;margin:4px 0 0;font-weight:700;color:#2B3850;cursor:pointer}
+  .fd-tag,.p-fd{display:inline-block;font-size:.68rem;font-weight:800;color:#1E47C0;background:#E8EEFC;border-radius:999px;padding:1px 7px;margin-left:6px;white-space:nowrap;vertical-align:middle}
+  .fd-warn{margin-top:8px;font-size:.82rem;font-weight:700;color:#A1322A;background:#FDECEA;border-radius:8px;padding:7px 10px}
 
   /* A4 견적서 */
   .paper{background:#fff;color:#111;max-width:820px;margin:0 auto;padding:46px 52px;border-radius:6px}
@@ -1605,6 +1621,22 @@
       <button class="btn btn-ghost" type="button" onclick="presetQuote()">기본 항목 넣기</button>
     </div>
     <div class="qsum" id="q_sum"></div>
+    <!-- 첫 달 관리비 할인 (11/27 나-1127-1) — 고객이 고른 때만 · 첫 결제 1회 · 정률 또는 정액 하나만 · 외주 견적서에는 안 나옴 -->
+    <div class="fd-box" id="q_fd">
+      <label class="fd-on"><input type="checkbox" id="fd_on" onchange="fdOn(this.checked)"> <b>첫 달 관리비 할인</b>
+        <span class="muted">— 고객이 고른 경우에만 넣습니다 · 첫 번째 정기 결제 1회만 · 매월 고정 관리비에만</span></label>
+      <div class="fd-body hide" id="fd_body">
+        <div class="fd-row"><span class="fd-k">방식</span>
+          <label><input type="radio" name="fd_m" id="fd_m_pct" onchange="fdSet('mode','pct')"> 정률</label>
+          <input class="inp fd-n" id="fd_pct" type="number" min="1" max="100" step="1" oninput="fdSet('pct',Math.min(100,Math.max(0,Number(this.value)||0)))"> %
+          <label style="margin-left:14px"><input type="radio" name="fd_m" id="fd_m_won" onchange="fdSet('mode','won')"> 정액</label>
+          <input class="inp fd-n" id="fd_won" inputmode="numeric" oninput="fdWon(this)"> 원
+          <span class="muted">100% = 첫 달 고정 관리비 전액 면제</span></div>
+        <div class="fd-k" style="margin-top:8px">할인 대상 <span class="muted" style="font-weight:500">— 매월 고정 관리비만 고르세요 (기본 운영비 · 채널 추가 · 유튜브 채널 관리 · 홈페이지 월 관리비 등). 세팅비 · 디자인 · 원고 · 영상 · 건별 업로드 · 촬영 · 광고는 고르지 않습니다.</span></div>
+        <div class="fd-list" id="fd_list"></div>
+        <label class="fd-ck"><input type="checkbox" id="fd_nolong" onchange="fdSet('nolong',this.checked)"> 장기 계약 할인(정기 콘텐츠 3 · 6개월 일시불 · 홈페이지 약정)과 함께 쓰지 않는 견적입니다</label>
+      </div>
+    </div>
 
     <!-- 결제 조건 — 견적서마다 다를 수 있어 여기서 고칩니다.
          비워 두면 「견적서 설정」에 적어 둔 기본 문구가 그대로 나갑니다. -->
@@ -6347,7 +6379,7 @@
     var r=CURROW,el=$('d_quote');
     if(r.quote_no){
       el.innerHTML='<span class="qno">'+esc(r.quote_no)+'</span>'
-        +'<b class="muted" style="font-weight:600;font-size:.84rem">발행 '+fdate(r.quote_issued_at)+' · '+(function(t){return webPay(r,t)?('계약 시 '+won(t.once)+' · 월 '+won(t.month)):('청구 '+won(t.firstPay));})(quoteTotals(r.quote))+'</b>'
+        +'<b class="muted" style="font-weight:600;font-size:.84rem">발행 '+fdate(r.quote_issued_at)+' · '+(function(t){return (t.fd?'첫 달 할인 - '+won(t.fd.disc)+' · ':'')+(webPay(r,t)?('계약 시 '+won(t.once)+' · 월 '+won(t.month)):('청구 '+won(t.firstPay)));})(quoteTotals(r.quote))+'</b>'
         +'<span style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">'
         +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="openQuote()">✏️ 편집</button>'
         +'<button class="btn btn-primary" style="padding:7px 13px" type="button" onclick="savePdf(this)">💾 PDF 받기</button>'
@@ -6893,7 +6925,8 @@
     var h='';
     QD.items.forEach(function(it,i){
       h+='<tr><td class="num muted tnum">'+(i+1)+'</td>'
-       +'<td><input class="qi" value="'+esc(it.name)+'" placeholder="예: 블로그 작성 / 원어민 수업료" oninput="qEdit('+i+',\'name\',this.value)"></td>'
+       +'<td><input class="qi" value="'+esc(it.name)+'" placeholder="예: 블로그 작성 / 원어민 수업료" oninput="qEdit('+i+',\'name\',this.value)">'
+       +(it.fm&&QD.first_disc&&QD.first_disc.on?'<span class="fd-tag">첫 달 할인 대상</span>':'')+'</td>'
        +'<td>'+qNumBox(i,'unit',it.unit,'0')+'</td>'
        +'<td>'+qNumBox(i,'qty',it.qty,'1')+'</td>'
        +'<td><select class="qi" onchange="qEdit('+i+',\'cycle\',this.value)">'
@@ -6904,12 +6937,15 @@
        +'<td><button class="qdel" type="button" onclick="qDel('+i+')">✕</button></td></tr>';
     });
     $('q_rows').innerHTML=h;
+    renderFd();
     renderQuoteSum();
   }
   /* 개당가격이나 수량을 고치면 **기존 비용**에 곱해 넣습니다 (2026-09-21 변경 — 예전엔 할인가).
      할인가(청구)는 기존 비용 칸에서 Tab 을 눌러 넘깁니다 → qKey. */
   window.qEdit=function(i,k,v){
     var it=QD.items[i]; it[k]=v;
+    if(k==='cycle'&&v!=='매월'&&it.fm){delete it.fm; renderQuoteRows(); return;}   /* 첫 달 할인 대상은 매월 품목만 */
+    if(k==='cycle'||(k==='price'&&it.fm)){renderFd();}
     if(k==='unit'||k==='qty'){
       var u=Number(it.unit)||0, q=Number(it.qty)||0;
       if(u&&q){ it.before=String(u*q); renderQuoteRows(); return; }
@@ -6954,8 +6990,86 @@
       if(it.cycle==='매월')t.month+=p;else if(it.cycle==='매년')t.year+=p;else t.once+=p;
     });
     t.discount=Math.max(0,t.before-t.price);
-    t.firstPay=t.once+t.month+t.year;
+    /* 첫 달 관리비 할인 (11/27 나-1127-1) — 기존 비용 · 할인가 · 매월 합계는 건드리지 않고 «첫 결제 1회»에서만 뺌.
+       🔴 t.month 는 정상 월 요금 그대로(관리비 대장 · 계약서 · DB monthly 와 같음). t.discount 에도 안 넣음(위약금 기준 「할인받은 제작비」와 섞이지 않게). */
+    t.fd=fdCalc(q);
+    t.firstMonth=t.month-(t.fd?t.fd.disc:0);
+    t.firstPay=t.once+t.firstMonth+t.year;
     return t;
+  }
+  /* ══════════ 첫 달 관리비 할인 (2026-11-27 이은총 님 · 연락판 나-1127-1) ══════════
+     저장 = quote.first_disc {on, mode:'pct'|'won', pct, won, nolong} + 할인 대상 품목에 it.fm=true (매월 품목만).
+     · 고른 때만 — 자동으로 붙지 않음 · 정률(0~100%) 또는 정액(대상 합계까지) 중 하나만
+     · 대상 = 직원이 고른 «매월 고정 관리비» 품목(기본 운영비 · 채널 추가 · 유튜브 채널 관리 · 홈페이지 월 관리비 등)
+       세팅비 · 디자인 · 원고 · 영상 · 건별 업로드 · 촬영 · 광고는 대상이 아님(매월이어도 건수에 따라 바뀌는 것은 고르지 않음)
+     · 기간 = 정기 관리 시작일부터 다음 결제일 전날까지의 «첫 결제 1회» — 날짜는 계산하지 않고 글로만 적음
+     🔴 DB(quote_by_key · my_orders)는 품목 금액만 더하므로 바뀌지 않음 — 결제 링크 금액(once_due) · 매월 금액(month_due)은 그대로.
+     🔴 장기 계약 할인과 함께 쓸지는 아직 정하지 않음 → 함께 못 쓰게 막음(약정 홈페이지 · 이미 할인된 매월 품목 · 직원 확인 칸). */
+  var FD_OK=/운영비|관리비|채널\s*관리|채널\s*추가|유지\s*관리|홈페이지\s*관리/, FD_NO=/세팅|디자인|원고|블로그\s*글|글\s*작성|영상|제작|업로드|촬영|광고|건당|편당|장당/;
+  function fdItems(q){return (q&&q.items||[]).filter(function(it){return it&&it.fm&&it.cycle==='매월';});}
+  function fdCalc(q){
+    var f=q&&q.first_disc; if(!f||!f.on)return null;
+    var base=fdItems(q).reduce(function(a,it){return a+(Number(it.price)||0);},0);
+    var disc=f.mode==='won'?Math.min(Math.max(0,Math.round(Number(f.won)||0)),base)
+      :Math.round(base*Math.min(100,Math.max(0,Number(f.pct)||0))/100);
+    return {base:base,disc:disc,mode:f.mode==='won'?'won':'pct',pct:Number(f.pct)||0,won:Number(f.won)||0,names:fdItems(q).map(function(it){return it.name;})};
+  }
+  function fdLabel(fd){return fd.mode==='pct'?(fd.pct===100?'첫 달 관리비 할인 (100% · 첫 결제 1회)':'첫 달 관리비 할인 ('+fd.pct+'% · 첫 결제 1회)'):'첫 달 관리비 할인 (정액 · 첫 결제 1회)';}
+  function fdBlock(q){   /* 함께 쓰지 못하는 경우 — 정해지기 전까지 막음 */
+    if(CURROW&&groupOf(CURROW)==='web'&&q.plan&&q.plan!=='정가')return '약정 홈페이지 견적입니다. 장기 계약(약정) 할인과 첫 달 관리비 할인을 함께 쓸지는 아직 정해지지 않아 넣을 수 없습니다.';
+    var d=fdItems(q).filter(function(it){return (Number(it.before)||0)>(Number(it.price)||0);});
+    if(d.length)return '「'+d.map(function(it){return it.name;}).join(', ')+'」은 이미 할인된 금액입니다(기존 비용 > 할인가). 장기 계약 할인 등과 겹칠 수 있어 첫 달 할인 대상으로 고를 수 없습니다.';
+    return '';
+  }
+  function fdNote(t){   /* 견적서 · 결제 링크 아래에 붙는 설명 */
+    if(!t.fd)return '';
+    return '첫 달 관리비 할인은 정기 관리 시작일부터 다음 결제일 전날까지의 첫 결제 기간에 한 번만 적용되며, 다음 결제일부터는 정상 월 요금 '+won(t.month)+'이 청구됩니다. 할인 대상 : '+t.fd.names.join(', ')+'.';
+  }
+  function fdSumHTML(t,web){   /* 합계 칸 — 정상 월 · 할인 · 첫 달 결제액 · 다음 결제일부터 */
+    if(!t.fd)return '';
+    return '<div class="r"><span>'+fdLabel(t.fd)+'</span><span class="dis">- '+won(t.fd.disc)+'</span></div>'
+      +'<div class="r"><span>첫 달 '+(web?'월 관리비':'매월 항목')+' 결제액</span><span>'+won(t.firstMonth)+'</span></div>'
+      +'<div class="r"><span>다음 결제일부터 정상 월 요금</span><span>'+won(t.month)+' / 월</span></div>';
+  }
+  window.fdOn=function(on){
+    if(on){
+      var b=fdBlock(QD); if(b){toast(b);$('fd_on').checked=false;return;}
+      QD.first_disc=QD.first_disc||{mode:'pct',pct:100,won:0};
+      QD.first_disc.on=true;
+      if(!QD.items.some(function(it){return it.fm;}))QD.items.forEach(function(it){   /* 이름으로 «골라 두기»만 — 직원이 확인 */
+        if(it.cycle==='매월'&&FD_OK.test(it.name||'')&&!FD_NO.test(it.name||''))it.fm=true;});
+    }else if(QD.first_disc){QD.first_disc.on=false;}
+    renderQuoteRows();
+  };
+  window.fdWon=function(el){var d=digits(el.value); el.value=comma(d); fdSet('won',Number(d)||0);};
+  window.fdSet=function(k,v){if(!QD.first_disc)return; QD.first_disc[k]=v; if(k==='mode')renderFd(); renderQuoteSum();};
+  window.fdPick=function(i,on){var it=QD.items[i]; if(!it)return; if(on&&it.cycle!=='매월'){toast('매월 결제 품목만 고를 수 있습니다');return;} it.fm=!!on; renderQuoteRows();};
+  function renderFd(){
+    var box=$('q_fd'); if(!box)return;
+    var ext=!!(CURROW&&CURROW._ext); box.classList.toggle('hide',ext);   /* 외주 견적서에는 안 씀 */
+    if(ext)return;
+    var f=QD.first_disc||{}, on=!!f.on;
+    $('fd_on').checked=on; $('fd_body').classList.toggle('hide',!on);
+    if(!on)return;
+    $('fd_m_pct').checked=f.mode!=='won'; $('fd_m_won').checked=f.mode==='won';
+    $('fd_pct').value=f.pct==null?'':f.pct; $('fd_won').value=f.won?comma(String(f.won)):'';
+    $('fd_pct').disabled=f.mode==='won'; $('fd_won').disabled=f.mode!=='won';
+    $('fd_nolong').checked=!!f.nolong;
+    var mi=QD.items.map(function(it,i){return {it:it,i:i};}).filter(function(x){return x.it.cycle==='매월'&&(x.it.name||Number(x.it.price));});
+    $('fd_list').innerHTML=mi.length?mi.map(function(x){
+      return '<label class="fd-it'+(x.it.fm?' on':'')+'"><input type="checkbox"'+(x.it.fm?' checked':'')+' onchange="fdPick('+x.i+',this.checked)">'
+        +'<span>'+esc(x.it.name||'(이름 없음)')+'</span><b>'+won(Number(x.it.price)||0)+' / 월</b></label>';}).join('')
+      :'<div class="muted">매월 결제 품목이 없습니다. 표에서 결제주기를 「매월」로 둔 고정 관리비 품목을 먼저 넣어 주세요.</div>';
+  }
+  function fdCheck(q){   /* 저장 전 검사 — 문제가 있으면 문장, 없으면 '' */
+    var f=q.first_disc; if(!f||!f.on)return '';
+    var b=fdBlock(q); if(b)return b;
+    var base=fdItems(q).reduce(function(a,it){return a+(Number(it.price)||0);},0);
+    if(!base)return '첫 달 관리비 할인 대상(매월 고정 관리비)을 하나 이상 골라 주세요.';
+    if(f.mode==='won'){var w=Number(f.won)||0; if(w<=0)return '첫 달 할인 금액(정액)을 적어 주세요.'; if(w>base)return '첫 달 할인 금액이 할인 대상 월 관리비 합계('+won(base)+')보다 큽니다.';}
+    else{var pc=Number(f.pct); if(!(pc>0&&pc<=100))return '첫 달 할인율은 1~100% 사이로 적어 주세요.';}
+    if(!f.nolong)return '「장기 계약 할인과 함께 쓰지 않는 견적입니다」를 확인해 주세요.';
+    return '';
   }
   /* 🔴 홈페이지 + 월 관리비가 있는 견적은 «계약할 때 낼 금액 = 제작비» 로 보여 줍니다 (2026-11-02 이은총 님).
         계약서 제3조 제4 · 5항 : 제작비는 계약할 때, 월 관리비는 홈페이지를 오픈한 달부터 매달 납부일(1일 · 10일)에 (11/3 CMS 약속 삭제).
@@ -6965,17 +7079,21 @@
     var t=quoteTotals(QD),h='';
     h+='<div class="r"><span>기존 비용 합계</span><span>'+won(t.before)+'</span></div>';
     h+='<div class="r"><span>할인 금액</span><span class="dis">- '+won(t.discount)+'</span></div>';
+    var fw=fdCheck(QD);   /* 첫 달 할인 — 고칠 것이 있으면 합계 밑에 빨갛게 */
+    var fwH=fw&&QD.first_disc&&QD.first_disc.on?'<div class="fd-warn">'+esc(fw)+'</div>':'';
     if(webPay(CURROW,t)){
       h+='<div class="r"><span>월 관리비 (오픈한 달부터 매월)</span><span>'+won(t.month)+' / 월</span></div>';
+      h+=fdSumHTML(t,true);
       if(t.year)h+='<div class="r"><span>매년 청구</span><span>'+won(t.year)+' / 년</span></div>';
       h+='<div class="r total"><span>계약할 때 낼 금액 (제작비)</span><span>'+won(t.once)+'</span></div>';
-      $('q_sum').innerHTML=h; return;
+      $('q_sum').innerHTML=h+fwH; return;
     }
     if(t.once)h+='<div class="r"><span>1회성 비용</span><span>'+won(t.once)+'</span></div>';
     if(t.month)h+='<div class="r"><span>매월 청구</span><span>'+won(t.month)+' / 월</span></div>';
+    h+=fdSumHTML(t,false);
     if(t.year)h+='<div class="r"><span>매년 청구</span><span>'+won(t.year)+' / 년</span></div>';
-    h+='<div class="r total"><span>최초 청구액</span><span>'+won(t.firstPay)+'</span></div>';
-    $('q_sum').innerHTML=h;
+    h+='<div class="r total"><span>최초 청구액'+(t.fd?' (첫 달 할인 반영)':'')+'</span><span>'+won(t.firstPay)+'</span></div>';
+    $('q_sum').innerHTML=h+fwH;
   }
   window.fillPay=function(){
     $('q_pay').value=SET.pay_note||'';
@@ -7067,6 +7185,13 @@
     QD.items=QD.items.filter(function(it){return it.name||Number(it.before)||Number(it.price);});
     QD.items.forEach(function(it){delete it._auto;});   /* 화면용 표시라 저장하지 않습니다 */
     if(!QD.items.length){toast('견적 항목을 한 줄 이상 입력해 주세요');return;}
+    /* 첫 달 관리비 할인 (11/27) — 켠 경우만 검사해 저장 · 끈 경우와 외주 견적서는 할인 · 대상 표시를 지움(예전 견적과 같은 모양) */
+    if(QD.first_disc&&QD.first_disc.on&&!(CURROW&&CURROW._ext)){
+      var fe=fdCheck(QD); if(fe){toast(fe);return;}
+      var fm=QD.first_disc.mode==='won'?'won':'pct';
+      QD.first_disc={on:true,mode:fm,pct:fm==='pct'?Number(QD.first_disc.pct):null,won:fm==='won'?Number(QD.first_disc.won):null,nolong:true,period:'첫 결제 1회'};
+      QD.items.forEach(function(it){if(it.fm&&it.cycle!=='매월')delete it.fm; if(!it.fm)delete it.fm;});
+    }else{ delete QD.first_disc; QD.items.forEach(function(it){delete it.fm;}); }
     /* 2026-11-03 — 홈페이지 견적서 조항의 요금 방식 줄을 고른 요금 방식으로 다시 쓰고, 수정 횟수가 계약서(제5조 · 5회)와 다르면 한 번 묻습니다 */
     if(groupOf(CURROW)==='web'){
       QD.terms.include=webTermsInclude(QD.terms.include,QD.plan,quoteTotals(QD).month);
@@ -7128,7 +7253,7 @@
       var it=(q.items||[])[i];
       var u=it&&Number(it.unit)?Number(it.unit):0, qn=it&&Number(it.qty)?Number(it.qty):0;
       rows+='<tr><td class="num">'+(i+1)+'</td>'
-        +'<td>'+(it?esc(it.name):'')+'</td>'
+        +'<td>'+(it?esc(it.name):'')+(it&&it.fm&&t.fd?' <span class="p-fd">첫 달 할인 대상</span>':'')+'</td>'
         +'<td class="r">'+(u?u.toLocaleString('ko-KR'):'')+'</td>'
         +'<td class="r">'+(qn?qn.toLocaleString('ko-KR'):'')+'</td>'
         +'<td>'+(it?esc(it.cycle||'1회'):'')+'</td>'
@@ -7138,10 +7263,11 @@
     var cyc='', wp=webPay(r,t);
     if(wp){
       cyc='<div class="r"><span>월 관리비 (오픈한 달부터 매월)</span><span>'+won(t.month)+' / 월</span></div>'
+         +fdSumHTML(t,true)
          +(t.year?'<div class="r"><span>매년 청구</span><span>'+won(t.year)+' / 년</span></div>':'');
     }
     else if(t.once)cyc+='<div class="r"><span>1회성 비용</span><span>'+won(t.once)+'</span></div>';
-    if(!wp&&t.month)cyc+='<div class="r"><span>매월 청구</span><span>'+won(t.month)+' / 월</span></div>';
+    if(!wp&&t.month)cyc+='<div class="r"><span>매월 청구</span><span>'+won(t.month)+' / 월</span></div>'+fdSumHTML(t,false);
     if(!wp&&t.year)cyc+='<div class="r"><span>매년 청구</span><span>'+won(t.year)+' / 년</span></div>';
     return '<div class="paper" id="paperBody">'
      +'<div class="p-h"><div><h1>견 적 서</h1><div class="qsub">QUOTATION</div></div>'
@@ -7179,9 +7305,10 @@
        +'<div class="r"><span>할인 금액</span><span class="dis">- '+won(t.discount)+'</span></div>'
        +cyc
        +(wp?'<div class="r tot"><span>계약할 때 낼 금액 (제작비)</span><span>'+won(t.once)+'</span></div>'
-           :'<div class="r tot"><span>최종 청구액</span><span>'+won(t.firstPay)+'</span></div>')
+           :'<div class="r tot"><span>최종 청구액'+(t.fd?' (첫 달 할인 반영)':'')+'</span><span>'+won(t.firstPay)+'</span></div>')
      +'</div>'
-     +'<div class="p-note">※ 표시된 금액은 부가세 포함 금액입니다.'+(wp?' 월 관리비는 홈페이지를 오픈한 달부터 매달 냅니다.':(t.month||t.year?' 매월·매년 항목은 주기마다 청구되며, 최종 청구액은 최초 결제 기준입니다.':''))+'</div>'
+     +'<div class="p-note">※ 표시된 금액은 부가세 포함 금액입니다.'+(wp?' 월 관리비는 홈페이지를 오픈한 달부터 매달 냅니다.':(t.month||t.year?' 매월·매년 항목은 주기마다 청구되며, 최종 청구액은 최초 결제 기준입니다.':''))
+       +(t.fd?'<br>※ '+esc(fdNote(t)):'')+'</div>'
      +payHTML(q)
      +(q.note?'<div class="p-sec"><h4>비고 / NOTES</h4><div class="box">'+esc(q.note)+'</div></div>':'')
      /* ── 계약 조항 — 비어 있는 칸은 아예 안 나옵니다 ── */
@@ -7598,10 +7725,12 @@
     if(webPay(r,t)){
       lines.push('· 계약할 때 낼 금액 (제작비): '+won(t.once));
       lines.push('· 월 관리비: '+won(t.month)+' / 월 (오픈한 달부터 매달)');
+      if(t.fd)lines.push('· 첫 달 관리비 할인: - '+won(t.fd.disc)+' (첫 결제 1회 · 첫 달 '+won(t.firstMonth)+' · 다음 결제일부터 '+won(t.month)+' / 월)');
       if(t.year)lines.push('· 매년 청구: '+won(t.year)+' / 년');
     }else{
     if(t.once)lines.push('· 1회성 비용 합계: '+won(t.once));
     if(t.month)lines.push('· 매월 청구: '+won(t.month)+' / 월');
+    if(t.fd)lines.push('· 첫 달 관리비 할인: - '+won(t.fd.disc)+' (첫 결제 1회 · 첫 달 매월 항목 '+won(t.firstMonth)+' · 다음 결제일부터 '+won(t.month)+' / 월)');
     if(t.year)lines.push('· 매년 청구: '+won(t.year)+' / 년');
     lines.push('· 최초 청구액: '+won(t.firstPay));
     }
@@ -7629,6 +7758,7 @@
     if(t.year)due+=' (매년 '+won(t.year)+' 포함)';
     if(webPay(r,t))due='계약할 때 낼 금액 (제작비): '+won(t.once)+' · 월 관리비 '+won(t.month)+' (오픈한 달부터)';
     lines.push('· '+due);
+    if(t.fd)lines.push('· 첫 달 관리비 할인: - '+won(t.fd.disc)+' (첫 결제 1회 · 다음 결제일부터 정상 월 요금 '+won(t.month)+')');
     lines.push('· 유효기간: 발행일로부터 '+(q.valid_days||30)+'일');
     lines.push('');
     lines.push('자세한 항목은 첨부된 PDF를 확인해 주세요. 궁금한 점은 편하게 회신 주세요.');
