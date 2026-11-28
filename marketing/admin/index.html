@@ -821,6 +821,12 @@
   .fd-it.on{border-color:var(--accent);background:#F1F5FE}
   .fd-ck{display:flex;align-items:flex-start;gap:7px;margin:4px 0 0;font-weight:700;color:#2B3850;cursor:pointer}
   .fd-tag,.p-fd{display:inline-block;font-size:.68rem;font-weight:800;color:#1E47C0;background:#E8EEFC;border-radius:999px;padding:1px 7px;margin-left:6px;white-space:nowrap;vertical-align:middle}
+  .fd-dt{flex-basis:100%;margin-top:10px;border:1px solid #D6E2FF;border-radius:10px;background:#F5F8FF;padding:10px 12px;font-size:.86rem}
+  .fd-dt-h{font-weight:800;color:#1E47C0;margin-bottom:6px}.fd-dt-h .muted{font-weight:500;font-size:.8rem}
+  .fd-dt dl{display:grid;grid-template-columns:130px 1fr;gap:4px 12px;margin:0}
+  .fd-dt dt{color:var(--muted);font-weight:700}.fd-dt dd{margin:0;font-variant-numeric:tabular-nums}
+  .fd-dt .dis{color:#B4433A}
+  @media(max-width:560px){.fd-dt dl{grid-template-columns:1fr}.fd-dt dd{margin-bottom:4px}}
   .fd-warn{margin-top:8px;font-size:.82rem;font-weight:700;color:#A1322A;background:#FDECEA;border-radius:8px;padding:7px 10px}
 
   /* A4 견적서 */
@@ -2771,7 +2777,8 @@
   var XQALL=false, XQD=null, XQD_BACK=null, XQF={pj:'',st:''};
   function xqById(id){return EXT.quotes.filter(function(q){return q.id===id;})[0]||null;}
   function xqState(x){return x.signed_at?{k:'sign',t:'서명 받음'}:x.sent_at?{k:'sent',t:'보냄'}:{k:'draft',t:'작성'};}
-  function xqAmt(q){var t=quoteTotals(q||{});return (t.once?won(t.once):'')+(t.month?(t.once?' + ':'')+'월 '+won(t.month):'')+(t.year?' + 연 '+won(t.year):'');}
+  function xqAmt(q){var t=quoteTotals(q||{});return (t.once?won(t.once):'')+(t.month?(t.once?' + ':'')+'월 '+won(t.month):'')+(t.year?' + 연 '+won(t.year):'')
+    +(t.fd?' · 첫 달 할인 - '+won(t.fd.disc)+' (첫 달 '+won(t.firstMonth)+')':'');}
   window.xqAll=function(){XQALL=true;toExt();renderExtNav();renderExt();};
   window.xqF=function(k,v){XQF[k]=v;renderExt();};
   function renderXqAll(){
@@ -2815,6 +2822,7 @@
       +'<button class="btn btn-primary" type="button" onclick="xqdPdf(this)">💾 PDF 받기</button>'
       +'<button class="btn btn-ghost" type="button" onclick="xqdView()">📄 미리보기</button>'
       +'<button class="btn btn-ghost" type="button" onclick="xqdView()">✉️ 메일 보내기</button></span></div>'
+      +fdDetailHTML(t,false)   /* 첫 달 관리비 할인 (11/28) */
       +'<div style="margin-top:10px">'+stRow('📤','보냄',x.sent_at,'sent','보냈다고 기록')+stRow('✍️','서명',x.signed_at,'sign','서명 받았다고 기록')+'</div>'
       +xqdCBox(x)
       +'<dl class="xqd-info"><dt>받는 곳</dt><dd><b>'+esc((q.to&&q.to.company)||'-')+'</b>'+(q.to&&q.to.manager?' · '+esc(q.to.manager):'')+'</dd>'
@@ -2895,8 +2903,8 @@
       +'<span class="muted">받는 곳 = 일을 맡긴 회사 · 제작 대상 = 실제로 만들어 주는 회사</span>'
       +'<button class="btn btn-primary" style="margin-left:auto;padding:6px 13px;font-size:.82rem" type="button" onclick="xqPick(\''+pid+'\')">＋ 견적서 만들기</button></div>'
       +(qs.length?qs.map(function(x){
-        var q=x.quote||{}, t=quoteTotals(q);
-        var amt=(t.once?won(t.once):'')+(t.month?(t.once?' + ':'')+'월 '+won(t.month):'')+(t.year?' + 연 '+won(t.year):'');
+        var q=x.quote||{};
+        var amt=xqAmt(q);   /* 같은 식 — 첫 달 할인만 덧붙음 (11/28) */
         var st=xqState(x);
         return '<div class="xq-row go" onclick="xqdOpen(\''+x.id+'\')"><span class="qno">'+esc(x.quote_no||'번호 없음')+'</span><span class="badge xq-'+st.k+'">'+st.t+'</span>'
           +'<span class="muted">'+(x.quote_issued_at?fdate(x.quote_issued_at):'')+'</span>'
@@ -6475,6 +6483,7 @@
         +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="previewQuote()">✉️ 메일 보내기</button>'
         +'<button class="btn btn-ghost" style="padding:7px 13px" type="button" onclick="payLink(this)">🔗 '
           +(r.quote_key?'결제 링크 복사':'결제 링크 만들기')+'</button></span>'
+        +(function(t){return fdDetailHTML(t,webPay(r,t));})(quoteTotals(r.quote))   /* 첫 달 관리비 할인 (11/28) */
         +(isWebContract(r)
            ? '<span style="flex-basis:100%;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding-top:8px;border-top:1px dashed var(--line)">'
              +'<b style="font-size:.86rem">📝 계약서</b><span class="muted" style="font-size:.8rem">'+contractState(r)+'</span>'
@@ -7126,6 +7135,17 @@
       +'<div class="r"><span>첫 달 '+(web?'월 관리비':'매월 항목')+' 결제액</span><span>'+won(t.firstMonth)+'</span></div>'
       +'<div class="r"><span>다음 결제일부터 정상 월 요금</span><span>'+won(t.month)+' / 월</span></div>';
   }
+  /* 견적 상세 창 (내부 의뢰 상세 · 외주 견적서 상세) — 할인이 있을 때만 (11/28 나-1128-1). 없으면 '' → 예전 화면 그대로 */
+  function fdDetailHTML(t,web){
+    if(!t||!t.fd)return '';
+    var kind=t.fd.mode==='pct'?'정률 '+t.fd.pct+'%':'정액';
+    var part=t.fd.base<t.month?' <span class="muted">(할인 대상 '+won(t.fd.base)+')</span>':'';
+    return '<div class="fd-dt"><div class="fd-dt-h">첫 달 관리비 할인 <span class="muted">· 첫 결제 1회 · 대상 '+esc(t.fd.names.join(', '))+'</span></div><dl>'
+      +'<dt>정상 월 '+(web?'관리비':'매월 금액')+'</dt><dd>'+won(t.month)+' / 월'+part+'</dd>'
+      +'<dt>할인</dt><dd>'+kind+' · <b class="dis">- '+won(t.fd.disc)+'</b></dd>'
+      +'<dt>첫 달 실제 청구액</dt><dd><b>'+won(t.firstMonth)+'</b>'+(!web&&(t.once||t.year)?' <span class="muted">('+[t.once?'1회성':'',t.year?'매년':''].filter(Boolean).join(' · ')+' 포함 최초 청구액 '+won(t.firstPay)+')</span>':'')+'</dd>'
+      +'<dt>다음 결제일부터</dt><dd>'+won(t.month)+' / 월</dd></dl></div>';
+  }
   window.fdOn=function(on){
     if(on){
       var b=fdBlock(QD); if(b){toast(b);$('fd_on').checked=false;return;}
@@ -7141,8 +7161,7 @@
   window.fdPick=function(i,on){var it=QD.items[i]; if(!it)return; if(on&&it.cycle!=='매월'){toast('매월 결제 품목만 고를 수 있습니다');return;} it.fm=!!on; renderQuoteRows();};
   function renderFd(){
     var box=$('q_fd'); if(!box)return;
-    var ext=!!(CURROW&&CURROW._ext); box.classList.toggle('hide',ext);   /* 외주 견적서에는 안 씀 */
-    if(ext)return;
+    /* 11/28 나-1128-1 — 외주 견적서에도 씀(11/27 판은 외주에서 이 칸을 숨기고 저장 때 지웠음 → 외부 견적서 상세에 할인이 안 나왔던 원인) */
     var f=QD.first_disc||{}, on=!!f.on;
     $('fd_on').checked=on; $('fd_body').classList.toggle('hide',!on);
     if(!on)return;
@@ -7280,8 +7299,9 @@
     QD.items=QD.items.filter(function(it){return it.name||Number(it.before)||Number(it.price);});
     QD.items.forEach(function(it){delete it._auto;});   /* 화면용 표시라 저장하지 않습니다 */
     if(!QD.items.length){toast('견적 항목을 한 줄 이상 입력해 주세요');return;}
-    /* 첫 달 관리비 할인 (11/27) — 켠 경우만 검사해 저장 · 끈 경우와 외주 견적서는 할인 · 대상 표시를 지움(예전 견적과 같은 모양) */
-    if(QD.first_disc&&QD.first_disc.on&&!(CURROW&&CURROW._ext)){
+    /* 첫 달 관리비 할인 (11/27) — 켠 경우만 검사해 저장 · 끈 경우는 할인 · 대상 표시를 지움(예전 견적과 같은 모양)
+       11/28 나-1128-1 : 외주 견적서도 같은 규칙으로 저장(ext_quotes.quote 안 · DB 변경 없음) */
+    if(QD.first_disc&&QD.first_disc.on){
       var fe=fdCheck(QD); if(fe){toast(fe);return;}
       var fm=QD.first_disc.mode==='won'?'won':'pct';
       QD.first_disc={on:true,mode:fm,pct:fm==='pct'?Number(QD.first_disc.pct):null,won:fm==='won'?Number(QD.first_disc.won):null,nolong:true,period:'첫 결제 1회'};
